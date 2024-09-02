@@ -38,6 +38,10 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    //시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
     //p6spy
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
@@ -51,6 +55,11 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 }
 
 tasks.named('test') {
