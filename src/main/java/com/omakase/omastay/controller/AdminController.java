@@ -42,7 +42,6 @@ public class AdminController {
         return "admins/payment_detail";
     }
 
-
     @RequestMapping("/sales")
     public String sales() {
         return "admins/sales";
