@@ -1,5 +1,5 @@
 server:
-  port: 9091
+  port: 9090
 spring:
   datasource:
     url: jdbc:mysql://18.116.238.9:3306/omastay
