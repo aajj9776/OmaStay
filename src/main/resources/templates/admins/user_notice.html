@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}"
+      layout:fragment="admin">
+  <head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div
+      class="w-full relative rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[102px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]"
+    >
+      <a
+        class="[text-decoration:none] w-[202px] h-[40px] relative font-semibold text-[inherit] flex items-center justify-center shrink-0 mq450:text-[19px]"
+        >회원 공지사항</a
+      >
+      <section
+        class="w-[1543px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[10px] box-border gap-[15px] max-w-full text-center text-[20px] text-[#000] font-[Inter]"
+      >
+        <div
+          class="w-[585px] overflow-hidden flex flex-row items-center justify-center flex-wrap content-center py-[5px] px-[20px] box-border gap-[15px] max-w-full"
+        >
+          <h3
+            class="m-[0px] w-[130px] relative text-inherit font-light font-[inherit] flex items-center justify-center shrink-0 mq450:text-[16px]"
+          >
+            등록일
+          </h3>
+          <nav
+            class="m-[0px] flex-1 flex flex-row items-start justify-center gap-[13.5px] min-w-[260px] max-w-full whitespace-nowrap text-left text-[16px] text-[rgba(0,0,0,0.87)] font-[Roboto] mq450:flex-wrap"
+          >
+            <div
+              class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[117px]"
+            >
+              <input
+                class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[94px]"
+                placeholder="Placeholder"
+                type="text"
+              />
+
+              <div class="h-[24px] hidden flex-row items-center justify-center">
+                <img
+                  class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
+                  alt=""
+                  src="/public/check.svg"
+                />
+              </div>
+            </div>
+            <div
+              class="h-[36px] relative tracking-[0.15px] leading-[150%] flex items-center min-w-[13px] mq450:w-full mq450:h-[13px]"
+            >
+              —
+            </div>
+            <div
+              class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[117px]"
+            >
+              <input
+                class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[94px]"
+                placeholder="Placeholder"
+                type="text"
+              />
+
+              <div class="h-[24px] hidden flex-row items-center justify-center">
+                <img
+                  class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
+                  alt=""
+                  src="/public/check.svg"
+                />
+              </div>
+            </div>
+          </nav>
+        </div>
+        <div
+          class="w-[172px] h-[35px] relative overflow-hidden shrink-0 hidden"
+        ></div>
+        <div
+          class="w-[725px] flex flex-col items-start justify-start gap-[15px] max-w-full"
+        >
+          <div
+            class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[20px] pr-[0px] box-border max-w-full"
+          >
+            <div
+              class="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-[15px] max-w-full"
+            >
+              <div
+                class="w-[130px] flex flex-col items-start justify-start pt-[6px] px-[0px] pb-[0px] box-border"
+              >
+                <h3
+                  class="m-[0px] self-stretch relative text-inherit font-light font-[inherit] mq450:text-[16px]"
+                >
+                  검색어
+                </h3>
+              </div>
+              <div
+                class="shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start py-[4px] px-[11px] text-left text-[16px] text-[#6c757d] font-[ABeeZee]"
+              >
+                <div
+                  class="overflow-hidden flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[15px]"
+                >
+                  <div
+                    class="relative leading-[24px] inline-block min-w-[90px]"
+                  >
+                    Placeholder
+                  </div>
+                  <div
+                    class="h-[18px] w-[1px] relative bg-[#495057] hidden"
+                  ></div>
+                </div>
+                <div class="h-[24px] flex flex-row items-center justify-center">
+                  <img
+                    class="h-[16px] w-[16px] relative"
+                    alt=""
+                    src="/public/-basetoggleup.svg"
+                  />
+                </div>
+              </div>
+              <div
+                class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start py-[4px] px-[11px] min-w-[260px] max-w-full"
+              >
+                <input
+                  class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-start justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[226px] max-w-full"
+                  placeholder="Placeholder"
+                  type="text"
+                />
+
+                <div
+                  class="h-[24px] hidden flex-row items-center justify-center"
+                >
+                  <img
+                    class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
+                    alt=""
+                    src="/public/check.svg"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-[233px] overflow-hidden flex flex-row items-start justify-start py-[4px] px-[50px] box-border gap-[10px] text-[16px] text-[#fff] font-[ABeeZee]"
+          >
+            <div class="flex flex-col items-start justify-start">
+              <div
+                class="rounded-[4px] bg-[#007bff] flex flex-col items-center justify-center py-[6px] px-[11px]"
+              >
+                <div
+                  class="flex flex-row items-center justify-center gap-[4px]"
+                >
+                  <img
+                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
+                    alt=""
+                    src="/public/l-icon1@2x.png"
+                  />
+
+                  <div
+                    class="relative leading-[24px] inline-block min-w-[32px]"
+                  >
+                    검색
+                  </div>
+                  <img
+                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
+                    alt=""
+                    src="/public/l-icon1@2x.png"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex-1 flex flex-col items-start justify-start text-[#007bff]"
+            >
+              <div
+                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[4px] px-[9px]"
+              >
+                <div
+                  class="w-[49px] flex flex-row items-center justify-center gap-[4px]"
+                >
+                  <img
+                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
+                    alt=""
+                    src="/public/l-icon1@2x.png"
+                  />
+
+                  <div
+                    class="relative leading-[24px] inline-block min-w-[48px]"
+                  >
+                    초기화
+                  </div>
+                  <img
+                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
+                    alt=""
+                    src="/public/l-icon1@2x.png"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="w-[1543px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[14px] text-[#000] font-['Work_Sans']"
+      >
+        <div
+          class="self-stretch overflow-hidden flex flex-col items-start justify-start pt-[10px] px-[10px] pb-[20px] gap-[10px]"
+        >
+          <div
+            class="self-stretch rounded-[10px] bg-[#e1e1e1] overflow-hidden flex flex-row items-center justify-between py-[20px] pl-[30px] pr-[634px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[158px] mq750:box-border mq1275:flex-wrap mq1275:pr-[317px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="w-[250px] relative leading-[150%] font-semibold text-center flex items-center justify-center shrink-0"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[634px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[158px] mq750:box-border mq1275:flex-wrap mq1275:pr-[317px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="w-[250px] relative leading-[150%] font-semibold text-center flex items-center justify-center shrink-0"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] pl-[30px] pr-[858px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[214px] mq750:box-border mq1275:flex-wrap mq1275:pr-[429px] mq1275:box-border"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              체크박스
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              제목
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              내용
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              첨부파일
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              등록일
+            </div>
+          </div>
+        </div>
+        <div
+          class="self-stretch rounded-[10px] overflow-hidden flex flex-row items-center justify-start flex-wrap content-center py-[2.5px] pl-[30px] pr-[1366px] gap-[10px] text-center text-[16px] text-[#fff] font-[ABeeZee] mq450:pr-[20px] mq450:box-border mq750:pr-[341px] mq750:box-border mq1275:pr-[683px] mq1275:box-border"
+        >
+          <div
+            class="flex-1 flex flex-col items-start justify-start min-w-[63px]"
+          >
+            <div
+              class="self-stretch rounded-[4px] bg-[#17a2b8] flex flex-col items-center justify-center py-[6px] px-[12px]"
+            >
+              <div
+                class="self-stretch flex flex-row items-center justify-center gap-[1px]"
+              >
+                <img
+                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover min-h-[24px]"
+                  loading="lazy"
+                  alt=""
+                  src="/public/l-icon3@2x.png"
+                />
+
+                <div class="flex-1 relative leading-[24px]">글쓰기</div>
+                <img
+                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
+                  alt=""
+                  src="/public/l-icon3@2x.png"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-0 flex flex-col items-start justify-start py-[0px] px-[0px] box-border text-[#17a2b8]"
+          >
+            <div
+              class="w-[54px] rounded-[4px] border-[#17a2b8] border-[1px] border-solid box-border flex flex-col items-center justify-center py-[4px] px-[10px]"
+            >
+              <div class="flex flex-row items-center justify-center gap-[4px]">
+                <img
+                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
+                  alt=""
+                  src="/public/l-icon3@2x.png"
+                />
+
+                <div class="relative leading-[24px] inline-block min-w-[32px]">
+                  삭제
+                </div>
+                <img
+                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
+                  alt=""
+                  src="/public/l-icon3@2x.png"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

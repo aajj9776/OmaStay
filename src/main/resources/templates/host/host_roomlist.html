@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/host}"
+      layout:fragment="host">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div
+      class="w-full relative bg-[#e4e7eb] flex flex-col items-center justify-center py-[102px] px-[279px] box-border gap-[119px] leading-[normal] tracking-[normal] mq750:gap-[30px] mq750:pl-[69px] mq750:pr-[69px] mq750:box-border mq1050:gap-[59px] mq1050:pl-[139px] mq1050:pr-[139px] mq1050:box-border"
+    >
+      <section
+        class="w-[1374px] h-[177px] flex flex-row items-start justify-start py-[0px] px-[10px] box-border max-w-full"
+      >
+        <header
+          class="flex-1 rounded-[30px] bg-[#fff] flex flex-col items-center justify-center max-w-full"
+        >
+          <img
+            class="w-[1119.7px] relative max-h-full object-cover max-w-full"
+            loading="lazy"
+            alt=""
+            src="/image/host/host-step-img@2x.png"
+          />
+        </header>
+      </section>
+      <section
+        class="w-[1338px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[144px] pb-[105px] box-border gap-[130px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border"
+      >
+        <h1
+          class="m-[0px] w-[300px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center mq450:text-[36px] mq450:leading-[14px] mq750:text-[48px] mq750:leading-[19px]"
+        >
+          객실 관리
+        </h1>
+        <div
+          class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[18px] pb-[39.5px] box-border max-w-full"
+        >
+          <div
+            class="flex-1 flex flex-col items-start justify-start gap-[118.5px] max-w-full mq750:gap-[30px] mq1050:gap-[59px]"
+          >
+            <div
+              class="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq1225:flex-wrap"
+            >
+              <div
+                class="w-[524px] flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px] box-border max-w-full"
+              >
+                <form
+                  class="m-[0px] self-stretch flex flex-row items-start justify-start gap-[30px] mq750:flex-wrap"
+                >
+                  <div
+                    class="w-[100px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[6px] px-[12px] relative"
+                  >
+                    <div class="h-[1px] w-[24px] hidden z-[0]"></div>
+                    <div class="h-[24px] w-[71px] hidden z-[1]"></div>
+                    <div
+                      class="h-[24px] w-0 absolute !m-[0] top-[calc(50%_-_12px)] left-[12px]"
+                    ></div>
+                    <div
+                      class="flex-1 flex flex-row items-start justify-start relative"
+                    >
+                      <div
+                        class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
+                      >
+                        제목
+                      </div>
+                      <img
+                        class="h-full w-[24px] absolute !m-[0] top-[0px] right-[0px] bottom-[0px] max-h-full overflow-hidden shrink-0 z-[1]"
+                        alt=""
+                        src="/image/host/arrowdropdownfilled.svg"
+                      />
+                    </div>
+                    <div
+                      class="self-stretch flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[4]"
+                    >
+                      Placeholder
+                    </div>
+                    <div
+                      class="h-0 w-[24px] absolute !m-[0] top-[calc(50%_-_0px)] right-[12px]"
+                    ></div>
+                    <div
+                      class="hidden flex-row items-start justify-start z-[6]"
+                    >
+                      <img
+                        class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
+                        alt=""
+                        src="/image/host/closefilled.svg"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="flex-1 flex flex-col items-start justify-center py-[0px] px-[10px] box-border min-w-[189px]"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[148px] min-h-[24px]"
+                        placeholder="검색어를 입력하세요."
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    class="cursor-pointer [border:none] py-[7px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
+                  >
+                    <div
+                      class="flex flex-row items-start justify-start gap-[8px]"
+                    >
+                      <img
+                        class="h-[22px] w-[18px] relative hidden"
+                        alt=""
+                        src="/image/host/masked-icon.svg"
+                      />
+
+                      <div
+                        class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[31px]"
+                      >
+                        검색
+                      </div>
+                      <img
+                        class="h-[22px] w-[18px] relative hidden"
+                        alt=""
+                        src="/image/host/masked-icon1.svg"
+                      />
+                    </div>
+                  </button>
+                </form>
+              </div>
+              <div
+                class="w-[231px] flex flex-row items-start justify-start gap-[30px]"
+              >
+                <div
+                  class="flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px]"
+                >
+                  <button
+                    class="cursor-pointer [border:none] py-[7px] px-[22px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
+                  >
+                    <div
+                      class="flex flex-row items-start justify-start gap-[8px]"
+                    >
+                      <img
+                        class="h-[22px] w-[18px] relative hidden"
+                        alt=""
+                        src="/image/host/masked-icon.svg"
+                      />
+
+                      <div
+                        class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[57px]"
+                      >
+                        객실추가
+                      </div>
+                      <img
+                        class="h-[22px] w-[18px] relative hidden"
+                        alt=""
+                        src="/image/host/masked-icon1.svg"
+                      />
+                    </div>
+                  </button>
+                </div>
+                <button
+                  class="cursor-pointer border-[#2196f3] border-[1px] border-solid py-[6px] pl-[15px] pr-[18px] bg-[#fff] flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
+                >
+                  <div
+                    class="flex flex-row items-start justify-start gap-[8px]"
+                  >
+                    <div
+                      class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left inline-block min-w-[61px] whitespace-nowrap"
+                    >
+                      객실 삭제
+                    </div>
+                    <img
+                      class="h-[22px] w-[18px] relative hidden"
+                      alt=""
+                      src="/image/host/masked-icon5.svg"
+                    />
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div
+              class="self-stretch h-[571px] flex flex-row items-start justify-start py-[0px] px-[5px] box-border max-w-full"
+            >
+              <div
+                class="self-stretch flex-1 flex flex-row items-center justify-center bg-[url('/image/host/image-17@2x.png')] bg-cover bg-no-repeat bg-[top] max-w-full"
+              >
+                <img
+                  class="w-[1010.9px] relative max-h-full object-cover hidden max-w-full"
+                  alt=""
+                  src="/image/host/image-17@2x.png"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[62px] pr-[0px] box-border max-w-full text-center text-[14px] text-[rgba(0,0,0,0.87)] mq750:pl-[31px] mq750:box-border"
+        >
+          <div
+            class="overflow-hidden flex flex-row items-start justify-start gap-[10px] max-w-full mq1050:flex-wrap"
+          >
+            <img
+              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
+              loading="lazy"
+              alt=""
+              src="/image/host/paginationitem.svg"
+            />
+
+            <img
+              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
+              loading="lazy"
+              alt=""
+              src="/image/host/paginationitem-1.svg"
+            />
+
+            <div
+              class="overflow-hidden flex flex-row items-start justify-start text-[#fff]"
+            >
+              <div
+                class="rounded-[4px] bg-[#2196f3] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
+              >
+                <div
+                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
+                >
+                  1
+                </div>
+              </div>
+            </div>
+            <div
+              class="overflow-hidden flex flex-row items-start justify-start"
+            >
+              <div
+                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
+              >
+                <div
+                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
+                >
+                  2
+                </div>
+              </div>
+            </div>
+            <div
+              class="overflow-hidden flex flex-row items-start justify-start"
+            >
+              <div
+                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
+              >
+                <div
+                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
+                >
+                  3
+                </div>
+              </div>
+            </div>
+            <div
+              class="overflow-hidden flex flex-row items-start justify-start"
+            >
+              <div
+                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
+              >
+                <div
+                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
+                >
+                  4
+                </div>
+              </div>
+            </div>
+            <div
+              class="overflow-hidden flex flex-row items-start justify-start"
+            >
+              <div
+                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
+              >
+                <div
+                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
+                >
+                  5
+                </div>
+              </div>
+            </div>
+            <div
+              class="overflow-hidden flex flex-row items-start justify-start"
+            >
+              <div
+                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
+              >
+                <div
+                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
+                >
+                  6
+                </div>
+              </div>
+            </div>
+            <div
+              class="overflow-hidden flex flex-row items-start justify-start"
+            >
+              <div
+                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
+              >
+                <div
+                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
+                >
+                  7
+                </div>
+              </div>
+            </div>
+            <img
+              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
+              loading="lazy"
+              alt=""
+              src="/image/host/paginationitem-1.svg"
+            />
+
+            <img
+              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
+              loading="lazy"
+              alt=""
+              src="/image/host/paginationitem-3.svg"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

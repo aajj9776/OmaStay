@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+    <header class="header" th:fragment="header">
+        <a th:href="@{/}">
+            <img alt="" class="header_logo" src="/image/logo/logo.png"/>
+        </a>
+        <div class="header_container">
+            <button class="header_login_button hover:bg-gray-200" type="button">
+                <a class="a">로그인/회원가입</a>
+            </button>
+            <div class="header_menu dropdown hover:bg-gray-200" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img alt="" class="svg-icon" src="/image/header/svg.svg"/>
+
+                <ul class="dropdown-menu w-[270px] p-0">
+                <li><a class="btn btn-primary" href="#">로그인/회원가입</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">국내 숙소</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">비회원 예약조회</a></li>
+                <li><a class="dropdown-item" href="#">이벤트</a></li>
+                <li><a class="dropdown-item" href="#">고객센터</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </header>
+    </body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/host}"
+      layout:fragment="host">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div
+      class="w-full relative bg-[#fff] overflow-y-auto flex flex-row items-start justify-start leading-[normal] tracking-[normal]"
+    >
+      <main
+        class="flex-1 bg-[#e4e7eb] overflow-hidden flex flex-col items-start justify-start pt-[75px] px-[0px] pb-[42px] box-border gap-[40px] max-w-full lg:pt-[49px] lg:pb-[27px] lg:box-border mq750:gap-[20px] mq450:pt-[21px] mq450:box-border mq1050:pt-[32px] mq1050:pb-[20px] mq1050:box-border"
+      >
+        <section
+          class="self-stretch flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full text-center text-[35px] text-[rgba(0,0,0,0.87)] font-[Inter]"
+        >
+          <div
+            class="w-[1200px] flex flex-col items-start justify-start gap-[45px] max-w-full mq750:gap-[22px]"
+          >
+            <div
+              class="self-stretch rounded-[30px] bg-[#fff] flex flex-col items-start justify-start py-[19.5px] px-[0px] box-border gap-[51px] max-w-full mq750:gap-[25px]"
+            >
+              <b
+                class="self-stretch relative leading-[44px] mq450:text-[21px] mq450:leading-[26px] mq1050:text-[28px] mq1050:leading-[35px]"
+                >아래 정보를 모두 입력하시고 숙소 등록을 완료하세요.</b
+              >
+              <div
+                class="self-stretch h-[236px] flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full"
+              >
+                <div
+                  class="self-stretch w-[1025px] flex flex-col items-start justify-start gap-[7px] max-w-full"
+                >
+                  <div
+                    class="self-stretch flex flex-row items-start justify-center py-[0px] px-[20px]"
+                  >
+                    <button
+                      class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[21px] pl-[24px] pr-[23px] bg-[#f2114c] rounded-[10px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-[#ff3873] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
+                    >
+                      <div
+                        class="relative text-[25px] font-semibold font-[Inter] text-[#fbf5f5] text-center whitespace-nowrap"
+                      >
+                        업체 정보 등록
+                      </div>
+                    </button>
+                  </div>
+                  <img
+                    class="self-stretch flex-1 relative max-w-full overflow-hidden max-h-full object-cover"
+                    loading="lazy"
+                    alt=""
+                    src="/image/host/host-step-img@2x.png"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[10px] box-border max-w-full text-left text-[25px] text-[#333]"
+            >
+              <div
+                class="flex-1 flex flex-row items-start justify-start gap-[59px] max-w-full mq750:gap-[29px] mq1050:flex-wrap"
+              >
+                <div
+                  class="w-[535px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[33px] pb-[32px] pl-[53px] pr-[42px] box-border gap-[16px] min-w-[535px] max-w-full mq750:py-[21px] mq750:pl-[26px] mq750:pr-[21px] mq750:box-border mq750:min-w-full mq1050:flex-1"
+                >
+                  <div
+                    class="w-[430px] flex flex-row items-start justify-between gap-[20px] max-w-full mq450:flex-wrap"
+                  >
+                    <b
+                      class="relative inline-block min-w-[100px] mq450:text-[20px]"
+                      >공지사항</b
+                    >
+                    <b
+                      class="w-[100px] relative flex text-[#000] text-right items-center shrink-0 mq450:text-[20px]"
+                      >더보기</b
+                    >
+                  </div>
+                  <div
+                    class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] box-border max-w-full"
+                  >
+                    <img
+                      class="h-[583px] flex-1 relative max-w-full overflow-hidden object-cover"
+                      loading="lazy"
+                      alt=""
+                      src="/image/host/image-16@2x.png"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="flex-1 flex flex-col items-start justify-start pt-[7px] px-[0px] pb-[0px] box-border min-w-[385px] max-w-full text-center text-[30px] text-[#fff] mq750:min-w-full"
+                >
+                  <div
+                    class="self-stretch flex flex-col items-start justify-start gap-[64px] max-w-full mq750:gap-[32px] mq450:gap-[16px]"
+                  >
+                    <div
+                      class="self-stretch rounded-[30px] bg-[#1a4568] overflow-hidden flex flex-col items-start justify-start pt-[36px] px-[63px] pb-[56px] box-border relative gap-[59px] max-w-full mq750:gap-[29px] mq750:pl-[31px] mq750:pr-[31px] mq750:box-border"
+                    >
+                      <div
+                        class="w-[368.5px] flex flex-row items-start justify-center max-w-full"
+                      >
+                        <img
+                          class="pl-[20px] h-[40px] w-[40px] relative object-contain"
+                          loading="lazy"
+                          alt=""
+                          src="/image/host/res-link.svg"
+                        />
+                      </div>
+                      <div
+                        class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[3px] box-border max-w-full"
+                      >
+                        <div
+                          class="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq450:flex-wrap"
+                        >
+                          <b
+                            class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                            >0</b
+                          >
+                          <b
+                            class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                            >0</b
+                          >
+                          <b
+                            class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                            >0</b
+                          >
+                        </div>
+                      </div>
+                      <b
+                        class="w-[250px] h-[62px] absolute !m-[0] top-[25px] left-[40px] flex text-left items-center mq450:text-[18px] mq1050:text-[24px]"
+                        >예약 객실 판매</b
+                      >
+                      <div
+                        class="w-[456px] flex flex-row items-start justify-between gap-[20px] max-w-full mq450:flex-wrap"
+                      >
+                        <b
+                          class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                          >오늘</b
+                        >
+                        <b
+                          class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                          >이번주</b
+                        >
+                        <b
+                          class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                          >이번달</b
+                        >
+                      </div>
+                    </div>
+                    <div
+                      class="self-stretch rounded-[30px] bg-[rgba(48,199,190,0.71)] overflow-hidden flex flex-col items-start justify-start pt-[36px] px-[63px] pb-[56px] box-border relative gap-[59px] max-w-full mq750:gap-[29px] mq750:pl-[31px] mq750:pr-[31px] mq750:box-border"
+                    >
+                      <div
+                        class="w-[368.5px] flex flex-row items-start justify-center max-w-full"
+                      >
+                        <img
+                          class="pl-[20px] h-[40px] w-[40px] relative object-contain"
+                          loading="lazy"
+                          alt=""
+                          src="/image/host/res-link.svg"
+                        />
+                      </div>
+                      <div
+                        class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[3px] box-border max-w-full"
+                      >
+                        <div
+                          class="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq450:flex-wrap"
+                        >
+                          <b
+                            class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                            >0</b
+                          >
+                          <b
+                            class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                            >0</b
+                          >
+                          <b
+                            class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                            >0</b
+                          >
+                        </div>
+                      </div>
+                      <b
+                        class="w-[250px] h-[62px] absolute !m-[0] top-[25px] left-[40px] flex text-left items-center mq450:text-[18px] mq1050:text-[24px]"
+                        >등록된 리뷰 수</b
+                      >
+                      <div
+                        class="w-[456px] flex flex-row items-start justify-between gap-[20px] max-w-full mq450:flex-wrap"
+                      >
+                        <b
+                          class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                          >오늘</b
+                        >
+                        <b
+                          class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                          >이번주</b
+                        >
+                        <b
+                          class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
+                          >이번달</b
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="self-stretch overflow-hidden flex flex-col items-center justify-center py-[0px] px-[20px] box-border max-w-full text-left text-[25px] text-[#333] font-[Inter]"
+        >
+          <div
+            class="w-[1186px] rounded-[30px] bg-[#fff] flex flex-col items-center justify-between py-[57px] px-[20px] box-border min-h-[778px] max-w-full mq450:pt-[24px] mq450:pb-[24px] mq450:box-border mq1050:pt-[37px] mq1050:pb-[37px] mq1050:box-border"
+          >
+            <div
+              class="w-[984px] flex flex-row items-center justify-between gap-[20px] max-w-full mq450:flex-wrap"
+            >
+              <b
+                class="h-[41px] w-[216px] relative tracking-[-0.16px] flex items-center shrink-0 mq450:text-[20px]"
+                >입실 예정 고객 정보</b
+              >
+              <b
+                class="h-[41px] relative flex text-[#000] items-center min-w-[75px] mq450:text-[20px]"
+                >더보기</b
+              >
+            </div>
+            <img
+              class="w-[1010.9px] relative max-h-full object-cover max-w-full"
+              loading="lazy"
+              alt=""
+              src="/image/host/image-17@2x.png"
+            />
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

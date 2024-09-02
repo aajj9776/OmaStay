@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <section
+      class="flex-1 bg-[#fff] flex flex-row items-end justify-center pt-[74px] px-[352px] pb-[86px] box-border gap-[67px] max-w-full text-left text-[13.2px] text-[#c7c2c2] font-[Roboto] mq1800:flex-wrap mq925:gap-[17px] mq925:pt-[48px] mq925:px-[88px] mq925:pb-[56px] mq925:box-border mq1350:gap-[33px] mq1350:pl-[176px] mq1350:pr-[176px] mq1350:box-border"
+    >
+      <form
+        class="m-[0px] w-[794px] flex flex-col items-start justify-start gap-[27.5px] min-w-[794px] max-w-full mq1800:flex-1 mq1800:min-w-full"
+      >
+        <div
+          class="self-stretch flex flex-col items-start justify-start gap-[13px] max-w-full"
+        >
+          <div
+            class="w-[211.8px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[10px]"
+          >
+            <div
+              class="flex flex-col items-start justify-start pt-[2.5px] px-[0px] pb-[0px]"
+            >
+              <img
+                class="w-[20px] h-[20px] relative shrink-0"
+                loading="lazy"
+                alt=""
+                src="/image/reservation/svg.svg"
+              />
+            </div>
+            <div
+              class="h-[25px] flex-1 overflow-hidden flex flex-row items-start justify-center shrink-0"
+            >
+              <b
+                class="reservation-details-title [text-decoration:none] flex-1 relative leading-[30px] font-bold text-[24px] shrink-0 mq450:text-[22px] mq450:leading-[28px] text-black"
+              >
+                예약 및 결제
+              </b>
+            </div>
+          </div>
+          <div
+            class="w-[211.8px] flex flex-row items-start justify-start pl-[0px] pr-[0px] box-border gap-[10px]"
+          ></div>
+          <div
+            class="flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[7px]"
+          >
+            <b
+              class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[82.1px] whitespace-nowrap"
+              >예약자 정보</b
+            >
+          </div>
+          <div
+            class="self-stretch flex flex-col items-start justify-start gap-[15px] max-w-full"
+          >
+            <div
+              class="w-[339px] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border gap-[4px] max-w-full"
+            >
+              <div
+                class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left inline-block min-w-[59.5px] whitespace-nowrap"
+              >
+                예약자 이름
+              </div>
+              <div
+                class="self-stretch rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid flex flex-row items-start justify-start py-[13px] px-[19px]"
+              >
+                <input
+                  class="w-[41.7px] [border:none] [outline:none] font-[Roboto] text-[15px] bg-[transparent] h-[19px] relative text-[rgba(0,0,0,0.24)] text-left flex items-center p-[0px]"
+                  placeholder="홍길동"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div
+              class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full"
+            >
+              <div
+                class="w-[59.5px] relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
+              >
+                이메일
+              </div>
+              <div
+                class="self-stretch flex flex-row items-start justify-start gap-[4px] mq450:flex-wrap"
+              >
+                <div
+                  class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[12px] px-[19px] pb-[9px] min-w-[157px] [row-gap:20px] mq450:flex-wrap"
+                >
+                  <div
+                    class="w-[166px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[4px] box-border"
+                  >
+                    <div
+                      class="w-[114.1px] relative text-[16px] font-[Roboto] text-[rgba(0,0,0,0.24)] text-left flex items-center shrink-0 whitespace-nowrap"
+                    >
+                      xxx@xx.com
+                    </div>
+                    <div
+                      class="h-[17px] w-[36px] relative overflow-hidden shrink-0 hidden"
+                    ></div>
+                  </div>
+                  <div
+                    class="flex flex-col items-start justify-start pt-[7px] px-[0px] pb-[0px] ml-[-2px] mq450:ml-[0px]"
+                  >
+                    <div
+                      class="h-[9px] relative text-[12px] font-[Roboto] text-[#f5455c] text-left flex items-center shrink-0 min-w-[34px] whitespace-nowrap z-[1]"
+                    >
+                      00:00
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[94px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
+                >
+                  <div
+                    class="w-[87px] relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center shrink-0"
+                  >
+                    인증번호 전송
+                  </div>
+                </div>
+              </div>
+              <div
+                class="relative text-[11.3px] leading-[16px] font-[Roboto] text-[#999] text-left whitespace-nowrap"
+              >
+                개인 정보 보호를 위해 안심번호로 숙소에 전송됩니다.
+              </div>
+            </div>
+            <div class="self-stretch h-[1px] relative bg-[#f5f5f5]"></div>
+            <b
+              class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[66.6px] whitespace-nowrap"
+              >할인 적용</b
+            >
+          </div>
+          <div
+            class="w-[363px] flex flex-row items-start justify-start py-[0px] px-[7px] box-border max-w-full"
+          >
+            <div
+              class="flex-1 flex flex-col items-start justify-start gap-[5px] max-w-full"
+            >
+              <div
+                class="w-[29px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center"
+              >
+                쿠폰
+              </div>
+              <div class="self-stretch flex flex-col items-start justify-start">
+                <div
+                  class="self-stretch flex flex-row items-start justify-start gap-[7px] mq925:flex-wrap"
+                >
+                  <div
+                    class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[19px] pr-[0px] min-w-[164px]"
+                  >
+                    <input
+                      class="w-full [border:none] [outline:none] font-[Roboto] text-[14px] bg-[transparent] h-[33px] flex-1 relative text-[#999] text-left flex items-center min-w-[139px] p-[0px]"
+                      placeholder="0"
+                      type="text"
+                    />
+                  </div>
+                  <div
+                    class="w-[90px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start whitespace-nowrap"
+                  >
+                    <div
+                      class="h-[33px] flex-1 relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center"
+                    >
+                      쿠폰 조회
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[147px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center z-[1]"
+                >
+                  사용 가능 쿠폰 (3) 장
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-[362px] flex flex-row items-start justify-start py-[0px] px-[7px] box-border max-w-full"
+        >
+          <div
+            class="flex-1 flex flex-col items-start justify-start gap-[4px] max-w-full"
+          >
+            <div
+              class="w-[47px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center"
+            >
+              상품권
+            </div>
+            <div
+              class="self-stretch flex flex-row items-start justify-start gap-[6px] mq925:flex-wrap"
+            >
+              <div
+                class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[19px] pr-[0px] min-w-[164px]"
+              >
+                <input
+                  class="w-full [border:none] [outline:none] font-[Roboto] text-[14px] bg-[transparent] h-[33px] flex-1 relative text-[#999] text-left flex items-center min-w-[139px] p-[0px]"
+                  placeholder="0"
+                  type="text"
+                />
+              </div>
+              <div
+                class="w-[90px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start whitespace-nowrap"
+              >
+                <div
+                  class="h-[33px] flex-1 relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center"
+                >
+                  잔액 확인
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="self-stretch flex flex-col items-start justify-start gap-[18px] max-w-full"
+        >
+          <div
+            class="self-stretch flex flex-col items-start justify-start gap-[13px]"
+          >
+            <img
+              class="self-stretch relative max-w-full overflow-hidden max-h-full"
+              loading="lazy"
+              alt=""
+              src="/image/reservation/horizontal-divider.svg"
+            />
+
+            <b
+              class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[66.6px] whitespace-nowrap"
+              >결제 수단</b
+            >
+          </div>
+          <div
+            class="flex flex-row items-start justify-start gap-[13.9px] max-w-full mq925:flex-wrap"
+          >
+            <button
+              class="cursor-pointer border-[#b7d5f6] border-[1px] border-solid py-[7px] pl-[39px] pr-[38px] bg-[#f2f8ff] rounded-[8px] flex flex-row items-start justify-start"
+            >
+              <img
+                class="h-[30px] w-[66.4px] relative overflow-hidden shrink-0 object-cover"
+                alt=""
+                src="/image/reservation/kakaopng@2x.png"
+              />
+            </button>
+            <div
+              class="rounded-[8px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid flex flex-row items-start justify-start py-[16px] pl-[39px] pr-[38px]"
+            >
+              <img
+                class="h-[13.6px] w-[66.4px] relative overflow-hidden shrink-0 object-cover"
+                loading="lazy"
+                alt=""
+                src="/image/reservation/tosspaypng@2x.png"
+              />
+            </div>
+            <div
+              class="rounded-[8px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid flex flex-row items-start justify-start py-[0px] pl-[32px] pr-[30px] whitespace-nowrap"
+            >
+              <div
+                class="relative text-[13.1px] leading-[46px] font-semibold font-[Roboto] text-[#333] text-center inline-block min-w-[81.1px] whitespace-nowrap"
+              >
+                신용/체크 카드
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div
+        class="w-[340px] flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
+      >
+        <div
+          class="self-stretch flex flex-col items-start justify-start gap-[15px]"
+        >
+          <div
+            class="self-stretch rounded-[12px] border-[#333] border-[1px] border-solid flex flex-col items-start justify-start pt-[19px] px-[15px] pb-[20px] gap-[6px]"
+          >
+            <div
+              class="self-stretch h-[144px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[11px] px-[7px] pb-[13px] box-border"
+            >
+              <div
+                class="self-stretch flex-1 relative rounded-[8px] bg-[#f5f7fa]"
+              ></div>
+            </div>
+            <div
+              class="w-[256px] flex flex-row items-start justify-start py-[0px] px-[10px] box-border"
+            >
+              <div
+                class="flex-1 flex flex-row items-start justify-start gap-[10px] mq450:flex-wrap"
+              >
+                <div
+                  class="w-[60px] flex flex-col items-start justify-start gap-[20px] min-w-[60px] mq450:flex-1"
+                >
+                  <b class="relative leading-[20px] inline-block min-w-[27px]"
+                    >객실</b
+                  >
+                  <b
+                    class="w-[31px] h-[25px] relative leading-[20px] flex items-center shrink-0"
+                    >일정</b
+                  >
+                  <div
+                    class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px]"
+                  >
+                    <b class="flex-1 relative leading-[15px]">기준인원</b>
+                  </div>
+                  <b class="relative leading-[20px] inline-block min-w-[53px]"
+                    >추가정보</b
+                  >
+                </div>
+                <div
+                  class="flex-1 flex flex-col items-start justify-start gap-[13px] min-w-[108px] text-[#c4c0c0]"
+                >
+                  <div
+                    class="w-[138px] flex flex-row items-start justify-start py-[0px] px-[1px] box-border"
+                  >
+                    <b class="flex-1 relative leading-[20px]">스탠다드?</b>
+                  </div>
+                  <div
+                    class="self-stretch flex flex-col items-start justify-start gap-[9px]"
+                  >
+                    <b
+                      class="self-stretch h-[40px] relative leading-[20px] flex items-center shrink-0"
+                      >오늘이겠지</b
+                    >
+                    <div
+                      class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px]"
+                    >
+                      <div
+                        class="flex-1 flex flex-col items-start justify-start gap-[15px]"
+                      >
+                        <b class="self-stretch relative leading-[20px]"
+                          >오늘이겠지</b
+                        >
+                        <div
+                          class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px]"
+                        >
+                          <b
+                            class="h-[37px] flex-1 relative leading-[20px] flex items-center"
+                            >오늘이겠지ㅇㅁㄴㅇㄻㄴㅇ</b
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[12px] border-[#333] border-[1px] border-solid flex flex-col items-start justify-start py-[23px] pl-[25px] pr-[23px] gap-[31.8px] text-[#333] mq450:gap-[16px]"
+          >
+            <div
+              class="self-stretch flex flex-col items-start justify-start gap-[16.1px]"
+            >
+              <b
+                class="relative text-[16.9px] leading-[21px] inline-block min-w-[66.6px] whitespace-nowrap"
+                >결제 정보</b
+              >
+              <div
+                class="self-stretch flex flex-row items-start justify-between gap-[20px]"
+              >
+                <div
+                  class="w-[57px] relative leading-[20px] flex items-center shrink-0"
+                >
+                  객실 가격
+                </div>
+                <div
+                  class="relative text-[14px] leading-[20px] font-semibold text-right inline-block min-w-[15px] shrink-0"
+                >
+                  원
+                </div>
+              </div>
+              <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
+              <div
+                class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[3px] pr-[0px]"
+              >
+                <div
+                  class="flex-1 flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap"
+                >
+                  <div
+                    class="flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px]"
+                  >
+                    <div
+                      class="relative leading-[20px] font-medium inline-block min-w-[67.5px] whitespace-nowrap"
+                    >
+                      총 결제 금액
+                    </div>
+                  </div>
+                  <b
+                    class="relative text-[20px] leading-[24px] inline-block text-[#f45858] text-right min-w-[32px] mq450:text-[16px] mq450:leading-[19px]"
+                    >0원</b
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              class="self-stretch flex flex-col items-start justify-start gap-[12px] text-[13.1px]"
+            >
+              <div
+                class="self-stretch rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start py-[11px] px-[10px] gap-[10px] mq450:flex-wrap"
+              >
+                <input
+                  class="m-[0px] h-[18px] w-[18px] relative min-h-[18px]"
+                  type="checkbox"
+                />
+
+                <div
+                  class="flex-1 flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border min-w-[139px]"
+                >
+                  <b class="relative leading-[18px] inline-block min-w-[82px]"
+                    >약관 전체동의</b
+                  >
+                </div>
+                <img
+                  class="h-[18px] w-[18px] relative min-h-[18px]"
+                  alt=""
+                  src="/image/reservation/svg-2.svg"
+                />
+              </div>
+              <div
+                class="self-stretch rounded-[10px] bg-[#1273e4] flex flex-row items-start justify-center py-[14.5px] px-[20px] whitespace-nowrap text-center text-[15.4px] text-[#fff]"
+              >
+                <div
+                  class="relative leading-[19px] font-semibold inline-block min-w-[83.4px]"
+                >
+                  0원 결제하기
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </body>
+</html>

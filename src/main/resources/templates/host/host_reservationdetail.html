@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/host}"
+      layout:fragment="host">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div
+      class="w-full relative bg-[#e4e7eb] flex flex-row items-start justify-center py-[100px] px-[20px] box-border leading-[normal] tracking-[normal]"
+    >
+      <main
+        class="w-[1400px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[130px] px-[0px] pb-[0px] box-border relative gap-[27px] max-w-full lg:pt-[84px] lg:box-border mq750:pt-[55px] mq750:box-border"
+      >
+      <section
+      class="w-full top-[0px] flex flex-row items-start justify-start pt-[58px] px-[50px] pb-[20px] box-border gap-[10px] max-w-full text-left text-[45px] text-[rgba(0,0,0,0.87)] font-[Roboto] lg:pl-[25px] lg:pr-[25px] lg:box-border"
+      >
+      <div
+      class="flex-1 flex flex-col items-start justify-start py-[10px] px-[0px] box-border max-w-full"
+      >
+      <h2
+      class="pl-[120px] m-[0px] flex-1 relative text-inherit leading-[52px] font-normal font-[inherit] inline-block max-w-full mq450:text-[27px] mq450:leading-[31px] mq1050:text-[36px] mq1050:leading-[42px]"
+      >
+      예약 상세
+    </h2>
+    <div
+    class="pl-[120px] w-[500px] relative text-[16px] leading-[140%] font-[Inter] text-[rgba(0,0,0,0.6)] "
+    >
+    Reservation Management
+  </div>
+  <div
+  class="self-stretch h-[3px] flex flex-row items-start justify-center max-w-full"
+>
+  <div
+    class="self-stretch w-[1100px] relative bg-[rgba(153,153,153,0.8)] max-w-full z-[1]"
+  ></div>
+</div>
+</div>
+<div
+class="h-[48px] w-[48px] rounded-[100px] overflow-hidden shrink-0 hidden flex-col items-center justify-center p-[8px] box-border"
+>
+<div
+class="flex flex-row items-start justify-start py-[0px] px-[4px]"
+>
+<img
+class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
+alt=""
+src="/image/host/starsharp-2.svg"
+/>
+</div>
+</div>
+
+        </section>
+        <form
+          class="m-[0px] self-stretch flex flex-col items-start justify-start gap-[10px] max-w-full"
+        >
+          <div
+            class="self-stretch flex flex-row items-start justify-center pt-[0px] px-[20px] pb-[9.5px] box-border max-w-full"
+          >
+            <div
+              class="w-[1200px] flex flex-col items-start justify-start gap-[5px] max-w-full"
+            >
+              <div
+                class="flex flex-row items-start justify-start py-[0px] px-[50px]"
+              >
+                <b
+                  class="relative text-[25px] leading-[40px] inline-block font-[Roboto] text-[#333] text-left min-w-[99px] whitespace-nowrap mq450:text-[20px] mq450:leading-[17px]"
+                  >예약 정보</b
+                >
+              </div>
+              <div
+                class="self-stretch flex flex-col items-start justify-center py-[10px] pl-[100px] pr-[505px] box-border gap-[20px] max-w-full lg:pl-[50px] lg:pr-[252px] lg:box-border mq450:pr-[20px] mq450:box-border mq750:pl-[25px] mq750:pr-[126px] mq750:box-border"
+              >
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[20px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >예약 번호 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="예약 번호"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[20px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >예약 상태 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="예약 상태"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[20px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >객실명 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="객실명"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex flex-row items-center justify-between max-w-full gap-[20px] mq1050:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >기간 :
+                  </b>
+                  <div
+                    class="w-[438px] flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[16px] box-border gap-[5px] max-w-full mq750:flex-wrap"
+                  >
+                    <div
+                      class="flex-1 flex flex-col items-start justify-start min-w-[97px]"
+                    >
+                      <div
+                        class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                      >
+                        <input
+                          class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
+                          placeholder="예약 시작일"
+                          type="text"
+                        />
+                      </div>
+                      <div
+                        class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
+                      >
+                        <div
+                          class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                        >
+                          Helper text
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="h-[40px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left flex items-center min-w-[15px] mq450:text-[16px] mq450:leading-[21px] mq750:w-full mq750:h-[15px]"
+                    >
+                      ~
+                    </div>
+                    <div
+                      class="flex-1 flex flex-col items-start justify-start min-w-[97px]"
+                    >
+                      <div
+                        class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                      >
+                        <input
+                          class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
+                          placeholder="예약 종료일"
+                          type="text"
+                        />
+                      </div>
+                      <div
+                        class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
+                      >
+                        <div
+                          class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                        >
+                          Helper text
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="h-[40px] w-[11px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-center flex items-center justify-center shrink-0 min-w-[11px] mq450:text-[16px] mq450:leading-[21px] mq750:w-full mq750:h-[11px]"
+                    >
+                      /
+                    </div>
+                    <div
+                      class="w-[56px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <div
+                        class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[8px] px-[0px] box-border relative min-h-[24px]"
+                      >
+                        <div
+                          class="h-[24px] w-[32px] !m-[0] absolute top-[8px] left-[0px] hidden z-[0]"
+                        ></div>
+                        <div
+                          class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left"
+                        >
+                          박
+                        </div>
+                        <div
+                          class="h-[24px] w-[24px] !m-[0] absolute top-[8px] left-[172px] hidden z-[2]"
+                        ></div>
+                      </div>
+                    </div>
+                    <div
+                      class="h-[40px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left flex items-center min-w-[15px] mq450:text-[16px] mq450:leading-[21px] mq750:w-full mq750:h-[15px]"
+                    >
+                      박
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[267px] flex flex-row items-center justify-between gap-[20px]"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >인원 :
+                  </b>
+                  <div
+                    class="w-[110px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[52px] min-h-[24px]"
+                        placeholder="인원"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="self-stretch h-[3px] flex flex-row items-start justify-start py-[0px] px-[50px] box-border max-w-full lg:pl-[25px] lg:pr-[25px] lg:box-border"
+              >
+                <div
+                  class="self-stretch flex-1 relative bg-[rgba(153,153,153,0.8)] max-w-full"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="self-stretch flex flex-row items-start justify-center pt-[0px] px-[20px] pb-[8.5px] box-border max-w-full"
+          >
+            <div
+              class="w-[1200px] flex flex-col items-start justify-start gap-[5px] max-w-full"
+            >
+              <div
+                class="flex flex-row items-start justify-start py-[0px] px-[50px]"
+              >
+                <b
+                  class="relative text-[25px] leading-[40px] inline-block font-[Roboto] text-[#333] text-left min-w-[122px] whitespace-nowrap mq450:text-[20px] mq450:leading-[17px]"
+                  >예약자 정보</b
+                >
+              </div>
+              <div
+                class="self-stretch flex flex-col items-center justify-center py-[5px] pl-[20px] pr-[560px] box-border gap-[20px] max-w-full mq450:pr-[20px] mq450:box-border mq750:pr-[140px] mq750:box-border mq1050:pr-[280px] mq1050:box-border"
+              >
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[9px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center mq450:text-[20px] mq450:leading-[19px]"
+                    >예약자 이름 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="예약자 이름"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[20px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[113px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >연락처 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="연락처"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="self-stretch h-[3px] flex flex-row items-start justify-start py-[0px] px-[50px] box-border max-w-full lg:pl-[25px] lg:pr-[25px] lg:box-border"
+              >
+                <div
+                  class="self-stretch flex-1 relative bg-[rgba(153,153,153,0.8)] max-w-full"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="self-stretch flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full"
+          >
+            <div
+              class="w-[1200px] flex flex-col items-start justify-start gap-[5px] max-w-full"
+            >
+              <div
+                class="flex flex-row items-start justify-start py-[0px] px-[50px]"
+              >
+                <b
+                  class="relative text-[25px] leading-[40px] inline-block font-[Roboto] text-[#333] text-left min-w-[99px] whitespace-nowrap mq450:text-[20px] mq450:leading-[17px]"
+                  >결제 정보</b
+                >
+              </div>
+              <div
+                class="self-stretch flex flex-col items-center justify-center py-[10px] pl-[20px] pr-[560px] box-border gap-[20px] max-w-full mq450:pr-[20px] mq450:box-border mq750:pr-[140px] mq750:box-border mq1050:pr-[280px] mq1050:box-border"
+              >
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[20px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >결제 일시 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="결제 일시"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[20px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >결제 수단 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="결제 수단"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[460px] flex flex-row items-center justify-between gap-[20px] max-w-full mq750:flex-wrap"
+                >
+                  <b
+                    class="h-[40px] w-[135px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+                    >결제 금액 :
+                  </b>
+                  <div
+                    class="w-[303px] flex flex-col items-start justify-start"
+                  >
+                    <div
+                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                    >
+                      <input
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        placeholder="결제 금액"
+                        type="text"
+                      />
+                    </div>
+                    <div
+                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
+                    >
+                      <div
+                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
+                      >
+                        Helper text
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="self-stretch h-[3px] flex flex-row items-start justify-start py-[0px] px-[50px] box-border max-w-full lg:pl-[25px] lg:pr-[25px] lg:box-border"
+              >
+                <div
+                  class="self-stretch flex-1 relative bg-[rgba(153,153,153,0.8)] max-w-full"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="self-stretch h-[143px] flex flex-row items-start justify-center py-[25px] px-[20px] box-border"
+          >
+            <button
+              class="cursor-pointer [border:none] py-[12px] px-[37px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
+            >
+              <div class="flex flex-row items-center justify-center gap-[8px]">
+                <img
+                  class="h-[22px] w-[18px] relative hidden"
+                  alt=""
+                  src="/image/host/masked-icon.svg"
+                />
+
+                <b
+                  class="relative text-[20px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[75px] whitespace-nowrap mq450:text-[16px] mq450:leading-[21px]"
+                  >목록보기</b
+                >
+                <img
+                  class="h-[22px] w-[18px] relative hidden"
+                  alt=""
+                  src="/image/host/masked-icon1.svg"
+                />
+              </div>
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>
