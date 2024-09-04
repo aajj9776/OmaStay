@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비밀번호 찾기</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-[457px] bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">비밀번호 찾기</h2>
+    <div class="mb-4">
+      <label for="email" class="block text-sm font-medium text-gray-700">이메일 <span class="text-red-500">*</span></label>
+      <input id="email" name="email" type="email" placeholder="이메일을 입력하세요" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    </div>
+    <div class="mb-4">
+      <label for="code" class="block text-sm font-medium text-gray-700">인증번호를 입력하세요</label>
+      <div class="flex items-center">
+        <input id="code" name="code" type="text" placeholder="인증번호를 입력하세요 ex:1212" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        <span class="ml-2 text-gray-500">00:00</span>
+      </div>
+      <div class="mt-2 text-right">
+        <span class="text-sm text-green-600 font-medium">일치함</span>
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <button class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700">이메일 인증</button>
+    </div>
+  </div>
+</body>
+  <script src="https://cdn.tailwindcss.com"></script>
+</html>
