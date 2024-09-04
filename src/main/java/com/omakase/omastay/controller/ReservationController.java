@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.omakase.omastay.dto.PaymentDTO;
+import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.service.ReservationService;
+
 
 @Controller
 @RequestMapping("/reservation")
@@ -34,15 +36,25 @@ public class ReservationController {
 
         PaymentDTO res = reservationService.insertPaymentInfo(payment);
         System.out.println("결과" + res);
+        if( res.getId() == 0) {
+            return "redirect:/reservation/payment_fail";
+        }
 
-        // 리다이렉트 시 쿼리 파라미터를 추가합니다.
-        redirectAttributes.addAttribute("paymentKey", payment.getPaymentKey());
+
+        ReservationDTO reservation = reservationService.insertReservationInfo(res);
+
         redirectAttributes.addAttribute("orderId", payment.getOrderId());
+        redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
         redirectAttributes.addAttribute("amount", payment.getAmount());
-
-
-        return "redirect:/reservation/payment_success.html";
+        redirectAttributes.addAttribute("payContent", payment.getPayContent());
+        return "redirect:/reservation/payment_complete";    
     }
+
+    @GetMapping("payment_complete")
+    public String payWan() {
+        return "reservation/payment_complete.html";
+    }
+    
 
     @RequestMapping("/no_reservation")
     public String noReservation() {
