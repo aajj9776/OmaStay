@@ -10,12 +10,15 @@ import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.repository.PaymentRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ReservationService {
 
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Transactional
     public PaymentDTO insertPaymentInfo(PaymentDTO payment) {
         System.out.println("얍"+ payment.getNsalePrice());
 
@@ -25,7 +28,7 @@ public class ReservationService {
         res.setPoint(null);
 
         if( payment.getNsalePrice() == null && payment.getNsalePrice().equals("")){
-            res.setNsalePrice("0");
+            res.setNsalePrice(null);
         }
 
         res.setPayStatus(PayStatus.PAY);
