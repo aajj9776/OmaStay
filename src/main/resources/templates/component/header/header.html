@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<header class="header" th:fragment="header">
+    <a th:href="@{/}">
+        <img alt="" class="header_logo" src="/image/logo/logo.png"/>
+    </a>
+    <div class="header_container">
+        <button class="header_login_button hover:bg-gray-200" type="button">
+            <a href="/login">로그인/회원가입</a>
+        </button>
+        <div aria-expanded="true" class="header_menu dropdown hover:bg-gray-200" data-bs-toggle="dropdown" role="button">
+            <img alt="" class="svg-icon" src="/image/header/svg.svg"/>
+
+            <ul class="dropdown-menu w-[270px] p-0">
+                <li><img class="mx-auto h-10 ml-3.5 mr-3.5 mt-2 mb-2  w-[240px] flex items-center justify-center" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)"/></img></li>
+                <li><a class="btn btn-primary mx-auto h-10 ml-3.5 mr-3.5 pb-2 pt-2 mt-2 mb-2  w-[240px] flex items-center justify-center" onclick="changPage(1)">로그인/회원가입</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/?activeSearch=domestic" onclick="changPage(2)">국내 숙소</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" onclick="changPage(3)">비회원 예약조회</a></li>
+                <li><a class="dropdown-item" onclick="changPage(4)">이벤트</a></li>
+                <li><a class="dropdown-item" onclick="changPage(5)">고객센터</a></li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script>
+        function changPage(index) {
+            const hrefs = [
+                "/", //몰라
+                "/login",
+                "/?activeSearch=domestic",
+                "/", //미정
+                "/", //미정
+                "/" //미정
+            ];
+            location.href = hrefs[index];
+        }
+    </script>
+</header>
+</body>
+</html>

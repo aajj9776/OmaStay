@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<header th:fragment="searchbar" id="search_bar"
+        class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid box-border flex flex-row items-start justify-center pt-[20px] px-[20px] pb-[18px] gap-[12px] top-[0] z-10 sticky max-w-full text-left text-[14.8px] text-[#333] font-[Inter]">
+    <div
+            class="w-[408px] h-[48px] rounded-[8px] bg-[#f5f5f5] overflow-hidden shrink-0 flex flex-row items-start justify-start p-[14px] box-border gap-[8px] max-w-full"
+    >
+        <div class="h-[20px] w-[20px] relative">
+            <img
+                    alt=""
+                    class="absolute h-4/5 w-4/5 top-[10%] right-[10%] bottom-[10%] left-[10%] max-w-full overflow-hidden max-h-full"
+                    src="/image/domestic-accommodations/placeholder-image.svg"
+            />
+        </div>
+        <input id="search-accommodation"
+                class="w-[calc(100%_-_44px)] text-black [border:none] [outline:none] bg-[transparent] h-[19px] flex-1 overflow-hidden flex flex-row items-end justify-start pt-[0px] px-[0px] pb-[0.5px] box-border font-[Inter] text-[16px] min-w-[211px] max-w-full"
+                placeholder="여행지나 숙소를 검색해보세요."
+                type="text"
+        />
+    </div>
+    <div id="date-range-picker"
+         class="w-[298px]  h-[48px] rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start mq750:w-[42px] mq1050:hidden"
+    >
+        <div class="h-[48px] w-[42px] relative">
+            <img
+                    alt=""
+                    class="absolute h-[31.25%] w-[33.33%] top-[34.38%] right-[26.19%] bottom-[34.38%] left-[40.48%] max-w-full overflow-hidden max-h-full"
+                    src="/image/domestic-accommodations/vector-1.svg"
+            />
+        </div>
+        <input type="text" readonly id="date-range-picker-input"
+               class="bg-[transparent] outline-none h-[48px] flex-1 relative leading-[24px] font-semibold flex items-center whitespace-nowrap mq750:hidden"
+        />
+    </div>
+    <div
+            class="w-[298px] h-[48px] rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start whitespace-nowrap text-[16px]"
+    >
+        <img
+                alt=""
+                class="h-[48px] w-[44px] relative min-h-[48px]"
+                src="/image/domestic-accommodations/search-img.svg"
+        />
+
+        <a
+                class="[text-decoration:none] h-[48px] flex-1 relative font-semibold text-[inherit] flex items-center"
+        >인원 2</a
+        >
+    </div>
+    <button type="button"
+            class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px]  flex flex-row items-center justify-center ont-semibold font-[Inter] text-[#fff] text-center "
+    >
+        검색
+    </button>
+</header>
+</body>
+</html>

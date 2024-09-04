@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <style>
+      .description {
+        display: none; /* 설명 텍스트 숨기기 */
+      }
+      .visible {
+        display: block; /* 보이기 */
+      }
+    </style>
+  <body>
+    <div
+      class="w-full relative bg-background-paper-elevation-8 overflow-hidden flex flex-col items-start justify-start pt-2.5 px-0 pb-[110px] box-border gap-[25.8px] leading-[normal] tracking-[normal] text-center text-11xl text-black font-menu-itemdefault"
+    >
+      <h1
+        class="m-0 self-stretch relative text-inherit font-normal font-[inherit] mq450:text-lg mq750:text-5xl"
+      >
+        엘리트 멤버쉽
+      </h1>
+      <main
+        class="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full"
+      >
+        <section
+          class="w-[850px] flex flex-col items-start justify-start gap-[8.8px] max-w-full text-left text-sm text-black font-menu-itemdefault"
+        >
+          <div
+            class="w-[800px] flex flex-row items-start justify-start pt-0 px-[61px] pb-[34px] box-border max-w-full mq750:pl-[30px] mq750:pr-[30px] mq750:box-border"
+          >
+            <div
+              class="w-[750px] flex-auto  items-start justify-start gap-[11px] max-w-full"
+            >
+            <div
+            class="w-[650px] flex-auto flex flex-row items-center justify-center pt-0 pb-1.5 px-5 text-center text-11xl mq450:px-5"
+          >
+            <h1
+              class="m-0 w-[650px] relative mq450:text-lg mq750:text-5xl text-center text-inherit leading-[36px] font-normal font-[inherit] whitespace-pre-wrap flex items-center justify-center"
+            >
+                  회원의 현재 등급
+                </h1>
+              </div>
+              <img
+                    id="member-status"
+                    class="w-auto h-[327px] mx-auto flex flex-row items-start justify-start"
+                    src="/image/user/normal.svg"
+                    alt=""
+            />
+              </textarea>
+              <div
+                class="w-[670px] flex flex-row items-start justify-start pt-0 px-[7px] pb-[3px] box-border"
+              >
+                <div
+                  class=" text-center flex-1 relative tracking-[0.17px] leading-[143%] whitespace-pre-wrap shrink-0"
+                >
+                  3번 더 이용시 방랑자 등급으로 상승
+                </div>
+              </div>
+              <div
+                class="self-stretch flex flex-row items-start justify-end max-w-full"
+              >
+                <div
+                  class="w-[500px] flex flex-col items-start justify-start gap-2 max-w-full"
+                >
+                  <div
+                    class="self-stretch rounded-mini flex flex-row items-start justify-start max-w-full"
+                  >
+                    <div
+                      class="h-5 flex-1 relative mix-blend-normal max-w-full"
+                    >
+                      <div
+                        class="absolute top-[0px] left-[45.3px] rounded-mini bg-primary-main w-[454.7px] h-5"
+                      >
+                        <div
+                          class="absolute top-[0px] left-[0px] rounded-mini bg-primary-main w-full h-full hidden mix-blend-normal"
+                        ></div>
+                        <div
+                          class="absolute top-[0px] left-[0px] rounded-mini bg-gray-700 w-full h-full mix-blend-normal z-[1]"
+                        ></div>
+                      </div>
+                      <div
+                        class="absolute top-[calc(50%_-_10px)] left-[0px] rounded-mini bg-primary-main w-[300px] h-5 overflow-hidden z-[2]"
+                      ></div>
+                    </div>
+                  </div>
+                  <div
+                    class="self-stretch flex flex-row items-start justify-center py-0 px-5"
+                  >
+                    <div
+                      class="w-[46px] relative tracking-[0.17px] leading-[143%] inline-block shrink-0"
+                    >
+                      60%
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <div class="flex flex-row items-center justify-center gap-[18px]"
+                  >
+                    <div
+                      class="relative tracking-[0.17px] leading-[143%] whitespace-nowrap text-center"
+                    >
+                  최근 2년간 이용한 횟수
+                </div>
+                <div
+                  class="h-5 relative tracking-[0.17px] leading-[143%] whitespace-pre-wrap inline-block min-w-[23px]"
+                >
+                  3번 더 이용시 여행가 등급으로 상승
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="self-stretch border-black border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start pt-[18px] px-0 pb-0 gap-[21.5px] max-w-full text-mini"
+          >
+            <div
+              class="w-[267px] flex flex-row items-start justify-center py-0 px-5 box-border"
+            >
+              <div class="relative leading-[18.4px] inline-block min-w-[105px]">
+                등급별 혜택 안내
+              </div>
+            </div>
+            <div
+              class="self-stretch flex flex-col items-start justify-start max-w-full text-xl"
+            >
+              <div
+                class="self-stretch h-[3px] relative border-primary-main border-t-[3px] border-solid box-border"
+              ></div>
+              <div
+                class="w-[850px] overflow-x-auto flex flex-row items-start justify-start py-0 pl-0 pr-2.5 box-border max-w-full mt-[-1px]"
+              >
+                <div
+                  class="w-[280px] border-silver-600 border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-col items-start justify-start"
+                >
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start py-1 px-0"
+                  >
+                    <div class="h-[58px] flex-1 relative overflow-hidden">
+                      <div
+                        class="absolute top-[0px] left-[0px] w-[280px] overflow-hidden flex flex-row items-start justify-start pt-2 px-[34px] pb-[5px] box-border"
+                      >
+                        <h3
+                          class="m-0 relative text-inherit font-normal font-[inherit] inline-block min-w-[60px] mq450:text-base"
+                        >
+                          방랑자
+                        </h3>
+                      </div>
+                      <div
+                        class="absolute top-[39px] left-[22px] text-xs inline-block min-w-[97px]"
+                      >
+                        이용횟수 5회 이하
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[3px] px-0 pb-0 text-mini"
+                  >
+                    <div
+                      class="flex flex-row items-start justify-start py-0 px-5"
+                    >
+                      <div class="relative inline-block min-w-[60px]">
+                        등급기준
+                      </div>
+                    </div>
+                    <div
+                      class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[3px] px-5 pb-[29px]"
+                    >
+                      <input
+                        class="w-[102px] [border:none] [outline:none] font-menu-itemdefault text-sm bg-[transparent] h-[19px] relative text-black text-left flex items-center p-0"
+                        placeholder="가입시 기본등급"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[5px] px-3 pb-[163px] gap-[23px] text-sm"
+                  >
+                    <div class="relative inline-block min-w-[60px]">
+                      등급 혜택
+                    </div>
+                    <div class="flex flex-row items-start justify-start gap-3">
+                      <div
+                        class="flex flex-col items-start justify-start gap-[26px]"
+                      >
+                        <img
+                          class="w-5 h-[19px] relative"
+                          loading="lazy"
+                          alt=""
+                          src="/image/user/vector.svg"
+                        />
+
+                        <img
+                          class="w-5 h-[19px] relative"
+                          loading="lazy"
+                          alt=""
+                          src="/image/user/vector.svg"
+                        />
+
+                        
+                      </div>
+                      <div
+                        class="flex flex-col items-start justify-start pt-0.5 px-0 pb-0"
+                      >
+                        <div
+                          class="flex flex-col items-start justify-start gap-[8.5px]"
+                        >
+                          <div class="relative">회원 전용 프로모션 진행</div>
+                          <div class="relative">
+                            리뷰 작성 시 최대 2000p 지급
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[280px] border-silver-600 border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-col items-start justify-start"
+                >
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start py-1 px-0"
+                  >
+                    <div class="h-[58px] flex-1 relative overflow-hidden">
+                      <div
+                        class="absolute top-[0px] left-[0px] w-[280px] overflow-hidden flex flex-row items-start justify-start pt-2 px-[34px] pb-[5px] box-border"
+                      >
+                        <h3
+                          class="m-0 relative text-inherit font-normal font-[inherit] inline-block min-w-[60px] mq450:text-base"
+                        >
+                          탐험가
+                        </h3>
+                      </div>
+                      <div
+                        class="absolute top-[39px] left-[22px] text-xs inline-block min-w-[94px]"
+                      >
+                        이용횟수5회 이상
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[3px] px-0 pb-0 text-mini"
+                  >
+                    <div
+                      class="flex flex-row items-start justify-start py-0 px-5"
+                    >
+                      <div class="relative inline-block min-w-[60px]">
+                        등급기준
+                      </div>
+                    </div>
+                    <div
+                      class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[3px] px-5 pb-[11px] text-sm"
+                    >
+                      <div class="relative">최근 2년 내 5번 이상 이용시</div>
+                    </div>
+                  </div>
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[5px] px-3 pb-[163px] gap-[23px] text-sm"
+                  >
+                    <div class="relative inline-block min-w-[60px]">
+                      등급 혜택
+                    </div>
+                    <div
+                      class="w-[214px] flex flex-row items-start justify-start gap-3"
+                    >
+                      <div
+                        class="flex flex-col items-start justify-start gap-[26px]"
+                      >
+                        <img
+                          class="w-5 h-[19px] relative"
+                          loading="lazy"
+                          alt=""
+                          src="/image/user/vector.svg"
+                        />
+
+                        <img
+                          class="w-5 h-[19px] relative"
+                          loading="lazy"
+                          alt=""
+                          src="/image/user/vector.svg"
+                        />
+
+                        <div
+                          class="flex flex-row items-start justify-start py-0 pl-px pr-0"
+                        >
+                          <img
+                            class="h-[19px] w-5 relative"
+                            loading="lazy"
+                            alt=""
+                            src="/image/user/vector.svg"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="flex-1 flex flex-col items-start justify-start pt-0.5 px-0 pb-0"
+                      >
+                        <div
+                          class="self-stretch flex flex-col items-start justify-start gap-[8.5px]"
+                        >
+                          <div class="self-stretch relative">
+                            탐험가 전용 쿠폰,프로모션 진행
+                          </div>
+                          <div class="relative">
+                            리뷰 작성 시 최대 2500p 지급
+                          </div>
+                          <div class="w-[168px] relative inline-block">
+                            이전 등급 프로모션,쿠폰 유지
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-[280px] border-silver-600 border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-col items-start justify-start"
+                >
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start py-1 px-0"
+                  >
+                    <div class="h-[58px] flex-1 relative overflow-hidden">
+                      <div
+                        class="absolute top-[0px] left-[0px] w-[280px] overflow-hidden flex flex-row items-start justify-start pt-2 px-[34px] pb-[5px] box-border"
+                      >
+                        <h3
+                          class="m-0 relative text-inherit font-normal font-[inherit] inline-block min-w-[60px] mq450:text-base"
+                        >
+                          개척자
+                        </h3>
+                      </div>
+                      <div
+                        class="absolute top-[39px] left-[22px] text-xs inline-block min-w-[104px]"
+                      >
+                        이용횟수 10회 이상
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[3px] px-0 pb-0 text-mini"
+                  >
+                    <div
+                      class="flex flex-row items-start justify-start py-0 px-5"
+                    >
+                      <div class="relative inline-block min-w-[60px]">
+                        등급기준
+                      </div>
+                    </div>
+                    <div
+                      class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[3px] px-5 pb-[11px] text-sm"
+                    >
+                      <div class="relative">최근 2년 내 10번 이상 이용시</div>
+                    </div>
+                  </div>
+                  <div
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[5px] px-3 pb-[163px] gap-[23px] text-sm"
+                  >
+                    <div class="relative inline-block min-w-[60px]">
+                      등급 혜택
+                    </div>
+                    <div
+                      class="w-[214px] flex flex-row items-start justify-start gap-3"
+                    >
+                      <div
+                        class="flex flex-col items-start justify-start gap-[26px]"
+                      >
+                        <img
+                          class="w-5 h-[19px] relative"
+                          loading="lazy"
+                          alt=""
+                          src="/image/user/vector.svg"
+                        />
+
+                        <img
+                          class="w-5 h-[19px] relative"
+                          loading="lazy"
+                          alt=""
+                          src="/image/user/vector.svg"
+                        />
+
+                        <div
+                          class="flex flex-row items-start justify-start py-0 pl-px pr-0"
+                        >
+                          <img
+                            class="h-[19px] w-5 relative"
+                            loading="lazy"
+                            alt=""
+                            src="/image/user/vector.svg"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="flex-1 flex flex-col items-start justify-start pt-0.5 px-0 pb-0"
+                      >
+                        <div
+                          class="self-stretch flex flex-col items-start justify-start gap-[8.5px]"
+                        >
+                          <div class="self-stretch relative">
+                            개척자 전용 쿠폰,프로모션 진행
+                          </div>
+                          <div class="relative">
+                            리뷰 작성 시 최대 3000p 지급
+                          </div>
+                          <div class="w-[168px] relative inline-block">
+                            이전 등급 프로모션,쿠폰 유지
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="self-stretch flex flex-row items-start justify-start py-0 px-0.5 box-border max-w-full text-center"
+          >
+            <div
+              class="flex-1 border-black border-[1px] border-solid box-border overflow-hidden flex flex-col items-center justify-start py-0 px-[13px] gap-3.5 max-w-full"
+            >
+              <div
+                class="self-stretch bg-background-paper-elevation-8 flex flex-col items-start justify-start gap-2 max-w-full"
+              >
+                <div
+                  class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
+                >
+                  <div
+                    class="flex flex-row items-center justify-center py-1.5 px-0"
+                  >
+                    <div
+                      class="relative tracking-[0.4px] leading-[24px] uppercase font-medium whitespace-nowrap"
+                    >
+                      omastay멤버십은 무료인가요?
+                    </div>
+                  </div>
+                  <div
+                    class="rounded-borderradius overflow-hidden flex flex-col items-center justify-center py-2 px-3"
+                  >
+                    <div
+                      class="w-[17px] flex flex-row items-center justify-center"
+                    >
+                      <img
+                        class="h-5 w-4 relative"
+                        loading="lazy"
+                        alt=""
+                        src="/image/user/masked-icon.svg"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="self-stretch flex flex-col items-start justify-start max-w-full text-left text-base text-text-primary"
+                >
+                  <div
+                    class="self-stretch shadow-[0px_3px_14px_2px_rgba(0,_0,_0,_0.12),_0px_8px_10px_1px_rgba(0,_0,_0,_0.14),_0px_5px_5px_-3px_rgba(0,_0,_0,_0.2)] rounded-mini bg-background-paper-elevation-8 overflow-hidden flex flex-col items-center justify-center py-2.5 px-0 box-border max-w-full"
+                  >
+                    <div
+                      class="self-stretch flex flex-col items-center justify-center max-w-full"
+                    >
+                      <div
+                        class="self-stretch flex flex-row items-center justify-center py-0 px-5 box-border max-w-full"
+                      >
+                        <div
+                          class="w-[536px] relative tracking-[0.15px] leading-[150%] inline-block shrink-0 max-w-full"
+                        >
+                          <p class="m-0">
+                            네 맞습니다. omastay를 자주 이용해주시는 고객님들께
+                            감사의 마음으로
+                          </p>
+                          <p class="m-0">혜택을 제공하는 무료 멤버십이에요.</p>
+                          <p class="m-0">
+                            멤버십 조건을 충족하시면 자동으로 가입돼요.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="self-stretch bg-background-paper-elevation-8 flex flex-col items-start justify-start gap-2 max-w-full"
+              >
+                <div
+                  class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
+                >
+                  <div
+                    class="w-[178px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
+                  >
+                    <div
+                      class="flex-1 relative tracking-[0.4px] leading-[24px] uppercase font-medium whitespace-nowrap"
+                    >
+                      회원 등급은 어떻게 올리나요?
+                    </div>
+                  </div>
+                  <div
+                    class="rounded-borderradius overflow-hidden flex flex-col items-center justify-center py-2 px-3"
+                  >
+                    <div
+                      class="w-[17px] flex flex-row items-center justify-center"
+                    >
+                      <img
+                        class="h-5 w-4 relative"
+                        loading="lazy"
+                        alt=""
+                        src="/image/user/masked-icon.svg"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="self-stretch flex flex-col items-start justify-start max-w-full text-left text-base text-text-primary"
+                >
+                  <div
+                    class="self-stretch shadow-[0px_3px_14px_2px_rgba(0,_0,_0,_0.12),_0px_8px_10px_1px_rgba(0,_0,_0,_0.14),_0px_5px_5px_-3px_rgba(0,_0,_0,_0.2)] rounded-mini bg-background-paper-elevation-8 overflow-hidden flex flex-col items-center justify-center py-2.5 px-0 box-border max-w-full"
+                  >
+                    <div
+                      class="self-stretch flex flex-col items-center justify-center max-w-full"
+                    >
+                      <div
+                        class="self-stretch flex flex-row items-center justify-center py-3 px-5 box-border max-w-full"
+                      >
+                        <div
+                          class="w-[536px] relative tracking-[0.15px] leading-[150%] inline-block shrink-0 max-w-full"
+                        >
+                          <p class="m-0">
+                            등급별로 이용 횟수 기준을 충족하시면, 다음 등급으로
+                            자동 승급됩니다
+                          </p>
+                          <p class="m-0">
+                            단, 상품 이용 완료 후 2년이 지난 건은 이용 횟수에서
+                            제외돼요.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="self-stretch bg-background-paper-elevation-8 flex flex-col items-start justify-start gap-2 max-w-full"
+              >
+                <div
+                  class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
+                >
+                  <div
+                    class="w-[255px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
+                  >
+                    <div
+                      class="h-6 flex-1 relative tracking-[0.4px] leading-[24px] uppercase font-medium flex items-center justify-center"
+                    >
+                      상품을 결제 했는데 이용등급이 안오릅니다
+                    </div>
+                  </div>
+                  <div
+                    class="rounded-borderradius overflow-hidden flex flex-col items-center justify-center py-2 px-3"
+                  >
+                    <div
+                      class="w-[17px] flex flex-row items-center justify-center"
+                    >
+                      <img
+                        class="h-5 w-4 relative"
+                        loading="lazy"
+                        alt=""
+                        src="/image/user/masked-icon.svg"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="self-stretch flex flex-col items-start justify-start max-w-full text-left text-base text-text-primary"
+                >
+                  <div
+                    class="self-stretch shadow-[0px_3px_14px_2px_rgba(0,_0,_0,_0.12),_0px_8px_10px_1px_rgba(0,_0,_0,_0.14),_0px_5px_5px_-3px_rgba(0,_0,_0,_0.2)] rounded-mini bg-background-paper-elevation-8 overflow-hidden flex flex-col items-center justify-center py-2.5 px-0 box-border max-w-full"
+                  >
+                    <div
+                      class="self-stretch flex flex-col items-center justify-center max-w-full"
+                    >
+                      <div
+                        class="self-stretch flex flex-row items-center justify-center py-3 px-5 box-border max-w-full"
+                      >
+                        <div
+                          class="h-12 w-[536px] relative tracking-[0.15px] leading-[150%] inline-block shrink-0 max-w-full"
+                        >
+                          <p class="m-0">
+                            전용 포인트를 사용할 경우에는 이용 등급이 오르지
+                            않습니다
+                          </p>
+                          <p class="m-0">
+                            더불어 이용 횟수가 반영 되기 까지 시간이 소요 될수
+                            있음을 양해 부탁드립니다
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="self-stretch bg-background-paper-elevation-8 flex flex-col items-start justify-start gap-2 max-w-full"
+              >
+                <div
+                  class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
+                >
+                  <div
+                    class="w-[188px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
+                  >
+                    <div
+                      class="flex-1 relative tracking-[0.4px] leading-[24px] uppercase font-medium whitespace-nowrap"
+                    >
+                      멤버십 전용 쿠폰이 안 보입니다
+                    </div>
+                  </div>
+                  <div
+                    class="rounded-borderradius overflow-hidden flex flex-col items-center justify-center py-2 px-3"
+                  >
+                    <div
+                      class="w-[17px] flex flex-row items-center justify-center"
+                    >
+                      <img
+                        class="h-5 w-4 relative"
+                        loading="lazy"
+                        alt=""
+                        src="/image/user/masked-icon.svg"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="self-stretch flex flex-col items-start justify-start max-w-full text-left text-base text-text-primary"
+                >
+                  <div
+                    class="self-stretch shadow-[0px_3px_14px_2px_rgba(0,_0,_0,_0.12),_0px_8px_10px_1px_rgba(0,_0,_0,_0.14),_0px_5px_5px_-3px_rgba(0,_0,_0,_0.2)] rounded-mini bg-background-paper-elevation-8 overflow-hidden flex flex-col items-center justify-center py-2.5 px-0 box-border max-w-full"
+                  >
+                    <div
+                      class="self-stretch flex flex-col items-center justify-center max-w-full"
+                    >
+                      <div
+                        class="self-stretch flex flex-row items-center justify-center py-0 px-5 box-border max-w-full"
+                      >
+                        <div
+                          class="w-[536px] relative tracking-[0.15px] leading-[150%] inline-block shrink-0 max-w-full"
+                        >
+                          <p class="m-0">
+                            멤버십 전용 쿠폰 탐험가 등급부터 발급됩니다.
+                          </p>
+                          <p class="m-0">
+                            다운받은 쿠폰은 내 정보 &gt; 쿠폰함에서 확인할 수
+                            있습니다.
+                          </p>
+                          <p class="m-0">
+                            쿠폰은 매월 발급되며, 등급별로 쿠폰 조건이나 혜택은
+                            상이할 수 있습니다.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="self-stretch flex flex-row items-start justify-start py-0 px-1 box-border max-w-full"
+          >
+            <div
+              class="flex-1 border-black border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start gap-5 max-w-full"
+            >
+              <textarea
+                class="border-black border-[1px] border-solid bg-[transparent] h-40 w-auto [outline:none] self-stretch box-border overflow-hidden shrink-0 flex flex-row items-start justify-start p-3 font-menu-itemdefault font-medium text-sm text-black"
+                placeholder="유의사항"
+                rows="{8}"
+                cols="{42}"
+              >
+              </textarea>
+              <textarea
+                class="border-black border-[1px] border-solid bg-[transparent] h-40 w-auto [outline:none] self-stretch box-border overflow-hidden shrink-0 flex flex-row items-start justify-start p-3 font-menu-itemdefault font-medium text-sm text-black"
+                placeholder="쿠폰 유의사항"
+                rows="{8}"
+                cols="{42}"
+              >
+              </textarea>
+              <textarea
+                class="border-black border-[1px] border-solid bg-[transparent] h-40 w-auto [outline:none] self-stretch box-border overflow-hidden shrink-0 flex flex-row items-start justify-start p-3 font-menu-itemdefault font-medium text-sm text-black"
+                placeholder="프로모션 유의 사항"
+                rows="{8}"
+                cols="{42}"
+              >
+              </textarea>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
+
+<head>
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+  <link rel="stylesheet" href="/DataTables/datatables.css" />
+</head>
+
+<body>
+  <div
+    class="w-full relative rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[102px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]">
+    <a
+      class="[text-decoration:none] w-[202px] h-[40px] relative font-semibold text-[inherit] flex items-center justify-center shrink-0 mq450:text-[19px]">가맹점
+      공지사항</a>
+    <section
+      class="w-[1543px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[10px] box-border gap-[15px] max-w-full text-center text-[20px] text-[#000] font-[Inter]">
+      <div
+        class="w-[585px] overflow-hidden flex flex-row items-center justify-center flex-wrap content-center py-[5px] px-[20px] box-border gap-[15px] max-w-full">
+        <h3
+          class="m-[0px] w-[130px] relative text-inherit font-light font-[inherit] flex items-center justify-center shrink-0 mq450:text-[16px]">
+          등록일
+        </h3>
+        <nav
+          class="m-[0px] flex-1 flex flex-row items-start justify-center gap-[13.5px] min-w-[260px] max-w-full whitespace-nowrap text-left text-[16px] text-[rgba(0,0,0,0.87)] font-[Roboto] mq450:flex-wrap">
+          <div
+            class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[117px]">
+            <input
+              class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[94px]"
+              placeholder="Placeholder" type="text" />
+
+            <div class="h-[24px] hidden flex-row items-center justify-center">
+              <img class="h-[16px] w-[16px] relative overflow-hidden shrink-0" alt="" src="/public/check.svg" />
+            </div>
+          </div>
+          <div
+            class="h-[36px] relative tracking-[0.15px] leading-[150%] flex items-center min-w-[13px] mq450:w-full mq450:h-[13px]">
+            —
+          </div>
+          <div
+            class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[117px]">
+            <input
+              class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[94px]"
+              placeholder="Placeholder" type="text" />
+
+            <div class="h-[24px] hidden flex-row items-center justify-center">
+              <img class="h-[16px] w-[16px] relative overflow-hidden shrink-0" alt="" src="/public/check.svg" />
+            </div>
+          </div>
+        </nav>
+
+        <button>검색</button>
+      </div>
+
+    </section>
+    <section
+      class="w-[1543px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[14px] text-[#000] font-['Work_Sans']">
+      <div
+        class="self-stretch overflow-hidden flex flex-col items-start justify-start pt-[10px] px-[10px] pb-[20px] gap-[10px]">
+        <table id="table" class="w-[1200px] text-[18px]">
+          <thead>
+            <tr
+              class="bg-[#d4d8f1] py-[20px] pl-[30px] pr-[634px] gap-[20px] mq450:pr-[20px] mq450:box-border mq750:pr-[158px] ">
+              <th><input type="checkbox" id="selectAllCheckbox"></th>
+              <th>제목</th>
+              <th>등록일</th>
+            </tr>
+          </thead>
+          <tbody class="bg-[#ffffff] pt-[100px]">
+            <tr th:each="item : ${list}">
+              <td><input type="checkbox" class="itemCheckbox" th:value="${item.id}"></td>
+              <td th:text="${item.sTitle}"></td>
+              <td th:text="${item.sDate}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="self-stretch rounded-[10px] overflow-hidden flex flex-row items-center justify-start flex-wrap content-center py-[2.5px] pl-[30px] pr-[1366px] gap-[10px] text-center text-[16px] text-[#fff] font-[ABeeZee] mq450:pr-[20px] mq450:box-border mq750:pr-[341px] mq750:box-border mq1275:pr-[683px] mq1275:box-border">
+        <div class="flex-1 flex flex-col items-start justify-start min-w-[63px]">
+          <div
+            class="self-stretch rounded-[4px] bg-[#17a2b8] flex flex-col items-center justify-center py-[6px] px-[12px]">
+            <div class="self-stretch flex flex-row items-center justify-center gap-[1px]">
+
+
+              <button class="flex-1 relative leading-[24px]"
+                onclick="javascript:location.href='/admin/host_notice_write'">글쓰기</button>
+            </div>
+          </div>
+        </div>
+        <div class="w-0 flex flex-col items-start justify-start py-[0px] px-[0px] box-border text-[#17a2b8]">
+
+          <button id="deleteButton"
+            class="w-[54px] h-[40px] rounded-[4px] border-[#17a2b8] border-[1px] border-solid box-border flex flex-col items-center justify-center py-[4px] px-[10px]">삭제</button>
+
+
+        </div>
+      </div>
+    </section>
+  </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+<script src="/DataTables/datatables.js"></script>
+<script>
+
+  $(document).ready(function () {
+    // $('#table').DataTable({
+    //   scrollX: '1200px', // 수평 스크롤 활성화
+    //   autoWidth: true
+    // });
+
+    // 전체 선택 체크박스 이벤트 처리
+    $('#selectAllCheckbox').on('click', function () {
+      $('.itemCheckbox').prop('checked', this.checked);
+    });
+
+    // 삭제 버튼 클릭 이벤트 처리
+    $('#deleteButton').on('click', function () {
+      var selectedIds = [];
+      $('.itemCheckbox:checked').each(function () {
+        selectedIds.push($(this).val());
+      });
+
+      if (selectedIds.length === 0) {
+        alert("삭제할 항목을 선택하세요.");
+        return;
+      }
+
+      if (confirm("선택한 항목을 삭제하시겠습니까?")) {
+        // AJAX 요청을 통해 서버에 삭제 요청 전송
+        $.ajax({
+          url: '/admin/host_notice/delete', // 실제 삭제 요청 URL로 변경
+          type: 'POST',
+          data: { ids: selectedIds },
+          success: function (response) {
+            // 삭제 성공 시 테이블 다시 로드 또는 삭제된 행 제거
+            table.ajax.reload();
+            alert("삭제가 완료되었습니다.");
+          },
+          error: function (error) {
+            // 삭제 실패 시 에러 처리
+            alert("삭제 중 오류가 발생했습니다.");
+            console.error(error);
+
+            // 삭제 실패 처리
+    console.error('삭제 실패:', error);
+    alert("삭제 중 오류가 발생했습니다. 서버 응답: " + xhr.responseText); 
+          }
+        });
+      }
+    });
+  });
+
+
+
+
+</script>
+
+</html>

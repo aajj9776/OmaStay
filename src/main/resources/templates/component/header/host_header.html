@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div th:fragment="host_header"
+      class="w-[1920px] max-w-full flex flex-col items-start justify-start leading-[normal] tracking-[normal] mx-auto"
+    >
+      <div
+        class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid flex flex-row items-start justify-between py-[0px] px-[360px] gap-[20px] mq750:pl-[90px] mq750:pr-[90px] mq750:box-border mq1050:flex-wrap mq1050:pl-[180px] mq1050:pr-[180px] mq1050:box-border"
+      >
+        <img
+          class="h-[75px] relative object-cover"
+          alt=""
+          src="/image/logo/logo.png"
+        />
+
+        <div
+          class="flex flex-col items-start justify-start pt-[17.5px] px-[0px] pb-[0px] dropdown"
+        >
+          <div class="w-[40px] h-[40px] relative rounded-[8px]  hover:bg-gray-200" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img
+              class="absolute top-[calc(50%_-_10px)] left-[calc(50%_-_10px)] w-[20px] h-[20px]"
+              alt=""
+              src="/image/header/svg.svg"
+            />
+            <!--알아서 커스텀 하시오-->
+            <ul class="dropdown-menu w-[270px] p-0">
+              <li><a class="btn btn-primary" href="#">로그인/회원가입</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">국내 숙소</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">비회원 예약조회</a></li>
+              <li><a class="dropdown-item" href="#">이벤트</a></li>
+              <li><a class="dropdown-item" href="#">고객센터</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid box-border flex flex-row items-start justify-start pt-[0.5px] px-[360px] pb-[0px] max-w-full mq750:pl-[90px] mq750:pr-[90px] mq750:box-border mq1050:pl-[180px] mq1050:pr-[180px] mq1050:box-border"
+      >
+        <div
+          class="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] lg:flex-wrap"
+        >
+          <div
+            class="w-[673px] overflow-hidden shrink-0 flex flex-row items-start justify-center py-[12px] px-[1px] box-border gap-[27px] max-w-full mq1050:flex-wrap"
+          >
+            <button
+              class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] px-[28px] bg-[#fff] flex-1 rounded-[10px] box-border flex flex-row items-start justify-start min-w-[130px] whitespace-nowrap hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
+            >
+              <a
+                class="[text-decoration:none] relative text-[16px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center whitespace-nowrap"
+                >변우석님 환영합니다.</a
+              >
+            </button>
+            <button
+              class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] pl-[35px] pr-[34px] bg-[#fff] rounded-[10px] flex flex-row items-start justify-start hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
+            >
+              <a
+                class="[text-decoration:none] relative text-[16px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center inline-block min-w-[59px]"
+                >숙소관리</a
+              >
+            </button>
+            <button
+              class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] pl-[35px] pr-[34px] bg-[#fff] rounded-[10px] flex flex-row items-start justify-start hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
+            >
+              <a
+                class="[text-decoration:none] relative text-[16px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center inline-block min-w-[59px]"
+                >예약관리</a
+              >
+            </button>
+            <button
+              class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] pl-[35px] pr-[34px] bg-[#fff] rounded-[10px] flex flex-row items-start justify-start hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
+            >
+              <a
+                class="[text-decoration:none] relative text-[16px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center inline-block min-w-[59px]"
+                >고객센터</a
+              >
+            </button>
+          </div>
+          <div
+            class="overflow-hidden flex flex-row items-start justify-start py-[12px] px-[0px]"
+          >
+            <button
+              class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] px-[27px] bg-[#fff] rounded-[10px] flex flex-row items-start justify-start hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
+            >
+              <a
+                class="[text-decoration:none] relative text-[16px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center inline-block min-w-[74px] whitespace-nowrap"
+                >마이페이지</a
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

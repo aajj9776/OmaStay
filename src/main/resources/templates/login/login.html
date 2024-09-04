@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
+<head>
+  </head>
+  <body class="bg-gray-100">
+    <div
+      class="w-[1200px] mx-auto flex flex-col items-center justify-start py-20 px-6 box-border gap-6 leading-normal text-center text-gray-600 font-inter"
+    >
+      <!-- 로고 섹션 -->
+      <div class="w-full flex justify-center mb-8">
+      </div>
+
+      <!-- 로그인/회원가입 섹션 -->
+      <div class="flex flex-row items-center justify-center mb-8 w-full max-w-md">
+        <div class="h-px flex-grow bg-gray-600"></div>
+        <div class="mx-4 text-xl md:text-2xl font-semibold whitespace-nowrap">
+          로그인/회원가입
+        </div>
+        <div class="h-px flex-grow bg-gray-600"></div>
+      </div>
+
+      <!-- 이미지 섹션들 -->
+      <div class="w-full max-w-md flex flex-col gap-4 mb-8">
+        <img
+          class="w-full rounded-lg object-cover"
+          loading="lazy"
+          alt="Kakao"
+          src="/image/user/kakaoLogin.png"
+         
+        />
+        <img
+          class="w-full rounded-lg object-cover"
+          loading="lazy"
+          alt="Naver"
+          src="/image/user/naverLogin.png"
+          
+        />
+        <img
+          class="w-full rounded-lg object-cover"
+          loading="lazy"
+          alt="Google"
+          src="/image/user/googleLogin.png"
+          
+        />
+      </div>
+
+      <!-- 이메일로 시작하기 버튼 -->
+      <div class="w-full max-w-md mb-6">
+        <button
+          class="w-full flex items-center justify-center py-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+        >
+          <img
+            class="w-6 h-auto mr-2"
+            loading="lazy"
+            alt="Email Icon"
+            src="/image/user/image-49@2x.png"
+            
+          />
+          <span class="text-xl md:text-2xl font-semibold">이메일로 시작하기</span>
+        </button>
+      </div>
+
+      <!-- 호스트/관리자 로그인 -->
+      <div class="flex flex-row items-center justify-between mb-8 w-full max-w-md">
+      <div class="text-gray-500md:text-xl font-semibold text-2xl hover:bg-gray-200">
+        호스트 로그인
+      </div>
+        <div class="text-gray-500md:text-xl font-semibold text-2xl hover:bg-gray-200">
+          관리자 로그인
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>

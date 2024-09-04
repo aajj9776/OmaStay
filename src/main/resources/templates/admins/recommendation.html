@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}"
+      layout:fragment="admin">
+<head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div
+      class="w-full relative rounded-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-center py-[54px] pl-[30px] pr-[20px] box-border gap-[15px] leading-[normal] tracking-[normal]"
+    >
+      <header
+        class="self-stretch h-[40px] relative text-[24px] font-semibold font-[Inter] text-[#000] text-left flex items-center shrink-0 whitespace-nowrap"
+      >
+        추천 숙소 관리
+      </header>
+      <section
+        class="w-[1474px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-center p-[27px] box-border gap-[15px] max-w-full text-left text-[20px] text-[#000] font-[Inter] mq450:pt-[20px] mq450:pb-[20px] mq450:box-border"
+      >
+        <div
+          class="overflow-hidden flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[802px] box-border gap-[10px] max-w-full mq450:pr-[20px] mq450:box-border mq825:pr-[200px] mq825:box-border mq1425:flex-wrap mq1425:pr-[401px] mq1425:box-border"
+        >
+          <h3
+            class="m-[0px] w-[181px] relative text-inherit font-semibold font-[inherit] flex items-center whitespace-nowrap mq450:text-[16px]"
+          >
+            현재 등록된 추천 숙소
+          </h3>
+          <div
+            class="h-[24px] relative flex items-center whitespace-nowrap max-w-full mq450:text-[16px]"
+          >
+            (2024-08-24 00:00:00 기준 갱신값)
+          </div>
+          <div
+            class="w-[91px] flex flex-col items-start justify-start text-center text-[16px] text-[#007bff] font-[ABeeZee]"
+          >
+            <div
+              class="self-stretch rounded-[4.8px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[6px] px-[15px]"
+            >
+              <div class="flex flex-row items-center justify-center gap-[4px]">
+                <img
+                  class="h-[30px] w-[30px] relative overflow-hidden shrink-0 object-cover hidden min-h-[30px]"
+                  alt=""
+                  src="/public/l-icon@2x.png"
+                />
+
+                <a
+                  class="[text-decoration:none] relative leading-[30px] text-[inherit] inline-block min-w-[59px]"
+                  >되돌리기</a
+                >
+                <img
+                  class="h-[30px] w-[30px] relative overflow-hidden shrink-0 object-cover hidden min-h-[30px]"
+                  alt=""
+                  src="/public/l-icon@2x.png"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="self-stretch overflow-hidden flex flex-col items-start justify-start p-[10px] gap-[10px] text-[14px] font-['Work_Sans']"
+        >
+          <div
+            class="self-stretch rounded-[10px] bg-[#e1e1e1] overflow-hidden flex flex-row items-center justify-between py-[20px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="w-[1454px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-center p-[27px] box-border gap-[15px] max-w-full text-left text-[20px] text-[#000] font-[Inter] mq450:pt-[20px] mq450:pb-[20px] mq450:box-border"
+      >
+        <div
+          class="overflow-hidden flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[681px] box-border gap-[10px] max-w-full mq450:pr-[20px] mq450:box-border mq825:pr-[170px] mq825:box-border mq1425:flex-wrap mq1425:pr-[340px] mq1425:box-border"
+        >
+          <h3
+            class="m-[0px] w-[181px] relative text-inherit font-semibold font-[inherit] flex items-center whitespace-nowrap mq450:text-[16px]"
+          >
+            실시간 갱신 추천 숙소
+          </h3>
+          <div
+            class="h-[24px] relative flex items-center whitespace-nowrap max-w-full mq450:text-[16px]"
+          >
+            (2024-08-24 00:00:00 기준 갱신값)
+          </div>
+          <div
+            class="w-[91px] flex flex-col items-start justify-start text-center text-[16px] text-[#007bff] font-[ABeeZee]"
+          >
+            <div
+              class="self-stretch rounded-[4.8px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[6px] px-[15px]"
+            >
+              <div class="flex flex-row items-center justify-center gap-[4px]">
+                <img
+                  class="h-[30px] w-[30px] relative overflow-hidden shrink-0 object-cover hidden min-h-[30px]"
+                  alt=""
+                  src="/public/l-icon@2x.png"
+                />
+
+                <div class="relative leading-[30px] inline-block min-w-[59px]">
+                  갱신하기
+                </div>
+                <img
+                  class="h-[30px] w-[30px] relative overflow-hidden shrink-0 object-cover hidden min-h-[30px]"
+                  alt=""
+                  src="/public/l-icon@2x.png"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="rounded-[4.8px] bg-[#007bff] flex flex-col items-center justify-center py-[8px] px-[16px] text-center text-[16px] text-[#fff] font-[ABeeZee]"
+          >
+            <div class="flex flex-row items-center justify-center gap-[4px]">
+              <img
+                class="h-[30px] w-[30px] relative overflow-hidden shrink-0 object-cover hidden min-h-[30px]"
+                alt=""
+                src="/public/l-icon@2x.png"
+              />
+
+              <div class="relative leading-[30px] inline-block min-w-[59px]">
+                반영하기
+              </div>
+              <img
+                class="h-[30px] w-[30px] relative overflow-hidden shrink-0 object-cover hidden min-h-[30px]"
+                alt=""
+                src="/public/l-icon@2x.png"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="self-stretch overflow-hidden flex flex-col items-start justify-start p-[10px] gap-[10px] text-[14px] font-['Work_Sans']"
+        >
+          <div
+            class="self-stretch rounded-[10px] bg-[#e1e1e1] overflow-hidden flex flex-row items-center justify-between py-[20px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+          <div
+            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq825:flex-wrap"
+          >
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              업체명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              업종
+            </div>
+            <div
+              class="w-[56px] relative leading-[150%] font-semibold flex items-center"
+            >
+              대표자명
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
+            >
+              연락처
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              주소
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출 액수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              매출건수
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
+            >
+              리뷰 평점
+            </div>
+            <div
+              class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
+            >
+              합계
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

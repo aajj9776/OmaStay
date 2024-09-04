@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
+<head>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+      <!-- 제목 및 설명 섹션 -->
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-semibold">필수 정보 입력</h1>
+        <p class="text-gray-600">가입을 위해 필수 정보를 입력해 주세요.</p>
+      </div>
+
+      <!-- 입력 폼 섹션 -->
+      <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <!-- 이메일 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">이메일 *</label>
+          <div class="flex">
+            <input
+              type="email"
+              placeholder="이메일을 입력하세요"
+              class="flex-grow p-2 border rounded-l-lg"
+            />
+            <button class="bg-blue-500 text-white p-2 rounded-r-lg">
+              이메일 인증
+            </button>
+          </div>
+        </div>
+
+        <!-- 비밀번호 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">비밀번호 *</label>
+          <input
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            class="w-full p-2 border rounded-lg"
+          />
+        </div>
+
+        <!-- 비밀번호 확인 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">비밀번호 확인 *</label>
+          <input
+            type="password"
+            placeholder="비밀번호를 다시 입력하세요"
+            class="w-full p-2 border rounded-lg"
+          />
+        </div>
+
+        <!-- 생년월일 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">생년월일 *</label>
+          <div class="flex space-x-2">
+            <input
+              type="text"
+              placeholder="년(YYYY)"
+              class="w-full p-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="월(MM)"
+              class="w-full p-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="일(DD)"
+              class="w-full p-2 border rounded-lg"
+            />
+          </div>
+        </div>
+
+        <!-- 성별 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">성별 *</label>
+          <div class="flex space-x-4">
+            <label class="flex items-center">
+              <input type="radio" name="gender" value="male" class="mr-2" />
+              남성
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="gender" value="female" class="mr-2" />
+              여성
+            </label>
+          </div>
+        </div>
+
+        <!-- 우편번호 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">우편번호 *</label>
+          <div class="flex">
+            <input
+              type="text"
+              placeholder="우편번호"
+              class="flex-grow p-2 border rounded-l-lg"
+            />
+            <button class="bg-blue-500 text-white p-2 rounded-r-lg">
+              검색
+            </button>
+          </div>
+        </div>
+
+        <!-- 주소 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">주소 *</label>
+          <input
+            type="text"
+            placeholder="주소를 입력하세요"
+            class="w-full p-2 border rounded-lg"
+          />
+        </div>
+
+        <!-- 상세주소 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">상세주소 *</label>
+          <input
+            type="text"
+            placeholder="상세주소를 입력하세요"
+            class="w-full p-2 border rounded-lg"
+          />
+        </div>
+
+        <!-- 휴대전화 입력 그룹 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">휴대전화 *</label>
+          <input
+            type="text"
+            placeholder="‘-’ 없이 입력해주세요"
+            class="w-full p-2 border rounded-lg"
+          />
+        </div>
+
+        <!-- 이메일 수신 여부 선택 -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700">이메일 수신 여부 *</label>
+          <div class="flex space-x-4">
+            <label class="flex items-center">
+              <input type="radio" name="email_subscription" value="yes" class="mr-2" />
+              예
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="email_subscription" value="no" class="mr-2" />
+              아니오
+            </label>
+          </div>
+        </div>
+
+        <!-- 확인 버튼 -->
+        <button
+          class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+        >
+          확인
+        </button>
+      </div>
+    </div>
+  </body>
+
+</html>

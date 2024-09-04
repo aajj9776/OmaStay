@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
+
+<head>
+</head>
+
+<body>
+  <div
+    class="w-full relative rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden flex flex-row items-center justify-start py-[90px] px-[60px] box-border leading-[normal] tracking-[normal] mq900:pl-[30px] mq900:pr-[30px] mq900:box-border">
+    <main
+      class="flex-1 overflow-hidden flex flex-col items-center justify-center py-[0px] px-[65px] box-border gap-[10px] max-w-full text-left text-[24px] text-[#000] font-[Roboto] mq1275:pl-[32px] mq1275:pr-[32px] mq1275:box-border">
+      <h2
+        class="m-[0px] self-stretch h-[48px] relative text-inherit tracking-[0.46px] leading-[26px] uppercase font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[21px]">
+        공지사항 글쓰기
+      </h2>
+      <section
+        class="self-stretch h-[764px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[48px] px-[61px] box-border mq450:pt-[20px] mq450:pb-[20px] mq450:box-border mq900:pt-[31px] mq900:pb-[31px] mq900:box-border mq1275:pl-[30px] mq1275:pr-[30px] mq1275:box-border">
+        <form action="write" method="post" 
+	encType="multipart/form-data"><%-- 폼에 파일을 첨부하게 될 때
+						encType을 반드시 multipart로 지정 --%>
+		<input type="hidden" name="bname" value="bbs"/>
+		<table summary="게시판 글쓰기">
+			<caption>게시판 글쓰기</caption>
+			<tbody>
+				<tr>
+					<th>제목:</th>
+					<td><input type="text" name="subject" data-str="제목" size="45"/></td>
+				</tr>
+				<tr>
+					<th>이름:</th>
+					<td><input type="text" name="writer" data-str="이름" size="12"/></td>
+				</tr>
+				<tr>
+					<th>내용:</th>
+					<td><textarea name="content" cols="50" data-str="내용" 
+							id="content" rows="8"></textarea></td>
+				</tr>
+				<tr>
+					<th>첨부파일:</th>
+					<td><input type="file" name="file" data-str="첨부파일"/></td>
+				</tr>
+<!--
+				<tr>
+					<th>비밀번호:</th>
+					<td><input type="password" name="pwd" size="12"/></td>
+				</tr>
+-->
+				<tr>
+					<td colspan="2">  
+						<input type="button" value="보내기" 
+						onclick="sendData()"/>
+						<input type="button" value="다시"/>
+              
+						<input type="button" value="목록" 
+						onclick="javascript:location.href='list?cPage=${param.cPage}&bname=${param.bname }'"/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+      </section>
+      <div
+        class="overflow-hidden flex flex-row items-center justify-start py-[15px] pl-[20px] pr-[1170px] gap-[11px] mq450:pr-[20px] mq450:box-border mq900:pr-[292px] mq900:box-border mq1275:pr-[585px] mq1275:box-border mq1650:flex-wrap">
+        <button
+          class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center">
+          <div class="flex flex-row items-center justify-center gap-[8px]">
+
+            <div
+              class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]">
+              등록
+            </div>
+            <img class="h-[22px] w-[18px] relative hidden" alt="" src="/public/masked-icon1.svg" />
+          </div>
+        </button>
+        <button
+          class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[21px] bg-[rgba(156,39,176,0.04)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center">
+          <div class="flex flex-row items-center justify-center gap-[8px]">
+            <img class="h-[22px] w-[18px] relative hidden" alt="" src="/public/masked-icon.svg" />
+
+            <div
+              class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[61px] whitespace-nowrap">
+              다시 입력
+            </div>
+            <img class="h-[22px] w-[18px] relative hidden" alt="" src="/public/masked-icon1.svg" />
+          </div>
+        </button>
+        <button
+          class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center">
+          <div class="flex flex-row items-center justify-center gap-[8px]">
+            <img class="h-[22px] w-[18px] relative hidden" alt="" src="/public/masked-icon.svg" />
+
+            <div
+              class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]">
+              목록
+            </div>
+            <img class="h-[22px] w-[18px] relative hidden" alt="" src="/public/masked-icon1.svg" />
+          </div>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>	
+  <script src="resources/js/summernote-lite.js"></script>
+  <script src="resources/js/lang/summernote-ko-KR.js"></script>
+  <script>
+  
+    $(function(){
+      $("#content").summernote({
+        lang: "ko-KR",
+        width: 750,
+        height: 300,
+        maxHeight: 400,
+        minHeight: 200,
+        
+        callbacks:{
+          onImageUpload:function(files, editor){
+            //이미지가 에디터에 추가될 때마다 수행하는 곳!
+            //이미지를 첨부하면 배열로 인식된다.
+            //이것을 서버로 비동기식 통신을 수행하면
+            //서버에 업로드를 시킬 수 있다.
+            //console.log("**");
+            for(let i=0; i<files.length; i++)
+              sendImage(files[i], editor);//이미지를 서버로 보낸다.
+          }
+        }
+      });
+      
+      $("#content").summernote("lineHeight", 0.7);
+    });
+    
+    function sendImage(file, editor){
+      //서버로 파일을 보내기 위해 폼객체 준비
+      let frm = new FormData();
+      
+      //보내고자 하는 자원을 폼에 파라미터 값으로 등록!(추가)
+      frm.append("s_file",file);//폼 안에 "upload"라는 이름으로
+            //전달하고자 하는 파일이 등록되었다.
+      frm.append("bname", "bbs");
+      $.ajax({
+        url: "saveImg",
+        type: "post",
+        data: frm,
+        contentType: false,
+        processData: false, //위의 내용을 지정해야 일반적인 
+                  //데이터 전송이 아니라 파일이 첨부됨을
+                  //증명한다.
+        dataType: "json",//서버로부터 받는 자원이 JSON이다.
+      }).done(function(data){
+        //서버로부터 응답이 도착한 경우
+        // 반드시 JSON자료로 받아야 한다.
+        //console.log(data.img_url);
+        //let image = $("<img>").attr("src",data.img_url);
+        //$("#content").summernote("insertNode", image[0]);
+        
+        //또 다른 방법
+        $("#content").summernote(
+          "editor.insertImage",data.url+"/"+data.fname);
+        
+      });
+    }
+  </script>
+</body>
+
+</html>

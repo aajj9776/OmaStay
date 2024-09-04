@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}"
+      layout:fragment="admin">
+  <head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div
+      class="w-full relative rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden flex flex-row items-center justify-start py-[90px] px-[60px] box-border leading-[normal] tracking-[normal] mq900:pl-[30px] mq900:pr-[30px] mq900:box-border"
+    >
+      <main
+        class="flex-1 overflow-hidden flex flex-col items-center justify-center py-[0px] px-[65px] box-border gap-[10px] max-w-full text-left text-[24px] text-[#000] font-[Roboto] mq1275:pl-[32px] mq1275:pr-[32px] mq1275:box-border"
+      >
+        <h2
+          class="m-[0px] self-stretch h-[48px] relative text-inherit tracking-[0.46px] leading-[26px] uppercase font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[21px]"
+        >
+          자주 묻는 질문 등록
+        </h2>
+        <section
+          class="self-stretch h-[764px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[48px] px-[61px] box-border mq450:pt-[20px] mq450:pb-[20px] mq450:box-border mq900:pt-[31px] mq900:pb-[31px] mq900:box-border mq1275:pl-[30px] mq1275:pr-[30px] mq1275:box-border"
+        >
+          <img
+            class="self-stretch flex-1 relative max-w-full overflow-hidden max-h-full object-cover"
+            loading="lazy"
+            alt=""
+            src="/public/image-45@2x.png"
+          />
+        </section>
+        <div
+          class="overflow-hidden flex flex-row items-center justify-start py-[15px] pl-[20px] pr-[1170px] gap-[11px] mq450:pr-[20px] mq450:box-border mq900:pr-[292px] mq900:box-border mq1275:pr-[585px] mq1275:box-border mq1650:flex-wrap"
+        >
+          <button
+            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center"
+          >
+            <div class="flex flex-row items-center justify-center gap-[8px]">
+              <img
+                class="h-[22px] w-[18px] relative hidden"
+                alt=""
+                src="/public/masked-icon.svg"
+              />
+
+              <div
+                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]"
+              >
+                등록
+              </div>
+              <img
+                class="h-[22px] w-[18px] relative hidden"
+                alt=""
+                src="/public/masked-icon1.svg"
+              />
+            </div>
+          </button>
+          <button
+            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[21px] bg-[rgba(156,39,176,0.04)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
+          >
+            <div class="flex flex-row items-center justify-center gap-[8px]">
+              <img
+                class="h-[22px] w-[18px] relative hidden"
+                alt=""
+                src="/public/masked-icon.svg"
+              />
+
+              <div
+                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[61px] whitespace-nowrap"
+              >
+                다시 입력
+              </div>
+              <img
+                class="h-[22px] w-[18px] relative hidden"
+                alt=""
+                src="/public/masked-icon1.svg"
+              />
+            </div>
+          </button>
+          <button
+            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center"
+          >
+            <div class="flex flex-row items-center justify-center gap-[8px]">
+              <img
+                class="h-[22px] w-[18px] relative hidden"
+                alt=""
+                src="/public/masked-icon.svg"
+              />
+
+              <div
+                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]"
+              >
+                목록
+              </div>
+              <img
+                class="h-[22px] w-[18px] relative hidden"
+                alt=""
+                src="/public/masked-icon1.svg"
+              />
+            </div>
+          </button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

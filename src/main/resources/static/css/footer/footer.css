@@ -1,0 +1,362 @@
+.footer-cs,
+.footer-cs2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.footer-cs {
+  text-decoration: none;
+  width: 96px;
+  font-weight: 700;
+  color: inherit;
+}
+.footer-cs2 {
+  width: 156px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+}
+.svg-icon21 {
+  height: 20px;
+  width: 20px;
+  position: relative;
+  min-height: 20px;
+}
+.contact-label {
+  text-decoration: none;
+  width: 83.7px;
+  position: relative;
+  font-weight: 600;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.footer-button {
+  flex: 1;
+  border-radius: 10px;
+  background-color: #fff;
+  border: 2px solid #ebebeb;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 11px 11px 11px 15px;
+  gap: 8px;
+}
+.a64 {
+  text-decoration: none;
+  width: 93px;
+  position: relative;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: Inter;
+  color: #333;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.footer-button:hover {
+  background-color: #e6e6e6;
+  border: 2px solid #d1d1d1;
+  box-sizing: border-box;
+}
+.footer-button-parent,
+.footer-cs-parent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.footer-button-parent {
+  align-self: stretch;
+  flex-direction: row;
+  gap: 8px;
+  text-align: center;
+  font-size: 15.4px;
+  color: #333;
+}
+.footer-cs-parent {
+  width: 292px;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 292px;
+}
+.footer-int {
+  width: 70px;
+  position: relative;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+.footer-int,
+.footer-int-col {
+  text-decoration: none;
+  color: inherit;
+}
+.footer-int-col,
+.footer-int-col1 {
+  align-self: stretch;
+  position: relative;
+  font-weight: 600;
+}
+.footer-int-group,
+.footer-int-parent,
+.parent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.parent {
+  align-self: stretch;
+  gap: 10px;
+  font-size: 14px;
+  color: #999;
+}
+.footer-int-group,
+.footer-int-parent {
+  gap: 16px;
+}
+.footer-int-parent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+}
+.footer-int-group {
+  flex: 1;
+  min-width: 117px;
+}
+.footer-int-col5 {
+  align-self: stretch;
+  position: relative;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+}
+.frame-container {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 24px;
+}
+.footer-int-col6 {
+  width: 180px;
+  position: relative;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+  display: flex;
+  align-items: center;
+}
+.frame-group {
+  position: absolute;
+  top: 0;
+  left: 204px;
+  width: 384px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+}
+.footer-int-col7 {
+  text-decoration: none;
+  align-self: stretch;
+  position: relative;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+}
+.frame-div {
+  position: absolute;
+  top: 0;
+  left: 612px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+}
+.frame-parent {
+  height: 128px;
+  width: 792px;
+  position: relative;
+  min-width: 792px;
+  max-width: 100%;
+  font-size: 15px;
+}
+.footer-intbar {
+  align-self: stretch;
+  border-bottom: 1px solid #f5f5f5;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 0 21px;
+  max-width: 100%;
+  gap: 20px;
+}
+.omakase1 {
+  margin: 0;
+}
+.omakase-container2 {
+  align-self: stretch;
+  position: relative;
+  font-size: 10.7px;
+  line-height: 16px;
+  color: #999;
+}
+.footer-intbar-parent {
+  width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+  text-align: left;
+  font-size: 18px;
+  color: #707070;
+  font-family: Inter;
+}
+.div85 {
+  min-width: 56px;
+}
+.div85,
+.div86,
+.div87 {
+  position: relative;
+  line-height: 17px;
+  font-weight: 600;
+  display: inline-block;
+}
+.div86 {
+  color: #333;
+  min-width: 107px;
+}
+
+.legal-links {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+}
+.copyright {
+  position: relative;
+  font-size: 11.3px;
+  line-height: 16px;
+}
+.legal-links-parent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 28px;
+  min-width: 195px;
+}
+.div88 {
+  position: relative;
+  line-height: 17px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.frame-parent1,
+.legal-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frame-parent1 {
+  align-self: stretch;
+  flex-direction: row;
+  gap: 7px;
+}
+.legal-content {
+  flex-direction: column;
+  padding: 14px 0 0;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.facebook-icon {
+  height: 40px;
+  width: 40px;
+  position: relative;
+  min-height: 40px;
+}
+.footer,
+.legal-content-parent,
+.social {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+}
+.footer,
+.legal-content-parent {
+  width: 1200px;
+  justify-content: space-between;
+  max-width: 100%;
+  gap: 20px;
+}
+.footer {
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fafafa;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 20px 87px;
+  box-sizing: border-box;
+  gap: 18px;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  font-size: 14px;
+  color: #999;
+  font-family: Inter;
+}
+@media screen and (max-width: 1150px) {
+  .footer-cs-parent,
+  .frame-parent {
+    flex: 1;
+  }
+  .footer-intbar {
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 1050px) {
+  .frame-parent {
+    min-width: 100%;
+  }
+}
+@media screen and (max-width: 750px) {
+  .legal-content-parent {
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 450px) {
+  .frame-container {
+    flex-wrap: wrap;
+  }
+  .frame-parent {
+    height: auto;
+    min-height: 128px;
+  }
+  .frame-parent1 {
+    flex-wrap: wrap;
+  }
+}
