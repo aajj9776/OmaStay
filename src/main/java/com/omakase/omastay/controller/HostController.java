@@ -1,14 +1,36 @@
 package com.omakase.omastay.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.omakase.omastay.service.AdminMemberService;
+import com.omakase.omastay.service.EmailService;
+
+import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
+
+
 
 @Controller
 @RequestMapping("/host")
+@RequiredArgsConstructor  
 public class HostController {
 
-    @GetMapping()
+    @Autowired
+    private AdminMemberService adminMemberService;
+
+    private final EmailService emailService;  
+
+    @RequestMapping("/login")
     public String host() {
         return "host/host_login";
     }
@@ -22,7 +44,6 @@ public class HostController {
     public String hostfindpw() {
         return "host/host_findpw";
     }
-
 
     @RequestMapping("/faq")
     public String hostfaq() {
@@ -79,11 +100,6 @@ public class HostController {
         return "host/host_paymentdetail";
     }
     
-    @RequestMapping("/reg")
-    public String hostreg() {
-        return "host/host_reg";
-    }
-    
     @RequestMapping("/reservation")
     public String hostreservation() {
         return "host/host_reservation";
@@ -123,4 +139,36 @@ public class HostController {
     public String hostsales() {
         return "host/host_sales";
     }
+
+    @RequestMapping("/idcheck")
+    @ResponseBody
+    public int hostidcheck(@RequestParam("id") String id) {
+
+        int cnt = adminMemberService.hostidcheck(id);
+
+        if(cnt == 0){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
+    @RequestMapping("/emailsend")  
+    public ResponseEntity<String> sendEmailPath(@RequestParam("email") String email) throws MessagingException { 
+        try {
+            emailService.sendEmail(email);  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("success");  
+    }  
+  
+    @RequestMapping("/emailchecknum")  
+    public ResponseEntity<String> sendEmailAndCode(@RequestParam("email") String email, @RequestParam("code") String code){  
+        if (emailService.verifyEmailCode(email, code)) {  
+            return ResponseEntity.ok("success");  
+        }  
+        return ResponseEntity.notFound().build();  
+    }
+    
 }
