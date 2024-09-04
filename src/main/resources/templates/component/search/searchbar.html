@@ -1,60 +1,140 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-</head>
-<body>
-<header th:fragment="searchbar" id="search_bar"
-        class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid box-border flex flex-row items-start justify-center pt-[20px] px-[20px] pb-[18px] gap-[12px] top-[0] z-10 sticky max-w-full text-left text-[14.8px] text-[#333] font-[Inter]">
-    <div
-            class="w-[408px] h-[48px] rounded-[8px] bg-[#f5f5f5] overflow-hidden shrink-0 flex flex-row items-start justify-start p-[14px] box-border gap-[8px] max-w-full"
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <header
+      th:fragment="searchbar"
+      id="searchbar"
+      class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid box-border flex flex-row items-start justify-center pt-[20px] px-[20px] pb-[18px] gap-[12px] top-[0] z-[99] sticky max-w-full text-left text-[14.8px] text-[#333] font-[Inter]"
     >
-        <div class="h-[20px] w-[20px] relative">
-            <img
-                    alt=""
-                    class="absolute h-4/5 w-4/5 top-[10%] right-[10%] bottom-[10%] left-[10%] max-w-full overflow-hidden max-h-full"
-                    src="/image/domestic-accommodations/placeholder-image.svg"
-            />
-        </div>
-        <input id="search-accommodation"
-                class="w-[calc(100%_-_44px)] text-black [border:none] [outline:none] bg-[transparent] h-[19px] flex-1 overflow-hidden flex flex-row items-end justify-start pt-[0px] px-[0px] pb-[0.5px] box-border font-[Inter] text-[16px] min-w-[211px] max-w-full"
-                placeholder="여행지나 숙소를 검색해보세요."
-                type="text"
-        />
-    </div>
-    <div id="date-range-picker"
-         class="w-[298px]  h-[48px] rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start mq750:w-[42px] mq1050:hidden"
-    >
-        <div class="h-[48px] w-[42px] relative">
-            <img
-                    alt=""
-                    class="absolute h-[31.25%] w-[33.33%] top-[34.38%] right-[26.19%] bottom-[34.38%] left-[40.48%] max-w-full overflow-hidden max-h-full"
-                    src="/image/domestic-accommodations/vector-1.svg"
-            />
-        </div>
-        <input type="text" readonly id="date-range-picker-input"
-               class="bg-[transparent] outline-none h-[48px] flex-1 relative leading-[24px] font-semibold flex items-center whitespace-nowrap mq750:hidden"
-        />
-    </div>
-    <div
-            class="w-[298px] h-[48px] rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start whitespace-nowrap text-[16px]"
-    >
-        <img
-                alt=""
-                class="h-[48px] w-[44px] relative min-h-[48px]"
-                src="/image/domestic-accommodations/search-img.svg"
-        />
-
-        <a
-                class="[text-decoration:none] h-[48px] flex-1 relative font-semibold text-[inherit] flex items-center"
-        >인원 2</a
+      <div class="dropdown me-3">
+        <div
+          data-bs-toggle="dropdown"
+          role="button"
+          aria-expanded="true"
+          id="rec_search_dropdown"
+          data-bs-auto-close="outside"
+          class="w-[408px] rounded-[8px] bg-[#f5f5f5] overflow-hidden shrink-0 flex flex-row items-start justify-start p-[14px] box-border gap-[8px] max-w-full hover:bg-white border-2 hover:border-black"
         >
-    </div>
-    <button type="button"
-            class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px]  flex flex-row items-center justify-center ont-semibold font-[Inter] text-[#fff] text-center "
-    >
+          <div class="h-[20px] w-[20px] relative">
+            <img
+              alt=""
+              class="absolute h-4/5 w-4/5 top-[10%] right-[10%] bottom-[10%] left-[10%] max-w-full overflow-hidden max-h-full"
+              src="/image/domestic-accommodations/placeholder-image.svg"
+            />
+          </div>
+          <input
+            id="search-accommodation"
+            class="w-[calc(100%_-_44px)] text-black [border:none] [outline:none] bg-[transparent] h-[19px] flex-1 overflow-hidden flex flex-row items-end justify-start pt-[0px] px-[0px] pb-[0.5px] box-border font-[Inter] text-[16px] min-w-[211px] max-w-full"
+            placeholder="여행지나 숙소를 검색해보세요."
+            type="text"
+          />
+
+          <div
+            class="dropdown-menu p-4 text-body-secondary"
+            aria-labelledby="rec_search_dropdown"
+            style="width: 408px"
+          >
+            <div class="flex flex-row items-start justify-start">
+              <p class="text-black">최근검색어</p>
+              <button
+                class="text-gray-700 text-xs mb-0 ml-[213px] mt-[5px] hover:text-gray-500 underline"
+              >
+                전체삭제
+              </button>
+            </div>
+            <hr class="dropdown-divider" style="margin-top: 10px" />
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="date-range-picker"
+        class="w-[298px] h-[48px] rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start mq750:w-[42px] mq1050:hidden hover:bg-white border-2 hover:border-black mr-[-2px] ml-[-18px]"
+      >
+        <div class="h-[48px] w-[42px] relative">
+          <img
+            alt=""
+            class="absolute h-[31.25%] w-[33.33%] top-[34.38%] right-[26.19%] bottom-[34.38%] left-[40.48%] max-w-full overflow-hidden max-h-full"
+            src="/image/domestic-accommodations/vector-1.svg"
+          />
+        </div>
+        <input
+          type="text"
+          readonly
+          id="date-range-picker-input"
+          class="bg-[transparent] outline-none h-[48px] flex-1 relative leading-[24px] font-semibold flex items-center whitespace-nowrap mq750:hidden"
+        />
+      </div>
+
+      <div class="dropdown me-3">
+        <div
+          data-bs-toggle="dropdown"
+          role="button"
+          aria-expanded="true"
+          aria-haspopup="true"
+          id="second_people_dropdown"
+          class="w-[298px] h-[48px] rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start whitespace-nowrap text-[16px] hover:bg-white border-2 hover:border-black"
+        >
+          <img
+            alt=""
+            class="h-[48px] w-[44px] relative min-h-[48px]"
+            src="/image/domestic-accommodations/search-img.svg"
+          />
+
+          <a
+            class="[text-decoration:none] h-[48px] flex-1 relative font-semibold text-[inherit] flex items-center"
+            >인원 <span id="count"></span
+          ></a>
+
+          <div
+            id="second_people_dropdown"
+            aria-labelledby="second_people_dropdown"
+            data-bs-auto-close="outside"
+            class="dropdown-menu p-4 text-body-secondary"
+            style="width: 297px"
+          >
+            <div class="flex flex-row items-end justify-start">
+              <div>
+                <p class="text-black text-lg font-semibold">인원</p>
+                <p class="text-gray-700 text-xs">
+                  유아 및 아동도<br />
+                  인원수에 포함해주세요.
+                </p>
+              </div>
+              <div
+                class="flex flex-row items-end justify-start ml-[17px] mb-[13px]"
+              >
+                <button
+                  type="button"
+                  id="dicreaseBtn"
+                  class="w-9 h-9 rounded-full bg-white border-2 border-gray-400 text-gray-800"
+                >
+                  -
+                </button>
+                <p class="text-black font-semibold text-xl ml-[12px] mb-[4px]">
+                  <span id="count">1</span>
+                </p>
+                <button
+                  type="button"
+                  id="increaseBtn"
+                  class="ml-[12px] w-9 h-9 rounded-full bg-white border-2 border-gray-400 text-gray-800"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center ont-semibold font-[Inter] text-[#fff] text-center ml-[-19px]"
+      >
         검색
-    </button>
-</header>
-</body>
+      </button>
+    </header>
+  </body>
 </html>
