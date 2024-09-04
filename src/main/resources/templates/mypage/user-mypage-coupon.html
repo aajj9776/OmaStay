@@ -3,226 +3,185 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main}"
       layout:fragment="main">
-<head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <div
-      class="w-full relative bg-background-paper-elevation-8 overflow-hidden flex flex-row items-start justify-start gap-[25px] leading-[normal] tracking-[normal] text-left text-xl text-black font-menu-itemdefault mq1500:flex-wrap"
-    >
-      <div
-        class="h-[1084px] w-[370px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-11 pl-[38px] pr-[34px] box-border max-w-full mq450:pt-[29px] mq450:pb-[29px] mq450:box-border"
-      >
+    <div class="flex">
+      <!-- Sidebar -->
+      <div class="h-screen w-[370px] flex-none flex flex-col justify-start py-11 px-[38px] box-border">
         <div class="flex-1 flex flex-col items-start justify-start">
           <div
-            class="self-stretch rounded-t-3xs rounded-b-none bg-background-paper-elevation-8 border-silver-300 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5"
+            class="self-stretch rounded-t-md bg-white border border-silver-300  flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5"
           >
-            <div
-              class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-0 px-0 pb-1.5 box-border"
-            >
-              <a
-                class="[text-decoration:none] flex-1 relative text-[inherit] mq450:text-base"
-                >예약 내역</a
-              >
+            <div class="w-[97px] flex-none flex flex-row items-start justify-start pb-1.5 box-border">
+              <a class="text-lg" href="#">예약 내역</a>
             </div>
           </div>
-          <div
-            class="self-stretch bg-background-paper-elevation-8 border-silver-300 border-r-[1px] border-solid border-silver-300 border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-5 px-[38px] pb-[21px]"
-          >
-            <div
-              class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-            >
-              <div
-                class="h-[33px] flex-1 relative flex items-center mq450:text-base"
-              >
-                포인트
-              </div>
+          <div class="self-stretch bg-white border border-silver-300 flex flex-row items-start justify-start pt-5 px-[38px] pb-[21px]">
+            <div class="w-[97px] flex-none flex flex-row items-start justify-start">
+              <div class="h-[33px] flex-1 flex items-center">포인트</div>
             </div>
           </div>
-          <div
-            class="self-stretch bg-background-paper-elevation-8 border-silver-300 border-t-[1px] border-solid border-silver-300 border-r-[1px] border-solid border-silver-300 border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-9 pb-[21px]"
-          >
-            <div
-              class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-            >
-              <div
-                class="h-[33px] flex-1 relative flex items-center mq450:text-base"
-              >
-                쿠폰
-              </div>
+          <div class="self-stretch bg-white border border-silver-300 flex flex-row items-start justify-start pt-[18px] px-9 pb-[21px]">
+            <div class="w-[97px] flex-none flex flex-row items-start justify-start">
+              <div class="h-[33px] flex-1 flex items-center">쿠폰</div>
             </div>
           </div>
-          <div
-            class="self-stretch bg-background-paper-elevation-8 border-silver-300 border-t-[1px] border-solid border-silver-300 border-r-[1px] border-solid border-silver-300 border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]"
-          >
-            <div
-              class="w-[113px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-0 px-0 pb-1.5 box-border"
-            >
-              <div class="flex-1 relative mq450:text-base">내 정보 관리</div>
+          <div class="self-stretch bg-white border border-silver-300 flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]">
+            <div class="w-[113px] flex-none flex flex-row items-start justify-start pb-1.5 box-border">
+              <div class="flex-1">내 정보 관리</div>
             </div>
           </div>
-          <div
-            class="self-stretch rounded-t-none rounded-b-3xs bg-background-paper-elevation-8 border-silver-300 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]"
-          >
-            <div
-              class="w-[76px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-0 px-0 pb-1.5 box-border"
-            >
-              <div class="flex-1 relative mq450:text-base">내 리뷰</div>
+          <div class="self-stretch rounded-b-md bg-white border border-silver-300 flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]">
+            <div class="w-[76px] flex-none flex flex-row items-start justify-start pb-1.5 box-border">
+              <div class="flex-1">내 리뷰</div>
             </div>
           </div>
         </div>
       </div>
-      <section
-        class="w-[1194px] flex flex-col items-start justify-start pt-[106px] px-0 pb-0 box-border max-w-full text-center text-13xl text-darkslategray-200 font-menu-itemdefault mq850:pt-[69px] mq850:box-border"
-      >
-        <div
-          class="self-stretch flex flex-col items-start justify-start gap-[59px] max-w-full mq850:gap-[29px]"
-        >
-          <div class="flex flex-row items-start justify-start py-0 px-[11px]">
-            <a
-              class="[text-decoration:none] relative leading-[29px] font-bold text-[inherit] inline-block min-w-[59px] mq450:text-lgi mq450:leading-[17px] mq850:text-7xl mq850:leading-[23px]"
-              >쿠폰</a
-            >
-          </div>
-          <div
-            class="self-stretch flex flex-col items-end justify-start gap-[27px] max-w-full text-5xl text-lightslategray-200"
-          >
-            <div
-              class="self-stretch flex flex-row items-start justify-end py-0 pl-[3px] pr-px box-border max-w-full"
-            >
-              <div
-                class="flex-1 flex flex-col items-start justify-start gap-[23px] max-w-full"
+
+      <!-- Main Content -->
+      <section class="flex-grow flex items-start justify-center py-[106px]">
+        <div class="w-[1194px] flex flex-col items-start justify-start text-center text-12xl text-darkslategray-200">
+          <div class="self-stretch flex flex-col items-start justify-start gap-[59px]">
+            <div class="flex flex-row items-start justify-start py-0 px-[11px]">
+              <a
+                class="leading-[29px] font-bold text-[inherit] inline-block min-w-[59px] text-lg"
+                >쿠폰</a
               >
-                <div
-                  class="flex flex-row items-start justify-start py-0 px-[5px]"
-                >
-                  <b
-                    class="relative leading-[21px] inline-block min-w-[86px] whitespace-nowrap mq450:text-lgi mq450:leading-[17px]"
-                    >쿠폰 2개</b
-                  >
-                </div>
-                <div
-                  class="self-stretch h-px relative border-silver-200 border-t-[1px] border-solid box-border"
-                ></div>
-              </div>
             </div>
-            <div
-              class="self-stretch flex flex-col items-start justify-start gap-[25px] max-w-full text-left text-xl text-darkslategray-200 font-inter"
-            >
-              <div
-                class="flex flex-row items-start justify-start py-0 px-[11px]"
-              >
-                <div class="flex flex-row items-start justify-start gap-[5px]">
-                  <img
-                    class="self-stretch w-[23px] relative max-h-full min-h-[16px]"
-                    loading="lazy"
-                    alt=""
-                    src="/image/user/vector1.svg"
-                  />
+            <div class="self-stretch flex flex-col items-end justify-start gap-[27px] text-4xl text-lightslategray-200">
+              <div class="self-stretch flex flex-row items-start justify-end py-0 pl-[3px] pr-px box-border">
+                <div class="flex-1 flex flex-col items-start justify-start gap-[23px]">
+                  <div class="flex flex-row items-start justify-start py-0 px-[5px]">
+                    <b
+                      class="relative leading-[21px] inline-block min-w-[86px] whitespace-nowrap text-lg"
+                      >쿠폰 2개</b
+                    >
+                  </div>
+                  <div class="self-stretch h-px relative border-t border-silver-200"></div>
+                </div>
+              </div>
+              <div class="self-stretch flex flex-col items-start justify-start gap-[25px] text-left text-lg text-darkslategray-200 font-inter">
+                <div class="flex flex-row items-start justify-start py-0 px-[11px]">
+                  <div class="flex flex-row items-start justify-start gap-[5px]">
+                    <img
+                      class="self-stretch w-[23px] max-h-full min-h-[16px]"
+                      loading="lazy"
+                      alt=""
+                      src="/image/user/vector1.svg"
+                    />
+                    <div class="h-4 font-semibold flex items-center min-w-[61px] text-sm">
+                      최신순
+                    </div>
+                  </div>
+                </div>
+                <div class="self-stretch flex flex-row flex-wrap items-start justify-start gap-[50px] text-24xl text-crimson">
+                  <div
+                    class="w-[572px] rounded-xl bg-white border border-silver-100 box-border  flex flex-col items-start justify-start pt-[60px] pb-[59px] pl-[71px] pr-[70px]"
+                  >
+                    <div class="h-[270px] flex-1 font-semibold flex items-center w-full">
+                      <span>
+                        <p class="m-0 mb-2">
+                          <span>5,000</span>
+                          <span class="text-15xl">원 할인</span>
+                        </p>
+                        <p class="m-0 mb-2">
+                          <span class="text-indianred">2일 남음</span>
+                        </p>
+                        <p class="m-0 mb-2 text-2xl text-darkgray-100">
+                          24.8.1(목)-24.8.31(토)
+                        </p>
+                        <p class="m-0 mb-2 text-black">
+                          <span>&nbsp;</span>
+                        </p>
+                        <p class="m-0 mb-2">
+                          8월 월클 해외숙소 쿠폰팩
+                        </p>
+                        <p class="m-0 mb-2 text-darkgray-200">
+                          국내 숙소 예약 시 사용 가능
+                        </p>
+                        <p class="m-0">
+                          400,000원 이상 결제 시 사용 가능
+                        </p>
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    class="w-[572px] rounded-xl bg-white border border-silver-100 box-border  flex flex-col items-start justify-start pt-[60px] pb-[59px] pl-[71px] pr-[70px]"
+                  >
+                    <div class="h-[270px] flex-1 font-semibold flex items-center w-full">
+                      <span>
+                        <p class="m-0 mb-2">
+                          <span>5,000</span>
+                          <span class="text-15xl">원 할인</span>
+                        </p>
+                        <p class="m-0 mb-2">
+                          <span class="text-indianred">2일 남음</span>
+                        </p>
+                        <p class="m-0 mb-2 text-2xl text-darkgray-100">
+                          24.8.1(목)-24.8.31(토)
+                        </p>
+                        <p class="m-0 mb-2 text-black">
+                          <span>&nbsp;</span>
+                        </p>
+                        <p class="m-0 mb-2">
+                          8월 월클 해외숙소 쿠폰팩
+                        </p>
+                        <p class="m-0 mb-2 text-darkgray-200">
+                          국내 숙소 예약 시 사용 가능
+                        </p>
+                        <p class="m-0">
+                          400,000원 이상 결제 시 사용 가능
+                        </p>
+                      </span>
+                    </div>
+                  </div>
 
                   <div
-                    class="h-4 relative font-semibold flex items-center min-w-[61px] mq450:text-base"
+                    class="w-[572px] rounded-xl bg-white border border-silver-100 box-border  flex flex-col items-start justify-start pt-[60px] pb-[59px] pl-[71px] pr-[70px]"
                   >
-                    최신순
-                  </div>
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-row items-start justify-start gap-[50px] max-w-full text-26xl text-crimson mq850:gap-[25px] mq1225:flex-wrap"
-              >
-                <div
-                  class="flex-1 rounded-xl bg-background-paper-elevation-8 border-silver-100 border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[60px] pb-[59px] pl-[71px] pr-[70px] min-w-[372px] max-w-full mq450:pt-[39px] mq450:pb-[38px] mq450:box-border mq450:min-w-full mq850:pl-[35px] mq850:pr-[35px] mq850:box-border"
-                >
-                  <div
-                    class="h-[270px] flex-1 relative font-semibold flex items-center max-w-full mq450:text-lg"
-                  >
-                    <span>
-                      <p class="[margin-block-start:0] [margin-block-end:8px]">
-                        <span>
+                    <div class="h-[270px] flex-1 font-semibold flex items-center w-full">
+                      <span>
+                        <p class="m-0 mb-2">
                           <span>5,000</span>
-                          <span class="text-16xl">원 할인</span>
-                        </span>
-                      </p>
-                      <p
-                        class="[margin-block-start:0] [margin-block-end:8px] text-3xl text-darkgray-100"
-                      >
-                        <span>
+                          <span class="text-15xl">원 할인</span>
+                        </p>
+                        <p class="m-0 mb-2">
                           <span class="text-indianred">2일 남음</span>
-                          <span> 24.8.1(목)-24.8.31(토)</span>
-                        </span>
-                      </p>
-                      <p
-                        class="[margin-block-start:0] [margin-block-end:8px] text-black"
-                      >
-                        <span>
+                        </p>
+                        <p class="m-0 mb-2 text-2xl text-darkgray-100">
+                          24.8.1(목)-24.8.31(토)
+                        </p>
+                        <p class="m-0 mb-2 text-black">
                           <span>&nbsp;</span>
-                        </span>
-                      </p>
-                      <p class="[margin-block-start:0] [margin-block-end:8px]">
-                        <span>
-                          <span>8월 월클 해외숙소 쿠폰팩</span>
-                        </span>
-                      </p>
-                      <p
-                        class="[margin-block-start:0] [margin-block-end:8px] text-darkgray-200"
-                      >
-                        <span>
-                          <span>국내 숙소 예약 시 사용 가능</span>
-                        </span>
-                      </p>
-                      <p class="m-0">
-                        <span>
-                          <span>400,000원 이상 결제 시 사용 가능</span>
-                        </span>
-                      </p>
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 rounded-xl bg-background-paper-elevation-8 border-silver-100 border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[60px] pb-[59px] pl-[71px] pr-[70px] min-w-[372px] max-w-full mq450:pt-[39px] mq450:pb-[38px] mq450:box-border mq450:min-w-full mq850:pl-[35px] mq850:pr-[35px] mq850:box-border"
-                >
-                  <div
-                    class="h-[270px] flex-1 relative font-semibold flex items-center max-w-full mq450:text-lg"
-                  >
-                    <span>
-                      <p class="[margin-block-start:0] [margin-block-end:8px]">
-                        <span>
-                          <span>5,000</span>
-                          <span class="text-16xl">원 할인</span>
-                        </span>
-                      </p>
-                      <p
-                        class="[margin-block-start:0] [margin-block-end:8px] text-3xl text-darkgray-100"
-                      >
-                        <span>
-                          <span class="text-indianred">2일 남음</span>
-                          <span> 24.8.1(목)-24.8.31(토)</span>
-                        </span>
-                      </p>
-                      <p
-                        class="[margin-block-start:0] [margin-block-end:8px] text-black"
-                      >
-                        <span>
-                          <span>&nbsp;</span>
-                        </span>
-                      </p>
-                      <p class="[margin-block-start:0] [margin-block-end:8px]">
-                        <span>
-                          <span>8월 월클 해외숙소 쿠폰팩</span>
-                        </span>
-                      </p>
-                      <p
-                        class="[margin-block-start:0] [margin-block-end:8px] text-darkgray-200"
-                      >
-                        <span>
-                          <span>국내 숙소 예약 시 사용 가능</span>
-                        </span>
-                      </p>
-                      <p class="m-0">
-                        <span>
-                          <span>400,000원 이상 결제 시 사용 가능</span>
-                        </span>
-                      </p>
-                    </span>
+                        </p>
+                        <p class="m-0 mb-2">
+                          8월 월클 해외숙소 쿠폰팩
+                        </p>
+                        <p class="m-0 mb-2 text-darkgray-200">
+                          국내 숙소 예약 시 사용 가능
+                        </p>
+                        <p class="m-0">
+                          400,000원 이상 결제 시 사용 가능
+                        </p>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
