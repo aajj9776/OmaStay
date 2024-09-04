@@ -1,25 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, width=device-width" />
-
-  <link rel="stylesheet" href="./global.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-  />
-  <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
-  />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
 </head>
-<body>
+<body >
 <div th:fragment="search_modal"
-     class="z-50 w-[90%] h-[90%] relative rounded-[25px] bg-[#fff] overflow-hidden flex flex-col items-end justify-start gap-[2px] leading-[normal] tracking-[normal]"
+        class="z-50 w-[90%] h-[90%] relative rounded-[25px] bg-[#fff] overflow-hidden flex flex-col items-end justify-start gap-[2px] leading-[normal] tracking-[normal]"
 >
   <header
           class="self-stretch w-full border-[#ebebeb] border-b-[2px] border-solid overflow-hidden flex flex-row items-start justify-start top-[0] z-[99] sticky"
@@ -27,22 +16,22 @@
     <button id=modal_close type="button" class="overflow-hidden shrink-0 btn-close h-[60px] w-[76px] relative" aria-label="Close"></button>
   </header>
   <main
-          class=" self-stretch flex flex-row items-start justify-start flex-wrap content-start py-[0px] pl-[20px] pr-[0px] box-border [row-gap:20px] w-full h-full text-left text-[15.1px] text-[#333] font-[Inter]"
+          class="h-[calc(100%-70px)] self-stretch flex flex-row items-start justify-start flex-wrap content-start py-[0px] pl-[20px] pr-[0px] box-border [row-gap:20px] w-full text-left text-[15.1px] text-[#333] font-[Inter]"
   >
     <!--필터 인클루드 -->
+    <div th:insert="~{component/search/searchfilter :: filterbar('modal')}"
+         class="w-[24%] max-w-[288px] h-full overflow-y-auto flex flex-col items-start justify-start pt-[2px] pb-[0px] pl-[0px] pr-[10px] box-border overflow-hidden text-ellipsis whitespace-nowrap">
+    </div>
 
-    <div th:include="/component/search/searchfilter :: filterbar" class="w-[24%] max-w-[288px] overflow-y-auto flex h-[calc(100%_-_70px)] flex-col items-start justify-start pt-[2px] pb-[0px] pl-[0px] pr-[10px] box-border overflow-hidden text-ellipsis whitespace-nowrap"
-    />
-
-    <!----------------님들아 뭐함 -------------->
+  <!----------------님들아 뭐함 -------------->
     <div
-            class="overflow-y-auto max-w-[375px] w-[28%]  h-[calc(100%_-_70px)] flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] box-border text-[10.3px] text-[#707070] overflow-hidden text-ellipsis whitespace-nowrap"
+            class="overflow-y-auto max-w-[375px] w-[28%]  h-full flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] box-border text-[10.3px] text-[#707070] overflow-hidden text-ellipsis whitespace-nowrap"
     >
       <div
               class="self-stretch overflow-y-auto shrink-0 flex flex-row items-start justify-start max-w-full mq450:h-auto"
       >
         <div
-                class="flex-1 overflow-hidden flex flex-col items-start justify-start pt-[22px] pb-[719px] pl-[27px] pr-[8px] box-border max-w-full lg:pt-[20px] lg:box-border mq750:pb-[304px] mq750:box-border"
+                class="flex-1 overflow-hidden flex flex-col items-start justify-start pt-[22px] pl-[27px] pr-[8px] box-border max-w-full lg:pt-[20px] lg:box-border mq750:pb-[304px] mq750:box-border"
         >
           <b
                   class="w-[320px] relative text-[12.2px] flex font-[Roboto] text-[#999] items-center z-[1]"
@@ -601,45 +590,11 @@
         </div>
       </div>
     </div>
-    <section
-            class="h-[calc(100%_-_70px)] relative bg-teal-600 overflow-hidden max-w-full whitespace-nowrap flex-1 flex flex-wrap "
-    ></section>
+    <section id="tmap"
+            class="h-[calc(100% - 70px)] relative overflow-hidden max-w-full whitespace-nowrap flex-1 flex flex-wrap "
+    >
+    </section>
   </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
-<script>
-  var slider = document.getElementById('slider');
-  noUiSlider.create(slider, {
-    start: [0, 500000],
-    connect: true,
-    range: {
-      'min': 0,
-      '10%': 30000,
-      '20%': 50000,
-      '30%': 100000,
-      '50%': 200000,
-      '70%': 300000,
-      '90%': 400000,
-      'max': 500000
-    },
-    snap: true // 스냅 기능 활성화
-  });
-
-  slider.noUiSlider.on('update', function (values, handle) {
-    var startValue = parseInt(values[0]);
-    var endValue = parseInt(values[1]);
-
-    if (endValue === 500000){
-      document.getElementById('price-range-value').innerText = startValue + '원 - ' + '500,000원 이상';
-    }
-    else {
-      document.getElementById('price-range-value').innerText = startValue + '원 - ' + endValue + '원 미만';
-    }
-
-    document.getElementById('slider-start').value = startValue;
-    document.getElementById('slider-end').value = endValue;
-  });
-
-</script>
 </body>
 </html>

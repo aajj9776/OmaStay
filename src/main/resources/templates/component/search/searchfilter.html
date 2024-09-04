@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
 </head>
 <body>
-<div th:fragment="filterbar">
+<div th:fragment="filterbar(identifier)">
     <div
-            class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[20px] gap-[20px] text-[17px]"
+            class="self-stretch h- flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[20px] gap-[20px] text-[17px]"
     >
         <div
                 class="self-stretch flex flex-col items-start justify-start py-[16px] px-[0px]"
@@ -197,19 +196,14 @@
         <div
                 class="self-stretch flex flex-col items-start justify-start gap-[16px] text-[12.3px] text-[#999]"
         >
-            <div
-                    class="self-stretch flex flex-row items-start justify-start py-[0px] px-[14px]"
-            >
-                <div id="slider" class="w-full"></div>
+            <div class="self-stretch flex flex-row items-start justify-start py-[0px] px-[14px]">
+                <div id="slider-${identifier}" class="w-full"></div>
             </div>
-            <!-- 가격 범위 값 -->
-            <input type="hidden" id="slider-start" name="start" value="">
-            <input type="hidden" id="slider-end" name="end" value="">
-            <span id="price-range-value"
-                    class="self-stretch relative leading-[20px] font-medium"
-            >
-                0원 ~ 500,000원 이상
-            </span>
+            <input type="hidden" id="slider-start-${identifier}" name="start" value="">
+            <input type="hidden" id="slider-end-${identifier}" name="end" value="">
+            <span id="price-range-value-${identifier}" class="self-stretch relative leading-[20px] font-medium">
+        0원 ~ 500,000원 이상
+    </span>
         </div>
     </div>
     <div
