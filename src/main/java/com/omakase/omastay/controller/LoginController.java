@@ -28,5 +28,15 @@ public class LoginController {
         return "login/admin_login";
     }
 
+    @RequestMapping("/userfindpw")
+    public String findpw() {
+        return "login/userfindpw";
+    }
+
+    @RequestMapping("/userchangepw")
+    public String userchangepw() {
+        return "login/userchangepw";
+    }
+
 
 }
