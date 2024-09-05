@@ -29,7 +29,7 @@ public class Coupon {
             @AttributeOverride(name = "start", column = @Column(name = "cp_date", nullable = false)),
             @AttributeOverride(name = "end", column = @Column(name = "cp_endtime", nullable = false))
     })
-    private StartEndVo cpStartEnd;
+    private StartEndVo cpStartEnd = new StartEndVo();
 
     @Column(name = "cp_sale", nullable = false, length = 100)
     private String cpSale;
