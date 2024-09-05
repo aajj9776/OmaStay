@@ -65,8 +65,11 @@
       <input type="hidden" id="nsale_price" name="nsalePrice" value="" />
       <input type="hidden" id="sale_price" name="salePrice" value="" />
       <input type="hidden" id="orderId" name="orderId" value="" />
+      <input type="hidden" id="resEmail" name="resEmail" value="" />
+      <input type="hidden" id="resName" name="resName" value="" />
       <input type="hidden" id="paymentKey" name="paymentKey" value="" />
     </form>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -80,6 +83,8 @@
       const amount = urlParams.get("amount");
       const room = urlParams.get("room");
       const payStatus = urlParams.get("payStatus");
+      const resEmail = urlParams.get("resEmail");
+      const resName = urlParams.get("resName");
 
       let pay_method;
       let pay_content;
@@ -104,6 +109,9 @@
 
         $("#orderId").val(orderId);
         $("#paymentKey").val(paymentKey);
+
+        $("#resEmail").val(resEmail);
+        $("#resName").val(resName);
 
         // 폼 전송
         $("#insertPayment").submit();
@@ -150,17 +158,12 @@
         );
 
         json = await response.json();
-        console.log(json);
 
         if (!response.ok) {
           // 결제 실패 비즈니스 로직을 구현하세요.
-          console.log(json);
           window.location.href = `/reservation/payment_fail`;
         } else {
-          // 결제 성공 비즈니스 로직을 구현하세요.
-          console.log(json.discount);
-          console.log(json.method);
-          console.log(json.totalAmount);
+          // 결제 성공 비즈니스 로직을 구현하세요.ddedssdsdsdsesfesfsfsew
           sendData(); // 결제 성공 시 sendData 호출
         }
       }

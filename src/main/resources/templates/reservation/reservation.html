@@ -68,9 +68,10 @@
                 class="self-stretch rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid flex flex-row items-start justify-start py-[13px] px-[19px]"
               >
                 <input
-                  class="w-[300px] [border:none] [outline:none] font-[Roboto] text-[15px] bg-[transparent] h-[19px] relative text-[rgba(0,0,0,0.24)] text-left flex items-center p-[0px]"
+                  class="w-[300px] [border:none] [outline:none] font-[Roboto] text-[15px] bg-[transparent] h-[19px] relative text-black text-left flex items-center p-[0px]"
                   placeholder="홍길동"
                   type="text"
+                  id="reserver_name"
                 />
               </div>
             </div>
@@ -92,8 +93,10 @@
                     class="w-[230px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[4px] box-border"
                   >
                     <input
-                      class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-[rgba(0,0,0,0.24)] text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
+                      class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
                       placeholder="xxx@xx.com"
+                      type="email"
+                      id="reserver_email"
                     />
 
                     <div
@@ -432,6 +435,8 @@
       // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
       async function requestPayment() {
+        let resEmail = $("#reserver_email").val();
+        let resName = $("#reserver_name").val();
         // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
         // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
         await payment.requestPayment({
@@ -441,11 +446,16 @@
             value: 50000,
           },
           orderId: orderNumber, // 고유 주분번호
-          orderName: "한별이~", //방이름
-          successUrl: window.location.origin + "/reservation/payment_success", // 결제 요청이 성공하면 리다이렉트되는 URL
+          orderName: "한별이~^^", //방이름
+          successUrl:
+            window.location.origin +
+            "/reservation/payment_success?resName=" +
+            encodeURIComponent(resName) +
+            "&resEmail=" +
+            encodeURIComponent(resEmail), // 결제 요청이 성공하면 리다이렉트되는 URL
           failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
-          customerEmail: "customer123@gmail.com", //회원 이메일
-          customerName: "정한별", //회원이름
+          customerEmail: resEmail, //회원 이메일
+          customerName: resName, //회원이름
           customerMobilePhone: "01012341234", //회원전화번호
 
           // 카드 결제에 필요한 정보
