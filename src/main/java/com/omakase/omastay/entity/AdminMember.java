@@ -11,6 +11,7 @@ import lombok.*;
 @Entity
 @Table(name = "admin_member")
 @ToString
+@Builder
 public class AdminMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
