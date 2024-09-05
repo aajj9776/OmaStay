@@ -2,13 +2,13 @@ server:
   port: 9090      #사용하기 편하게 하기 위해서 임의로 변경 추후에 바꾸는걸 추천
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/omastay #원래는 url: jdbc:mysql://18.116.238.9:3306/omastay
-    username: root  #원래는 omastay
-    password: root  #원래는 omastay18
+    url: jdbc:mysql://18.116.238.9:3306/omastay
+    username: omastay
+    password: omastay18
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update  #none으로 하면 DB접근이 어려워서 update로 함
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
