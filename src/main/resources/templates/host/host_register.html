@@ -60,10 +60,9 @@
             class="w-[80px] flex flex-row items-end justify-end py-[0px] pl-[7px] pr-[0px]"
               >
               <div
-              id="check_result"
+              id="id_checkresult"
               class="h-[9px] relative text-[12px] text-[#f5455c] flex items-center min-w-[34px] whitespace-nowrap"
             >
-              
             </div>
               </div>
               </div>
@@ -104,6 +103,8 @@
                 class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
               >
                 <input
+                  id="pw"
+                  name="pw"
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[15px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
                   placeholder="**********"
                   type="password"
@@ -134,16 +135,27 @@
               <div class="w-[1px] h-[16px] relative"></div>
             </div>
             <div
-              class="self-stretch flex flex-col items-start justify-start relative"
+              class="w-full self-stretch flex flex-row items-start justify-start relative"
             >
               <div
-                class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                class="w-[250px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-row items-start justify-start py-[0px] px-[11px]"
               >
                 <input
-                  class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[15px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+                  id="pw_check"
+                  class="w-[180px] [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[15px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
                   placeholder="**********"
                   type="password"
                 />
+                <div 
+            class="w-[80px] h-[56px] flex flex-row items-center justify-center py-[0px] pr-[0px]"
+              >
+              <div
+              id="pw_checkresult"
+              name="pw_checkresult"
+              class="h-[56px] relative text-[12px] text-[#f5455c] flex items-center min-w-[34px] whitespace-nowrap"
+            >
+            </div>
+              </div>
               </div>
               <div
                 class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[4px] box-border z-[1]"
@@ -236,7 +248,7 @@
                     class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[15px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
                     placeholder="**********"
                     type="text"
-                    id="check_num"
+                    id="email_check"
                   />
                 </div>
                 <div
@@ -303,6 +315,10 @@
             </div>
             <button
               class="cursor-pointer [border:none] py-[7px] px-[20px] bg-[#fff] self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
+              type="button"
+              id="regist"
+              name="regist"
+              onclick="regist()"
             >
               <div class="flex flex-row items-center justify-center gap-[8px]">
                 <div
@@ -329,7 +345,7 @@
       $('#id_check').click(function () {
               var id = $('#id').val();
 
-              $('#check_result').text('').hide();
+              $('#id_checkresult').text('').hide();
 
               $.ajax({
                   type: "POST",
@@ -339,9 +355,9 @@
                       var cnt = data;
                       console.log(cnt);
                       if (cnt == 0) {
-                          $('#check_result').text('사용가능').css('color', 'blue').show();
+                          $('#id_checkresult').text('사용가능').css('color', 'blue').show();
                       } else {
-                          $('#check_result').text('사용불가').css('color', 'red').show();
+                          $('#id_checkresult').text('사용불가').css('color', 'red').show();
                       }
                   }
               });
@@ -386,7 +402,7 @@ function sendEmailAndStartTimer() {
 
 function verifyCode() {
   const email = $('#email').val();
-  const code = $('#check_num').val();
+  const code = $('#email_check').val();
   console.log(code);
 
   if (code === "") {
@@ -413,7 +429,7 @@ function verifyCode() {
       resetVerificationButton('인증번호 전송', 'sendEmailAndStartTimer()');
       clearTimeout(timerId); // 타이머 중지
       sendEmailAndStartTimer(); // 타이머 및 이메일 재전송
-      $('#check_num').val('');
+      $('#email_check"').val('');
     }
   });
 }
@@ -441,6 +457,83 @@ function resetVerificationButton(text, onclick) {
 
 // 초기 버튼 설정
 resetVerificationButton('인증번호 전송', 'sendEmailAndStartTimer()');
+
+$('#pw_check').keyup(function () {
+        var pw = $('#pw').val();
+        var pw_check = $('#pw_check').val();
+        if (pw == pw_check) {
+            $('#pw_checkresult').text('일치').css('color', 'blue').show();
+        } else {
+            $('#pw_checkresult').text('불일치').css('color', 'red').show();
+        }
+    });
+
+    function regist() {
+        var id = $('#id').val().trim();
+	      var id_check = $('#id_check').text().trim();
+        var pw = $('#pw').val().trim();
+        var pw_check = $('#pw_check').val().trim();
+        var pw_checkresult = $('#pw_checkresult').text().trim();
+        var email = $('#email').val().trim();
+        var email_check = $('#email_check').val().trim();
+        var emailVerified = sessionStorage.getItem("emailVerified");
+
+        if (id == "") {
+            alert("아이디를 입력해주세요.");
+            return;
+        }
+
+        if (id_check == "사용불가") {
+            alert("아이디 중복확인을 해주세요.");
+            return;
+        }
+
+        if (pw == "") {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+
+        if (pw_check == "") {
+            alert("비밀번호 확인을 입력해주세요.");
+            return;
+        }
+
+        if (pw_checkresult == "불일치") {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        if (email == "") {
+            alert("이메일을 입력해주세요.");
+            return;
+        }
+
+        if (email_check == "") {
+            alert("이메일 인증코드를 입력해주세요");
+            return;
+        }
+
+        if (emailVerified == "" || emailVerified !== "true") {
+            alert("이메일 인증을 완료해주세요");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/host/hostregist",
+            data: { id: id, pw: pw, email: email,},
+            success: function(data) {
+              data = data.trim();
+              if (data === "success") {
+                alert("가입이 완료되었습니다.");
+                location.href = "/host/login";
+              } else {
+                        alert("가입에 실패하였습니다.");
+              }
+            }
+          });
+    }
+
     </script>
   </body>
 </html>
