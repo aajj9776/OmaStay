@@ -65,6 +65,7 @@
       <input type="hidden" id="nsale_price" name="nsalePrice" value="" />
       <input type="hidden" id="sale_price" name="salePrice" value="" />
       <input type="hidden" id="orderId" name="orderId" value="" />
+      <input type="hidden" id="paymentKey" name="paymentKey" value="" />
     </form>
     <script src="https://cdn.tailwindcss.com"></script>
     <script
@@ -102,6 +103,7 @@
         $("#sale_price").val(json.totalAmount);
 
         $("#orderId").val(orderId);
+        $("#paymentKey").val(paymentKey);
 
         // 폼 전송
         $("#insertPayment").submit();
