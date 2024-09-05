@@ -6,6 +6,7 @@
 <head>
     <meta charset="utf-8"/></head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
+    <link rel="stylesheet" href="/css/component/slider.css">
 
 <body>
 <div
@@ -439,6 +440,7 @@
         src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH"></script>
 
 <script>
+    // 필터 버튼 값 변경
     $(document).ready(function () {
         $("#dropdown-filter-button").text("평점높은순");
         $("#dropdown-filter-button").val("rating");
@@ -446,6 +448,7 @@
         console.log($("#dropdown-filter-button").val());
     });
 
+    // 슬라이더 초기화 함수
     function initializeSlider(identifier) {
         var sliderElement = document.getElementById('slider-' + identifier);
         var valueElement = document.getElementById('price-range-value-' + identifier);
@@ -471,6 +474,7 @@
             snap: true // 스냅 기능 활성화
         });
 
+        // 슬라이더 출력 값 띄우는 함수
         sliderElement.noUiSlider.on('update', function (values, handle) {
             var startValue = parseInt(values[0]);
             var endValue = parseInt(values[1]);
@@ -486,15 +490,50 @@
         });
     }
 
+
+    // 지도 보기 버튼 클릭 시 지도 출력
+    function showmap() {
+        $("#search_bar").css("display", "none");
+        $("#main-filter").css("display", "none");
+        $("#searchbar").css("display", "none");
+        $("#modal-wrap").css("display", "flex");
+        $("body").css("overflow", "hidden");
+        $("footer").css("display", "none");
+        loadTmap();
+
+        // 모달 슬라이더 초기화
+        initializeSlider('modal');
+    }
+
+    // 지도 출력 함수
+    $("#modal_close").click(function () {
+        $("#search_bar").css("display", "flex");
+        $("#main-filter").css("display", "flex");
+        $("#modal-wrap").css("display", "none");
+        $("#searchbar").css("display", "flex");
+        $("body").css("overflow", "auto");
+        $("footer").css("display", "flex");
+
+        // 메인 슬라이더 재초기화
+        initializeSlider('main');
+    });
+
+    /*----------------------티맵 관련 스크립트------------------------*/
+    var markers = [];
+    var map;
+
+    //티맵 호출 함수
     function initTmap() {
-        var map = new Tmapv2.Map("tmap", {
+        map = new Tmapv2.Map("tmap", {
             center: new Tmapv2.LatLng(37.56520450, 126.98702028),
             width: "100%", // 지도의 넓이
             height: "100%", // 지도의 높이
             zoom: 17
         });
+        addMarkersTooMuch(); // 100개의 마커 추가
     }
 
+    //티맵 리로드 모달때문에 한번 초기화 필요
     function loadTmap() {
         if (typeof Tmapv2 === 'undefined') {
             var script = document.createElement('script');
@@ -506,28 +545,29 @@
         }
     }
 
-    function showmap() {
-        $("#search_bar").css("display", "none");
-        $("#main-filter").css("display", "none");
-        $("#modal-wrap").css("display", "flex");
-        loadTmap();
-        $("body").css("overflow", "hidden");
-        $("footer").css("display", "none");
-
-        // 모달 슬라이더 초기화
-        initializeSlider('modal');
+    //마커 추가하는 함수
+    function addMarkersTooMuch() {
+        removeMarkers();
+        for (var i = 0; i < 100; i++) {
+            var lat = Math.random() / 100;
+            var lng = Math.random() / 100;
+            //Marker 객체 생성.
+            var marker = new Tmapv2.Marker({
+                position: new Tmapv2.LatLng(37.56220450 + lat, 126.98402028 + lng), //Marker의 중심좌표 설정.
+                label: 'test' //Marker의 라벨.
+            });
+            marker.setMap(map); //Marker가 표시될 Map 설정.
+            markers.push(marker);
+        }
     }
 
-    $("#modal_close").click(function () {
-        $("#search_bar").css("display", "flex");
-        $("#main-filter").css("display", "flex");
-        $("#modal-wrap").css("display", "none");
-        $("body").css("overflow", "auto");
-        $("footer").css("display", "block");
-
-        // 메인 슬라이더 재초기화
-        initializeSlider('main');
-    });
+    // 모든 마커를 제거하는 함수입니다.
+    function removeMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
 </script>
 </body>
 </html>
