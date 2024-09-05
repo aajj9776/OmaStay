@@ -170,5 +170,15 @@ public class HostController {
         }  
         return ResponseEntity.notFound().build();  
     }
+
+    @PostMapping("/hostregist")
+    public ResponseEntity<String> hostregister(@RequestParam("id") String id, @RequestParam("pw") String pw, @RequestParam("email") String email) {
+        boolean result = adminMemberService.hostregist(id, pw, email);
+        if (result) {
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.status(500).body("Registration failed");
+        }
+    }
     
 }
