@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+  <style>
+    /* 전체 화면 크기에 따라 section의 위치 조정 */
+    @media (min-width: 1025px) {
+      #content-section {
+        max-width: calc(100% - 370px); /* 사이드바 너비를 뺀 나머지 영역을 차지 */
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      #content-section {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .responsive-div {
+        flex-direction: column;
+        width: 100%;
+      }
+      .adjusted-flex {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* 작은 화면에서는 section의 좌우 여백 최소화 */
+    @media (max-width: 768px) {
+      #content-section {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+      .adjusted-flex {
+        width: 100%;
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="flex">
+    <!-- Sidebar -->
+    <div class="w-[370px] h-auto flex-none flex flex-col justify-start py-11 pl-[38px] pr-[34px] box-border">
+      <div class="flex-1 flex flex-col items-start justify-start">
+        <div class="self-stretch rounded-t-3xs rounded-b-none bg-white border-gray-300 border-[1px] border-solid flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5">
+          <div class="w-[97px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+            <a class="text-lg" href="#">예약 내역</a>
+          </div>
+        </div>
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-5 px-[38px] pb-[21px]">
+          <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+            <div class="h-[33px] flex-1 flex items-center text-lg">포인트</div>
+          </div>
+        </div>
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-9 pb-[21px]">
+          <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+            <div class="h-[33px] flex-1 flex items-center text-lg">쿠폰</div>
+          </div>
+        </div>
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]">
+          <div class="w-[113px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+            <div class="flex-1 text-lg">내 정보 관리</div>
+          </div>
+        </div>
+        <div class="self-stretch rounded-b-3xs bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]">
+          <div class="w-[76px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+            <div class="flex-1 text-lg">내 리뷰</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <section id="content-section" class="flex-grow flex flex-col items-center justify-center pt-[106px]">
+      <div class="responsive-div flex flex-col items-start justify-start gap-10">
+        <div class="flex flex-row items-start justify-start py-0 px-[15px]">
+          <a class="[text-decoration:none] relative leading-[29px] font-bold text-[inherit] whitespace-nowrap mq450:text-lgi mq450:leading-[17px] mq750:text-7xl mq750:leading-[23px]">
+            내 정보관리
+          </a>
+        </div>
+        <div class="self-stretch flex flex-col items-start justify-start gap-[11px] text-5xl text-gray-600">
+          <div class="flex flex-row items-start justify-start py-0 px-[15px] box-border">
+            <div class="flex-1 flex flex-row items-start justify-between gap-5 mq450:flex-wrap">
+              <div class="flex flex-col items-start justify-start pt-[19px] px-0 pb-0">
+                <h1 class="m-0 relative text-lg text-inherit leading-[21px] font-bold font-[inherit] inline-block min-w-[95px] whitespace-nowrap mq450:text-lgi mq450:leading-[17px]">
+                  회원 정보
+                </h1>
+              </div>
+              <div class="flex flex-row items-start justify-start gap-2.5 text-xl text-black">
+                <div class="flex flex-col items-start justify-start pt-[18px] px-0 pb-0">
+                  <h2 class="m-0 relative text-inherit leading-[24px] font-semibold font-[inherit] whitespace-nowrap mq450:text-base">
+                    나의 등급 : 방랑가
+                  </h2>
+                </div>
+                <img class="h-[59px] w-[50px] relative rounded-[50px] object-cover" loading="lazy" alt="" src="/image/user/-1@2x.png" />
+              </div>
+            </div>
+          </div>
+          <div class="self-stretch h-px relative border-gray-400 border-t-[1px] border-solid box-border"></div>
+        </div>
+
+        <div class="self-stretch flex flex-row flex-wrap items-start justify-between py-0 pl-0 pr-px box-border text-2xs text-black">
+          <div class="adjusted-flex flex flex-col items-start justify-start pt-[3px] pb-[111px] box-border gap-[24.5px] min-w-[366px]">
+            <div class="w-full flex flex-col items-start justify-start gap-2">
+              <div class="relative inline-block min-w-[33px]">이메일</div>
+              <div class="w-full flex flex-col items-start justify-start gap-[26px] text-base">
+                <div class="self-stretch flex flex-row items-start justify-start gap-[28.5px]">
+                  <div class="flex-1 flex flex-row items-start justify-start gap-2.5 min-w-[228px]">
+                    <input
+                      class="w-full bg-gray-200 border border-gray-400 h-16 flex-1 rounded-mini flex flex-row items-start justify-start py-6 px-[15px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
+                      placeholder="dd@naver.com"
+                      type="text"
+                    />
+                    <button type="button"
+                      class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
+                      이메일 인증
+                    </button>
+                  </div>
+                  <div class="flex flex-col items-start justify-start pt-5 text-text-primary">
+                    <div class="flex flex-row items-center gap-2">
+                      <label class="flex items-center gap-1">
+                        <input
+                          class="form-radio h-4 w-4 border border-gray-400"
+                          type="radio"
+                          name="email-receive"
+                        />
+                        <span>예</span>
+                      </label>
+                      <label class="flex items-center gap-1">
+                        <input
+                          class="form-radio h-4 w-4 border border-gray-400"
+                          type="radio"
+                          name="email-receive"
+                        />
+                        <span>아니요</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="relative text-2xs inline-block min-w-[44px]">
+                  휴대전화
+                </div>
+              </div>
+              <input
+                class="w-full bg-gray-200 border border-gray-400 self-stretch h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[17px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
+                placeholder="010-9999-8888"
+                type="text"
+              />
+            </div>
+            <div class="w-full flex flex-col items-start justify-start gap-2">
+              <div class="relative inline-block min-w-[44px]">비밀번호</div>
+              <div class="w-full flex flex-col items-start justify-start gap-[26px] text-sm">
+                <div class="self-stretch flex flex-row items-start justify-start gap-1.5">
+                  <input
+                    class="w-full bg-gray-200 border border-gray-400 h-16 flex-1 rounded-mini flex flex-row items-start justify-start py-6 px-[17px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
+                    placeholder="비밀번호 입력"
+                    type="password"
+                  />
+                  <button type="button"
+                    class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
+                    비밀번호 확인
+                  </button>
+                </div>
+                <div class="relative text-2xs inline-block min-w-[44px]">생년월일</div>
+              </div>
+              <input
+                class="w-full bg-gray-200 border border-gray-400 self-stretch h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[19px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
+                placeholder="1998년 9월 10일"
+                type="text"
+              />
+            </div>
+            <div class="self-stretch flex flex-col items-start justify-start gap-5 shrink-0 text-lg text-cornflowerblue">
+              <button type="button"
+                class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
+                수정하기
+              </button>
+            </div>
+          </div>
+
+          <div class="adjusted-flex flex flex-col items-start justify-start pt-[3px] pb-[111px] box-border gap-[24.5px] min-w-[366px]">
+            <div class="w-full flex flex-col items-start justify-start gap-2">
+              <div class="relative inline-block min-w-[44px]">우편번호</div>
+              <div class="w-full flex flex-col items-start justify-start gap-[26px] text-sm">
+                <div class="self-stretch flex flex-row items-start justify-start gap-1.5">
+                  <input
+                    class="w-full bg-gray-200 border border-gray-400 h-16 flex-1 rounded-mini flex flex-row items-start justify-start py-6 px-[23px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
+                    placeholder="15151"
+                    type="text"
+                  />
+                  <button type="button"
+                    class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
+                    우편번호 조회
+                  </button>
+                </div>
+                <div class="relative text-2xs inline-block min-w-[22px]">주소</div>
+              </div>
+              <input
+                class="w-full bg-gray-200 border border-gray-400 self-stretch h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[18px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
+                placeholder="경기도 남양주시 어찌구 저찌구"
+                type="text"
+              />
+            </div>
+            <input
+              class="w-full bg-gray-200 border border-gray-400 h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[19px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500 max-w-full"
+              placeholder="쌍용"
+              type="text"
+            />
+            
+          </div>
+        </div>
+
+        <div class="w-[360px] flex flex-col items-start justify-start content-start max-w-full text-lg">
+          <h2
+            class="m-0 flex-1 relative text-inherit tracking-[0.4px] leading-[20px] uppercase font-medium font-[inherit] inline-block min-w-[188px] shrink-0"
+          >
+            더 이상 이용을 원하지 않으신가요?
+          </h2>
+          <br />
+          <div class="flex flex-col items-start justify-start pt-[5px] px-0 pb-0 ml-0 text-gray-400 mq450:ml-0">
+            <button type="button"
+        class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full"
+>
+회원탈퇴
+</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+<script src="https://cdn.tailwindcss.com"></script>
+</html>

@@ -26,4 +26,8 @@ public class MypageController {
     public String userMyPageReview() {
         return "mypage/user-my-page-review";
     }
+    @RequestMapping("/info")
+    public String userMyPageInfo() {
+        return "mypage/user-mypage-info";
+    }
 }

@@ -59,6 +59,13 @@ public class Payment {
     @Column(name = "cancel_date")
     private LocalDateTime cancelDate;
 
+
+    @Column(name = "payment_key", length = 500)
+    private String paymentKey;
+
+    @Column(name = "order_id", length = 500)
+    private String orderId;
+
     @Column(name = "pay_none", length = 100)
     private String payNone;
 
