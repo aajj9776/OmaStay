@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 
     @GetMapping()
-    public String index(@RequestParam(name = "activeSearch", required = false) String activeSearch, Model model) {
+    public String index(@RequestParam(value = "activeSearch", required = false)
+                            String activeSearch, Model model) {
         model.addAttribute("activeSearch", activeSearch);
 
         return "index";
