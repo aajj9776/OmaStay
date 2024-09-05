@@ -41,7 +41,9 @@ public class ReservationController {
         }
 
 
+/*
         ReservationDTO reservation = reservationService.insertReservationInfo(res);
+*/
 
         redirectAttributes.addAttribute("orderId", payment.getOrderId());
         redirectAttributes.addAttribute("payStatus", payment.getPayStatus());

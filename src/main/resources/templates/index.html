@@ -1,30 +1,20 @@
 <!DOCTYPE html>
+<html lang="ko" layout:decorate="~{layout/main}"
+      layout:fragment="main"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="/css/index.css" rel="stylesheet"/>
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/component/swiper.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-<html
-  lang="ko"
-  layout:decorate="~{layout/main}"
-  layout:fragment="main"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  xmlns:th="http://www.thymeleaf.org"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <link href="/css/index.css" rel="stylesheet" />
-    <link
-      href="https://unpkg.com/swiper/swiper-bundle.min.css"
-      rel="stylesheet"
-    />
-    <link href="/css/component/swiper.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
-    />
-  </head>
-  <body>
-    <div class="wrarp">
-      <section class="main-content">
+</head>
+<body>
+<div class="wrarp">
+    <section class="main-content">
         <div class="column0">
             <img
                     alt=""
@@ -37,19 +27,15 @@
               <p class="txt1">오마스테이, 당신을</p>
               <p class="txt1">위한 맞춤형 숙소</p>
             </span>
-          </h2>
-          <div class="search">
-            <div class="search_title_wrapper">
-              <div class="search_title">국내 숙소</div>
+            </h2>
+            <div class="search">
+                <div class="search_title_wrapper">
+                    <div class="search_title">국내 숙소</div>
+                </div>
+                <div class="search-area">
+                    <div class="search-bar" th:include="/component/search/searchbar :: searchbar"/>
+                </div>
             </div>
-            <div class="search-area">
-              <div
-                class="search-bar"
-                th:include="/component/search/searchbar :: searchbar"
-              >
-            </div>
-          </div>
-
         </div>
     </section>
 
@@ -61,19 +47,20 @@
             </div>
         </div>
         <div class="swiper-container">
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-wrapper">
-            <img
-              class="swiper-slide"
-              loading="lazy"
-              src="/image/index/group--slide--link-----@2x.png"
-              th:each="i : ${#numbers.sequence(1, 5)}"
-            />
-          </div>
-          <div class="div6">
-            <div class="swiper-pagination"></div>
-          </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-wrapper">
+                <img class="swiper-slide"
+                     loading="lazy"
+                     src="/image/index/group--slide--link-----@2x.png"
+                     th:each="i : ${#numbers.sequence(1, 5)}"
+                />
+
+            </div>
+            <div class="div6">
+                <div class="swiper-pagination"></div>
+            </div>
+
         </div>
     </section>
 
@@ -81,17 +68,13 @@
         <b class="h21">국내 인기 여행지</b>
 
         <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
-              <img
-                alt=""
-                class="container-icon"
-                loading="lazy"
-                src="/image/index/container@2x.png"
-              />
-              <div class="span1">
-                <div class="div8">제주도</div>
-              </div>
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
+                    <img alt="" class="container-icon" loading="lazy" src="/image/index/container@2x.png"/>
+                    <div class="span1">
+                        <div class="div8">제주도</div>
+                    </div>
+                </div>
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
@@ -99,23 +82,18 @@
     </section>
     <div class="column3">
         <div class="column3-content">
-          <div class="event-header">
-            <h3 class="h3">회원가입만 해도 받는 오마스테이 엠버서더 혜택</h3>
-            <div class="div19">
-              로그인 하면 엠버서더 할인가로 예약할 수 있어요.
+            <div class="event-header">
+                <h3 class="h3">
+                    회원가입만 해도 받는 오마스테이 엠버서더 혜택
+                </h3>
+                <div class="div19">
+                    로그인 하면 엠버서더 할인가로 예약할 수 있어요.
+                </div>
+                <div class="column3-action">
+                    <button class="btn btn-primary w-[150px] h-[48px] font-bold" type="button">로그인/회원가입</button>
+                    <a class="pl-4 text-center color text-primary">혜택 자세히 보기</a>
+                </div>
             </div>
-            <div class="column3-action">
-              <button
-                class="btn btn-primary w-[150px] h-[48px] font-bold"
-                type="button"
-              >
-                로그인/회원가입
-              </button>
-              <a class="pl-4 text-center color text-primary"
-                >혜택 자세히 보기</a
-              >
-            </div>
-          </div>
         </div>
         <img
                 alt=""
@@ -153,16 +131,50 @@
             </div>
         </div>
         <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
-              <div class="card">
-                <div class="div23">
-                  <img
-                    alt=""
-                    class="ac436e31398e5cc182d7d5fdea0572-icon"
-                    loading="lazy"
-                    src="/image/index/32ac436e31398e5cc182d7d5fdea0572jpg@2x.png"
-                  />
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
+                    <div class="card">
+                        <div class="div23">
+                            <img
+                                    alt=""
+                                    class="ac436e31398e5cc182d7d5fdea0572-icon"
+                                    loading="lazy"
+                                    src="/image/index/32ac436e31398e5cc182d7d5fdea0572jpg@2x.png"
+                            />
+                        </div>
+                        <div class="stay-info-container">
+                            <div class="stay-details-container">
+                                <div class="div24">모텔</div>
+                                <div class="heading-3">
+                                    <b class="b">구월 호텔반월</b>
+                                </div>
+                                <div class="container">
+                                    <div class="container1">
+                                        <div class="div25">인천터미널역 도보 14분</div>
+                                    </div>
+                                </div>
+                                <div class="span-wrapper">
+                                    <div class="span7">
+                                        <div class="rating">
+                                            <img loading="lazy" src="/image/index/svg-3.svg"/>
+                                            <b class="rating-placeholder">9.5</b>
+                                        </div>
+                                        <div class="div26">9,871명 평가</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stay-price-container-parent">
+                            <div class="stay-price-container">
+                                <div class="div25">쿠폰 적용시</div>
+                            </div>
+                            <div class="span9">
+                                <b class="span10">40,000</b>
+                                <div class="span11">원</div>
+                                <div class="span12">45,000원</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--============================================-->
@@ -180,14 +192,15 @@
             </div>
         </div>
         <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 5)}">
-              <img
-                alt=""
-                class="cc123e1c51f2b16e4bc19b5f014752-icon"
-                loading="lazy"
-                src="/image/index/cc123e1c51f2b16e4bc19b5f014752f4jpg@2x.png"
-              />
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 5)}">
+                    <img
+                            alt=""
+                            class="cc123e1c51f2b16e4bc19b5f014752-icon"
+                            loading="lazy"
+                            src="/image/index/cc123e1c51f2b16e4bc19b5f014752f4jpg@2x.png"
+                    />
+                </div>
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
@@ -217,162 +230,149 @@
             <div class="a15">울산</div>
             <div class="a15">세종</div>
         </div>
-      </section>
-    </div>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script
-      crossorigin="anonymous"
-      integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc="
-      src="https://code.jquery.com/jquery-3.7.1.slim.js"
-    ></script>
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.slim.js"
-      integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc="
-      crossorigin="anonymous"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
-    ></script>
-    <script type="text/javascript" src="/js/datepicker.js"></script>
-    <script>
-      $(document).ready(function () {
+    </section>
+</div>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="/js/datepicker.js"></script>
+<script>
+    $(document).ready(function () {
         const urlParams = new URLSearchParams(window.location.search);
-        const activeSearch = urlParams.get("activeSearch");
-        if (activeSearch === "domestic") {
-          $("#search-accommodation").focus();
+        const activeSearch = urlParams.get('activeSearch');
+        if (activeSearch === 'domestic') {
+            $('#search-accommodation').focus();
+            $('#search-accommodation').trigger('click');
         }
-      });
-      document.addEventListener("DOMContentLoaded", function () {
-        const swiper1 = new Swiper(".column1 .swiper-container", {
-          loop: true,
-          slidesPerView: 3,
-          spaceBetween: 15,
-          slidesPerGroup: 3,
-          autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-          },
-          navigation: {
-            nextEl: ".column1 .swiper-button-next",
-            prevEl: ".column1 .swiper-button-prev",
-          },
-          pagination: {
-            el: ".column1 .swiper-pagination",
-            clickable: true,
-          },
-          breakpoints: {
-            1200: {
-              slidesPerView: 3,
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiper1 = new Swiper('.column1 .swiper-container', {
+            loop: true,
+            slidesPerView: 3,
+            spaceBetween: 15,
+            slidesPerGroup: 3,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
             },
-            0: {
-              slidesPerView: 1,
+            navigation: {
+                nextEl: '.column1 .swiper-button-next',
+                prevEl: '.column1 .swiper-button-prev',
             },
-          },
+            pagination: {
+                el: '.column1 .swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                1200: {
+                    slidesPerView: 3,
+                },
+                0: {
+                    slidesPerView: 1,
+                }
+            },
         });
 
-        const swiper2 = new Swiper(".column2 .swiper-container", {
-          loop: false,
-          slidesPerView: 6,
-          spaceBetween: 15,
-          slidesPerGroup: 6,
-          navigation: {
-            nextEl: ".column2 .swiper-button-next",
-            prevEl: ".column2 .swiper-button-prev",
-          },
-          breakpoints: {
-            1200: {
-              slidesPerView: 6,
+        const swiper2 = new Swiper('.column2 .swiper-container', {
+            loop: false,
+            slidesPerView: 6,
+            spaceBetween: 15,
+            slidesPerGroup: 6,
+            navigation: {
+                nextEl: '.column2 .swiper-button-next',
+                prevEl: '.column2 .swiper-button-prev',
             },
-            0: {
-              slidesPerView: 1,
+            breakpoints: {
+                1200: {
+                    slidesPerView: 6,
+                },
+                0: {
+                    slidesPerView: 1,
+                }
             },
-          },
-          on: {
-            init: function () {
-              updateNavigationButtons(this);
-            },
-            slideChange: function () {
-              updateNavigationButtons(this);
-            },
-          },
+            on: {
+                init: function () {
+                    updateNavigationButtons(this);
+                },
+                slideChange: function () {
+                    updateNavigationButtons(this);
+                }
+            }
         });
 
-        const swiper3 = new Swiper(".column4 .swiper-container", {
-          loop: false,
-          slidesPerView: 4,
-          spaceBetween: 15,
-          slidesPerGroup: 4,
-          navigation: {
-            nextEl: ".column4 .swiper-button-next",
-            prevEl: ".column4 .swiper-button-prev",
-          },
-          breakpoints: {
-            1200: {
-              slidesPerView: 4,
+        const swiper3 = new Swiper('.column4 .swiper-container', {
+            loop: false,
+            slidesPerView: 4,
+            spaceBetween: 15,
+            slidesPerGroup: 4,
+            navigation: {
+                nextEl: '.column4 .swiper-button-next',
+                prevEl: '.column4 .swiper-button-prev'
             },
-            0: {
-              slidesPerView: 1,
+            breakpoints: {
+                1200: {
+                    slidesPerView: 4,
+                },
+                0: {
+                    slidesPerView: 1,
+                }
             },
-          },
-          on: {
-            init: function () {
-              updateNavigationButtons(this);
-            },
-            slideChange: function () {
-              updateNavigationButtons(this);
-            },
-          },
+            on: {
+                init: function () {
+                    updateNavigationButtons(this);
+                },
+                slideChange: function () {
+                    updateNavigationButtons(this);
+                }
+            }
         });
 
-        const swiper5 = new Swiper(".column6 .swiper-container", {
-          // Ensure the class name matches the HTML
-          loop: true,
-          slidesPerView: 2.4,
-          slidesPerGroup: 1,
-          autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-          },
-          navigation: {
-            nextEl: ".column6 .swiper-button-next",
-            prevEl: ".column6 .swiper-button-prev",
-          },
-          pagination: {
-            el: ".column6 .swiper-pagination",
-            clickable: true,
-          },
-          breakpoints: {
-            1200: {
-              slidesPerView: 2.4,
+        const swiper5 = new Swiper('.column6 .swiper-container', { // Ensure the class name matches the HTML
+            loop: true,
+            slidesPerView: 2.4,
+            slidesPerGroup: 1,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
             },
-            0: {
-              slidesPerView: 1,
+            navigation: {
+                nextEl: '.column6 .swiper-button-next',
+                prevEl: '.column6 .swiper-button-prev',
             },
-          },
+            pagination: {
+                el: '.column6 .swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                1200: {
+                    slidesPerView: 2.4,
+                },
+                0: {
+                    slidesPerView: 1,
+                }
+            },
         });
 
         function updateNavigationButtons(swiper) {
-          const nextButton = swiper.el.querySelector(".swiper-button-next");
-          const prevButton = swiper.el.querySelector(".swiper-button-prev");
+            const nextButton = swiper.el.querySelector('.swiper-button-next');
+            const prevButton = swiper.el.querySelector('.swiper-button-prev');
 
-          if (swiper.isEnd) {
-            nextButton.style.visibility = "hidden";
-          } else {
-            nextButton.style.visibility = "visible";
-          }
+            if (swiper.isEnd) {
+                nextButton.style.visibility = 'hidden';
+            } else {
+                nextButton.style.visibility = 'visible';
+            }
 
-          if (swiper.isBeginning) {
-            prevButton.style.visibility = "hidden";
-          } else {
-            prevButton.style.visibility = "visible";
-          }
+            if (swiper.isBeginning) {
+                prevButton.style.visibility = 'hidden';
+            } else {
+                prevButton.style.visibility = 'visible';
+            }
         }
-      });
-    </script>
-  </body>
+    });
+</script>
+</body>
 </html>
