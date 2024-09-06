@@ -5,6 +5,8 @@ import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
 import com.omakase.omastay.vo.HostOwnerInfoVo;
 import com.omakase.omastay.entity.enumurate.HStatus;
+import com.omakase.omastay.entity.enumurate.HStep;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -75,9 +77,14 @@ public class HostInfo {
     private String priceAdd;
 
     //신청 승인 반려 해제
-    @Enumerated
-    @Column(name = "h_status", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "h_status", nullable = true)
     private HStatus hStatus;
+
+    //마이페이지 숙소 이용규칙 객실
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "h_step", nullable = false)
+    private HStep hStep;
 
     @Column(name = "h_none", length = 100)
     private String hNone;
