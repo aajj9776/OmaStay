@@ -19,7 +19,7 @@ public class ServiceDTO {
     private UserAuth sAuth;
     private String sTitle;
     private String sContent;
-    private FileImageNameVo fileName;
+    private FileImageNameVo fileName = new FileImageNameVo();
     private LocalDateTime sDate;
     private BooleanStatus sStatus;
     private String sNone;

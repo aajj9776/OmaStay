@@ -47,7 +47,6 @@ public class ReservationService {
         startEndVo.setEnd(LocalDateTime.now().plusDays(1));
         res.setStartEndVo(startEndVo);
         res.setResStatus(ResStatus.COMPLETED);
-        res.setResNum(paymentDTO.getOrderId());
         res.setNonMember(null);
 
         Reservation result = reservationRepository.save(res);

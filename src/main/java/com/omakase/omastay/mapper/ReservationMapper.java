@@ -16,12 +16,14 @@ public interface ReservationMapper {
     @Mapping(source = "member.id", target = "memIdx")
     @Mapping(source = "nonMember.id", target = "nonIdx")
     @Mapping(source = "payment.id", target = "payIdx")
+    @Mapping(source = "startEndVo", target = "startEndVo")
     ReservationDTO toReservationDTO(Reservation reservation);
 
     @Mapping(source = "roomIdx", target = "roomFacility.id")
     @Mapping(source = "memIdx", target = "member.id")
     @Mapping(source = "nonIdx", target = "nonMember.id")
     @Mapping(source = "payIdx", target = "payment.id")
+    @Mapping(source = "startEndVo", target = "startEndVo")
     Reservation toReservation(ReservationDTO reservationDTO);
 
     List<ReservationDTO> toReservationDTOList(List<Reservation> reservationList);
