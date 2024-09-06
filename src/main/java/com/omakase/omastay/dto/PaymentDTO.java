@@ -28,7 +28,6 @@ public class PaymentDTO {
 
     //주문번호
     private String paymentKey;
-    private String orderId;
     private String amount;
 
     public PaymentDTO(Payment payment) {
@@ -45,12 +44,11 @@ public class PaymentDTO {
         this.payDate = payment.getPayDate();
         this.cancelDate = payment.getCancelDate();
         this.paymentKey = payment.getPaymentKey();
-        this.orderId = payment.getOrderId();
         this.payNone = payment.getPayNone();
     }
 
     @QueryProjection
-    public PaymentDTO(int id, int icIdx, int pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelTime, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String orderId, String payNone) {
+    public PaymentDTO(int id, int icIdx, int pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelTime, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String payNone) {
         this.id = id;
         this.icIdx = icIdx;
         this.pIdx = pIdx;
@@ -64,7 +62,6 @@ public class PaymentDTO {
         this.payDate = payDate;
         this.cancelDate = cancelDate;
         this.paymentKey = paymentKey;
-        this.orderId = orderId;
         this.payNone = payNone;
     }
 }

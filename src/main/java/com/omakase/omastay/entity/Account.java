@@ -19,7 +19,7 @@ public class Account {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "ac_bank", nullable = false, length = 100)
     private String acBank;

@@ -23,6 +23,6 @@ public interface AdminMemberMapper {
     AdminMember toAdminMember(AdminMemberDTO adminMemberDTO);
 
     List<AdminMemberDTO> toAdminMemberDTOList(List<AdminMember> adminMemberList);
-
     List<AdminMember> toAdminMemberList(List<AdminMemberDTO> adminMemberDTOList);
+
 }

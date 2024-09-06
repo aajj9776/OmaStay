@@ -438,7 +438,7 @@
 <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
 <script
         src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH"></script>
-
+<script src="/js/countperson.js"></script>
 <script>
     // 필터 버튼 값 변경
     $(document).ready(function () {
@@ -446,6 +446,22 @@
         $("#dropdown-filter-button").val("rating");
         initializeSlider('main');  // 메인 슬라이더 초기화
         console.log($("#dropdown-filter-button").val());
+
+
+
+        /*시설 필터 버튼 색 바꾸기*/
+        const btns = document.querySelectorAll('[id^="f_idx"]');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('bg-gray-300')) {
+                    btn.classList.remove('bg-gray-300');
+                    btn.classList.remove('f_idx');
+                } else {
+                    btn.classList.add('bg-gray-300');
+                    btn.classList.add('f_idx');
+                }
+            });
+        });
     });
 
     // 슬라이더 초기화 함수
@@ -522,41 +538,67 @@
     var markers = [];
     var map;
 
-    //티맵 호출 함수
+    // 티맵 호출 함수
     function initTmap() {
-        map = new Tmapv2.Map("tmap", {
-            center: new Tmapv2.LatLng(37.56520450, 126.98702028),
-            width: "100%", // 지도의 넓이
-            height: "100%", // 지도의 높이
-            zoom: 17
-        });
-        addMarkersTooMuch(); // 100개의 마커 추가
-    }
-
-    //티맵 리로드 모달때문에 한번 초기화 필요
-    function loadTmap() {
-        if (typeof Tmapv2 === 'undefined') {
-            var script = document.createElement('script');
-            script.src = 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH';
-            script.onload = initTmap;
-            document.body.appendChild(script);
-        } else {
-            initTmap();
+        if (!map) {
+            map = new Tmapv2.Map("tmap", {
+                center: new Tmapv2.LatLng(37.56520450, 126.98702028),
+                width: "100%", // 지도의 넓이
+                height: "100%", // 지도의 높이
+                zoom: 17
+            });
         }
     }
 
-    //마커 추가하는 함수
+    // 티맵 리로드 모달때문에 한번 초기화 필요
+    function loadTmap() {
+        console.log('Loading Tmap');
+        if (typeof Tmapv2 === 'undefined') {
+            console.log('Tmap not loaded');
+            var script = document.createElement('script');
+            script.src = 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH';
+            script.onload = function() {
+                console.log('Tmap script loaded');
+                initTmap();
+                addMarkersTooMuch(); // 처음 로드될 때에도 마커 추가
+            };
+            document.body.appendChild(script);
+        } else {
+            console.log('Tmap script already loaded');
+            initTmap();
+            addMarkersTooMuch(); // 스크립트가 이미 로드되어 있다면 마커 추가
+        }
+    }
+
+    // 마커 추가하는 함수
     function addMarkersTooMuch() {
-        removeMarkers();
+        console.log('Adding markers');
+        removeMarkers(); // 기존 마커 제거
         for (var i = 0; i < 100; i++) {
             var lat = Math.random() / 100;
             var lng = Math.random() / 100;
-            //Marker 객체 생성.
+            var position = new Tmapv2.LatLng(37.56220450 + lat, 126.98402028 + lng);
+
+            // 좌표 콘솔 로그
+            console.log('Marker position:', position);
+
+            // 커스텀 마커
+            var markerElement = `
+            <span class="ballon relative max-w-xs bg-gray-800 text-white rounded p-2 inline-block text-center">
+                크크루삥뽕
+                <span class="absolute border-gray-800 border-l-transparent border-r-transparent border-t-8 border-l-8 border-r-8 -bottom-2 left-1/2 transform -translate-x-1/2"></span>
+            </span>
+            `;
+            // tmap 마커 생성
             var marker = new Tmapv2.Marker({
-                position: new Tmapv2.LatLng(37.56220450 + lat, 126.98402028 + lng), //Marker의 중심좌표 설정.
-                label: 'test' //Marker의 라벨.
+                position: position,
+                iconHTML: markerElement
             });
-            marker.setMap(map); //Marker가 표시될 Map 설정.
+
+            // 마커를 tmap에 추가
+            marker.setMap(map);
+
+            // 마커를 markers 배열에 추가
             markers.push(marker);
         }
     }
@@ -568,6 +610,10 @@
         }
         markers = [];
     }
+    /*-------------필터 관리 기능--------------*/
+
+
+
 </script>
 </body>
 </html>

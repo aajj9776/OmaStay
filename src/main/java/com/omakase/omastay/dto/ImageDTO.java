@@ -15,7 +15,7 @@ public class ImageDTO {
     private int rId;
     private int hIdx;
     private ImgCate imgCate;
-    private FileImageNameVo imgName;
+    private FileImageNameVo imgName = new FileImageNameVo();
     private BooleanStatus imgStatus;
     private String imgNone;
 
