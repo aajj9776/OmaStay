@@ -23,7 +23,7 @@ public class IqComment {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "iq_idx", referencedColumnName = "iq_idx")
-    private Inquiry inquiry;
+    private Inquiry inquiry = new Inquiry();
 
     @Column(name = "iqc_title", nullable = false, length = 100)
     private String iqcTitle;

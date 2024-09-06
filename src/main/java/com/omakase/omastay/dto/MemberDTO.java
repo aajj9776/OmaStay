@@ -17,14 +17,14 @@ import java.time.LocalDateTime;
 public class MemberDTO {
     private int id;
     private int gIdx;
-    private UserProfileVo memberProfile;
+    private UserProfileVo memberProfile = new UserProfileVo();
     private String memPhone;
     private String memName;
     private BooleanStatus memEmailCheck;
     private String memBirth;
     private LocalDateTime memJoinDate;
     private Social memSocial;
-    private AddressVo addressVo;
+    private AddressVo addressVo = new AddressVo();
     private Gender memGender;
     private String accessToken;
     private String refreshToken;
@@ -48,7 +48,6 @@ public class MemberDTO {
     }
 
     //이게 없으면 DTO에 이메일 비밀번호 Set이 안됨()
-
     public void setMemEmail(String email) {
         if (this.memberProfile == null) {
             this.memberProfile = new UserProfileVo();
@@ -65,7 +64,6 @@ public class MemberDTO {
     }
 
     //일단 만듬
-
     @QueryProjection
     public MemberDTO(int id, int gIdx, UserProfileVo memberProfile, String memPhone, String memName, BooleanStatus memEmailCheck, String memBirth, LocalDateTime memJoinDate, Social memSocial, AddressVo addressVo, Gender memGender, String accessToken, String refreshToken, String memNone) {
         this.id = id;

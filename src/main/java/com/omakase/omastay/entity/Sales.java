@@ -22,11 +22,11 @@ public class Sales {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_idx", referencedColumnName = "res_idx")
-    private Reservation reservation;
+    private Reservation reservation = new Reservation();
 
     @Column(name = "sal_date", nullable = false)
     private LocalDate salDate;

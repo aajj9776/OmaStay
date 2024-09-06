@@ -23,11 +23,11 @@ public class RoomFacilities {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_idx", referencedColumnName = "f_idx")
-    private Facilities facilities;
+    private Facilities facilities = new Facilities();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ri_idx", referencedColumnName = "ri_idx")
-    private RoomInfo roomInfo;
+    private RoomInfo roomInfo = new RoomInfo();
 
     @Column(name = "room_none", length = 100)
     private String roomNone;
