@@ -24,6 +24,8 @@ public class ReservationDTO {
     private int resPerson;
     private int resPrice;
     private ResStatus resStatus;
+    private String resName;
+    private String resEmail;
     private String resNone;
 
     public ReservationDTO(Reservation reservation) {
@@ -34,18 +36,18 @@ public class ReservationDTO {
         this.payIdx = reservation.getPayment() != null ? reservation.getPayment().getId() : null;
         this.resNum = reservation.getResNum();
         this.startEndVo = reservation.getStartEndVo();
-        this.resStart = reservation.getResStart();
-        this.resEnd = reservation.getResEnd();
         this.resPerson = reservation.getResPerson();
         this.resPrice = reservation.getResPrice();
         this.resStatus = reservation.getResStatus();
+        this.resName = reservation.getResName();
+        this.resEmail = reservation.getResEmail();
         this.resNone = reservation.getResNone();
     }
 
     @QueryProjection
     public ReservationDTO(int id, int roomIdx, int memIdx, int nonIdx, int paymentId, String resNum,
-                          StartEndVo startEndVo, LocalDateTime resStart,
-                          LocalDateTime resEnd, int resPerson, int resPrice, ResStatus resStatus, String resNone) {
+                          StartEndVo startEndVo, String resName, String resEmail,
+                        int resPerson, int resPrice, ResStatus resStatus, String resNone) {
         this.id = id;
         this.roomIdx = roomIdx;
         this.memIdx = memIdx;
@@ -53,10 +55,10 @@ public class ReservationDTO {
         this.payIdx = paymentId;
         this.resNum = resNum;
         this.startEndVo = startEndVo;
-        this.resStart = resStart;
-        this.resEnd = resEnd;
         this.resPerson = resPerson;
         this.resPrice = resPrice;
+        this.resName = resName;
+        this.resEmail = resEmail;
         this.resStatus = resStatus;
         this.resNone = resNone;
     }
