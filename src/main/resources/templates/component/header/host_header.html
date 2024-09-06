@@ -112,8 +112,7 @@
             >
               <div
                 class="[text-decoration:none] relative text-[20px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center whitespace-nowrap"
-                ><span th:text="${adminMember != null ? adminMember.adId : 'Guest'}">변우석</span>님 환영합니다.</div
-              >
+                ><span th:text="${session.adminMember != null ? session.adminMember.adId : 'Guest'}">변우석</span>님 환영합니다.</div>
           </div>
           </div>
         </div>

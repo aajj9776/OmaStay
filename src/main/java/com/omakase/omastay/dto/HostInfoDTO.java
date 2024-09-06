@@ -3,6 +3,7 @@ package com.omakase.omastay.dto;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;
+import com.omakase.omastay.entity.enumurate.HStep;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
 import com.omakase.omastay.vo.HostOwnerInfoVo;
@@ -29,6 +30,7 @@ public class HostInfoDTO {
     private String rules;
     private String priceAdd;
     private HStatus hStatus;
+    private HStep hStep;
     private String hNone;
 
     public HostInfoDTO(HostInfo hostInfo) {
@@ -48,11 +50,12 @@ public class HostInfoDTO {
         this.rules = hostInfo.getRules();
         this.priceAdd = hostInfo.getPriceAdd();
         this.hStatus = hostInfo.getHStatus();
+        this.hStep = hostInfo.getHStep();
         this.hNone = hostInfo.getHNone();
     }
 
     @QueryProjection
-    public HostInfoDTO(int id, int adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hUrl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, String hNone) {
+    public HostInfoDTO(int id, int adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hUrl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, HStep hStep, String hNone) {
         this.id = id;
         this.adIdx = adIdx;
         this.addressVo = addressVo;
@@ -69,6 +72,7 @@ public class HostInfoDTO {
         this.rules = rules;
         this.priceAdd = priceAdd;
         this.hStatus = hStatus;
+        this.hStep = hStep;
         this.hNone = hNone;
     }
 }

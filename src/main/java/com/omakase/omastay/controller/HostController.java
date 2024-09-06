@@ -226,7 +226,7 @@ public class HostController {
 
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate(); 
+        session.removeAttribute("adminMember");
         return "host/host_login"; 
     }
     
