@@ -45,7 +45,7 @@ public class Service {
             @AttributeOverride(name = "fName", column = @Column(name = "s_fname", nullable = false, length = 500)),
             @AttributeOverride(name = "oName", column = @Column(name = "s_oname", nullable = false, length = 500))
     })
-    private FileImageNameVo fileName;
+    private FileImageNameVo fileName = new FileImageNameVo();
 
     @Column(name = "s_date", nullable = false)
     private LocalDateTime sDate;

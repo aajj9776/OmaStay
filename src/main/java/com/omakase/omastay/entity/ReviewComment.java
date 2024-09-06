@@ -23,7 +23,7 @@ public class ReviewComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rev_idx", referencedColumnName = "rev_idx")
-    private Review review;
+    private Review review = new Review();
 
     @Column(name = "rc_comment", nullable = false, length = 100)
     private String rcComment;

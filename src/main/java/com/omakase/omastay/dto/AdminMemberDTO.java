@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AdminMemberDTO {
     private int id;
     private String adId;
-    private UserProfileVo adminProfile;
+    private UserProfileVo adminProfile = new UserProfileVo();
     private int adAuth;
     private String adNone;
 

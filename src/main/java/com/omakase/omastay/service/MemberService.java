@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.entity.Grade;
 import com.omakase.omastay.entity.Member;
+import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.Gender;
 import com.omakase.omastay.entity.enumurate.Social;
 import com.omakase.omastay.repository.GradeRepository;
 import com.omakase.omastay.repository.MemberRepository;
+import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.UserProfileVo;
 
 import java.io.UnsupportedEncodingException;

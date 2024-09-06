@@ -20,7 +20,7 @@ public class Recommendation {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "rec_point")
     private Float recPoint;

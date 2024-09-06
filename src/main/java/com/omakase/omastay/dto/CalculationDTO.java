@@ -16,7 +16,7 @@ public class CalculationDTO {
     private int hIdx;
     private int calAmount;
     private BooleanStatus calStatus;
-    private StartEndVo calStartEnd;
+    private StartEndVo calStartEnd = new StartEndVo();
     private LocalDateTime calLegTime;
     private LocalDateTime calConfirmTime;
     private LocalDateTime calCompleteTime;
