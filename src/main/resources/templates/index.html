@@ -10,7 +10,6 @@
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
     <link href="/css/component/swiper.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
 </head>
 <body>
 <div class="wrarp">
@@ -230,39 +229,27 @@
             <div class="a15">울산</div>
             <div class="a15">세종</div>
         </div>
-      </section>
-    </div>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script
-      crossorigin="anonymous"
-      integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc="
-      src="https://code.jquery.com/jquery-3.7.1.slim.js"
-    ></script>
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.slim.js"
-      integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc="
-      crossorigin="anonymous"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
-    ></script>
-    <script type="text/javascript" src="/js/datepicker.js"></script>
-    <script>
-      $(document).ready(function () {
+    </section>
+</div>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="/js/datepicker.js"></script>
+<script type="text/javascript" src="/js/countperson.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         const urlParams = new URLSearchParams(window.location.search);
         const activeSearch = urlParams.get("activeSearch");
         if (activeSearch === "domestic") {
           $("#search-accommodation").focus();
           $("#search-accommodation").trigger("click");
         }
-      });
 
-    document.addEventListener("DOMContentLoaded", function () {
+        /*--------------*/
+
         const swiper1 = new Swiper(".column1 .swiper-container", {
             loop: true,
             slidesPerView: 3,
@@ -291,58 +278,31 @@
         });
     });
 
-        const swiper2 = new Swiper('.column2 .swiper-container', {
-            loop: false,
-            slidesPerView: 6,
-            spaceBetween: 15,
-            slidesPerGroup: 6,
-            navigation: {
-                nextEl: '.column2 .swiper-button-next',
-                prevEl: '.column2 .swiper-button-prev',
+        const swiper2 = new Swiper(".column2 .swiper-container", {
+          loop: false,
+          slidesPerView: 6,
+          spaceBetween: 15,
+          slidesPerGroup: 6,
+          navigation: {
+            nextEl: ".column2 .swiper-button-next",
+            prevEl: ".column2 .swiper-button-prev",
+          },
+          breakpoints: {
+            1200: {
+              slidesPerView: 6,
             },
-            breakpoints: {
-                1200: {
-                    slidesPerView: 6,
-                },
-                0: {
-                    slidesPerView: 1,
-                }
+            0: {
+              slidesPerView: 1,
             },
-            on: {
-                init: function () {
-                    updateNavigationButtons(this);
-                },
-                slideChange: function () {
-                    updateNavigationButtons(this);
-                }
-            }
-        });
-
-        const swiper3 = new Swiper('.column4 .swiper-container', {
-            loop: false,
-            slidesPerView: 4,
-            spaceBetween: 15,
-            slidesPerGroup: 4,
-            navigation: {
-                nextEl: '.column4 .swiper-button-next',
-                prevEl: '.column4 .swiper-button-prev'
+          },
+          on: {
+            init: function () {
+              updateNavigationButtons(this);
             },
-            breakpoints: {
-                1200: {
-                    slidesPerView: 4,
-                },
-                0: {
-                    slidesPerView: 1,
-                }
+            slideChange: function () {
+              updateNavigationButtons(this);
             },
-            on: {
-                init: function () {
-                    updateNavigationButtons(this);
-                },
-                slideChange: function () {
-                    updateNavigationButtons(this);
-                }
-            }
+          },
         });
 
     const swiper5 = new Swiper('.column6 .swiper-container', {
