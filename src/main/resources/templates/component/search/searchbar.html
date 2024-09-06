@@ -28,14 +28,17 @@
             style="width: 408px"
           >
             <div class="flex flex-row items-start justify-start">
-              <p class="text-black">최근검색어</p>
-              <button
+              <p class="text-black font-bold">최근검색어</p>
+              <button id="allDelBtn"
                 class="text-gray-700 text-xs mb-0 ml-[213px] mt-[5px] hover:text-gray-500 underline"
               >
                 전체삭제
               </button>
-            </div>
-            <hr class="dropdown-divider" style="margin-top: 10px" />
+        </div>
+                <div>
+                        <ul id="rec_search_content" class="mt-2">
+                        </ul>
+                </div>
           </div>
         </div>
         </div>
@@ -92,8 +95,8 @@
                                 </div>
                         </div>
                 </div>
-                <button type="button" 
-                id="sbtn" class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px]  flex flex-row items-center justify-center ont-semibold font-[Inter] text-[#fff] text-center ml-[-19px] ">
+                <button
+                id="keyword_searchBtn" class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px]  flex flex-row items-center justify-center ont-semibold font-[Inter] text-[#fff] text-center ml-[-19px] ">
                         검색
                 </button>                       
 </header>
