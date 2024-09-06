@@ -25,33 +25,11 @@ import jakarta.transaction.Transactional;
 public class ReservationService {
 
     @Autowired
-    private PaymentRepository paymentRepository;
-
-    @Autowired
     private ReservationRepository reservationRepository;
 
+    
+
     @Transactional
-    public PaymentDTO insertPaymentInfo(PaymentDTO payment) {
-        System.out.println("얍"+ payment.getNsalePrice());
-
-        Payment res = PaymentMapper.INSTANCE.toPayment(payment);
-
-        res.setIssuedCoupon(null);
-        res.setPoint(null);
-
-        if( payment.getNsalePrice() == null && payment.getNsalePrice().equals("")){
-            res.setNsalePrice(null);
-        }
-
-        res.setPayStatus(PayStatus.PAY);
-        res.setPayDate(LocalDateTime.now());
-
-        Payment pay = paymentRepository.save(res);
-
-        PaymentDTO dto = PaymentMapper.INSTANCE.toPaymentDTO(pay);
-        return dto;
-    }
-
     public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
 
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);

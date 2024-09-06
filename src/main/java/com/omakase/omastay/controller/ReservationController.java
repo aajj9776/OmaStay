@@ -9,8 +9,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
+import com.omakase.omastay.service.PaymentService;
 import com.omakase.omastay.service.ReservationService;
 
 
@@ -20,6 +22,10 @@ public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
+
+
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping
     public String reservation() {
@@ -38,8 +44,10 @@ public class ReservationController {
 
         System.out.println("reservation이메일 이름 들어와야함" + reservation);
 
+
+
         //결제정보 저장
-        PaymentDTO res = reservationService.insertPaymentInfo(payment);
+        PaymentDTO res = paymentService.insertPaymentInfo(payment);
         System.out.println("결과" + res);
         if( res.getId() == 0) {
             return "redirect:/reservation/payment_fail";
@@ -48,7 +56,6 @@ public class ReservationController {
         //예약정보 저장
         ReservationDTO reserve = null;
         if( res.getPayStatus() == PayStatus.PAY) {
-            
             
             reservation.setPayIdx(res.getId());
             reserve = reservationService.insertReservationInfo(reservation, res);
