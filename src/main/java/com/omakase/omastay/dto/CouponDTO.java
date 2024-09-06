@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CouponDTO {
     private int id;
     private String cpContent;
-    private StartEndVo cpStartEnd;
+    private StartEndVo cpStartEnd = new StartEndVo();
     private String cpSale;
     private CpCate cpCate;
     private CpMethod cpMethod;

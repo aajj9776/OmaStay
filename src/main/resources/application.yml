@@ -1,8 +1,12 @@
 server:
+<<<<<<< HEAD
   port: 9090
   servlet:
     session:
       timeout: 24h
+=======
+  port: 9090      #사용하기 편하게 하기 위해서 임의로 변경 추후에 바꾸는걸 추천
+>>>>>>> 10da0d1eb54e2f896adcc19b929a6898d5cbc366
 spring:
   datasource:
     url: jdbc:mysql://18.116.238.9:3306/omastay

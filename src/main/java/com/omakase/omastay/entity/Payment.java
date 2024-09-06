@@ -24,11 +24,11 @@ public class Payment {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ic_idx", referencedColumnName = "ic_idx", nullable = true)
-    private IssuedCoupon issuedCoupon;
+    private IssuedCoupon issuedCoupon = new IssuedCoupon();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_idx", referencedColumnName = "p_idx", nullable = true)
-    private Point point;
+    private Point point = new Point();
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "pay_status", nullable = false)
@@ -41,6 +41,7 @@ public class Payment {
     @Column(name = "pay_content", nullable = false, length = 500)
     private String payContent;
 
+    //amount
     @Column(name = "sale_price", length = 100)
     private String salePrice;
 
@@ -59,14 +60,9 @@ public class Payment {
     @Column(name = "cancel_date")
     private LocalDateTime cancelDate;
 
-
     @Column(name = "payment_key", length = 500)
     private String paymentKey;
-
-    @Column(name = "order_id", length = 500)
-    private String orderId;
-
+    
     @Column(name = "pay_none", length = 100)
     private String payNone;
-
 }

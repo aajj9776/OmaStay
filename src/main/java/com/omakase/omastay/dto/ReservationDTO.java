@@ -18,9 +18,7 @@ public class ReservationDTO {
     private int nonIdx;
     private int payIdx;
     private String resNum;
-    private StartEndVo startEndVo;
-    private LocalDateTime resStart;
-    private LocalDateTime resEnd;
+    private StartEndVo startEndVo = new StartEndVo();
     private int resPerson;
     private int resPrice;
     private ResStatus resStatus;

@@ -19,7 +19,7 @@ public class InquiryDTO {
     private String iqTitle;
     private String iqContent;
     private String iqWriter;
-    private FileImageNameVo fileName;
+    private FileImageNameVo fileName = new FileImageNameVo();
     private LocalDateTime iqDate;
     private BooleanStatus iqStatus;
     private CStatus cStatus;

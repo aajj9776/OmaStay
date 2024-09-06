@@ -59,7 +59,6 @@ public class ReservationController {
         System.out.println(reserve);
 
         if( reserve.getResStatus() == ResStatus.COMPLETED) {
-            redirectAttributes.addAttribute("orderId", payment.getOrderId());
             redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
             redirectAttributes.addAttribute("amount", payment.getAmount());
             redirectAttributes.addAttribute("payContent", payment.getPayContent());
