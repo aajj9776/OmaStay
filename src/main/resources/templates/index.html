@@ -32,7 +32,7 @@
                     <div class="search_title">국내 숙소</div>
                 </div>
                 <div class="search-area">
-                    <div class="search-bar" th:include="~{/component/search/searchbar :: searchbar}"/>
+                    <div class="search-bar" th:include="/component/search/searchbar :: searchbar"></div>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <div>더보기</div>
             </div>
         </div>
-        <div class="swiper-container">
+        <div class="swiper-container z-0">
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-wrapper">
@@ -239,6 +239,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="/js/datepicker.js"></script>
 <script type="text/javascript" src="/js/countperson.js"></script>
+<script type="text/javascript" src="/js/countperson.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const urlParams = new URLSearchParams(window.location.search);
@@ -347,6 +348,9 @@
             prevButton.style.visibility = 'visible';
         }
     }
+
+  
+
 </script>
 </body>
 </html>

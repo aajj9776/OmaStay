@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <section
+          class="w-[1200px] h-[177px] rounded-[30px] bg-[#fff] flex flex-col items-center justify-center max-w-full"
+        >
+        <div class="w-[1000px] justify-between items-center inline-flex">
+          <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
+            <a th:href="@{/host/mypage}" class="w-[100px] h-[100px]">
+            <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/mypage.png" />
+            </a>
+            <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">마이페이지</div>
+          </div>
+          <div class="w-[85px] h-[175px] py-[50px] flex-col justify-top items-center inline-flex">
+            <img class="self-stretch h-9" src="/image/host/line.png" />
+          </div>
+          <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
+            <a th:href="@{/host/info}" class="w-[100px] h-[100px]">
+            <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/info.png" />
+            </a>
+            <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">숙소 소개</div>
+          </div>
+          <div class="w-[85px] h-[175px] py-[50px] flex-col justify-top items-center inline-flex">
+            <img class="self-stretch h-9" src="/image/host/line.png" />
+          </div>
+          <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
+            <a th:href="@{/host/rules}" class="w-[100px] h-[100px]">
+            <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/rules.png" />
+            </a>
+            <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">이용규칙 관리</div>
+          </div>
+          <div class="w-[85px] h-[175px] py-[50px] flex-col justify-top items-center inline-flex">
+            <img class="self-stretch h-9" src="/image/host/line.png" />
+          </div>
+          <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
+            <a th:href="@{/host/roomlist}" class="w-[100px] h-[100px]">
+            <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/room.png" />
+            </a>
+            <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">객실 관리</div>
+          </div>
+        </div>
+        </section>
+  </body>
+</html>
