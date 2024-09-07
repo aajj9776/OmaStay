@@ -440,6 +440,8 @@
         src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH"></script>
 <script src="/js/countperson.js"></script>
 <script>
+    let hCate
+    let f_idx = [];
     // 필터 버튼 값 변경
     $(document).ready(function () {
         $("#dropdown-filter-button").text("평점높은순");
@@ -458,10 +460,14 @@
                     btn.classList.remove('f_idx');
                 } else {
                     btn.classList.add('bg-gray-300');
+                    //나중에 필터링할때 쓸거임
                     btn.classList.add('f_idx');
                 }
             });
         });
+
+        //기본적으로 hCate의 네임을 가지고있는 라디오버튼중 id가 all이 체크되어있음
+        document.getElementById('all').checked = true;
     });
 
     // 슬라이더 초기화 함수
@@ -503,6 +509,8 @@
 
             startInput.value = startValue;
             endInput.value = endValue;
+
+            handleFilter();
         });
     }
 
@@ -611,8 +619,18 @@
         markers = [];
     }
     /*-------------필터 관리 기능--------------*/
+    function handleFilter() {
+        //f_idx 클래스를 가진 요소들을 찾아서 필터링
+        f_idx = document.querySelectorAll('.f_idx').values();
+        //name이 hcate인것중에 라디오 버튼이 체크된것의 벨류값
+        hCate = document.querySelector('input[name=hCate]:checked').value;
+        console.log(f_idx);
+        console.log(hCate);
+    }
 
+    function reset(){
 
+    }
 
 </script>
 </body>

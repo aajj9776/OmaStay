@@ -1,407 +1,422 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <div th:fragment="filterbar(identifier)">
-    <div
-            class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[20px] gap-[20px] text-[17px]"
-    >
         <div
-                class="self-stretch flex flex-col items-start justify-start py-[16px] px-[0px]"
+                class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[20px] gap-[20px] text-[17px]"
         >
             <div
-                    class="self-stretch flex flex-row items-center justify-between gap-[20px]"
+                    class="self-stretch flex flex-col items-start justify-start py-[16px] px-[0px]"
             >
-                <div class="flex flex-col items-start justify-start">
-                    <b class="relative inline-block min-w-[34px]">필터</b>
-                </div>
-                <span
-                        class="btn btn-outline-secondary flex flex-row items-center justify-center py-[0px] border-none text-center text-[13.1px] text-[#d6d6d6]"
+                <div
+                        class="self-stretch flex flex-row items-center justify-between gap-[20px]"
                 >
-                    <div
-                            class="flex flex-col items-start justify-start w-[16px] h-[16px]"
-                    >
-                        <img
-                                alt=""
-                                class=" relative"
-                                loading="lazy"
-                                src="/image/domestic-accommodations/svg.svg"
-                        />
+                    <div class="flex flex-col items-start justify-start">
+                        <b class="relative inline-block min-w-[34px]">필터</b>
                     </div>
-                    <div class="flex flex-col items-center justify-start font-semibold min-w-[40px]">
+                    <button class="btn btn-outline-secondary flex flex-row items-center justify-center py-[0px] border-none text-center text-[13.1px] text-[#d6d6d6]"
+                            id="reset" name="reset" onclick="reset()"
+                    >
+                        <div
+                                class="flex flex-col items-start justify-start w-[16px] h-[16px]"
+                        >
+                            <img
+                                    alt=""
+                                    class=" relative"
+                                    loading="lazy"
+                                    src="/image/domestic-accommodations/svg.svg"
+                            />
+                        </div>
+                        <div class="flex flex-col items-center justify-start font-semibold min-w-[40px]">
                             초기화
-                    </div>
-                </span>
-            </div>
-        </div>
-        <div
-                class="flex flex-row items-start justify-start gap-[8px] text-[14.1px]"
-        >
-            <input
-                    class="m-[0px] h-[18px] w-[18px] relative rounded-[4px] border-[rgba(0,0,0,0.32)] border-[1px] border-solid box-border overflow-hidden shrink-0"
-                    type="checkbox"
-            />
-            <div
-                    class="relative font-medium inline-block min-w-[86px] whitespace-nowrap"
-            >
-                매진 숙소 제외
-            </div>
-        </div>
-    </div>
-
-    <div
-            class="self-stretch border-[#ebebeb] border-t-[1px] border-solid flex flex-col items-start justify-start text-[15px]"
-    >
-        <div
-                class="self-stretch flex flex-col items-start justify-start pt-[18px] px-[0px] pb-[6px] gap-[18px]"
-        >
-            <div
-                    class="self-stretch flex flex-row items-center justify-start"
-            >
-                <b class="flex-1 relative">숙소유형</b>
-            </div>
-            <div
-                    class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[14px] text-[16px] text-[#343a40]"
-            >
-                <div
-                        class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
-                >
-                    <div class="flex flex-row items-center justify-start">
-                        <div
-                                class="flex flex-row items-start justify-start p-[8px]"
-                        >
-                            <input
-                                    class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
-                                    name="radioGroup-1"
-                                    type="radio"
-                            />
                         </div>
-                        <div
-                                class="relative leading-[28px] inline-block min-w-[30px]"
-                        >
-                            전체
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
-                >
-                    <div class="flex flex-row items-center justify-start">
-                        <div
-                                class="flex flex-row items-start justify-start p-[8px]"
-                        >
-                            <input
-                                    class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
-                                    name="radioGroup-1"
-                                    type="radio"
-                            />
-                        </div>
-                        <div
-                                class="relative leading-[28px] inline-block min-w-[30px]"
-                        >
-                            모텔
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
-                >
-                    <div class="flex flex-row items-center justify-start">
-                        <div
-                                class="flex flex-row items-start justify-start p-[8px]"
-                        >
-                            <input
-                                    class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
-                                    name="radioGroup-1"
-                                    type="radio"
-                            />
-                        </div>
-                        <div
-                                class="relative leading-[28px] inline-block min-w-[87px] whitespace-nowrap"
-                        >
-                            호텔 · 리조트
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
-                >
-                    <div class="flex flex-row items-center justify-start">
-                        <div
-                                class="flex flex-row items-start justify-start p-[8px]"
-                        >
-                            <input
-                                    class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
-                                    name="radioGroup-1"
-                                    type="radio"
-                            />
-                        </div>
-                        <div
-                                class="relative leading-[28px] inline-block min-w-[87px] whitespace-nowrap"
-                        >
-                            펜션 · 풀빌라
-                        </div>
-                    </div>
-                </div>
-                <div
-                        class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
-                >
-                    <div class="flex flex-row items-center justify-start">
-                        <div
-                                class="flex flex-row items-start justify-start p-[8px]"
-                        >
-                            <input
-                                    class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
-                                    name="radioGroup-1"
-                                    type="radio"
-                            />
-                        </div>
-                        <div
-                                class="relative leading-[28px] inline-block min-w-[73px]"
-                        >
-                            게하 · 한옥
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div
-            class="self-stretch border-[#ebebeb] border-t-[1px] border-solid flex flex-col items-start justify-start pt-[17px] px-[0px] pb-[22px] gap-[34px] mq450:gap-[17px]"
-    >
-        <div
-                class="flex flex-row items-start justify-start gap-[1px]"
-        >
-            <b class="relative leading-[19px] inline-block min-w-[31px]"
-            >가격</b
-            >
-            <div
-                    class="flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] text-[11.3px] text-[#999]"
-            >
-                <div
-                        class="relative font-semibold inline-block min-w-[42px]"
-                >
-                    1박 기준
-                </div>
-            </div>
-        </div>
-        <div
-                class="self-stretch flex flex-col items-start justify-start gap-[16px] text-[12.3px] text-[#999]"
-        >
-            <div class="self-stretch flex flex-row items-start justify-start py-[0px] px-[14px] ml-[-28px]">
-                <div th:id="'slider-' + ${identifier}" class="w-full"></div>
-            </div>
-            <input type="hidden" th:id="'slider-start-' + ${identifier}" name="start" value="">
-            <input type="hidden" th:id="'slider-end-' + ${identifier}" name="end" value="">
-            <span th:id="'price-range-value-' + ${identifier}" class="self-stretch relative leading-[20px] font-medium">
-    0원 ~ 500,000원 이상
-</span>
-        </div>
-    </div>
-    <div
-            class="self-stretch border-[#ebebeb] border-t-[1px] border-solid border-b-[1px]  flex flex-col items-start justify-start py-[13px] px-[0px] gap-[16.5px] text-[#9aa9b8]"
-    >
-        <div
-                class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[9.2px] text-[#333]"
-        >
-            <b class="flex-1 relative">시설</b>
-        </div>
-        <div
-                class="w-[294px] flex flex-col items-start justify-start gap-[8.7px] text-[12.3px]"
-        >
-            <b class="relative text-[14.1px] inline-block min-w-[52px]"
-            >공용시설</b
-            >
-            <div
-                    class="self-stretch h-[80px] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[0.3px] px-[0px] pb-[39.7px] box-border text-center text-[#333]"
-            >
-                <div class="w-full h-[8px] hidden max-w-[294px]"></div>
-                <div class="w-full h-[8px] hidden max-w-[294px]"></div>
-                <div
-                        class="w-[250px] flex flex-row items-start justify-start"
-                >
-                    <div
-                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
-                    >
-                        <button type="button" id="f_idx3"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
-                        >
-                            엘리베이터
-                        </button>
-                    </div>
-
-                    <div
-                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
-                    >
-                        <button type="button" id="f_idx4"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
-                        >
-                            주차장
-                        </button>
-                    </div>
-                    <div
-                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
-                    >
-                        <button type="button" id="f_idx13"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
-                        >
-                            바베큐
-                        </button>
-                    </div>
-                </div>
-                <div
-                        class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border "
-                >
-                    <button type="button" id="f_idx1"
-                        class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
-                    >
-                        주방/식당
                     </button>
                 </div>
             </div>
-            <b
-                    class="w-[288px] relative text-[14.2px] flex items-center"
-            >객실 내 시설</b
-            >
             <div
-                    class="w-[288px] h-fit overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[0px] pl-[0px] pr-[32px] box-border gap-[0.2px] text-center text-[#333]"
+                    class="flex flex-row items-start justify-start gap-[8px] text-[14.1px]"
+            >
+                <input
+                        class="m-[0px] h-[18px] w-[18px] relative rounded-[4px] border-[rgba(0,0,0,0.32)] border-[1px] border-solid box-border overflow-hidden shrink-0"
+                        type="checkbox" id="soldout" name="soldout" value="soldout"
+                />
+                <div
+                        class="relative font-medium inline-block min-w-[86px] whitespace-nowrap"
+                >
+                    매진 숙소 제외
+                </div>
+            </div>
+        </div>
+
+        <div
+                class="self-stretch border-[#ebebeb] border-t-[1px] border-solid flex flex-col items-start justify-start text-[15px]"
+        >
+            <div
+                    class="self-stretch flex flex-col items-start justify-start pt-[18px] px-[0px] pb-[6px] gap-[18px]"
             >
                 <div
-                        class="self-stretch flex flex-row items-start justify-start shrink-0"
+                        class="self-stretch flex flex-row items-center justify-start"
+                >
+                    <b class="flex-1 relative">숙소유형</b>
+                </div>
+                <div
+                        class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[14px] text-[16px] text-[#343a40]"
                 >
                     <div
-                            class="flex-1 flex flex-col items-start justify-start relative"
+                            class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
+                    >
+                        <div class="flex flex-row items-center justify-start">
+                            <div
+                                    class="flex flex-row items-start justify-start p-[8px]"
+                            >
+                                <input
+                                        class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
+                                        name="hCate"
+                                        type="radio"
+                                        id = "all"
+                                        value="all"
+                                        onclick="handleFilter()"
+                                />
+                            </div>
+                            <div
+                                    class="relative leading-[28px] inline-block min-w-[30px]"
+                            >
+                                전체
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
+                    >
+                        <div class="flex flex-row items-center justify-start">
+                            <div
+                                    class="flex flex-row items-start justify-start p-[8px]"
+                            >
+                                <input
+                                        class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
+                                        name="hCate"
+                                        type="radio"
+                                        id = "motel"
+                                        value="0"
+                                        onclick="handleFilter()"
+                                />
+                            </div>
+                            <div
+                                    class="relative leading-[28px] inline-block min-w-[30px]"
+                            >
+                                모텔
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
+                    >
+                        <div class="flex flex-row items-center justify-start">
+                            <div
+                                    class="flex flex-row items-start justify-start p-[8px]"
+                            >
+                                <input
+                                        class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
+                                        name="hCate"
+                                        type="radio"
+                                        id = "hotel"
+                                        value="1"
+                                        onclick="handleFilter()"
+                                />
+                            </div>
+                            <div
+                                    class="relative leading-[28px] inline-block min-w-[87px] whitespace-nowrap"
+                            >
+                                호텔 · 리조트
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
+                    >
+                        <div class="flex flex-row items-center justify-start">
+                            <div
+                                    class="flex flex-row items-start justify-start p-[8px]"
+                            >
+                                <input
+                                        class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
+                                        name="hCate"
+                                        type="radio"
+                                        id = "pension"
+                                        value="2"
+                                        onclick="handleFilter()"
+                                />
+                            </div>
+                            <div
+                                    class="relative leading-[28px] inline-block min-w-[87px] whitespace-nowrap"
+                            >
+                                펜션 · 풀빌라
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="self-stretch flex flex-row items-center justify-start py-[8px] px-[0px]"
+                    >
+                        <div class="flex flex-row items-center justify-start">
+                            <div
+                                    class="flex flex-row items-start justify-start p-[8px]"
+                            >
+                                <input
+                                        class="cursor-pointer m-[0px] h-[16px] w-[16px] relative"
+                                        name="hCate"
+                                        type="radio"
+                                        id = "guesthouse"
+                                        value="3"
+                                />
+                            </div>
+                            <div
+                                    class="relative leading-[28px] inline-block min-w-[73px]"
+                            >
+                                게하 · 한옥
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+                class="self-stretch border-[#ebebeb] border-t-[1px] border-solid flex flex-col items-start justify-start pt-[17px] px-[0px] pb-[22px] gap-[34px] mq450:gap-[17px]"
+        >
+            <div
+                    class="flex flex-row items-start justify-start gap-[1px]"
+            >
+                <b class="relative leading-[19px] inline-block min-w-[31px]"
+                >가격</b
+                >
+                <div
+                        class="flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] text-[11.3px] text-[#999]"
+                >
+                    <div
+                            class="relative font-semibold inline-block min-w-[42px]"
+                    >
+                        1박 기준
+                    </div>
+                </div>
+            </div>
+            <div
+                    class="self-stretch flex flex-col items-start justify-start gap-[16px] text-[12.3px] text-[#999]"
+            >
+                <div class="self-stretch flex flex-row items-start justify-start py-[0px] px-[14px] ml-[-28px]">
+                    <div class="w-full" th:id="'slider-' + ${identifier}" ></div>
+                </div>
+                <input name="startPrice" th:id="'slider-start-' + ${identifier}" type="hidden" value="">
+                <input name="endPrice" th:id="'slider-end-' + ${identifier}" type="hidden" value="">
+                <span class="self-stretch relative leading-[20px] font-medium"
+                      th:id="'price-range-value-' + ${identifier}">
+    0원 ~ 500,000원 이상
+</span>
+            </div>
+        </div>
+        <div
+                class="self-stretch border-[#ebebeb] border-t-[1px] border-solid border-b-[1px]  flex flex-col items-start justify-start py-[13px] px-[0px] gap-[16.5px] text-[#9aa9b8]"
+        >
+            <div
+                    class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[9.2px] text-[#333]"
+            >
+                <b class="flex-1 relative">시설</b>
+            </div>
+            <div
+                    class="w-[294px] flex flex-col items-start justify-start gap-[8.7px] text-[12.3px]"
+            >
+                <b class="relative text-[14.1px] inline-block min-w-[52px]"
+                >공용시설</b
+                >
+                <div
+                        class="self-stretch h-[80px] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[0.3px] px-[0px] pb-[39.7px] box-border text-center text-[#333]"
+                >
+                    <div class="w-full h-[8px] hidden max-w-[294px]"></div>
+                    <div class="w-full h-[8px] hidden max-w-[294px]"></div>
+                    <div
+                            class="w-[250px] flex flex-row items-start justify-start"
                     >
                         <div
                                 class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
-                            <button type="button" id="f_idx15"
-                                class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
+                                    id="f_idx3" type="button" name="f_idx" value="3" onclick="handleFilter()"
                             >
-                                전자레인지
+                                엘리베이터
+                            </button>
+                        </div>
+
+                        <div
+                                class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                        >
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx4"
+                                    type="button" name="f_idx" value="4"  onclick="handleFilter()"
+                            >
+                                주차장
                             </button>
                         </div>
                         <div
-                                class="w-[85px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                                class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
-                            <button type="button" id="f_idx5"
-                                class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx13"
+                                    type="button" name="f_idx" value="13" onclick="handleFilter()"
                             >
-                                와이파이
-                            </button>
-                        </div>
-                        <div
-                                class="w-fit !m-[0] absolute right-[-62px] bottom-[-0.2px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px] ]"
-                        >
-                            <button type="button" id="f_idx7"
-                                class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
-                            >
-                                에어컨
+                                바베큐
                             </button>
                         </div>
                     </div>
                     <div
-                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border "
                     >
-                        <button type="button" id="f_idx10"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
+                        <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx1"
+                                type="button" name="f_idx" value="1" onclick="handleFilter()"
                         >
-                            드라이기
+                            주방/식당
                         </button>
-                    </div>
-                    <div
-                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border relative max-w-[294px]"
-                    >
-                        <button type="button" id="f_idx2"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
-                        >
-                            세탁기
-                        </button>
-                        <div
-                                class="w-[85px] !m-[0] absolute bottom-[-39.7px] left-[-23px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px] ]"
-                        >
-                            <button type="button" id="f_idx6"
-                                    class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit"
-                            >
-                                욕실용품
-                            </button>
-                        </div>
                     </div>
                 </div>
+                <b
+                        class="w-[288px] relative text-[14.2px] flex items-center"
+                >객실 내 시설</b
+                >
                 <div
-                        class="w-[194px] flex flex-row items-end justify-start shrink-0 text-[12.2px]"
+                        class="w-[288px] h-fit overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[0px] pl-[0px] pr-[32px] box-border gap-[0.2px] text-center text-[#333]"
                 >
                     <div
-                            class="flex-1 flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                            class="self-stretch flex flex-row items-start justify-start shrink-0"
                     >
-                        <button type="button" id="f_idx8"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                        <div
+                                class="flex-1 flex flex-col items-start justify-start relative"
                         >
-                            냉장고
-                        </button>
+                            <div
+                                    class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                            >
+                                <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx15"
+                                        type="button" name="f_idx" value="15" onclick="handleFilter()"
+                                >
+                                    전자레인지
+                                </button>
+                            </div>
+                            <div
+                                    class="w-[85px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                            >
+                                <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx5"
+                                        type="button" name="f_idx" value="5" onclick="handleFilter()"
+                                >
+                                    와이파이
+                                </button>
+                            </div>
+                            <div
+                                    class="w-fit !m-[0] absolute right-[-62px] bottom-[-0.2px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px] ]"
+                            >
+                                <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx7"
+                                        type="button" name="f_idx" value="7" onclick="handleFilter()"
+                                >
+                                    에어컨
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                                class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                        >
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx10"
+                                    type="button" name="f_idx" value="10" onclick="handleFilter()"
+                            >
+                                드라이기
+                            </button>
+                        </div>
+                        <div
+                                class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border relative max-w-[294px]"
+                        >
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx2"
+                                    type="button" name="f_idx" value="2" onclick="handleFilter()"
+                            >
+                                세탁기
+                            </button>
+                            <div
+                                    class="w-[85px] !m-[0] absolute bottom-[-39.7px] left-[-23px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px] ]"
+                            >
+                                <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-fit" id="f_idx6"
+                                        type="button" name="f_idx" value="6" onclick="handleFilter()"
+                                >
+                                    욕실용품
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div
-                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                            class="w-[194px] flex flex-row items-end justify-start shrink-0 text-[12.2px]"
                     >
-                        <button type="button" id="f_idx16"
-                                class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                        <div
+                                class="flex-1 flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
-                           TV
-                        </button>
-                    </div>
-                    <div
-                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
-                    >
-                        <button type="button" id="f_idx9"
-                                class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx8"
+                                    type="button"  name="f_idx" value="8" onclick="handleFilter()"
+                            >
+                                냉장고
+                            </button>
+                        </div>
+                        <div
+                                class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
-                            욕조
-                        </button>
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx16"
+                                    type="button" name="f_idx" value="16" onclick="handleFilter()"
+                            >
+                                TV
+                            </button>
+                        </div>
+                        <div
+                                class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                        >
+                            <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx9"
+                                    type="button" name="f_idx" value="9" onclick="handleFilter()"
+                            >
+                                욕조
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div
-                class="self-stretch flex flex-col items-start justify-start gap-[9px] text-[14.1px]"
-        >
-            <b class="relative inline-block min-w-[52px]">기타시설</b>
             <div
-                    class="self-stretch overflow-hidden flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[20px] text-center text-[12.2px] text-[#333]"
+                    class="self-stretch flex flex-col items-start justify-start gap-[9px] text-[14.1px]"
             >
+                <b class="relative inline-block min-w-[52px]">기타시설</b>
                 <div
-                        class="flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
+                        class="self-stretch overflow-hidden flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[20px] text-center text-[12.2px] text-[#333]"
                 >
-                    <button type="button" id="f_idx14"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                    <div
+                            class="flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                     >
-                        객실내취사
-                    </button>
-                </div>
-                <div
-                        class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
-                >
-                    <button id="f_idx11"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                        <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx14"
+                                type="button" name="f_idx" value="14" onclick="handleFilter()"
+                        >
+                            객실내취사
+                        </button>
+                    </div>
+                    <div
+                            class="w-fit flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                     >
-                       흡연
-                    </button>
-                </div>
-                <div
-                        class="flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
-                >
-                    <button id="f_idx12"
-                            class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                        <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                                id="f_idx11" type="button" name="f_idx" value="11" onclick="handleFilter()"
+                        >
+                            흡연
+                        </button>
+                    </div>
+                    <div
+                            class="flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                     >
-                       반려동물동반
-                    </button>
+                        <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
+                                id="f_idx12" type="button" name="f_idx" value="12" onclick="handleFilter()"
+                        >
+                            반려동물동반
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </div>
 </body>
 </html>
