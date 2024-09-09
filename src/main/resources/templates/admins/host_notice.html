@@ -151,7 +151,7 @@
       ],
       columnDefs: [{ width: 80, targets: 0 },
         {width: 80, targets: 1},
-        {width: 800, targets: 2},
+        {width: 700, targets: 2},
         {width: 300, targets: 3}
       ],
 
@@ -207,16 +207,17 @@
       }
 
       if (confirm("선택한 항목을 삭제하시겠습니까?")) {
-        // AJAX 요청을 통해 서버에 삭제 요청 전송
+
         $.ajax({
-          url: '/admin/host_notice/delete', // 실제 삭제 요청 URL로 변경
+          url: '/admin/host_notice/delete', 
           type: 'POST',
           data: { ids: selectedIds },
         }).done(function (response) {
-          // 삭제 성공 시 테이블 다시 로드 또는 삭제된 행 제거
           alert("삭제가 완료되었습니다.");
-          // 테이블 다시 로드 
-          location.reload();
+
+          console.log(response);
+
+          $('#listTable').DataTable().ajax.reload();
 
         }).fail(function (error) {
           // 삭제 실패 시 에러 처리
