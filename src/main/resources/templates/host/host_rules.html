@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/host}"
+      layout:decorate="~{layout/host_step}"
       layout:fragment="host">
   <head>
     <meta charset="utf-8" />
   </head>
   <body>
-    <div
-      class="w-full relative bg-[#fff] overflow-y-auto flex flex-row items-start justify-start leading-[normal] tracking-[normal]"
-    >
-      <main
-        class="flex-1 bg-[#e4e7eb] flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
-      >
-      <div th:insert="~{component/step/host_step}"/>
       <section
         class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[102px] px-[120px] pb-[94px] box-border gap-[120px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq1325:gap-[69px] mq1325:pt-[66px] mq1325:px-[60px] mq1325:pb-[61px] mq1325:box-border mq450:gap-[17px] mq800:gap-[35px] mq800:pt-[43px] mq800:px-[30px] mq800:pb-[40px] mq800:box-border"
       >
@@ -685,7 +678,11 @@
           </div>
         </div>
       </section>
-      </main>
-    </div>
+      <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>

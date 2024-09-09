@@ -4,6 +4,7 @@ import com.omakase.omastay.repository.custom.AccountRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface AccountRepository extends JpaRepository<Account, String>, AccountRepositoryCustom {
+public interface AccountRepository extends JpaRepository<Account, Integer>, AccountRepositoryCustom {
 
+    Account findByHostInfoId(int HIdx);
 }
