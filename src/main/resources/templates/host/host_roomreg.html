@@ -8,24 +8,14 @@
   </head>
   <body>
     <div
-      class="w-full relative bg-[#e4e7eb] flex flex-col items-center justify-center pt-[102px] px-[279px] pb-[104px] box-border gap-[119px] leading-[normal] tracking-[normal] lg:gap-[59px] lg:pl-[139px] lg:pr-[139px] lg:box-border mq825:gap-[30px] mq825:pl-[69px] mq825:pr-[69px] mq825:box-border"
+      class="w-full relative bg-[#fff] overflow-y-auto flex flex-row items-start justify-start leading-[normal] tracking-[normal]"
     >
-      <header
-        class="w-[1374px] h-[177px] flex flex-row items-start justify-start py-[0px] px-[10px] box-border max-w-full"
+      <main
+        class="flex-1 bg-[#e4e7eb] flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
       >
-        <div
-          class="flex-1 rounded-[30px] bg-[#fff] flex flex-col items-center justify-center max-w-full"
-        >
-          <img
-            class="w-[1119.7px] relative max-h-full object-cover max-w-full"
-            loading="lazy"
-            alt=""
-            src="/image/host/image-20@2x.png"
-          />
-        </div>
-      </header>
+      <div th:insert="~{component/step/host_step}"/>
       <section
-        class="w-[1338px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[102px] px-[120px] pb-[79px] box-border gap-[50px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] lg:pt-[43px] lg:pb-[33px] lg:box-border mq1400:gap-[62px] mq1400:pt-[66px] mq1400:px-[60px] mq1400:pb-[51px] mq1400:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[21px] mq450:box-border mq825:gap-[31px] mq825:pl-[30px] mq825:pr-[30px] mq825:box-border"
+        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[102px] px-[120px] pb-[79px] box-border gap-[120px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] lg:pt-[43px] lg:pb-[33px] lg:box-border mq1400:gap-[62px] mq1400:pt-[66px] mq1400:px-[60px] mq1400:pb-[51px] mq1400:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[21px] mq450:box-border mq825:gap-[31px] mq825:pl-[30px] mq825:pr-[30px] mq825:box-border"
       >
         <div
           class="w-[302px] flex flex-row items-start justify-start py-[50px] px-[1px] box-border"
@@ -488,6 +478,7 @@
           </div>
         </div>
       </section>
+      </main>
     </div>
   </body>
 </html>

@@ -16,4 +16,9 @@ public class SearchController {
         public String domesticAccommodations() {
             return "search/domestic-accommodations";
         }
+
+        @RequestMapping("/filter")
+        public String filter() {
+            return "search/filter";
+        }
 }

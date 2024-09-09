@@ -1,14 +1,39 @@
 package com.omakase.omastay.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.omakase.omastay.dto.AdminMemberDTO;
+import com.omakase.omastay.service.AdminMemberService;
+import com.omakase.omastay.service.EmailService;
+
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
+
 
 @Controller
 @RequestMapping("/host")
+@RequiredArgsConstructor  
 public class HostController {
 
-    @GetMapping()
+    @Autowired
+    private AdminMemberService adminMemberService;
+    
+    private final EmailService emailService;
+
+    @Autowired
+    private HttpSession session;
+
+    @RequestMapping("/login")
     public String host() {
         return "host/host_login";
     }
@@ -22,7 +47,6 @@ public class HostController {
     public String hostfindpw() {
         return "host/host_findpw";
     }
-
 
     @RequestMapping("/faq")
     public String hostfaq() {
@@ -79,11 +103,6 @@ public class HostController {
         return "host/host_paymentdetail";
     }
     
-    @RequestMapping("/reg")
-    public String hostreg() {
-        return "host/host_reg";
-    }
-    
     @RequestMapping("/reservation")
     public String hostreservation() {
         return "host/host_reservation";
@@ -123,4 +142,92 @@ public class HostController {
     public String hostsales() {
         return "host/host_sales";
     }
+
+    @RequestMapping("/idcheck")
+    @ResponseBody
+    public int hostidcheck(@RequestParam("id") String id) {
+
+        int cnt = adminMemberService.hostidcheck(id);
+
+        if(cnt == 0){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
+    @RequestMapping("/emailsend")  
+    public ResponseEntity<String> sendEmailPath(@RequestParam("email") String email) throws MessagingException { 
+        try {
+            emailService.sendEmail(email);  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("success");  
+    }  
+  
+    @RequestMapping("/emailchecknum")  
+    public ResponseEntity<String> sendEmailAndCode(@RequestParam("email") String email, @RequestParam("code") String code){  
+        if (emailService.verifyEmailCode(email, code)) {  
+            return ResponseEntity.ok("success");  
+        }  
+        return ResponseEntity.notFound().build();  
+    }
+
+    @RequestMapping("/hostregist")
+    public ResponseEntity<String> hostregister(@RequestParam("id") String id, @RequestParam("pw") String pw, @RequestParam("email") String email) {
+        boolean result = adminMemberService.hostregist(id, pw, email);
+        if (result) {
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.status(500).body("Registration failed");
+        }
+    }
+
+    @RequestMapping("/hostlogin")
+    public ModelAndView hostlogin(@RequestParam("id") String id, @RequestParam("pw") String pw) {
+        AdminMemberDTO adminMemberDTO = adminMemberService.hostlogin(id,pw);
+
+        ModelAndView mv = new ModelAndView();
+        if (adminMemberDTO != null) {
+            session.setAttribute("adminMember", adminMemberDTO); // 세션에 사용자 정보 저장
+            mv.addObject("adminMember", adminMemberDTO);
+            mv.setViewName("host/host_main");
+        } else {
+            mv.addObject("errorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            mv.setViewName("host/host_login");
+        }
+
+        return mv;
+    }
+
+    @RequestMapping("/idemailsend")  
+    public ResponseEntity<String> sendIdEmail(@RequestParam("id") String id, @RequestParam("email") String email) throws MessagingException { 
+        boolean isValid = adminMemberService.hostfindpw(id, email);
+
+        if (isValid) {
+            emailService.sendEmail(email);
+            return ResponseEntity.ok("success");
+        } else {
+            String errorMessage = "아이디 또는 이메일이 일치하지 않습니다.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }  
+
+    @RequestMapping("/changepw")
+    public ResponseEntity<String> hostchangepw(@RequestParam("id") String id, @RequestParam("pw") String pw, @RequestParam("email") String email) {
+        boolean result = adminMemberService.hostchagepw(id, email, pw);
+        if (result) {
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.status(500).body("Change failed");
+        }
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("adminMember");
+        return "host/host_login"; 
+    }
+    
 }

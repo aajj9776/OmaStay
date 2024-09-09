@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -122,13 +124,12 @@ public class LoginController {
 
         // MemberDTO 생성 및 서비스 호출
         MemberDTO memberDTO = new MemberDTO();
-        
+
         // **memberProfile null 체크 후 설정**
         if (memberDTO.getMemberProfile() == null) {
             memberDTO.setMemberProfile(new UserProfileVo());
         }
         memberDTO.setMemName(name);
-        
         memberDTO.getMemberProfile().setEmail(email);
         memberDTO.getMemberProfile().setPw(password);
         memberDTO.setMemPhone(phone);
@@ -154,7 +155,6 @@ public class LoginController {
    
        return ResponseEntity.ok(response); // JSON 응답
     }
-
 
     //유저 로그인 
     @PostMapping("/user")
@@ -189,3 +189,4 @@ public class LoginController {
     }
 
 }
+

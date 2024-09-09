@@ -5,6 +5,8 @@ import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
 import com.omakase.omastay.vo.HostOwnerInfoVo;
 import com.omakase.omastay.entity.enumurate.HStatus;
+import com.omakase.omastay.entity.enumurate.HStep;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,12 +27,12 @@ public class HostInfo {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_idx", referencedColumnName = "ad_idx")
-    private AdminMember adminMember;
+    private AdminMember adminMember = new AdminMember();
 
     //주소
     //우편번호, 주소, 상세주소
     @Embedded
-    private AddressVo addressVo;
+    private AddressVo hostAddress = new AddressVo();
 
     @Column(name = "region", length = 100)
     private String region;
@@ -49,12 +51,12 @@ public class HostInfo {
     //호스트 소유주 정보
     //업체명, 이메일, 전화번호, 호스트명, 호스트 소개
     @Embedded
-    private HostOwnerInfoVo hostContactInfo;
+    private HostOwnerInfoVo hostOwnerInfo = new HostOwnerInfoVo();
 
     //호스트 담당자
     //연결자명, 연결자 이메일, 연결자 전화번호
     @Embedded
-    private HostContactInfoVo hostOwnerInfo;
+    private HostContactInfoVo hostContactInfo = new HostContactInfoVo();
 
     @Column(name = "h_url", length = 100)
     private String hUrl;
@@ -75,9 +77,14 @@ public class HostInfo {
     private String priceAdd;
 
     //신청 승인 반려 해제
-    @Enumerated
-    @Column(name = "h_status", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "h_status", nullable = true)
     private HStatus hStatus;
+
+    //마이페이지 숙소 이용규칙 객실
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "h_step", nullable = false)
+    private HStep hStep;
 
     @Column(name = "h_none", length = 100)
     private String hNone;

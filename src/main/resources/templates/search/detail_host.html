@@ -8,22 +8,22 @@
     </head>
     <body class="overflow-y-auto">
         <div
-        class="w-full relative bg-[#fff] lg:h-auto lg:min-h-[6445]"
+        class="w-full bg-[#fff] lg:h-auto lg:min-h-[6445] sticky border-b-[1px]"
         >
-        <header class="sticky top-0 left-0 w-full flex flex-col items-start justify-start max-w-full text-left text-[15.1px] text-[#707070] font-[Inter] z-50 relative"> 
-        <div class="w-full self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid flex flex-row items-start justify-start pt-[34.5px] px-[392px] pb-[33px] gap-[52.8px] lg:pl-[196px] lg:pr-[196px] lg:box-border mq450:pl-[20px] mq450:pr-[20px] mq450:box-border mq750:gap-[26px] mq750:pl-[98px] mq750:pr-[98px] mq750:box-border whitespace-nowrap" style="display: flex; grid-auto-flow: column;"> 
-            <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0">개요</a>
-            <a class="[text-decoration:none] text-[15px] font-medium text-[inherit] inline-block min-w-[118.6px] flex-shrink-0">서비스 및 부대시설</a>
-            <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0">객실</a>
-            <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0">위치</a>
-            <a class="[text-decoration:none] font-bold text-[#1273e4] inline-block min-w-[31px] flex-shrink-0">리뷰</a>
+        <header class=" top-0 left-0 w-[1200px] mx-auto flex flex-col items-start justify-start max-w-full text-left text-[15.1px] text-[#707070] font-[Inter] z-50">
+        <div id="simple-list-example" class="simple-list-example-scrollspy w-full self-stretch bg-[#fff] border-[#ebebeb]  border-solid flex flex-row items-start justify-start pt-[34.5px] px-[392px] pb-[33px] gap-[52.8px] lg:pl-[23px] lg:pr-[196px] lg:box-border mq450:pl-[20px] mq450:pr-[20px] mq450:box-border mq750:gap-[26px] mq750:pl-[98px] mq750:pr-[98px] mq750:box-border whitespace-nowrap" style="display: flex; grid-auto-flow: column;">
+            <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0" href="#simple-list-item-1">개요</a>
+            <a class="[text-decoration:none] text-[15px] font-medium text-[inherit] inline-block min-w-[118.6px] flex-shrink-0" href="#simple-list-item-2">서비스 및 부대시설</a>
+            <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0" href="#simple-list-item-3">객실</a>
+            <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0" href="#simple-list-item-4">위치</a>
+            <a class="[text-decoration:none] font-bold text-[#1273e4] inline-block min-w-[31px] flex-shrink-0" href="#simple-list-item-5">리뷰</a>
         </div>
         </header>
     </div>
 
-    <main class="flex flex-col items-center justify-start w-full pt-[100px] lg:pt-[100px]"> 
+    <main id="simple-list-item-1" class="flex flex-col items-center justify-start w-full pt-[100px] lg:pt-[100px]"> 
         
-    <div class="flex flex-col lg:flex-row items-center justify-center w-full max-w-[1560px] gap-8 px-4 sm:px-6 lg:px-0">
+    <div class="flex flex-col lg:flex-row items-center justify-center w-full max-w-[1560px] gap-8 px-4 sm:px-6 lg:px-0" >
         <img class="rounded-[12px] w-full h-auto lg:max-w-[640px] object-cover mb-8 lg:mb-0"
             loading="lazy"
             alt=""
@@ -103,7 +103,7 @@
                     </button>
                 </div>
                 </div>
-                <div
+                <div id="simple-list-item-2"
                 class="w-[1176px] overflow-x-auto flex flex-row items-start justify-start gap-[35px] max-w-full"
                 >
                 <img
@@ -123,16 +123,16 @@
                 />
                 </div>
             </div>
-            <div
+            <div 
                 class="self-stretch flex flex-col items-start justify-start gap-[33px] max-w-full shrink-0"
             >
-                <div
+                <div  
                 class="self-stretch flex flex-row items-start justify-start pt-[0px] pb-[32.5px] pl-[3px] pr-[0px] box-border max-w-full"
                 >
-                <div
+                <div 
                     class="flex-1 flex flex-col items-start justify-start gap-[22px] max-w-full"
                 >
-                    <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
+                    <div id="simple-list-item-3" class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
                     <b class="self-stretch relative">서비스 및 부대시설</b>
                     <div
                     class="flex flex-col items-start justify-start py-[1px] pl-[0px] pr-[21px] box-border gap-[20px] max-w-full text-[14.1px] text-[#707070]"
@@ -385,7 +385,7 @@
                         </div>
                     </div>
                     </div>
-                    <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
+                    <div  class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
                 </div>
                 </div>
                 <div
@@ -545,11 +545,13 @@
                                     <button
                                     class="cursor-pointer [border:none] py-[9px] px-[10px] bg-[#1273e4] rounded-[8px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-[#3899ff]"
                                     >
+                                    <a href="/reservation">
                                     <div
                                         class="relative text-[12px] font-semibold font-[Inter] text-[#fff] text-center inline-block min-w-[52px]"
                                     >
                                         객실 예약
                                     </div>
+                                    </a>
                                     </button>
                                 </div>
                                 </div>
@@ -730,11 +732,13 @@
                                     <button
                                     class="cursor-pointer [border:none] rounded-[8px] bg-[#1273e4] flex flex-row items-start justify-start py-[9px] px-[10px] whitespace-nowrap hover:bg-[#3899ff]"
                                     >
+                                    <a href="/reservation"></a>
                                     <div
                                         class="relative font-semibold inline-block min-w-[52px]"
                                     >
                                         객실 예약
                                     </div>
+                                    </a>
                                     </button>
                                 </div>
                                 </div>
@@ -1007,7 +1011,7 @@
                     <div
                     class="w-[144px] flex flex-col items-start justify-start pt-[2.5px] px-[0px] pb-[0px] box-border text-center text-[16px] text-[#5f84a1]"
                     >
-                    <button
+                    <button id="simple-list-item-4"
                         class="self-stretch h-[16px] relative font-semibold flex items-center shrink-0"
                     >
                         <span>
@@ -1048,7 +1052,7 @@
                     src="/image/detail/image-1@2x.png"
                     />
                 </div>
-                <div
+                <div id="simple-list-item-5"
                     class="self-stretch flex flex-col items-start justify-start gap-[21px] max-w-full"
                 >
                     <div
@@ -1150,6 +1154,9 @@
                     cols="{56}"
                     >
                     <input type="text" class="w-auto [outline:none]" placeholder="리뷰를 작성해주세요 !"/>
+                    <button>
+                        작성하기
+                    </button>
                 </div>
                 </div>
                 </div>
@@ -1192,8 +1199,7 @@
                         class="flex flex-row items-start justify-start gap-[0.5px] text-[13.1px]"
                         >
                         
-                        <button
-                        class="relative font-semibold inline-block min-w-[40px] flex flex-row items-start justify-start"
+                        <button type="button" class="relative font-semibold inline-block min-w-[40px] flex flex-row items-start justify-start" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
                         >
                         <img
                         class="h-[16px] w-[16px] relative min-h-[16px]"
@@ -1202,6 +1208,15 @@
                         />
                         추천순
                         </button>
+
+                        <div class="btn-group">
+                            <ul class="dropdown-menu" >
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                              </ul>
+                          </div>
+
                         </div>
                     </div>
                     </div>
@@ -1659,5 +1674,16 @@
             </div>
             </section>
         </main>
+        <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="/js/countperson.js"></script>
     </body>
+<script>
+    $(document).ready(function(){
+        //세션스토리지의 값 searh_bar에 넣기
+        let s_count = sessionStorage.getItem('count');
+        if (s_count) {
+            $("#person_count2").val(s_count);
+        }
+    });
+</script>
     </html>
