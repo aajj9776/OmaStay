@@ -7,24 +7,34 @@ import java.util.Map;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.service.MemberService;
+import com.omakase.omastay.session.UserSession;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.UserProfileVo;
 
-import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    private UserSession userSession;  // 세션 관리
+
+
      @Autowired
     private MemberService memberService;
 
@@ -82,12 +92,29 @@ public class LoginController {
         return "login/social/google"; // 소셜 로그인 
     }
     
+    //이메일 확인여부
+    @PostMapping("/checkEmail")
+    public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam("email") String email) {
+        // DB에서 이메일 중복 여부 확인
+        boolean exists = memberService.checkEmailDuplicate(email);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+
+        return ResponseEntity.ok(response);
+    }
+
+    //회원정보 저장
     @PostMapping("/register")
     public ResponseEntity<Map<String,Object>> registerMember(@RequestBody Map<String, String> requestData) {
-        String name= requestData.get("name");
-        String email = requestData.get("email");
-        String password = requestData.get("password");
-        String birth = requestData.get("birth");
+        String name= requestData.get("memName");
+        System.out.println("Name받기용: " + name);
+        String email = requestData.get("memEmail");  // memEmail으로 수정
+        String password = requestData.get("memPw"); 
+        String year = requestData.get("year");
+        String month = requestData.get("month");
+        String day = requestData.get("day");
+        String birth = year + "-" + month + "-" + day;
         String gender = requestData.get("gender");
         String emailSubscription = requestData.get("emailSubscription");
         String phone = requestData.get("phone");
@@ -128,4 +155,38 @@ public class LoginController {
    
        return ResponseEntity.ok(response); // JSON 응답
     }
+
+    //유저 로그인 
+    @PostMapping("/user")
+    public String login(MemberDTO memberDTO, HttpServletResponse response, HttpServletRequest request, Model model) {
+
+        System.out.println("Email: " + memberDTO.getMemberProfile().getEmail());
+    System.out.println("Password: " + memberDTO.getMemberProfile().getPw());
+    try {
+        // 이메일과 비밀번호 검증 및 토큰 발급
+        MemberDTO responseDTO = memberService.loginAndGenerateToken(memberDTO);
+        
+        // 토큰을 쿠키에 저장
+        Cookie accessTokenCookie = new Cookie("accessToken", responseDTO.getAccessToken());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
+        response.addCookie(accessTokenCookie);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", responseDTO.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        response.addCookie(refreshTokenCookie);
+        userSession.createSession(request);
+        //세션 저장
+
+        // 로그인 성공 시 메인 페이지로 리다이렉트
+        return "redirect:/";  // 메인 페이지로 리다이렉트
+        } catch (IOException e) {
+        // 로그인 실패 시 에러 메시지를 모델에 추가하여 뷰에 전달
+        model.addAttribute("errorMessage", "이메일 또는 비밀번호가 잘못되었습니다.");
+        return "login/user_login";  // 로그인 페이지로 다시 이동
+        }  
+    }
+
 }
+
