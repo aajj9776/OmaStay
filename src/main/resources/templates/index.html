@@ -10,7 +10,6 @@
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
     <link href="/css/component/swiper.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
 </head>
 <body>
 <div class="wrarp">
@@ -33,7 +32,7 @@
                     <div class="search_title">국내 숙소</div>
                 </div>
                 <div class="search-area">
-                    <div class="search-bar" th:include="/component/search/searchbar :: searchbar"/>
+                    <div class="search-bar" th:include="/component/search/searchbar :: searchbar"></div>
                 </div>
             </div>
         </div>
@@ -46,7 +45,7 @@
                 <div>더보기</div>
             </div>
         </div>
-        <div class="swiper-container">
+        <div class="swiper-container z-0">
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-wrapper">
@@ -239,16 +238,25 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="/js/datepicker.js"></script>
+<script type="text/javascript" src="/js/countperson.js"></script>
 <script>
-    $(document).ready(function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const activeSearch = urlParams.get('activeSearch');
-        if (activeSearch === 'domestic') {
-            $('#search-accommodation').focus();
+    document.addEventListener("DOMContentLoaded", function () {
+        //세션스토리지의 값 searh_bar에 넣기
+        let s_count = sessionStorage.getItem('count');
+        if (s_count) {
+            $("#person_count2").text(s_count);
         }
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-        const swiper1 = new Swiper('.column1 .swiper-container', {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeSearch = urlParams.get("activeSearch");
+        if (activeSearch === "domestic") {
+          $("#search-accommodation").focus();
+          $("#search-accommodation").trigger("click");
+        }
+
+        /*--------------*/
+
+        const swiper1 = new Swiper(".column1 .swiper-container", {
             loop: true,
             slidesPerView: 3,
             spaceBetween: 15,
@@ -258,11 +266,11 @@
                 disableOnInteraction: false,
             },
             navigation: {
-                nextEl: '.column1 .swiper-button-next',
-                prevEl: '.column1 .swiper-button-prev',
+                nextEl: ".column1 .swiper-button-next",
+                prevEl: ".column1 .swiper-button-prev",
             },
             pagination: {
-                el: '.column1 .swiper-pagination',
+                el: ".column1 .swiper-pagination",
                 clickable: true,
             },
             breakpoints: {
@@ -272,106 +280,113 @@
                 0: {
                     slidesPerView: 1,
                 }
-            },
-        });
-
-        const swiper2 = new Swiper('.column2 .swiper-container', {
-            loop: false,
-            slidesPerView: 6,
-            spaceBetween: 15,
-            slidesPerGroup: 6,
-            navigation: {
-                nextEl: '.column2 .swiper-button-next',
-                prevEl: '.column2 .swiper-button-prev',
-            },
-            breakpoints: {
-                1200: {
-                    slidesPerView: 6,
-                },
-                0: {
-                    slidesPerView: 1,
-                }
-            },
-            on: {
-                init: function () {
-                    updateNavigationButtons(this);
-                },
-                slideChange: function () {
-                    updateNavigationButtons(this);
-                }
             }
         });
-
-        const swiper3 = new Swiper('.column4 .swiper-container', {
-            loop: false,
-            slidesPerView: 4,
-            spaceBetween: 15,
-            slidesPerGroup: 4,
-            navigation: {
-                nextEl: '.column4 .swiper-button-next',
-                prevEl: '.column4 .swiper-button-prev'
-            },
-            breakpoints: {
-                1200: {
-                    slidesPerView: 4,
-                },
-                0: {
-                    slidesPerView: 1,
-                }
-            },
-            on: {
-                init: function () {
-                    updateNavigationButtons(this);
-                },
-                slideChange: function () {
-                    updateNavigationButtons(this);
-                }
-            }
-        });
-
-        const swiper5 = new Swiper('.column6 .swiper-container', { // Ensure the class name matches the HTML
-            loop: true,
-            slidesPerView: 2.4,
-            slidesPerGroup: 1,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            navigation: {
-                nextEl: '.column6 .swiper-button-next',
-                prevEl: '.column6 .swiper-button-prev',
-            },
-            pagination: {
-                el: '.column6 .swiper-pagination',
-                clickable: true,
-            },
-            breakpoints: {
-                1200: {
-                    slidesPerView: 2.4,
-                },
-                0: {
-                    slidesPerView: 1,
-                }
-            },
-        });
-
-        function updateNavigationButtons(swiper) {
-            const nextButton = swiper.el.querySelector('.swiper-button-next');
-            const prevButton = swiper.el.querySelector('.swiper-button-prev');
-
-            if (swiper.isEnd) {
-                nextButton.style.visibility = 'hidden';
-            } else {
-                nextButton.style.visibility = 'visible';
-            }
-
-            if (swiper.isBeginning) {
-                prevButton.style.visibility = 'hidden';
-            } else {
-                prevButton.style.visibility = 'visible';
-            }
-        }
     });
+
+        const swiper2 = new Swiper(".column2 .swiper-container", {
+          loop: false,
+          slidesPerView: 6,
+          spaceBetween: 15,
+          slidesPerGroup: 6,
+          navigation: {
+            nextEl: ".column2 .swiper-button-next",
+            prevEl: ".column2 .swiper-button-prev",
+          },
+          breakpoints: {
+            1200: {
+              slidesPerView: 6,
+            },
+            0: {
+              slidesPerView: 1,
+            },
+          },
+          on: {
+            init: function () {
+              updateNavigationButtons(this);
+            },
+            slideChange: function () {
+              updateNavigationButtons(this);
+            },
+          },
+        });
+
+        const swiper4 = new Swiper(".column4 .swiper-container", {
+          loop: false,
+          slidesPerView: 4,
+          spaceBetween: 15,
+          slidesPerGroup: 4,
+          navigation: {
+            nextEl: ".column4 .swiper-button-next",
+            prevEl: ".column4 .swiper-button-prev",
+          },
+          pagination: {
+            el: ".column4 .swiper-pagination",
+            clickable: true,
+          },
+          breakpoints: {
+            1200: {
+              slidesPerView: 4,
+            },
+            0: {
+              slidesPerView: 1,
+            },
+          },
+            on: {
+                init: function () {
+                    updateNavigationButtons(this);
+                },
+                slideChange: function () {
+                    updateNavigationButtons(this);
+                },
+            },
+        });
+
+    const swiper5 = new Swiper('.column6 .swiper-container', {
+        loop: true,
+        slidesPerView: 2.4,
+        slidesPerGroup: 1,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: '.column6 .swiper-button-next',
+            prevEl: '.column6 .swiper-button-prev',
+        },
+        pagination: {
+            el: '.column6 .swiper-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            1200: {
+                slidesPerView: 2.4,
+            },
+            0: {
+                slidesPerView: 1,
+            }
+        },
+    });
+
+    function updateNavigationButtons(swiper) {
+        const nextButton = swiper.el.querySelector('.swiper-button-next');
+        const prevButton = swiper.el.querySelector('.swiper-button-prev');
+
+        if (swiper.isEnd) {
+            nextButton.style.visibility = 'hidden';
+        } else {
+            nextButton.style.visibility = 'visible';
+        }
+
+        if (swiper.isBeginning) {
+            prevButton.style.visibility = 'hidden';
+        } else {
+            prevButton.style.visibility = 'visible';
+        }
+    }
+
+  
+
 </script>
 </body>
 </html>

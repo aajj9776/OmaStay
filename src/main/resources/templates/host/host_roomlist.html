@@ -8,24 +8,14 @@
   </head>
   <body>
     <div
-      class="w-full relative bg-[#e4e7eb] flex flex-col items-center justify-center py-[102px] px-[279px] box-border gap-[119px] leading-[normal] tracking-[normal] mq750:gap-[30px] mq750:pl-[69px] mq750:pr-[69px] mq750:box-border mq1050:gap-[59px] mq1050:pl-[139px] mq1050:pr-[139px] mq1050:box-border"
+      class="w-full relative bg-[#fff] overflow-y-auto flex flex-row items-start justify-start leading-[normal] tracking-[normal]"
     >
-      <section
-        class="w-[1374px] h-[177px] flex flex-row items-start justify-start py-[0px] px-[10px] box-border max-w-full"
+      <main
+        class="flex-1 bg-[#e4e7eb] flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
       >
-        <header
-          class="flex-1 rounded-[30px] bg-[#fff] flex flex-col items-center justify-center max-w-full"
-        >
-          <img
-            class="w-[1119.7px] relative max-h-full object-cover max-w-full"
-            loading="lazy"
-            alt=""
-            src="/image/host/host-step-img@2x.png"
-          />
-        </header>
-      </section>
+      <div th:insert="~{component/step/host_step}"/>
       <section
-        class="w-[1338px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[144px] pb-[105px] box-border gap-[130px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border"
+        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[100px] pb-[105px] box-border gap-[120px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border"
       >
         <h1
           class="m-[0px] w-[300px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center mq450:text-[36px] mq450:leading-[14px] mq750:text-[48px] mq750:leading-[19px]"
@@ -328,6 +318,7 @@
           </div>
         </div>
       </section>
+      </main>
     </div>
   </body>
 </html>

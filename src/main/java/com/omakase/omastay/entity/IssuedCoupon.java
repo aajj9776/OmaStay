@@ -21,11 +21,11 @@ public class IssuedCoupon {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
-    private Member member;
+    private Member member = new Member();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cp_idx", referencedColumnName = "cp_idx")
-    private Coupon coupon;
+    private Coupon coupon = new Coupon();
 
     //미사용 사용
     @Enumerated

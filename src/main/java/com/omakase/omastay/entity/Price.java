@@ -22,22 +22,22 @@ public class Price {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ri_idx", referencedColumnName = "ri_idx")
-    private RoomInfo roomInfo;
+    private RoomInfo roomInfo = new RoomInfo();
 
     @Column(name = "regular_price", nullable = false)
     private int regularPrice;
 
     //성수기 가격 시작날짜 끝날짜
     @Embedded
-    private PeakVo peakVo;
+    private PeakVo peakVo = new PeakVo();
 
     //비성수기 가격 시작날짜 끝날짜
     @Embedded
-    private SemiPeakVo semi;
+    private SemiPeakVo semi = new SemiPeakVo();
 
     @Column(name = "peak_set", nullable = false)
     private int peakSet;

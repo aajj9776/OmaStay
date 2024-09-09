@@ -20,20 +20,24 @@
           <label class="block text-sm font-medium text-gray-700">이메일 *</label>
           <div class="flex">
             <input
+              id="inputemail"
+              name="memberProfile.email"
               type="email"
               placeholder="이메일을 입력하세요"
               class="flex-grow p-2 border rounded-l-lg"
             />
-            <button class="bg-blue-500 text-white p-2 rounded-r-lg">
+            <button id="emailcheck" onclick="emailcheck()" class="bg-blue-500 text-white p-2 rounded-r-lg">
               이메일 인증
             </button>
           </div>
+          <div id="emailCheckResult" style="color:red;display:none;">이미 가입된 이메일입니다</div>
         </div>
 
         <!-- 비밀번호 입력 그룹 -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">비밀번호 *</label>
           <input
+            id="inputpw"
             type="password"
             placeholder="비밀번호를 입력하세요"
             class="w-full p-2 border rounded-lg"
@@ -44,27 +48,44 @@
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">비밀번호 확인 *</label>
           <input
+            id="checkpw"
             type="password"
             placeholder="비밀번호를 다시 입력하세요"
             class="w-full p-2 border rounded-lg"
+            oninput="checkPasswordMatch()"
           />
+          <div id="passwordMatchResult" style="color:red; display:none;"></div>
         </div>
 
+         <!-- 이름 입력 그룹 -->
+         <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">이름 *</label>
+          <input
+            id="inputname"
+            type="text"
+            placeholder="이름을 입력하세요"
+            class="w-full p-2 border rounded-lg"
+          />
+        </div>
+        
         <!-- 생년월일 입력 그룹 -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">생년월일 *</label>
           <div class="flex space-x-2">
             <input
+              id="inputyear"
               type="text"
               placeholder="년(YYYY)"
               class="w-full p-2 border rounded-lg"
             />
             <input
+            id="inputmonth"
               type="text"
               placeholder="월(MM)"
               class="w-full p-2 border rounded-lg"
             />
             <input
+            id="inputday"
               type="text"
               placeholder="일(DD)"
               class="w-full p-2 border rounded-lg"
@@ -77,26 +98,28 @@
           <label class="block text-sm font-medium text-gray-700">성별 *</label>
           <div class="flex space-x-4">
             <label class="flex items-center">
-              <input type="radio" name="gender" value="male" class="mr-2" />
+              <input id="gendermale" type="radio" name="gender" value="male" class="mr-2" />
               남성
             </label>
             <label class="flex items-center">
-              <input type="radio" name="gender" value="female" class="mr-2" />
+              <input id="genderwoman" type="radio" name="gender" value="female" class="mr-2" />
               여성
             </label>
           </div>
         </div>
-
+        <span id="guide" style="color:#999;display:none"></span>
         <!-- 우편번호 입력 그룹 -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">우편번호 *</label>
           <div class="flex">
             <input
+            id="mempostcode"
               type="text"
               placeholder="우편번호"
               class="flex-grow p-2 border rounded-l-lg"
             />
-            <button class="bg-blue-500 text-white p-2 rounded-r-lg">
+            <button  class="bg-blue-500 text-white p-2 rounded-r-lg"
+            onclick="sample4_execDaumPostcode()">
               검색
             </button>
           </div>
@@ -106,6 +129,7 @@
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">주소 *</label>
           <input
+          id="memstreet"
             type="text"
             placeholder="주소를 입력하세요"
             class="w-full p-2 border rounded-lg"
@@ -116,6 +140,7 @@
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">상세주소 *</label>
           <input
+            id="memdetail"
             type="text"
             placeholder="상세주소를 입력하세요"
             class="w-full p-2 border rounded-lg"
@@ -126,6 +151,7 @@
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">휴대전화 *</label>
           <input
+            id="mem_phone"
             type="text"
             placeholder="‘-’ 없이 입력해주세요"
             class="w-full p-2 border rounded-lg"
@@ -137,11 +163,11 @@
           <label class="block text-sm font-medium text-gray-700">이메일 수신 여부 *</label>
           <div class="flex space-x-4">
             <label class="flex items-center">
-              <input type="radio" name="email_subscription" value="yes" class="mr-2" />
+              <input id="emailyes" type="radio" name="email_subscription" value="yes" class="mr-2" />
               예
             </label>
             <label class="flex items-center">
-              <input type="radio" name="email_subscription" value="no" class="mr-2" />
+              <input id="emailno" type="radio" name="email_subscription" value="no" class="mr-2" />
               아니오
             </label>
           </div>
@@ -149,12 +175,171 @@
 
         <!-- 확인 버튼 -->
         <button
-          class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-        >
+          id="registeremail"
+          class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" 
+          onclick="registeremail()">
           확인
         </button>
       </div>
     </div>
   </body>
 
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+  <script>
+    //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+    function sample4_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                   extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('mempostcode').value = data.zonecode;
+                document.getElementById("memstreet").value = roadAddr;
+                
+
+                var guideTextBox = document.getElementById("guide");
+                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                if(data.autoRoadAddress) {
+                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                    guideTextBox.style.display = 'block';
+
+                } else if(data.autoJibunAddress) {
+                    var expJibunAddr = data.autoJibunAddress;
+                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                    guideTextBox.style.display = 'block';
+                } else {
+                    guideTextBox.innerHTML = '';
+                    guideTextBox.style.display = 'none';
+                }
+            }
+        }).open();
+    }
+    // 이메일 인증 함수
+    function emailcheck() {
+        var emailInput = document.getElementById("inputemail").value;
+        var emailCheckResult = document.getElementById("emailCheckResult");
+        
+        if (emailInput === "") {
+            alert("이메일을 입력하지 않았습니다.");
+            document.getElementById("emailInput").focus();
+            return;
+        }
+
+        
+        var emailIsDuplicate = false;  // DB 체크 후 이메일 중복 여부
+
+        if (emailIsDuplicate) {
+            alert("이미 이메일로 가입되었습니다.");
+            emailCheckResult.style.display = "block";
+        } else {
+            alert("이메일 인증이 완료되었습니다.");
+            emailCheckResult.style.display = "none";
+        }
+    }
+
+    function checkPasswordMatch() {
+        var password = document.getElementById("inputpw").value;
+        var checkPassword = document.getElementById("checkpw").value;
+        var matchResult = document.getElementById("passwordMatchResult");
+
+        if (password === checkPassword) {
+            matchResult.style.color = "green";
+            matchResult.innerHTML = "일치합니다";
+            matchResult.style.display = "block";
+        } else {
+            matchResult.style.color = "red";
+            matchResult.innerHTML = "불일치합니다";
+            matchResult.style.display = "block";
+        }
+    }
+
+    function registeremail() {
+
+    var name = document.getElementById("inputname").value;
+    var emailInput = document.getElementById("inputemail").value;
+    var passwordInput = document.getElementById("inputpw").value;
+    var yearInput = document.getElementById("inputyear").value;
+    var monthInput = document.getElementById("inputmonth").value;
+    var dayInput = document.getElementById("inputday").value;
+    var genderElement = document.querySelector('input[name="gender"]:checked');
+
+   
+    var gender = genderElement.value;
+    var emailSubscriptionElement = document.querySelector('input[name="email_subscription"]:checked').value;
+    var phone = document.getElementById("mem_phone").value;
+    var postCode = document.getElementById("mempostcode").value;
+    var street = document.getElementById("memstreet").value;
+    var detail = document.getElementById("memdetail").value;
+    var emailSubscription = emailSubscriptionElement.value;
+    var birthDate = yearInput + "-" + monthInput + "-" + dayInput;
+
+    if (!genderElement) {
+            alert("성별을 선택해주세요.");
+            return;
+        }
+        if (!emailSubscriptionElement) {
+            alert("이메일 수신 여부를 선택해주세요.");
+            return;
+        }
+
+    var data = {
+        name: name,
+        email: emailInput,
+        password: passwordInput,
+        birth: birthDate,
+        gender: gender,
+        emailSubscription: emailSubscription,
+        phone: phone,
+        postCode: postCode,
+        street: street,
+        detail: detail
+    };
+
+    fetch('/login/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Network response was not ok');
+        }
+    })
+    .then(data => {
+        alert("가입 완료!");
+        window.location.href = "/login"; // 성공 페이지로 리다이렉션
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    });
+}
+
+
+</script>
 </html>

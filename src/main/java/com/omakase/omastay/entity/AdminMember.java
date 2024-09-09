@@ -11,6 +11,7 @@ import lombok.*;
 @Entity
 @Table(name = "admin_member")
 @ToString
+@Builder
 public class AdminMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,7 @@ public class AdminMember {
 
     //이메일, 비밀번호, 회원가입탈퇴 상태
     @Embedded
-    private UserProfileVo adminProfile;
+    private UserProfileVo adminProfile = new UserProfileVo();
 
     @Column(name = "ad_auth", nullable = false)
     private int adAuth;

@@ -1,5 +1,8 @@
 server:
   port: 9090
+  servlet:
+    session:
+      timeout: 24h
 spring:
   datasource:
     url: jdbc:mysql://18.116.238.9:3306/omastay
@@ -17,6 +20,28 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: omastay2@gmail.com
+    password: pkpauztcsjapcqyr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          encoding: UTF-8
+    auth-code-expiration-millis: 180000
+  data: 
+    redis:
+      host: 18.116.238.9
+      port: 6379
+      duration: 600
 decorator:
   datasource:
     p6spy:

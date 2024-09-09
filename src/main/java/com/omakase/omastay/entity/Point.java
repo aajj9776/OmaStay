@@ -20,7 +20,7 @@ public class Point {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
-    private Member member;
+    private Member member = new Member();
 
     @Column(name = "p_sum", nullable = false)
     private int pSum;

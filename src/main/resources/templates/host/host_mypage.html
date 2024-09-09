@@ -13,18 +13,9 @@
       <main
         class="flex-1 bg-[#e4e7eb] flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
       >
+        <div th:insert="~{component/step/host_step}"/>
         <section
-          class="w-[1342px] h-[177px] rounded-[30px] bg-[#fff] flex flex-col items-center justify-center max-w-full"
-        >
-          <img
-            class="w-[1025px] relative max-h-full object-cover max-w-full"
-            loading="lazy"
-            alt=""
-            src="/image/host/host-step-img@2x.png"
-          />
-        </section>
-        <section
-          class="w-[1338px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[120px] pb-[125px] box-border gap-[164px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] lg:pt-[65px] lg:pb-[81px] lg:box-border mq450:gap-[41px] mq450:pt-[27px] mq450:px-[30px] mq450:pb-[34px] mq450:box-border mq1050:gap-[82px] mq1050:pt-[42px] mq1050:px-[60px] mq1050:pb-[53px] mq1050:box-border"
+          class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[120px] pb-[125px] box-border gap-[120px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] lg:pt-[65px] lg:pb-[81px] lg:box-border mq450:gap-[41px] mq450:pt-[27px] mq450:px-[30px] mq450:pb-[34px] mq450:box-border mq1050:gap-[82px] mq1050:pt-[42px] mq1050:px-[60px] mq1050:pb-[53px] mq1050:box-border"
         >
           <h1
             class="pt-[30px] m-[0px] w-[301px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center mq450:text-[36px] mq450:leading-[14px] mq1050:text-[48px] mq1050:leading-[19px]"
@@ -32,7 +23,7 @@
             마이페이지
           </h1>
           <div
-            class="w-[689px] flex flex-col items-end justify-start gap-[130px] max-w-full text-[25px] mq450:gap-[32px] mq750:gap-[65px]"
+            class="w-[689px] flex flex-col items-start justify-start gap-[130px] max-w-full text-[25px] mq450:gap-[32px] mq750:gap-[65px]"
           >
             <div
               class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[0px] pr-[11px] box-border max-w-full"
@@ -60,15 +51,6 @@
                         type="text"
                       />
                     </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div
@@ -89,16 +71,9 @@
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="아이디"
                         type="text"
+                        disabled
+                        th:value="${session.adminMember != null ? session.adminMember.adId : 'Guest'}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -116,20 +91,13 @@
                     <div
                       class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
                     >
-                      <input
-                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                        placeholder="비밀번호"
-                        type="text"
-                      />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                      >
-                        Helper text
-                      </div>
+                        <input
+                        id="pw"
+                        name="pw"
+                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+                        placeholder="**********"
+                        type="password"
+                        />  
                     </div>
                   </div>
                 </div>
@@ -142,26 +110,28 @@
                     비밀번호 확인 :
                   </h3>
                   <div
-                    class="w-[303px] flex flex-col items-start justify-start text-[12px] text-[rgba(0,0,0,0.6)]"
+                    class="w-[303px] h-[40px] flex flex-row items-start justify-start text-[12px] text-[rgba(0,0,0,0.6)]"
                   >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                    >
-                      <input
-                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                        placeholder="비밀번호 확인"
-                        type="text"
-                      />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
+                  <div
+                  class=" flex flex-row self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                >
+                    <input
+                    id="pw_check"
+                    class="w-[200px] [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+                    placeholder="**********"
+                    type="password"
+                    />  
+                    <div 
+                      class="w-[80px] h-[40px] flex flex-row items-center justify-center py-[0px] pr-[0px]"
+                        >
+                        <div
+                        id="pw_checkresult"
+                        name="pw_checkresult"
+                        class="h-[40px] relative text-[12px] text-[#f5455c] flex items-center min-w-[34px] whitespace-nowrap"
                       >
-                        Helper text
                       </div>
-                    </div>
+                      </div>
+                  </div>
                   </div>
                 </div>
                 <div
@@ -184,15 +154,6 @@
                         type="text"
                       />
                     </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div
@@ -207,78 +168,44 @@
                     class="w-[303px] flex flex-row items-center justify-center text-[16px] text-[rgba(0,0,0,0.87)]"
                   >
                     <div
-                      class="flex-1 rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                      class="h-[40px] flex-1 rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
                     >
                       <div
-                        class="self-stretch overflow-hidden flex flex-row items-center justify-between py-[8px] px-[10px] box-border min-w-[24px] min-h-[24px] gap-[-22px] [row-gap:20px] mq450:flex-wrap"
+                        class="h-[40px] self-stretch overflow-hidden flex flex-row items-center justify-between px-[10px] box-border min-w-[24px] min-h-[24px] gap-[-22px] [row-gap:20px] mq450:flex-wrap"
                       >
+                        <input
+                        class="w-[175px] [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start px-[0px] box-border font-[Roboto] text-[15px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+                        id="email"
+                        name="email"
+                        placeholder="**********"
+                        type="text"
+                        th:value="${session.adminMember != null ? session.adminMember.adminProfile.email : ''}"
+                      />
                         <div
-                          class="h-[24px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border z-[1]"
+                          class="h-[40px] relative text-[12px] text-[#f5455c] flex items-center min-w-[34px] whitespace-nowrap"
+                          id="timer"
                         >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          class="w-[225px] relative tracking-[0.15px] leading-[24px] inline-block"
-                        >
-                          *********
-                        </div>
-                        <div
-                          class="h-[9px] relative text-[12px] text-[#f5455c] flex items-center min-w-[34px] whitespace-nowrap mq450:ml-[0px]"
-                        >
-                          00:00
-                        </div>
-                        <div
-                          class="self-stretch w-[98px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden z-[4]"
-                        >
-                          Placeholder
-                        </div>
-                        <div
-                          class="h-[24px] w-[24px] hidden flex-row items-center justify-start z-[5]"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
+                        </div>      
                       </div>
                     </div>
                   </div>
                   <div
-                    class="shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#2196f3] overflow-hidden flex flex-col items-center justify-center py-[7px] px-[9px] text-[15px] text-[#fff]"
+                    class="h-[40px] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#2196f3] overflow-hidden flex flex-col items-center justify-center py-[7px] px-[9px] text-[15px] text-[#fff]"
                   >
-                    <div
-                      class="flex flex-row items-center justify-center gap-[8px]"
-                    >
-                      <img
-                        class="h-[22px] w-[18px] relative hidden"
-                        alt=""
-                        src="/image/host/masked-icon.svg"
-                      />
-
+                    <button
+                    type="button"
+                    class="button_1 cursor-pointer"
+                    onclick="sendEmailAndStartTimer"
+                    id="verification"
+                  >
+                    <div class="flex flex-row items-center justify-center">
                       <div
-                        class="relative tracking-[0.46px] leading-[26px] uppercase font-medium inline-block min-w-[90px] whitespace-nowrap"
+                        class="relative tracking-[0.1px] leading-[20px] font-medium inline-block min-w-[82px] whitespace-nowrap"
                       >
                         인증번호 전송
                       </div>
-                      <img
-                        class="h-[22px] w-[18px] relative hidden"
-                        alt=""
-                        src="/image/host/masked-icon1.svg"
-                      />
                     </div>
+                    </button>  
                   </div>
                 </div>
                 <div
@@ -299,16 +226,8 @@
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="인증번호 확인"
                         type="text"
+                        id="email_check"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -332,15 +251,6 @@
                         type="text"
                       />
                     </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div
@@ -359,18 +269,9 @@
                     >
                       <input
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                        placeholder="대표번호"
+                        placeholder="대표번호( - 제외)"
                         type="text"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -386,41 +287,21 @@
                     class="flex-1 flex flex-col items-start justify-start gap-[30px] min-w-[317px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
                   >
                     <div
-                      class="w-[220px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[6px] px-[12px] relative"
+                      class="w-[220px] rounded-[4px] box-border flex flex-row items-start justify-start relative"
                     >
-                      <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-                      <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-                      <div
-                        class="w-[172px] flex flex-row items-start justify-start"
-                      >
-                        <div class="h-[24px] w-0 relative hidden"></div>
-                        <div
-                          class="flex-1 relative tracking-[0.15px] leading-[24px]"
-                        >
-                          거래 은행
-                        </div>
+                    <div class="w-[220px] flex flex-row items-start justify-start">
+                      <div class="w-[220px] dropdown w-full h-auto">
+                        <select class="w-[220px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="bankSelect">
+                          <option value="" disabled selected>은행 선택</option>
+                          <option value="국민은행">국민은행</option>
+                          <option value="농협은행">농협은행</option>
+                          <option value="우리은행">우리은행</option>
+                          <option value="신한은행">신한은행</option>
+                          <option value="기업은행">기업은행</option>
+                        </select>
                       </div>
-                      <div
-                        class="self-stretch flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden z-[3]"
-                      >
-                        Placeholder
-                      </div>
-                      <div class="h-0 w-[24px] relative hidden z-[4]"></div>
-                      <img
-                        class="h-[24px] w-[24px] absolute !m-[0] top-[calc(50%_-_12px)] right-[12px] overflow-hidden shrink-0 z-[1]"
-                        alt=""
-                        src="/image/host/arrowdropdownfilled.svg"
-                      />
-
-                      <div
-                        class="hidden flex-row items-start justify-start z-[6]"
-                      >
-                        <img
-                          class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                          alt=""
-                          src="/image/host/closefilled.svg"
-                        />
-                      </div>
+                    </div>
+                      
                     </div>
                     <div
                       class="w-[303px] flex flex-col items-start justify-start text-[12px] text-[rgba(0,0,0,0.6)]"
@@ -433,15 +314,6 @@
                           placeholder="예금주"
                           type="text"
                         />
-                      </div>
-                      <div
-                        class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                      >
-                        <div
-                          class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                        >
-                          Helper text
-                        </div>
                       </div>
                     </div>
                     <div
@@ -458,7 +330,7 @@
                         >
                           <input
                             class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[250px] max-w-full p-[0px]"
-                            placeholder="계좌번호"
+                            placeholder="계좌번호( - 제외)"
                             type="text"
                           />
 
@@ -473,7 +345,7 @@
               </div>
             </div>
             <div
-              class="w-[258px] flex flex-row items-center justify-between gap-[20px]"
+              class="ml-[320px] w-[300px] flex flex-row items-center justify-between gap-[20px]"
             >
               <button
                 class="cursor-pointer [border:none] py-[8px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
@@ -481,22 +353,11 @@
                 <div
                   class="flex flex-row items-center justify-center gap-[8px]"
                 >
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon.svg"
-                  />
-
                   <div
                     class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[31px]"
                   >
                     저장
                   </div>
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon1.svg"
-                  />
                 </div>
               </button>
               <button
@@ -505,22 +366,11 @@
                 <div
                   class="flex flex-row items-center justify-center gap-[8px]"
                 >
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon.svg"
-                  />
-
                   <div
                     class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left inline-block min-w-[31px]"
                   >
                     취소
                   </div>
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon.svg"
-                  />
                 </div>
               </button>
             </div>
@@ -528,5 +378,119 @@
         </section>
       </main>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <script>
+    $("#email").on("keyup", function () {
+      $(this).val($(this).val().replace(/[^a-z0-9@._-]/g, ""));
+    });
+        
+    let originalEmail = "${session.adminMember != null ? session.adminMember.adminProfile.email : ''}".trim();
+    let timeLeft = 3 * 60;
+    let timerId;
+
+    function sendEmailAndStartTimer() {
+      const email = $('#email').val().trim();
+
+      if (email === "") {
+        alert("이메일을 입력해주세요.");
+        return;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/host/emailsend",
+        data: { email: email },
+        success: function(data) {
+          data = data.trim();
+          if (data === "success") {
+            alert("이메일이 성공적으로 전송되었습니다.");
+            resetVerificationButton('인증번호 확인', 'verifyCode()');
+
+            clearTimeout(timerId);
+            timeLeft = 3 * 60; // 타이머 초기화
+            timerId = setTimeout(updateTimer, 1000);// 타이머 시작
+          }
+        },
+        error: function(error) {
+          console.error("이메일 전송 중 오류 발생:", error);
+          alert("이메일 전송 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
+      });
+    }
+
+    function verifyCode() {
+      const email = $('#email').val().trim();
+      const code = $('#email_check').val().trim();
+      console.log(code);
+
+      if (code === "") {
+        alert("인증번호를 입력해주세요.");
+        return;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/host/emailchecknum",
+        data: { code: code, email: email },
+        success: function(data) {
+          data = data.trim();
+          console.log(data);
+          if (data === "success") {
+            alert("인증번호가 일치합니다.");
+            sessionStorage.setItem("emailVerified", "true");
+            clearTimeout(timerId);
+
+            $('#pw').prop('disabled', false);
+            $('#pw_check').prop('disabled', false);
+          } 
+        },
+        error: function(error) {
+          console.error("인증번호 검증 중 오류 발생:", error);
+          alert("인증번호가 일치하지 않거나 인증번호가 만료되었습니다. 다시 요청해주세요.");
+          resetVerificationButton('인증번호 전송', 'sendEmailAndStartTimer()');
+          clearTimeout(timerId); // 타이머 중지
+          sendEmailAndStartTimer(); // 타이머 및 이메일 재전송
+          $('#email_check"').val('');
+        }
+      });
+    }
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+
+      $('#timer').text(`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`);
+
+      if (timeLeft > 0) {
+        timeLeft--;
+        timerId = setTimeout(updateTimer, 1000);
+      } else {
+        $('#timer').text('시간 초과').css('color', 'red');
+        alert("3분이 지났습니다. 인증번호를 다시 요청해주세요.");
+        resetVerificationButton('인증번호 전송', 'sendEmailAndStartTimer()');
+      }
+    }
+
+    function resetVerificationButton(text, onclick) {
+      $('#verification > div > div').text(text);
+      $('#verification').attr('onclick', onclick);
+    }
+
+    // 초기 버튼 설정
+    resetVerificationButton('인증번호 전송', 'sendEmailAndStartTimer()');
+
+    $('#pw_check').keyup(function () {
+          var pw = $('#pw').val().trim();
+          var pw_check = $('#pw_check').val().trim();
+          if (pw == pw_check) {
+              $('#pw_checkresult').text('일치').css('color', 'blue').show();
+          } else {
+              $('#pw_checkresult').text('불일치').css('color', 'red').show();
+          }
+      });
+    
+  </script>
   </body>
 </html>
