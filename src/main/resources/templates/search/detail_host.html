@@ -1677,4 +1677,13 @@
         <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="/js/countperson.js"></script>
     </body>
+<script>
+    $(document).ready(function(){
+        //세션스토리지의 값 searh_bar에 넣기
+        let s_count = sessionStorage.getItem('count');
+        if (s_count) {
+            $("#person_count2").val(s_count);
+        }
+    });
+</script>
     </html>

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,8 +25,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
-
-
      @Autowired
     private MemberService memberService;
 
@@ -97,14 +97,14 @@ public class LoginController {
 
         // MemberDTO 생성 및 서비스 호출
         MemberDTO memberDTO = new MemberDTO();
-        
+
         // **memberProfile null 체크 후 설정**
         if (memberDTO.getMemberProfile() == null) {
             memberDTO.setMemberProfile(new UserProfileVo());
         }
         memberDTO.setMemName(name);
-        memberDTO.setMemEmail(email);
-        memberDTO.setMemPw(password);
+        memberDTO.getMemberProfile().setEmail(email);
+        memberDTO.getMemberProfile().setPw(password);
         memberDTO.setMemPhone(phone);
         memberDTO.setMemBirth(birth);
 
@@ -128,5 +128,4 @@ public class LoginController {
    
        return ResponseEntity.ok(response); // JSON 응답
     }
-
 }

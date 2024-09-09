@@ -7,7 +7,6 @@
     <meta charset="utf-8"/></head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
     <link rel="stylesheet" href="/css/component/slider.css">
-
 <body>
 <div
         class="w-full relative bg-[#fff] overflow-y-auto flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[100px] box-border leading-[normal] tracking-[normal]"
@@ -435,17 +434,38 @@
      id="modal-wrap">
     <div class="bg-white w-[90%] h-[90%]" id="modal"  th:include="~{/search/modal :: search_modal}"></div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
 <script
         src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH"></script>
 <script src="/js/countperson.js"></script>
 <script>
+    let hCate
+    let f_idx = [];
     // 필터 버튼 값 변경
     $(document).ready(function () {
+        let s_count = sessionStorage.getItem('count');
+        if (s_count) {
+            $("#person_count2").val(s_count);
+        }
+
         $("#dropdown-filter-button").text("평점높은순");
         $("#dropdown-filter-button").val("rating");
         initializeSlider('main');  // 메인 슬라이더 초기화
-        console.log($("#dropdown-filter-button").val());
+
+        // 드롭다운 메뉴 항목 클릭 시 이벤트 핸들러
+        $('#dropdown-filter .dropdown-item').on('click', function () {
+            // 클릭된 항목의 텍스트와 값을 가져옴
+            var selectedText = $(this).text();
+            var selectedValue = $(this).parent().attr('value');
+
+            // 버튼의 텍스트와 값을 변경
+            $('#dropdown-filter-button').text(selectedText);
+            $('#dropdown-filter-button').val(selectedValue);
+
+            // 변경된 값 콘솔에 출력 (디버깅용)
+            console.log('dropdownFilter', selectedValue);
+        });
 
 
 
@@ -458,10 +478,18 @@
                     btn.classList.remove('f_idx');
                 } else {
                     btn.classList.add('bg-gray-300');
+                    //나중에 필터링할때 쓸거임
                     btn.classList.add('f_idx');
                 }
+                handleFilter();
             });
         });
+
+
+        document.getElementById('all').checked = true;
+        hCate = document.getElementById('all').value;
+
+        console.log(hCate);
     });
 
     // 슬라이더 초기화 함수
@@ -503,7 +531,14 @@
 
             startInput.value = startValue;
             endInput.value = endValue;
+
+            /*handleFilter();*/
         });
+
+
+
+        //초기 필터 상태 설정
+        handleFilter();
     }
 
 
@@ -519,6 +554,7 @@
 
         // 모달 슬라이더 초기화
         initializeSlider('modal');
+        initializeFilters('modal');
     }
 
     // 지도 출력 함수
@@ -532,6 +568,7 @@
 
         // 메인 슬라이더 재초기화
         initializeSlider('main');
+        initializeFilters('main');
     });
 
     /*----------------------티맵 관련 스크립트------------------------*/
@@ -579,9 +616,6 @@
             var lng = Math.random() / 100;
             var position = new Tmapv2.LatLng(37.56220450 + lat, 126.98402028 + lng);
 
-            // 좌표 콘솔 로그
-            console.log('Marker position:', position);
-
             // 커스텀 마커
             var markerElement = `
             <span class="ballon relative max-w-xs bg-gray-800 text-white rounded p-2 inline-block text-center">
@@ -610,10 +644,100 @@
         }
         markers = [];
     }
+
     /*-------------필터 관리 기능--------------*/
+    function handleFilter() {
+        // f_idx 클래스를 가진 요소들을 찾아서 필터링
+        const f_idxElements = document.querySelectorAll('.f_idx');
+
+        // f_idxElements를 배열로 변환하고 각 요소의 값을 가져옴
+        const facilities = Array.from(f_idxElements, elem => elem.value);
+
+        // name이 hCate인 것 중에 라디오 버튼이 체크된 것의 value값
+        const hCateElement = document.querySelector('input[name="hCate"]:checked');
+        let hCate;
+        if (hCateElement) {
+            hCate = hCateElement.value;
+        } else {
+            console.error('No radio button with name "hCate" is checked.');
+            hCate = null; // 필요시 기본값 설정
+        }
+
+        // 가격 필터링
+        let startPriceElement = document.getElementById('slider-start-main');
+        let endPriceElement = document.getElementById('slider-end-main');
+        let startPrice = startPriceElement ? startPriceElement.value : null;
+        let endPrice = endPriceElement ? endPriceElement.value : null;
+
+        // 검색어 필터링
+        let keyword = sessionStorage.getItem('keyword');
+        let startDay = sessionStorage.getItem('startDate');
+        let endDay = sessionStorage.getItem('endDate');
+
+        //드롭다운 필터
+        let filter = document.getElementById('dropdown-filter-button').value;
+
+        // 필터링된 값들을 콘솔에 출력 (디버깅용)
+        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter);
+
+        // 필터링된 값들을 세션 스토리지에 저장
+        sessionStorage.setItem('facilities', JSON.stringify(facilities));
+        sessionStorage.setItem('hCate', hCate);
+        sessionStorage.setItem('startPrice', startPrice);
+        sessionStorage.setItem('endPrice', endPrice);
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // 모달이 열릴 때 initializeModal 함수를 호출
+        document.getElementById('modal').addEventListener('show', initializeModal);
+    });
 
 
+    //모달창의 필터에 초기값 설정
+    function initializeFilters(identifier) {
+    // sessionStorage에서 필터 값을 가져옴
+    const facilities = JSON.parse(sessionStorage.getItem('facilities')) || [];
+    const hCate = sessionStorage.getItem('hCate');
+    const startPrice = sessionStorage.getItem('startPrice');
+    const endPrice = sessionStorage.getItem('endPrice');
 
+    // identifier에 따라 요소 선택
+    const prefix = identifier === 'main' ? '' : '#modal ';
+
+    // 필터 값을 설정
+    facilities.forEach(facility => {
+        const element = document.querySelector(`${prefix}.f_idx[value="${facility}"]`);
+        if (element) {
+            element.classList.add('bg-gray-300');
+        }
+    });
+
+    if (hCate) {
+        const hCateElement = document.querySelector(`${prefix}input[name="hCate"][value="${hCate}"]`);
+        if (hCateElement) {
+            hCateElement.checked = true;
+        }
+    }
+
+    if (startPrice) {
+        const startPriceElement = document.querySelector(`${prefix}#slider-start-${identifier}`);
+        if (startPriceElement) {
+            startPriceElement.value = startPrice;
+        }
+    }
+
+    if (endPrice) {
+        const endPriceElement = document.querySelector(`${prefix}#slider-end-${identifier}`);
+        if (endPriceElement) {
+            endPriceElement.value = endPrice;
+        }
+    }
+
+    }
+
+    function reset(){
+
+    }
 </script>
 </body>
 </html>
