@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -38,6 +39,9 @@ public class MemberService {
 
     @Autowired
     private GradeRepository gradeRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final String clientId = "2iV7rMvgZbmW51NsmXrs";  // 네이버 클라이언트 ID
     private final String clientSecret = "4w8zFgGlCG";  // 네이버 클라이언트 시크릿
@@ -109,10 +113,15 @@ public class MemberService {
         // 이메일 수신 여부:참이면 TRUE,아니면 FALSE
         BooleanStatus emailCheck = "yes".equalsIgnoreCase(emailSubscription) ? BooleanStatus.TRUE : BooleanStatus.FALSE;
 
+        String rawPassword = memberDTO.getMemberProfile().getPw();
+        String encryptedPassword = passwordEncoder.encode(rawPassword); // 비밀번호 암호화
+        memberDTO.getMemberProfile().setPw(encryptedPassword);  
+
         // Member 엔티티를 생성하여 입력 데이터 세팅
         Member member = new Member();
         member.setGrade(grade);  // 기본 등급
         member.setMemberProfile(memberDTO.getMemberProfile());  // 이메일, 비밀번호 등
+
         member.setMemName(memberDTO.getMemName());
         member.setMemPhone(memberDTO.getMemPhone());
         member.setMemEmailCheck(emailCheck);
@@ -133,35 +142,42 @@ public class MemberService {
 
     @Transactional
     public MemberDTO loginAndGenerateToken(MemberDTO memberDTO) throws IOException {
-    if (memberDTO.getMemberProfile() == null) {
-        System.out.println("테스트1" + memberDTO.getMemberProfile().getPw());
-        throw new IOException("잘못된 요청입니다: 사용자 프로필 정보가 없습니다.");
-    }
-    // 2. 이메일 조회
+        //암호화 포함
+        if (memberDTO.getMemberProfile() == null) {
+            System.out.println("테스트1" + memberDTO.getMemberProfile().getPw());
+            throw new IOException("잘못된 요청입니다: 사용자 프로필 정보가 없습니다.");
+        }
+    // 1. 이메일 조회
     Member member = memberRepository.findByMemberProfileEmail(memberDTO.getMemberProfile().getEmail());
     if (member == null) {
         System.out.println("해당 이메일로 등록된 사용자가 없습니다.");
         throw new IOException("해당 이메일로 등록된 사용자가 없습니다.");
     }
-    if (memberDTO.getMemberProfile().getPw() == null || member.getMemberProfile().getPw() == null) {
-        System.out.println("테스트3" + memberDTO.getMemberProfile().getPw());
+
+    // 2. 비밀번호가 누락된 경우 처리
+    if (memberDTO.getMemberProfile().getPw() == null) {
+        System.out.println("테스트2" + memberDTO.getMemberProfile().getPw());
         throw new IOException("비밀번호가 누락되었습니다.");
     }
-    if (!member.getMemberProfile().getPw().equals(memberDTO.getMemberProfile().getPw())) {
-        System.out.println("테스트2" + memberDTO.getMemberProfile().getPw());
+
+    // 3. 암호화된 비밀번호 비교 (암호화된 비밀번호를 비교하기 위해 passwordEncoder.matches() 사용)
+    if (!passwordEncoder.matches(memberDTO.getMemberProfile().getPw(), member.getMemberProfile().getPw())) {
+        System.out.println("테스트3" + memberDTO.getMemberProfile().getPw());
         throw new IOException("이메일 또는 비밀번호가 잘못되었습니다.");
     }
-    // 3. JWT 토큰 받기
+
+
+    // 4. JWT 토큰 받기
     Map<String, Object> claims = new HashMap<>();
     claims.put("email", member.getMemberProfile().getEmail());
     claims.put("name", member.getMemName());
     String accessToken = jwtProvider.getAccesToken(claims);
     String refreshToken = jwtProvider.getRefreshToken(claims);
-    // 4. DB에 토큰 저장
+    // 5. DB에 토큰 저장
     member.setAccessToken(accessToken);
     member.setRefreshToken(refreshToken);
     memberRepository.save(member);  // 토큰 저장
-    // 5 응답 반환 (토큰 포함)
+    // 6 응답 반환 (토큰 포함)
     MemberDTO responseDTO = new MemberDTO(member);
     responseDTO.setAccessToken(accessToken);
     responseDTO.setRefreshToken(refreshToken);
