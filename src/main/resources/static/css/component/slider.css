@@ -1,0 +1,27 @@
+/* noUiSlider CSS 커스터마이징 - 미니멀 스타일 */
+.noUi-handle {
+    border-radius: 50%; /* 동그랗게 */
+    width: 12px; /* 사이즈 조정 */
+    height: 12px; /* 사이즈 조정 */
+    background: #3f51b5; /* MUI 기본 색상 */
+    border: 2px solid #fff; /* 버튼 테두리 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    transform: translateY(-50%); /* 핸들을 슬라이더의 정 중앙에 위치 */
+}
+
+.noUi-target {
+    height: 6px; /* 슬라이더 높이 조정 */
+    width: 80%; /* 슬라이더 길이 조정 */
+    background: #c5cae9; /* MUI 라이트 블루 */
+    border-radius: 3px; /* 슬라이더 모서리 둥글게 */
+    margin: 0 auto; /* 슬라이더 중앙 정렬 */
+}
+
+.noUi-horizontal .noUi-handle {
+    top: 1px
+}
+
+.noUi-connect {
+    background: #3f51b5; /* MUI 기본 색상 */
+    border-radius: 3px; /* 슬라이더 연결 부분 모서리 둥글게 */
+}

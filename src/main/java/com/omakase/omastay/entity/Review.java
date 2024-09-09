@@ -27,11 +27,11 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
-    private Member member;
+    private Member member = new Member();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_idx", referencedColumnName = "res_idx")
-    private Reservation reservation;
+    private Reservation reservation = new Reservation();
 
     @Column(name = "rev_writer", nullable = false, length = 100)
     private String revWriter;

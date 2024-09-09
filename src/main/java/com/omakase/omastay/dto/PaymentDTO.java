@@ -1,12 +1,13 @@
 package com.omakase.omastay.dto;
 
+import java.time.LocalDateTime;
+
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +28,6 @@ public class PaymentDTO {
 
     //주문번호
     private String paymentKey;
-    private String orderId;
     private String amount;
 
     public PaymentDTO(Payment payment) {
@@ -43,11 +43,12 @@ public class PaymentDTO {
         this.cancelContent = payment.getCancelContent();
         this.payDate = payment.getPayDate();
         this.cancelDate = payment.getCancelDate();
+        this.paymentKey = payment.getPaymentKey();
         this.payNone = payment.getPayNone();
     }
 
     @QueryProjection
-    public PaymentDTO(int id, int icIdx, int pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelTime, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String payNone) {
+    public PaymentDTO(int id, int icIdx, int pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelTime, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String payNone) {
         this.id = id;
         this.icIdx = icIdx;
         this.pIdx = pIdx;
@@ -60,6 +61,7 @@ public class PaymentDTO {
         this.cancelContent = cancelContent;
         this.payDate = payDate;
         this.cancelDate = cancelDate;
+        this.paymentKey = paymentKey;
         this.payNone = payNone;
     }
 }

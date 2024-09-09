@@ -25,7 +25,7 @@ public class Calculation {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "cal_amount", nullable = false)
     private int calAmount;
@@ -39,7 +39,7 @@ public class Calculation {
             @AttributeOverride(name = "start", column = @Column(name = "cal_start", nullable = false)),
             @AttributeOverride(name = "end", column = @Column(name = "cal_end", nullable = false))
     })
-    private StartEndVo calStartEnd;
+    private StartEndVo calStartEnd = new StartEndVo();
 
     @Column(name = "cal_leg_time")
     private LocalDateTime calLegTime;

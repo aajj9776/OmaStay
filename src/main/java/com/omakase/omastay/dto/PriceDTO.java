@@ -14,8 +14,8 @@ public class PriceDTO {
     private int hIdx;
     private int riIdx;
     private int regularPrice;
-    private PeakVo peakVo;
-    private SemiPeakVo semi;
+    private PeakVo peakVo = new PeakVo();
+    private SemiPeakVo semi = new SemiPeakVo();
     private int peakSet;
     private String priNone;
 

@@ -27,7 +27,7 @@ public class Member {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "g_idx", referencedColumnName = "g_idx")
-    private Grade grade;
+    private Grade grade = new Grade();
 
     @Embedded
     @AttributeOverrides({
@@ -35,7 +35,7 @@ public class Member {
             @AttributeOverride(name = "pw", column = @Column(name = "mem_pw", nullable = false, length = 1024)),
             @AttributeOverride(name = "status", column = @Column(name = "mem_status", nullable = false))
     })
-    private UserProfileVo memberProfile;
+    private UserProfileVo memberProfile = new UserProfileVo();
 
     @Column(name = "mem_phone", nullable = false, length = 100)
     private String memPhone;
@@ -65,7 +65,7 @@ public class Member {
             @AttributeOverride(name = "street", column = @Column(name = "mem_street", nullable = false, length = 200)),
             @AttributeOverride(name = "detail", column = @Column(name = "mem_detail", nullable = false, length = 200))
     })
-    private AddressVo addressVo;
+    private AddressVo addressVo = new AddressVo();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "mem_gender", nullable = false, length = 10, updatable = false)

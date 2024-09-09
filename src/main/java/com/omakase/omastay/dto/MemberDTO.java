@@ -17,14 +17,14 @@ import java.time.LocalDateTime;
 public class MemberDTO {
     private int id;
     private int gIdx;
-    private UserProfileVo memberProfile;
+    private UserProfileVo memberProfile = new UserProfileVo();
     private String memPhone;
     private String memName;
     private BooleanStatus memEmailCheck;
     private String memBirth;
     private LocalDateTime memJoinDate;
     private Social memSocial;
-    private AddressVo addressVo;
+    private AddressVo addressVo = new AddressVo();
     private Gender memGender;
     private String accessToken;
     private String refreshToken;
@@ -46,7 +46,7 @@ public class MemberDTO {
         this.refreshToken = member.getRefreshToken();
         this.memNone = member.getMemNone();
     }
-
+    //일단 만듬
     @QueryProjection
     public MemberDTO(int id, int gIdx, UserProfileVo memberProfile, String memPhone, String memName, BooleanStatus memEmailCheck, String memBirth, LocalDateTime memJoinDate, Social memSocial, AddressVo addressVo, Gender memGender, String accessToken, String refreshToken, String memNone) {
         this.id = id;
