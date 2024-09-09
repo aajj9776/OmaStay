@@ -21,6 +21,7 @@
           <div class="flex">
             <input
               id="inputemail"
+              name="memEmail"
               type="email"
               placeholder="이메일을 입력하세요"
               class="flex-grow p-2 border rounded-l-lg"
@@ -49,6 +50,7 @@
           <input
             id="checkpw"
             type="password"
+            name="memPw"
             placeholder="비밀번호를 다시 입력하세요"
             class="w-full p-2 border rounded-lg"
             oninput="checkPasswordMatch()"
@@ -62,6 +64,7 @@
           <input
             id="inputname"
             type="text"
+            name="memName"
             placeholder="이름을 입력하세요"
             class="w-full p-2 border rounded-lg"
           />
@@ -73,18 +76,21 @@
           <div class="flex space-x-2">
             <input
               id="inputyear"
+              name="memBirthYear"
               type="text"
               placeholder="년(YYYY)"
               class="w-full p-2 border rounded-lg"
             />
             <input
             id="inputmonth"
+            name="memBirthMonth"
               type="text"
               placeholder="월(MM)"
               class="w-full p-2 border rounded-lg"
             />
             <input
             id="inputday"
+            name="memBirthDay"
               type="text"
               placeholder="일(DD)"
               class="w-full p-2 border rounded-lg"
@@ -114,6 +120,7 @@
             <input
             id="mempostcode"
               type="text"
+              name="postCode"
               placeholder="우편번호"
               class="flex-grow p-2 border rounded-l-lg"
             />
@@ -129,6 +136,7 @@
           <label class="block text-sm font-medium text-gray-700">주소 *</label>
           <input
           id="memstreet"
+          name="street"
             type="text"
             placeholder="주소를 입력하세요"
             class="w-full p-2 border rounded-lg"
@@ -140,6 +148,7 @@
           <label class="block text-sm font-medium text-gray-700">상세주소 *</label>
           <input
             id="memdetail"
+            name="detail"
             type="text"
             placeholder="상세주소를 입력하세요"
             class="w-full p-2 border rounded-lg"
@@ -151,6 +160,7 @@
           <label class="block text-sm font-medium text-gray-700">휴대전화 *</label>
           <input
             id="mem_phone"
+            name="phone"
             type="text"
             placeholder="‘-’ 없이 입력해주세요"
             class="w-full p-2 border rounded-lg"
@@ -293,24 +303,82 @@
 
         // 이메일 인증이 완료되지 않으면 가입 불가
         function registerEmail() {
-    if (!isEmailVerified) {
-        alert("이메일 인증을 먼저 완료해 주세요.");
+
+          var memEmail = document.getElementById("inputemail").value;
+          var memPw = document.getElementById("inputpw").value;
+          var memName = document.getElementById("inputname").value;
+          var memYear = document.getElementById("inputyear").value;
+          var memMonth = document.getElementById("inputmonth").value;
+          var memDay = document.getElementById("inputday").value;
+          var gender = document.querySelector('input[name="gender"]:checked');
+          var phone = document.getElementById("mem_phone").value;
+          var postCode = document.getElementById("mempostcode").value;
+          var street = document.getElementById("memstreet").value;
+          var detail = document.getElementById("memdetail").value;
+          var emailSubscription = document.querySelector('input[name="email_subscription"]:checked');
+        
+        if (!memEmail) {
+        alert("이메일을 입력해주세요.");
         return;
-    }
+        }
+        if (!memPw) {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+        if (!memName) {
+            alert("이름을 입력해주세요.");
+            return;
+        }
+        if (!memYear || !memMonth || !memDay) {
+            alert("생년월일을 모두 입력해주세요.");
+            return;
+        }
+        if (!gender) {
+            alert("성별을 선택해주세요.");
+            return;
+        }
+        if (!phone) {
+            alert("휴대전화를 입력해주세요.");
+            return;
+        }
+        if (!postCode) {
+            alert("우편번호를 입력해주세요.");
+            return;
+        }
+        if (!street) {
+            alert("주소를 입력해주세요.");
+            return;
+        }
+        if (!detail) {
+            alert("상세주소를 입력해주세요.");
+            return;
+        }
+        if (!emailSubscription) {
+            alert("이메일 수신 여부를 선택해주세요.");
+            return;
+        }
 
         // FormData 객체 생성
         var formData = {
-            memEmail: document.getElementById("inputemail").value,
-            memPw: document.getElementById("inputpw").value,
-            memName: document.getElementById("inputname").value,
-            memBirth: document.getElementById("inputyear").value + "-" + document.getElementById("inputmonth").value + "-" + document.getElementById("inputday").value,
-            gender: document.querySelector('input[name="gender"]:checked').value,
-            phone: document.getElementById("mem_phone").value,
-            postCode: document.getElementById("mempostcode").value,
-            street: document.getElementById("memstreet").value,
-            detail: document.getElementById("memdetail").value,
-            emailSubscription: document.querySelector('input[name="email_subscription"]:checked').value
+            memEmail: memEmail,
+            memPw: memPw,
+            memName: memName,
+            memBirth: memYear + "-" + memMonth + "-" + memDay,
+            gender: gender.value,
+            phone: phone,
+            postCode: postCode,
+            street: street,
+            detail: detail,
+            emailSubscription: emailSubscription.value
         };
+
+        console.log(formData);  // 등록 전 데이터를 출력
+
+        if (!isEmailVerified) {
+            alert("이메일 인증을 먼저 완료해 주세요.");
+            console.log("테스트시작")
+            return;
+        }
 
         // 서버에 데이터를 전송
         fetch('/login/register', {
@@ -336,8 +404,6 @@
             alert("회원가입 중 오류가 발생했습니다.");
         });
     }
-
-
 
 </script>
 </html>

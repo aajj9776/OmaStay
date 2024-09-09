@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.service.MemberService;
+import com.omakase.omastay.session.UserSession;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.UserProfileVo;
 
@@ -26,6 +28,9 @@ import com.omakase.omastay.vo.UserProfileVo;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    private UserSession userSession;  // 세션 관리
 
 
      @Autowired
@@ -85,6 +90,7 @@ public class LoginController {
         return "login/social/google"; // 소셜 로그인 
     }
     
+    //이메일 확인여부
     @PostMapping("/checkEmail")
     public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam("email") String email) {
         // DB에서 이메일 중복 여부 확인
@@ -96,13 +102,17 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
-
+    //회원정보 저장
     @PostMapping("/register")
     public ResponseEntity<Map<String,Object>> registerMember(@RequestBody Map<String, String> requestData) {
-        String name= requestData.get("name");
-        String email = requestData.get("email");
-        String password = requestData.get("password");
-        String birth = requestData.get("birth");
+        String name= requestData.get("memName");
+        System.out.println("Name받기용: " + name);
+        String email = requestData.get("memEmail");  // memEmail으로 수정
+        String password = requestData.get("memPw"); 
+        String year = requestData.get("year");
+        String month = requestData.get("month");
+        String day = requestData.get("day");
+        String birth = year + "-" + month + "-" + day;
         String gender = requestData.get("gender");
         String emailSubscription = requestData.get("emailSubscription");
         String phone = requestData.get("phone");
@@ -118,6 +128,7 @@ public class LoginController {
             memberDTO.setMemberProfile(new UserProfileVo());
         }
         memberDTO.setMemName(name);
+        
         memberDTO.getMemberProfile().setEmail(email);
         memberDTO.getMemberProfile().setPw(password);
         memberDTO.setMemPhone(phone);
@@ -144,9 +155,10 @@ public class LoginController {
        return ResponseEntity.ok(response); // JSON 응답
     }
 
-    //유저 로그인 기능 부분
+
+    //유저 로그인 
     @PostMapping("/user")
-    public String login(MemberDTO memberDTO, HttpServletResponse response, Model model) {
+    public String login(MemberDTO memberDTO, HttpServletResponse response, HttpServletRequest request, Model model) {
 
         System.out.println("Email: " + memberDTO.getMemberProfile().getEmail());
     System.out.println("Password: " + memberDTO.getMemberProfile().getPw());
@@ -164,6 +176,8 @@ public class LoginController {
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
         response.addCookie(refreshTokenCookie);
+        userSession.createSession(request);
+        //세션 저장
 
         // 로그인 성공 시 메인 페이지로 리다이렉트
         return "redirect:/";  // 메인 페이지로 리다이렉트
