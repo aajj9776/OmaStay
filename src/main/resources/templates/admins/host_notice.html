@@ -48,7 +48,7 @@
             class="w-[40px] [border:none] [outline:none] h-[24px] justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]">
             <option value="all">전체</option>
             <option value="title">제목</option>
-            <option value="date">파일명</option>
+            <option value="ffname">파일명</option>
           </select>
           <input id="search-keyword"
             class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
@@ -209,7 +209,7 @@
       if (confirm("선택한 항목을 삭제하시겠습니까?")) {
 
         $.ajax({
-          url: '/admin/host_notice/delete', 
+          url: '/admin/notice/delete', 
           type: 'POST',
           data: { ids: selectedIds },
         }).done(function (response) {

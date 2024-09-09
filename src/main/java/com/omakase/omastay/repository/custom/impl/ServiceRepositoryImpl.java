@@ -26,26 +26,52 @@ public class ServiceRepositoryImpl implements ServiceRepositoryCustom {
         this.queryFactory = queryFactory;
     }
 
+    //service 엔티티 전체 가져오기
     @Override
-    public List<Service> searchHostNotice(String type, String keyword, String startDate, String endDate) {
+    public List<Service> findBySCateAndSAuth(SCate sCate, UserAuth sAuth, BooleanStatus sStatus) {
         return queryFactory.selectFrom(service)
                 .where(
-                    containsKeyword(keyword),
+                    eqSCate(sCate),
+                    service.sAuth.eq(sAuth),
+                    service.sStatus.eq(sStatus)
+                )
+                .orderBy(service.id.desc())
+                .fetch();
+    }
+
+
+    //service 엔티티 검색
+    @Override
+    public List<Service> searchServices(String type, String keyword, String startDate, String endDate, UserAuth sAuth, SCate sCate) {
+        return queryFactory.selectFrom(service)
+                .where(
+                    containsKeyword(type, keyword),
                     isAfterStartDate(startDate),
                     isBeforeEndDate(endDate),
-                    service.sAuth.eq(UserAuth.HOST),
-                    service.sCate.eq(SCate.NOTICE),
+                    service.sAuth.eq(sAuth),
+                    eqSCate(sCate),
                     service.sStatus.eq(BooleanStatus.TRUE)
                 )
                 .orderBy(service.id.desc())
                 .fetch();
     }
 
-    private BooleanExpression containsKeyword(String keyword) {
+    private BooleanExpression containsKeyword(String type, String keyword) {
         if (keyword == null || keyword.isEmpty()) {
             return null;
         }
-        return service.sTitle.contains(keyword).or(service.sContent.contains(keyword));
+        switch (type) {
+            case "title":
+                return service.sTitle.contains(keyword);
+            case "ffname":
+                return service.fileName.fName.contains(keyword);
+            case "all":
+                return service.sTitle.contains(keyword)
+                        .or(service.fileName.fName.contains(keyword))
+                        .or(service.sContent.contains(keyword));
+            default:
+                return null;
+        }
     }
 
     private BooleanExpression isAfterStartDate(String startDate) {
@@ -72,5 +98,12 @@ public class ServiceRepositoryImpl implements ServiceRepositoryCustom {
             // 날짜 형식이 잘못된 경우 처리
             return null;
         }
+    }
+
+    private BooleanExpression eqSCate(SCate sCate) {
+        if (sCate == null) {
+            return null;
+        }
+        return service.sCate.eq(sCate);
     }
 }
