@@ -34,7 +34,7 @@
                      style="background-color: white !important; "></textarea></td>
               </tr>
               <tr>
-                <td><input type="file" name="file" data-str="첨부파일" class="mt-2 text-[#6c757d]" /></td>
+                <td><input type="file" id="fileUpload" name="file" data-str="첨부파일" class="mt-2 text-[#6c757d]" /></td>
               </tr>
             </tbody>
           </table>
@@ -97,7 +97,7 @@
         dataType: "json",
       }).done(function (data) {
         console.log(data);
-        console.log(data.url + "/" + data.fname);
+        console.log(data.url);
         $("#content").summernote(
           "insertImage", data.url);
 
@@ -123,6 +123,7 @@
     function resetData(){
       $("#title").val("");
       $("#content").summernote("code", "");
+      $("#fileUpload").val("");
     }
   </script>
 </body>

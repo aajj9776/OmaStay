@@ -125,6 +125,21 @@ public class AdminController {
         return map;
     }
 
+    // 가맹점 공지사항 삭제하기
+    @ResponseBody
+    @RequestMapping("/host_notice/delete")
+    public Map<String, Object> host_notice_delete(@RequestParam("ids") List<Integer> ids) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        int cnt = ss.deleteHostNotice(ids);
+        System.out.println("삭제 완료 개수 : " + cnt);
+
+        map.put("cnt", cnt);
+
+        return map;
+    }
+
     // 가맹점 공지사항 세부 조회
     @RequestMapping(value = "/host_notice/view", method = RequestMethod.GET)
     public ModelAndView host_notice_detail(@RequestParam("id") String id) {
@@ -140,83 +155,13 @@ public class AdminController {
         return mv;
     }
 
-    // 가맹점 공지사항 삭제하기
-    @ResponseBody
-    @RequestMapping("/host_notice/delete")
-    public Map<String, Object> host_notice_delete(@RequestParam("ids") List<Integer> ids) {
-
-        Map<String, Object> map = new HashMap<>();
-
-        int cnt = ss.deleteHostNotice(ids);
-
-        map.put("cnt", cnt);
-
-        return map;
-    }
-
-    // 가맹점 공지사항 글쓰기로 이동
-    @RequestMapping(value = "/host_notice/write", method = RequestMethod.GET)
-    public String host_notice_write() {
-
-        return "admins/host_notice_write";
-    }
-
-    // 가맹점 공지사항 글쓰기로 저장
-    @RequestMapping(value = "/host_notice/write", method = RequestMethod.POST)
-    public ModelAndView write(ServiceDTO sDto, @RequestParam("file") MultipartFile f) {
-        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
-        String c_type = request.getContentType();
-        if (c_type.startsWith("multipart")) {
-
-            String fname = null;
-            if (f != null && f.getSize() > 0) {
-                System.out.println("되냐?????????????????????");
-                String realPath = application.getRealPath(upload);
-
-                fname = f.getOriginalFilename();
-                System.out.println("fname : " + fname);
-                FileImageNameVo fvo = new FileImageNameVo();
-                fvo.setOName(fname);
-
-                fname = FileRenameUtil.checkSameFileName(fname, realPath);
-                System.out.println("fname : " + fname);
-
-                try {
-                    File uploadDir = new File(realPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    // 파일 업로드(upload폴더에 저장)
-                    File dest = new File(uploadDir, fname);
-                    f.transferTo(dest);
-
-                    fvo.setFName(fname);
-
-                    sDto.setFileName(fvo);
-                    System.out.println("fvo : " + fvo.getFName());
-                    System.out.println("fvo : " + fvo.getOName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // vo를 DAO에게 전달하여 DB에 저장하도록 한다.
-            ss.saveHostNotice(sDto);
-        }
-
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("redirect:/admin/host_notice");
-
-        return mv;
-    }
-
     // 가맹점 공지사항 수정하기
     @RequestMapping(value = "/host_notice/modify", method = RequestMethod.GET)
     public ModelAndView host_notice_modify(@RequestParam("id") String id) {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admins/host_notice_modify");
+
         if (id != null) {
             ServiceDTO sDto = ss.getHostNotice(Integer.parseInt(id));
             mv.addObject("sDto", sDto);
@@ -228,11 +173,7 @@ public class AdminController {
     // 가맹점 공지사항 수정하기로 저장
     @RequestMapping(value = "/host_notice/modify", method=RequestMethod.POST)
     public String requestMethodName(ServiceDTO modified, @RequestParam("file") MultipartFile f, @RequestParam("selectedFile") String selectedFile) {
-        
-        System.out.println("modified : " + modified);
-        System.out.println("f : " + f); 
-        System.out.println("selectedFile : " + selectedFile);
-
+    
         ServiceDTO sDto = ss.getHostNotice(modified.getId());
         
         // 해당 id에 대해 modified 객체의 값으로 수정한다.
@@ -246,6 +187,7 @@ public class AdminController {
             FileImageNameVo fvo = new FileImageNameVo();
             fvo.setOName(fname);
             fname = FileRenameUtil.checkSameFileName(fname, realPath);
+            fvo.setFName(fname);
             try {
                 File uploadDir = new File(realPath);
                 if (!uploadDir.exists()) {
@@ -253,9 +195,7 @@ public class AdminController {
                 }
                 File dest = new File(uploadDir, fname);
                 f.transferTo(dest);
-                fvo.setFName(fname);
                 sDto.setFileName(fvo);
-
 
                 //ss에서 업데이트 하기
             } catch (Exception e) {
@@ -273,48 +213,86 @@ public class AdminController {
 
         ss.modifyHostNotice(sDto); // 업데이트: sDto에는 수정된 값이 들어있음
 
-        
-
         return "redirect:/admin/host_notice/view?id=" + sDto.getId();
     }
     
+    // 가맹점 공지사항 글쓰기로 이동
+    @RequestMapping(value = "/host_notice/write", method = RequestMethod.GET)
+    public String host_notice_write() {
+
+        return "admins/host_notice_write";
+    }
+
+    // 가맹점 공지사항 글쓰기로 저장
+    @RequestMapping(value = "/host_notice/write", method = RequestMethod.POST)
+    public ModelAndView write(ServiceDTO sDto, @RequestParam("file") MultipartFile f) {
+        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
+        String c_type = request.getContentType();
+        if (c_type.startsWith("multipart")) {
+
+            String fname = null;
+            if (f != null && f.getSize() > 0) {
+                String realPath = application.getRealPath(upload);
+
+                fname = f.getOriginalFilename();
+                FileImageNameVo fvo = new FileImageNameVo();
+                fvo.setOName(fname);
+                fname = FileRenameUtil.checkSameFileName(fname, realPath);
+                fvo.setFName(fname);
+
+                try {
+                    File uploadDir = new File(realPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    // 파일 업로드(upload폴더에 저장)
+                    File dest = new File(uploadDir, fname);
+                    f.transferTo(dest);
+
+                    sDto.setFileName(fvo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            
+            ss.saveHostNotice(sDto);
+        }
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:/admin/host_notice");
+
+        return mv;
+    }
 
     // 가맹점 공지사항 글쓰기 이미지 첨부
     @RequestMapping(value = "/saveImg", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> saveImg(@RequestParam("s_file") MultipartFile f) throws java.io.IOException {
-        ;
+
         // 반환객체 생성
         Map<String, String> map = new HashMap<String, String>();
+        String fname = null;
 
-        if (f.getSize() > 0) {
-            // 파일이 있는 경우
-            // 파일을 저장할 위치를 절대경로로 만들자!
-            // String temp = application.getRealPath("/");
-            // //C:\Users\20191\AppData\Local\Temp\tomcat-docbase.9090.14372696236669970848\
-            // System.out.println("temp : " + temp);
-            String realPath = application.getRealPath(upload);
+        if (f.getSize() > 0) { 
 
-            // //전달된 파일을 저장한다.
-            // try {
-            // //파일올리기
-            // f.transferTo(new File(realPath, f.getOriginalFilename()));
-            // map.put("fname", f.getOriginalFilename());
-            // } catch (Exception e) {
-            // e.printStackTrace();
-            // }
+            String realPath = application.getRealPath(upload); //실행되는 tomcat 서버의 경로
 
-            try { // src/main/resources/static 디렉토리의 파일은 /
-                  // src/main/resources/static/upload/admin 경로를 가져옵니다.
+            fname = f.getOriginalFilename();
+            fname = FileRenameUtil.checkSameFileName(fname, realPath);
+
+            try { 
                 File uploadDir = new File(realPath);
+
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();
                 }
 
                 // 전달된 파일을 저장합니다.
-                File dest = new File(uploadDir, f.getOriginalFilename());
+                File dest = new File(uploadDir, fname);
                 f.transferTo(dest);
-                map.put("fname", f.getOriginalFilename());
+                map.put("fname", fname);
+
             } catch (IOException e) {
                 e.printStackTrace();
                 map.put("error", "File upload failed");
@@ -322,16 +300,10 @@ public class AdminController {
         } else {
             map.put("error", "File is empty");
         }
-        // 현재 파일이 저장된 서버경로를 문자열로 만들자!
-        // 예) localhost:8080/editor/editor_img/test.png
-        // String c_path = application.getContextPath();
-        // System.out.println("c_path : " + c_path);
-        // map.put("url", c_path+"/resources/static/upload/admin");
 
-        map.put("url", upload + f.getOriginalFilename());
+        map.put("url", upload + System.getProperty("file.separator") + fname);
 
-        return map;// 요청한 곳으로 보내진다. 이때
-        // JSON으로 보내기 위해 현재 메서드 위에ResponseBody를 지정한다.
+        return map;
     }
 
     @RequestMapping(value = "/fileDownload", method = RequestMethod.GET)
@@ -339,7 +311,6 @@ public class AdminController {
     public ResponseEntity<InputStreamResource> fileDownload(@RequestParam("fName") String fName)
             throws FileNotFoundException, UnsupportedEncodingException {
 
-        // dir은 파일이 저장된 위치를 의미한다. 이것을 절대경로화 시키자!
         String realPath = application.getRealPath(upload);
 
         // 전체경로를 만들어서 File객체 생성
@@ -365,8 +336,6 @@ public class AdminController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
-
-    
 
     /***************************** 가맹점 공지사항 *****************************/
 
