@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="initial-scale=1, width=device-width" name="viewport"/>
+    <link href="/css/global.css" rel="stylesheet"/>
+    <link href="/css/header/header.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/css/footer/footer.css"/>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=ABeeZee:wght@400&family=Roboto:wght@100;200;400;500;600;700&family=Work+Sans:wght@600&family=Lato:wght@400;600;700;900&family=Poppins:wght@400;500&family=Abel:wght@400&family=Whisper:wght@400&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;500;700&family=Oswald:wght@400;500;700&display=swap"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+  </head>
+  <body>
+    <header th:insert="~{component/header/host_header :: host_header}"/>
+    <div
+      class="w-full relative bg-[#fff] overflow-y-auto flex flex-row items-start justify-start leading-[normal] tracking-[normal]"
+    >
+      <main
+        class="flex-1 bg-[#e4e7eb] flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
+      >
+    <div th:insert="component/step/host_step"/>
+    <div id="main-content" layout:fragment="host">
+      <!-- 메인 콘텐츠가 로드될 영역 -->
+    </div>
+    </main>
+    </div>
+    <footer th:insert="~{component/footer/footer :: footer}"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener('htmx:afterOnLoad', function(evt) {
+        // 비동기 요청 후 스타일 재적용
+        var currentPath = window.location.pathname;
+
+        if (currentPath.includes("/host/mypage")) {
+          $("#mypage-link img").css("background-color", "#2196f3");
+        } else if (currentPath.includes("/host/info")) {
+          $("#info-link img").css("background-color", "#2196f3");
+        } else if (currentPath.includes("/host/rules")) {
+          $("#rules-link img").css("background-color", "#2196f3");
+        } else if (currentPath.includes("/host/roomlist")) {
+          $("#room-link img").css("background-color", "#2196f3");
+        } else if (currentPath.includes("/host/roomchange")) {
+          $("#room-link img").css("background-color", "#2196f3");
+        } else if (currentPath.includes("/host/roomreg")) {
+          $("#room-link img").css("background-color", "#2196f3");
+        }
+      });
+    </script>
+  </body>
+</html>
