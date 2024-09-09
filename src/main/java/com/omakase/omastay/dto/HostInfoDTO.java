@@ -8,11 +8,16 @@ import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
 import com.omakase.omastay.vo.HostOwnerInfoVo;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class HostInfoDTO {
     private int id;
     private int adIdx;
@@ -23,7 +28,7 @@ public class HostInfoDTO {
     private String yAxis;
     private HostOwnerInfoVo hostOwnerInfo  = new HostOwnerInfoVo();
     private HostContactInfoVo hostContactInfo = new HostContactInfoVo();
-    private String hUrl;
+    private String hurl;
     private String checkin;
     private String checkout;
     private String directions;
@@ -32,6 +37,8 @@ public class HostInfoDTO {
     private HStatus hStatus;
     private HStep hStep;
     private String hNone;
+    private String hname;
+    private String hphone;
 
     public HostInfoDTO(HostInfo hostInfo) {
         this.id = hostInfo.getId();
@@ -41,9 +48,9 @@ public class HostInfoDTO {
         this.hCate = hostInfo.getHCate(); // 추가된 필드
         this.xAxis = hostInfo.getXAxis();
         this.yAxis = hostInfo.getYAxis();
-        this.hostContactInfo = hostInfo.getHostContactInfo();
         this.hostOwnerInfo = hostInfo.getHostOwnerInfo();
-        this.hUrl = hostInfo.getHUrl();
+        this.hostContactInfo = hostInfo.getHostContactInfo();
+        this.hurl = hostInfo.getHurl();
         this.checkin = hostInfo.getCheckin();
         this.checkout = hostInfo.getCheckout();
         this.directions = hostInfo.getDirections();
@@ -52,10 +59,14 @@ public class HostInfoDTO {
         this.hStatus = hostInfo.getHStatus();
         this.hStep = hostInfo.getHStep();
         this.hNone = hostInfo.getHNone();
+        System.out.println("hostInfo::"+hostInfo);
+        System.out.println("hostInfo HNAME::"+hostInfo.getHname());
+        this.hname = hostInfo.getHname();
+        this.hphone = hostInfo.getHphone();
     }
-
+    /* 
     @QueryProjection
-    public HostInfoDTO(int id, int adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hUrl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, HStep hStep, String hNone) {
+    public HostInfoDTO(int id, int adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hUrl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, HStep hStep, String hNone, String hName, String hPhone) {
         this.id = id;
         this.adIdx = adIdx;
         this.addressVo = addressVo;
@@ -74,5 +85,19 @@ public class HostInfoDTO {
         this.hStatus = hStatus;
         this.hStep = hStep;
         this.hNone = hNone;
+        this.hName = hName;
+        this.hPhone = hPhone;
+    }
+        */
+
+    @QueryProjection
+    public HostInfoDTO(int id, int adIdx, HostContactInfoVo hostContactInfo, String hurl, HStep hStep, String hname, String hphone) {
+        this.id = id;
+        this.adIdx = adIdx;
+        this.hostContactInfo = hostContactInfo;
+        this.hurl = hurl;
+        this.hStep = hStep;
+        this.hname = hname;
+        this.hphone = hphone;
     }
 }

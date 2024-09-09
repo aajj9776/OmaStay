@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HostInfoRepository extends JpaRepository<HostInfo, Integer>, HostInfoRepositoryCustom {
 
+    HostInfo findByAdminMemberId(int adIdx);
+
 }
