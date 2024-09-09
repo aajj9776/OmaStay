@@ -25,7 +25,7 @@
               placeholder="이메일을 입력하세요"
               class="flex-grow p-2 border rounded-l-lg"
             />
-            <button id="emailcheck" onclick="emailcheck()" class="bg-blue-500 text-white p-2 rounded-r-lg">
+            <button id="emailcheck" onclick="emailCheck()" class="bg-blue-500 text-white p-2 rounded-r-lg">
               이메일 인증
             </button>
           </div>
@@ -176,7 +176,7 @@
         <button
           id="registeremail"
           class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" 
-          onclick="registeremail()">
+          onclick="registerEmail()">
           확인
         </button>
       </div>
@@ -186,6 +186,13 @@
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
   <script>
+    var isEmailVerified = false;
+
+    function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
     //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
     function sample4_execDaumPostcode() {
         new daum.Postcode({
@@ -234,28 +241,6 @@
             }
         }).open();
     }
-    // 이메일 인증 함수
-    function emailcheck() {
-        var emailInput = document.getElementById("inputemail").value;
-        var emailCheckResult = document.getElementById("emailCheckResult");
-        
-        if (emailInput === "") {
-            alert("이메일을 입력하지 않았습니다.");
-            document.getElementById("emailInput").focus();
-            return;
-        }
-
-        
-        var emailIsDuplicate = false;  // DB 체크 후 이메일 중복 여부
-
-        if (emailIsDuplicate) {
-            alert("이미 이메일로 가입되었습니다.");
-            emailCheckResult.style.display = "block";
-        } else {
-            alert("이메일 인증이 완료되었습니다.");
-            emailCheckResult.style.display = "none";
-        }
-    }
 
     function checkPasswordMatch() {
         var password = document.getElementById("inputpw").value;
@@ -273,71 +258,85 @@
         }
     }
 
-    function registeremail() {
+      // 이메일 인증 함수
+      function emailCheck() {
+            var emailInput = document.getElementById("inputemail").value;
+            var emailCheckResult = document.getElementById("emailCheckResult");
 
-    var name = document.getElementById("inputname").value;
-    var emailInput = document.getElementById("inputemail").value;
-    var passwordInput = document.getElementById("inputpw").value;
-    var yearInput = document.getElementById("inputyear").value;
-    var monthInput = document.getElementById("inputmonth").value;
-    var dayInput = document.getElementById("inputday").value;
-    var genderElement = document.querySelector('input[name="gender"]:checked');
+            // 이메일 형식 체크
+            if (!validateEmail(emailInput)) {
+                alert("이메일 형식이 올바르지 않습니다.");
+                return;
+            }
 
-   
-    var gender = genderElement.value;
-    var emailSubscriptionElement = document.querySelector('input[name="email_subscription"]:checked').value;
-    var phone = document.getElementById("mem_phone").value;
-    var postCode = document.getElementById("mempostcode").value;
-    var street = document.getElementById("memstreet").value;
-    var detail = document.getElementById("memdetail").value;
-    var emailSubscription = emailSubscriptionElement.value;
-    var birthDate = yearInput + "-" + monthInput + "-" + dayInput;
-
-    if (!genderElement) {
-            alert("성별을 선택해주세요.");
-            return;
+            // 서버에 이메일 중복 체크 요청
+            fetch('/login/checkEmail?email=' + encodeURIComponent(emailInput), {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    alert("이미 가입된 이메일입니다.");
+                    emailCheckResult.style.display = "block";
+                    isEmailVerified = false;
+                } else {
+                    alert("사용 가능한 이메일입니다.");
+                    emailCheckResult.style.display = "none";
+                    isEmailVerified = true;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert("이메일 중복 확인 중 오류가 발생했습니다.");
+            });
         }
-        if (!emailSubscriptionElement) {
-            alert("이메일 수신 여부를 선택해주세요.");
-            return;
-        }
 
-    var data = {
-        name: name,
-        email: emailInput,
-        password: passwordInput,
-        birth: birthDate,
-        gender: gender,
-        emailSubscription: emailSubscription,
-        phone: phone,
-        postCode: postCode,
-        street: street,
-        detail: detail
-    };
+        // 이메일 인증이 완료되지 않으면 가입 불가
+        function registerEmail() {
+    if (!isEmailVerified) {
+        alert("이메일 인증을 먼저 완료해 주세요.");
+        return;
+    }
 
-    fetch('/login/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Network response was not ok');
-        }
-    })
-    .then(data => {
-        alert("가입 완료!");
-        window.location.href = "/login"; // 성공 페이지로 리다이렉션
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
-    });
-}
+        // FormData 객체 생성
+        var formData = {
+            memEmail: document.getElementById("inputemail").value,
+            memPw: document.getElementById("inputpw").value,
+            memName: document.getElementById("inputname").value,
+            memBirth: document.getElementById("inputyear").value + "-" + document.getElementById("inputmonth").value + "-" + document.getElementById("inputday").value,
+            gender: document.querySelector('input[name="gender"]:checked').value,
+            phone: document.getElementById("mem_phone").value,
+            postCode: document.getElementById("mempostcode").value,
+            street: document.getElementById("memstreet").value,
+            detail: document.getElementById("memdetail").value,
+            emailSubscription: document.querySelector('input[name="email_subscription"]:checked').value
+        };
+
+        // 서버에 데이터를 전송
+        fetch('/login/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)  // 데이터를 JSON 문자열로 변환하여 전송
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .then(data => {
+            alert("회원가입이 완료되었습니다.");
+            window.location.href = "/login";
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert("회원가입 중 오류가 발생했습니다.");
+        });
+    }
+
 
 
 </script>

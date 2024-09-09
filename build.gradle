@@ -60,6 +60,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
+    //웹에 토큰 저장용
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
 tasks.named('test') {
