@@ -12,10 +12,10 @@ import java.util.List;
 public interface RoomInfoMapper {
     RoomInfoMapper INSTANCE = Mappers.getMapper(RoomInfoMapper.class);
 
-    @Mapping(source = "hostInfo.id", target = "hostInfoId")
+    @Mapping(source = "hostInfo.id", target = "HIdx")
     RoomInfoDTO toRoomInfoDTO(RoomInfo roomInfo);
 
-    @Mapping(source = "hostInfoId", target = "hostInfo.id")
+    @Mapping(source = "HIdx", target = "hostInfo.id")
     RoomInfo toRoomInfo(RoomInfoDTO roomInfoDTO);
 
     List<RoomInfoDTO> toRoomInfoDTOList(List<RoomInfo> roomInfoList);

@@ -87,9 +87,9 @@ searchButton.addEventListener('click', function(){
     const startDate = moment(dateRange[0], 'MM/DD');
     const endDate = moment(dateRange[1].split(' ')[0], 'MM/DD');
 
-    const formattedStartDate = startDate.format('YYYY-MM-DD');
-    const formattedEndDate = endDate.format('YYYY-MM-DD');
-
+    //localdatetime로 변환
+    const formattedStartDate = startDate.toISOString();
+    const formattedEndDate = endDate.toISOString();
 
     sessionStorage.setItem('keyword', keywordInput.value);
     sessionStorage.setItem('date', dateInput.value);

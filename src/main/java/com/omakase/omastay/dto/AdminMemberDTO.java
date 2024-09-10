@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AdminMemberDTO {
-    private int id;
+    private Integer id;
     private String adId;
     private UserProfileVo adminProfile = new UserProfileVo();
-    private int adAuth;
+    private Integer adAuth;
     private String adNone;
 
     public AdminMemberDTO(AdminMember adminMember) {
@@ -24,7 +24,7 @@ public class AdminMemberDTO {
     }
 
     @QueryProjection
-    public AdminMemberDTO(int id, String adId, UserProfileVo adminProfile, int adAuth, String adNone) {
+    public AdminMemberDTO(Integer id, String adId, UserProfileVo adminProfile, Integer adAuth, String adNone) {
         this.id = id;
         this.adId = adId;
         this.adminProfile = adminProfile;
