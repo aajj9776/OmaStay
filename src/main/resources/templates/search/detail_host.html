@@ -1109,58 +1109,30 @@
                     </h2>
                 </div>
                 <div
-                    class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[24px] pr-[20px]"
+                    class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[24px] pr-[20px] mt-[-20px]"
                 >
-                    <div class="flex flex-row items-start justify-start gap-[5px]">
-                    <img
-                        class="h-[48px] w-[50.1px] relative min-h-[48px]"
-                        loading="lazy"
-                        alt=""
-                        src="/image/detail/rating-star.svg"
-                    />
+                    <div id="rating-container" class="flex flex-row items-start justify-start gap-[5px]">
 
-                    <img
-                        class="h-[48px] w-[50.1px] relative min-h-[48px]"
-                        alt=""
-                        src="/image/detail/rating-star-1.svg"
-                    />
-
-                    <img
-                        class="h-[48px] w-[50.1px] relative min-h-[48px]"
-                        alt=""
-                        src="/image/detail/rating-star-2.svg"
-                    />
-
-                    <img
-                        class="h-[48px] w-[50.1px] relative min-h-[48px]"
-                        alt=""
-                        src="/image/detail/rating-star-3.svg"
-                    />
-
-                    <img
-                        class="h-[48px] w-[50.1px] relative min-h-[48px]"
-                        alt=""
-                        src="/image/detail/rating-star-4.svg"
-                    />
                     </div>
                 </div>
                 <div
-                    class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[38px] pr-[34px] box-border max-w-full"
-                >
-                    <div
-                    class="border-[#90afc4] border-[3px] border-solid bg-[transparent] h-[201px] w-auto [outline:none] flex-1 rounded-[13px] box-border overflow-hidden flex flex-row items-start justify-start py-[15px] px-[19px] font-[Inter] font-bold text-[14.2px] text-[#707070] max-w-full"
-                    placeholder="리뷰를 작성해주세요 !"
-                    rows="{10}"
-                    cols="{56}"
-                    >
-                    <input type="text" class="w-auto [outline:none]" placeholder="리뷰를 작성해주세요 !"/>
-                    <button>
-                        작성하기
-                    </button>
-                </div>
-                </div>
-                </div>
+                class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[38px] pr-[34px] box-border max-w-full"
+            >
+                
+                <textarea id="reviewText" type="text" class="bg-gray-100 h-[201px] w-auto [outline:none] flex-1 rounded-[13px] box-border overflow-hidden flex flex-row items-start justify-start py-[15px] px-[19px] font-[Inter] font-bold text-[14.2px] text-[#707070] max-w-full resize-none"
+                rows="{10}"
+                cols="{56}" placeholder="리뷰를 작성해주세요 !"></textarea>
+            
             </div>
+             <div class="input-group mb-3">
+                <input type="text" class="form-control w-[978px] ml-[39px]" placeholder="파일을 첨부하세요" aria-label="file_insert" aria-describedby="basic-addon2">
+                <button class="input-group-text" id="basic-addon2">파일 첨부하기</span>
+              </div>
+            <div class="d-grid gap-2">
+                <button id="reviewInsertBtn" class="btn btn-primary ml-[38px] w-[1123px] h-[60px] mt-[-11px]">작성하기</button>
+              </div>
+            </div>
+        </div>
             <div
                 class="self-stretch flex flex-row items-start justify-start pt-[0px] pb-[176.4px] pl-[8px] pr-[4px] box-border max-w-full shrink-0 text-[11.3px] text-[#49627a]"
             >
@@ -1206,14 +1178,15 @@
                         alt=""
                         src="/image/detail/svg-2.svg"
                         />
-                        추천순
+                        <span id = "recommSpan">추천순</span>
                         </button>
 
                         <div class="btn-group">
                             <ul class="dropdown-menu" >
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item">추천순</a></li>
+                                <li><a class="dropdown-item" >최신순</a></li>
+                                <li><a class="dropdown-item" >평점 높은 순</a></li>
+                                <li><a class="dropdown-item" >평점 낮은 순</a></li>
                               </ul>
                           </div>
 
@@ -1674,7 +1647,135 @@
             </div>
             </section>
         </main>
-        <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="/js/countperson.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script>
+
+           
+            document.addEventListener('click', (event) => {
+                const recommDropBtns = event.target.closest('.dropdown-item');
+                if (recommDropBtns) {
+                    const recommSpan = document.getElementById('recommSpan');
+                    recommSpan.innerText = event.target.innerText;
+                    if(event.target.innerText == "추천순"){
+                        recommSpan.innerText = "추천순";
+                    }else if(event.target.innerText == "최신순"){
+                        recommSpan.innerText = "최신순";
+                    }else if(event.target.innerText == "평점 높은 순"){
+                        recommSpan.innerText = "평점 높은 순";
+                    }else if(event.target.innerText == "평점 낮은 순"){
+                        recommSpan.innerText = "평점 낮은 순";
+                    }
+                }
+            });
+
+            const ratingContainers = document.querySelectorAll('#rating-container');
+            let currentRating = 0;
+
+            ratingContainers.forEach(ratingContainer => {
+                const stars = [];
+
+                const svgNS = "http://www.w3.org/2000/svg";
+
+                for (let i = 0; i < 5; i++) {
+                    const star = document.createElementNS(svgNS, 'svg');
+                    star.setAttributeNS(null, 'width', '50');
+                    star.setAttributeNS(null, 'height', '50');
+                    star.setAttributeNS(null, 'fill', 'gold');
+                    star.setAttributeNS(null, 'class', 'bi bi-star');
+                    star.setAttributeNS(null, 'viewBox', '0 0 16 16');
+
+                    const path = document.createElementNS(svgNS, 'path');
+                    path.setAttributeNS(null, 'd', "M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z");
+                    star.appendChild(path);
+                    star.classList.add('star');
+                    star.dataset.index = i;
+                    stars.push(star);
+                    ratingContainer.appendChild(star);
+
+                    star.addEventListener('click', (e) => {
+                        const boundingRect = star.getBoundingClientRect();
+                        const clickX = e.clientX - boundingRect.left;
+
+                        if (clickX <= boundingRect.width / 2) {
+                            currentRating = i + 0.5; // 왼쪽 절반 클릭 시 0.5점
+                        } else {
+                            currentRating = i + 1; // 오른쪽 절반 클릭 시 1점
+                        }
+                        console.log(currentRating);
+                        updateStar();
+                    });
+
+                }
+
+                ratingContainer.addEventListener('mouseleave', () => {
+                    updateStar();
+                });
+
+                function updateStar(rating = currentRating) {
+                    for (let i = 0; i < 5; i++) {
+                        const star = stars[i];
+                        if (rating >= i + 1) {
+                            // 별이 완전히 채워짐
+                            star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>`;
+                        } else if (rating > i && rating < i + 1) {
+                            // 별이 반만 채워짐
+                            star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star-half" viewBox="0 0 16 16">
+                                <path d="M5.354 5.119 7.538.792A.52.52 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.54.54 0 0 1 16 6.32a.55.55 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.5.5 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.6.6 0 0 1 .085-.302.51.51 0 0 1 .37-.245zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.56.56 0 0 1 .162-.505l2.907-2.77-4.052-.576a.53.53 0 0 1-.393-.288L8.001 2.223 8 2.226z"/>
+                            </svg>`;
+                        } else {
+                            // 별이 비어 있음
+                            star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star" viewBox="0 0 16 16">
+                                <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
+                            </svg>`;
+                        }
+                    }
+                }
+            });
+
+           // 리뷰 등록 버튼 클릭 시 이벤트 핸들러
+                $('#reviewInsertBtn').click(function() {
+                // 사용자 입력 값 가져오기 (예시)
+                let rating = currentRating; // 별점 입력 요소에서 값 가져오기
+                let review = $('#reviewText').val(); // 리뷰 텍스트 입력 요소에서 값 가져오기
+                console.log(rating, review);
+
+                    // Fetch API를 사용하여 리뷰 데이터 전송
+                    fetch('/review/insert', {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                        rating: rating,
+                        review: review
+                        })
+                        
+                    }) 
+                    .then(response => {
+                        console.log(response);
+                        if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // 응답을 JSON으로 파싱
+                        console.log(JSON.stringify({ rating: rating, review: review }))
+                    })
+                    .then(data => {
+                        console.log(data);
+                        alert('리뷰가 등록되었습니다.');
+                        // 성공 시 추가적인 작업 수행 (예: 입력 필드 초기화, 리뷰 목록 업데이트 등)
+                    })
+                    .catch(error => {
+                        console.error('리뷰 등록 실패:', error);
+                        alert('리뷰 등록에 실패했습니다.');
+                        // 오류 처리 로직 추가 (예: 오류 메시지 표시, 로그 기록 등)
+                        
+                    });
+                    });
+  
+
+
+        </script>
     </body>
     </html>
