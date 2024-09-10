@@ -1124,10 +1124,10 @@
                 cols="{56}" placeholder="리뷰를 작성해주세요 !"></textarea>
             
             </div>
-             <div class="input-group mb-3">
-                <input type="text" class="form-control w-[978px] ml-[39px]" placeholder="파일을 첨부하세요" aria-label="file_insert" aria-describedby="basic-addon2">
-                <button class="input-group-text" id="basic-addon2">파일 첨부하기</span>
-              </div>
+             <div class="input-group mb-3 w-[97%]">
+                <input type="file" name="file" class="form-control w-[978px] ml-[39px]" placeholder="파일을 첨부하세요" aria-label="file_insert" aria-describedby="basic-addon2">
+                <button class="input-group-text" id="basic-addon2">파일 첨부하기</button>
+             </div>
             <div class="d-grid gap-2">
                 <button id="reviewInsertBtn" class="btn btn-primary ml-[38px] w-[1123px] h-[60px] mt-[-11px]">작성하기</button>
               </div>
@@ -1648,6 +1648,8 @@
             </section>
         </main>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript" src="/js/datepicker.js"></script>
+        <script type="text/javascript" src="/js/countperson.js"></script>
         <script>
 
            
@@ -1748,8 +1750,8 @@
                         'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                        rating: rating,
-                        review: review
+                        revRating: rating,
+                        revContent: review
                         })
                         
                     }) 
@@ -1779,12 +1781,12 @@
         </script>
     </body>
 <script>
-    $(document).ready(function(){
-        //세션스토리지의 값 searh_bar에 넣기
-        let s_count = sessionStorage.getItem('count');
-        if (s_count) {
-            $("#person_count2").val(s_count);
-        }
-    });
+            $(document).ready(function(){
+                //세션스토리지의 값 searh_bar에 넣기
+                let s_count = sessionStorage.getItem('count');
+                if (s_count) {
+                    $("#person_count2").val(s_count);
+                }
+            });
 </script>
     </html>

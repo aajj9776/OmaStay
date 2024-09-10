@@ -26,7 +26,7 @@ public class ReviewService {
         review.setMember(member);
 
         Reservation reservation = new Reservation();
-        reservation.setId(1);
+        reservation.setId(20);
         review.setReservation(reservation);
 
         review.setRevContent(reviewDTO.getRevContent());
