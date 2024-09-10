@@ -22,7 +22,7 @@ public class Inquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iq_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx" , referencedColumnName = "mem_idx")

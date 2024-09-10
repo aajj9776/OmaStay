@@ -1,14 +1,14 @@
 package com.omakase.omastay.service;
 
-import com.omakase.omastay.repository.RoomFacilitiesRepository;
+import com.omakase.omastay.repository.HostFacilitiesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoomFacilitiesService {
+public class HostFacilitiesService {
 
     @Autowired
-    private RoomFacilitiesRepository roomFacilitiesRepository;
+    private HostFacilitiesRepository hostFacilitiesRepository;
 
 
 }

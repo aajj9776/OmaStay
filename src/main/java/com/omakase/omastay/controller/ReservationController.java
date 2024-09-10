@@ -32,7 +32,7 @@ public class ReservationController {
         return "reservation/payment_success.html";
     }
 
-    @PostMapping("/payment_success")
+    /*@PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation) {
         System.out.println("payment" + payment);
 
@@ -66,7 +66,7 @@ public class ReservationController {
         } else {
             return "redirect:/reservation/payment_fail";
         }
-    }
+    }*/
 
     @GetMapping("payment_complete")
     public String payWan() {

@@ -1,6 +1,6 @@
 package com.omakase.omastay.entity.enumurate;
 
-public enum RiStatus {
+public enum RoomStatus {
     AVAILABLE,
     SOLDOUT
 }

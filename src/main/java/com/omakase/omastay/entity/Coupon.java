@@ -19,7 +19,7 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cp_idx", nullable = false, length = 100)
-    private int id;
+    private Integer id;
 
     @Column(name = "cp_content", length = 100)
     private String cpContent;

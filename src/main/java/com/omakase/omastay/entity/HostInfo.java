@@ -23,7 +23,7 @@ public class HostInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "h_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_idx", referencedColumnName = "ad_idx")

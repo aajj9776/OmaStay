@@ -2,6 +2,7 @@ package com.omakase.omastay.service;
 
 import java.time.LocalDateTime;
 
+import com.omakase.omastay.entity.enumurate.PayStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,6 @@ import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
-import com.omakase.omastay.entity.RoomFacilities;
-import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
@@ -52,7 +51,7 @@ public class ReservationService {
         return dto;
     }
 
-    public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
+    /*public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
 
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
 
@@ -74,7 +73,7 @@ public class ReservationService {
         Reservation result = reservationRepository.save(res);
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
-    }
+    }*/
 
 
 }

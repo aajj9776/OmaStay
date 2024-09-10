@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class CalculationDTO {
-    private int id;
-    private int hIdx;
-    private int calAmount;
+    private Integer id;
+    private Integer hIdx;
+    private Integer calAmount;
     private BooleanStatus calStatus;
     private StartEndVo calStartEnd = new StartEndVo();
     private LocalDateTime calLegTime;
@@ -37,7 +37,7 @@ public class CalculationDTO {
     }
 
     @QueryProjection
-    public CalculationDTO(int id, int hIdx, int calAmount, BooleanStatus calStatus, StartEndVo calStartEnd, LocalDateTime calLegTime, LocalDateTime calConfirmTime, LocalDateTime calCompleteTime, LocalDateTime calCancelTime, String calNone) {
+    public CalculationDTO(Integer id, Integer hIdx, Integer calAmount, BooleanStatus calStatus, StartEndVo calStartEnd, LocalDateTime calLegTime, LocalDateTime calConfirmTime, LocalDateTime calCompleteTime, LocalDateTime calCancelTime, String calNone) {
         this.id = id;
         this.hIdx = hIdx;
         this.calAmount = calAmount;

@@ -14,8 +14,8 @@ import lombok.ToString;
 @ToString(exclude = "hostInfo")
 public class Account {
     @Id
-    @Column(name = "ac_idx", nullable = false, length = 100)
-    private int id;
+    @Column(name = "ac_idx")
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
