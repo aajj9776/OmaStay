@@ -43,9 +43,10 @@ public class Review {
     @Column(name = "rev_status", nullable = false)
     private BooleanStatus revStatus;
 
-    @Column(name = "`rev_ rating`")
+    @Column(name = "rev_ rating")
     private Float revRating;
 
     @Column(name = "rev_none", length = 100)
     private String revNone;
+
 }
