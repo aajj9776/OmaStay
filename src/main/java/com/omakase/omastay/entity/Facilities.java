@@ -19,7 +19,7 @@ public class Facilities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "f_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "f_cate", nullable = false, length = 100)
     private String fCate;

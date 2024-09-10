@@ -19,7 +19,7 @@ public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "g_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "g_cate", nullable = false, length = 100)
     private String gCate;

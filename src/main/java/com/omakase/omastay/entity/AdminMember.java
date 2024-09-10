@@ -16,7 +16,7 @@ public class AdminMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ad_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "ad_id", nullable = false, length = 100)
     private String adId;
@@ -26,7 +26,7 @@ public class AdminMember {
     private UserProfileVo adminProfile = new UserProfileVo();
 
     @Column(name = "ad_auth", nullable = false)
-    private int adAuth;
+    private Integer adAuth;
 
     @Column(name = "ad_none", length = 100)
     private String adNone;

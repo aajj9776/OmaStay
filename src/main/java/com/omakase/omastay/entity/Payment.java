@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "payment")
-@ToString(exclude = {"issuedCoupon", "point"})
+@ToString(exclude = {"issuedCoupon", "poInteger"})
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pay_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ic_idx", referencedColumnName = "ic_idx", nullable = true)

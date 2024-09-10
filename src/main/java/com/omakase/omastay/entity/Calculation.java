@@ -21,14 +21,14 @@ public class Calculation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cal_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
     private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "cal_amount", nullable = false)
-    private int calAmount;
+    private Integer calAmount;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "cal_status", nullable = false)

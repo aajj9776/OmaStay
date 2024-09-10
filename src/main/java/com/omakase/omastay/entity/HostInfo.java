@@ -23,7 +23,7 @@ public class HostInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "h_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_idx", referencedColumnName = "ad_idx")
@@ -49,17 +49,17 @@ public class HostInfo {
     private String yAxis;
 
     //호스트 소유주 정보
-    //업체명, 이메일, 전화번호, 호스트명, 호스트 소개
+    //호스트명, 호스트 소개
     @Embedded
     private HostOwnerInfoVo hostOwnerInfo = new HostOwnerInfoVo();
 
     //호스트 담당자
-    //연결자명, 연결자 이메일, 연결자 전화번호
+    //연결자명, 연결자 이메일
     @Embedded
     private HostContactInfoVo hostContactInfo = new HostContactInfoVo();
 
     @Column(name = "h_url", length = 100)
-    private String hUrl;
+    private String hurl;
 
     @Column(name = "checkin", length = 100)
     private String checkin;
@@ -88,5 +88,13 @@ public class HostInfo {
 
     @Column(name = "h_none", length = 100)
     private String hNone;
+
+    //숙소명
+    @Column(name = "h_name", nullable = false, length = 100)
+    private String hname;
+
+    //대표번호
+    @Column(name = "h_phone", nullable = false, length = 100)
+    private String hphone;
 
 }

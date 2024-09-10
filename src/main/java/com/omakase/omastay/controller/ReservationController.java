@@ -43,7 +43,6 @@ public class ReservationController {
         return "reservation/payment_success.html";
     }
 
-
     @RequestMapping("/sendEmail")  
     public ResponseEntity<String> sendEmailPath(@RequestParam("email") String email) throws MessagingException { 
         try {

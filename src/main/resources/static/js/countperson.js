@@ -1,5 +1,5 @@
 let count = 1;
-
+// 이거 시작날짜랑 끝나는 날짜 연도로 해서 세션으로 같이 넘겨주세요
 function changCount() {
   if (count < 1) count = 1;
   if (count > 10) count = 10;
@@ -31,7 +31,25 @@ $(document).ready(function () {
   dropdownElement = $("#second_people_dropdown");
   const dropdown = new bootstrap.Dropdown(dropdownElement[0]);
 
+<<<<<<< HEAD
   changCount();
+=======
+
+$(document).ready(function() {
+    dropdownElement = $('#second_people_dropdown');
+    const dropdown = new bootstrap.Dropdown(dropdownElement[0]);
+
+    let s_count = sessionStorage.getItem('people');
+    if (s_count) {
+        count = parseInt(s_count);
+    }
+
+    //세션스토리지에 저자된 값이 있으면 불러오기
+    let s_keyword = sessionStorage.getItem('keyword');
+    if (s_keyword) {
+        $("#search-accommodation").val(s_keyword);
+    }
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478
 
   $("#decreaseBtn").click(function (event) {
     count--;
@@ -39,6 +57,7 @@ $(document).ready(function () {
     console.log(count);
   });
 
+<<<<<<< HEAD
   $("#increaseBtn").on("click", (event) => {
     count++;
     changCount();
@@ -64,6 +83,34 @@ $(document).ready(function () {
       dropdown.show();
     }
   });
+=======
+    $("#decreaseBtn").click(function(event){
+        count--;
+        changCount();
+        console.log(count);
+    });
+
+    $("#increaseBtn").on('click', (event) => {
+        count++;
+        changCount();
+        console.log(count);
+    });
+
+
+    dropdownElement.on('click', function (event) {
+          if ($(!event.target).is('#decreaseBtn') && $(!event.target).is('#increaseBtn')) {
+            event.stopPropagation();
+            dropdown.hide();
+          }
+    });
+
+    dropdownElement.on('click', function (event) {
+          if ($(event.target).is('#decreaseBtn') || $(event.target).is('#increaseBtn')) {
+            event.stopPropagation();
+            dropdown.show();
+          }
+    });
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478
 });
 
 const keywordInput = document.getElementById("search-accommodation");
@@ -71,6 +118,7 @@ const dateInput = document.getElementById("date-range-picker-input");
 const peopleInput = document.getElementById("person_count2");
 const searchButton = document.getElementById("keyword_searchBtn");
 
+<<<<<<< HEAD
 searchButton.addEventListener("click", function () {
   sessionStorage.setItem("keyword", keywordInput.value);
   sessionStorage.setItem("date", dateInput.value);
@@ -80,6 +128,26 @@ searchButton.addEventListener("click", function () {
     sessionStorage.getItem("date"),
     sessionStorage.getItem("people")
   );
+=======
+searchButton.addEventListener('click', function(){
+    // 검색어, 날짜, 시작 날짜, 끝 날짜, 인원을 세션스토리지에 저장
+    const dateRange = dateInput.value.split(' ~ ');
+    const startDate = moment(dateRange[0], 'MM/DD');
+    const endDate = moment(dateRange[1].split(' ')[0], 'MM/DD');
+
+    //localdatetime로 변환
+    const formattedStartDate = startDate.toISOString();
+    const formattedEndDate = endDate.toISOString();
+
+    sessionStorage.setItem('keyword', keywordInput.value);
+    sessionStorage.setItem('date', dateInput.value);
+    //예약 시작 일과 끝일 저장
+    sessionStorage.setItem(('startDate'), formattedStartDate);
+    sessionStorage.setItem(('endDate'), formattedEndDate);
+    sessionStorage.setItem('people', peopleInput.innerText);
+    console.log(sessionStorage.getItem('keyword'), sessionStorage.getItem('date'), sessionStorage.getItem('people'), sessionStorage.getItem('startDate'), sessionStorage.getItem('endDate'));
+
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478
 
   recSearch();
 });
@@ -191,6 +259,13 @@ function recSearch() {
                     <hr class="dropdown-divider my-2" /> 
                     </div>
                 `;
+<<<<<<< HEAD
     }
   }
 }
+=======
+            }
+
+        }
+    }
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478

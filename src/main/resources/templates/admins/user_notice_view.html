@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/admin}" layout:fragment="admin">
+
+<head>
+    <link rel="stylesheet" href="/summernote/css/style.css" />
+    <link rel="stylesheet" href="/summernote/css/summernote-lite.css" />
+    <style>
+        .note-editable {
+            background-color: white !important;
+            color: black !important;
+            width: 1000px;
+            height: 400px;
+            padding: 10px !important;
+            margin: 10px;
+            border-color: #d4d8f1;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div
+        class="w-[1720px] relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] gap-[20px]">
+        <main
+            class="flex-1 overflow-hidden flex flex-col items-center justify-center py-[0px] px-[65px] gap-[10px] max-w-full text-left text-[24px] text-[#000] font-[Roboto] mq1275:pl-[32px] mq1275:pr-[32px] ">
+
+            <!-- 제목 영역 -->
+            <h2
+                class="m-[0px] self-stretch h-[48px] relative text-inherit tracking-[0.46px] leading-[26px] uppercase font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[21px]">
+                게시물 상세 보기
+            </h2>
+
+            <!-- 게시판 상세보기 영역-->
+            <section
+                class="text-[#6c757d] text-[16px] w-[1300px] self-stretch h-[700px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[48px] px-[61px] mq450:pt-[20px] mq450:pb-[20px] mq900:pt-[31px] mq900:pb-[31px] mq1275:pl-[30px] mq1275:pr-[30px]">
+                <div th:if="${sDto != null}">
+
+                    <table summary="게시판 상세보기">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="flex flex-row">
+                                        <input type="hidden" id="sc" th:value="${sDto.sCate}" />
+                                        <select id="notice-type" disabled
+                                            class="w-[150px] h-[40px] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border py-[4px] px-[5px]" >
+                                            <option value="">---선택---</option>
+                                            <option value="NOTICE">공지사항</option>
+                                            <option value="BENEFIT">혜택</option>
+                                            <option value="EVENT">이벤트</option>
+                                            <option value="FAQ">자주묻는질문</option>
+                                        </select>
+
+                                        <input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}"
+                                            data-str="제목" placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
+                  text-[#000] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
+                  border-solid box-border py-[4px] px-[11px] mb-2" readonly />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="p-2"><span class="text-black">등록일: </span><span
+                                            class="text-black" th:text="${sDto.sDate}"> </span><span> (* 등록일만 저장됩니다.)
+                                        </span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><textarea th:text="${sDto.sContent}" id="content"
+                                        class="bg-[#fff] w-[1000px] h-[500px] text-[#000]" name="sContent" cols="50"
+                                        data-str="내용" rows="8" readonly></textarea></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div th:if="${sDto.fileName != null}">
+                                        <a th:href="|javascript:down('${sDto.fileName.fName}')|">
+                                            <span th:text="${sDto.fileName.fName}"></span>
+                                        </a>
+                                    </div>
+                                    <div th:if="${sDto.fileName == null}">
+                                        <span>첨부된 파일이 없습니다.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 버튼 영역 -->
+            <div
+                class="text-[15px] font-medium overflow-hidden flex flex-row items-center justify-start py-[15px] pl-[20px] pr-[1170px] gap-[11px] mq450:pr-[20px] mq900:pr-[292px] mq1275:pr-[585px] mq1650:flex-wrap">
+                <button th:onclick="|javascript:location.href='/admin/user_notice/modify?id='+'${sDto.id}'|"
+                    class="w-[80px] h-[35px] bg-[#d4d8f1] rounded-[4px]">
+                    수정
+                </button>
+                <button onclick="javascript:location.href='/admin/user_notice'"
+                    class="w-[80px] h-[35px] border-[2px] border-[#d4d8f1] rounded-[4px]">
+                    목록
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/summernote/js/summernote-lite.js"></script>
+    <script>
+        $(function () {
+            $("#content").summernote({
+                toolbar: false, // 툴바를 제거합니다.
+                airMode: true, // 에디터를 비활성화합니다.
+            });
+
+            $("#content").summernote('disable');
+
+            
+
+            var sCateValue = $("#sc").val();
+            console.log("sCate value:", sCateValue);
+
+            if (sCateValue) {
+                $('#notice-type').prop('disabled', false);
+                $('#notice-type option').each(function() {
+                    if ($(this).val() === sCateValue) {
+                        $(this).prop('selected', true);
+                    }
+                });
+            }
+        });
+
+        function down(fName) {
+            $.ajax({
+                url: "/admin/fileDownload",
+                type: "GET",
+                data: { fName: fName },
+                xhrFields: {
+                    responseType: 'blob' // 바이너리 데이터를 받기 위해 설정
+                },
+                success: function (data, status, xhr) {
+                    var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fName;
+                    link.click();
+                    alert("다운로드 되었습니다.");
+                },
+                error: function (xhr, status, error) {
+                    alert("다운로드에 실패했습니다.");
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

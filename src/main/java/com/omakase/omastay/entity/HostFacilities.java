@@ -13,12 +13,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "room_facilities")
-@ToString(exclude = {"facilities", "roomInfo"})
-public class RoomFacilities {
+@Table(name = "host_facilities")
+@ToString(exclude = {"facilities", "hostInfo"})
+public class HostFacilities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "room_idx", nullable = false)
+    @Column(name = "idx", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,8 +26,8 @@ public class RoomFacilities {
     private Facilities facilities = new Facilities();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ri_idx", referencedColumnName = "ri_idx")
-    private RoomInfo roomInfo = new RoomInfo();
+    @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
+    private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "room_none", length = 100)
     private String roomNone;
