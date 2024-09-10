@@ -13,7 +13,7 @@
     <section
       class="flex-1 bg-[#fff] flex flex-row items-start justify-center pt-[74px] px-[352px] pb-[86px] box-border gap-[67px] max-w-full text-left text-[13.2px] text-[#c7c2c2] font-[Roboto] mq1800:flex-wrap mq925:gap-[17px] mq925:pt-[48px] mq925:px-[88px] mq925:pb-[56px] mq925:box-border mq1350:gap-[33px] mq1350:pl-[176px] mq1350:pr-[176px] mq1350:box-border"
     >
-      <form
+      <div
         class="m-[0px] w-[794px] flex flex-col items-start justify-start gap-[27.5px] min-w-[794px] max-w-full mq1800:flex-1 mq1800:min-w-full"
       >
         <div
@@ -107,27 +107,60 @@
                     class="flex flex-col items-start justify-start pt-[7px] px-[0px] pb-[0px] ml-[-2px] mq450:ml-[0px]"
                   >
                     <div
+                      id="timer"
                       class="h-[9px] relative text-[12px] font-[Roboto] text-[#f5455c] text-left flex items-center shrink-0 min-w-[34px] whitespace-nowrap z-[1]"
                     >
-                      00:00
+                      03:00
                     </div>
                   </div>
                 </div>
-                <div
+                <button
+                  onclick="sendEmail()"
                   class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
                 >
                   <div
+                    id="emailText"
                     class="w-full relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center shrink-0"
                   >
                     인증번호 전송
                   </div>
+                </button>
+              </div>
+              <div id="authPlace" style="display: none">
+                <div
+                  class="w-[300px] flex flex-col items-start justify-start gap-[4px] max-w-full mt-[10px]"
+                >
+                  <div
+                    class="self-stretch rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid flex flex-row items-start justify-start py-[13px] px-[19px]"
+                  >
+                    <input
+                      class="w-[300px] [border:none] [outline:none] font-[Roboto] text-[15px] bg-[transparent] h-[19px] relative text-black text-left flex items-center p-[0px]"
+                      placeholder="인증번호 입력"
+                      type="text"
+                      id="verification_code"
+                    />
+                  </div>
                 </div>
+
+                <button
+                  id="authBtn"
+                  onclick="verifyCode()"
+                  class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap mt-[10px]"
+                >
+                  <div
+                    id="verificationText"
+                    class="w-full relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center shrink-0"
+                  >
+                    인증번호 확인
+                  </div>
+                </button>
               </div>
-              <div
-                class="relative text-[11.3px] leading-[16px] font-[Roboto] text-[#999] text-left whitespace-nowrap"
+              <a
+                id="noEmail"
+                class="relative text-[11.3px] leading-[16px] font-[Roboto] text-[#292828] text-left whitespace-nowrap"
               >
-                개인 정보 보호를 위해 안심번호로 숙소에 전송됩니다.
-              </div>
+                이메일을 받지 못하셨나요?
+              </a>
             </div>
             <div class="self-stretch h-[1px] relative bg-[#f5f5f5]"></div>
             <b
@@ -136,84 +169,72 @@
             >
           </div>
           <div
-            class="w-[363px] flex flex-row items-start justify-start py-[0px] px-[7px] box-border max-w-full"
+            class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
           >
             <div
-              class="flex-1 flex flex-col items-start justify-start gap-[5px] max-w-full mt-[10px]"
+              class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
+            >
+              쿠폰
+            </div>
+            <div
+              class="self-stretch flex flex-row items-start justify-start gap-[4px]"
             >
               <div
-                class="w-[29px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center"
+                class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex items-start justify-start pt-[12px] px-[19px] pb-[9px] min-w-[300px]"
               >
-                쿠폰
+                <input
+                  class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
+                  placeholder="쿠폰 입력"
+                  type="text"
+                  id="coupon_input"
+                />
               </div>
-              <div class="self-stretch flex flex-col items-start justify-start">
+              <button
+                class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
+              >
                 <div
-                  class="self-stretch flex flex-row items-start justify-start gap-[7px] mq925:flex-wrap"
+                  class="text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center shrink-0"
                 >
-                  <div
-                    class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[19px] pr-[0px] min-w-[164px]"
-                  >
-                    <input
-                      class="w-full [border:none] [outline:none] font-[Roboto] text-[14px] bg-[transparent] h-[33px] flex-1 relative text-[#999] text-left flex items-center min-w-[139px] p-[0px]"
-                      placeholder="0"
-                      type="text"
-                    />
-                  </div>
-                  <div
-                    class="w-[90px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start whitespace-nowrap"
-                  >
-                    <div
-                      class="h-[33px] flex-1 relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center"
-                    >
-                      쿠폰 조회
-                    </div>
-                  </div>
+                  쿠폰 조회
                 </div>
-                <div
-                  class="w-[147px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center z-[1] mb-[-17px]"
-                >
-                  사용 가능 쿠폰 (3) 장
-                </div>
-              </div>
+              </button>
             </div>
           </div>
-        </div>
-        <div
-          class="w-[362px] flex flex-row items-start justify-start py-[0px] px-[7px] box-border max-w-full"
-        >
+
           <div
-            class="flex-1 flex flex-col items-start justify-start gap-[4px] max-w-full"
+            class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
           >
             <div
-              class="w-[47px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center"
+              class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
             >
               상품권
             </div>
             <div
-              class="self-stretch flex flex-row items-start justify-start gap-[6px] mq925:flex-wrap"
+              class="self-stretch flex flex-row items-start justify-start gap-[4px]"
             >
               <div
-                class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[19px] pr-[0px] min-w-[164px]"
+                class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex items-start justify-start pt-[12px] px-[19px] pb-[9px] min-w-[300px]"
               >
                 <input
-                  class="w-full [border:none] [outline:none] font-[Roboto] text-[14px] bg-[transparent] h-[33px] flex-1 relative text-[#999] text-left flex items-center min-w-[139px] p-[0px]"
-                  placeholder="0"
+                  class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
+                  placeholder="상품권 입력"
                   type="text"
+                  id="point_input"
                 />
               </div>
-              <div
-                class="w-[90px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start whitespace-nowrap"
+              <button
+                class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
               >
                 <div
-                  class="h-[33px] flex-1 relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center"
+                  class="text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center shrink-0"
                 >
                   잔액 확인
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
-      </form>
+      </div>
       <div
         class="w-[340px] flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
       >
@@ -395,6 +416,40 @@
       let room = $("#room").val();
       let sale_price = $("#sale_price").val();
       let nsale_price = $("#nsale_price").val();
+      let resEmail;
+      let resName;
+
+      let timerExpired = false;
+
+      function verifyCode() {
+        if (timerExpired) {
+          alert("인증 시간이 만료되었습니다. 다시 시도해주세요.");
+          return;
+        }
+        let code = $("#verification_code").val();
+        if (code == null && code == "") {
+          alert("인증번호를 입력해주세요.");
+          return;
+        }
+
+        $.ajax({
+          url: "/reservation/emailCheck",
+          type: "POST",
+          data: {
+            code: code,
+            email: $("#reserver_email").val(),
+          },
+        }).done(function (data) {
+          if (data == "success") {
+            alert("인증번호 확인 완료");
+            $("#authBtn").css("display", "none");
+            $("#verification_code").val("인증완료!");
+            $("#verification_code").attr("readonly", true);
+          } else {
+            alert("인증번호가 일치하지 않습니다.");
+          }
+        });
+      }
 
       function makeOrderId() {
         const date = new Date();
@@ -421,6 +476,64 @@
       // 예시 사용
       const orderNumber = makeOrderId();
 
+      //이메일 인증
+      function sendEmail() {
+        if (timerExpired) {
+          $("#emailText").text("인증번호 재전송");
+        }
+        let email = $("#reserver_email").val();
+        if (email == null && email == "") {
+          alert("이메일을 입력해주세요.");
+          return;
+        }
+
+        $.ajax({
+          url: "/reservation/sendEmail",
+          type: "POST",
+          data: {
+            email: email,
+          },
+        }).done(function (data) {
+          if (data == "success") {
+            startCountdown();
+            alert("인증번호가 전송되었습니다.");
+            $("#authPlace").css("display", "block");
+            $("#verification_code").prop("disabled", false); // 타이머 시작 시 입력 가능하도록
+            $("#authBtn").prop("disabled", false); // 타이머 시작 시 인증 버튼 활성화
+          }
+        });
+      }
+
+      function startCountdown() {
+        let time = 180; // 3분 = 180초
+        let timerDisplay = $("#timer");
+
+        // 1초마다 실행
+        let countdownInterval = setInterval(function () {
+          // 타이머 종료 조건
+          if (time <= 0) {
+            clearInterval(countdownInterval); // 타이머 멈추기
+            timerDisplay.text("00:00"); // 타이머 종료 시 00:00 표시
+            alert("인증 시간이 만료되었습니다.");
+            timerExpired = true;
+            $("#verification_code").val("");
+            return;
+          }
+
+          let minutes = Math.floor(time / 60);
+          let seconds = time % 60;
+
+          // 시간 포맷팅 (초가 두 자리가 아니면 앞에 0 추가)
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+
+          // 타이머 화면 업데이트
+          timerDisplay.text(minutes + ":" + seconds);
+
+          time--; // 화면 업데이트 후 시간 감소
+        }, 1000); // 1초마다 실행
+      }
+
       // ------  SDK 초기화 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
       const clientKey = "test_ck_PBal2vxj81jDG7MyAXLR35RQgOAN";
@@ -435,8 +548,20 @@
       // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
       async function requestPayment() {
-        let resEmail = $("#reserver_email").val();
-        let resName = $("#reserver_name").val();
+        resEmail = $("#reserver_email").val();
+        resName = $("#reserver_name").val();
+
+        let code = $("#verification_code").val();
+
+        if (resName == null && resName == "") {
+          alert("예약자 이름을 입력해주세요");
+          return;
+        }
+        if (code != "인증완료!") {
+          alert("이메일 인증을 해주세요");
+          return;
+        }
+
         // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
         // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
         await payment.requestPayment({

@@ -28,6 +28,7 @@ public class PaymentDTO {
 
     //주문번호
     private String paymentKey;
+    private String orderId;
     private String amount;
 
     public PaymentDTO(Payment payment) {

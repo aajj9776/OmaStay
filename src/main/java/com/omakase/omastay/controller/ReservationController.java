@@ -1,19 +1,25 @@
 package com.omakase.omastay.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
-import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
-import com.omakase.omastay.service.PaymentService;
+import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.ReservationService;
+
+import jakarta.mail.MessagingException;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -23,9 +29,8 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
-
     @Autowired
-    private PaymentService paymentService;
+    private EmailService emailService;
 
     @GetMapping
     public String reservation() {
@@ -38,16 +43,37 @@ public class ReservationController {
         return "reservation/payment_success.html";
     }
 
+
+    @RequestMapping("/sendEmail")  
+    public ResponseEntity<String> sendEmailPath(@RequestParam("email") String email) throws MessagingException { 
+        try {
+            emailService.sendEmail(email);  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("success");  
+    }
+
+    @RequestMapping("/emailCheck")  
+    public ResponseEntity<String> sendEmailAndCode(@RequestParam("email") String email, @RequestParam("code") String code){  
+
+        System.out.println(email);
+        if (emailService.verifyEmailCode(email, code)) {  
+            return ResponseEntity.ok("success");  
+        }  
+        return ResponseEntity.notFound().build();  
+    }
+
+    
+
     @PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation) {
         System.out.println("payment" + payment);
 
         System.out.println("reservation이메일 이름 들어와야함" + reservation);
 
-
-
         //결제정보 저장
-        PaymentDTO res = paymentService.insertPaymentInfo(payment);
+        PaymentDTO res = reservationService.insertPaymentInfo(payment);
         System.out.println("결과" + res);
         if( res.getId() == 0) {
             return "redirect:/reservation/payment_fail";
@@ -66,8 +92,9 @@ public class ReservationController {
         System.out.println(reserve);
 
         if( reserve.getResStatus() == ResStatus.COMPLETED) {
+            redirectAttributes.addAttribute("orderId", reserve.getResNum());
             redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
-            redirectAttributes.addAttribute("amount", payment.getAmount());
+            redirectAttributes.addAttribute("amount", reserve.getResPrice());
             redirectAttributes.addAttribute("payContent", payment.getPayContent());
             return "redirect:/reservation/payment_complete";  
         } else {
@@ -75,7 +102,7 @@ public class ReservationController {
         }
     }
 
-    @GetMapping("payment_complete")
+    @GetMapping("/payment_complete")
     public String payWan() {
         return "reservation/payment_complete.html";
     }
@@ -86,11 +113,23 @@ public class ReservationController {
         return "reservation/no_reservation.html";
     }
 
+    @RequestMapping("/check_detail")
+    public ModelAndView check_detail() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("reservation/check_detail.html");
+
+        return mv;
+    }
 
     //이거는 마이페이지로 이동
     @RequestMapping("/reservation_check")
-    public String reservationCheck() {
-        return "reservation/reservation_check.html";
+    public ModelAndView reservationCheck() {
+        ModelAndView mv = new ModelAndView();
+
+        mv.setViewName("reservation/reservation_check.html");
+
+        return mv;
+        
     }
 
 

@@ -65,7 +65,7 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setTo(email);
-        helper.setSubject("Omastay Hosthouse 인증코드 안내드립니다.");
+        helper.setSubject("Omastay 인증코드 안내드립니다.");
         helper.setFrom(configEmail);
         helper.setText(setContext(authCode), true);
 
