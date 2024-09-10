@@ -3,7 +3,6 @@ package com.omakase.omastay.controller;
 import com.omakase.omastay.dto.custom.FilterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/search")

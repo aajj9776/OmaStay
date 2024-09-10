@@ -19,7 +19,7 @@ public class Visitor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "v_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "v_ip", nullable = false, length = 100)
     private String vIp;

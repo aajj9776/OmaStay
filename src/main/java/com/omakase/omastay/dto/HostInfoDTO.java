@@ -17,10 +17,9 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class HostInfoDTO {
-    private int id;
-    private int adIdx;
+    private Integer id;
+    private Integer adIdx;
     private AddressVo addressVo = new AddressVo();
     private String region;
     private HCate hCate; // 추가된 필드
@@ -59,24 +58,22 @@ public class HostInfoDTO {
         this.hStatus = hostInfo.getHStatus();
         this.hStep = hostInfo.getHStep();
         this.hNone = hostInfo.getHNone();
-        System.out.println("hostInfo::"+hostInfo);
-        System.out.println("hostInfo HNAME::"+hostInfo.getHname());
         this.hname = hostInfo.getHname();
         this.hphone = hostInfo.getHphone();
     }
-    /* 
+
     @QueryProjection
-    public HostInfoDTO(int id, int adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hUrl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, HStep hStep, String hNone, String hName, String hPhone) {
+    public HostInfoDTO(Integer id, Integer adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hurl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, HStep hStep, String hNone, String hname, String hphone) {
         this.id = id;
         this.adIdx = adIdx;
         this.addressVo = addressVo;
         this.region = region;
-        this.hCate = hCate; // 추가된 필드
+        this.hCate = hCate;
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.hostOwnerInfo = hostOwnerInfo;
         this.hostContactInfo = hostContactInfo;
-        this.hUrl = hUrl;
+        this.hurl = hurl;
         this.checkin = checkin;
         this.checkout = checkout;
         this.directions = directions;
@@ -85,13 +82,12 @@ public class HostInfoDTO {
         this.hStatus = hStatus;
         this.hStep = hStep;
         this.hNone = hNone;
-        this.hName = hName;
-        this.hPhone = hPhone;
+        this.hname = hname;
+        this.hphone = hphone;
     }
-        */
 
     @QueryProjection
-    public HostInfoDTO(int id, int adIdx, HostContactInfoVo hostContactInfo, String hurl, HStep hStep, String hname, String hphone) {
+    public HostInfoDTO(Integer id, Integer adIdx, HostContactInfoVo hostContactInfo, String hurl, HStep hStep, String hname, String hphone) {
         this.id = id;
         this.adIdx = adIdx;
         this.hostContactInfo = hostContactInfo;

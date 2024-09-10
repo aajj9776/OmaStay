@@ -18,7 +18,7 @@ public class Sales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sal_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
