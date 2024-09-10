@@ -127,7 +127,7 @@ document.addEventListener('click', (event) => {
         const allDelBtn = event.target.closest('#allDelBtn');
         if (allDelBtn) {
             const chk = confirm('정말 전부 삭제하시겠습니까?');
-            if (dd) {
+            if (chk) {
                 recSearches = [];
                 sessionStorage.setItem('recSearches', JSON.stringify(recSearches));
                 const recSearchContent = document.getElementById('rec_search_content');

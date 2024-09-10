@@ -23,15 +23,15 @@ public class SearchController {
     public FilterDTO filtering(@RequestBody FilterDTO filterDTO) {
         System.out.println(filterDTO);
         for(int i : filterDTO.getFacilities()) {
-            System.out.println(i);
+            System.out.println("idx" + i);
         }
-        System.out.println(filterDTO.getHCate());
-        System.out.println(filterDTO.getKeyword());
-        System.out.println(filterDTO.getStartPrice());
-        System.out.println(filterDTO.getEndPrice());
-        System.out.println(filterDTO.getFilter());
-
-
+        System.out.println("hCate" + filterDTO.getHCate());
+        System.out.println("keyword" + filterDTO.getKeyword());
+        System.out.println("startPrice" + filterDTO.getStartPrice());
+        System.out.println("endPrice" + filterDTO.getEndPrice());
+        System.out.println("startDay" + filterDTO.getStartEndDay().getStart());
+        System.out.println("endDay" + filterDTO.getStartEndDay().getEnd());
+        System.out.println("filter" + filterDTO.getFilter());
 
         return filterDTO;
     }
