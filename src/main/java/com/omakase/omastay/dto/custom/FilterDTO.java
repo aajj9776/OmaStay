@@ -16,6 +16,7 @@ public class FilterDTO {
     private String keyword;
     private Integer startPrice;
     private Integer endPrice;
+    private Integer person;
     private StartEndVo startEndDay;
     private String filter;
 }

@@ -1,14 +1,24 @@
 package com.omakase.omastay.controller;
 
 import com.omakase.omastay.dto.custom.FilterDTO;
+import com.omakase.omastay.dto.custom.ResultAccommodationsDTO;
+import com.omakase.omastay.service.FacilitiesService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/search")
 public class SearchController {
 
-        @RequestMapping("/detail-host")
+    private final FacilitiesService facilitiesService;
+
+    public SearchController(FacilitiesService facilitiesService) {
+        this.facilitiesService = facilitiesService;
+    }
+
+    @RequestMapping("/detail-host")
         public String detailHost() {
             return "search/detail_host";
         }
@@ -32,6 +42,9 @@ public class SearchController {
         System.out.println("startDay" + filterDTO.getStartEndDay().getStart());
         System.out.println("endDay" + filterDTO.getStartEndDay().getEnd());
         System.out.println("filter" + filterDTO.getFilter());
+        System.out.println("person" + filterDTO.getPerson());
+
+        List<ResultAccommodationsDTO> resultAccommodations  = facilitiesService.filteringAccommodations(filterDTO);
 
         return filterDTO;
     }

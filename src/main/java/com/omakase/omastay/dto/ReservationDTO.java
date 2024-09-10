@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class ReservationDTO {
-    private int id;
-    private int roomIdx;
-    private int memIdx;
-    private int nonIdx;
-    private int payIdx;
+    private Integer id;
+    private Integer roomIdx;
+    private Integer memIdx;
+    private Integer nonIdx;
+    private Integer payIdx;
     private String resNum;
     private StartEndVo startEndVo = new StartEndVo();
-    private int resPerson;
-    private int resPrice;
+    private Integer resPerson;
+    private Integer resPrice;
     private ResStatus resStatus;
     private String resName;
     private String resEmail;
@@ -43,9 +43,9 @@ public class ReservationDTO {
     }
 
     @QueryProjection
-    public ReservationDTO(int id, int roomIdx, int memIdx, int nonIdx, int paymentId, String resNum,
+    public ReservationDTO(Integer id, Integer roomIdx, Integer memIdx, Integer nonIdx, Integer paymentId, String resNum,
                           StartEndVo startEndVo, String resName, String resEmail,
-                        int resPerson, int resPrice, ResStatus resStatus, String resNone) {
+                        Integer resPerson, Integer resPrice, ResStatus resStatus, String resNone) {
         this.id = id;
         this.roomIdx = roomIdx;
         this.memIdx = memIdx;

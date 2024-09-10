@@ -13,12 +13,10 @@ import java.util.List;
 public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "hostInfo.id", target = "hidx")
+    @Mapping(source = "hostInfo.id", target = "HIdx")
     AccountDTO toAccountDTO(Account account);
 
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "hidx", target = "hostInfo.id")
+    @Mapping(source = "HIdx", target = "hostInfo.id")
     Account toAccount(AccountDTO accountDTO);
 
     List<AccountDTO> toAccountDTOList(List<Account> accountList);

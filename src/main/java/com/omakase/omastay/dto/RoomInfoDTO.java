@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class RoomInfoDTO {
-    private int id;
-    private int hIdx;
+    private Integer id;
+    private Integer hIdx;
     private String roomName;
     private String roomType;
-    private int roomPerson;
+    private Integer roomPerson;
     private String roomIntro;
     private RoomStatus roomStatus;
     private String roomNone;
@@ -30,7 +30,7 @@ public class RoomInfoDTO {
     }
 
     @QueryProjection
-    public RoomInfoDTO(int id, int hIdx, String roomName, String roomType, String riIntro, RoomStatus roomStatus, String roomNone, int roomPerson) {
+    public RoomInfoDTO(Integer id, Integer hIdx, String roomName, String roomType, String riIntro, RoomStatus roomStatus, String roomNone, Integer roomPerson) {
         this.id = id;
         this.hIdx = hIdx;
         this.roomName = roomName;
