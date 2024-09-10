@@ -46,7 +46,7 @@ public class MemberDTO {
         this.refreshToken = member.getRefreshToken();
         this.memNone = member.getMemNone();
     }
-    //일단 만듬
+
     @QueryProjection
     public MemberDTO(int id, int gIdx, UserProfileVo memberProfile, String memPhone, String memName, BooleanStatus memEmailCheck, String memBirth, LocalDateTime memJoinDate, Social memSocial, AddressVo addressVo, Gender memGender, String accessToken, String refreshToken, String memNone) {
         this.id = id;

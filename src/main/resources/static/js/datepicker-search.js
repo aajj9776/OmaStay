@@ -2,27 +2,12 @@
 /*<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>*/
 //위에 있는거 같이 첨부해야됨
-
 $(document).ready(function () {
     var start = moment();
-    var end = moment().add(1, 'days');
-
-    let startDate = sessionStorage.getItem('startDate');
-    let endDate = sessionStorage.getItem('endDate');
-
-
-    if (startDate && endDate) {
-        start = moment(startDate);
-        end = moment(endDate);
-    }
+    var end = moment();
 
     function setDateRangePicker(start, end) {
-        var nights = end.diff(start, 'days');
-        var days = nights + 1;
-        var displayText = start.format('MM/DD') + " ~ " + end.format('MM/DD') + " (" + nights + "박 " + days + "일)";
-        let date = sessionStorage.getItem('date');
-
-
+        var displayText = start.format('YYYY-MM-DD') + " ~ " + end.format('YYYY-MM-DD');
         $('#date-range-picker-input').val(displayText);
     }
 
@@ -37,8 +22,8 @@ $(document).ready(function () {
         },
         showDropdowns: true,
         autoApply: true,
-        minDate: moment(),
-        maxDate: moment().add(6, 'months'),
+        minDate: moment().add(-36, 'months'),
+        maxDate: moment(),
         timePicker: false,
         singleDatePicker: false,
         startDate: start,
@@ -46,7 +31,5 @@ $(document).ready(function () {
     }, function (start, end) {
         setDateRangePicker(start, end);
     });
-
-    setDateRangePicker(start, end);
 
 });
