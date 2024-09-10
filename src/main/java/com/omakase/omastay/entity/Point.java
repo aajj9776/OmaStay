@@ -16,17 +16,17 @@ public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "p_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
     private Member member = new Member();
 
     @Column(name = "p_sum", nullable = false)
-    private int pSum;
+    private Integer pSum;
 
     @Column(name = "p_value", nullable = false)
-    private int pValue;
+    private Integer pValue;
 
     @Column(name = "p_date", nullable = false)
     private LocalDateTime pDate;

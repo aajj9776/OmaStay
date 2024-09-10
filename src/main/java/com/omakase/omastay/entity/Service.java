@@ -23,7 +23,7 @@ public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "s_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @Enumerated
     @Column(name = "s_cate", nullable = false)

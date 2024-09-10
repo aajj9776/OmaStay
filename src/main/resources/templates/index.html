@@ -239,9 +239,14 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="/js/datepicker.js"></script>
 <script type="text/javascript" src="/js/countperson.js"></script>
-<script type="text/javascript" src="/js/countperson.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        //세션스토리지의 값 searh_bar에 넣기
+        let s_count = sessionStorage.getItem('count');
+        if (s_count) {
+            $("#person_count2").text(s_count);
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const activeSearch = urlParams.get("activeSearch");
         if (activeSearch === "domestic") {
@@ -305,6 +310,37 @@
               updateNavigationButtons(this);
             },
           },
+        });
+
+        const swiper4 = new Swiper(".column4 .swiper-container", {
+          loop: false,
+          slidesPerView: 4,
+          spaceBetween: 15,
+          slidesPerGroup: 4,
+          navigation: {
+            nextEl: ".column4 .swiper-button-next",
+            prevEl: ".column4 .swiper-button-prev",
+          },
+          pagination: {
+            el: ".column4 .swiper-pagination",
+            clickable: true,
+          },
+          breakpoints: {
+            1200: {
+              slidesPerView: 4,
+            },
+            0: {
+              slidesPerView: 1,
+            },
+          },
+            on: {
+                init: function () {
+                    updateNavigationButtons(this);
+                },
+                slideChange: function () {
+                    updateNavigationButtons(this);
+                },
+            },
         });
 
     const swiper5 = new Swiper('.column6 .swiper-container', {

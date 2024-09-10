@@ -19,10 +19,10 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ri_idx", referencedColumnName = "ri_idx")
+    @JoinColumn(name = "room_idx", referencedColumnName = "room_idx")
     private RoomInfo roomInfo = new RoomInfo();
 
     @ManyToOne(fetch = FetchType.LAZY)
