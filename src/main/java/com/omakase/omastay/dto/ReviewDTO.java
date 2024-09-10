@@ -20,6 +20,8 @@ public class ReviewDTO {
     private BooleanStatus revStatus;
     private Float revRating;
     private String revNone;
+    private String revFname;
+    private String revOname;
 
     public ReviewDTO(Review review) {
         this.id = review.getId();
