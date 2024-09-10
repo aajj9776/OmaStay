@@ -1,7 +1,9 @@
 package com.omakase.omastay.controller;
 
+import com.omakase.omastay.dto.custom.FilterDTO;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/search")
@@ -17,8 +19,21 @@ public class SearchController {
             return "search/domestic-accommodations";
         }
 
-        @RequestMapping("/filter")
-        public String filter() {
-            return "search/filter";
+    @PostMapping(value = "/filtering")
+    @ResponseBody
+    public FilterDTO filtering(@RequestBody FilterDTO filterDTO) {
+        System.out.println(filterDTO);
+        for(int i : filterDTO.getFacilities()) {
+            System.out.println(i);
         }
+        System.out.println(filterDTO.getHCate());
+        System.out.println(filterDTO.getKeyword());
+        System.out.println(filterDTO.getStartPrice());
+        System.out.println(filterDTO.getEndPrice());
+        System.out.println(filterDTO.getFilter());
+
+
+
+        return filterDTO;
+    }
 }
