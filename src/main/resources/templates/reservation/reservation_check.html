@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
   <head>
     <meta charset="utf-8" />
   </head>
@@ -193,67 +196,74 @@
                   </h2>
                 </div>
                 <div
-                  class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
+                  class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
                 >
+                  <!-- 예약 리스트 반복문 시작 -->
                   <div
-                    class="h-[258px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1"
+                    th:each="reservation : ${checkList}"
+                    class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
                   >
                     <div
-                      class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"
-                    ></div>
-                  </div>
-                  <div
-                    class="w-[189px] flex flex-col items-start justify-start pt-[49px] px-[0px] pb-[0px] box-border min-w-[189px] mq450:flex-1"
-                  >
-                    <div
-                      class="self-stretch flex flex-col items-start justify-start gap-[30px]"
+                      class="h-[258px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1"
                     >
                       <div
-                        class="self-stretch flex flex-col items-start justify-start gap-[10px]"
-                      >
-                        <div
-                          class="self-stretch flex flex-col items-start justify-start gap-[3px]"
-                        >
-                          <b
-                            class="w-[81px] relative leading-[21px] flex items-center"
-                            >예약 취소</b
-                          >
-                          <b
-                            class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]"
-                            >서울시 중랑구</b
-                          >
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]"
-                        >
-                          <b class="flex-1 relative leading-[21px]"
-                            >ADSHGHFLR</b
-                          >
-                        </div>
-                      </div>
+                        class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"
+                      ></div>
+                    </div>
+                    <div
+                      class="w-[189px] flex flex-col items-start justify-start pt-[49px] px-[0px] pb-[0px] box-border min-w-[189px] mq450:flex-1"
+                    >
                       <div
-                        class="self-stretch flex flex-row items-start justify-between py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter]"
+                        class="self-stretch flex flex-col items-start justify-start gap-[30px]"
                       >
                         <div
-                          class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border"
+                          class="self-stretch flex flex-col items-start justify-start gap-[10px]"
                         >
-                          <div class="flex-1 relative font-semibold">
-                            다시예약
+                          <div
+                            class="self-stretch flex flex-col items-start justify-start gap-[3px]"
+                          >
+                            <b
+                              class="w-[81px] relative leading-[21px] flex items-center"
+                              >예약 취소</b
+                            >
+                            <b
+                              class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]"
+                              th:text="${reservation.address}"
+                              >서울시 중랑구</b
+                            >
+                          </div>
+                          <div
+                            class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]"
+                          >
+                            <b
+                              class="flex-1 relative leading-[21px]"
+                              th:text="${reservation.reservationCode}"
+                              >ADSHGHFLR</b
+                            >
                           </div>
                         </div>
                         <div
-                          class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap"
+                          class="self-stretch flex flex-row items-start justify-between py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter]"
                         >
-                          <div class="flex-1 relative font-semibold">
-                            취소 상세
+                          <div
+                            class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border"
+                          >
+                            <div class="flex-1 relative font-semibold">
+                              다시예약
+                            </div>
+                          </div>
+                          <div
+                            class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap"
+                          >
+                            <div class="flex-1 relative font-semibold">
+                              취소 상세
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="h-[270px] w-[743px] relative overflow-hidden shrink-0 hidden max-w-full"
-                  ></div>
+                  <!-- 예약 리스트 반복문 끝 -->
                 </div>
               </div>
             </div>

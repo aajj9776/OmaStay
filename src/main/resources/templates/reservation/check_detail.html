@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
   <head>
     <meta charset="utf-8" />
   </head>
@@ -281,8 +284,7 @@
                   class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full text-[13.2px] text-[#8e8888] mq800:flex-wrap"
                 >
                   <div
-                    class="w-[411px] bg-[#f7f7f7] overflow-hidden shrink-0 flex flex-row items-start justify-start p-[24px] box-border gap-[59px] min-w-[411px] min-h-[251px] max-w-full z-[1] mq450:gap-[29px] mq450:flex-wrap mq800:flex-1 mq800:min-w-full
-                    "
+                    class="w-[411px] bg-[#f7f7f7] overflow-hidden shrink-0 flex flex-row items-start justify-start p-[24px] box-border gap-[59px] min-w-[411px] min-h-[251px] max-w-full z-[1] mq450:gap-[29px] mq450:flex-wrap mq800:flex-1 mq800:min-w-full"
                   >
                     <div
                       class="w-[151px] flex flex-col items-start justify-start gap-[14px]"
@@ -332,7 +334,8 @@
                             <div
                               class="w-[166px] flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] box-border"
                             >
-                              <b class="self-stretch relative leading-[20px] justify-end"
+                              <b
+                                class="self-stretch relative leading-[20px] justify-end"
                                 >객실 가격 (1박)</b
                               >
                             </div>
@@ -420,6 +423,7 @@
                     하루전에는 취소가 가능합니다
                   </h2>
                   <button
+                    id="cancelBtn"
                     class="cursor-pointer [border:none] py-[11.5px] px-[16px] bg-[#fcd4d4] absolute top-[17px] left-[774px] rounded-[10px] flex flex-row items-start justify-start whitespace-nowrap z-[1] hover:bg-[#e3baba]"
                   >
                     <div
@@ -436,5 +440,25 @@
       </main>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      $("#cancelBtn").click(function () {
+        let chk = confirm("정말로 예약을 취소하시겠습니까?");
+        if (chk) {
+          $.ajax({
+            url: "/payment/cancel", //호출하고자 하는 URL
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+              paymentKey: "tviva20240909122439nX1E8", // 실제 데이터 값 확인
+              cancelReason: "고객 요청", // 실제 데이터 값 확인
+            }),
+          }).done(function (res) {
+            console.log(res);
+          });
+        }
+      });
+      $(function () {});
+    </script>
   </body>
 </html>

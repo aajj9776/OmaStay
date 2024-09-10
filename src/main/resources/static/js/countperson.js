@@ -1,35 +1,39 @@
 let count = 1;
 // 이거 시작날짜랑 끝나는 날짜 연도로 해서 세션으로 같이 넘겨주세요
 function changCount() {
-    if (count < 1) count = 1;
-    if (count > 10) count = 10;
+  if (count < 1) count = 1;
+  if (count > 10) count = 10;
 
-    $("#person_count").text(count);
-    $("#person_count2").text(count);
+  $("#person_count").text(count);
+  $("#person_count2").text(count);
 
-    
-    dropdownElement.find("#decreaseBtn").prop('aria-disabled', count <= 1);
-    dropdownElement.find("#increaseBtn").prop('aria-disabled', count >= 10);
+  dropdownElement.find("#decreaseBtn").prop("aria-disabled", count <= 1);
+  dropdownElement.find("#increaseBtn").prop("aria-disabled", count >= 10);
 
-  
-    if (count <= 1) {
-            dropdownElement.find("#decreaseBtn").addClass('opacity-50 bg-gray-800');
-            dropdownElement.find("#decreaseBtn")[0].style.cursor = 'not-allowed';
-        } else {
-            dropdownElement.find("#decreaseBtn").removeClass('opacity-50 bg-gray-800');
-            dropdownElement.find("#decreaseBtn")[0].style.cursor = 'pointer'; 
-        }
+  if (count <= 1) {
+    dropdownElement.find("#decreaseBtn").addClass("opacity-50 bg-gray-800");
+    dropdownElement.find("#decreaseBtn")[0].style.cursor = "not-allowed";
+  } else {
+    dropdownElement.find("#decreaseBtn").removeClass("opacity-50 bg-gray-800");
+    dropdownElement.find("#decreaseBtn")[0].style.cursor = "pointer";
+  }
 
-    if (count >= 10) {
-            dropdownElement.find("#increaseBtn").addClass('opacity-50 bg-gray-800');
-            dropdownElement.find("#increaseBtn")[0].style.cursor = 'not-allowed';
-        } else {
-            dropdownElement.find("#increaseBtn").removeClass('opacity-50 bg-gray-800');
-            dropdownElement.find("#increaseBtn")[0].style.cursor = 'pointer'; 
-        }
-    }
+  if (count >= 10) {
+    dropdownElement.find("#increaseBtn").addClass("opacity-50 bg-gray-800");
+    dropdownElement.find("#increaseBtn")[0].style.cursor = "not-allowed";
+  } else {
+    dropdownElement.find("#increaseBtn").removeClass("opacity-50 bg-gray-800");
+    dropdownElement.find("#increaseBtn")[0].style.cursor = "pointer";
+  }
+}
 
+$(document).ready(function () {
+  dropdownElement = $("#second_people_dropdown");
+  const dropdown = new bootstrap.Dropdown(dropdownElement[0]);
 
+<<<<<<< HEAD
+  changCount();
+=======
 
 $(document).ready(function() {
     dropdownElement = $('#second_people_dropdown');
@@ -45,9 +49,41 @@ $(document).ready(function() {
     if (s_keyword) {
         $("#search-accommodation").val(s_keyword);
     }
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478
 
+  $("#decreaseBtn").click(function (event) {
+    count--;
     changCount();
+    console.log(count);
+  });
 
+<<<<<<< HEAD
+  $("#increaseBtn").on("click", (event) => {
+    count++;
+    changCount();
+    console.log(count);
+  });
+
+  dropdownElement.on("click", function (event) {
+    if (
+      $(!event.target).is("#decreaseBtn") &&
+      $(!event.target).is("#increaseBtn")
+    ) {
+      event.stopPropagation();
+      dropdown.hide();
+    }
+  });
+
+  dropdownElement.on("click", function (event) {
+    if (
+      $(event.target).is("#decreaseBtn") ||
+      $(event.target).is("#increaseBtn")
+    ) {
+      event.stopPropagation();
+      dropdown.show();
+    }
+  });
+=======
     $("#decreaseBtn").click(function(event){
         count--;
         changCount();
@@ -74,13 +110,25 @@ $(document).ready(function() {
             dropdown.show();
           }
     });
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478
 });
 
-const keywordInput = document.getElementById('search-accommodation');
-const dateInput = document.getElementById('date-range-picker-input');
-const peopleInput = document.getElementById('person_count2');
-const searchButton = document.getElementById('keyword_searchBtn');
+const keywordInput = document.getElementById("search-accommodation");
+const dateInput = document.getElementById("date-range-picker-input");
+const peopleInput = document.getElementById("person_count2");
+const searchButton = document.getElementById("keyword_searchBtn");
 
+<<<<<<< HEAD
+searchButton.addEventListener("click", function () {
+  sessionStorage.setItem("keyword", keywordInput.value);
+  sessionStorage.setItem("date", dateInput.value);
+  sessionStorage.setItem("people", peopleInput.innerText);
+  console.log(
+    sessionStorage.getItem("keyword"),
+    sessionStorage.getItem("date"),
+    sessionStorage.getItem("people")
+  );
+=======
 searchButton.addEventListener('click', function(){
     // 검색어, 날짜, 시작 날짜, 끝 날짜, 인원을 세션스토리지에 저장
     const dateRange = dateInput.value.split(' ~ ');
@@ -99,97 +147,103 @@ searchButton.addEventListener('click', function(){
     sessionStorage.setItem('people', peopleInput.innerText);
     console.log(sessionStorage.getItem('keyword'), sessionStorage.getItem('date'), sessionStorage.getItem('people'), sessionStorage.getItem('startDate'), sessionStorage.getItem('endDate'));
 
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478
 
-    recSearch();
+  recSearch();
 });
 
 let recSearches = [];
 
-document.addEventListener('click', (event) => {
-    const deleteBtn = event.target.closest('.delete-btn');
-    if (deleteBtn && deleteBtn.closest('#rec_search_content')) {
-        const indexRemove = parseInt(deleteBtn.dataset.index, 10); 
+document.addEventListener("click", (event) => {
+  const deleteBtn = event.target.closest(".delete-btn");
+  if (deleteBtn && deleteBtn.closest("#rec_search_content")) {
+    const indexRemove = parseInt(deleteBtn.dataset.index, 10);
 
-        recSearches.splice(indexRemove, 1);
-        sessionStorage.setItem('recSearches', JSON.stringify(recSearches));
-        
-        const listItemToRemove = deleteBtn.closest('#rec_search_table');
-            if (listItemToRemove) { 
-                listItemToRemove.remove(); 
-                if (listItemToRemove.nextElementSibling) { // nextElementSibling null 체크
-                    listItemToRemove.nextElementSibling.remove(); // <hr> 요소도 함께 제거
-                }
-            }
-        }
-    });
+    recSearches.splice(indexRemove, 1);
+    sessionStorage.setItem("recSearches", JSON.stringify(recSearches));
 
-    document.addEventListener('click',(event) => {
-        const allDelBtn = event.target.closest('#allDelBtn');
-        if (allDelBtn) {
-            const chk = confirm('정말 전부 삭제하시겠습니까?');
-            if (dd) {
-                recSearches = [];
-                sessionStorage.setItem('recSearches', JSON.stringify(recSearches));
-                const recSearchContent = document.getElementById('rec_search_content');
-                recSearchContent.innerHTML = '';
-            }
-        }
-    });
-    
-    window.addEventListener('load', () => {
-        const keyword = sessionStorage.getItem('keyword');
-    
-        if (keyword && keyword.trim().length > 0) {
-            recSearch();
-        }
-    });
-    
-
-function recSearch(){
-    const keyword = sessionStorage.getItem('keyword');
-    const date = sessionStorage.getItem('date');
-    const people = sessionStorage.getItem('people'); 
-    
-    if (!keyword || keyword.trim().length === 0) {
-        alert('검색어를 입력해주세요.');
-        return;
+    const listItemToRemove = deleteBtn.closest("#rec_search_table");
+    if (listItemToRemove) {
+      listItemToRemove.remove();
+      if (listItemToRemove.nextElementSibling) {
+        // nextElementSibling null 체크
+        listItemToRemove.nextElementSibling.remove(); // <hr> 요소도 함께 제거
+      }
     }
+  }
+});
 
-    const keywords = (keyword && date && people) ? `${keyword} ${date} ${people}` : null;
-    console.log(keywords);
+document.addEventListener("click", (event) => {
+  const allDelBtn = event.target.closest("#allDelBtn");
+  if (allDelBtn) {
+    const chk = confirm("정말 전부 삭제하시겠습니까?");
+    if (chk) {
+      recSearches = [];
+      sessionStorage.setItem("recSearches", JSON.stringify(recSearches));
+      const recSearchContent = document.getElementById("rec_search_content");
+      recSearchContent.innerHTML = "";
+    }
+  }
+});
 
-    let storedSearch = sessionStorage.getItem('recSearches');
-    recSearches = storedSearch ? JSON.parse(storedSearch) : [];
-   
-    const extractKeyword = (searchItem) => {
-        const parts = searchItem.split(/ (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /); 
-        return parts[0];
-    };
+window.addEventListener("load", () => {
+  const keyword = sessionStorage.getItem("keyword");
 
-    const existingKeywords = recSearches.map(extractKeyword);
+  if (keyword && keyword.trim().length > 0) {
+    recSearch();
+  }
+});
 
-        if (keywords && existingKeywords.includes(keyword)) { 
-        const indexToRemove = existingKeywords.indexOf(keyword);
-        recSearches.splice(indexToRemove, 1);
-        }
+function recSearch() {
+  const keyword = sessionStorage.getItem("keyword");
+  const date = sessionStorage.getItem("date");
+  const people = sessionStorage.getItem("people");
 
-        if (keywords) { 
-            recSearches.unshift(keywords); 
-        }
+  if (!keyword || keyword.trim().length === 0) {
+    alert("검색어를 입력해주세요.");
+    return;
+  }
 
-    recSearches = recSearches.slice(0, 5); 
-    sessionStorage.setItem('recSearches', JSON.stringify(recSearches)); 
-    
-    const recSearchContent = document.getElementById('rec_search_content');
-    recSearchContent.innerHTML = ''; 
+  const keywords =
+    keyword && date && people ? `${keyword} ${date} ${people}` : null;
+  console.log(keywords);
 
-        for (let i = 0; i < recSearches.length; i++) {
-            const parts = recSearches[i].split(/ (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /);
-            const keyword = parts[0];
-            const date = parts[1];
-            const people = parts[2];
-                if(keyword != null && date != null && people != null){
-                recSearchContent.innerHTML += `
+  let storedSearch = sessionStorage.getItem("recSearches");
+  recSearches = storedSearch ? JSON.parse(storedSearch) : [];
+
+  const extractKeyword = (searchItem) => {
+    const parts = searchItem.split(
+      / (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /
+    );
+    return parts[0];
+  };
+
+  const existingKeywords = recSearches.map(extractKeyword);
+
+  if (keywords && existingKeywords.includes(keyword)) {
+    const indexToRemove = existingKeywords.indexOf(keyword);
+    recSearches.splice(indexToRemove, 1);
+  }
+
+  if (keywords) {
+    recSearches.unshift(keywords);
+  }
+
+  recSearches = recSearches.slice(0, 5);
+  sessionStorage.setItem("recSearches", JSON.stringify(recSearches));
+
+  const recSearchContent = document.getElementById("rec_search_content");
+  recSearchContent.innerHTML = "";
+
+  for (let i = 0; i < recSearches.length; i++) {
+    const parts = recSearches[i].split(
+      / (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /
+    );
+    const keyword = parts[0];
+    const date = parts[1];
+    const people = parts[2];
+    if (keyword != null && date != null && people != null) {
+      recSearchContent.innerHTML += `
                 <div id="rec_search_table">
                     <li class="dropdown-item flex flex-row justify-between items-center"> 
                         <div>
@@ -205,7 +259,13 @@ function recSearch(){
                     <hr class="dropdown-divider my-2" /> 
                     </div>
                 `;
+<<<<<<< HEAD
+    }
+  }
+}
+=======
             }
 
         }
     }
+>>>>>>> 46ded66a241d70eb1542f7c28adb7d7b73b96478
