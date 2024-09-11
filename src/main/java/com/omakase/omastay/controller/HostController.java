@@ -1,5 +1,7 @@
 package com.omakase.omastay.controller;
 
+import com.omakase.omastay.dto.FacilitiesDTO;
+import com.omakase.omastay.service.FacilitiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.omakase.omastay.dto.AdminMemberDTO;
-import com.omakase.omastay.dto.custom.HostMypageDTO;
+
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.HostMypageService;
@@ -21,6 +23,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 
 
 @Controller
@@ -33,7 +36,10 @@ public class HostController {
 
     @Autowired
     private HostMypageService hostMypageService;
-    
+
+    @Autowired
+    private FacilitiesService facilitiesService;
+
     private final EmailService emailService;
 
     @Autowired
@@ -60,8 +66,17 @@ public class HostController {
     }
 
     @RequestMapping("/info")
-    public String hostinfo() {
-        return "host/host_info";
+    public ModelAndView hostinfo(){
+        System.out.println("숙소소개 컨트롤러 옴");
+        ModelAndView mv = new ModelAndView();
+
+        List<FacilitiesDTO> facilities = facilitiesService.all();
+
+        System.out.println("facilities:"+facilities);
+        mv.addObject("facilities", facilities);
+        mv.setViewName("host/host_info");
+
+        return mv;
     }
 
     @RequestMapping("/inquiry")

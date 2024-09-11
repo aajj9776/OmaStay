@@ -1,23 +1,22 @@
 package com.omakase.omastay.service;
 
+import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.custom.FilterDTO;
 import com.omakase.omastay.dto.custom.ResultAccommodationsDTO;
+import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.HostInfo;
-import com.omakase.omastay.entity.Reservation;
+import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.repository.FacilitiesRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
-import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.RoomInfoRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
 public class FacilitiesService {
     @Autowired
     private HostInfoRepository hostInfoRepository;
@@ -27,6 +26,16 @@ public class FacilitiesService {
 
     @Autowired
     private JPAQueryFactory queryFactory;
+
+    @Autowired
+    private FacilitiesRepository facilitiesRepository;
+
+    public List<FacilitiesDTO> all() {
+
+        List<Facilities> facilities = facilitiesRepository.findAll();
+
+        return FacilitiesMapper.INSTANCE.toFacilitiesDTOList(facilities);
+    }
 
     public List<ResultAccommodationsDTO> filteringAccommodations(FilterDTO filterDTO) {
 
