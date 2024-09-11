@@ -10,7 +10,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 public class GradeDTO {
-    private int id;
+    private Integer id;
     private String gCate;
     private String gReq;
     private String gSale;

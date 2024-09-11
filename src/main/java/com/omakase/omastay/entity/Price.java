@@ -18,18 +18,18 @@ public class Price {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pri_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
     private HostInfo hostInfo = new HostInfo();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ri_idx", referencedColumnName = "ri_idx")
+    @JoinColumn(name = "room_idx", referencedColumnName = "room_idx")
     private RoomInfo roomInfo = new RoomInfo();
 
     @Column(name = "regular_price", nullable = false)
-    private int regularPrice;
+    private Integer regularPrice;
 
     //성수기 가격 시작날짜 끝날짜
     @Embedded
@@ -40,7 +40,7 @@ public class Price {
     private SemiPeakVo semi = new SemiPeakVo();
 
     @Column(name = "peak_set", nullable = false)
-    private int peakSet;
+    private Integer peakSet;
 
     @Column(name = "pri_none", length = 100)
     private String priNone;

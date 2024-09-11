@@ -28,7 +28,7 @@ public class ReservationDTO {
 
     public ReservationDTO(Reservation reservation) {
         this.id = reservation.getId();
-        this.roomIdx = reservation.getRoomFacility() != null ? reservation.getRoomFacility().getId() : null;
+        this.roomIdx = reservation.getRoomInfo() != null ? reservation.getRoomInfo().getId() : null;
         this.memIdx = reservation.getMember() != null ? reservation.getMember().getId() : null;
         this.nonIdx = reservation.getNonMember() != null ? reservation.getNonMember().getId() : null;
         this.payIdx = reservation.getPayment() != null ? reservation.getPayment().getId() : null;

@@ -1,17 +1,15 @@
 package com.omakase.omastay.entity;
 
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.vo.FileImageNameVo;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @NoArgsConstructor
 @Getter
@@ -23,7 +21,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rev_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
@@ -46,10 +44,16 @@ public class Review {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "rev_status", nullable = false)
     private BooleanStatus revStatus;
+    
+    @Column(name = "rev_none", length = 100)
+    private String revNone;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "fName", column = @Column(name = "rev_fname", length = 200)),
+            @AttributeOverride(name = "oName", column = @Column(name = "rev_oname", length = 200))
+    })
+    private FileImageNameVo revFileImageNameVo = new FileImageNameVo();
 
     @Column(name = "`rev_ rating`")
     private Float revRating;
-
-    @Column(name = "rev_none", length = 100)
-    private String revNone;
 }

@@ -15,16 +15,16 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "reservation")
-@ToString(exclude = {"member", "roomFacility", "nonMember", "payment"})
+@ToString(exclude = {"member", "roomInfo", "nonMember", "payment"})
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "res_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_idx", referencedColumnName = "room_idx")
-    private RoomFacilities roomFacility = new RoomFacilities();
+    private RoomInfo roomInfo = new RoomInfo();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
@@ -54,10 +54,10 @@ public class Reservation {
     private StartEndVo startEndVo = new StartEndVo();
 
     @Column(name = "res_person", nullable = false)
-    private int resPerson;
+    private Integer resPerson;
 
     @Column(name = "res_price", nullable = false)
-    private int resPrice;
+    private Integer resPrice;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "res_status", nullable = false)

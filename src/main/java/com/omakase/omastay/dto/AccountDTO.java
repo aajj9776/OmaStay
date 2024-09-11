@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AccountDTO {
-    private int id;
+    private Integer id;
     private String acNum;
-    private int hidx;
+    private Integer hidx;
     private String acBank;
     private String acName;
     private String acNone;
@@ -26,7 +26,7 @@ public class AccountDTO {
 
 
     @QueryProjection
-    public AccountDTO(int id, String acNum, int hidx, String acBank, String acName, String acNone) {
+    public AccountDTO(Integer id, String acNum, Integer hidx, String acBank, String acName, String acNone) {
         this.id = id;
         this.acNum = acNum;
         this.hidx = hidx;

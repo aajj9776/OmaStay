@@ -20,14 +20,14 @@ public class ServiceService {
     @Autowired
     private ServiceRepository serviceRepository;
 
-    //  Get all the host notice
-    public List<ServiceDTO> getAllHostNotice(){   
-        List<com.omakase.omastay.entity.Service> hostNotice = serviceRepository.findBySCateAndSAuth(SCate.NOTICE, UserAuth.HOST, BooleanStatus.TRUE);
-
-        return ServiceMapper.INSTANCE.toServiceDTOList(hostNotice);
+    // 전체 게시글 가져오기
+    public List<ServiceDTO> getAllServices(SCate sCate, UserAuth sAuth) {
+        List<com.omakase.omastay.entity.Service> services = serviceRepository.findBySCateAndSAuth(sCate, sAuth, BooleanStatus.TRUE);
+        return ServiceMapper.INSTANCE.toServiceDTOList(services);
     }
     
-    public int deleteHostNotice(List<Integer> ids) {
+    // 게시글 삭제하기
+    public int deleteService(List<Integer> ids) {
         int[] idArray = new int[ids.size()];
         for (int i = 0; i < ids.size(); i++) {
             idArray[i] = ids.get(i);
@@ -37,59 +37,48 @@ public class ServiceService {
         return cnt;
     }
 
-    //게시판 저장
-    public void saveHostNotice(ServiceDTO serviceDTO) {
-
-        serviceDTO.setSCate(SCate.NOTICE);
-        serviceDTO.setSAuth(UserAuth.HOST);
+    // 게시글 저장
+    public void saveService(ServiceDTO serviceDTO) {
         serviceDTO.setSStatus(BooleanStatus.TRUE);
         serviceDTO.setSDate(LocalDateTime.now());
 
-        System.out.println(serviceDTO.getFileName().getFName());
-        System.out.println(serviceDTO.getFileName().getOName());
-
-        
         com.omakase.omastay.entity.Service service = ServiceMapper.INSTANCE.toService(serviceDTO);
-        System.out.println(service.getFileName().getFName());
-        System.out.println(service.getFileName().getOName());
-
 
         serviceRepository.save(service);
     }
 
-    public ServiceDTO getHostNotice(int id) {
+    // 게시글 id 값으로 serviceDTO 가져오기
+    public ServiceDTO getServices(int id) {
         com.omakase.omastay.entity.Service service = serviceRepository.findById(id).get();
         return ServiceMapper.INSTANCE.toServiceDTO(service);
     }
 
-    /*
-     * all
-     * ㅁㄴㅇ
-     * 2024-08-08 ~ 2024-09-03
-     */
-    public List<ServiceDTO> searchHostNotice(String type, String keyword, String date){
+    // 게시글 수정
+    public void modifyServices(ServiceDTO serviceDTO) {
+        com.omakase.omastay.entity.Service service = serviceRepository.findById(serviceDTO.getId()).get();
+        service.setSTitle(serviceDTO.getSTitle());
+        service.setSContent(serviceDTO.getSContent());
+        service.setSCate(serviceDTO.getSCate());
+        service.setFileName(serviceDTO.getFileName());
+
+        serviceRepository.save(service);
+    }
+
+    // 게시물 검색
+    public List<ServiceDTO> searchService(String type, String keyword, String date, UserAuth sAuth, SCate sCate){
         List<com.omakase.omastay.entity.Service> services;
         if(!date.isEmpty()){
             String[] date2 = date.split(" ~ ");
             String startDate = date2[0];
             String endDate = date2[1];
 
-            services = serviceRepository.searchHostNotice(type, keyword, startDate, endDate);
+            services = serviceRepository.searchServices(type, keyword, startDate, endDate, sAuth, sCate); 
         }else{
-            services = serviceRepository.searchHostNotice(type, keyword, null, null);
+            services = serviceRepository.searchServices(type, keyword, null, null, sAuth, sCate);
         }
 
-        
         return ServiceMapper.INSTANCE.toServiceDTOList(services);
     }
 
-    public void modifyHostNotice(ServiceDTO serviceDTO) {
-        com.omakase.omastay.entity.Service service = serviceRepository.findById(serviceDTO.getId()).get();
-        service.setSTitle(serviceDTO.getSTitle());
-        service.setSContent(serviceDTO.getSContent());
-        service.setFileName(serviceDTO.getFileName());
-
-        serviceRepository.save(service);
-    }
-
+    
 }

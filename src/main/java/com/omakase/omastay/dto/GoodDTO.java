@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class GoodDTO {
-    private int id;
-    private int revIdx;
-    private int memIdx;
+    private Integer id;
+    private Integer revIdx;
+    private Integer memIdx;
     private LocalDateTime goodDate;
     private BooleanStatus goodStatus;
     private String goodNone;
@@ -30,7 +30,7 @@ public class GoodDTO {
     }
 
     @QueryProjection
-    public GoodDTO(int id, int revIdx, int memIdx, LocalDateTime goodDate, BooleanStatus goodStatus, String goodNone) {
+    public GoodDTO(Integer id, Integer revIdx, Integer memIdx, LocalDateTime goodDate, BooleanStatus goodStatus, String goodNone) {
         this.id = id;
         this.revIdx = revIdx;
         this.memIdx = memIdx;

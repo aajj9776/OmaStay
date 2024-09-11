@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -37,7 +37,8 @@ spring:
           writetimeout: 5000
           encoding: UTF-8
     auth-code-expiration-millis: 180000
-  data: 
+  data:
+    # Redis aws에 설치함 컴포즈에 만들어야됨
     redis:
       host: 18.116.238.9
       port: 6379

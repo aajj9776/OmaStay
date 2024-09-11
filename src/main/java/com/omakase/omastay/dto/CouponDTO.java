@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CouponDTO {
-    private int id;
+    private Integer id;
     private String cpContent;
     private StartEndVo cpStartEnd = new StartEndVo();
     private String cpSale;
@@ -30,7 +30,7 @@ public class CouponDTO {
     }
 
     @QueryProjection
-    public CouponDTO(int id, String cpContent, StartEndVo cpStartEnd, String cpSale, CpCate cpCate, CpMethod cpMethod, String cpNone) {
+    public CouponDTO(Integer id, String cpContent, StartEndVo cpStartEnd, String cpSale, CpCate cpCate, CpMethod cpMethod, String cpNone) {
         this.id = id;
         this.cpContent = cpContent;
         this.cpStartEnd = cpStartEnd;
