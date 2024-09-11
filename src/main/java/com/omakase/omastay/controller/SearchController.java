@@ -3,6 +3,7 @@ package com.omakase.omastay.controller;
 import com.omakase.omastay.dto.custom.FilterDTO;
 import com.omakase.omastay.dto.custom.ResultAccommodationsDTO;
 import com.omakase.omastay.service.FacilitiesService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

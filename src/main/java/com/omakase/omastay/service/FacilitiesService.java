@@ -19,15 +19,8 @@ import java.util.Set;
 @Service
 @Transactional
 public class FacilitiesService {
-
-    @Autowired
-    private FacilitiesRepository facilitiesRepository;
-
     @Autowired
     private HostInfoRepository hostInfoRepository;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
 
     @Autowired
     private RoomInfoRepository roomInfoRepository;
@@ -35,23 +28,19 @@ public class FacilitiesService {
     @Autowired
     private JPAQueryFactory queryFactory;
 
-
     public List<ResultAccommodationsDTO> filteringAccommodations(FilterDTO filterDTO) {
 
         //1. 검색어 필터링(hostInfo에서 가져와야됨)
-        Set<HostInfo> keyword = hostInfoRepository.keywordFiltering(filterDTO.getKeyword());
+        List<Integer> keyword = hostInfoRepository.keywordFiltering(filterDTO.getKeyword());
 
         //2. 검색어의 해당하는 리스트중 해당 날짜 예약이 가능한 숙소만 필터링(reservation에서 가져와야됨)
-        Set<HostInfo> date = reservationRepository.dateFiltering(filterDTO.getStartDate(), filterDTO.getEndDate());
-
+        Set<Integer> date = roomInfoRepository.dateFiltering(filterDTO.getStartEndDay(), keyword);
 
         //3. 검색어 + 해당 날짜중 해당 인원이 들어갈 수 있는 숙소만 필터링(roomInfo에서 가져와야됨)
-        Set<HostInfo> person = roomInfoRepository.personFiltering(filterDTO.get());
+        Set<HostInfo> person = roomInfoRepository.personFiltering(filterDTO.getPerson(), date);
 
         //위의 3개의 조건은 And연산
         return null;
     }
-
-
 
 }

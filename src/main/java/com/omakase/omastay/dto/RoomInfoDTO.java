@@ -1,6 +1,7 @@
 package com.omakase.omastay.dto;
 
 import com.omakase.omastay.entity.RoomInfo;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class RoomInfoDTO {
     private String roomType;
     private Integer roomPerson;
     private String roomIntro;
-    private RoomStatus roomStatus;
+    private BooleanStatus roomStatus;
     private String roomNone;
 
     public RoomInfoDTO(RoomInfo roomInfo) {
@@ -30,7 +31,7 @@ public class RoomInfoDTO {
     }
 
     @QueryProjection
-    public RoomInfoDTO(Integer id, Integer hIdx, String roomName, String roomType, String riIntro, RoomStatus roomStatus, String roomNone, Integer roomPerson) {
+    public RoomInfoDTO(Integer id, Integer hIdx, String roomName, String roomType, String riIntro, BooleanStatus roomStatus, String roomNone, Integer roomPerson) {
         this.id = id;
         this.hIdx = hIdx;
         this.roomName = roomName;
