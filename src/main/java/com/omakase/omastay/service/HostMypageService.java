@@ -15,7 +15,6 @@ import com.omakase.omastay.entity.enumurate.HStep;
 import com.omakase.omastay.mapper.AccountMapper;
 import com.omakase.omastay.mapper.AdminMemberMapper;
 import com.omakase.omastay.mapper.HostInfoMapper;
-import com.omakase.omastay.mapper.HostMypageMapper;
 import com.omakase.omastay.entity.AdminMember;
 import com.omakase.omastay.repository.AccountRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
@@ -29,9 +28,6 @@ public class HostMypageService {
 
     @Autowired
     private HostInfoRepository hostInfoRepository;
-
-    @Autowired
-    private HostMypageMapper hostMypageMapper;
 
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
