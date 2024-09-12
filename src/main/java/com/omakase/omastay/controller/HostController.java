@@ -1,6 +1,7 @@
 package com.omakase.omastay.controller;
 
 import com.omakase.omastay.dto.FacilitiesDTO;
+import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.service.FacilitiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

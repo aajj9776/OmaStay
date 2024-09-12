@@ -6,7 +6,7 @@ public class ResultAccommodationsDTO {
     private String h_cate;
     private String hName;
     private Integer oneDayPrice; //평균 가격
-    private String f_name;
+    private String img_url;
     private float rating;
     private Integer reviewCount;
 }
