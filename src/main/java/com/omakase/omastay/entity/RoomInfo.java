@@ -1,5 +1,6 @@
 package com.omakase.omastay.entity;
 
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.RoomStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class RoomInfo {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "room_status", nullable = false)
-    private RoomStatus roomStatus;
+    private BooleanStatus roomStatus;
 
     @Column(name = "room_person", nullable = false)
     private int roomPerson;

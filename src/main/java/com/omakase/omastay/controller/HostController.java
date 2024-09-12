@@ -1,8 +1,7 @@
 package com.omakase.omastay.controller;
 
-import java.util.List;
-
-import org.apache.tomcat.util.http.parser.Host;
+import com.omakase.omastay.dto.FacilitiesDTO;
+import com.omakase.omastay.service.FacilitiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,22 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.omakase.omastay.dto.AccountDTO;
 import com.omakase.omastay.dto.AdminMemberDTO;
-import com.omakase.omastay.dto.FacilitiesDTO;
-import com.omakase.omastay.dto.HostInfoDTO;
-import com.omakase.omastay.dto.HostMypageDTO;
+
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
-import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.HostMypageService;
-import com.omakase.omastay.vo.HostContactInfoVo;
-import com.omakase.omastay.vo.HostOwnerInfoVo;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 
 
 @Controller
@@ -45,7 +39,7 @@ public class HostController {
 
     @Autowired
     private FacilitiesService facilitiesService;
-    
+
     private final EmailService emailService;
 
     @Autowired
@@ -286,5 +280,4 @@ public class HostController {
 
         return ResponseEntity.ok("success");
     }
-
 }

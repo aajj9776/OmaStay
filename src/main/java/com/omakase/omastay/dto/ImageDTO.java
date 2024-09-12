@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ImageDTO {
-    private int id;
-    private int rId;
-    private int hIdx;
+    private Integer id;
+    private Integer rId;
+    private Integer hIdx;
     private ImgCate imgCate;
     private FileImageNameVo imgName = new FileImageNameVo();
     private BooleanStatus imgStatus;
@@ -30,7 +30,7 @@ public class ImageDTO {
     }
 
     @QueryProjection
-    public ImageDTO(int id, int rId, int hIdx, ImgCate imgCate, FileImageNameVo imgName, BooleanStatus imgStatus, String imgNone) {
+    public ImageDTO(Integer id, Integer rId, Integer hIdx, ImgCate imgCate, FileImageNameVo imgName, BooleanStatus imgStatus, String imgNone) {
         this.id = id;
         this.rId = rId;
         this.hIdx = hIdx;
