@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +26,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.omakase.omastay.dto.CouponDTO;
+import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
+import com.omakase.omastay.service.CouponService;
+import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
+import com.omakase.omastay.vo.StartEndVo;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.ServletContext;
@@ -43,6 +52,12 @@ public class AdminController {
 
     @Autowired
     ServiceService ss;
+
+    @Autowired
+    CouponService cs;
+
+    @Autowired
+    IssuedCouponService ics;
 
     @Autowired
     private ServletContext application;
@@ -532,9 +547,80 @@ public class AdminController {
 
     /***************************** 회원 공지사항 *****************************/
 
+    /***************************** 쿠폰 *****************************/
+    // 쿠폰 리스트 select 후 쿠폰 관리로 이동
     @RequestMapping("/coupon")
-    public String coupon() {
-        return "admins/coupon";
+    public ModelAndView coupon() {
+        ModelAndView mv = new ModelAndView();
+
+        List<CouponDTO> list =  cs.getAllCoupons();
+        mv.addObject("list", list);
+        mv.setViewName("admins/coupon");
+        return mv;
+    }
+
+    // 쿠폰 발급 내역 리스트 가져오기
+    @RequestMapping("/coupon/history")
+    @ResponseBody
+    public Map<String, Object> coupon_history(@RequestParam("id") String id){
+        Map<String, Object> map = new HashMap<>();
+
+        int idx = Integer.parseInt(id);
+
+        List<IssuedCouponDTO> list = ics.getIssuedCouponsById(idx);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 쿠폰 등록 후 쿠폰 관리로 이동
+    @RequestMapping("/coupon/add")
+    public String coupon_add(CouponDTO cDto, @RequestParam("date") String date,
+                            @RequestParam(value = "selectGrade", required = false) String selectGrade,
+                            @RequestParam(value = "code", required = false) String code,
+                            @RequestParam(value = "count", required = false) Integer count)  {    
+        
+        // DateTimeFormatter를 사용하여 문자열을 LocalDate로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 날짜 형식에 맞게 패턴을 설정
+        LocalDate localDate = LocalDate.parse(date, formatter);
+
+        // LocalDateTime으로 변환하고 시간 부분을 23:59:59로 설정
+        LocalDateTime endDate = localDate.atTime(LocalTime.MAX);
+
+        StartEndVo tempDate = new StartEndVo();
+        tempDate.setStart(LocalDateTime.now());
+        tempDate.setEnd(endDate);
+                                
+        cDto.setCpStartEnd(tempDate);
+
+        System.out.println("cDto : " + cDto);
+        System.out.println("cDto : " + cDto.getCpStartEnd().getEnd());
+        System.out.println("selectGrade : " + selectGrade);
+        System.out.println("code : " + code);
+        System.out.println("count : " + count);
+        System.out.println("date : " + date);
+
+        int cnt;
+        switch(cDto.getCpMethod()){
+            case DESIGNATED:
+                cnt = cs.issueDesignatedCoupon(cDto, selectGrade);
+                break;
+            case SINGLE_USE:
+                cnt = cs.issueSingleUseCoupon(cDto, count);
+                break;
+            case MULTI_USE:
+                cnt = cs.issueMultiUseCoupon(cDto, code, count);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown coupon method: " + cDto.getCpMethod());
+        }
+        if(cnt < 1){
+            System.out.println("쿠폰 발급 실패");
+            return "error";
+        }
+        return "redirect:/admin/coupon";
     }
 
     @RequestMapping("/coupon_history")
@@ -542,10 +628,6 @@ public class AdminController {
         return "admins/modals/coupon_history";
     }
 
-    @RequestMapping("/add_coupon")
-    public String add_coupon() {
-        return "admins/modals/add_coupon";
-    }
 
     @RequestMapping("/point")
     public String point() {

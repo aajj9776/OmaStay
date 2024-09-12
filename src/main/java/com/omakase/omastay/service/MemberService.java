@@ -105,7 +105,7 @@ public class MemberService {
         if ("male".equalsIgnoreCase(genderString)) {
             gender = Gender.MAN;
         } else if ("female".equalsIgnoreCase(genderString)) {
-            gender = Gender.WOMEN;
+            gender = Gender.WOMAN;
         } else {
             throw new IllegalArgumentException("Invalid gender value: " + genderString);
         }
