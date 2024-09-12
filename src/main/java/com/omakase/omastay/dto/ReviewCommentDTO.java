@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class ReviewCommentDTO {
-    private int id;
-    private int revIdx;
+    private Integer id;
+    private Integer revIdx;
     private String rcComment;
     private LocalDateTime rcDate;
     private BooleanStatus rcStatus;
@@ -28,7 +28,7 @@ public class ReviewCommentDTO {
     }
 
     @QueryProjection
-    public ReviewCommentDTO(int id, int revIdx, String rcComment, LocalDateTime rcDate, BooleanStatus rcStatus, String rcNone) {
+    public ReviewCommentDTO(Integer id, Integer revIdx, String rcComment, LocalDateTime rcDate, BooleanStatus rcStatus, String rcNone) {
         this.id = id;
         this.revIdx = revIdx;
         this.rcComment = rcComment;

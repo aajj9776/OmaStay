@@ -23,6 +23,7 @@ public class AdminMember {
 
     //이메일, 비밀번호, 회원가입탈퇴 상태
     @Embedded
+    @Builder.Default
     private UserProfileVo adminProfile = new UserProfileVo();
 
     @Column(name = "ad_auth", nullable = false)

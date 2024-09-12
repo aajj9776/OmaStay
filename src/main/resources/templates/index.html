@@ -239,8 +239,9 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="/js/datepicker.js"></script>
 <script type="text/javascript" src="/js/countperson.js"></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function (){
         //세션스토리지의 값 searh_bar에 넣기
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
@@ -253,6 +254,7 @@
           $("#search-accommodation").focus();
           $("#search-accommodation").trigger("click");
         }
+
 
         /*--------------*/
 
@@ -385,7 +387,6 @@
         }
     }
 
-  
 
 </script>
 </body>

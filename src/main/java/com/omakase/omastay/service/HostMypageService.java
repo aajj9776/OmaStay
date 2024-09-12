@@ -30,8 +30,6 @@ public class HostMypageService {
     @Autowired
     private HostInfoRepository hostInfoRepository;
 
-    @Autowired
-    private HostMypageMapper hostMypageMapper;
 
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);

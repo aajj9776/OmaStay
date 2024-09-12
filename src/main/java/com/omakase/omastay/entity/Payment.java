@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "payment")
-@ToString(exclude = {"issuedCoupon", "poInteger"})
+@ToString(exclude = {"issuedCoupon", "point"})
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
