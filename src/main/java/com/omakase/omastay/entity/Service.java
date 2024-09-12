@@ -42,8 +42,8 @@ public class Service {
     //파일이름, 파일원본이름
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "fName", column = @Column(name = "s_fname", nullable = false, length = 500)),
-            @AttributeOverride(name = "oName", column = @Column(name = "s_oname", nullable = false, length = 500))
+            @AttributeOverride(name = "fName", column = @Column(name = "s_fname", length = 500)),
+            @AttributeOverride(name = "oName", column = @Column(name = "s_oname", length = 500))
     })
     private FileImageNameVo fileName = new FileImageNameVo();
 
