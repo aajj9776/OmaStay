@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.custom.CancelRequest;
 
 import org.springframework.http.MediaType;
@@ -21,7 +22,8 @@ public class PaymentController {
 
 
     @PostMapping("/cancel")
-    public ResponseEntity<String> cancelPayment(@RequestBody CancelRequest cancelRequest) {
+    public ResponseEntity<String> cancelPayment(@RequestBody CancelRequest cancelRequest, MemberDTO memberDTO) {
+      System.out.println(memberDTO.getId());
         String paymentKey = cancelRequest.getPaymentKey();
           // URL 생성 (UriComponentsBuilder 사용)
         String url = UriComponentsBuilder.fromHttpUrl("https://api.tosspayments.com/v1/payments/{paymentKey}/cancel")
@@ -41,7 +43,7 @@ public class PaymentController {
         // RestTemplate을 사용해 외부 API 호출
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
+        
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 

@@ -7,6 +7,7 @@ import com.omakase.omastay.entity.enumurate.Social;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.UserProfileVo;
 import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
