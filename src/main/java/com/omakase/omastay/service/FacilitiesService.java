@@ -50,7 +50,7 @@ public class FacilitiesService {
         //호스트 키값이랑 호텔 이름, x좌표, y좌표 가져오기
         Set<Tuple> hostInfos = roomInfoRepository.findHostIdsByRoomIds(roomIdxs);
 
-        //튀플에서 호스트 키값만 가져오기
+        //튜플에서 호스트 키값만 가져오기
         List<Integer> hostIds = roomInfoRepository.findHostIdsByRoomIds(roomIdxs).stream()
                 .map(tuple -> tuple.get(QRoomInfo.roomInfo.hostInfo.id))
                 .collect(Collectors.toList());
