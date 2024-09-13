@@ -29,7 +29,6 @@ import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +54,6 @@ public class HostController {
     private HttpSession session;
 
     private String upload = "/upload/host";
-
-    @Autowired
-    private ServletContext application;
 
     @Autowired
     private HttpServletRequest request;
