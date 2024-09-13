@@ -36,8 +36,8 @@ public class Image {
     //파일이름, 파일원본이름
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "fName", column = @Column(name = "f_name", nullable = false, length = 200)),
-            @AttributeOverride(name = "oName", column = @Column(name = "ori_name", nullable = false, length = 200))
+            @AttributeOverride(name = "fName", column = @Column(name = "f_name", length = 200)),
+            @AttributeOverride(name = "oName", column = @Column(name = "ori_name", length = 200))
     })
     private FileImageNameVo imgName = new FileImageNameVo();
 

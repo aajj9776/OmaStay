@@ -17,6 +17,7 @@ import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.repository.AccountRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 
+
 @Service
 public class HostMypageService {
 
@@ -25,7 +26,6 @@ public class HostMypageService {
 
     @Autowired
     private HostInfoRepository hostInfoRepository;
-
 
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
@@ -64,8 +64,6 @@ public class HostMypageService {
         Account account = null;
         if (hostInfo != null) {
             account = accountRepository.findByHostInfoId(hostInfo.getId());
-            System.out.println(account);
-            System.out.println(account.getHostInfo());
         }
 
         AccountDTO accountDTO = null;
@@ -75,6 +73,11 @@ public class HostMypageService {
             try {
                 accountDTO = AccountMapper.INSTANCE.toAccountDTO(account);
                 System.out.println(accountDTO);
+                if (account.getHostInfo() != null) {
+                    System.out.println(account.getHostInfo());
+                } else {
+                    System.out.println("HostInfo is null for the given account");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -83,7 +86,6 @@ public class HostMypageService {
         if (hostInfo != null) {
             try {
                 hostInfoDTO = HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
-                System.out.println(hostInfoDTO);
             } catch (Exception e) {
                 e.printStackTrace();
             }

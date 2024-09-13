@@ -9,7 +9,6 @@ import com.omakase.omastay.vo.HostContactInfoVo;
 import com.omakase.omastay.vo.HostOwnerInfoVo;
 import com.querydsl.core.annotations.QueryProjection;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -95,5 +94,17 @@ public class HostInfoDTO {
         this.hStep = hStep;
         this.hname = hname;
         this.hphone = hphone;
+    }
+
+    @QueryProjection
+    public HostInfoDTO(HCate hcate, AddressVo addressVo, String xaxis, String yaxis, String region, String directions, HostOwnerInfoVo hostOwnerInfo, HStep hstep)  {
+        this.hCate = hcate;
+        this.addressVo = addressVo;
+        this.xAxis = xaxis;
+        this.yAxis = yaxis;
+        this.region = region;
+        this.directions = directions;
+        this.hostOwnerInfo = hostOwnerInfo;
+        this.hStep = hstep;
     }
 }

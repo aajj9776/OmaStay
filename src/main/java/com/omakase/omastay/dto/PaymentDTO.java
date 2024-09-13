@@ -45,7 +45,8 @@ public class PaymentDTO {
     }
 
     @QueryProjection
-    public PaymentDTO(Integer id, Integer icIdx, Integer pIdx, PayStatus payStatus, String payMethod, String payContent, String nsalePrice, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String payNone) {
+
+    public PaymentDTO(Integer id, Integer icIdx, Integer pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String payNone) {
         this.id = id;
         this.icIdx = icIdx;
         this.pIdx = pIdx;
