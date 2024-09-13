@@ -1,15 +1,9 @@
 package com.omakase.omastay.controller;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 
-=======
-import com.omakase.omastay.dto.FacilitiesDTO;
-import com.omakase.omastay.dto.custom.HostMypageDTO;
-import com.omakase.omastay.service.FacilitiesService;
->>>>>>> 5c6296ac3e5b07c71c4d78c79fd1c90e219559c5
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
