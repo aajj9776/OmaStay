@@ -7,6 +7,9 @@
   layout:fragment="main"
 >
   <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <meta charset="utf-8" />
   </head>
   <body>
@@ -265,12 +268,61 @@
                   </div>
                   <!-- 예약 리스트 반복문 끝 -->
                 </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>예약 번호</th>
+                      <th>예약자 이름</th>
+                      <th>예약 가격</th>
+                      <th>예약 상태</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reservation-table-body"></tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </main>
     </div>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      function updateTableWithReservations(reservation) {
+        let tableBody = $("#reservation-table-body"); // 테이블 바디 선택
+        tableBody.empty(); // 기존 내용을 비움
+
+        // reservations 배열을 반복하며 각 데이터를 테이블에 추가
+        reservation.forEach(function (reservation) {
+          let row = `<tr>
+                 <td><a href="/mypage/reservation_check?id=${reservation.id}">${
+            reservation.resNum
+          }</a></td>
+                 <td>${reservation.resName}</td>
+                 <td>${reservation.resPrice.toLocaleString()} 원</td>
+                 <td>${reservation.resStatus}</td>
+               </tr>`;
+          tableBody.append(row); // 테이블에 행 추가
+        });
+      }
+      $(function () {
+        let accessToken = Cookies.get("accessToken");
+        let member = jwt_decode(accessToken);
+        let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
+        let payIdx;
+        let resIdx;
+
+        console.log(member);
+
+        // 예약 정보를 불러오는 AJAX 요청
+        $.ajax({
+          url: "/mypage/reservation", // 호출하고자 하는 URL
+          method: "POST",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(member), // member 객체를 JSON으로 변환해서 전송
+        }).done(function (res) {
+          updateTableWithReservations(res.reservation);
+        });
+      });
+    </script>
   </body>
 </html>

@@ -60,9 +60,11 @@ public class Review {
     })
     private FileImageNameVo revFileImageNameVo = new FileImageNameVo();
 
-    @Column(name = "`rev_ rating`")
+    @Column(name = "rev_ rating")
     private Float revRating;
 
 
 
+
 }
+
