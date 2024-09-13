@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <head>
     <meta charset="utf-8" />
   </head>
@@ -9,7 +10,7 @@
         >
         <div class="w-[1000px] justify-between items-center inline-flex">
           <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
-            <a th:href="@{/host/mypage}" class="w-[100px] h-[100px]">
+            <a id="mypage-link" onclick="javascript:location.href='/host/mypage'" class="w-[100px] h-[100px]" hx-get="/host/mypage" hx-target="#main-content" hx-push-url="true"  style="cursor: pointer;">
             <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/mypage.png" />
             </a>
             <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">마이페이지</div>
@@ -18,7 +19,7 @@
             <img class="self-stretch h-9" src="/image/host/line.png" />
           </div>
           <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
-            <a th:href="@{/host/info}" class="w-[100px] h-[100px]">
+            <a id="info-link" onclick="javascript:location.href='/host/info'" class="w-[100px] h-[100px]" hx-get="/host/info" hx-target="#main-content" hx-push-url="true"  style="cursor: pointer;">
             <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/info.png" />
             </a>
             <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">숙소 소개</div>
@@ -27,7 +28,7 @@
             <img class="self-stretch h-9" src="/image/host/line.png" />
           </div>
           <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
-            <a th:href="@{/host/rules}" class="w-[100px] h-[100px]">
+            <a id="rules-link" onclick="javascript:location.href='/host/rules'" class="w-[100px] h-[100px]" hx-get="/host/rules" hx-target="#main-content" hx-push-url="true"  style="cursor: pointer;">
             <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/rules.png" />
             </a>
             <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">이용규칙 관리</div>
@@ -36,12 +37,34 @@
             <img class="self-stretch h-9" src="/image/host/line.png" />
           </div>
           <div class="w-[150px] h-[175px] py-[15px] flex-col justify-center items-center gap-[15px] inline-flex">
-            <a th:href="@{/host/roomlist}" class="w-[100px] h-[100px]">
+            <a id="room-link" onclick="javascript:location.href='/host/roomlist'" class="w-[100px] h-[100px]" hx-get="/host/roomlist" hx-target="#main-content" hx-push-url="true"  style="cursor: pointer;">
             <img class="w-[100px] h-[100px] rounded-[30px] bg-[#D9D9D9]" src="/image/host/room.png" />
             </a>
             <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">객실 관리</div>
           </div>
         </div>
         </section>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+        <script>
+          $(document).ready(function() {
+            var currentPath = window.location.pathname;
+          
+            if (currentPath.includes("/host/mypage")) {
+              $("#mypage-link img").css("background-color", "#2196f3");
+            } else if (currentPath.includes("/host/info")) {
+              $("#info-link img").css("background-color", "#2196f3");
+            } else if (currentPath.includes("/host/rules")) {
+              $("#rules-link img").css("background-color", "#2196f3");
+            } else if (currentPath.includes("/host/roomlist")) {
+              $("#room-link img").css("background-color", "#2196f3");
+            } else if (currentPath.includes("/host/roomchange")) {
+              $("#room-link img").css("background-color", "#2196f3");
+            } else if (currentPath.includes("/host/roomreg")) {
+              $("#room-link img").css("background-color", "#2196f3");
+            }
+          });
+          </script>
   </body>
 </html>

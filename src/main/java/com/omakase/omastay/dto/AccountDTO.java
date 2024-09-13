@@ -8,15 +8,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AccountDTO {
-    private String id;
-    private int hIdx;
+    private Integer id;
+    private String acNum;
+    private Integer hIdx;
     private String acBank;
     private String acName;
     private String acNone;
 
 
     public AccountDTO(Account account) {
-        this.id = account.getId();
+        this.acNum = account.getAcNum();
         this.hIdx = account.getHostInfo() != null ? account.getHostInfo().getId() : null;
         this.acBank = account.getAcBank();
         this.acName = account.getAcName();
@@ -25,8 +26,9 @@ public class AccountDTO {
 
 
     @QueryProjection
-    public AccountDTO(String id, int hIdx, String acBank, String acName, String acNone) {
+    public AccountDTO(Integer id, String acNum, Integer hIdx, String acBank, String acName, String acNone) {
         this.id = id;
+        this.acNum = acNum;
         this.hIdx = hIdx;
         this.acBank = acBank;
         this.acName = acName;

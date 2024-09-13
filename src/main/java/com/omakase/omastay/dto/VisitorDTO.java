@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class VisitorDTO {
-    private int id;
+    private Integer id;
     private String vIp;
     private LocalDateTime vDate;
     private String vRefer;
@@ -29,7 +29,7 @@ public class VisitorDTO {
     }
 
     @QueryProjection
-    public VisitorDTO(int id, String vIp, String vRefer, String vAgent, String vNone, LocalDateTime vDate) {
+    public VisitorDTO(Integer id, String vIp, String vRefer, String vAgent, String vNone, LocalDateTime vDate) {
         this.id = id;
         this.vIp = vIp;
         this.vDate = vDate;

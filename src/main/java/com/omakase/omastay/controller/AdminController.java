@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.entity.enumurate.SCate;
+import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -101,7 +103,7 @@ public class AdminController {
     public Map<String, Object> host_notice_list() {
         Map<String, Object> map = new HashMap<>();
 
-        List<ServiceDTO> list = ss.getAllHostNotice();
+        List<ServiceDTO> list = ss.getAllServices(SCate.NOTICE, UserAuth.HOST);
 
         map.put("data", list);
 
@@ -118,9 +120,24 @@ public class AdminController {
 
         Map<String, Object> map = new HashMap<>();
 
-        List<ServiceDTO> list = ss.searchHostNotice(type, keyword, date);
+        List<ServiceDTO> list = ss.searchService(type, keyword, date, UserAuth.HOST, SCate.NOTICE);
 
         map.put("list", list);
+
+        return map;
+    }
+
+    // 게시물 삭제하기
+    @ResponseBody
+    @RequestMapping("/notice/delete")
+    public Map<String, Object> notice_delete(@RequestParam("ids") List<Integer> ids) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        int cnt = ss.deleteService(ids);
+        System.out.println("삭제 완료 개수 : " + cnt);
+
+        map.put("cnt", cnt);
 
         return map;
     }
@@ -133,80 +150,9 @@ public class AdminController {
         mv.setViewName("admins/host_notice_view");
         
         if (id != null) {
-            ServiceDTO sDto = ss.getHostNotice(Integer.parseInt(id));
+            ServiceDTO sDto = ss.getServices(Integer.parseInt(id));
             mv.addObject("sDto", sDto);
         }
-
-        return mv;
-    }
-
-    // 가맹점 공지사항 삭제하기
-    @ResponseBody
-    @RequestMapping("/host_notice/delete")
-    public Map<String, Object> host_notice_delete(@RequestParam("ids") List<Integer> ids) {
-
-        Map<String, Object> map = new HashMap<>();
-
-        int cnt = ss.deleteHostNotice(ids);
-
-        map.put("cnt", cnt);
-
-        return map;
-    }
-
-    // 가맹점 공지사항 글쓰기로 이동
-    @RequestMapping(value = "/host_notice/write", method = RequestMethod.GET)
-    public String host_notice_write() {
-
-        return "admins/host_notice_write";
-    }
-
-    // 가맹점 공지사항 글쓰기로 저장
-    @RequestMapping(value = "/host_notice/write", method = RequestMethod.POST)
-    public ModelAndView write(ServiceDTO sDto, @RequestParam("file") MultipartFile f) {
-        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
-        String c_type = request.getContentType();
-        if (c_type.startsWith("multipart")) {
-
-            String fname = null;
-            if (f != null && f.getSize() > 0) {
-                System.out.println("되냐?????????????????????");
-                String realPath = application.getRealPath(upload);
-
-                fname = f.getOriginalFilename();
-                System.out.println("fname : " + fname);
-                FileImageNameVo fvo = new FileImageNameVo();
-                fvo.setOName(fname);
-
-                fname = FileRenameUtil.checkSameFileName(fname, realPath);
-                System.out.println("fname : " + fname);
-
-                try {
-                    File uploadDir = new File(realPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    // 파일 업로드(upload폴더에 저장)
-                    File dest = new File(uploadDir, fname);
-                    f.transferTo(dest);
-
-                    fvo.setFName(fname);
-
-                    sDto.setFileName(fvo);
-                    System.out.println("fvo : " + fvo.getFName());
-                    System.out.println("fvo : " + fvo.getOName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // vo를 DAO에게 전달하여 DB에 저장하도록 한다.
-            ss.saveHostNotice(sDto);
-        }
-
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("redirect:/admin/host_notice");
 
         return mv;
     }
@@ -217,8 +163,9 @@ public class AdminController {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admins/host_notice_modify");
+
         if (id != null) {
-            ServiceDTO sDto = ss.getHostNotice(Integer.parseInt(id));
+            ServiceDTO sDto = ss.getServices(Integer.parseInt(id));
             mv.addObject("sDto", sDto);
         }
 
@@ -227,13 +174,9 @@ public class AdminController {
 
     // 가맹점 공지사항 수정하기로 저장
     @RequestMapping(value = "/host_notice/modify", method=RequestMethod.POST)
-    public String requestMethodName(ServiceDTO modified, @RequestParam("file") MultipartFile f, @RequestParam("selectedFile") String selectedFile) {
-        
-        System.out.println("modified : " + modified);
-        System.out.println("f : " + f); 
-        System.out.println("selectedFile : " + selectedFile);
-
-        ServiceDTO sDto = ss.getHostNotice(modified.getId());
+    public String host_notice_modify_save(ServiceDTO modified, @RequestParam("file") MultipartFile f, @RequestParam("selectedFile") String selectedFile) {
+    
+        ServiceDTO sDto = ss.getServices(modified.getId());
         
         // 해당 id에 대해 modified 객체의 값으로 수정한다.
         sDto.setSTitle(modified.getSTitle());
@@ -246,6 +189,7 @@ public class AdminController {
             FileImageNameVo fvo = new FileImageNameVo();
             fvo.setOName(fname);
             fname = FileRenameUtil.checkSameFileName(fname, realPath);
+            fvo.setFName(fname);
             try {
                 File uploadDir = new File(realPath);
                 if (!uploadDir.exists()) {
@@ -253,9 +197,7 @@ public class AdminController {
                 }
                 File dest = new File(uploadDir, fname);
                 f.transferTo(dest);
-                fvo.setFName(fname);
                 sDto.setFileName(fvo);
-
 
                 //ss에서 업데이트 하기
             } catch (Exception e) {
@@ -271,50 +213,92 @@ public class AdminController {
             // 2) 파일이 계속 유지되는 경우 -> f == null fileName은 있는 경우
         }
 
-        ss.modifyHostNotice(sDto); // 업데이트: sDto에는 수정된 값이 들어있음
-
-        
+        ss.modifyServices(sDto); // 업데이트: sDto에는 수정된 값이 들어있음
 
         return "redirect:/admin/host_notice/view?id=" + sDto.getId();
     }
     
+    // 가맹점 공지사항 글쓰기로 이동
+    @RequestMapping(value = "/host_notice/write", method = RequestMethod.GET)
+    public String host_notice_write() {
 
-    // 가맹점 공지사항 글쓰기 이미지 첨부
+        return "admins/host_notice_write";
+    }
+
+    // 가맹점 공지사항 글쓰기로 저장
+    @RequestMapping(value = "/host_notice/write", method = RequestMethod.POST)
+    public ModelAndView host_notice_write_save(ServiceDTO sDto, @RequestParam("file") MultipartFile f) {
+        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
+        String c_type = request.getContentType();
+        if (c_type.startsWith("multipart")) {
+
+            String fname = null;
+            if (f != null && f.getSize() > 0) {
+                String realPath = application.getRealPath(upload);
+
+                fname = f.getOriginalFilename();
+                FileImageNameVo fvo = new FileImageNameVo();
+                fvo.setOName(fname);
+                fname = FileRenameUtil.checkSameFileName(fname, realPath);
+                fvo.setFName(fname);
+
+                try {
+                    File uploadDir = new File(realPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    // 파일 업로드(upload폴더에 저장)
+                    File dest = new File(uploadDir, fname);
+                    f.transferTo(dest);
+
+                    sDto.setFileName(fvo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            sDto.setSCate(SCate.NOTICE);
+            sDto.setSAuth(UserAuth.HOST);
+
+            ss.saveService(sDto);
+        }
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:/admin/host_notice");
+
+        return mv;
+    }
+    /***************************** 가맹점 공지사항 *****************************/
+
+    // 이미지 첨부
     @RequestMapping(value = "/saveImg", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> saveImg(@RequestParam("s_file") MultipartFile f) throws java.io.IOException {
-        ;
+
         // 반환객체 생성
         Map<String, String> map = new HashMap<String, String>();
+        String fname = null;
 
-        if (f.getSize() > 0) {
-            // 파일이 있는 경우
-            // 파일을 저장할 위치를 절대경로로 만들자!
-            // String temp = application.getRealPath("/");
-            // //C:\Users\20191\AppData\Local\Temp\tomcat-docbase.9090.14372696236669970848\
-            // System.out.println("temp : " + temp);
-            String realPath = application.getRealPath(upload);
+        if (f.getSize() > 0) { 
 
-            // //전달된 파일을 저장한다.
-            // try {
-            // //파일올리기
-            // f.transferTo(new File(realPath, f.getOriginalFilename()));
-            // map.put("fname", f.getOriginalFilename());
-            // } catch (Exception e) {
-            // e.printStackTrace();
-            // }
+            String realPath = application.getRealPath(upload); //실행되는 tomcat 서버의 경로
 
-            try { // src/main/resources/static 디렉토리의 파일은 /
-                  // src/main/resources/static/upload/admin 경로를 가져옵니다.
+            fname = f.getOriginalFilename();
+            fname = FileRenameUtil.checkSameFileName(fname, realPath);
+
+            try { 
                 File uploadDir = new File(realPath);
+
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();
                 }
 
                 // 전달된 파일을 저장합니다.
-                File dest = new File(uploadDir, f.getOriginalFilename());
+                File dest = new File(uploadDir, fname);
                 f.transferTo(dest);
-                map.put("fname", f.getOriginalFilename());
+                map.put("fname", fname);
+
             } catch (IOException e) {
                 e.printStackTrace();
                 map.put("error", "File upload failed");
@@ -322,24 +306,18 @@ public class AdminController {
         } else {
             map.put("error", "File is empty");
         }
-        // 현재 파일이 저장된 서버경로를 문자열로 만들자!
-        // 예) localhost:8080/editor/editor_img/test.png
-        // String c_path = application.getContextPath();
-        // System.out.println("c_path : " + c_path);
-        // map.put("url", c_path+"/resources/static/upload/admin");
 
-        map.put("url", upload + f.getOriginalFilename());
+        map.put("url", upload + System.getProperty("file.separator") + fname);
 
-        return map;// 요청한 곳으로 보내진다. 이때
-        // JSON으로 보내기 위해 현재 메서드 위에ResponseBody를 지정한다.
+        return map;
     }
 
+    // 파일 다운로드
     @RequestMapping(value = "/fileDownload", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<InputStreamResource> fileDownload(@RequestParam("fName") String fName)
             throws FileNotFoundException, UnsupportedEncodingException {
 
-        // dir은 파일이 저장된 위치를 의미한다. 이것을 절대경로화 시키자!
         String realPath = application.getRealPath(upload);
 
         // 전체경로를 만들어서 File객체 생성
@@ -368,8 +346,6 @@ public class AdminController {
 
     
 
-    /***************************** 가맹점 공지사항 *****************************/
-
     @RequestMapping("/host_inquiry")
     public String host_inquiry() {
         return "admins/host_inquiry";
@@ -385,40 +361,176 @@ public class AdminController {
         return "admins/member";
     }
 
+
+    /***************************** 회원 공지사항 *****************************/
+
+     // 회원 공지사항 리스트로 이동
     @RequestMapping("/user_notice")
     public String user_notice() {
         return "admins/user_notice";
     }
 
-    @RequestMapping("/user_notice_write")
+    // 회원 공지사항 전체 리스트 가져오기
+    @RequestMapping("/user_notice/getList")
+    @ResponseBody
+    public Map<String, Object> user_notice_list() {
+        Map<String, Object> map = new HashMap<>();
+
+        List<ServiceDTO> list = ss.getAllServices(null, UserAuth.USER);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 회원 공지사항 검색하기
+    @RequestMapping("/user_notice/search")
+    @ResponseBody
+    public Map<String, Object> user_notice_search(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "date", required = false) String date,
+            @RequestParam(value = "noticeType", required = false) SCate noticeType) {
+
+        System.out.println("noticeType : " + noticeType);
+        Map<String, Object> map = new HashMap<>();
+
+        List<ServiceDTO> list = ss.searchService(type, keyword, date, UserAuth.USER, noticeType);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 가맹점 공지사항 세부 조회
+    @RequestMapping(value = "/user_notice/view", method = RequestMethod.GET)
+    public ModelAndView user_notice_detail(@RequestParam("id") String id) {
+        ServiceDTO sDto = null;
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admins/user_notice_view");
+        
+        if (id != null) {
+            sDto = ss.getServices(Integer.parseInt(id));
+            mv.addObject("sDto", sDto);
+        }
+        
+        return mv;
+    }
+
+    // 회원 공지사항 수정하기
+    @RequestMapping(value = "/user_notice/modify", method = RequestMethod.GET)
+    public ModelAndView user_notice_modify(@RequestParam("id") String id) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admins/user_notice_modify");
+
+        if (id != null) {
+            ServiceDTO sDto = ss.getServices(Integer.parseInt(id));
+            mv.addObject("sDto", sDto);
+        }
+
+        return mv;
+    }
+
+    // 회원 공지사항 수정하기로 저장
+    @RequestMapping(value = "/user_notice/modify", method=RequestMethod.POST)
+    public String user_notice_modify_save(ServiceDTO modified, @RequestParam("file") MultipartFile f, @RequestParam("selectedFile") String selectedFile) {
+        System.out.println("modified.getSCate() : "+modified.getSCate());
+        ServiceDTO sDto = ss.getServices(modified.getId());
+        
+        // 해당 id에 대해 modified 객체의 값으로 수정한다.
+        sDto.setSTitle(modified.getSTitle());
+        sDto.setSContent(modified.getSContent());
+        sDto.setSCate(modified.getSCate());
+
+        // 파일이 수정되었을 경우
+        if(f.getSize() > 0) {
+            String realPath = application.getRealPath(upload);
+            String fname = f.getOriginalFilename();
+            FileImageNameVo fvo = new FileImageNameVo();
+            fvo.setOName(fname);
+            fname = FileRenameUtil.checkSameFileName(fname, realPath);
+            fvo.setFName(fname);
+            try {
+                File uploadDir = new File(realPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+                File dest = new File(uploadDir, fname);
+                f.transferTo(dest);
+                sDto.setFileName(fvo);
+
+                //ss에서 업데이트 하기
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(selectedFile.length()<1 && sDto.getFileName() != null) { //파일이 있었는데 삭제된 경우 -> fileName을 null로 바꾸고 업데이트
+            //파일이 있었는데 삭제된 경우 -> fileName을 null로 바꾸고 업데이트
+            sDto.setFileName(null);
+
+        } else {
+            // 그냥 title이랑 content만 업데이트하는 경우
+            // 1) 파일이 원래 없었고 file name도 nulll일때
+            // 2) 파일이 계속 유지되는 경우 -> f == null fileName은 있는 경우
+        }
+
+        ss.modifyServices(sDto); // 업데이트: sDto에는 수정된 값이 들어있음
+
+        return "redirect:/admin/user_notice/view?id=" + sDto.getId();
+    }
+    
+    // 회원 공지사항 글쓰기로 이동
+    @RequestMapping(value = "/user_notice/write", method = RequestMethod.GET)
     public String user_notice_write() {
+
         return "admins/user_notice_write";
     }
 
-    @RequestMapping("/user_event")
-    public String user_event() {
-        return "admins/user_event";
+    // 회원 공지사항 글쓰기로 저장
+    @RequestMapping(value = "/user_notice/write", method = RequestMethod.POST)
+    public ModelAndView user_notice_write_save(ServiceDTO sDto, @RequestParam("file") MultipartFile f) {
+        System.out.println("modified.getSCate() : "+sDto.getSCate());
+
+        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
+        String c_type = request.getContentType();
+        if (c_type.startsWith("multipart")) {
+
+            String fname = null;
+            if (f != null && f.getSize() > 0) {
+                String realPath = application.getRealPath(upload);
+
+                fname = f.getOriginalFilename();
+                FileImageNameVo fvo = new FileImageNameVo();
+                fvo.setOName(fname);
+                fname = FileRenameUtil.checkSameFileName(fname, realPath);
+                fvo.setFName(fname);
+
+                try {
+                    File uploadDir = new File(realPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    // 파일 업로드(upload폴더에 저장)
+                    File dest = new File(uploadDir, fname);
+                    f.transferTo(dest);
+
+                    sDto.setFileName(fvo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            sDto.setSAuth(UserAuth.USER);
+            ss.saveService(sDto);
+        }
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:/admin/user_notice");
+
+        return mv;
     }
 
-    @RequestMapping("/user_event_write")
-    public String user_event_write() {
-        return "admins/user_event_write";
-    }
-
-    @RequestMapping("/user_qna")
-    public String user_qna() {
-        return "admins/user_qna";
-    }
-
-    @RequestMapping("/user_qna_write")
-    public String user_qna_write() {
-        return "admins/user_qna_write";
-    }
-
-    @RequestMapping("/grade")
-    public String grade() {
-        return "admins/grade";
-    }
+    /***************************** 회원 공지사항 *****************************/
 
     @RequestMapping("/coupon")
     public String coupon() {

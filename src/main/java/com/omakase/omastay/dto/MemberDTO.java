@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class MemberDTO {
-    private int id;
-    private int gIdx;
+    private Integer id;
+    private Integer gIdx;
     private UserProfileVo memberProfile = new UserProfileVo();
     private String memPhone;
     private String memName;
@@ -46,9 +46,9 @@ public class MemberDTO {
         this.refreshToken = member.getRefreshToken();
         this.memNone = member.getMemNone();
     }
-    //일단 만듬
+
     @QueryProjection
-    public MemberDTO(int id, int gIdx, UserProfileVo memberProfile, String memPhone, String memName, BooleanStatus memEmailCheck, String memBirth, LocalDateTime memJoinDate, Social memSocial, AddressVo addressVo, Gender memGender, String accessToken, String refreshToken, String memNone) {
+    public MemberDTO(Integer id, Integer gIdx, UserProfileVo memberProfile, String memPhone, String memName, BooleanStatus memEmailCheck, String memBirth, LocalDateTime memJoinDate, Social memSocial, AddressVo addressVo, Gender memGender, String accessToken, String refreshToken, String memNone) {
         this.id = id;
         this.gIdx = gIdx;
         this.memberProfile = memberProfile;

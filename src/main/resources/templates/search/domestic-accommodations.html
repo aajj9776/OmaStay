@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{layout/search_main}"
-      layout:fragment="search"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
 <head>
-    <meta charset="utf-8"/></head>
+    <meta charset="utf-8"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
     <link rel="stylesheet" href="/css/component/slider.css">
+</head>
 <body>
 <div
-        class="w-full relative bg-[#fff] overflow-y-auto flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[100px] box-border leading-[normal] tracking-[normal]"
+        class="w-full relative bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[100px] box-border leading-[normal] tracking-[normal]"
 >
     <main
             class="self-stretch flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full"
@@ -90,8 +91,8 @@
                                     <ul class="dropdown-menu">
                                         <li value="rating"><p class="dropdown-item">평점높은순</p></li>
                                         <li value="review"><p class="dropdown-item">리뷰많은순</p></li>
-                                        <li value="lowprice"><p class="dropdown-item">낮은가격순</p></li>
-                                        <li value="highprice"><p class="dropdown-item">높은가격순</p></li>
+                                        <li value="lowPrice"><p class="dropdown-item">낮은가격순</p></li>
+                                        <li value="highPrice"><p class="dropdown-item">높은가격순</p></li>
                                     </ul>
                                 </div>
                         </div>
@@ -440,36 +441,33 @@
         src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH"></script>
 <script src="/js/countperson.js"></script>
 <script>
-    let hCate
+    let hCate;
     let f_idx = [];
-    // 필터 버튼 값 변경
+
     $(document).ready(function () {
+        initializeSlider('main');  // 메인 슬라���더 초기화
+        initializeFilters('main'); // 초기 필터 상태 설정
+
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
             $("#person_count2").val(s_count);
         }
 
+        // 초기 드롭다운 메뉴 설정
         $("#dropdown-filter-button").text("평점높은순");
         $("#dropdown-filter-button").val("rating");
-        initializeSlider('main');  // 메인 슬라이더 초기화
 
-        // 드롭다운 메뉴 항목 클릭 시 이벤트 핸들러
+        // 드롭다운 메뉴 클릭 핸들러
         $('#dropdown-filter .dropdown-item').on('click', function () {
-            // 클릭된 항목의 텍스트와 값을 가져옴
             var selectedText = $(this).text();
-            var selectedValue = $(this).parent().attr('value');
+            var selectedValue = $(this).attr('value');
 
-            // 버튼의 텍스트와 값을 변경
             $('#dropdown-filter-button').text(selectedText);
             $('#dropdown-filter-button').val(selectedValue);
-
-            // 변경된 값 콘솔에 출력 (디버깅용)
-            console.log('dropdownFilter', selectedValue);
+            handleFilter('main'); // 필터 변경 시 상태 저장
         });
 
-
-
-        /*시설 필터 버튼 색 바꾸기*/
+        // 시설 필터 버튼 클릭 이벤트 핸들러
         const btns = document.querySelectorAll('[id^="f_idx"]');
         btns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -478,18 +476,11 @@
                     btn.classList.remove('f_idx');
                 } else {
                     btn.classList.add('bg-gray-300');
-                    //나중에 필터링할때 쓸거임
                     btn.classList.add('f_idx');
                 }
-                handleFilter();
+                handleFilter('main'); // 필터 변경 시 상태 저장
             });
         });
-
-
-        document.getElementById('all').checked = true;
-        hCate = document.getElementById('all').value;
-
-        console.log(hCate);
     });
 
     // 슬라이더 초기화 함수
@@ -502,6 +493,7 @@
         if (sliderElement.noUiSlider) {
             sliderElement.noUiSlider.destroy();
         }
+
         noUiSlider.create(sliderElement, {
             start: [0, 500000],
             connect: true,
@@ -518,12 +510,11 @@
             snap: true // 스냅 기능 활성화
         });
 
-        // 슬라이더 출력 값 띄우는 함수
         sliderElement.noUiSlider.on('update', function (values, handle) {
             var startValue = parseInt(values[0]);
             var endValue = parseInt(values[1]);
 
-            if (endValue === 500000){
+            if (endValue === 500000) {
                 valueElement.innerText = startValue + '원 - ' + '500,000원 이상';
             } else {
                 valueElement.innerText = startValue + '원 - ' + endValue + '원 미만';
@@ -531,19 +522,16 @@
 
             startInput.value = startValue;
             endInput.value = endValue;
-
-            /*handleFilter();*/
         });
 
-
-
-        //초기 필터 상태 설정
-        handleFilter();
+        // 초기 필터 상태 설정
+        handleFilter(identifier);
     }
 
-
-    // 지도 보기 버튼 클릭 시 지도 출력
+    // 모달 창 열기
     function showmap() {
+        copyFilter('modal');
+
         $("#search_bar").css("display", "none");
         $("#main-filter").css("display", "none");
         $("#searchbar").css("display", "none");
@@ -552,12 +540,10 @@
         $("footer").css("display", "none");
         loadTmap();
 
-        // 모달 슬라이더 초기화
-        initializeSlider('modal');
-        initializeFilters('modal');
+        initializeSlider('modal'); // 모달 슬라이더 초기화
     }
 
-    // 지도 출력 함수
+    // 모달 창 닫기
     $("#modal_close").click(function () {
         $("#search_bar").css("display", "flex");
         $("#main-filter").css("display", "flex");
@@ -566,177 +552,223 @@
         $("body").css("overflow", "auto");
         $("footer").css("display", "flex");
 
-        // 메인 슬라이더 재초기화
-        initializeSlider('main');
-        initializeFilters('main');
+        copyFilter('main');
     });
 
-    /*----------------------티맵 관련 스크립트------------------------*/
+    // 메인 필터를 모달 필터로 복사
+    function copyFilter(subject) {
+        const facilities = JSON.parse(sessionStorage.getItem('facilities') || '[]');
+        const selectedHCate = sessionStorage.getItem('hCate');
+        const startPrice = sessionStorage.getItem('startPrice');
+        const endPrice = sessionStorage.getItem('endPrice');
+
+        console.log(facilities, selectedHCate, startPrice, endPrice + "되냐?");
+
+        // 모달 필터 초기값 설정
+        initializeFilters(subject, facilities, selectedHCate, startPrice, endPrice);
+    }
+
+    // 필터 초기화 함수
+    function initializeFilters(identifier, facilities = null, hCate = null, startPrice = null, endPrice = null) {
+        const isMain = (identifier === 'main');
+
+        if (!facilities) {
+            facilities = isMain ? JSON.parse(sessionStorage.getItem('facilities') || '[]') : [];
+        }
+        if (!hCate) {
+            hCate = isMain ? sessionStorage.getItem('hCate') : null;
+            console.log("하이" + hCate);
+        }
+        if (!startPrice) {
+            startPrice = isMain ? sessionStorage.getItem('startPrice') : null;
+        }
+        if (!endPrice) {
+            endPrice = isMain ? sessionStorage.getItem('endPrice') : null;
+        }
+
+        const prefix = identifier === 'modal' ? '#modal ' : '';
+
+        // 시설 필터 초기화
+        const f_idxElements = document.querySelectorAll(`${prefix}button[name="f_idx"]`);
+        f_idxElements.forEach(elem => {
+            elem.classList.remove('bg-gray-300');
+        });
+
+        // 숙소 유형 필터 초기화
+        const hCateElements = document.querySelectorAll(`${prefix}input[name="hCate"]`);
+        hCateElements.forEach(elem => {
+            elem.checked = false;
+        });
+
+        // 시설 필터 설정
+        if (Array.isArray(facilities)) {
+            facilities.forEach(facility => {
+                const element = document.querySelector(`${prefix}button[name="f_idx"][value="${facility}"]`);
+                if (element) {
+                    element.classList.add('bg-gray-300');
+                }
+            });
+        }
+
+        // 카테고리 필터 설정
+        if (hCate) {
+            const hCateElement = document.querySelector(`${prefix}input[name="hCate"][value="${hCate}"]`);
+            console.log(hCateElement);
+            if (hCateElement) {
+                hCateElement.checked = true;
+            }
+        } else if (isMain) {
+            const defaultAllElement = document.querySelector(`${prefix}input[name="hCate"][value="all"]`);
+            if (defaultAllElement) {
+                defaultAllElement.checked = true;
+            }
+        }
+
+        // 가격 필터 설정
+        if (startPrice) {
+            const startPriceElement = document.querySelector(`${prefix}#slider-start-${identifier}`);
+            if (startPriceElement) {
+                startPriceElement.value = startPrice;
+            }
+        }
+
+        if (endPrice) {
+            const endPriceElement = document.querySelector(`${prefix}#slider-end-${identifier}`);
+            if (endPriceElement) {
+                endPriceElement.value = endPrice;
+            }
+        }
+    }
+
+    // 필터 상태 저장 함수
+    function handleFilter(identifier) {
+        console.log(identifier)
+        const isMain = (identifier === 'main');
+        const prefix = isMain ? '' : '#modal '; // 모달 창에서만 사용되는 접두사
+
+        const f_idxElements = document.querySelectorAll(`${prefix}.f_idx`);
+        const facilities = Array.from(f_idxElements, elem => elem.value);
+
+        const hCateElement = document.querySelector(`${prefix}input[name="hCate"]:checked`);
+        let hCate = hCateElement ? hCateElement.value : (isMain ? "all" : null);
+
+        let startPriceElement = document.getElementById(`slider-start-${identifier}`);
+        let endPriceElement = document.getElementById(`slider-end-${identifier}`);
+        let startPrice = startPriceElement ? startPriceElement.value : null;
+        let endPrice = endPriceElement ? endPriceElement.value : null;
+
+        let keyword = sessionStorage.getItem('keyword');
+        let startDay = sessionStorage.getItem('startDate');
+        let endDay = sessionStorage.getItem('endDate');
+        let person = sessionStorage.getItem('people');
+
+        let filter = document.getElementById('dropdown-filter-button').value;
+
+        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter);
+
+        // 필터 상태를 세션 스토리지에 저장 (메인 페이지에서만)
+        if (isMain) {
+            sessionStorage.setItem('facilities', JSON.stringify(facilities));
+            sessionStorage.setItem('hCate', hCate);
+            sessionStorage.setItem('startPrice', startPrice);
+            sessionStorage.setItem('endPrice', endPrice);
+        }
+
+        //iso-8601 형식으로 변환
+        if (startDay) {
+            startDay = new Date(startDay).toISOString()
+        }
+        if (endDay) {
+            endDay = new Date(endDay).toISOString()
+        }
+
+        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter, person + "되냐?");
+
+        $.ajax({
+            type: "post",
+            url: "/search/filtering",
+            contentType: "application/json; charset=utf-8",  // JSON 형식으로 전송
+            data: JSON.stringify({
+                facilities: facilities,
+                hCate: hCate,
+                startPrice: startPrice,
+                endPrice: endPrice,
+                person: person,
+                keyword: keyword,
+                startEndDay: {
+                    start: startDay,
+                    end: endDay
+                },
+                filter: filter
+            }),
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    }
+
+    // 티맵 초기화
     var markers = [];
     var map;
 
-    // 티맵 호출 함수
     function initTmap() {
         if (!map) {
             map = new Tmapv2.Map("tmap", {
                 center: new Tmapv2.LatLng(37.56520450, 126.98702028),
-                width: "100%", // 지도의 넓이
-                height: "100%", // 지도의 높이
+                width: "100%",
+                height: "100%",
                 zoom: 17
             });
         }
     }
 
-    // 티맵 리로드 모달때문에 한번 초기화 필요
+    // 티맵 로드
     function loadTmap() {
-        console.log('Loading Tmap');
         if (typeof Tmapv2 === 'undefined') {
-            console.log('Tmap not loaded');
             var script = document.createElement('script');
             script.src = 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH';
-            script.onload = function() {
-                console.log('Tmap script loaded');
+            script.onload = function () {
                 initTmap();
-                addMarkersTooMuch(); // 처음 로드될 때에도 마커 추가
+                addMarkersTooMuch();
             };
             document.body.appendChild(script);
         } else {
-            console.log('Tmap script already loaded');
             initTmap();
-            addMarkersTooMuch(); // 스크립트가 이미 로드되어 있다면 마커 추가
+            addMarkersTooMuch();
         }
     }
 
-    // 마커 추가하는 함수
+    // 마커 추가
     function addMarkersTooMuch() {
-        console.log('Adding markers');
-        removeMarkers(); // 기존 마커 제거
+        removeMarkers();
         for (var i = 0; i < 100; i++) {
             var lat = Math.random() / 100;
             var lng = Math.random() / 100;
             var position = new Tmapv2.LatLng(37.56220450 + lat, 126.98402028 + lng);
 
-            // 커스텀 마커
             var markerElement = `
             <span class="ballon relative max-w-xs bg-gray-800 text-white rounded p-2 inline-block text-center">
                 크크루삥뽕
                 <span class="absolute border-gray-800 border-l-transparent border-r-transparent border-t-8 border-l-8 border-r-8 -bottom-2 left-1/2 transform -translate-x-1/2"></span>
             </span>
             `;
-            // tmap 마커 생성
+
             var marker = new Tmapv2.Marker({
                 position: position,
                 iconHTML: markerElement
             });
 
-            // 마커를 tmap에 추가
             marker.setMap(map);
-
-            // 마커를 markers 배열에 추가
             markers.push(marker);
         }
     }
 
-    // 모든 마커를 제거하는 함수입니다.
+    // 마커 제거
     function removeMarkers() {
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
         markers = [];
-    }
-
-    /*-------------필터 관리 기능--------------*/
-    function handleFilter() {
-        // f_idx 클래스를 가진 요소들을 찾아서 필터링
-        const f_idxElements = document.querySelectorAll('.f_idx');
-
-        // f_idxElements를 배열로 변환하고 각 요소의 값을 가져옴
-        const facilities = Array.from(f_idxElements, elem => elem.value);
-
-        // name이 hCate인 것 중에 라디오 버튼이 체크된 것의 value값
-        const hCateElement = document.querySelector('input[name="hCate"]:checked');
-        let hCate;
-        if (hCateElement) {
-            hCate = hCateElement.value;
-        } else {
-            console.error('No radio button with name "hCate" is checked.');
-            hCate = null; // 필요시 기본값 설정
-        }
-
-        // 가격 필터링
-        let startPriceElement = document.getElementById('slider-start-main');
-        let endPriceElement = document.getElementById('slider-end-main');
-        let startPrice = startPriceElement ? startPriceElement.value : null;
-        let endPrice = endPriceElement ? endPriceElement.value : null;
-
-        // 검색어 필터링
-        let keyword = sessionStorage.getItem('keyword');
-        let startDay = sessionStorage.getItem('startDate');
-        let endDay = sessionStorage.getItem('endDate');
-
-        //드롭다운 필터
-        let filter = document.getElementById('dropdown-filter-button').value;
-
-        // 필터링된 값들을 콘솔에 출력 (디버깅용)
-        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter);
-
-        // 필터링된 값들을 세션 스토리지에 저장
-        sessionStorage.setItem('facilities', JSON.stringify(facilities));
-        sessionStorage.setItem('hCate', hCate);
-        sessionStorage.setItem('startPrice', startPrice);
-        sessionStorage.setItem('endPrice', endPrice);
-    }
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        // 모달이 열릴 때 initializeModal 함수를 호출
-        document.getElementById('modal').addEventListener('show', initializeModal);
-    });
-
-
-    //모달창의 필터에 초기값 설정
-    function initializeFilters(identifier) {
-    // sessionStorage에서 필터 값을 가져옴
-    const facilities = JSON.parse(sessionStorage.getItem('facilities')) || [];
-    const hCate = sessionStorage.getItem('hCate');
-    const startPrice = sessionStorage.getItem('startPrice');
-    const endPrice = sessionStorage.getItem('endPrice');
-
-    // identifier에 따라 요소 선택
-    const prefix = identifier === 'main' ? '' : '#modal ';
-
-    // 필터 값을 설정
-    facilities.forEach(facility => {
-        const element = document.querySelector(`${prefix}.f_idx[value="${facility}"]`);
-        if (element) {
-            element.classList.add('bg-gray-300');
-        }
-    });
-
-    if (hCate) {
-        const hCateElement = document.querySelector(`${prefix}input[name="hCate"][value="${hCate}"]`);
-        if (hCateElement) {
-            hCateElement.checked = true;
-        }
-    }
-
-    if (startPrice) {
-        const startPriceElement = document.querySelector(`${prefix}#slider-start-${identifier}`);
-        if (startPriceElement) {
-            startPriceElement.value = startPrice;
-        }
-    }
-
-    if (endPrice) {
-        const endPriceElement = document.querySelector(`${prefix}#slider-end-${identifier}`);
-        if (endPriceElement) {
-            endPriceElement.value = endPrice;
-        }
-    }
-
-    }
-
-    function reset(){
-
     }
 </script>
 </body>

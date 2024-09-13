@@ -87,9 +87,9 @@ searchButton.addEventListener('click', function(){
     const startDate = moment(dateRange[0], 'MM/DD');
     const endDate = moment(dateRange[1].split(' ')[0], 'MM/DD');
 
-    const formattedStartDate = startDate.format('YYYY-MM-DD');
-    const formattedEndDate = endDate.format('YYYY-MM-DD');
-
+    //localdatetime로 변환
+    const formattedStartDate = startDate.toISOString();
+    const formattedEndDate = endDate.toISOString();
 
     sessionStorage.setItem('keyword', keywordInput.value);
     sessionStorage.setItem('date', dateInput.value);
@@ -99,8 +99,7 @@ searchButton.addEventListener('click', function(){
     sessionStorage.setItem('people', peopleInput.innerText);
     console.log(sessionStorage.getItem('keyword'), sessionStorage.getItem('date'), sessionStorage.getItem('people'), sessionStorage.getItem('startDate'), sessionStorage.getItem('endDate'));
 
-
-    recSearch();
+  recSearch();
 });
 
 let recSearches = [];
@@ -123,73 +122,77 @@ document.addEventListener('click', (event) => {
         }
     });
 
-    document.addEventListener('click',(event) => {
-        const allDelBtn = event.target.closest('#allDelBtn');
-        if (allDelBtn) {
-            const chk = confirm('정말 전부 삭제하시겠습니까?');
-            if (dd) {
-                recSearches = [];
-                sessionStorage.setItem('recSearches', JSON.stringify(recSearches));
-                const recSearchContent = document.getElementById('rec_search_content');
-                recSearchContent.innerHTML = '';
-            }
-        }
-    });
-    
-    window.addEventListener('load', () => {
-        const keyword = sessionStorage.getItem('keyword');
-    
-        if (keyword && keyword.trim().length > 0) {
-            recSearch();
-        }
-    });
-    
-
-function recSearch(){
-    const keyword = sessionStorage.getItem('keyword');
-    const date = sessionStorage.getItem('date');
-    const people = sessionStorage.getItem('people'); 
-    
-    if (!keyword || keyword.trim().length === 0) {
-        alert('검색어를 입력해주세요.');
-        return;
+document.addEventListener("click", (event) => {
+  const allDelBtn = event.target.closest("#allDelBtn");
+  if (allDelBtn) {
+    const chk = confirm("정말 전부 삭제하시겠습니까?");
+    if (chk) {
+      recSearches = [];
+      sessionStorage.setItem("recSearches", JSON.stringify(recSearches));
+      const recSearchContent = document.getElementById("rec_search_content");
+      recSearchContent.innerHTML = "";
     }
+  }
+});
 
-    const keywords = (keyword && date && people) ? `${keyword} ${date} ${people}` : null;
-    console.log(keywords);
+window.addEventListener("load", () => {
+  const keyword = sessionStorage.getItem("keyword");
 
-    let storedSearch = sessionStorage.getItem('recSearches');
-    recSearches = storedSearch ? JSON.parse(storedSearch) : [];
-   
-    const extractKeyword = (searchItem) => {
-        const parts = searchItem.split(/ (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /); 
-        return parts[0];
-    };
+  if (keyword && keyword.trim().length > 0) {
+    recSearch();
+  }
+});
 
-    const existingKeywords = recSearches.map(extractKeyword);
+function recSearch() {
+  const keyword = sessionStorage.getItem("keyword");
+  const date = sessionStorage.getItem("date");
+  const people = sessionStorage.getItem("people");
 
-        if (keywords && existingKeywords.includes(keyword)) { 
-        const indexToRemove = existingKeywords.indexOf(keyword);
-        recSearches.splice(indexToRemove, 1);
-        }
+  if (!keyword || keyword.trim().length === 0) {
+    alert("검색어를 입력해주세요.");
+    return;
+  }
 
-        if (keywords) { 
-            recSearches.unshift(keywords); 
-        }
+  const keywords =
+    keyword && date && people ? `${keyword} ${date} ${people}` : null;
+  console.log(keywords);
 
-    recSearches = recSearches.slice(0, 5); 
-    sessionStorage.setItem('recSearches', JSON.stringify(recSearches)); 
-    
-    const recSearchContent = document.getElementById('rec_search_content');
-    recSearchContent.innerHTML = ''; 
+  let storedSearch = sessionStorage.getItem("recSearches");
+  recSearches = storedSearch ? JSON.parse(storedSearch) : [];
 
-        for (let i = 0; i < recSearches.length; i++) {
-            const parts = recSearches[i].split(/ (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /);
-            const keyword = parts[0];
-            const date = parts[1];
-            const people = parts[2];
-                if(keyword != null && date != null && people != null){
-                recSearchContent.innerHTML += `
+  const extractKeyword = (searchItem) => {
+    const parts = searchItem.split(
+      / (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /
+    );
+    return parts[0];
+  };
+
+  const existingKeywords = recSearches.map(extractKeyword);
+
+  if (keywords && existingKeywords.includes(keyword)) {
+    const indexToRemove = existingKeywords.indexOf(keyword);
+    recSearches.splice(indexToRemove, 1);
+  }
+
+  if (keywords) {
+    recSearches.unshift(keywords);
+  }
+
+  recSearches = recSearches.slice(0, 5);
+  sessionStorage.setItem("recSearches", JSON.stringify(recSearches));
+
+  const recSearchContent = document.getElementById("rec_search_content");
+  recSearchContent.innerHTML = "";
+
+  for (let i = 0; i < recSearches.length; i++) {
+    const parts = recSearches[i].split(
+      / (\d{2}\/\d{2} ~ \d{2}\/\d{2} \(\d박 \d일\)) /
+    );
+    const keyword = parts[0];
+    const date = parts[1];
+    const people = parts[2];
+    if (keyword != null && date != null && people != null) {
+      recSearchContent.innerHTML += `
                 <div id="rec_search_table">
                     <li class="dropdown-item flex flex-row justify-between items-center"> 
                         <div>

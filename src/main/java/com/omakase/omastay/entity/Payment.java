@@ -20,7 +20,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pay_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ic_idx", referencedColumnName = "ic_idx", nullable = true)
@@ -47,9 +47,6 @@ public class Payment {
 
     @Column(name = "nsale_price", length = 100)
     private String nsalePrice;
-
-    @Column(name = "cancel_time", length = 100)
-    private String cancelTime;
 
     @Column(name = "cancel_content", length = 100)
     private String cancelContent;

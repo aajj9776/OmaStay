@@ -1,23 +1,30 @@
 package com.omakase.omastay.controller;
 
+import com.omakase.omastay.dto.FacilitiesDTO;
+import com.omakase.omastay.dto.custom.HostMypageDTO;
+import com.omakase.omastay.service.FacilitiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.omakase.omastay.dto.AdminMemberDTO;
+
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
+import com.omakase.omastay.service.HostMypageService;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 
 
 @Controller
@@ -27,7 +34,13 @@ public class HostController {
 
     @Autowired
     private AdminMemberService adminMemberService;
-    
+
+    @Autowired
+    private HostMypageService hostMypageService;
+
+    @Autowired
+    private FacilitiesService facilitiesService;
+
     private final EmailService emailService;
 
     @Autowired
@@ -54,8 +67,17 @@ public class HostController {
     }
 
     @RequestMapping("/info")
-    public String hostinfo() {
-        return "host/host_info";
+    public ModelAndView hostinfo(){
+        System.out.println("숙소소개 컨트롤러 옴");
+        ModelAndView mv = new ModelAndView();
+
+        List<FacilitiesDTO> facilities = facilitiesService.all();
+
+        System.out.println("facilities:"+facilities);
+        mv.addObject("facilities", facilities);
+        mv.setViewName("host/host_info");
+
+        return mv;
     }
 
     @RequestMapping("/inquiry")
@@ -79,8 +101,19 @@ public class HostController {
     }
 
     @RequestMapping("/mypage")
-    public String hostmypage() {
-        return "host/host_mypage";
+    public ModelAndView hostmypage() {
+
+        ModelAndView mv = new ModelAndView();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        if (adminMember != null) {
+            HostMypageDTO hostMypageDTO = hostMypageService.findHostMypageByAdminMember(adminMember);
+            mv.addObject("hostMypageDTO", hostMypageDTO);
+        }
+
+        mv.setViewName("host/host_mypage");
+        return mv;
     }
 
     @RequestMapping("/notice")
@@ -229,5 +262,23 @@ public class HostController {
         session.removeAttribute("adminMember");
         return "host/host_login"; 
     }
-    
+
+    @RequestMapping("/mypagereg")
+    @ResponseBody
+    public ResponseEntity<String> mypagereg(@RequestBody HostMypageDTO hostMypageDTO) {
+        System.out.println(hostMypageDTO);
+        System.out.println(hostMypageDTO.getHostInfo().getHname());
+        System.out.println(hostMypageDTO.getHostInfo().getHphone());
+
+        AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
+        System.out.println(adminMember);
+
+        String pw = hostMypageDTO.getPw();
+            
+        adminMemberService.hostchagepw(adminMember.getAdId(), adminMember.getAdminProfile().getEmail(), pw);    
+
+        hostMypageService.saveHostMypage(hostMypageDTO, adminMember);
+
+        return ResponseEntity.ok("success");
+    }
 }
