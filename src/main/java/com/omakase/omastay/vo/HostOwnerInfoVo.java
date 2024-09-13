@@ -17,5 +17,5 @@ public class HostOwnerInfoVo {
     private String hostName;
 
     @Column(name = "h_intro", length = 100)
-    private String hIntro;
+    private String hintro;
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.omakase.omastay.dto.AccountDTO;
 import com.omakase.omastay.dto.AdminMemberDTO;
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.entity.Account;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.enumurate.HStep;
@@ -64,8 +66,6 @@ public class HostMypageService {
         Account account = null;
         if (hostInfo != null) {
             account = accountRepository.findByHostInfoId(hostInfo.getId());
-            System.out.println(account);
-            System.out.println(account.getHostInfo());
         }
 
         AccountDTO accountDTO = null;
@@ -75,6 +75,11 @@ public class HostMypageService {
             try {
                 accountDTO = AccountMapper.INSTANCE.toAccountDTO(account);
                 System.out.println(accountDTO);
+                if (account.getHostInfo() != null) {
+                    System.out.println(account.getHostInfo());
+                } else {
+                    System.out.println("HostInfo is null for the given account");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -83,7 +88,6 @@ public class HostMypageService {
         if (hostInfo != null) {
             try {
                 hostInfoDTO = HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
-                System.out.println(hostInfoDTO);
             } catch (Exception e) {
                 e.printStackTrace();
             }
