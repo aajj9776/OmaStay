@@ -1,13 +1,14 @@
 package com.omakase.omastay.dto;
 
-import com.omakase.omastay.entity.*;
-import com.omakase.omastay.vo.StartEndVo;
+import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.enumurate.ResStatus;
+import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
@@ -25,6 +26,8 @@ public class ReservationDTO {
     private String resName;
     private String resEmail;
     private String resNone;
+
+    private PaymentDTO payment;
 
     public ReservationDTO(Reservation reservation) {
         this.id = reservation.getId();

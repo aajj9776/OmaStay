@@ -1,5 +1,7 @@
 package com.omakase.omastay.dto;
 
+import java.time.LocalDateTime;
+
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.Gender;
@@ -7,10 +9,11 @@ import com.omakase.omastay.entity.enumurate.Social;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.UserProfileVo;
 import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +32,7 @@ public class MemberDTO {
     private String accessToken;
     private String refreshToken;
     private String memNone;
+    private List<ReservationDTO> reservations;
 
     public MemberDTO(Member member) {
         this.id = member.getId();

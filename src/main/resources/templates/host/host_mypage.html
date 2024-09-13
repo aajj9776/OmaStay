@@ -43,7 +43,7 @@
                         placeholder="숙소명"
                         type="text"
                         id="hname"
-                        th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hname : ''}"
+                        th:value="${hostMypageDTO != null && hostMypageDTO.hostInfo != null ? hostMypageDTO.hostInfo.hname : ''}"
                       />
                     </div>
                   </div>
@@ -148,7 +148,7 @@
                         placeholder="담당자명"
                         type="text"
                         id="contactname"
-                        th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hostContactInfo.contactName : ''}"
+                        th:value="${hostMypageDTO != null && hostMypageDTO.hostInfo != null ? hostMypageDTO.hostInfo.hostContactInfo.contactName : ''}"
                       />
                     </div>
                   </div>
@@ -176,7 +176,7 @@
                         name="email"
                         placeholder="**********"
                         type="text"
-                        th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hostContactInfo.contactEmail : ''}"
+                        th:value="${hostMypageDTO != null && hostMypageDTO.hostInfo != null ? hostMypageDTO.hostInfo.hostContactInfo.contactEmail : ''}"
                       />
                         <div
                           class="h-[40px] relative text-[12px] text-[#f5455c] flex items-center min-w-[34px] whitespace-nowrap"
@@ -247,7 +247,7 @@
                         placeholder="숙소 URL"
                         type="text"
                         id="hurl"
-                        th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hurl : ''}"
+                        th:value="${hostMypageDTO != null && hostMypageDTO.hostInfo != null ? hostMypageDTO.hostInfo.hurl : ''}"
                       />
                     </div>
                   </div>
@@ -271,7 +271,7 @@
                         placeholder="대표번호( - 제외)"
                         type="text"
                         id="hphone"
-                        th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hphone : ''}"
+                        th:value="${hostMypageDTO != null && hostMypageDTO.hostInfo != null ? hostMypageDTO.hostInfo.hphone : ''}"
                       />
                     </div>
                   </div>
@@ -293,12 +293,12 @@
                     <div class="w-[220px] flex flex-row items-start justify-start">
                       <div class="w-[220px] dropdown w-full h-auto">
                         <select class="w-[220px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="acbank">
-                          <option value="" disabled selected>은행 선택</option>
-                          <option value="국민은행">국민은행</option>
-                          <option value="농협은행">농협은행</option>
-                          <option value="우리은행">우리은행</option>
-                          <option value="신한은행">신한은행</option>
-                          <option value="기업은행">기업은행</option>
+                          <option value="" disabled th:selected="${hostMypageDTO == null || hostMypageDTO.account == null || hostMypageDTO.account.acBank == ''}">은행 선택</option>
+                          <option value="국민은행" th:selected="${hostMypageDTO != null && hostMypageDTO.account != null && hostMypageDTO.account.acBank == '국민은행'}">국민은행</option>
+                          <option value="농협은행" th:selected="${hostMypageDTO != null && hostMypageDTO.account != null && hostMypageDTO.account.acBank == '농협은행'}">농협은행</option>
+                          <option value="우리은행" th:selected="${hostMypageDTO != null && hostMypageDTO.account != null && hostMypageDTO.account.acBank == '우리은행'}">우리은행</option>
+                          <option value="신한은행" th:selected="${hostMypageDTO != null && hostMypageDTO.account != null && hostMypageDTO.account.acBank == '신한은행'}">신한은행</option>
+                          <option value="기업은행" th:selected="${hostMypageDTO != null && hostMypageDTO.account != null && hostMypageDTO.account.acBank == '기업은행'}">기업은행</option>
                         </select>
                       </div>
                     </div>
@@ -315,7 +315,7 @@
                           placeholder="예금주"
                           type="text"
                           id="acname"
-                          th:value="${hostMypageDTO != null ? hostMypageDTO.account.acName : ''}"
+                          th:value="${hostMypageDTO != null && hostMypageDTO.account != null ? hostMypageDTO.account.acName : ''}"
                         />
                       </div>
                     </div>
@@ -336,7 +336,7 @@
                             placeholder="계좌번호( - 제외)"
                             type="text"
                             id="acnum"
-                            th:value="${hostMypageDTO != null ? hostMypageDTO.account.acNum : ''}"
+                            th:value="${hostMypageDTO != null && hostMypageDTO.account != null ? hostMypageDTO.account.acNum : ''}"
                           />
 
                           <div
@@ -596,6 +596,13 @@
                   }
                 }
               });
+        }
+
+        window.onload = function() {
+            var errorMessage = "${errorMessage}".replace(/\$\{(.*?)\}/g, ''); // Thymeleaf 표현식 제거
+            if (errorMessage && errorMessage.trim() !== "") {
+                alert(errorMessage);
+            }
         }
     </script>
   </body>
