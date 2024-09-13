@@ -1,21 +1,14 @@
 package com.omakase.omastay.controller;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 
-=======
-import com.omakase.omastay.dto.FacilitiesDTO;
-import com.omakase.omastay.dto.custom.HostMypageDTO;
-import com.omakase.omastay.service.FacilitiesService;
->>>>>>> 5c6296ac3e5b07c71c4d78c79fd1c90e219559c5
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +22,6 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
-import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
@@ -38,7 +30,6 @@ import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -65,9 +56,6 @@ public class HostController {
     private HttpSession session;
 
     private String upload = "/upload/host";
-
-    @Autowired
-    private ServletContext application;
 
     @Autowired
     private HttpServletRequest request;
