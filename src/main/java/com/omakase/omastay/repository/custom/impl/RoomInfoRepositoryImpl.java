@@ -1,11 +1,11 @@
 package com.omakase.omastay.repository.custom.impl;
 
-import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.repository.custom.RoomInfoRepositoryCustom;
 import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -46,13 +46,13 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
         return new HashSet<>(queryFactory
                 .select(roomInfo.id)
                 .from(roomInfo)
-                .leftJoin(reservation).on(reservation.roomInfo.id.eq(roomInfo.id))
+                .leftJoin(reservation).on(reservation.roomInfo.id.eq(roomInfo.id)).fetchJoin()
                 .where(builder)
                 .fetch());
     }
 
     @Override
-    public Set<HostInfo> personFiltering(int person, Set<Integer> hostInfos) {
+    public List<Integer> personFiltering(int person, Set<Integer> hostInfos) {
         BooleanBuilder builder = new BooleanBuilder();
 
         // 1. room_status true인 것
@@ -64,12 +64,20 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
         // 3. room_person이 person보다 크거나 같은 것
         builder.and(roomInfo.roomPerson.goe(person));
 
-        // 조인 조건을 조금 더 명확히 하기 위해 id 필드 비교를 추가할 수 있음
-        return new HashSet<>(queryFactory
-                .select(roomInfo.hostInfo)
+        return queryFactory
+                .select(roomInfo.id)
                 .from(roomInfo)
-                .join(roomInfo.hostInfo, hostInfo)
                 .where(builder)
+                .fetch();
+    }
+
+    @Override
+    public HashSet<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs) {
+        return new HashSet<>(queryFactory
+                .select(roomInfo.hostInfo.id, hostInfo.hname, hostInfo.xAxis, hostInfo.yAxis)  // hname 변경
+                .from(roomInfo)
+                .join(hostInfo).on(roomInfo.hostInfo.id.eq(hostInfo.id)).fetchJoin()
+                .where(roomInfo.id.in(roomIdxs))
                 .fetch());
     }
 
@@ -79,6 +87,4 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
 
         return reservation.startEndVo.start.goe(end).or(reservation.startEndVo.end.loe(start));
     }
-
-
 }
