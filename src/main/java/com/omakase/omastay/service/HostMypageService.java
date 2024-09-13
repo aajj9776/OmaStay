@@ -1,10 +1,9 @@
 package com.omakase.omastay.service;
 
-import org.apache.tomcat.util.http.parser.Host;
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.custom.HostMypageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.omakase.omastay.dto.AccountDTO;
 import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
@@ -18,7 +17,7 @@ import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.entity.AdminMember;
 import com.omakase.omastay.repository.AccountRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
-import com.omakase.omastay.repository.AdminMemberRepository;
+
 
 @Service
 public class HostMypageService {

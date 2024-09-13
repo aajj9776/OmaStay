@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{layout/search_main}"
-      layout:fragment="search"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
 <head>
-    <meta charset="utf-8"/></head>
+    <meta charset="utf-8"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
     <link rel="stylesheet" href="/css/component/slider.css">
+</head>
 <body>
 <div
         class="w-full relative bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[100px] box-border leading-[normal] tracking-[normal]"

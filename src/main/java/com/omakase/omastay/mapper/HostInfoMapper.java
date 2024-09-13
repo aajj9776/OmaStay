@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface HostInfoMapper {
     HostInfoMapper INSTANCE = Mappers.getMapper(HostInfoMapper.class);
@@ -19,4 +21,8 @@ public interface HostInfoMapper {
     @Mapping(source = "addressVo", target = "hostAddress")
     @Mapping(source = "hostOwnerInfo", target = "hostOwnerInfo")
     HostInfo toHostInfo(HostInfoDTO hostInfoDTO);
+
+    List<HostInfoDTO> toHostInfoDTOList(List<HostInfo> hostInfos);
+
+    List<HostInfo> toHostInfoList(List<HostInfoDTO> hostInfoDTOs);
 }
