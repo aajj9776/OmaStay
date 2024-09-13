@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class ServiceDTO {
-    private int id;
+    private Integer id;
     private SCate sCate;
     private UserAuth sAuth;
     private String sTitle;
@@ -37,7 +37,7 @@ public class ServiceDTO {
     }
 
     @QueryProjection
-    public ServiceDTO(int id, SCate sCate, UserAuth sAuth, String sTitle, String sContent, FileImageNameVo fileName,
+    public ServiceDTO(Integer id, SCate sCate, UserAuth sAuth, String sTitle, String sContent, FileImageNameVo fileName,
                       LocalDateTime sDate, BooleanStatus sStatus, String sNone) {
         this.id = id;
         this.sCate = sCate;

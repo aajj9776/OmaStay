@@ -6,11 +6,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MemberInfoDTO {
-
     private int id;
     private String email;
-    private String exp;
+    private Long exp;
     private String memName;
     private String sub;
-    
 }

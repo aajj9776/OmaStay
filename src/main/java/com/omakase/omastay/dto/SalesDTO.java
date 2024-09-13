@@ -10,9 +10,9 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 public class SalesDTO {
-    private int id;
-    private int hostInfoId;
-    private int resIdx;
+    private Integer id;
+    private Integer hostInfoId;
+    private Integer resIdx;
     private LocalDate salDate;
     private String salNone;
 
@@ -25,7 +25,7 @@ public class SalesDTO {
     }
 
     @QueryProjection
-    public SalesDTO(int id, int hostInfoId, int reservationId, LocalDate salPeriod,
+    public SalesDTO(Integer id, Integer hostInfoId, Integer reservationId, LocalDate salPeriod,
                     LocalDate salDate, String salNone) {
         this.id = id;
         this.hostInfoId = hostInfoId;

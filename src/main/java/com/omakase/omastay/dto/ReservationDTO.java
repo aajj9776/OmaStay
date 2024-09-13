@@ -1,30 +1,33 @@
 package com.omakase.omastay.dto;
 
-import com.omakase.omastay.entity.*;
-import com.omakase.omastay.vo.StartEndVo;
+import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.enumurate.ResStatus;
+import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
 public class ReservationDTO {
-    private int id;
-    private int roomIdx;
-    private int memIdx;
-    private int nonIdx;
-    private int payIdx;
+    private Integer id;
+    private Integer roomIdx;
+    private Integer memIdx;
+    private Integer nonIdx;
+    private Integer payIdx;
     private String resNum;
     private StartEndVo startEndVo = new StartEndVo();
-    private int resPerson;
-    private int resPrice;
+    private Integer resPerson;
+    private Integer resPrice;
     private ResStatus resStatus;
     private String resName;
     private String resEmail;
     private String resNone;
+
+    private PaymentDTO payment;
 
     public ReservationDTO(Reservation reservation) {
         this.id = reservation.getId();
@@ -43,9 +46,9 @@ public class ReservationDTO {
     }
 
     @QueryProjection
-    public ReservationDTO(int id, int roomIdx, int memIdx, int nonIdx, int paymentId, String resNum,
+    public ReservationDTO(Integer id, Integer roomIdx, Integer memIdx, Integer nonIdx, Integer paymentId, String resNum,
                           StartEndVo startEndVo, String resName, String resEmail,
-                        int resPerson, int resPrice, ResStatus resStatus, String resNone) {
+                        Integer resPerson, Integer resPrice, ResStatus resStatus, String resNone) {
         this.id = id;
         this.roomIdx = roomIdx;
         this.memIdx = memIdx;

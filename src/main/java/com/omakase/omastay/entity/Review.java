@@ -4,6 +4,7 @@ import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "review")
-@ToString(exclude = {"member", "reservation"})
+@ToString(exclude = {"member", "reservation", "hostInfo"})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +31,10 @@ public class Review {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_idx", referencedColumnName = "res_idx")
     private Reservation reservation = new Reservation();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
+    private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "rev_writer", nullable = false, length = 100)
     private String revWriter;
@@ -56,6 +61,9 @@ public class Review {
 
     @Column(name = "rev_ rating")
     private Float revRating;
+
+
+
 
 }
 

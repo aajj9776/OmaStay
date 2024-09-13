@@ -5,8 +5,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CancelRequest {
+public class CancelRequestDTO {
     private String paymentKey;
     private String cancelReason;
+    private int payIdx;
+    private int resIdx;
     
 }
