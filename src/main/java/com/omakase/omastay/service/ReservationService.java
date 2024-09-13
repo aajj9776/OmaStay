@@ -33,7 +33,7 @@ public class ReservationService {
 
     @Transactional
     public PaymentDTO insertPaymentInfo(PaymentDTO payment) {
-        System.out.println("얍"+ payment.getNsalePrice());
+        System.out.println("얍"+ payment);
 
         // 결제 ID를 기준으로 비관적 락을 걸고 기존 결제 정보 조회
         payment.setId(1);
@@ -45,12 +45,12 @@ public class ReservationService {
         }
 
         Payment res = PaymentMapper.INSTANCE.toPayment(payment);
-        
+        System.out.println("여기뭐가나와요?"+ res);
         res.setIssuedCoupon(null);
         res.setPoint(null);
 
-        if( payment.getNsalePrice() == null && payment.getNsalePrice().equals("")){
-            res.setNsalePrice(null);
+        if( payment.getNsalePrice() == null ){
+            res.setNsalePrice("0");
         }
 
         res.setPayStatus(PayStatus.PAY);
@@ -67,9 +67,9 @@ public class ReservationService {
 
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
 
-        res.setResPrice(500000);
+        res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
         Member member = new Member();
-        member.setId(1);
+        member.setId(2);
         res.setMember(member);
         res.setResPerson(2);
         RoomInfo roomInfo = new RoomInfo();
@@ -82,6 +82,14 @@ public class ReservationService {
         res.setResStatus(ResStatus.COMPLETED);
         res.setNonMember(null);
 
+        Reservation result = reservationRepository.save(res);
+        ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
+        return dto;
+    }
+
+    public ReservationDTO getReservation(int resIdx ) {
+        Reservation res = reservationRepository.findById(resIdx).get();
+        res.setResStatus(ResStatus.CANCELLED);
         Reservation result = reservationRepository.save(res);
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;

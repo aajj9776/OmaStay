@@ -1,20 +1,19 @@
 package com.omakase.omastay.service;
 
-import com.omakase.omastay.dto.HostInfoDTO;
-import com.omakase.omastay.dto.custom.HostMypageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.omakase.omastay.dto.AccountDTO;
 import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.entity.Account;
+import com.omakase.omastay.entity.AdminMember;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.enumurate.HStep;
 import com.omakase.omastay.mapper.AccountMapper;
 import com.omakase.omastay.mapper.AdminMemberMapper;
 import com.omakase.omastay.mapper.HostInfoMapper;
-import com.omakase.omastay.entity.AdminMember;
 import com.omakase.omastay.repository.AccountRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 
@@ -27,7 +26,6 @@ public class HostMypageService {
 
     @Autowired
     private HostInfoRepository hostInfoRepository;
-
 
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
