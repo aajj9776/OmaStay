@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class PointDTO {
-    private int id;
-    private int memIdx; // 속성 이름이 mIdx인지 확인
-    private int pSum;
-    private int pValue;
+    private Integer id;
+    private Integer memIdx; // 속성 이름이 mIdx인지 확인
+    private Integer pSum;
+    private Integer pValue;
     private LocalDateTime pDate;
 
     public PointDTO(Point point) {

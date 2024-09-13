@@ -1,28 +1,39 @@
 package com.omakase.omastay.controller;
 
-import org.apache.tomcat.util.http.parser.Host;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.omakase.omastay.dto.AccountDTO;
 import com.omakase.omastay.dto.AdminMemberDTO;
-import com.omakase.omastay.dto.HostInfoDTO;
-import com.omakase.omastay.dto.HostMypageDTO;
+import com.omakase.omastay.dto.FacilitiesDTO;
+import com.omakase.omastay.dto.ImageDTO;
+import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
+import com.omakase.omastay.dto.custom.HostMypageDTO;
+import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
-import com.omakase.omastay.service.HostMypageService;
-import com.omakase.omastay.vo.HostContactInfoVo;
-import com.omakase.omastay.vo.HostOwnerInfoVo;
+import com.omakase.omastay.service.FacilitiesService;
+import com.omakase.omastay.service.HostInfoService;
+import com.omakase.omastay.util.FileRenameUtil;
+import com.omakase.omastay.vo.FileImageNameVo;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -37,13 +48,24 @@ public class HostController {
     private AdminMemberService adminMemberService;
 
     @Autowired
-    private HostMypageService hostMypageService;
+    private HostInfoService hostInfoService;
+
+    @Autowired
+    private FacilitiesService facilitiesService;
     
     private final EmailService emailService;
 
     @Autowired
     private HttpSession session;
 
+    private String upload = "/upload/host";
+
+    @Autowired
+    private ServletContext application;
+
+    @Autowired
+    private HttpServletRequest request;
+    
     @RequestMapping("/login")
     public String host() {
         return "host/host_login";
@@ -65,8 +87,33 @@ public class HostController {
     }
 
     @RequestMapping("/info")
-    public String hostinfo() {
-        return "host/host_info";
+    public ModelAndView hostinfo(){
+        System.out.println("숙소소개 컨트롤러 옴");
+        ModelAndView mv = new ModelAndView();
+
+        List<FacilitiesDTO> facilities = facilitiesService.all();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        if (adminMember != null) {
+            HostMypageDTO hostMypageDTO = hostInfoService.findHostMypageByAdminMember(adminMember);
+
+            if (hostMypageDTO.getHostInfo().getHStep() == null) {
+                mv.addObject("errorMessage", "이전 단계를 완료해주세요.");
+                mv.setViewName("host/host_mypage");
+                return mv;
+            }
+
+            HostInfoCustomDTO hostInfoCustomDTO = hostInfoService.findHostInfoByHostInfoId(hostMypageDTO.getHostInfo().getId());
+            mv.addObject("hostMypageDTO", hostMypageDTO);
+            mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
+        }
+
+
+        mv.addObject("facilities", facilities);
+        mv.setViewName("host/host_info");
+
+        return mv;
     }
 
     @RequestMapping("/inquiry")
@@ -97,7 +144,7 @@ public class HostController {
         AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
 
         if (adminMember != null) {
-            HostMypageDTO hostMypageDTO = hostMypageService.findHostMypageByAdminMember(adminMember);
+            HostMypageDTO hostMypageDTO = hostInfoService.findHostMypageByAdminMember(adminMember);
             mv.addObject("hostMypageDTO", hostMypageDTO);
         }
 
@@ -266,8 +313,67 @@ public class HostController {
             
         adminMemberService.hostchagepw(adminMember.getAdId(), adminMember.getAdminProfile().getEmail(), pw);    
 
-        hostMypageService.saveHostMypage(hostMypageDTO, adminMember);
+        hostInfoService.saveHostMypage(hostMypageDTO, adminMember);
 
         return ResponseEntity.ok("success");
+    }
+
+    @RequestMapping("/hostinforeg")
+    public ResponseEntity<List<String>> hostinforeg(@RequestPart("hostInfoCustomDTO") HostInfoCustomDTO hostInfoCustomDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+        System.out.println(hostInfoCustomDTO.getHostInfo().getYAxis());
+        System.out.println(hostInfoCustomDTO.getImages().size());
+        AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
+
+        List<String> imageUrls = new ArrayList<>();
+
+        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
+        String c_type = request.getContentType();
+        if (c_type.startsWith("multipart")) {
+            List<ImageDTO> imageDTOList = new ArrayList<>();
+            if (images != null) {
+            for (MultipartFile f : images) {
+            if (f != null && f.getSize() > 0) {
+                String realPath = request.getServletContext().getRealPath(upload);
+
+                String oname = f.getOriginalFilename();//실제파일명
+                FileImageNameVo fvo = new FileImageNameVo();
+                fvo.setOName(oname);
+                String fname = FileRenameUtil.checkSameFileName(oname, realPath);
+                fvo.setFName(fname);
+
+                try {
+                    File uploadDir = new File(realPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    // 파일 업로드(upload폴더에 저장)
+                    File hostFile = new File(uploadDir, fname);
+                    if (hostFile.exists()) {
+                        System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
+                        continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
+                    }
+
+                    ImageDTO imageDTO = new ImageDTO();
+                    imageDTO.setImgName(fvo);
+                    imageDTOList.add(imageDTO);
+
+                    String imageUrl = "/upload/" + fname;
+                    imageUrls.add(imageUrl);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } 
+            }
+        }
+            hostInfoCustomDTO.setImages(imageDTOList);
+        }
+
+        hostInfoService.saveHostInfo(hostInfoCustomDTO, adminMember);
+
+        //html 에서 hostInfoCustomDTO 받아야함
+        
+        return ResponseEntity.ok(imageUrls);
     }
 }

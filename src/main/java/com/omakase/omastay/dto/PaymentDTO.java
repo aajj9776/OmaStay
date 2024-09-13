@@ -12,15 +12,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PaymentDTO {
-    private int id;
-    private int icIdx;
-    private int pIdx;
+    private Integer id;
+    private Integer icIdx;
+    private Integer pIdx;
     private PayStatus payStatus;
     private String payMethod;
     private String payContent;
     private String salePrice;
     private String nsalePrice;
-    private String cancelTime;
     private String cancelContent;
     private LocalDateTime payDate;
     private LocalDateTime cancelDate;
@@ -49,6 +48,7 @@ public class PaymentDTO {
 
     @QueryProjection
     public PaymentDTO(int id, int icIdx, int pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String payNone) {
+
         this.id = id;
         this.icIdx = icIdx;
         this.pIdx = pIdx;

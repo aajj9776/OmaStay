@@ -4,6 +4,7 @@ import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,4 +62,7 @@ public class Review {
 
     @Column(name = "`rev_ rating`")
     private Float revRating;
+
+
+
 }

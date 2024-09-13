@@ -1,9 +1,34 @@
 let count = 1;
 // 이거 시작날짜랑 끝나는 날짜 연도로 해서 세션으로 같이 넘겨주세요
 function changCount() {
+    if (count < 1) count = 1;
+    if (count > 10) count = 10;
 
-  if (count < 1) count = 1;
-  if (count > 10) count = 10;
+    $("#person_count").text(count);
+    $("#person_count2").text(count);
+
+    
+    dropdownElement.find("#decreaseBtn").prop('aria-disabled', count <= 1);
+    dropdownElement.find("#increaseBtn").prop('aria-disabled', count >= 10);
+
+  
+    if (count <= 1) {
+            dropdownElement.find("#decreaseBtn").addClass('opacity-50 bg-gray-800');
+            dropdownElement.find("#decreaseBtn")[0].style.cursor = 'not-allowed';
+        } else {
+            dropdownElement.find("#decreaseBtn").removeClass('opacity-50 bg-gray-800');
+            dropdownElement.find("#decreaseBtn")[0].style.cursor = 'pointer'; 
+        }
+
+    if (count >= 10) {
+            dropdownElement.find("#increaseBtn").addClass('opacity-50 bg-gray-800');
+            dropdownElement.find("#increaseBtn")[0].style.cursor = 'not-allowed';
+        } else {
+            dropdownElement.find("#increaseBtn").removeClass('opacity-50 bg-gray-800');
+            dropdownElement.find("#increaseBtn")[0].style.cursor = 'pointer'; 
+        }
+    }
+
 
 
   $("#person_count").text(count);
@@ -27,7 +52,7 @@ function changCount() {
     dropdownElement.find("#increaseBtn").removeClass("opacity-50 bg-gray-800");
     dropdownElement.find("#increaseBtn")[0].style.cursor = "pointer";
   }
-}
+
 
 $(document).ready(function() {
     dropdownElement = $('#second_people_dropdown');
@@ -43,6 +68,7 @@ $(document).ready(function() {
     if (s_keyword) {
         $("#search-accommodation").val(s_keyword);
     }
+    changCount();
 
     $("#decreaseBtn").click(function(event){
         count--;
@@ -72,11 +98,10 @@ $(document).ready(function() {
     });
 });
 
-const keywordInput = document.getElementById("search-accommodation");
-const dateInput = document.getElementById("date-range-picker-input");
-const peopleInput = document.getElementById("person_count2");
-const searchButton = document.getElementById("keyword_searchBtn");
-
+const keywordInput = document.getElementById('search-accommodation');
+const dateInput = document.getElementById('date-range-picker-input');
+const peopleInput = document.getElementById('person_count2');
+const searchButton = document.getElementById('keyword_searchBtn');
 
 searchButton.addEventListener('click', function(){
     // 검색어, 날짜, 시작 날짜, 끝 날짜, 인원을 세션스토리지에 저장
@@ -101,24 +126,23 @@ searchButton.addEventListener('click', function(){
 
 let recSearches = [];
 
-document.addEventListener("click", (event) => {
-  const deleteBtn = event.target.closest(".delete-btn");
-  if (deleteBtn && deleteBtn.closest("#rec_search_content")) {
-    const indexRemove = parseInt(deleteBtn.dataset.index, 10);
+document.addEventListener('click', (event) => {
+    const deleteBtn = event.target.closest('.delete-btn');
+    if (deleteBtn && deleteBtn.closest('#rec_search_content')) {
+        const indexRemove = parseInt(deleteBtn.dataset.index, 10); 
 
-    recSearches.splice(indexRemove, 1);
-    sessionStorage.setItem("recSearches", JSON.stringify(recSearches));
-
-    const listItemToRemove = deleteBtn.closest("#rec_search_table");
-    if (listItemToRemove) {
-      listItemToRemove.remove();
-      if (listItemToRemove.nextElementSibling) {
-        // nextElementSibling null 체크
-        listItemToRemove.nextElementSibling.remove(); // <hr> 요소도 함께 제거
-      }
-    }
-  }
-});
+        recSearches.splice(indexRemove, 1);
+        sessionStorage.setItem('recSearches', JSON.stringify(recSearches));
+        
+        const listItemToRemove = deleteBtn.closest('#rec_search_table');
+            if (listItemToRemove) { 
+                listItemToRemove.remove(); 
+                if (listItemToRemove.nextElementSibling) { // nextElementSibling null 체크
+                    listItemToRemove.nextElementSibling.remove(); // <hr> 요소도 함께 제거
+                }
+            }
+        }
+    });
 
 document.addEventListener("click", (event) => {
   const allDelBtn = event.target.closest("#allDelBtn");
