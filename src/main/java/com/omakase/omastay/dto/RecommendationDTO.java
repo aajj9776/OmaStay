@@ -11,8 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 @Data
 @NoArgsConstructor
 public class RecommendationDTO {
-    private int id;
-    private int hIdx;
+    private Integer id;
+    private Integer hIdx;
     private Float recPoint;
     private String recNone;
 
@@ -24,7 +24,7 @@ public class RecommendationDTO {
     }
 
     @QueryProjection
-    public RecommendationDTO(int id, Float recPoint, String recNone) {
+    public RecommendationDTO(Integer id, Float recPoint, String recNone) {
         this.id = id;
         this.recPoint = recPoint;
         this.recNone = recNone;

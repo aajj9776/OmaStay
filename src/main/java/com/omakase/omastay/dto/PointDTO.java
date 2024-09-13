@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class PointDTO {
-    private int id;
-    private int memIdx; // 속성 이름이 mIdx인지 확인
-    private int pSum;
-    private int pValue;
+    private Integer id;
+    private Integer memIdx; // 속성 이름이 mIdx인지 확인
+    private Integer pSum;
+    private Integer pValue;
     private LocalDateTime pDate;
     private String pNone;
 
@@ -27,7 +27,7 @@ public class PointDTO {
     }
 
     @QueryProjection
-    public PointDTO(int id, int memIdx, int pSum, int pValue, LocalDateTime pDate, String pNone) {
+    public PointDTO(Integer id, Integer memIdx, Integer pSum, Integer pValue, LocalDateTime pDate, String pNone) {
         this.id = id;
         this.memIdx = memIdx;
         this.pSum = pSum;

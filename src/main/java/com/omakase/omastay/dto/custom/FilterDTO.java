@@ -1,6 +1,8 @@
 package com.omakase.omastay.dto.custom;
 
 import com.omakase.omastay.vo.StartEndVo;
+
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class FilterDTO {
     private String keyword;
     private Integer startPrice;
     private Integer endPrice;
+    private Integer person;
     private StartEndVo startEndDay;
     private String filter;
 }

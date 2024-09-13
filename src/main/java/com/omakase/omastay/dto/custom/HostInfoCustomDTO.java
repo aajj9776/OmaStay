@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class HostInfoCustomDTO {
     private HostInfoDTO hostInfo;
     private List<FacilitiesDTO> facilities;
-    private ImageDTO image;
+    private List<ImageDTO> images;
 
-    public HostInfoCustomDTO(HostInfoDTO hostInfo, List<FacilitiesDTO> facilities, ImageDTO image) {
+    public HostInfoCustomDTO(HostInfoDTO hostInfo, List<FacilitiesDTO> facilities, List<ImageDTO> images) {
         this.hostInfo = hostInfo;
         this.facilities= facilities;
-        this.image = image;
+        this.images = images;
     }
 
 }

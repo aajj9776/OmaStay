@@ -5,6 +5,7 @@ import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostFacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.entity.Account;
@@ -13,18 +14,24 @@ import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.HostFacilities;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.Image;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStep;
+import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.mapper.AccountMapper;
 import com.omakase.omastay.mapper.AdminMemberMapper;
 import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.mapper.HostInfoMapper;
+import com.omakase.omastay.mapper.ImageMapper;
 import com.omakase.omastay.repository.AccountRepository;
+import com.omakase.omastay.repository.FacilitiesRepository;
 import com.omakase.omastay.repository.HostFacilitiesRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.ImageRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +50,9 @@ public class HostInfoService {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private FacilitiesRepository facilitiesRepository;
 
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
@@ -110,7 +120,7 @@ public class HostInfoService {
     }
 
     public void saveHostInfo(HostInfoCustomDTO hostInfoCustomDTO, AdminMemberDTO adminMemberDTO) {
-        System.out.println(hostInfoCustomDTO);
+        System.out.println(hostInfoCustomDTO.getHostInfo().getAddressVo().getStreet());
         System.out.println(adminMemberDTO);
         
         AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
@@ -118,10 +128,13 @@ public class HostInfoService {
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
 
         hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
-        hostInfo.setHCate(hostInfoCustomDTO.getHostInfo().getHCate());;
-        hostInfo.setHostAddress(hostInfoCustomDTO.getHostInfo().getAddressVo());;
-        hostInfo.setHostOwnerInfo(hostInfoCustomDTO.getHostInfo().getHostOwnerInfo());
+        hostInfo.setHCate(hostInfoCustomDTO.getHostInfo().getHCate());
+        hostInfo.setRegion(hostInfoCustomDTO.getHostInfo().getRegion());
+        hostInfo.setXAxis(hostInfoCustomDTO.getHostInfo().getXAxis());
+        hostInfo.setYAxis(hostInfoCustomDTO.getHostInfo().getYAxis());
         hostInfo.setDirections(hostInfoCustomDTO.getHostInfo().getDirections());
+        hostInfo.setHostAddress(hostInfoCustomDTO.getHostInfo().getAddressVo());
+        hostInfo.setHostOwnerInfo(hostInfoCustomDTO.getHostInfo().getHostOwnerInfo());
         hostInfoRepository.save(hostInfo);
 
         List<HostFacilities> hostFacilities = hostFacilitiesRepository.findByHostInfoId(hostInfo.getId());
@@ -150,13 +163,48 @@ public class HostInfoService {
 
         List<Image> images = imageRepository.findByHostInfoId(hostInfo.getId());
 
+        for (ImageDTO imageDTO : hostInfoCustomDTO.getImages()) {
         boolean exists = images.stream()
-                .anyMatch(image -> image.getImgName().equals(hostInfoCustomDTO.getImage().getImgName()));
+                .anyMatch(image -> image.getImgName().equals(imageDTO.getImgName()));
         if (!exists) {
             Image newImage = new Image();
+            newImage.setRoomInfo(null);
             newImage.setHostInfo(hostInfo);
-            newImage.setImgName(hostInfoCustomDTO.getImage().getImgName());
+            newImage.setImgName(imageDTO.getImgName());
+            newImage.setImgCate(ImgCate.HOST);
+            newImage.setImgStatus(BooleanStatus.TRUE);
             imageRepository.save(newImage);
-        } 
+        }
+    }
+    }
+
+    public HostInfoCustomDTO findHostInfoByHostInfoId(int hIdx) {
+
+        HostInfo hostInfo = hostInfoRepository.findById(hIdx);
+
+        List<FacilitiesDTO> facilitiesDTO= null;
+        List<ImageDTO> imageDTO = null;
+        if (hostInfo != null) {
+            List<HostFacilities> hostFacilitiesList = hostFacilitiesRepository.findByHostInfoId(hostInfo.getId());
+            facilitiesDTO = hostFacilitiesList.stream()
+                .map(hostFacilities -> {
+                    Optional<Facilities> facilitiesOptional = facilitiesRepository.findById(hostFacilities.getFacilities().getId());
+                    Facilities facilities = facilitiesOptional.orElse(null);
+                    return FacilitiesMapper.INSTANCE.toFacilitiesDTO(facilities);
+                })
+                .collect(Collectors.toList());
+            
+            List<Image> imageList = imageRepository.findByHostInfoId(hostInfo.getId());
+            imageDTO = imageList.stream()
+                .map(image -> ImageMapper.INSTANCE.toImageDTO(image))
+                .collect(Collectors.toList());
+        }
+
+        HostInfoCustomDTO hostInfoCustomDTO = new HostInfoCustomDTO();
+        hostInfoCustomDTO.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo));
+        hostInfoCustomDTO.setFacilities(facilitiesDTO);
+        hostInfoCustomDTO.setImages(imageDTO);
+        
+        return hostInfoCustomDTO;
     }
 }
