@@ -15,7 +15,6 @@ public class PointDTO {
     private int pSum;
     private int pValue;
     private LocalDateTime pDate;
-    private String pNone;
 
     public PointDTO(Point point) {
         this.id = point.getId();
@@ -23,16 +22,14 @@ public class PointDTO {
         this.pSum = point.getPSum();
         this.pValue = point.getPValue();
         this.pDate = point.getPDate();
-        this.pNone = point.getPNone();
     }
 
     @QueryProjection
-    public PointDTO(int id, int memIdx, int pSum, int pValue, LocalDateTime pDate, String pNone) {
+    public PointDTO(int id, int memIdx, int pSum, int pValue, LocalDateTime pDate) {
         this.id = id;
         this.memIdx = memIdx;
         this.pSum = pSum;
         this.pValue = pValue;
         this.pDate = pDate;
-        this.pNone = pNone;
     }
 }

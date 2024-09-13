@@ -40,7 +40,6 @@ public class PaymentDTO {
         this.payContent = payment.getPayContent();
         this.salePrice = payment.getSalePrice();
         this.nsalePrice = payment.getNsalePrice();
-        this.cancelTime = payment.getCancelTime();
         this.cancelContent = payment.getCancelContent();
         this.payDate = payment.getPayDate();
         this.cancelDate = payment.getCancelDate();
@@ -49,7 +48,7 @@ public class PaymentDTO {
     }
 
     @QueryProjection
-    public PaymentDTO(int id, int icIdx, int pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelTime, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String payNone) {
+    public PaymentDTO(int id, int icIdx, int pIdx, PayStatus payStatus, String payMethod, String payContent, String salePrice, String nsalePrice, String cancelContent, LocalDateTime payDate, LocalDateTime cancelDate, String paymentKey, String payNone) {
         this.id = id;
         this.icIdx = icIdx;
         this.pIdx = pIdx;
@@ -58,7 +57,6 @@ public class PaymentDTO {
         this.payContent = payContent;
         this.salePrice = salePrice;
         this.nsalePrice = nsalePrice;
-        this.cancelTime = cancelTime;
         this.cancelContent = cancelContent;
         this.payDate = payDate;
         this.cancelDate = cancelDate;

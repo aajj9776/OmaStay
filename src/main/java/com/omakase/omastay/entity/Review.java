@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "review")
-@ToString(exclude = {"member", "reservation"})
+@ToString(exclude = {"member", "reservation", "hostInfo"})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,10 @@ public class Review {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_idx", referencedColumnName = "res_idx")
     private Reservation reservation = new Reservation();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
+    private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "rev_writer", nullable = false, length = 100)
     private String revWriter;
@@ -47,6 +51,7 @@ public class Review {
     
     @Column(name = "rev_none", length = 100)
     private String revNone;
+    
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "fName", column = @Column(name = "rev_fname", length = 200)),

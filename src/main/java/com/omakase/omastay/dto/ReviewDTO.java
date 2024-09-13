@@ -8,12 +8,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Data
 @NoArgsConstructor
 public class ReviewDTO {
     private int id;
     private int memIdx;
     private int resIdx;
+    private int hIdx;
     private String revWriter;
     private String revContent;
     private LocalDateTime revDate;
@@ -23,10 +26,13 @@ public class ReviewDTO {
     private String revFname;
     private String revOname;
 
+    
+
     public ReviewDTO(Review review) {
         this.id = review.getId();
         this.memIdx = review.getMember() != null ? review.getMember().getId() : null;
         this.resIdx = review.getReservation() != null ? review.getReservation().getId() : null;
+        this.hIdx = review.getHostInfo() != null ? review.getHostInfo().getId() : null;
         this.revWriter = review.getRevWriter();
         this.revContent = review.getRevContent();
         this.revDate = review.getRevDate();
@@ -36,11 +42,12 @@ public class ReviewDTO {
     }
 
     @QueryProjection
-    public ReviewDTO(int id, int memberId, int reservationId, String revWriter, String revContent, LocalDateTime revDate,
+    public ReviewDTO(int id, int memberId, int reservationId, int hostInforId, String revWriter, String revContent, LocalDateTime revDate,
                      BooleanStatus revStatus, Float revRating, String revNone) {
         this.id = id;
         this.memIdx = memberId;
         this.resIdx = reservationId;
+        this.hIdx = hostInforId;
         this.revWriter = revWriter;
         this.revContent = revContent;
         this.revDate = revDate;

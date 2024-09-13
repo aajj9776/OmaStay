@@ -6,7 +6,7 @@
     <head>
     <meta charset="utf-8" />
     </head>
-    <body class="overflow-y-auto">
+        <body class="overflow-y-auto">
         <div
         class="w-full bg-[#fff] lg:h-auto lg:min-h-[6445] sticky border-b-[1px]"
         >
@@ -59,8 +59,6 @@
                 </div>
             </div>
         </div>
-            </div>
-            </div>
             <section
             class="w-[1223px] flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[26.6px] max-w-full text-left text-[18px] text-[#333] font-[Inter]"
             >
@@ -81,11 +79,6 @@
                     <div
                     class="flex flex-col items-start justify-start pt-[2.7px] px-[0px] pb-[0px]"
                     >
-                    <img
-                        class="w-[23.9px] h-[21.6px] relative"
-                        alt=""
-                        src="/image/detail/star-rating-img.svg"
-                    />
                     </div>
                     <b
                     class="h-[27px] relative text-[15.5px] flex items-center min-w-[27px]"
@@ -1108,36 +1101,24 @@
                     호텔은 만족스러우셨나요?
                     </h2>
                 </div>
-                <div
-                    class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[24px] pr-[20px] mt-[-20px]"
-                >
-                    <div id="rating-container" class="flex flex-row items-start justify-start gap-[5px]">
+            <div class="d-grid gap-2">
+                <button id="reviewInsertBtn" type="button" class="btn btn-outline-primary ml-[38px] w-[1123px] h-[60px] mt-[-11px]">리뷰 작성하기</button>
+            </div>
 
-                    </div>
-                </div>
-                <div
-                class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[38px] pr-[34px] box-border max-w-full"
-            >
-                
-                <textarea id="reviewText" type="text" class="bg-gray-100 h-[201px] w-auto [outline:none] flex-1 rounded-[13px] box-border overflow-hidden flex flex-row items-start justify-start py-[15px] px-[19px] font-[Inter] font-bold text-[14.2px] text-[#707070] max-w-full resize-none"
-                rows="{10}"
-                cols="{56}" placeholder="리뷰를 작성해주세요 !"></textarea>
+           <!-- 모달 -->
+            <div id="myModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999px] to-50%">
+                <!-- AJAX로 불러온 HTML을 여기에 삽입 -->
+                <div id="modal-body"></div>
+            </div>
+            
             
             </div>
-             <div class="input-group mb-3 w-[97%]">
-                <input type="file" name="file" class="form-control w-[978px] ml-[39px]" placeholder="파일을 첨부하세요" aria-label="file_insert" aria-describedby="basic-addon2">
-                <button class="input-group-text" id="basic-addon2">파일 첨부하기</button>
-             </div>
-            <div class="d-grid gap-2">
-                <button id="reviewInsertBtn" class="btn btn-primary ml-[38px] w-[1123px] h-[60px] mt-[-11px]">작성하기</button>
-              </div>
-            </div>
         </div>
-            <div
-                class="self-stretch flex flex-row items-start justify-start pt-[0px] pb-[176.4px] pl-[8px] pr-[4px] box-border max-w-full shrink-0 text-[11.3px] text-[#49627a]"
+            <div id="modalBlockBox"
+                class="self-stretch flex flex-row items-start justify-start pt-[0px] pb-[176.4px] pl-[8px] pr-[4px] box-border max-w-full shrink-0 text-[11.3px] text-[#49627a] z-0"
             >
                 <div
-                class="flex-1 flex flex-col items-start justify-start gap-[34.7px] max-w-full"
+                class="flex-1 flex flex-col items-start justify-start gap-[34.7px] max-w-full z-0"
                 >
                 <div
                     class="self-stretch flex flex-col items-start justify-start gap-[8px] max-w-full text-[17.2px] text-[#333]"
@@ -1336,30 +1317,31 @@
                         <div
                         class="self-stretch flex flex-col items-start justify-start gap-[14px] text-[13.9px] text-[#333]"
                         >
-                        <div
-                            class="self-stretch h-[66px] relative leading-[22px] flex items-center shrink-0"
-                        >
-                            <span>
-                            <p class="m-[0px]">️객실</p>
-                            <p class="m-[0px]">
-                                -객실이 아주 넓고 쾌적했어요. 침구류도 편안했습니다.
-                                티비 화면도 크고, 에어컨도 설정한 온도대로 잘 나와서
-                                시원했어요. 창문도 조금 열 수 있어서 환기
-                            </p>
-                            <p class="m-[0px]">
-                                하기 좋았어요. 무엇보다 광안대교를 정면으로 펼쳐지는
-                                오션 뷰가 너무 좋았어요. 제가 투숙한 날에 비가
-                                왔음에도 뷰가 정말 아름다웠어요.…
-                            </p>
+                        <p class="m-[0px]">️객실</p>
+                            <span id="reviewText" class="overflow-hidden transition-all duration-300 max-h-[60px]">
+                                    여기어때 한정특가로 3개월 전 쯤 예약했습니다. 결과적으로 여행일정이 확실하다면 한정특가 진짜 아주아주 강력추천 드려요.
+
+                                    동해바다 본 지 오래되었었고, 강릉이 뭔가 가고싶은데 좋은 숙소에서 편히 쉬고 싶었어요. 뷰도 좋지만 편의시설도 좋아서 많이 안움직여도 되는 곳! 을 생각하던 차에 스카이베이경포 특가가 떠서 조식과 수영장 이용 모두 포함된 레이크뷰 숙소를 좋은 가격에 미리 예약했었습니다.
+                                    
+                                    바다는 바로 앞이니까 보면 됐고 숙소에서 바라보는 호수랑 산뷰도 참 멋있습니다. 침대에 누워서도 호수가 보이고 밤에도 어둡지만 호수가 보여 좋습니다 ㅎㅎ 
+                                    
+                                    편의시설 야외수영장 예쁜거로 유명해서 가보니 기대한대로 예뻤어요. 야외풀에서 커플이나 가족단위로 오셔서 물놀이 하시고 사진찍느라 실내수영장이 비어있더라구요. 혼자가고 운동좋아하는 제겐 안성맞춤이었습니다. 거의 전세내듯 써서 40분 바짝 알차게 수영할 수 있었어요.
+                                    
+                                    헬스장은 곳곳에서 바다를 볼 수 있는 구조로 되어있어요. 특히 창이랑 유산소기구가 제일 가까워서 바다 보면서 유산소 할 수 있습니다. 근력운동도 골고루 할 수 있게 기구 잘 갖춰진 것 같아요.
+                                    
+                                    조식은 사실 저는 연어만 있으면 좋다 주의인데 연어있고 국물류 쌀국수랑 오뎅탕? 있고 기본 토스트나 빵 샐러드 과일 한식류 등 엄~청 많진 않지만 엄~청 적지도 않고 좋았습니다.
+                                    
+                                    조금 아쉬운건 노후화된 바닥이랑 벽지...? 구석에 한가닥 보인 머리카락...?(입실하자마자 본건데 다른 청소 상태는 괜찮아서 스윽 치웠어요.)
+                                    아, 욕조가 없는지 몰랐어요 욕조 선호파라서...! 이정도 아쉬움 말곤 전반적으로 만족하며 다녀왔습니다.
+                                    
+                                    다음에 또 묵을거냐고 물으면 재방문의사 있는 곳입니다!
                             </span>
+                        
+                        <div class="flex flex-row items-start justify-start text-center text-[13.1px]">
+                            <button id="toggleButton" class="relative font-semibold inline-block min-w-[36.5px] flex items-center">
+                                더보기
+                            </button>
                         </div>
-                        <div
-                            class="flex flex-row items-start justify-start text-center text-[13.1px]"
-                        >
-                        <button class="relative font-semibold inline-block min-w-[36.5px] flex items-center"> 
-                            더보기
-                            <img class="h-[16px] w-[16px] relative min-h-[16px] z-[1]" alt="" src="/image/detail/svg-3.svg" />
-                        </button>
                         </div>
                         <div
                             class="flex flex-row items-start justify-start gap-[4px] text-[12.2px] text-[#707070]"
@@ -1378,200 +1360,24 @@
                             3명이 이 리뷰를 추천했어요
                             </div>
                         </div>
+
+                        <div class="p-4 bg-gray-100 rounded-lg w-[890px] h-[200px]">
+                            <p class="text-sm font-bold text-gray-900">
+                            호텔이름 룰루랄라
+                            </p>
+                            <p class="text-sm text-gray-900">
+                            ㅇㅇ
+                            </p>
+                          </div>
+
                         </div>
                     </div>
                     </div>
                 </div>
                 <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
-                <div
-                    class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[22px] pr-[29px] box-border max-w-full"
-                >
-                    <div
-                    class="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-[72px] max-w-full"
-                    >
-                    <div
-                        class="w-[175px] flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px] box-border"
-                    >
-                        <div
-                        class="self-stretch flex flex-row items-end justify-start gap-[5px]"
-                        >
-                        <img
-                            class="h-[36px] w-[38px] relative rounded-[150px] object-cover"
-                            alt=""
-                            src="/image/detail/review-grade-img-1@2x.png"
-                        />
-
-                        <div
-                            class="flex-1 flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[3px]"
-                        >
-                            <div
-                            class="self-stretch flex flex-col items-start justify-start gap-[7px]"
-                            >
-                            <div
-                                class="flex flex-row items-start justify-start gap-[4px]"
-                            >
-                                <div
-                                class="rounded-[3px] bg-[#f5f7fa] flex flex-row items-start justify-start py-[3px] pl-[6px] pr-[4px] shrink-0"
-                                >
-                                <b class="relative inline-block min-w-[34px]"
-                                    >탐험자</b
-                                >
-                                </div>
-                                <div
-                                class="rounded-[3px] bg-[#90afc4] flex flex-row items-start justify-start pt-[3px] pb-[2px] pl-[3px] pr-[0px] gap-[4px] shrink-0 text-[#1a4568]"
-                                >
-                                <div
-                                    class="flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px]"
-                                >
-                                    <img
-                                    class="w-[12px] h-[12px] relative"
-                                    alt=""
-                                    src="/image/detail/best-review-img.svg"
-                                    />
-                                </div>
-                                <b class="relative inline-block min-w-[60px]"
-                                    >베스트 리뷰</b
-                                >
-                                </div>
-                            </div>
-                            <div
-                                class="flex flex-col items-start justify-start gap-[1px] text-[12.2px] text-[#333]"
-                            >
-                                <div
-                                class="relative font-semibold inline-block min-w-[61px]"
-                                >
-                                애플크로플
-                                </div>
-                                <div class="relative text-[#707070]">
-                                리뷰 17 · 다녀온 장소 16
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div
-                        class="flex-1 flex flex-col items-start justify-start gap-[42px] min-w-[580px] max-w-full text-[#707070] mq750:min-w-full"
-                    >
-                        <div
-                        class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] box-border max-w-full"
-                        >
-                        <div
-                            class="flex-1 flex flex-col items-start justify-start gap-[14px] max-w-full"
-                        >
-                            <div
-                            class="flex flex-row items-start justify-start gap-[3px]"
-                            >
-                            <img
-                                class="h-[15px] w-[15px] relative min-h-[15px]"
-                                alt=""
-                                src="/image/detail/star1.svg"
-                            />
-
-                            <img
-                                class="h-[15px] w-[15px] relative min-h-[15px]"
-                                alt=""
-                                src="/image/detail/star1.svg"
-                            />
-
-                            <img
-                                class="h-[15px] w-[15px] relative min-h-[15px]"
-                                alt=""
-                                src="/image/detail/star1.svg"
-                            />
-
-                            <img
-                                class="h-[15px] w-[15px] relative min-h-[15px]"
-                                alt=""
-                                src="/image/detail/star1.svg"
-                            />
-
-                            <img
-                                class="h-[15px] w-[15px] relative min-h-[15px]"
-                                alt=""
-                                src="/image/detail/star1.svg"
-                            />
-
-                            <div
-                                class="relative tracking-[-0.16px] inline-block min-w-[36.6px]"
-                            >
-                                19일 전
-                            </div>
-                            </div>
-                            <div
-                            class="w-[892px] overflow-x-auto flex flex-row items-start justify-start gap-[27px] max-w-full"
-                            >
-                            <img
-                                class="h-[210px] w-[210px] relative rounded-[12px] overflow-hidden shrink-0 object-cover min-h-[210px]"
-                                alt=""
-                                src="/image/detail/group--slide@2x.png"
-                            />
-
-                            <img
-                                class="h-[210px] w-[210px] relative rounded-[12px] overflow-hidden shrink-0 object-cover min-h-[210px]"
-                                alt=""
-                                src="/image/detail/group--slide-1@2x.png"
-                            />
-
-                            <img
-                                class="h-[210px] w-[210px] relative rounded-[12px] overflow-hidden shrink-0 object-cover min-h-[210px]"
-                                alt=""
-                                src="/image/detail/group--slide-2@2x.png"
-                            />
-                            </div>
-                        </div>
-                        </div>
-                        <div
-                        class="self-stretch flex flex-col items-start justify-start gap-[14px] text-[13.9px] text-[#333]"
-                        >
-                        <div
-                            class="self-stretch h-[66px] relative leading-[22px] flex items-center shrink-0"
-                        >
-                            <span>
-                            <p class="m-[0px]">️객실</p>
-                            <p class="m-[0px]">
-                                -객실이 아주 넓고 쾌적했어요. 침구류도 편안했습니다.
-                                티비 화면도 크고, 에어컨도 설정한 온도대로 잘 나와서
-                                시원했어요. 창문도 조금 열 수 있어서 환기
-                            </p>
-                            <p class="m-[0px]">
-                                하기 좋았어요. 무엇보다 광안대교를 정면으로 펼쳐지는
-                                오션 뷰가 너무 좋았어요. 제가 투숙한 날에 비가
-                                왔음에도 뷰가 정말 아름다웠어요.…
-                            </p>
-                            </span>
-                        </div>
-                        <div
-                            class="flex flex-row items-start justify-start text-center text-[13.1px]"
-                        >
-                        <button class="relative font-semibold inline-block min-w-[36.5px] flex items-center"> 
-                            더보기
-                            <img class="h-[16px] w-[16px] relative min-h-[16px] z-[1]" alt="" src="/image/detail/svg-3.svg" />
-                        </button>
-                        </div>
-                        <div
-                            class="flex flex-row items-start justify-start gap-[4px] text-[12.2px] text-[#707070]"
-                        >
-                        <button>
-                            <img
-                            class="h-[20px] w-[20px] relative min-h-[16px] shrink-0"
-                            alt=""
-                            src="/image/detail/svg-4.svg"
-                            />
-                        </button>
-                            <div
-                            class="relative font-semibold shrink-0 whitespace-nowrap text-[15px]" 
-                            >
-                            3명이 이 리뷰를 추천했어요
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
+                
                 </div>
-                </div>
-            </div>
-            <div
+            <div id="reviewPagination"
                 class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[20px] pr-[21px] text-center text-[#393939] mb-[100px]"
             >
                 <div
@@ -1647,10 +1453,16 @@
             </div>
             </section>
         </main>
+        <link href="/summernote/css/summernote-lite.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="/summernote/js/summernote-lite.js"></script>
+        <script src="/summernote/js/summernote-ko-KR.js"></script>
         <script type="text/javascript" src="/js/datepicker.js"></script>
         <script type="text/javascript" src="/js/countperson.js"></script>
         <script>
+            let ratingContainers;
+            let currentRating;
+            let isRatingInitialized = false;
 
            
             document.addEventListener('click', (event) => {
@@ -1670,112 +1482,257 @@
                 }
             });
 
-            const ratingContainers = document.querySelectorAll('#rating-container');
-            let currentRating = 0;
+            $(document).ready(function() {
+                let uploadedFileInfo = []; // 상위 스코프에서 선언
+                let scrollPosition = 0;
+                $('#reviewInsertBtn').on('click', function() {   
+                    initializeRating();
+                    scrollPosition = $(window).scrollTop(); // 현재 스크롤 위치 저장
+                    $('body').addClass('modal-open'); // 스크롤 막기 위한 클래스 추가
+                    $('body').css({
+                        'overflow': 'hidden',           // 스크롤 막기
+                        'position': 'fixed',            // 고정
+                        'top': `-${scrollPosition}px`,   // 스크롤 위치 고정
+                        'width': '100%'                 // 페이지 너비 유지
+                    }); 
+                    $('#myModal').show();
+                    $("#modalBlockBox").css("display", "none");
+                    $("#search_bar").css("display", "none");
+                    $("footer").css("display", "none");
+                    $("#reviewPagination").css("display", "none");
+                    $.ajax({
+                        url: '/review_write',
+                        method: 'GET',
+                        dataType: 'html',
+                        success: function(data) {
+                            $('#modal-body').html(data);
 
-            ratingContainers.forEach(ratingContainer => {
-                const stars = [];
+                            // Summernote 및 기타 초기화 작업
+                            $('#summernote').summernote({
+                                lang: 'ko-KR',
+                                height: 300,
+                                placeholder: '리뷰 내용을 입력하세요',
+                                toolbar: [
+                                    ['style', ['style']],
+                                    ['font', ['bold', 'underline', 'italic', 'clear']],
+                                    ['color', ['color']],
+                                    ['para', ['ul', 'ol', 'paragraph']],
+                                    ['table', ['table']],
+                                    ['insert', ['link', 'picture', 'video']],
+                                    ['view', ['fullscreen', 'codeview', 'help']]
+                                ],
+                                callbacks: {
+                                    onImageUpload: function(files) {
+                                        for (let i = 0; i < files.length; i++){
+                                            uploadImage(files[i]);
+                                        }
+                                    }
+                                }
+                            });
 
-                const svgNS = "http://www.w3.org/2000/svg";
+                            function uploadImage(file) {
+                                let formData = new FormData();
+                                formData.append('file', file);
+                                $.ajax({
+                                    url: "/upload_image",
+                                    type: "POST",
+                                    data: formData,
+                                    contentType: false,
+                                    processData: false, 
+                                    dataType: "json",
+                                }).done(function(data){
+                                    const imageUrl = data.url;
+                                    const imgTag = '<img src="' + imageUrl + '" alt="Image">';
+                                    $('.note-editable').append(imgTag);
+                                    
+                                    uploadedFileInfo.push({
+                                        oname: data.oname,
+                                        fname: data.fname
+                                    });
+                                });
+                            }
+                            
+                            // Insert button click event
+                            $('#insertBtn').on('click', function() {
+                                const rating = currentRating;
+                                const contentHtml = $('.note-editable').html();
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = contentHtml;
+                                
+                                let textContent = '';
+                                tempDiv.querySelectorAll('p').forEach(p => {
+                                    textContent += p.textContent + '\n';
+                                });
+                                const content = textContent.trim();
 
-                for (let i = 0; i < 5; i++) {
-                    const star = document.createElementNS(svgNS, 'svg');
-                    star.setAttributeNS(null, 'width', '50');
-                    star.setAttributeNS(null, 'height', '50');
-                    star.setAttributeNS(null, 'fill', 'gold');
-                    star.setAttributeNS(null, 'class', 'bi bi-star');
-                    star.setAttributeNS(null, 'viewBox', '0 0 16 16');
+                                let formData = new FormData();
+                                formData.append('revContent', content);
+                                formData.append('revRating', rating);
 
-                    const path = document.createElementNS(svgNS, 'path');
-                    path.setAttributeNS(null, 'd', "M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z");
-                    star.appendChild(path);
-                    star.classList.add('star');
-                    star.dataset.index = i;
-                    stars.push(star);
-                    ratingContainer.appendChild(star);
+                                uploadedFileInfo.forEach((fileInfo, index) => {
+                                    formData.append('oname_' + index, fileInfo.oname); 
+                                    formData.append('fname_' + index, fileInfo.fname);
+                                });
 
-                    star.addEventListener('click', (e) => {
-                        const boundingRect = star.getBoundingClientRect();
-                        const clickX = e.clientX - boundingRect.left;
+                                $.ajax({
+                                    url: '/review_insert',
+                                    method: 'POST',
+                                    data: formData,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function(data) {
+                                        alert('리뷰가 성공적으로 등록되었습니다.');
+                                        $('body').removeClass('modal-open'); // 스크롤 막기 해제
+                                        $('body').css({
+                                        'overflow': '',                   // 스크롤 복구
+                                        'position': '',                   // 고정 해제
+                                        'top': '',                        // 스크롤 위치 복구
+                                        'width': ''                       // 너비 복구
+                                    });
+                                    $(window).scrollTop(scrollPosition);  // 저장된 스크롤 위치로 복구
+                                    $('#myModal').hide();
+                                    $("#modalBlockBox").css("display", "flex");
+                                    $("#search_bar").css("display", "flex");
+                                    $("#reviewPagination").css("display", "flex");
+                                    $("footer").css("display", "flex");
+        
+                                    },
+                                    error: function(xhr, status, error) {
+                                        alert('리뷰 등록에 실패했습니다. 잠시 후 다시 시도해주세요.');
+                                    }
+                                });
+                            });
 
-                        if (clickX <= boundingRect.width / 2) {
-                            currentRating = i + 0.5; // 왼쪽 절반 클릭 시 0.5점
-                        } else {
-                            currentRating = i + 1; // 오른쪽 절반 클릭 시 1점
+                            // Close modal event
+                            $('#closeBtn, #myModal').on('click', function(event) {
+                                if (event.target.id === 'closeBtn' || event.target.id === 'myModal') {
+                                    $('body').removeClass('modal-open'); // 스크롤 막기 해제
+                                    $('body').css({
+                                        'overflow': '',                   // 스크롤 복구
+                                        'position': '',                   // 고정 해제
+                                        'top': '',                        // 스크롤 위치 복구
+                                        'width': ''                       // 너비 복구
+                                    });
+                                    $(window).scrollTop(scrollPosition);  // 저장된 스크롤 위치로 복구
+                                    $('#myModal').hide();
+                                    $("#modalBlockBox").css("display", "flex");
+                                    $("#search_bar").css("display", "flex");
+                                    $("#reviewPagination").css("display", "flex");
+                                    $("footer").css("display", "flex");
+                                }
+                            });
+
+                            // Make sure that rating is initialized
+
+                        },
+                        error: function(xhr, status, error) {
+                            alert('리뷰 작성 페이지를 불러오는 데 실패했습니다.');
                         }
-                        console.log(currentRating);
+                    });
+                });
+            });
+
+           function initializeRating() {
+                    if (isRatingInitialized) {
+                    return; // 이미 별점이 초기화되었으면 다시 초기화하지 않음
+                }
+
+                ratingContainers = document.querySelectorAll('#rating-container');
+                currentRating = 0;
+
+                ratingContainers.forEach(ratingContainer => {
+                    const stars = [];
+                    const svgNS = "http://www.w3.org/2000/svg";
+
+                    for (let i = 0; i < 5; i++) {
+                        const star = document.createElementNS(svgNS, 'svg');
+                        star.setAttributeNS(null, 'width', '50');
+                        star.setAttributeNS(null, 'height', '50');
+                        star.setAttributeNS(null, 'fill', 'gold');
+                        star.setAttributeNS(null, 'class', 'bi bi-star');
+                        star.setAttributeNS(null, 'viewBox', '0 0 16 16');
+
+                        const path = document.createElementNS(svgNS, 'path');
+                        path.setAttributeNS(null, 'd', "M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z");
+                        star.appendChild(path);
+                        star.classList.add('star');
+                        star.dataset.index = i;
+                        stars.push(star);
+                        ratingContainer.appendChild(star);
+
+                        // 클릭 이벤트 리스너 추가
+                        star.addEventListener('click', (e) => {
+                            const boundingRect = star.getBoundingClientRect();
+                            const clickX = e.clientX - boundingRect.left;
+
+                            if (clickX <= boundingRect.width / 2) {
+                                currentRating = i + 0.5; // 절반 채움
+                            } else {
+                                currentRating = i + 1; // 전부 채움
+                            }
+                            updateStar();
+                        });
+                    }
+
+                    // 마우스가 별점을 벗어날 때 이벤트 리스너 추가
+                    ratingContainer.addEventListener('mouseleave', () => {
                         updateStar();
                     });
 
-                }
-
-                ratingContainer.addEventListener('mouseleave', () => {
-                    updateStar();
-                });
-
-                function updateStar(rating = currentRating) {
-                    for (let i = 0; i < 5; i++) {
-                        const star = stars[i];
-                        if (rating >= i + 1) {
-                            // 별이 완전히 채워짐
-                            star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                            </svg>`;
-                        } else if (rating > i && rating < i + 1) {
-                            // 별이 반만 채워짐
-                            star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star-half" viewBox="0 0 16 16">
-                                <path d="M5.354 5.119 7.538.792A.52.52 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.54.54 0 0 1 16 6.32a.55.55 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.5.5 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.6.6 0 0 1 .085-.302.51.51 0 0 1 .37-.245zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.56.56 0 0 1 .162-.505l2.907-2.77-4.052-.576a.53.53 0 0 1-.393-.288L8.001 2.223 8 2.226z"/>
-                            </svg>`;
-                        } else {
-                            // 별이 비어 있음
-                            star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star" viewBox="0 0 16 16">
-                                <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
-                            </svg>`;
+                    // 별 업데이트 함수 정의
+                    function updateStar(rating = currentRating) {
+                        for (let i = 0; i < 5; i++) {
+                            const star = stars[i];
+                            if (rating >= i + 1) {
+                                star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                </svg>`;
+                            } else if (rating > i && rating < i + 1) {
+                                star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star-half" viewBox="0 0 16 16">
+                                    <path d="M5.354 5.119 7.538.792A.52.52 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.54.54 0 0 1 16 6.32a.55.55 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.5.5 0 0 1-.146.05c-.342.06-.668-.254-.6-.642"/>
+                                </svg>`;
+                            } else {
+                                star.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gold" class="bi bi-star" viewBox="0 0 16 16">
+                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
+                                </svg>`;
+                            }
                         }
                     }
-                }
-            });
+                });
+                isRatingInitialized = true; 
 
-           // 리뷰 등록 버튼 클릭 시 이벤트 핸들러
-                $('#reviewInsertBtn').click(function() {
-                // 사용자 입력 값 가져오기 (예시)
-                let rating = currentRating; // 별점 입력 요소에서 값 가져오기
-                let review = $('#reviewText').val(); // 리뷰 텍스트 입력 요소에서 값 가져오기
-                console.log(rating, review);
+            }
 
-                    // Fetch API를 사용하여 리뷰 데이터 전송
-                    fetch('/review/insert', {
-                        method: 'POST',
-                        headers: {
-                        'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                        revRating: rating,
-                        revContent: review
-                        })
+
+                $(document).on('click', '.note-btn', function() {
+                    // 모달이 생성되기 전에 미리 백드롭을 제거
+                    $('.note-modal-backdrop').remove();
+                    
+                });
+
+
+                $(document).ready(function() {
+                    // 이벤트 위임을 사용하여 동적으로 추가된 버튼에도 적용되도록 설정
+                    $(document).on('click', '#toggleButton', function() {
+                        var reviewText = $('#reviewText');
                         
-                    }) 
-                    .then(response => {
-                        console.log(response);
-                        if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        // 전체 높이를 동적으로 계산
+                        var fullHeight = reviewText.prop('scrollHeight') + "px";
+                        
+                        // 현재 상태 확인
+                        if (reviewText.hasClass('max-h-[60px]')) {
+                            reviewText.removeClass('max-h-[60px]').css('max-height', fullHeight);  // 전체 높이로 확장
+                            $(this).text('접기');
+                        } else {
+                            reviewText.addClass('max-h-[60px]').css('max-height', '60px');  // 다시 60px로 축소
+                            $(this).text('더보기');
                         }
-                        return response.json(); // 응답을 JSON으로 파싱
-                        console.log(JSON.stringify({ rating: rating, review: review }))
-                    })
-                    .then(data => {
-                        console.log(data);
-                        alert('리뷰가 등록되었습니다.');
-                        // 성공 시 추가적인 작업 수행 (예: 입력 필드 초기화, 리뷰 목록 업데이트 등)
-                    })
-                    .catch(error => {
-                        console.error('리뷰 등록 실패:', error);
-                        alert('리뷰 등록에 실패했습니다.');
-                        // 오류 처리 로직 추가 (예: 오류 메시지 표시, 로그 기록 등)
-                        
                     });
-                    });
-  
+
+                    // 페이지 로드 시 'collapsed' 상태가 제대로 적용되었는지 확인
+                    $('#reviewText').css('max-height', '60px');
+                });
+
 
 
         </script>

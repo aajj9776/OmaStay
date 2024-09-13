@@ -48,9 +48,6 @@ public class Payment {
     @Column(name = "nsale_price", length = 100)
     private String nsalePrice;
 
-    @Column(name = "cancel_time", length = 100)
-    private String cancelTime;
-
     @Column(name = "cancel_content", length = 100)
     private String cancelContent;
 

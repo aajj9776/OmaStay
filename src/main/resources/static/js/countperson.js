@@ -29,11 +29,6 @@ function changCount() {
   }
 }
 
-$(document).ready(function () {
-  dropdownElement = $("#second_people_dropdown");
-  const dropdown = new bootstrap.Dropdown(dropdownElement[0]);
-});
-
 $(document).ready(function() {
     dropdownElement = $('#second_people_dropdown');
     const dropdown = new bootstrap.Dropdown(dropdownElement[0]);
@@ -48,12 +43,6 @@ $(document).ready(function() {
     if (s_keyword) {
         $("#search-accommodation").val(s_keyword);
     }
-
-  $("#decreaseBtn").click(function (event) {
-    count--;
-    changCount();
-    console.log(count);
-  });
 
     $("#decreaseBtn").click(function(event){
         count--;
