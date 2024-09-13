@@ -67,7 +67,6 @@ public class FacilitiesService {
         return null;
     }
 
-
     //숙소 검색 필터링
     public List<ResultAccommodationsDTO> filteringAccommodations(FilterDTO filterDTO) {
 
@@ -90,5 +89,4 @@ public class FacilitiesService {
         //3. 검색어의 해당하는 리스트중 해당 인원수 이상의 숙소만 필터링(roomInfo.id 리스트)
         return roomInfoRepository.personFiltering(filterDTO.getPerson(), date);
     }
-
 }

@@ -87,6 +87,4 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
 
         return reservation.startEndVo.start.goe(end).or(reservation.startEndVo.end.loe(start));
     }
-
-
 }

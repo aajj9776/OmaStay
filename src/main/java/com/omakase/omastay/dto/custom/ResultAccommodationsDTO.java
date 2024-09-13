@@ -9,4 +9,5 @@ public class ResultAccommodationsDTO {
     private String img_url;
     private float rating;
     private Integer reviewCount;
+    private boolean soldOut;
 }
