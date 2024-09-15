@@ -16,4 +16,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer>, Paym
     @Query("SELECT p FROM Payment p WHERE p.paymentKey = :paymentKey")
     Payment findByPaymentKeyWithLock(@Param("paymentKey") String paymentKey);
 
+    Payment findByPaymentKey(String paymentKey);
+
 }

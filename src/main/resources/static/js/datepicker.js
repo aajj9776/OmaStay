@@ -1,8 +1,3 @@
-// <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-/*<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>*/
-//위에 있는거 같이 첨부해야됨
-
 $(document).ready(function () {
     var start = moment();
     var end = moment().add(1, 'days');

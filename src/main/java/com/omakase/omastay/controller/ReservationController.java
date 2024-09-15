@@ -19,6 +19,10 @@ import com.omakase.omastay.service.ReservationService;
 import jakarta.mail.MessagingException;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -126,7 +130,6 @@ public class ReservationController {
         ModelAndView mv = new ModelAndView();
 
         mv.setViewName("reservation/reservation_check.html");
-
         return mv;
         
     }
@@ -136,9 +139,8 @@ public class ReservationController {
     public String fail() {
         return "reservation/payment_fail.html";
     }
-    
-    
-    //이거 2개는 모달창
+
+    //이거 3개는 모달창
     @RequestMapping("/room_info")
     public String roomInfo() {
         return "reservation/room_info.html";
@@ -146,6 +148,10 @@ public class ReservationController {
     @RequestMapping("/cancel_content")
     public String checkDetail() {
         return "reservation/cancel_content.html";
+    }
+    @GetMapping("/modal/coupon-modal")
+    public String getCouponModal() {
+        return "reservation/modal/coupon-modal"; // .html 확장자는 생략 가능
     }
     
     

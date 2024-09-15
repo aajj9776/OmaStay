@@ -29,7 +29,8 @@
     </div>
     <div
       class="w-[886px] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[10px] box-border gap-[25px] max-w-full text-[25px]">
-      <form class="m-[0px] w-[690px] flex flex-col items-start justify-start gap-[25px] max-w-full">
+      <form id="hostInfoForm" enctype="multipart/form-data"
+       class="m-[0px] w-[690px] flex flex-col items-start justify-start gap-[25px] max-w-full">
         <div class="w-[493px] flex flex-row items-center justify-between gap-[20px] max-w-full mq800:flex-wrap">
           <h3
             class="m-[0px] h-[40px] w-[120px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000]  text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
@@ -39,8 +40,12 @@
             <div
               class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
               <input
+                id="hname"
                 class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                placeholder="숙소명" type="text" />
+                placeholder="숙소명" type="text"
+                readonly
+                th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hname : ''}"
+                />
             </div>
             <div class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border">
               <div
@@ -55,12 +60,12 @@
             class="m-[0px] h-[40px] w-[165px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000]  text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
             숙소 유형 :
           </h3>
-          <select class="w-[220px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="acbank">
-            <option value="" disabled selected>숙소 유형</option>
-            <option value="모텔">모텔</option>
-            <option value="호텔/리조트">호텔/리조트</option>
-            <option value="펜션/풀빌라">펜션/풀빌라</option>
-            <option value="게하/한옥">게하/한옥</option>
+          <select class="w-[220px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="hCate" data-str="숙소 유형" >
+            <option value="NULL" disabled th:selected="${hostInfoCustomDTO == null || hostInfoCustomDTO.hostInfo == null || hostInfoCustomDTO.hostInfo.hCate == null || hostInfoCustomDTO.hostInfo.hCate == ''}">숙소 유형</option>
+            <option value="MOTEL"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'MOTEL'}">모텔</option>
+            <option value="HOTEL_RESORT"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'HOTEL_RESORT'}">호텔/리조트</option>
+            <option value="POOL_VILLA"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'POOL_VILLA'}">펜션/풀빌라</option>
+            <option value="GUESTHOUSE_HANOK"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'GUESTHOUSE_HANOK'}">게하/한옥</option>
           </select>
         </div>
         <div
@@ -75,8 +80,10 @@
                 class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
                 <input
                   id="postcode"
+                  data-str="주소"
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[189px] min-h-[24px]"
-                  placeholder="우편번호" type="text" />
+                  placeholder="우편번호" type="text" 
+                  th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.addressVo != null ? hostInfoCustomDTO.hostInfo.addressVo.postCode : ''}"/>
               </div>
             </div>
             <button type="button" onclick="searchPostcode()"
@@ -98,9 +105,10 @@
                 class="flex-1 overflow-hidden flex flex-row items-start justify-start py-[8px] px-[0px] box-border relative min-h-[24px] max-w-full">
                 <div class="h-[24px] w-[32px] !m-[0] absolute top-[calc(50%_-_12px)] left-[0px]"></div>
                 <div class="flex-1 flex flex-row items-start justify-start relative max-w-full">
-                  <input id="address"
+                  <input id="address" 
                     class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[250px] max-w-full p-[0px]"
-                    placeholder="주소" type="text" />
+                    placeholder="주소" type="text"
+                    th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.addressVo != null ? hostInfoCustomDTO.hostInfo.addressVo.street : ''}" />
 
                   <div class="h-full w-[24px] !m-[0] absolute top-[0px] bottom-[0px] left-[172px]"></div>
                 </div>
@@ -112,9 +120,10 @@
                 class="flex-1 overflow-hidden flex flex-row items-start justify-start py-[8px] px-[0px] box-border relative min-h-[24px] max-w-full">
                 <div class="h-[24px] w-[32px] !m-[0] absolute top-[calc(50%_-_12px)] left-[0px]"></div>
                 <div class="flex-1 flex flex-row items-start justify-start relative max-w-full">
-                  <input id="detailaddress"
+                  <input id="detailaddress" 
                     class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[250px] max-w-full p-[0px]"
-                    placeholder="상세주소" type="text" />
+                    placeholder="상세주소" type="text" 
+                    th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.addressVo != null ? hostInfoCustomDTO.hostInfo.addressVo.detail : ''}" />
 
                   <div class="h-full w-[24px] !m-[0] absolute top-[0px] bottom-[0px] left-[172px]"></div>
                 </div>
@@ -130,9 +139,11 @@
           <div class="w-[303px] flex flex-col items-start justify-start">
             <div
               class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
-              <input
+              <input 
+                id="hostName"
                 class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                placeholder="호스트 이름" type="text" />
+                placeholder="호스트 이름" type="text" data-str="호스트 이름"
+                th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hostOwnerInfo != null ? hostInfoCustomDTO.hostInfo.hostOwnerInfo.hostName : ''}" />
             </div>
           </div>
         </div>
@@ -145,7 +156,8 @@
             class="flex-1 flex flex-row items-start justify-start min-w-[325px] max-w-full [row-gap:20px] mq800:flex-wrap">
             <textarea
               class="w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
-              placeholder="호스트 소개"></textarea>
+              placeholder="호스트 소개" id="hIntro"
+              th:text="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hostOwnerInfo != null ? hostInfoCustomDTO.hostInfo.hostOwnerInfo.hintro : ''}"></textarea>
           </div>
         </div>
         <div
@@ -163,13 +175,13 @@
                 <div class="overflow-hidden flex flex-row items-center justify-start">
                   <div
                     class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
-                    <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" />
+                    <input class="facility-checkbox m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" th:value="${facility.id}" th:checked="${#lists.contains(hostInfoCustomDTO.facilities, facility)}"/>
                   </div>
                 </div>
                 <div class="w-max flex flex-col items-start justify-start">
                   <div
                     class="w-max relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[67px]">
-                    <span th:text="${facility.fCate}"></span>
+                    <span class="fCate" th:text="${facility.fCate}"></span>
                   </div>
                 </div>
               </div>
@@ -188,13 +200,13 @@
                 <div class="overflow-hidden flex flex-row items-center justify-start">
                   <div
                     class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
-                    <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" />
+                    <input class="facility-checkbox m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" th:value="${facility.id}" th:checked="${#lists.contains(hostInfoCustomDTO.facilities, facility)}"/>
                   </div>
                 </div>
                 <div class="w-max flex flex-col items-start justify-start">
                   <div
                     class="w-max relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[67px]">
-                    <span th:text="${facility.fCate}"></span>
+                    <span class="fCate" th:text="${facility.fCate}"></span>
                   </div>
                 </div>
               </div>
@@ -213,13 +225,13 @@
                 <div class="overflow-hidden flex flex-row items-center justify-start">
                   <div
                     class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
-                    <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" />
+                    <input class="facility-checkbox m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" th:value="${facility.id}" th:checked="${#lists.contains(hostInfoCustomDTO.facilities, facility)}" />
                   </div>
                 </div>
                 <div class="flex flex-col items-start justify-start">
                   <div
                     class="relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[73.2px]">
-                    <span th:text="${facility.fCate}"></span>
+                    <span class="fCate" th:text="${facility.fCate}"></span>
                   </div>
                 </div>
               </div>
@@ -238,13 +250,13 @@
                 <div class="overflow-hidden flex flex-row items-center justify-start">
                   <div
                     class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
-                    <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" />
+                    <input class="facility-checkbox m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" type="checkbox" th:value="${facility.id}" th:checked="${#lists.contains(hostInfoCustomDTO.facilities, facility)}" />
                   </div>
                 </div>
                 <div class="w-max flex flex-col items-start justify-start">
                   <div
                     class="w-max relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[67px]">
-                    <span th:text="${facility.fCate}"></span>
+                    <span class="fCate" th:text="${facility.fCate}"></span>
                   </div>
                 </div>
               </div>
@@ -264,7 +276,8 @@
             <div class="w-[552px] flex flex-row items-start justify-start py-[0px] px-[26px] box-border max-w-full">
               <textarea
                 class="w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
-                placeholder="오시는 길"></textarea>
+                placeholder="오시는 길" id="directions"
+                th:text="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null ? hostInfoCustomDTO.hostInfo.directions : ''}"></textarea>
             </div>
           </div>
         </div>
@@ -287,22 +300,21 @@
                     이미지 추가</b>
                 </div>
               </button>
-              <input type="file" id="fileInput" style="display: none;" accept="image/*" />
               <div class="hostimage">
                 <div class="swiper-container w-[520px] overflow-hidden">
                     <!-- 네비게이션 버튼 -->
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
                   <div id="image_container"
-                    class="swiper-wrapper h-[300px] self-stretch flex flex-row items-start justify-start gap-[10px] mq1125:flex-wrap display-none hidden">
-                    <div id="image_template"
+                  class="swiper-wrapper h-[300px] self-stretch flex flex-row items-start justify-start gap-[10px] mq1125:flex-wrap">
+                    <div id="image_template" 
                       class="w-[240px] h-[300px] flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border min-w-[175px] gap-[10px] display-none hidden">
                       <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                         <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
                           <div
                             class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
                             <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
-                              loading="lazy" alt="" src="/image/host/photooutlined.svg" />
+                              loading="lazy" alt="" />
                           </div>
                         </div>
                       </div>
@@ -317,7 +329,32 @@
                       </div>
                     </div>
                   </div>
-                 
+                  <!--
+                  <div id="saved_images" th:classappend="${#lists.isEmpty(imageUrls)} ? 'hidden' : ''"
+                  class="swiper-wrapper h-[300px] self-stretch flex flex-row items-start justify-start gap-[10px] mq1125:flex-wrap">
+                    <div id="saved_images_template" th:each="image : ${hostInfoCustomDTO.images}"
+                      class="w-[240px] h-[300px] flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border min-w-[175px] gap-[10px] display-none hidden">
+                      <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
+                        <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
+                          <div
+                            class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                            <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                              loading="lazy" alt="" th:src="@{${imageUrl}}" />
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="w-[240px] h-[50px] self-stretch flex flex-col items-center justify-center py-[0px] px-[16px]">
+                        <div
+                          class="w-[100px] h-[50px] flex flex-col relative tracking-[0.15px] leading-[160%] font-medium flex items-center mq450:text-[16px] mq450:leading-[26px] gap-[10px]">
+                          <button type="button" class="w-full h-[30px] cursor-pointer [border:none] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] 
+                                      text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff]"
+                            onclick="deletehostimage(this)">삭제</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  -->
                 </div>
               </div>
             </div>
@@ -326,6 +363,7 @@
         <input type="hidden" id="xaxis" value=""/> 
         <input type="hidden" id="yaxis" value=""/>
         <input type="hidden" id="region" value=""/>
+        <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple />
       </form>
     </div>
     <div
@@ -342,7 +380,7 @@
     </div>
   </section>
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3ef2e683e23a5e204a33006079a1d014"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3ef2e683e23a5e204a33006079a1d014&libraries=services"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/htmx.org@1.6.1"></script>
@@ -363,7 +401,7 @@
 
                 //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
                 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                    addr = data.roadAddress;
+                    addr = data.roadAddress+"("+data.buildingName+")";
                     sido = data.sido;
 
                 } else { // 사용자가 지번 주소를 선택했을 경우(J)
@@ -378,13 +416,19 @@
                 // 커서를 상세주소 필드로 이동한다.
                 $('#detailaddress').focus();
 
+                console.log(data.zonecode);    
+                console.log(addr);    
+                console.log(sido); 
+
                 //주소 좌표로 변환해서 저장
                 var geocoder = new kakao.maps.services.Geocoder();
                     geocoder.addressSearch(addr, function(result, status) {
                         if (status === kakao.maps.services.Status.OK) {
-                            var coords = result[0];
+                            var coords = result[0]; 
                             $('#xaxis').val(coords.x);
                             $('#yaxis').val(coords.y);
+                            console.log(coords.x);    
+                            console.log(coords.y);  
                         }
                     });
             }
@@ -392,90 +436,193 @@
     }
 
 
-    $(document).ready(function () {
-      const swiper = new Swiper('.swiper-container', {
-        loop: false,
-        slidesPerView: 2,
-        spaceBetween: 10,
-        slidesPerGroup: 1,
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-        breakpoints: {
-          520: {
-            slidesPerView: 2,
-          },
-          0: {
-            slidesPerView: 1,
-          },
-        },
-        on: {
-          init: function () {
-            updateNavigationButtons(this);
-          },
-          slideChange: function () {
-            updateNavigationButtons(this);
-          },
-        },
-      });
+    var swiper; // 전역 변수로 정의
 
-      function updateNavigationButtons(swiper) {
-        const nextButton = swiper.el.querySelector('.swiper-button-next');
-        const prevButton = swiper.el.querySelector('.swiper-button-prev');
+        $(document).ready(function () {
+            swiper = new Swiper('.swiper-container', {
+                loop: false,
+                slidesPerView: 2,
+                spaceBetween: 10,
+                slidesPerGroup: 1,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    520: {
+                        slidesPerView: 2,
+                    },
+                    0: {
+                        slidesPerView: 1,
+                    },
+                },
+                on: {
+                    init: function () {
+                        updateNavigationButtons(this);
+                    },
+                    slideChange: function () {
+                        updateNavigationButtons(this);
+                    },
+                },
+            });
 
-        if (swiper.isEnd) {
-          nextButton.style.visibility = 'hidden';
-        } else {
-          nextButton.style.visibility = 'visible';
+            function updateNavigationButtons(swiper) {
+                const nextButton = swiper.el.querySelector('.swiper-button-next');
+                const prevButton = swiper.el.querySelector('.swiper-button-prev');
+
+                if (swiper.isEnd) {
+                    nextButton.style.visibility = 'hidden';
+                } else {
+                    nextButton.style.visibility = 'visible';
+                }
+
+                if (swiper.isBeginning) {
+                    prevButton.style.visibility = 'hidden';
+                } else {
+                    prevButton.style.visibility = 'visible';
+                }
+            }
+
+            $('#addimagebutton').click(function () {
+                $('#fileInput').click();
+            });
+
+            $('#fileInput').change(function (event) {
+                var files = event.target.files;
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var $slide = $('<div class="swiper-slide"></div>');
+                            var $template = $('#image_template').clone();
+                            $template.removeClass('hidden');
+                            $template.removeAttr('id');
+                            $template.find('img').attr('src', e.target.result);
+                            $template.css('display', 'flex');
+
+                            // 템플릿 내의 삭제 버튼에 클릭 이벤트 핸들러 연결 (선택 사항)
+                            $template.find('.delete-image-btn').click(function() { 
+                                deletehostimage(this); 
+                            }); 
+
+                            $slide.append($template);
+                            $('#image_container').css('display', 'flex');
+                            $('#image_container').append($slide);
+                            swiper.appendSlide($slide); 
+                            swiper.update();
+                            updateNavigationButtons(swiper);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }  
+            });
+
+            $('#image_container').on('click', '.delete-image-btn', function() { // .delete-image-btn 클래스를 가진 버튼에 대한 클릭 이벤트 처리
+                deletehostimage(this); 
+            });
+
+            // 전역 함수로 정의
+            window.deletehostimage = function(button) {
+              var $slide = $(button).closest('.swiper-slide');
+              var slideIndex = swiper.getSlideIndex($slide[0]); // Swiper.realIndex 사용
+
+              console.log("Deleting slide at index: " + slideIndex);
+
+              swiper.removeSlide(slideIndex); 
+              swiper.update(); 
+
+              console.log("Slide removed. Total slides: " + swiper.slides.length);
+              console.log(swiper.slides); // Swiper 업데이트 확인
+
+              updateNavigationButtons(swiper);
+
+              if (swiper.slides.length === 0) {
+                  $('#image_container').hide();
+              }
+            };
+        });
+
+
+    function savehostinfo() {
+            var formData = new FormData();
+            var facilities = [];
+
+            // 체크된 체크박스의 값을 수집하여 facilities 배열에 추가
+            $('input[type=checkbox].facility-checkbox:checked').each(function() {
+                facilities.push({
+                    id: $(this).val(),
+                    fCate: $(this).closest('div').next('div').find('.fCate').text()
+                });
+            });
+
+            var hostInfoCustomDTO = {
+                hostInfo: {
+                    hcate: $('#hCate').val(),
+                    addressVo: {
+                        postCode: $('#postcode').val(),
+                        street: $('#address').val(),
+                        detail: $('#detailaddress').val(),
+                    },
+                    xaxis: $('#xaxis').val(),
+                    yaxis: $('#yaxis').val(),
+                    region: $('#region').val(),
+                    directions: $('#directions').val(),
+                    hostOwnerInfo: {
+                      hostName: $('#hostName').val(),
+                      hintro: $('#hIntro').val(),
+                    },  
+                },
+                facilities: facilities,
+                images: [] 
+              };
+
+            // JSON 데이터를 FormData에 추가
+           formData.append('hostInfoCustomDTO', new Blob([JSON.stringify(hostInfoCustomDTO)], { type: 'application/json; charset=utf-8' }));  
+            
+            var files = $('#fileInput')[0].files;
+            console.log(files.length);
+            for (var i = 0; i < files.length; i++) {
+                formData.append('images', files[i]);
+            }
+
+            $.ajax({
+                url: '/host/hostinforeg', 
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert('저장되었습니다.');
+                    // 서버에서 반환된 이미지 URL을 사용하여 이미지를 표시
+                    /*
+                    $('#image_container').hide();
+                    $('#saved_images').show();
+                    for (var i = 0; i < response.length; i++) {
+                        var imageUrl = response[i];
+                        var $slide = $('<div class="swiper-slide"></div>');
+                        var $template = $('#image_template').clone();
+                        $template.removeClass('hidden');
+                        $template.removeAttr('id');
+                        $template.find('img').attr('src', imageUrl);
+                        $template.css('display', 'flex');
+                        $slide.append($template);
+                        $('#saved_images .swiper-wrapper').append($slide);
+                        swiper.appendSlide($slide);
+                        swiper.update();
+                        updateNavigationButtons(swiper);
+                      }
+                      */ 
+                },
+                error: function (error) {
+                    alert('저장 실패하였습니다.');
+                }
+            });
         }
-
-        if (swiper.isBeginning) {
-          prevButton.style.visibility = 'hidden';
-        } else {
-          prevButton.style.visibility = 'visible';
-        }
-      }
-
-      $('#addimagebutton').click(function () {
-        $('#fileInput').click();
-      });
-
-      $('#fileInput').change(function (event) {
-        var file = event.target.files[0];
-        if (file) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var $slide = $('<div class="swiper-slide"></div>');
-            var $template = $('#image_template').clone();
-            $template.removeClass('hidden');
-            $template.removeAttr('id');
-            $template.find('img').attr('src', e.target.result);
-            $template.css('display', 'flex');
-            $slide.append($template);
-            $('#image_container').css('display', 'flex');
-            $('#image_container').append($slide);
-            swiper.appendSlide($slide); 
-            swiper.update();
-            updateNavigationButtons(swiper);
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-    });
-
-    function deletehostimage(button){
-      var swiper = $(button).closest('.swiper-slide'); 
-      swiper.remove();
-      swiper.update();
-      updateNavigationButtons(swiper);
-
-    }
   </script>
 </body>
 </html>

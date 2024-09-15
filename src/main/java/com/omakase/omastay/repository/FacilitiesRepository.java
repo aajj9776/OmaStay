@@ -11,4 +11,6 @@ public interface FacilitiesRepository extends JpaRepository<Facilities, Integer>
 
     List<Facilities> findAll();
 
+    Facilities findById(int id);
+
 }

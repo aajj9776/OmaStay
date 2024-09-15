@@ -3,9 +3,7 @@ package com.omakase.omastay.dto;
 import com.omakase.omastay.entity.Facilities;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
