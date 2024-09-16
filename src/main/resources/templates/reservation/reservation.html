@@ -7,6 +7,9 @@
   layout:fragment="main"
 >
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script type="text/javascript" src="/js/checkToken.js"></script>
     <meta charset="utf-8" />
   </head>
   <body>
@@ -190,6 +193,7 @@
                 />
               </div>
               <button
+                id="couponButton"
                 class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
               >
                 <div
@@ -198,6 +202,7 @@
                   쿠폰 조회
                 </div>
               </button>
+              <div id="couponModalOverlay" class="modal-overlay"></div>
             </div>
           </div>
 
@@ -398,6 +403,7 @@
                 결제하기
               </button>
             </div>
+            <div id="login"></div>
           </div>
         </div>
       </div>
@@ -418,8 +424,18 @@
       let nsale_price = $("#nsale_price").val();
       let resEmail;
       let resName;
-
       let timerExpired = false;
+      let login = localStorage.getItem("isLogin") === "true";
+
+      $(function () {
+        let token = Cookies.get("accessToken");
+        let userInfo = jwt_decode(token); // JWT 디코딩
+        if (login) {
+          console.log("로그인됨");
+        } else {
+          console.log("로그인안됨");
+        }
+      });
 
       function verifyCode() {
         if (timerExpired) {
@@ -592,6 +608,29 @@
           },
         });
       }
+
+      // 쿠폰 조회 버튼 클릭 시 모달을 AJAX로 로드하고 띄움
+      $("#couponButton").click("click", function () {
+        console.log("쿠폰 조회 버튼 클릭");
+        $.ajax({
+          url: "/reservation/modal/coupon-modal", // 모달이 있는 파일
+          success: function (data) {
+            console.log(data);
+            // 모달 내용을 couponModalOverlay에 넣기
+            $("#couponModalOverlay").html(data);
+
+            // 모달 창을 보이게 설정
+            $("#couponModalOverlay").css("display", "block");
+          },
+        });
+      });
+
+      // 쿠폰 적용 로직
+      function applyCoupon() {
+        alert("쿠폰이 적용되었습니다.");
+        closeModal();
+      }
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
   </body>
 </html>

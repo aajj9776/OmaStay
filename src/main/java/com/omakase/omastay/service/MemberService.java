@@ -170,7 +170,8 @@ public class MemberService {
     // 4. JWT 토큰 받기
     Map<String, Object> claims = new HashMap<>();
     claims.put("email", member.getMemberProfile().getEmail());
-    claims.put("name", member.getMemName());
+    claims.put("memName", member.getMemName());
+    claims.put("id", member.getId());
     String accessToken = jwtProvider.getAccesToken(claims);
     String refreshToken = jwtProvider.getRefreshToken(claims);
     // 5. DB에 토큰 저장
