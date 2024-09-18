@@ -28,7 +28,7 @@ public class Price {
     @JoinColumn(name = "room_idx", referencedColumnName = "room_idx")
     private RoomInfo roomInfo = new RoomInfo();
 
-    @Column(name = "regular_price", nullable = false)
+    @Column(name = "regular_price")
     private Integer regularPrice;
 
     //성수기 가격 시작날짜 끝날짜

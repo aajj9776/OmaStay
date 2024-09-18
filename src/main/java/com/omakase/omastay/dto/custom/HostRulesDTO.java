@@ -1,10 +1,7 @@
 package com.omakase.omastay.dto.custom;
 
-import java.util.List;
-
-import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
-import com.omakase.omastay.dto.ImageDTO;
+import com.omakase.omastay.dto.PriceDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,9 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HostInfoCustomDTO {
+public class HostRulesDTO {
     private HostInfoDTO hostInfo;
-    private List<FacilitiesDTO> facilities;
-    private List<ImageDTO> images;
-
+    private PriceDTO price;
 }
