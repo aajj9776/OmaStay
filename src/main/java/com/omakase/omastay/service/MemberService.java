@@ -3,6 +3,8 @@ package com.omakase.omastay.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.custom.MemberInfoDTO;
+import com.omakase.omastay.dto.custom.MembercpDTO;
 import com.omakase.omastay.entity.Grade;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Reservation;
@@ -14,6 +16,7 @@ import com.omakase.omastay.mapper.MemberMapper;
 import com.omakase.omastay.repository.GradeRepository;
 import com.omakase.omastay.repository.MemberRepository;
 import com.omakase.omastay.repository.ReservationRepository;
+import com.omakase.omastay.repository.custom.MemberRepositoryCustom;
 import com.omakase.omastay.vo.UserProfileVo;
 
 import java.io.IOException;
@@ -38,6 +41,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private MemberRepositoryCustom memberRepositoryCustom;
 
     @Autowired
     private GradeRepository gradeRepository;
