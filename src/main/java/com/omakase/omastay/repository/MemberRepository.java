@@ -15,5 +15,9 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer>, MemberRepositoryCustom {
 
+    Member findByEmail(String email);
+
     Member findByMemberProfileEmail(String email);
+
+    List<Member> findByGrade(String grade);
 }
