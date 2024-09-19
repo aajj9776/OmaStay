@@ -9,4 +9,8 @@ import java.util.Set;
 
 public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer>, RoomInfoRepositoryCustom {
 
+    RoomInfo findByHostInfoId(int hIdx);
+
+    RoomInfo findById(int id);
+
 }

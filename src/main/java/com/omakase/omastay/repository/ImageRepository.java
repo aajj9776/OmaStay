@@ -11,4 +11,6 @@ public interface ImageRepository extends JpaRepository<Image, Integer>, ImageRep
 
     List<Image> findByHostInfoId(int hIdx);
 
+    List<Image> findByRoomInfoId(int rId);
+
 }
