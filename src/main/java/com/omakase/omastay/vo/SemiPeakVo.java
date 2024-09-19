@@ -22,6 +22,6 @@ public class SemiPeakVo {
     @Column(name = "semi_end")
     private LocalDateTime semiEnd;
 
-    @Column(name = "semi_price", nullable = false)
+    @Column(name = "semi_price")
     private int semiPrice;
 }

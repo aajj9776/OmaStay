@@ -39,16 +39,16 @@
         </h3>
         <div
           class="flex-1 rounded-[4px]  box-border flex flex-row items-start justify-start py-[0px] relative min-w-[197px]">
-          <select class="w-[547px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select">
-            <option value="NULL" disabled>체크인 시간</option>
-            <option value="오후 01:00">오후 01:00</option>
-            <option value="오후 02:00">오후 02:00</option>
-            <option value="오후 03:00">오후 03:00</option>
-            <option value="오후 04:00">오후 04:00</option>
-            <option value="오후 05:00">오후 05:00</option>
-            <option value="오후 06:00">오후 06:00</option>
-            <option value="오후 07:00">오후 07:00</option>
-            <option value="오후 08:00">오후 08:00</option>
+          <select class="w-[547px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="checkin">
+            <option value="NULL" disabled th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == null}">체크인 시간</option>
+            <option value="오후 01:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 01:00'}">오후 01:00</option>
+            <option value="오후 02:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 02:00'}">오후 02:00</option>
+            <option value="오후 03:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 03:00'}">오후 03:00</option>
+            <option value="오후 04:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 04:00'}">오후 04:00</option>
+            <option value="오후 05:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 05:00'}">오후 05:00</option>
+            <option value="오후 06:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 06:00'}">오후 06:00</option>
+            <option value="오후 07:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 07:00'}">오후 07:00</option>
+            <option value="오후 08:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 08:00'}">오후 08:00</option>
           </select>
         </div>
       </div>
@@ -61,16 +61,16 @@
           </h3>
           <div
             class="flex-1 rounded-[4px]  box-border flex flex-row items-start justify-start py-[0px] relative min-w-[197px]">
-            <select class="w-[547px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select">
-              <option value="NULL" disabled>체크아웃 시간</option>
-              <option value="오전 10:00">오전 10:00</option>
-              <option value="오전 11:00">오전 11:00</option>
-              <option value="오후 12:00">오후 12:00</option>
-              <option value="오후 01:00">오후 01:00</option>
-              <option value="오후 02:00">오후 02:00</option>
-              <option value="오후 03:00">오후 03:00</option>
-              <option value="오후 04:00">오후 04:00</option>
-              <option value="오후 05:00">오후 05:00</option>
+            <select class="w-[547px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="checkout">
+              <option value="NULL" disabled th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == null}">체크아웃 시간</option>
+              <option value="오전 10:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오전 10:00'}">오전 10:00</option>
+              <option value="오전 11:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오전 11:00'}">오전 11:00</option>
+              <option value="오후 12:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 12:00'}">오후 12:00</option>
+              <option value="오후 01:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 01:00'}">오후 01:00</option>
+              <option value="오후 02:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 02:00'}">오후 02:00</option>
+              <option value="오후 03:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 03:00'}">오후 03:00</option>
+              <option value="오후 04:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 04:00'}">오후 04:00</option>
+              <option value="오후 05:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 05:00'}">오후 05:00</option>
             </select>
           </div>
         </div>
@@ -89,7 +89,7 @@
                   <div
                     class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
                     <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" name="settings"
-                      type="radio" />
+                      type="radio" id="settingsRadio" th:checked="${priceDTO != null && priceDTO.peakSet == 1}"/>
                   </div>
                 </div>
               </div>
@@ -104,7 +104,7 @@
                   <div
                     class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
                     <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" name="settings"
-                      type="radio" />
+                      type="radio" id="nonsettingsRadio" th:checked="${priceDTO != null && priceDTO.peakSet == 0}"/>
                   </div>
                 </div>
               </div>
@@ -116,8 +116,9 @@
           </div>
         </div>
       </div>
+      <div id="date" class="hidden w-[700px] flex  flex-col item-end justify-end gap-[10px]" th:classappend="${priceDTO != null && priceDTO.peakSet == 1} ? 'block' : 'hidden'">
       <div class="self-stretch flex flex-col items-end justify-start gap-[25px] max-w-full">
-        <div class="w-[573px] flex flex-row items-start justify-start flex-wrap content-start gap-[15px] max-w-full">
+        <div class="w-[450px] flex flex-row items-start justify-start flex-wrap content-start gap-[15px] max-w-full">
           <div
             class="relative text-[20px] tracking-[0.46px] leading-[50px] uppercase font-[Roboto] text-[#000] text-left inline-block min-w-[82px] mq450:text-[16px] mq450:leading-[21px]">
             준성수기 :
@@ -128,8 +129,8 @@
               <div 
                 class="date-range-picker-semi self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
                 <input
-                  class="date-range-picker-input-semi w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px] datepicker"
-                  placeholder="준성수기 기간" type="text" readonly />
+                  class="date-range-picker-input-semi w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
+                  placeholder="준성수기 기간" type="text" readonly th:value="${semiPeriod != null ? semiPeriod : ''}" />
               </div>
             </div>
           </div>
@@ -139,7 +140,7 @@
         <div class="self-stretch flex flex-row items-start justify-end py-[0px] box-border max-w-full">
           <div class="self-stretch flex flex-col items-end justify-start gap-[25px] max-w-full">
             <div
-              class="w-[573px] ml-[100px] flex flex-row items-start justify-start flex-wrap content-start gap-[24.5px] max-w-full">
+              class="w-[450px] ml-[100px] flex flex-row items-start justify-start flex-wrap content-start gap-[24.5px] max-w-full">
               <div
                 class="relative text-[20px] tracking-[0.46px] leading-[50px] uppercase font-[Roboto] text-[#000] text-left inline-block min-w-[82px] mq450:text-[16px] mq450:leading-[21px]">
                 성수기 :
@@ -150,14 +151,15 @@
                   <div 
                     class="date-range-picker-peak self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
                     <input
-                      class="date-range-picker-input-peak w-full [border:none] [outline:none]  self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
-                      placeholder="성수기 기간" type="text" readonly />
+                      class="date-range-picker-input-peak w-full [border:none] [outline:none]  self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px] "
+                      placeholder="성수기 기간" type="text" readonly th:value="${peakPeriod != null ? peakPeriod : ''}"/>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
       </div>
       <div
         class="self-stretch flex flex-row items-start justify-start gap-[44px] max-w-full mq1125:flex-wrap mq800:gap-[22px]">
@@ -169,7 +171,9 @@
           class="mt-[10px] flex-1 flex flex-row items-start justify-start min-w-[322px] max-w-full [row-gap:20px] mq800:flex-wrap">
           <textarea
             class="w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
-            placeholder="숙소 이용 규칙"></textarea>
+            placeholder="숙소 이용 규칙"
+            id="rules"
+            th:text="${hostInfoDTO != null ? hostInfoDTO.rules : ''}"></textarea>
         </div>
       </div>
       <div class="self-stretch flex flex-row items-start justify-start max-w-full [row-gap:20px] mq1125:flex-wrap">
@@ -179,12 +183,15 @@
         </b>
         <textarea
           class="mt-[10px] w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
-          placeholder="현장 요금 추가 정보"></textarea>
+          placeholder="현장 요금 추가 정보"
+          id="priceAdd"
+          th:text="${hostInfoDTO != null ? hostInfoDTO.priceAdd : ''}"></textarea>
       </div>
     </form>
     <div class="self-stretch flex flex-row items-start justify-center">
       <div class="w-full flex flex-row items-center justify-center gap-[20px]">
         <button
+          type="button" onclick="savehostrules()"
           class="cursor-pointer [border:none] py-[8px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center">
           <div class="flex flex-row items-center justify-center gap-[8px]">
             <div
@@ -195,8 +202,12 @@
         </button>
       </div>
     </div>
+    <input type="hidden" id="peakSet"/>
+    <input type="hidden" id="semiStart" th:value="${semiStart != null ? semiStart : ''}" />
+    <input type="hidden" id="semiEnd" th:value="${semiEnd != null ? semiEnd : ''}" />
+    <input type="hidden" id="peakStart"  th:value="${peakStart != null ? peakStart : ''}"/>
+    <input type="hidden" id="peakEnd" th:value="${peakEnd != null ? peakEnd : ''}"/>
   </section>
-
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/htmx.org@1.6.1"></script>
@@ -209,5 +220,89 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
   <script type="text/javascript" src="\js\host-datepicker.js"></script>
 
+  <script>
+     $(document).ready(function() {
+    function updateDateSettings() {
+      if ($('#settingsRadio').is(':checked')) {
+        $('#date').removeClass('hidden');
+        $('#peakSet').val('1');
+      } else {
+        $('#date').addClass('hidden');
+        $('#peakSet').val('0');
+      }
+    }
+
+    $('#settingsRadio').change(updateDateSettings);
+    $('#nonsettingsRadio').change(updateDateSettings);
+
+    // 초기 상태 설정
+    updateDateSettings();
+
+  });
+
+    function savehostrules() {
+      var checkin = $('#checkin').val();
+      var checkout = $('#checkout').val();
+      var peakSet = $('#peakSet').val();
+      var semiStart = $('#semiStart').val();
+      var semiEnd = $('#semiEnd').val();
+      var peakStart = $('#peakStart').val();
+      var peakEnd = $('#peakEnd').val();
+      var rules = $('#rules').val();
+      var priceAdd = $('#priceAdd').val();
+
+        if (checkin == "") {
+            alert("체크인 시간을 선택해주세요");
+            return;
+        }
+
+        if (checkout == "") {
+            alert("체크아웃 시간을 선택해주세요");
+            return;
+        }
+
+        if (peakSet == "") {
+            alert("성수기 설정을 선택해주세요");
+            return;
+        }
+
+        var data = {
+            hostInfo: {
+              checkin: checkin,
+              checkout: checkout,
+              rules: rules,
+              priceAdd: priceAdd
+            },
+            price: {
+              peakSet: peakSet,
+              semi: {  
+              semiStart: semiStart,
+              semiEnd: semiEnd,
+              },
+              peakVo: {
+              peakStart: peakStart,
+              peakEnd: peakEnd
+              }
+            }
+        };
+
+        console.log(JSON.stringify(data));
+
+        $.ajax({
+              type: "POST",
+              url: "/host/rulesreg",
+              contentType: "application/json",
+              data: JSON.stringify(data),
+              success: function(data) {
+                data = data.trim();
+                if (data === "success") {
+                  alert("저장되었습니다.");
+                } else {
+                  alert("저장 실패하였습니다.");
+                }
+              }
+            });
+    }
+  </script>
 </body>
 </html>

@@ -23,11 +23,12 @@
           <div class="w-[1200px] h-[340px] bg-white rounded-[30px] flex-col justify-end items-center gap-2.5 inline-flex">
             <div class="w-[1000px] h-[140px] flex-col justify-center items-center gap-3 flex">
               <div class="w-[1000px] h-[50px] text-center text-black text-3xl font-semibold font-['Inter']">아래 정보를 모두 입력하시고 숙소등록을 완료하세요.</div>
-              <div class="w-[230px] h-[55px] px-[22px] py-2 bg-[#2196f3] rounded-[10px] flex-col justify-center items-center flex">
+              <button id="registerButton" type="button" onclick="requestadmin()"
+              class="w-[230px] h-[55px] px-[22px] py-2 bg-[#2196f3] rounded-[10px] flex-col justify-center items-center flex">
                 <div class="justify-center items-center gap-2 inline-flex">
-                  <div class="text-white text-[25px] font-bold font-['Roboto'] uppercase leading-relaxed tracking-wide">업체 정보 등록</div>
+                  <div class="text-white text-[25px] font-bold font-['Roboto'] uppercase leading-relaxed tracking-wide">숙소 등록 요청</div>
                 </div>
-              </div>
+              </button>
             </div>
             <div th:insert="~{component/step/host_step}"/>
           </div>
@@ -218,6 +219,46 @@
           </div>
         </section>
       </main>
+      <input type="hidden" id="hStep" th:value="${hStep}" />
+      <input type="hidden" id="hStatus" th:value="${hStatus}" />
     </div>
+    <script>
+      $(document).ready(function() {
+        var hStep =  $("#hStep").val();
+        var hStatus =  $("#hStatus").val();
+
+        var registerButton = $("#registerButton");
+
+        if (hStatus === "APPLY") {
+          registerButton.css("background-color", "#ffffff");
+          registerButton.find(".text-white").removeClass("text-white").addClass("text-blue-500").text("숙소 등록 검수중");
+        } else if (hStatus === "APPROVE") {
+          registerButton.css("background-color", "#ffffff");
+          registerButton.find(".text-white").removeClass("text-white").addClass("text-blue-500").text("숙소 등록 완료");
+        } else if (hStatus === "REJECT" || hStatus === "RELEASE") {
+          registerButton.css("background-color", "#2196f3");
+          registerButton.find(".text-white").css("color", "#ffffff").text("업체 정보 등록");
+        }
+
+        console.log("hStep 값:", hStep);
+
+        window.requestadmin = function() {
+          if (hStep.trim().toUpperCase() === "ROOM") {
+            $.ajax({
+                url: '/host/requestadmin', 
+                type: 'POST',
+                success: function (response) {
+                    alert('등록 요청되었습니다.'); 
+                },
+                error: function (error) {
+                    alert('등록 요청 실패하였습니다.');
+                }
+            });
+          } else {
+            alert("등록 단계를 모두 진행해 주세요.");
+          }
+        };
+      });
+    </script>
   </body>
 </html>
