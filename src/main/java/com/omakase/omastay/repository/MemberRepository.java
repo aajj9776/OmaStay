@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer>, MemberRepositoryCustom {
 
-    //Member findByMemberProfileEmail(String email);
+    Member findByMemberProfileEmail(String email);
 
     @Query("SELECT m FROM Member m WHERE m.grade.gCate = :grade")
     List<Member> findByGrade(@Param("grade") String grade);
