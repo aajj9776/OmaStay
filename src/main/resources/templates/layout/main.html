@@ -58,6 +58,16 @@
           alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
         }
       };
+      searchAccommodation = () => {
+        let search = document.getElementById("search-accommodation").value;
+        let checkIn = document.getElementById("check-in").value;
+        console.log(checkIn);
+        let checkOut = document.getElementById("check-out").value;
+        console.log(checkOut);
+        let person = document.getElementById("person_count").innerText;
+        let url = `/search/search?keyword=${encodeURIComponent(search)}&startEndDay.start=${encodeURIComponent(checkIn)}&startEndDay.end=${encodeURIComponent(checkOut)}&person=${encodeURIComponent(person)}`;
+        location.href = url;
+      }
     </script>
   </body>
 </html>

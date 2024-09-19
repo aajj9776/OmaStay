@@ -1,16 +1,11 @@
 package com.omakase.omastay.repository.custom.impl;
-
-import com.omakase.omastay.entity.Price;
-import com.omakase.omastay.entity.QPrice;
 import com.omakase.omastay.repository.custom.PriceRepositoryCustom;
 import com.omakase.omastay.vo.StartEndVo;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import static com.omakase.omastay.entity.QPrice.price;
 
 public class PriceRepositoryImpl implements PriceRepositoryCustom {

@@ -37,13 +37,13 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
         // 조건 3: 예약 상태를 확인 (PENDING 또는 COMPLETED이 아닌 경우, 또는 예약 정보가 없는 경우)
         builder.and(
                 reservation.resStatus.ne(ResStatus.PENDING)
-                        .and(reservation.resStatus.ne(ResStatus.COMPLETED))
+                        .and(reservation.resStatus.ne(ResStatus.CONFIRMED))
                         .or(reservation.isNull())
         );
 
         return queryFactory
                 .select(roomInfo.id ,hostInfo.id)
-                .from(roomInfo).join(roomInfo.hostInfo, hostInfo).fetchJoin()
+                .from(roomInfo).join(roomInfo.hostInfo, hostInfo)
                 .leftJoin(reservation)
                 .where(builder).distinct()
                 .fetch();
@@ -65,7 +65,7 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
         return queryFactory
                 .select(roomInfo.id, hostInfo.id)
                 .from(roomInfo).
-                join(roomInfo.hostInfo, hostInfo).fetchJoin()
+                join(roomInfo.hostInfo, hostInfo)
                 .where(builder).distinct()
                 .fetch();
     }
