@@ -61,7 +61,7 @@
             숙소 유형 :
           </h3>
           <select class="w-[220px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="hCate" data-str="숙소 유형" >
-            <option value="NULL" disabled th:selected="${hostInfoCustomDTO == null || hostInfoCustomDTO.hostInfo == null || hostInfoCustomDTO.hostInfo.hCate == null || hostInfoCustomDTO.hostInfo.hCate == ''}">숙소 유형</option>
+            <option value="" disabled selected th:selected="${hostInfoCustomDTO == null || hostInfoCustomDTO.hostInfo == null || hostInfoCustomDTO.hostInfo.hCate == null || hostInfoCustomDTO.hostInfo.hCate == ''}">숙소 유형</option>
             <option value="MOTEL"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'MOTEL'}">모텔</option>
             <option value="HOTEL_RESORT"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'HOTEL_RESORT'}">호텔/리조트</option>
             <option value="POOL_VILLA"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'POOL_VILLA'}">펜션/풀빌라</option>
@@ -580,6 +580,7 @@
                 facilities: facilities,
                 images: [] 
               };
+              console.log($('#hCate').val());
 
             // JSON 데이터를 FormData에 추가
            formData.append('hostInfoCustomDTO', new Blob([JSON.stringify(hostInfoCustomDTO)], { type: 'application/json; charset=utf-8' }));  

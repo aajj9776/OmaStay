@@ -60,7 +60,7 @@ public class EmailService {
     // 메일 반환
     private MimeMessage createEmailForm(String email) throws MessagingException {
         String authCode = createdCode();
-
+        System.out.println("인증번호:"+authCode);
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 

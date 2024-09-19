@@ -16,6 +16,7 @@ import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.HCate;
+import com.omakase.omastay.entity.enumurate.HStatus;
 import com.omakase.omastay.entity.enumurate.HStep;
 import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.mapper.AccountMapper;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
+import org.apache.tomcat.util.http.parser.Host;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,12 @@ public class HostInfoService {
 
     @Autowired
     private FacilitiesRepository facilitiesRepository;
+
+    public HostInfoDTO findHostInfoDTO(AdminMemberDTO adminMemberDTO) {
+        AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
+        HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
+        return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
+    }
 
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
@@ -102,6 +110,11 @@ public class HostInfoService {
             try {
                 accountDTO = AccountMapper.INSTANCE.toAccountDTO(account);
                 System.out.println(accountDTO);
+                if (account.getHostInfo() != null) {
+                    System.out.println(account.getHostInfo());
+                } else {
+                    System.out.println("HostInfo is null for the given account");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -128,7 +141,7 @@ public class HostInfoService {
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
 
         hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
-        hostInfo.setHCate(hostInfoCustomDTO.getHostInfo().getHCate());
+        hostInfo.setHCate(HCate.valueOf(hostInfoCustomDTO.getHostInfo().getHCate().name()));
         hostInfo.setRegion(hostInfoCustomDTO.getHostInfo().getRegion());
         hostInfo.setXAxis(hostInfoCustomDTO.getHostInfo().getXAxis());
         hostInfo.setYAxis(hostInfoCustomDTO.getHostInfo().getYAxis());
@@ -206,5 +219,30 @@ public class HostInfoService {
         hostInfoCustomDTO.setImages(imageDTO);
         
         return hostInfoCustomDTO;
+    }
+
+    public HostInfoDTO saverules(HostInfoDTO hostInfoDTO, AdminMemberDTO adminMemberDTO) {
+
+        AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
+        
+        HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
+
+        hostInfo.setHStep(HStep.RULE); // hStep을 2로 설정
+        hostInfo.setCheckin(hostInfoDTO.getCheckin());
+        hostInfo.setCheckout(hostInfoDTO.getCheckout());
+        hostInfo.setRules(hostInfoDTO.getRules());
+        hostInfo.setPriceAdd(hostInfoDTO.getPriceAdd());
+        hostInfoRepository.save(hostInfo);
+
+        return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
+    }
+
+    public void requestAdmin(HostInfoDTO hostInfoDTO) {
+
+        HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
+
+        hostInfo.setHStatus(HStatus.APPLY);
+
+        hostInfoRepository.save(hostInfo);
     }
 }

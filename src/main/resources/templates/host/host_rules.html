@@ -1,688 +1,308 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/host_step}"
-      layout:fragment="host">
-  <head>
-    <meta charset="utf-8" />
-  </head>
-  <body>
-      <section
-        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[102px] px-[120px] pb-[94px] box-border gap-[120px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq1325:gap-[69px] mq1325:pt-[66px] mq1325:px-[60px] mq1325:pb-[61px] mq1325:box-border mq450:gap-[17px] mq800:gap-[35px] mq800:pt-[43px] mq800:px-[30px] mq800:pb-[40px] mq800:box-border"
-      >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/host_step}" layout:fragment="host">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <style>
+    textarea:focus {
+      outline: none;
+      /* 포커스 시 기본 아웃라인 제거 */
+      border-color: rgba(0, 0, 0, 0.23);
+      box-shadow: none;
+      /* 포커스 시 그림자 제거 */
+    }
+
+    textarea {
+      resize: none;
+      /* 창 크기 조절 핸들 제거 */
+    }
+  </style>
+</head>
+
+<body>
+  <section
+    class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[102px] px-[120px] pb-[94px] box-border gap-[120px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq1325:gap-[69px] mq1325:pt-[66px] mq1325:px-[60px] mq1325:pb-[61px] mq1325:box-border mq450:gap-[17px] mq800:gap-[35px] mq800:pt-[43px] mq800:px-[30px] mq800:pb-[40px] mq800:box-border">
+    <div class="w-[399px] flex flex-row items-start justify-start pt-[0px] px-[1px] pb-[10px] box-border max-w-full">
+      <h1
+        class="m-[0px] flex-1 relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] inline-block max-w-full mq450:text-[36px] mq450:leading-[14px] mq800:text-[48px] mq800:leading-[19px]">
+        이용규칙 관리
+      </h1>
+    </div>
+    <form class="m-[0px] w-[823px] flex flex-col items-start justify-start gap-[30px] max-w-full">
+      <div
+        class="w-[547px] flex flex-row items-center justify-start flex-wrap content-start pt-[0px] px-[0px] pb-[5px] box-border gap-[79px] max-w-full mq450:gap-[20px] mq800:gap-[39px]">
+        <h3
+          class="m-[0px] h-[50px] w-[165px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
+          체크인 시간 :
+        </h3>
         <div
-          class="w-[399px] flex flex-row items-start justify-start pt-[0px] px-[1px] pb-[10px] box-border max-w-full"
-        >
-          <h1
-            class="m-[0px] flex-1 relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] inline-block max-w-full mq450:text-[36px] mq450:leading-[14px] mq800:text-[48px] mq800:leading-[19px]"
-          >
-            이용규칙 관리
-          </h1>
+          class="flex-1 rounded-[4px]  box-border flex flex-row items-start justify-start py-[0px] relative min-w-[197px]">
+          <select class="w-[547px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="checkin">
+            <option value="NULL" disabled th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == null}">체크인 시간</option>
+            <option value="오후 01:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 01:00'}">오후 01:00</option>
+            <option value="오후 02:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 02:00'}">오후 02:00</option>
+            <option value="오후 03:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 03:00'}">오후 03:00</option>
+            <option value="오후 04:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 04:00'}">오후 04:00</option>
+            <option value="오후 05:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 05:00'}">오후 05:00</option>
+            <option value="오후 06:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 06:00'}">오후 06:00</option>
+            <option value="오후 07:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 07:00'}">오후 07:00</option>
+            <option value="오후 08:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkin == '오후 08:00'}">오후 08:00</option>
+          </select>
         </div>
-        <form
-          class="m-[0px] w-[823px] flex flex-col items-start justify-start gap-[30px] max-w-full"
-        >
+      </div>
+      <div class="w-[547px] flex flex-row items-center justify-start pt-[0px] px-[0px] pb-[5px] box-border max-w-full">
+        <div
+          class="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-[58px] max-w-full mq800:gap-[29px]">
+          <h3
+            class="m-[0px] h-[50px] w-[186px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
+            체크아웃 시간 :
+          </h3>
           <div
-            class="self-stretch flex flex-col items-start justify-start gap-[25px] max-w-full"
-          >
-            <div
-              class="w-[547px] flex flex-row items-start justify-start flex-wrap content-start pt-[0px] px-[0px] pb-[5px] box-border gap-[79px] max-w-full mq450:gap-[20px] mq800:gap-[39px]"
-            >
-              <h3
-                class="m-[0px] h-[50px] w-[165px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
-              >
-                체크인 시간 :
-              </h3>
-              <div
-                class="flex-1 rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] px-[12px] relative min-w-[197px]"
-              >
-                <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-                <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-                <div class="w-[239px] flex flex-row items-start justify-start">
-                  <div class="h-[24px] w-0 relative hidden"></div>
-                  <div
-                    class="h-[50px] flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left flex items-center"
-                  >
-                    체크인 시간
-                  </div>
-                </div>
-                <div
-                  class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[3]"
-                >
-                  Placeholder
-                </div>
-                <div class="h-0 w-[24px] relative hidden z-[4]"></div>
-                <img
-                  class="h-full w-[40px] absolute !m-[0] top-[0px] right-[12px] bottom-[0px] max-h-full overflow-hidden shrink-0 z-[1]"
-                  alt=""
-                  src="/image/host/arrowdropdownfilled.svg"
-                />
-
-                <div class="hidden flex-row items-start justify-start z-[6]">
-                  <img
-                    class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                    alt=""
-                    src="/image/host/closefilled.svg"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              class="w-[547px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border max-w-full"
-            >
-              <div
-                class="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-[58px] max-w-full mq800:gap-[29px]"
-              >
-                <h3
-                  class="m-[0px] h-[50px] w-[186px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
-                >
-                  체크아웃 시간 :
-                </h3>
-                <div
-                  class="flex-1 rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] px-[12px] relative min-w-[197px]"
-                >
-                  <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-                  <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-                  <div
-                    class="w-[239px] flex flex-row items-start justify-start"
-                  >
-                    <div class="h-[24px] w-0 relative hidden"></div>
-                    <div
-                      class="h-[50px] flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left flex items-center"
-                    >
-                      체크아웃 시간
-                    </div>
-                  </div>
-                  <div
-                    class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[3]"
-                  >
-                    Placeholder
-                  </div>
-                  <div class="h-0 w-[24px] relative hidden z-[4]"></div>
-                  <img
-                    class="h-full w-[40px] absolute !m-[0] top-[0px] right-[12px] bottom-[0px] max-h-full overflow-hidden shrink-0 z-[1]"
-                    alt=""
-                    src="/image/host/arrowdropdownfilled.svg"
-                  />
-
-                  <div class="hidden flex-row items-start justify-start z-[6]">
-                    <img
-                      class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/image/host/closefilled.svg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="w-[550px] flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[3px] box-border max-w-full"
-            >
-              <div
-                class="self-stretch flex flex-row items-center justify-start flex-wrap content-center py-[0px] px-[0px] gap-[75px] mq450:gap-[19px] mq800:gap-[37px]"
-              >
-                <h3
-                  class="m-[0px] h-[50px] w-[164px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
-                >
-                  성수기 설정 :
-                </h3>
-                <div
-                  class="flex-1 flex flex-row items-center justify-between min-w-[198px] gap-[20px] mq450:flex-wrap"
-                >
-                  <div
-                    class="h-[50px] w-[99px] flex flex-row items-center justify-start py-[12.5px] px-[0px] box-border"
-                  >
-                    <div
-                      class="self-stretch w-[42px] flex flex-row items-center justify-start py-[0px] px-[0px] box-border"
-                    >
-                      <div
-                        class="h-[42px] w-[42px] overflow-hidden shrink-0 flex flex-row items-center justify-start"
-                      >
-                        <div
-                          class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-center justify-start p-[9px] box-border"
-                        >
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/-hidden.svg"
-                          />
-                        </div>
-                      </div>
-                      <div class="hidden flex-col items-start justify-start">
-                        <div
-                          class="relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
-                        >
-                          설정
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="flex-1 relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left mq450:text-[16px] mq450:leading-[21px]"
-                    >
-                      설정
-                    </div>
-                  </div>
-                  <div
-                    class="h-[50px] w-[100px] flex flex-row items-center justify-start py-[12.5px] px-[0px] box-border"
-                  >
-                    <div
-                      class="self-stretch w-[42px] flex flex-row items-center justify-start py-[0px] px-[0px] box-border"
-                    >
-                      <div
-                        class="h-[42px] w-[42px] overflow-hidden shrink-0 flex flex-row items-center justify-start"
-                      >
-                        <div
-                          class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-center justify-start p-[9px] box-border"
-                        >
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/-hidden.svg"
-                          />
-                        </div>
-                      </div>
-                      <div class="hidden flex-col items-start justify-start">
-                        <div
-                          class="relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
-                        >
-                          설정
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="flex-1 relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left mq450:text-[16px] mq450:leading-[21px]"
-                    >
-                      <p class="m-[0px]">미설정</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="self-stretch flex flex-col items-end justify-start gap-[25px] max-w-full"
-            >
-              <div
-                class="w-[573px] flex flex-row items-start justify-start flex-wrap content-start gap-[24.5px] max-w-full"
-              >
-                <div
-                  class="relative text-[20px] tracking-[0.46px] leading-[50px] uppercase font-[Roboto] text-[#000] text-left inline-block min-w-[82px] mq450:text-[16px] mq450:leading-[21px]"
-                >
-                  준성수기
-                </div>
-                <div
-                  class="flex-1 flex flex-col items-start justify-start pt-[5px] px-[0px] pb-[0px] box-border min-w-[97px]"
-                >
-                  <div
-                    class="self-stretch flex flex-col items-start justify-start"
-                  >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                    >
-                      <input
-                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
-                        placeholder="준성수기 시작일"
-                        type="text"
-                      />
-                    </div>
-                    <div
-                      class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex flex-col items-start justify-start pt-[5px] px-[0px] pb-[0px]"
-                >
-                  <div
-                    class="relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left inline-block min-w-[15px] mq450:text-[16px] mq450:leading-[21px]"
-                  >
-                    ~
-                  </div>
-                </div>
-                <div
-                  class="flex-1 flex flex-col items-start justify-start pt-[5px] px-[0px] pb-[0px] box-border min-w-[97px]"
-                >
-                  <div
-                    class="self-stretch flex flex-col items-start justify-start"
-                  >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                    >
-                      <input
-                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
-                        placeholder="준성수기 종료일"
-                        type="text"
-                      />
-                    </div>
-                    <div
-                      class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex flex-col items-start justify-start pt-[5px] px-[0px] pb-[0px]"
-                >
-                  <button
-                    class="cursor-pointer [border:none] py-[7px] px-[20px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
-                  >
-                    <div
-                      class="flex flex-row items-start justify-start gap-[8px]"
-                    >
-                      <b
-                        class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[37px]"
-                        >삭제</b
-                      >
-                    </div>
-                  </button>
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-row items-start justify-start max-w-full"
-              >
-                <div
-                  class="w-[593px] flex flex-col items-start justify-end py-[0px] px-[250px] box-border max-w-full mq450:pl-[20px] mq450:pr-[20px] mq450:box-border mq800:pl-[125px] mq800:pr-[125px] mq800:box-border"
-                >
-                  <button
-                    class="cursor-pointer border-[rgba(33,150,243,0.5)] border-[1px] border-solid py-[5px] px-[19px] bg-[transparent] self-stretch rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
-                  >
-                    <div
-                      class="flex flex-row items-center justify-center gap-[8px]"
-                    >
-
-                      <b
-                        class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#2196f3] text-left min-w-[53px]"
-                        >+ 추가</b
-                      >
-
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="self-stretch flex flex-row items-start justify-start flex-wrap content-start gap-[5px] max-w-full"
-          >
-            <div
-              class="flex-1 flex flex-col items-start justify-start gap-[30px] max-w-full mq1325:min-w-full"
-            >
-              <div
-                class="self-stretch flex flex-row items-start justify-end py-[0px] px-[20px] box-border max-w-full"
-              >
-                <div
-                  class="w-[470px] flex flex-row items-start justify-start gap-[25px] max-w-full mq800:flex-wrap"
-                >
-                  <div
-                    class="h-[40px] w-[80px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[16px] mq450:leading-[21px]"
-                  >
-                    성수기
-                  </div>
-                  <div
-                    class="flex-1 flex flex-col items-start justify-start min-w-[97px]"
-                  >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                    >
-                      <div
-                        class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[8px] px-[0px] box-border min-h-[24px]"
-                      >
-                        <div
-                          class="h-[24px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left"
-                        >
-                          성수기 시작일
-                        </div>
-                        <div
-                          class="h-[24px] w-[24px] hidden flex-row items-center justify-center"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left inline-block min-w-[15px] mq450:text-[16px] mq450:leading-[21px] mq800:w-full mq800:h-[15px]"
-                  >
-                    ~
-                  </div>
-                  <div
-                    class="flex-1 flex flex-col items-start justify-start min-w-[97px]"
-                  >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                    >
-                      <div
-                        class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[8px] px-[0px] box-border min-h-[24px]"
-                      >
-                        <div
-                          class="h-[24px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left"
-                        >
-                          성수기 종료일
-                        </div>
-                        <div
-                          class="h-[24px] w-[24px] hidden flex-row items-center justify-center"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="w-[593px] flex flex-col items-start justify-end py-[0px] px-[250px] box-border max-w-full mq450:pl-[20px] mq450:pr-[20px] mq450:box-border mq800:pl-[125px] mq800:pr-[125px] mq800:box-border"
-              >
-                <button
-                  class="cursor-pointer border-[rgba(33,150,243,0.5)] border-[1px] border-solid py-[5px] px-[19px] bg-[transparent] self-stretch rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
-                >
-                  <div
-                    class="flex flex-row items-center justify-center gap-[8px]"
-                  >
-                    <b
-                      class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#2196f3] text-left min-w-[53px]"
-                      >+ 추가</b
-                    >
-                  </div>
-                </button>
-              </div>
-              <div
-                class="self-stretch flex flex-row items-start justify-start gap-[44px] max-w-full mq1125:flex-wrap mq800:gap-[22px]"
-              >
-                <h3
-                  class="m-[0px] h-[50px] w-[200px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
-                >
-                  숙소 이용 규칙 :
-                </h3>
-                <div
-                  class="flex-1 flex flex-row items-start justify-start min-w-[322px] max-w-full [row-gap:20px] mq800:flex-wrap"
-                >
-                  <div
-                    class="flex-1 flex flex-col items-start justify-start relative min-w-[313px] max-w-full"
-                  >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto"
-                    >
-                      <div
-                        class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
-                      >
-                        <div
-                          class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          class="h-[168px] flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block max-w-full"
-                        >
-                          It is a long established fact that a reader will be
-                          distracted by the readable content of a page when
-                          looking at its layout. The point of using Lorem Ipsum
-                          is that it has a more-or-less normal distribution of
-                          letters, as opposed to using 'Content here, content
-                          here', making it look like readable English.
-                        </div>
-                        <div
-                          class="w-[98px] relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden"
-                        >
-                          Placeholder
-                        </div>
-                        <div
-                          class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[4px] box-border z-[1]"
-                    >
-                      <div
-                        class="relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[30px]"
-                      >
-                        Label
-                      </div>
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[152px] mq800:w-full mq800:h-[15px]"
-                  >
-                    <div
-                      class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-row items-start justify-start max-w-full [row-gap:20px] mq1125:flex-wrap"
-              >
-                <b
-                  class="h-[40px] w-[240px] relative text-[24.5px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
-                  >현장 요금 추가 정보 :
-                </b>
-                <div
-                  class="flex-1 flex flex-row items-start justify-start min-w-[325px] max-w-full [row-gap:20px] mq800:flex-wrap"
-                >
-                  <div
-                    class="flex-1 flex flex-col items-start justify-start relative min-w-[315px] max-w-full"
-                  >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto"
-                    >
-                      <div
-                        class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
-                      >
-                        <div
-                          class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          class="h-[168px] flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block max-w-full"
-                        >
-                          It is a long established fact that a reader will be
-                          distracted by the readable content of a page when
-                          looking at its layout. The point of using Lorem Ipsum
-                          is that it has a more-or-less normal distribution of
-                          letters, as opposed to using 'Content here, content
-                          here', making it look like readable English.
-                        </div>
-                        <div
-                          class="w-[98px] relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden"
-                        >
-                          Placeholder
-                        </div>
-                        <div
-                          class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
-                        >
-                          <div
-                            class="hidden flex-row items-start justify-start"
-                          >
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/image/host/starsharp-2.svg"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[4px] box-border z-[1]"
-                    >
-                      <div
-                        class="relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[30px]"
-                      >
-                        Label
-                      </div>
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[152px] mq800:w-full mq800:h-[15px]"
-                  >
-                    <div
-                      class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <button
-              class="cursor-pointer [border:none] py-[7px] px-[20px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
-            >
-              <div class="flex flex-row items-start justify-start gap-[8px]">
-                <b
-                  class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[37px]"
-                  >삭제</b
-                >
-              </div>
-            </button>
-          </div>
-        </form>
-        <div class="self-stretch flex flex-row items-start justify-center">
-          <div
-            class="w-[258px] flex flex-row items-center justify-between gap-[20px]"
-          >
-            <button
-              class="cursor-pointer [border:none] py-[8px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
-            >
-              <div class="flex flex-row items-center justify-center gap-[8px]">
-                <div
-                  class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[31px]"
-                >
-                  저장
-                </div>
-              </div>
-            </button>
-            <button
-              class="cursor-pointer border-[rgba(33,150,243,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[transparent] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center"
-            >
-              <div class="flex flex-row items-center justify-center gap-[8px]">
-                <div
-                  class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left inline-block min-w-[31px]"
-                >
-                  취소
-                </div>
-              </div>
-            </button>
+            class="flex-1 rounded-[4px]  box-border flex flex-row items-start justify-start py-[0px] relative min-w-[197px]">
+            <select class="w-[547px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="checkout">
+              <option value="NULL" disabled th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == null}">체크아웃 시간</option>
+              <option value="오전 10:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오전 10:00'}">오전 10:00</option>
+              <option value="오전 11:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오전 11:00'}">오전 11:00</option>
+              <option value="오후 12:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 12:00'}">오후 12:00</option>
+              <option value="오후 01:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 01:00'}">오후 01:00</option>
+              <option value="오후 02:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 02:00'}">오후 02:00</option>
+              <option value="오후 03:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 03:00'}">오후 03:00</option>
+              <option value="오후 04:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 04:00'}">오후 04:00</option>
+              <option value="오후 05:00" th:selected="${hostInfoDTO != null && hostInfoDTO.checkout == '오후 05:00'}">오후 05:00</option>
+            </select>
           </div>
         </div>
-      </section>
-      <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+      </div>
+      <div class="w-[550px] flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[3px] box-border max-w-full">
+        <div
+          class="self-stretch flex flex-row items-center justify-start flex-wrap content-center py-[0px] px-[0px] gap-[75px] mq450:gap-[19px] mq800:gap-[37px]">
+          <h3
+            class="m-[0px] h-[50px] w-[164px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
+            성수기 설정 :
+          </h3>
+          <div class="flex-1 flex flex-row items-center justify-between min-w-[198px] gap-[20px] mq450:flex-wrap">
+            <div class="h-[50px] w-[99px] flex flex-row items-center justify-start py-[12.5px] px-[0px] box-border">
+              <div class="self-stretch w-[42px] flex flex-row items-center justify-start py-[0px] px-[0px] box-border">
+                <div class="h-[42px] w-[42px] overflow-hidden shrink-0 flex flex-row items-center justify-start">
+                  <div
+                    class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
+                    <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" name="settings"
+                      type="radio" id="settingsRadio" th:checked="${priceDTO != null && priceDTO.peakSet == 1}"/>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex-1 relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left mq450:text-[16px] mq450:leading-[21px]">
+                설정
+              </div>
+            </div>
+            <div class="h-[50px] w-[100px] flex flex-row items-center justify-start py-[12.5px] px-[0px] box-border">
+              <div class="self-stretch w-[42px] flex flex-row items-center justify-start py-[0px] px-[0px] box-border">
+                <div class="h-[42px] w-[42px] overflow-hidden shrink-0 flex flex-row items-center justify-start">
+                  <div
+                    class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border">
+                    <input class="m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0" name="settings"
+                      type="radio" id="nonsettingsRadio" th:checked="${priceDTO != null && priceDTO.peakSet == 0}"/>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex-1 relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-[Roboto] text-[#000] text-left mq450:text-[16px] mq450:leading-[21px]">
+                <p class="w-max">미설정</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="date" class="hidden w-[700px] flex  flex-col item-end justify-end gap-[10px]" th:classappend="${priceDTO != null && priceDTO.peakSet == 1} ? 'block' : 'hidden'">
+      <div class="self-stretch flex flex-col items-end justify-start gap-[25px] max-w-full">
+        <div class="w-[450px] flex flex-row items-start justify-start flex-wrap content-start gap-[15px] max-w-full">
+          <div
+            class="relative text-[20px] tracking-[0.46px] leading-[50px] uppercase font-[Roboto] text-[#000] text-left inline-block min-w-[82px] mq450:text-[16px] mq450:leading-[21px]">
+            준성수기 :
+          </div>
+          <div
+            class="flex-1 flex flex-col items-start justify-start pt-[5px] px-[0px] pb-[0px] box-border min-w-[97px]">
+            <div class="self-stretch flex flex-col items-start justify-start">
+              <div 
+                class="date-range-picker-semi self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
+                <input
+                  class="date-range-picker-input-semi w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
+                  placeholder="준성수기 기간" type="text" readonly th:value="${semiPeriod != null ? semiPeriod : ''}" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="self-stretch flex-1 flex flex-col items-end justify-end gap-[30px] max-w-full">
+        <div class="self-stretch flex flex-row items-start justify-end py-[0px] box-border max-w-full">
+          <div class="self-stretch flex flex-col items-end justify-start gap-[25px] max-w-full">
+            <div
+              class="w-[450px] ml-[100px] flex flex-row items-start justify-start flex-wrap content-start gap-[24.5px] max-w-full">
+              <div
+                class="relative text-[20px] tracking-[0.46px] leading-[50px] uppercase font-[Roboto] text-[#000] text-left inline-block min-w-[82px] mq450:text-[16px] mq450:leading-[21px]">
+                성수기 :
+              </div>
+              <div
+                class="flex-1 flex flex-col items-start justify-start pt-[5px] px-[0px] pb-[0px] box-border min-w-[97px]">
+                <div class="self-stretch flex flex-col items-start justify-start">
+                  <div 
+                    class="date-range-picker-peak self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
+                    <input
+                      class="date-range-picker-input-peak w-full [border:none] [outline:none]  self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px] "
+                      placeholder="성수기 기간" type="text" readonly th:value="${peakPeriod != null ? peakPeriod : ''}"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div
+        class="self-stretch flex flex-row items-start justify-start gap-[44px] max-w-full mq1125:flex-wrap mq800:gap-[22px]">
+        <h3
+          class="m-[0px] h-[50px] w-[200px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
+          숙소 이용 규칙 :
+        </h3>
+        <div
+          class="mt-[10px] flex-1 flex flex-row items-start justify-start min-w-[322px] max-w-full [row-gap:20px] mq800:flex-wrap">
+          <textarea
+            class="w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
+            placeholder="숙소 이용 규칙"
+            id="rules"
+            th:text="${hostInfoDTO != null ? hostInfoDTO.rules : ''}"></textarea>
+        </div>
+      </div>
+      <div class="self-stretch flex flex-row items-start justify-start max-w-full [row-gap:20px] mq1125:flex-wrap">
+        <b
+          class="h-[40px] w-[240px] relative text-[24.5px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">현장
+          요금 추가 정보 :
+        </b>
+        <textarea
+          class="mt-[10px] w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
+          placeholder="현장 요금 추가 정보"
+          id="priceAdd"
+          th:text="${hostInfoDTO != null ? hostInfoDTO.priceAdd : ''}"></textarea>
+      </div>
+    </form>
+    <div class="self-stretch flex flex-row items-start justify-center">
+      <div class="w-full flex flex-row items-center justify-center gap-[20px]">
+        <button
+          type="button" onclick="savehostrules()"
+          class="cursor-pointer [border:none] py-[8px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center">
+          <div class="flex flex-row items-center justify-center gap-[8px]">
+            <div
+              class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[31px]">
+              저장
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+    <input type="hidden" id="peakSet"/>
+    <input type="hidden" id="semiStart" th:value="${semiStart != null ? semiStart : ''}" />
+    <input type="hidden" id="semiEnd" th:value="${semiEnd != null ? semiEnd : ''}" />
+    <input type="hidden" id="peakStart"  th:value="${peakStart != null ? peakStart : ''}"/>
+    <input type="hidden" id="peakEnd" th:value="${peakEnd != null ? peakEnd : ''}"/>
+  </section>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
+  <script type="text/javascript" src="\js\host-datepicker.js"></script>
+
+  <script>
+     $(document).ready(function() {
+    function updateDateSettings() {
+      if ($('#settingsRadio').is(':checked')) {
+        $('#date').removeClass('hidden');
+        $('#peakSet').val('1');
+      } else {
+        $('#date').addClass('hidden');
+        $('#peakSet').val('0');
+      }
+    }
+
+    $('#settingsRadio').change(updateDateSettings);
+    $('#nonsettingsRadio').change(updateDateSettings);
+
+    // 초기 상태 설정
+    updateDateSettings();
+
+  });
+
+    function savehostrules() {
+      var checkin = $('#checkin').val();
+      var checkout = $('#checkout').val();
+      var peakSet = $('#peakSet').val();
+      var semiStart = $('#semiStart').val();
+      var semiEnd = $('#semiEnd').val();
+      var peakStart = $('#peakStart').val();
+      var peakEnd = $('#peakEnd').val();
+      var rules = $('#rules').val();
+      var priceAdd = $('#priceAdd').val();
+
+        if (checkin == "") {
+            alert("체크인 시간을 선택해주세요");
+            return;
+        }
+
+        if (checkout == "") {
+            alert("체크아웃 시간을 선택해주세요");
+            return;
+        }
+
+        if (peakSet == "") {
+            alert("성수기 설정을 선택해주세요");
+            return;
+        }
+
+        var data = {
+            hostInfo: {
+              checkin: checkin,
+              checkout: checkout,
+              rules: rules,
+              priceAdd: priceAdd
+            },
+            price: {
+              peakSet: peakSet,
+              semi: {  
+              semiStart: semiStart,
+              semiEnd: semiEnd,
+              },
+              peakVo: {
+              peakStart: peakStart,
+              peakEnd: peakEnd
+              }
+            }
+        };
+
+        console.log(JSON.stringify(data));
+
+        $.ajax({
+              type: "POST",
+              url: "/host/rulesreg",
+              contentType: "application/json",
+              data: JSON.stringify(data),
+              success: function(data) {
+                data = data.trim();
+                if (data === "success") {
+                  alert("저장되었습니다.");
+                } else {
+                  alert("저장 실패하였습니다.");
+                }
+              }
+            });
+    }
+  </script>
+</body>
 </html>
