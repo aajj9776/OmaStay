@@ -1,14 +1,15 @@
 package com.omakase.omastay.repository;
 
-import com.omakase.omastay.entity.Member;
-import com.omakase.omastay.repository.custom.MemberRepositoryCustom;
-
-import io.lettuce.core.dynamic.annotation.Param;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
+
+import com.omakase.omastay.entity.Member;
+import com.omakase.omastay.repository.custom.MemberRepositoryCustom;
+
+import io.lettuce.core.dynamic.annotation.Param;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer>, MemberRepositoryCustom {
 
@@ -16,4 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Member
 
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.reservations WHERE m.id = :memberId")
     Optional<Member> findMemberWithReservations(@Param("memberId") int memberId);
+
+
 }

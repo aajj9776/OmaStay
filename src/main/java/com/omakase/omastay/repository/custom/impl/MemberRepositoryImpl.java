@@ -9,4 +9,5 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     public MemberRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
+
 }

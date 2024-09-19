@@ -1,5 +1,7 @@
 package com.omakase.omastay.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,19 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.custom.MemberInfoDTO;
+import com.omakase.omastay.dto.custom.MembercpDTO;
+import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.service.EmailService;
+import com.omakase.omastay.service.MemberService;
+import com.omakase.omastay.service.MyPageService;
 import com.omakase.omastay.service.ReservationService;
 
 import jakarta.mail.MessagingException;
 
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -34,11 +39,17 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
+    private MemberService memberService;
+
+    @Autowired
     private EmailService emailService;
 
     @GetMapping
-    public String reservation() {
-        return "reservation/reservation.html";
+    public ModelAndView reservation(MemberInfoDTO member) {
+        ModelAndView mv = new ModelAndView();
+
+        mv.setViewName("reservation/reservation");
+        return mv;
     }
 
     @GetMapping("/payment_success")
