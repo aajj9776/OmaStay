@@ -27,16 +27,19 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.omakase.omastay.dto.CouponDTO;
+import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.InquiryDTO;
 import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
+import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
 import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.CouponService;
+import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.InquiryService;
 import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.MemberService;
@@ -78,6 +81,9 @@ public class AdminController {
     InquiryService is;
 
     @Autowired
+    HostInfoService hs;
+
+    @Autowired
     private ServletContext application;
 
     @Autowired
@@ -97,13 +103,24 @@ public class AdminController {
     @RequestMapping("/request")
     public ModelAndView request() {
         ModelAndView mv = new ModelAndView();
+
+        List<HostInfoDTO> list = hs.getAllHostInfos();
+
+        mv.addObject("list", list);
         mv.setViewName("admins/request");
         return mv;
     }
 
-    @RequestMapping("/request_detail")
-    public String request_detail() {
-        return "admins/request_detail";
+    @RequestMapping("/request/detail")
+    public ModelAndView request_detail(@RequestParam("id") String id) {
+        ModelAndView mv = new ModelAndView();
+
+        HostRequestInfoDTO host = hs.getHostRequestInfo(Integer.parseInt(id));
+        System.out.println(host);
+        
+        mv.addObject("host", host);
+        mv.setViewName("admins/request_detail");
+        return mv;
     }
 
     @RequestMapping("/request_room")

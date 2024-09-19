@@ -43,9 +43,6 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepositoryCustom memberRepositoryCustom;
-
-    @Autowired
     private GradeRepository gradeRepository;
 
     @Autowired
@@ -95,7 +92,7 @@ public class MemberService {
 
     public boolean checkEmailDuplicate(String email) {
         // 이메일 중복 여부 확인 (null이면 중복 아님)
-        Member member = memberRepository.findByMemberProfileEmail(email);
+        Member member = memberRepository.findByEmail(email);
         return member != null;
     }
 
@@ -153,7 +150,7 @@ public class MemberService {
             throw new IOException("잘못된 요청입니다: 사용자 프로필 정보가 없습니다.");
         }
         // 1. 이메일 조회
-        Member member = memberRepository.findByMemberProfileEmail(memberDTO.getMemberProfile().getEmail());
+        Member member = memberRepository.findByEmail(memberDTO.getMemberProfile().getEmail());
         if (member == null) {
             System.out.println("해당 이메일로 등록된 사용자가 없습니다.");
             throw new IOException("해당 이메일로 등록된 사용자가 없습니다.");
