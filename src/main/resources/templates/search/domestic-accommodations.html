@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{layout/search_main}"
-      layout:fragment="search"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
 <head>
-    <meta charset="utf-8"/></head>
+    <meta charset="utf-8"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
     <link rel="stylesheet" href="/css/component/slider.css">
+</head>
 <body>
 <div
-        class="w-full relative bg-[#fff] overflow-y-auto flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[100px] box-border leading-[normal] tracking-[normal]"
+        class="w-full relative bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[100px] box-border leading-[normal] tracking-[normal]"
 >
     <main
             class="self-stretch flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full"
@@ -659,6 +660,7 @@
         let keyword = sessionStorage.getItem('keyword');
         let startDay = sessionStorage.getItem('startDate');
         let endDay = sessionStorage.getItem('endDate');
+        let person = sessionStorage.getItem('people');
 
         let filter = document.getElementById('dropdown-filter-button').value;
 
@@ -680,8 +682,8 @@
             endDay = new Date(endDay).toISOString()
         }
 
-        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter + "되냐?");
-        //ajax 통신
+        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter, person + "되냐?");
+
         $.ajax({
             type: "post",
             url: "/search/filtering",
@@ -691,6 +693,7 @@
                 hCate: hCate,
                 startPrice: startPrice,
                 endPrice: endPrice,
+                person: person,
                 keyword: keyword,
                 startEndDay: {
                     start: startDay,

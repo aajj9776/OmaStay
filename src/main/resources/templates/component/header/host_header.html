@@ -10,7 +10,7 @@
       <div
         class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid flex flex-row items-start justify-between py-[0px] px-[360px] gap-[20px] mq750:pl-[90px] mq750:pr-[90px] mq750:box-border mq1050:flex-wrap mq1050:pl-[180px] mq1050:pr-[180px] mq1050:box-border"
       >
-      <a class="dropdown-item" th:href="@{/host/main}">
+      <a class="dropdown-item" href="/host/main" onclick="changPage(0)">
         <img
           class="h-[75px] relative object-cover"
           alt=""
@@ -31,14 +31,14 @@
             >
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" th:href="@{/host/mypage}">마이페이지</a></li>
-            <li><a class="dropdown-item" th:href="@{/host/inquiry}">나의 1:1 문의</a></li>
+            <li><a class="dropdown-item" onclick="changPage(1)">마이페이지</a></li>
+            <li><a class="dropdown-item" onclick="changPage(2)">나의 1:1 문의</a></li>
           </ul>
         </div> 
         <button
         class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] pl-[35px] pr-[34px] bg-[#fff] rounded-[10px] flex flex-row items-start justify-start hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
       >
-        <a th:href="@{/host/logout}"
+        <a onclick="changPage(3)"
           class="w-[70px] [text-decoration:none] relative text-[16px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center inline-block min-w-[59px]"
           >로그아웃</a
         >
@@ -65,10 +65,10 @@
               >
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" th:href="@{/host/info}">숙소 소개</a></li>
-              <li><a class="dropdown-item" th:href="@{/host/rules}">이용규칙 관리</a></li>
-              <li><a class="dropdown-item" th:href="@{/host/roomlist}">객실 관리</a></li>
-              <li><a class="dropdown-item" th:href="@{/host/review}">리뷰 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(4)">숙소 소개</a></li>
+              <li><a class="dropdown-item" onclick="changPage(5)">이용규칙 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(6)">객실 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(7)">리뷰 관리</a></li>
             </ul>
             </div>
             <div class="dropdown">
@@ -82,9 +82,9 @@
               >
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" th:href="@{/host/reservation}">예약 관리</a></li>
-              <li><a class="dropdown-item" th:href="@{/host/sales}">매출 관리</a></li>
-              <li><a class="dropdown-item" th:href="@{/host/payment}">정산 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(8)">예약 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(9)">매출 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(10)">정산 관리</a></li>
             </ul>
             </div>
             <div class="dropdown">
@@ -98,9 +98,9 @@
               >
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" th:href="@{/host/notice}">공지사항</a></li>
-              <li><a class="dropdown-item" th:href="@{/host/faq}">자주 묻는 질문</a></li>
-              <li><a class="dropdown-item" th:href="@{/host/inquiry}">1:1 문의</a></li>
+              <li><a class="dropdown-item" onclick="changPage(11)">공지사항</a></li>
+              <li><a class="dropdown-item" onclick="changPage(12)">자주 묻는 질문</a></li>
+              <li><a class="dropdown-item" onclick="changPage(13)">1:1 문의</a></li>
             </ul>
             </div>
           </div>
@@ -117,6 +117,28 @@
           </div>
         </div>
       </div>
+      <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script>
+        function changPage(index) {
+            const hrefs = [
+                "/host/main", 
+                "/host/mypage",
+                "/host/inquiry",
+                "/host/logout", 
+                "/host/info", 
+                "/host/rules", 
+                "/host/roomlist",
+                "/host/review", 
+                "/host/reservation", 
+                "/host/sales", 
+                "/host/payment", 
+                "/host/notice", 
+                "/host/faq", 
+                "/host/inquiry" 
+            ];
+            location.href = hrefs[index];
+        }
+    </script>
     </header>
   </body>
 </html>

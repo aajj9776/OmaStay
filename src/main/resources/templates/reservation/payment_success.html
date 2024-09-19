@@ -62,9 +62,9 @@
     >
       <input type="hidden" id="pay_method" name="payMethod" value="" />
       <input type="hidden" id="pay_content" name="payContent" value="" />
-      <input type="hidden" id="nsale_price" name="nsalePrice" value="" />
-      <input type="hidden" id="sale_price" name="salePrice" value="" />
-      <input type="hidden" id="orderId" name="orderId" value="" />
+      <input type="hidden" id="nsale_price" name="nsale_price" value="" />
+      <input type="hidden" id="sale_price" name="amount" value="" />
+      <input type="hidden" id="orderId" name="resNum" value="" />
       <input type="hidden" id="resEmail" name="resEmail" value="" />
       <input type="hidden" id="resName" name="resName" value="" />
       <input type="hidden" id="paymentKey" name="paymentKey" value="" />
@@ -100,8 +100,10 @@
         $("#pay_content").val("방이름");
 
         // 할인 전 금액
-        if (json.discount && json.discount > 0) {
+        if (json.discount > 0) {
           $("#nsale_price").val(json.discount);
+        } else {
+          $("#nsale_price").val(json.totalAmount);
         }
 
         // 할인 후 금액
@@ -163,7 +165,6 @@
           // 결제 실패 비즈니스 로직을 구현하세요.
           window.location.href = `/reservation/payment_fail`;
         } else {
-          // 결제 성공 비즈니스 로직을 구현하세요.ddedssdsdsdsesfesfsfsew
           sendData(); // 결제 성공 시 sendData 호출
         }
       }

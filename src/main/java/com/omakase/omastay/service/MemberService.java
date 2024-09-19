@@ -168,18 +168,19 @@ public class MemberService {
         // 4. JWT 토큰 받기
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", member.getMemberProfile().getEmail());
-        claims.put("name", member.getMemName());
+        claims.put("memName", member.getMemName());
+        claims.put("id", member.getId());
         String accessToken = jwtProvider.getAccesToken(claims);
         String refreshToken = jwtProvider.getRefreshToken(claims);
         // 5. DB에 토큰 저장
         member.setAccessToken(accessToken);
         member.setRefreshToken(refreshToken);
-        memberRepository.save(member); // 토큰 저장
+        memberRepository.save(member);  // 토큰 저장
         // 6 응답 반환 (토큰 포함)
         MemberDTO responseDTO = new MemberDTO(member);
         responseDTO.setAccessToken(accessToken);
         responseDTO.setRefreshToken(refreshToken);
-        return responseDTO; // 토큰 포함한 사용자 정보 반환
+        return responseDTO;  // 토큰 포함한 사용자 정보 반환
     }
 
 
@@ -188,5 +189,8 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
         return MemberMapper.INSTANCE.toMemberDTOList(members);
     }
+    
+}
+
 
 }

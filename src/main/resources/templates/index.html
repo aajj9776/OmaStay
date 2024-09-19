@@ -4,8 +4,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link href="/css/index.css" rel="stylesheet"/>
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
     <link href="/css/component/swiper.css" rel="stylesheet"/>
@@ -232,15 +232,14 @@
     </section>
 </div>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script crossorigin="anonymous"
-        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="/js/datepicker.js"></script>
 <script type="text/javascript" src="/js/countperson.js"></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function (){
         //세션스토리지의 값 searh_bar에 넣기
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
@@ -253,6 +252,7 @@
           $("#search-accommodation").focus();
           $("#search-accommodation").trigger("click");
         }
+
 
         /*--------------*/
 
@@ -385,7 +385,6 @@
         }
     }
 
-  
 
 </script>
 </body>

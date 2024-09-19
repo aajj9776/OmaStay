@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.service.MemberService;
@@ -33,6 +34,9 @@ public class LoginController {
 
     @Autowired
     private UserSession userSession;  // 세션 관리
+
+    @Autowired
+    private HttpSession session;
 
 
      @Autowired
@@ -168,12 +172,13 @@ public class LoginController {
         
         // 토큰을 쿠키에 저장
         Cookie accessTokenCookie = new Cookie("accessToken", responseDTO.getAccessToken());
-        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setHttpOnly(false);
         accessTokenCookie.setPath("/");
+        accessTokenCookie.setSecure(false); // HTTPS에서만 쿠키 전송
         response.addCookie(accessTokenCookie);
 
         Cookie refreshTokenCookie = new Cookie("refreshToken", responseDTO.getRefreshToken());
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setPath("/");
         response.addCookie(refreshTokenCookie);
         userSession.createSession(request);

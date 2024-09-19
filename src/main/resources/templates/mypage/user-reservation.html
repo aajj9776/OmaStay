@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
   <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <meta charset="utf-8" />
   </head>
   <body>
@@ -193,74 +199,130 @@
                   </h2>
                 </div>
                 <div
-                  class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
+                  class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
                 >
+                  <!-- 예약 리스트 반복문 시작 -->
                   <div
-                    class="h-[258px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1"
+                    th:each="reservation : ${checkList}"
+                    class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
                   >
                     <div
-                      class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"
-                    ></div>
-                  </div>
-                  <div
-                    class="w-[189px] flex flex-col items-start justify-start pt-[49px] px-[0px] pb-[0px] box-border min-w-[189px] mq450:flex-1"
-                  >
-                    <div
-                      class="self-stretch flex flex-col items-start justify-start gap-[30px]"
+                      class="h-[258px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1"
                     >
                       <div
-                        class="self-stretch flex flex-col items-start justify-start gap-[10px]"
-                      >
-                        <div
-                          class="self-stretch flex flex-col items-start justify-start gap-[3px]"
-                        >
-                          <b
-                            class="w-[81px] relative leading-[21px] flex items-center"
-                            >예약 취소</b
-                          >
-                          <b
-                            class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]"
-                            >서울시 중랑구</b
-                          >
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]"
-                        >
-                          <b class="flex-1 relative leading-[21px]"
-                            >ADSHGHFLR</b
-                          >
-                        </div>
-                      </div>
+                        class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"
+                      ></div>
+                    </div>
+                    <div
+                      class="w-[189px] flex flex-col items-start justify-start pt-[49px] px-[0px] pb-[0px] box-border min-w-[189px] mq450:flex-1"
+                    >
                       <div
-                        class="self-stretch flex flex-row items-start justify-between py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter]"
+                        class="self-stretch flex flex-col items-start justify-start gap-[30px]"
                       >
                         <div
-                          class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border"
+                          class="self-stretch flex flex-col items-start justify-start gap-[10px]"
                         >
-                          <div class="flex-1 relative font-semibold">
-                            다시예약
+                          <div
+                            class="self-stretch flex flex-col items-start justify-start gap-[3px]"
+                          >
+                            <b
+                              class="w-[81px] relative leading-[21px] flex items-center"
+                              >예약 취소</b
+                            >
+                            <b
+                              class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]"
+                              th:text="${reservation.address}"
+                              >서울시 중랑구</b
+                            >
+                          </div>
+                          <div
+                            class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]"
+                          >
+                            <b
+                              class="flex-1 relative leading-[21px]"
+                              th:text="${reservation.reservationCode}"
+                              >ADSHGHFLR</b
+                            >
                           </div>
                         </div>
                         <div
-                          class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap"
+                          class="self-stretch flex flex-row items-start justify-between py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter]"
                         >
-                          <div class="flex-1 relative font-semibold">
-                            취소 상세
+                          <div
+                            class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border"
+                          >
+                            <div class="flex-1 relative font-semibold">
+                              다시예약
+                            </div>
+                          </div>
+                          <div
+                            class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap"
+                          >
+                            <div class="flex-1 relative font-semibold">
+                              취소 상세
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="h-[270px] w-[743px] relative overflow-hidden shrink-0 hidden max-w-full"
-                  ></div>
+                  <!-- 예약 리스트 반복문 끝 -->
                 </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>예약 번호</th>
+                      <th>예약자 이름</th>
+                      <th>예약 가격</th>
+                      <th>예약 상태</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reservation-table-body"></tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </main>
     </div>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      function updateTableWithReservations(reservation) {
+        let tableBody = $("#reservation-table-body"); // 테이블 바디 선택
+        tableBody.empty(); // 기존 내용을 비움
+
+        // reservations 배열을 반복하며 각 데이터를 테이블에 추가
+        reservation.forEach(function (reservation) {
+          let row = `<tr>
+                 <td><a href="/mypage/reservation_check?id=${reservation.id}">${
+            reservation.resNum
+          }</a></td>
+                 <td>${reservation.resName}</td>
+                 <td>${reservation.resPrice.toLocaleString()} 원</td>
+                 <td>${reservation.resStatus}</td>
+               </tr>`;
+          tableBody.append(row); // 테이블에 행 추가
+        });
+      }
+      $(function () {
+        let accessToken = Cookies.get("accessToken");
+        let member = jwt_decode(accessToken);
+        let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
+        let payIdx;
+        let resIdx;
+
+        console.log(member);
+
+        // 예약 정보를 불러오는 AJAX 요청
+        $.ajax({
+          url: "/mypage/reservation", // 호출하고자 하는 URL
+          method: "POST",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(member), // member 객체를 JSON으로 변환해서 전송
+        }).done(function (res) {
+          updateTableWithReservations(res.reservation);
+        });
+      });
+    </script>
   </body>
 </html>

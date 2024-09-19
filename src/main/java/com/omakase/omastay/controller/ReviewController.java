@@ -20,8 +20,7 @@ public class ReviewController {
     @PostMapping("/review/insert")
     @ResponseBody 
     public ReviewDTO addReview(@RequestBody ReviewDTO reviewDTO) { 
-        //ReviewDTO rdto = reviewService.addReview(reviewDTO);
-        ReviewDTO rdto = null;
+        ReviewDTO rdto = reviewService.addReview(reviewDTO);
         return rdto;
     }
 }

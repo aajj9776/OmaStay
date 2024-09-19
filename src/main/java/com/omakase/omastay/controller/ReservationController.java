@@ -1,17 +1,29 @@
 package com.omakase.omastay.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
+import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.ReservationService;
+
+import jakarta.mail.MessagingException;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
 
 
 @Controller
@@ -20,6 +32,9 @@ public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping
     public String reservation() {
@@ -32,7 +47,29 @@ public class ReservationController {
         return "reservation/payment_success.html";
     }
 
-    /*@PostMapping("/payment_success")
+    @RequestMapping("/sendEmail")  
+    public ResponseEntity<String> sendEmailPath(@RequestParam("email") String email) throws MessagingException { 
+        try {
+            emailService.sendEmail(email);  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("success");  
+    }
+
+    @RequestMapping("/emailCheck")  
+    public ResponseEntity<String> sendEmailAndCode(@RequestParam("email") String email, @RequestParam("code") String code){  
+
+        System.out.println(email);
+        if (emailService.verifyEmailCode(email, code)) {  
+            return ResponseEntity.ok("success");  
+        }  
+        return ResponseEntity.notFound().build();  
+    }
+
+    
+
+    @PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation) {
         System.out.println("payment" + payment);
 
@@ -49,7 +86,6 @@ public class ReservationController {
         ReservationDTO reserve = null;
         if( res.getPayStatus() == PayStatus.PAY) {
             
-            
             reservation.setPayIdx(res.getId());
             reserve = reservationService.insertReservationInfo(reservation, res);
         } else {
@@ -59,16 +95,17 @@ public class ReservationController {
         System.out.println(reserve);
 
         if( reserve.getResStatus() == ResStatus.COMPLETED) {
+            redirectAttributes.addAttribute("orderId", reserve.getResNum());
             redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
-            redirectAttributes.addAttribute("amount", payment.getAmount());
+            redirectAttributes.addAttribute("amount", reserve.getResPrice());
             redirectAttributes.addAttribute("payContent", payment.getPayContent());
             return "redirect:/reservation/payment_complete";  
         } else {
             return "redirect:/reservation/payment_fail";
         }
-    }*/
+    }
 
-    @GetMapping("payment_complete")
+    @GetMapping("/payment_complete")
     public String payWan() {
         return "reservation/payment_complete.html";
     }
@@ -79,11 +116,22 @@ public class ReservationController {
         return "reservation/no_reservation.html";
     }
 
+    @RequestMapping("/check_detail")
+    public ModelAndView check_detail() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("reservation/check_detail.html");
+
+        return mv;
+    }
 
     //이거는 마이페이지로 이동
     @RequestMapping("/reservation_check")
-    public String reservationCheck() {
-        return "reservation/reservation_check.html";
+    public ModelAndView reservationCheck() {
+        ModelAndView mv = new ModelAndView();
+
+        mv.setViewName("reservation/reservation_check.html");
+        return mv;
+        
     }
 
 
@@ -91,9 +139,8 @@ public class ReservationController {
     public String fail() {
         return "reservation/payment_fail.html";
     }
-    
-    
-    //이거 2개는 모달창
+
+    //이거 3개는 모달창
     @RequestMapping("/room_info")
     public String roomInfo() {
         return "reservation/room_info.html";
@@ -101,6 +148,10 @@ public class ReservationController {
     @RequestMapping("/cancel_content")
     public String checkDetail() {
         return "reservation/cancel_content.html";
+    }
+    @GetMapping("/modal/coupon-modal")
+    public String getCouponModal() {
+        return "reservation/modal/coupon-modal"; // .html 확장자는 생략 가능
     }
     
     

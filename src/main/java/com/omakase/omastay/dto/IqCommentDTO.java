@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class IqCommentDTO {
-    private int id;
-    private int iqIdx;
+    private Integer id;
+    private Integer iqIdx;
     private String iqcTitle;
     private String iqcContent;
     private LocalDateTime iqcDate;
@@ -27,7 +27,7 @@ public class IqCommentDTO {
     }
 
     @QueryProjection
-    public IqCommentDTO(int id, int iqIdx, String iqcTitle, String iqcContent, LocalDateTime iqcDate, String iqcNone) {
+    public IqCommentDTO(Integer id, Integer iqIdx, String iqcTitle, String iqcContent, LocalDateTime iqcDate, String iqcNone) {
         this.id = id;
         this.iqIdx = iqIdx;
         this.iqcTitle = iqcTitle;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "payment")
-@ToString(exclude = {"issuedCoupon", "poInteger"})
+@ToString(exclude = {"issuedCoupon", "point"})
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,9 +48,6 @@ public class Payment {
 
     @Column(name = "nsale_price", length = 100)
     private String nsalePrice;
-
-    @Column(name = "cancel_time", length = 100)
-    private String cancelTime;
 
     @Column(name = "cancel_content", length = 100)
     private String cancelContent;

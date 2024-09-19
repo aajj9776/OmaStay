@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class IssuedCouponDTO {
-    private int id;
-    private int mIdx;
-    private int cpIdx;
+    private Integer id;
+    private Integer mIdx;
+    private Integer cpIdx;
     private IcStatus icStatus;
     private String icCode;
     private String icNone;
@@ -26,7 +26,7 @@ public class IssuedCouponDTO {
     }
 
     @QueryProjection
-    public IssuedCouponDTO(int id, int mIdx, int cpIdx, IcStatus icStatus, String icCode, String icNone) {
+    public IssuedCouponDTO(Integer id, Integer mIdx, Integer cpIdx, IcStatus icStatus, String icCode, String icNone) {
         this.id = id;
         this.mIdx = mIdx;
         this.cpIdx = cpIdx;

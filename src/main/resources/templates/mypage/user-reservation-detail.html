@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <meta charset="utf-8" />
   </head>
   <body>
@@ -281,8 +286,7 @@
                   class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full text-[13.2px] text-[#8e8888] mq800:flex-wrap"
                 >
                   <div
-                    class="w-[411px] bg-[#f7f7f7] overflow-hidden shrink-0 flex flex-row items-start justify-start p-[24px] box-border gap-[59px] min-w-[411px] min-h-[251px] max-w-full z-[1] mq450:gap-[29px] mq450:flex-wrap mq800:flex-1 mq800:min-w-full
-                    "
+                    class="w-[411px] bg-[#f7f7f7] overflow-hidden shrink-0 flex flex-row items-start justify-start p-[24px] box-border gap-[59px] min-w-[411px] min-h-[251px] max-w-full z-[1] mq450:gap-[29px] mq450:flex-wrap mq800:flex-1 mq800:min-w-full"
                   >
                     <div
                       class="w-[151px] flex flex-col items-start justify-start gap-[14px]"
@@ -332,7 +336,8 @@
                             <div
                               class="w-[166px] flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] box-border"
                             >
-                              <b class="self-stretch relative leading-[20px] justify-end"
+                              <b
+                                class="self-stretch relative leading-[20px] justify-end"
                                 >객실 가격 (1박)</b
                               >
                             </div>
@@ -420,13 +425,10 @@
                     하루전에는 취소가 가능합니다
                   </h2>
                   <button
+                    id="cancelBtn"
                     class="cursor-pointer [border:none] py-[11.5px] px-[16px] bg-[#fcd4d4] absolute top-[17px] left-[774px] rounded-[10px] flex flex-row items-start justify-start whitespace-nowrap z-[1] hover:bg-[#e3baba]"
                   >
-                    <div
-                      class="relative text-[16px] leading-[19.09px] font-semibold font-[Inter] text-[#ff5b5b] text-center inline-block min-w-[63px] whitespace-nowrap"
-                    >
-                      예약 취소
-                    </div>
+                    예약취소
                   </button>
                 </div>
               </div>
@@ -436,5 +438,66 @@
       </main>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      $(function () {
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id"); // 'id' 파라미터 값을 추출
+        console.log(id);
+
+        let accessToken = Cookies.get("accessToken");
+        let member = jwt_decode(accessToken);
+        let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
+        let resIdx;
+        let payIdx;
+
+        console.log(member);
+
+        // 예약 정보를 불러오는 AJAX 요청
+        $.ajax({
+          url: "/mypage/reservation_check", // 호출하고자 하는 URL
+          method: "POST",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({ id }), // member 객체를 JSON으로 변환해서 전송
+        }).done(function (res) {
+          console.log(res);
+          paymentKey = res.payment.paymentKey;
+          payIdx = res.payment.id;
+        });
+
+        // 취소 버튼 클릭 시 이벤트 처리
+        $("#cancelBtn").click(function () {
+          let chk = confirm("정말로 예약을 취소하시겠습니까?");
+          if (chk) {
+            // paymentKey 변수를 취소 요청에 사용
+            $.ajax({
+              url: "/payment/cancel", // 호출하고자 하는 URL
+              method: "POST",
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({
+                paymentKey: paymentKey, // res.payment.paymentKey 값을 사용
+                cancelReason: "고객 요청", // 실제 데이터 값 확인
+                resIdx: id,
+                payIdx: payIdx,
+              }),
+            }).done(function (res) {
+              alert("예약이 취소되었습니다.");
+              location.href = "/";
+            });
+          }
+        });
+      });
+
+      function getPaymentData() {
+        $.ajax({
+          url: "/mypage/reservation_check", // 호출하고자 하는 URL
+          method: "POST",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({ id }), // member 객체를 JSON으로 변환해서 전송
+        }).done(function (res) {
+          console.log(res);
+        });
+      }
+    </script>
   </body>
 </html>
