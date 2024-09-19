@@ -25,16 +25,16 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
     public List<Integer> keywordFiltering(String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        //조건1 h_status가 1인지
+        //조건1 h_status가 1(승인)인지
         builder.and(hostInfo.hStatus.eq(HStatus.APPROVE));
         //조건2 h_name에 keyword가 포함되어 있는지
-        builder.or(hostNameContains(keyword));
+        builder.or(hostNameContains(keyword)); //업체명
         //조건3 h_post_code에 keyword가 포함되어 있는지
-        builder.or(postCodeContains(keyword));
+        builder.or(postCodeContains(keyword)); //우편번호
         //조건4 h_street 에 keyword가 포함되어 있는지
-        builder.or(streetContains(keyword));
+        builder.or(streetContains(keyword)); //주소
         //조건5 region에 keyword가 포함되어 있는지
-        builder.or(regionContains(keyword));
+        builder.or(regionContains(keyword)); //지역
 
         return queryFactory
                 .select(roomInfo.id)
