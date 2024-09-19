@@ -9,13 +9,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Data
 @NoArgsConstructor
 public class ReviewDTO {
-    private Integer id;
-    private Integer memIdx;
-    private Integer resIdx;
-    private Integer hIdx;
+    private int id;
+    private int memIdx;
+    private int resIdx;
+    private int hIdx;
     private String revWriter;
     private String revContent;
     private FileImageNameVo revFileImageNameVo;
@@ -23,6 +25,8 @@ public class ReviewDTO {
     private BooleanStatus revStatus;
     private Float revRating;
     private String revNone;
+
+    
 
     public ReviewDTO(Review review) {
         this.id = review.getId();

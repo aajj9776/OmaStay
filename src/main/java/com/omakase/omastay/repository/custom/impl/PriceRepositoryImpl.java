@@ -1,12 +1,12 @@
 package com.omakase.omastay.repository.custom.impl;
-
 import com.omakase.omastay.repository.custom.PriceRepositoryCustom;
 import com.omakase.omastay.vo.StartEndVo;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import static com.omakase.omastay.entity.QPrice.price;
 
 public class PriceRepositoryImpl implements PriceRepositoryCustom {
 
@@ -21,10 +21,44 @@ public class PriceRepositoryImpl implements PriceRepositoryCustom {
         LocalDateTime start = startEndDay.getStart();
         LocalDateTime end = startEndDay.getEnd();
         // 1. 지금 예약이 가능한 호텔의 예약 가능한 방 중 제일가격이 낮은 방의 가격을 가져옴
+        List<Tuple> lowestPricesByHost = queryFactory
+                .select(price.roomInfo.hostInfo.id, price.regularPrice.min())
+                .from(price)
+                .where(price.roomInfo.hostInfo.id.in(hostIds))
+                .groupBy(price.roomInfo.hostInfo.id)
+                .fetch();
 
         // 2. 그 중 예약 시작일과 종료일을 price의 peak_start peak_end semi_start semi_end와 비교하여
         // 내가 예약하는 시작일과 종료일의 1박에 해당하는 평균 가격을 가져옴
 
         return List.of();
     }
+
+    /*@Override
+    public List<Tuple> findLowestPricesByHostIds(List<Integer> hostIds, LocalDateTime start, LocalDateTime end) {
+        QPrice price = QPrice.price;
+
+        // 1. 각 호스트에서 예약 가능한 방 중 가장 낮은 가격의 리스트를 찾기
+        return queryFactory
+                .select(price.roomInfo.hostInfo.id, price.regularPrice.min())
+                .from(price)
+                .where(price.roomInfo.hostInfo.id.in(hostIds)
+                        .and(price.startDate.before(end))
+                        .and(price.endDate.after(start)))
+                .groupBy(price.roomInfo.hostInfo.id)
+                .fetch();
+    }
+
+    @Override
+    public List<Price> findPricesByHostIdAndDateRange(Long hostId, Integer minPrice, LocalDateTime start, LocalDateTime end) {
+        QPrice price = QPrice.price;
+
+        return queryFactory
+                .selectFrom(price)
+                .where(price.roomInfo.hostInfo.id.eq(hostId)
+                        .and(price.startDate.before(end))
+                        .and(price.endDate.after(start))
+                        .and(price.regularPrice.eq(minPrice)))
+                .fetch();
+    }*/
 }

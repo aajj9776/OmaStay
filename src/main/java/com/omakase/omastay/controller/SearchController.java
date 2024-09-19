@@ -40,12 +40,17 @@ public class SearchController {
 
 
     //숙소 검색 창(위에꺼 이걸로 변경예정)
-    @PostMapping(value = "/search")
-    @ResponseBody
-    public FilterDTO search(@RequestBody @Valid FilterDTO filterDTO) {
-        List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(filterDTO);
+    @ GetMapping(value = "/search")
+    public ModelAndView search(@ModelAttribute @Valid FilterDTO search) {
+        System.out.println(search);
+        List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(search);
 
-        return filterDTO;
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("resultAccommodations", resultAccommodations);
+        mv.addObject("includeSearchBar", true);
+        mv.setViewName("search/domestic-accommodations");
+
+        return mv;
     }
 
     //숙소 검색 필터링
