@@ -1,6 +1,9 @@
 package com.omakase.omastay.repository.custom;
 
-public interface RoomInfoRepositoryCustom {
+import org.hibernate.mapping.Set;
 
+import com.omakase.omastay.vo.StartEndVo;
+
+public interface RoomInfoRepositoryCustom {
 
 }

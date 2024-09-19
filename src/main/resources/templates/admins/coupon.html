@@ -9,11 +9,17 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
+  <style>
+    #historyTable {
+      table-layout: fixed; /* 테이블 레이아웃을 자동으로 설정 */
+      width: 660px; /* 테이블 너비를 100%로 설정 */
+    }
+  </style>
 </head>
 
 <body>
   <div
-    class="w-full relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]">
+    class="w-full relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000]">
 
     <!-- 제목 영역-->
     <label
@@ -21,57 +27,26 @@
       쿠폰 관리
     </label>
 
-    <!-- 검색 영역-->
-    <div
-      class="w-[1300px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[10px] box-border gap-[5px] max-w-full text-center text-[18px] text-[#000] font-[Inter]">
-
-      <!-- 검색어 영역 -->
-      <div
-        class="w-[700px] overflow-hidden flex flex-row items-center justify-center flex-wrap content-center py-[5px] px-[20px] box-border gap-[15px] max-w-full">
-        <label
-          class="m-[0px] w-[130px] relative text-[20px] font-light font-[Inter] flex items-center justify-center shrink-0 mq450:text-[16px]">
-          검색어
-        </label>
-
-        <div id="search-input"
-          class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
-          <select id="search-type"
-            class="w-[40px] [border:none] [outline:none] h-[24px] justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]">
-            <option value="all">전체</option>
-            <option value="title">제목</option>
-            <option value="ffname">파일명</option>
-          </select>
-          <input id="search-keyword"
-            class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
-            type="text" />
-        </div>
-
-        <div
-          class="w-[300px] flex-1 box-border flex flex-row items-center justify-center py-[4px] px-[30px] gap-[15px]">
-          <button id="search-button" class="w-[100px] h-[30px] bg-[#d4d8f1] rounded-[4px]">검색</button>
-          <button id="reset-button"
-            class="flex flex-row items-center justify-center w-[100px] h-[30px] border-[2px] border-[#d4d8f1] rounded-[4px]">초기화</button>
-        </div>
-      </div>
-    </div>
-
     <!-- 쿠폰 버튼 영역 -->
-    <div class="flex flex-row text-[16px] justify-center items-center gap-2">
+    <div class="flex flex-row text-[16px] justify-center items-center gap-4">
       <button id="addButton" class="w-[100px] h-[35px] bg-[#d4d8f1] rounded-[4px] text-[16px] ml-[30px]">쿠폰 등록</button>
-      <span>쿠폰 등록은 발급과 동시에 이루어집니다. 등록 후 삭제할 수 없으니 유의해주세요</span>
+      <span class="text-gray-400"> * 쿠폰 등록은 발급과 동시에 이루어집니다. 등록 후 삭제할 수 없으니 유의해주세요</span>
     </div>
-    <button id="history" class="w-[160px] h-[35px] bg-[#d4d8f1] rounded-[4px] text-[16px] ml-[30px]">[임시] 쿠폰 상세
-      보기</button>
 
     <!-- 테이블 영역-->
-    <div
+
+    <div th:if="${list == null}" class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+        <p class="text-[18px] text-[#6c757d]">등록된 쿠폰이 없습니다.</p>
+    </div>
+    
+    <div th:if="${list != null}"
       class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
 
       <!-- 테이블 데이터 영역-->
       <div id="table" class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
         <table id="listTable" class="w-[1200px] hover ">
           <thead>
-            <tr class="bg-[#d4d8f1] py-[20px] pl-[30px] pr-[634px] gap-[10px] font-medium">
+            <tr class="bg-[#d4d8f1] font-medium">
               <th>쿠폰 번호</th>
               <th>쿠폰 내용</th>
               <th>쿠폰 형식</th>
@@ -86,10 +61,17 @@
             <tr th:each="coupon : ${list}">
               <td th:text="${coupon.id}"></td>
               <td th:text="${coupon.cpContent}"></td>
-              <td th:text="${coupon.cpMethod}"></td>
-              <td th:text="${coupon.cpStartEnd.start}"></td>
-              <td th:text="${coupon.cpStartEnd.end}"></td>
-              <td th:text="${coupon.cpCate}"></td>
+              <td th:switch="${coupon.cpMethod}">
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpMethod).DESIGNATED}">지정 발행</span>
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpMethod).SINGLE_USE}">일회용 코드</span>
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpMethod).MULTI_USE}">다회용 코드</span>
+              </td>
+              <td th:text="${#temporals.format(coupon.cpStartEnd.start, 'yyyy-MM-dd HH:mm')}"></td>
+              <td th:text="${#temporals.format(coupon.cpStartEnd.end, 'yyyy-MM-dd HH:mm')}"></td>
+              <td th:switch="${coupon.cpCate}">
+                  <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PERCENT}">백분율 할인</span>
+                  <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PRICE}">금액 할인</span>
+              </td>
               <td th:text="${coupon.cpSale}"></td>
               <td ><button th:onclick="'showDetails(' + ${coupon.id} + ')'"><img class="w-[15px] h-[15px]" src="/image/admin/icon-more.png"/></button></td>
             </tr>
@@ -114,7 +96,7 @@
         class="bg-[#d9ddf1] p-[30px_30px] max-w-[450px] min-w-[100px] box-border rounded-[12px] flex items-center justify-center relative top-[40px] m-auto"
         style="width: auto;">
 
-        <button id="closeModal" class="absolute top-4 right-4 p-2 rounded-lg z-10">
+        <button id="closeAddModal" class="absolute top-4 right-4 p-2 rounded-lg z-10">
           <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
         </button>
 
@@ -272,46 +254,46 @@
       <!-- 쿠폰 상세보기 모달-->
       <!-- 쿠폰 상세보기 모달-->
       <!-- 쿠폰 상세보기 모달-->
-      <div id="history_modal" class="relative top-[40px] w-[640px] rounded-[12px] bg-[#fff] max-w-full shrink-0 flex flex-col leading-[normal] tracking-[normal] m-auto">
+      <div id="history_modal" class="relative top-[40px] w-[720px] rounded-[12px] bg-[#fff] shrink-0 flex flex-col leading-[normal] tracking-[normal] m-auto">
         <!-- 헤더 -->
-        <section class="bg-[#fff] flex flex-col items-start justify-center relative rounded-[12px] w-full">
-          <div id="closeHistory" class="w-full flex flex-row items-end justify-end p-[10px]"> 
+        <section class="bg-[#fff] flex flex-col items-end justify-center relative rounded-[12px] w-full">
+          <button id="closeHistory" class="w-auto flex flex-row items-end justify-end p-[10px]"> 
             <img class="h-[24px] w-[24px] shrink-0" src="/image/admin/icon-cancel.png" />
-          </div>  
+          </button>  
           <header class="w-full bg-[#fff] flex flex-col items-start justify-center gap-[10px] text-left text-[18px] text-[#101828] mb-2">
             <p class="px-[30px] font-semibold text-[inherit] whitespace-nowrap">쿠폰 사용 내역</p>
-            <div class="px-[40px] text-[14px] text-[#475467] whitespace-nowrap">등록할 쿠폰의 정보를 입력해주세요</div>
+            <!-- <div class="px-[40px] text-[14px] text-[#475467] whitespace-nowrap">메세지</div> -->
           </header>
         </section>
 
         <!-- 본문 영역 -->
         <section
-          class="w-full flex flex-col items-start justify-start px-[30px] py-[10px] max-w-full text-left text-[14px] text-[#989898]">
+          class="w-full flex flex-col  justify-start px-[30px] py-[10px] text-[14px] ">
           <!-- 발행 현황 -->
-          <div class="flex flex-row items-start justify-start gap-[10.5px] text-[12px]"> 
+          <div class="flex flex-row items-start justify-start gap-[10.5px] text-[12px] text-[#989898]"> 
             <div>발행</div>
-            <div>N</div>
+            <div id="issueCount">N</div>
             <div>건 /</div>
             <div>사용</div>
-            <div>N</div>
+            <div id="useCount">N</div>
             <div>건</div>
           </div>
 
           <!-- 테이블 영역 -->
           <div id="historyTableSection"
-            class="self-stretch flex flex-row items-center justify-center py-[30px] box-border max-w-full text-center text-[14px] text-[rgba(0,0,0,0.87)] font-[Roboto]">
-            <table id="historyTable" class="w-full font-medium hover ">
-              <thead>
+            class="w-[660px] flex flex-row items-center justify-center text-center text-[16px]"
+            >
+            <table id="historyTable" class="w-full font-medium hover">
+              <thead >
                 <tr class="bg-[#d4d8f1]">
                   <th>쿠폰 코드</th>
-                  <th>고객 번호</th>
-                  <th>발행일</th>
+                  <th>회원 번호</th>
                   <th>만료일</th>
                   <th>사용일</th>
                   <th>사용주문</th>
                 </tr>
               </thead>
-              <tbody id="tbody" class="bg-[#ffffff] pt-[10px] "></tbody>
+              <tbody id="tbody" class="bg-[#ffffff] pt-[10px] mb-[50px] font-normal"></tbody>
             </table>
           </div>
         </section>
@@ -331,15 +313,21 @@
 
       $('#listTable').DataTable();
 
+      $('#historyTable').DataTable({
+        pageLength: 10,
+        lengthChange: false,
+      }).columns.adjust().draw();
+
+
       // 쿠폰 등록 모달
       $('#addButton').click(function () {
         $('#modalOverlay').show();
         $('#history_modal').css('display', 'none');
-        $('#addCoupon').show();
+        $('#addCoupon').css('display', 'flex');
       });
 
       // 쿠폰 등록 모달 닫기
-      $('#closeModal').click(function () {
+      $('#closeAddModal').click(function () {
         $('#modalOverlay').css('display', 'none');
       });
 
@@ -366,6 +354,12 @@
         $('#addCoupon').css('display', 'none');
         $('#history_modal').show();
       });
+
+      $('#reset-button').click(function () {
+        $('#date-range-picker-input').val('');
+        $('#search-keyword').val('');
+        $('#search-type').val('all');
+      }); 
 
       // 쿠폰 형식 - 라디오 버튼 클릭 이벤트
       $('input[name="couponType"]').change(function () {
@@ -573,26 +567,48 @@
       fetch(`/admin/coupon/history?id=${id}`)
         .then(response => response.json())
         .then(data => {
-
           console.log(data);
-          // 모달에 데이터를 채움
-          var modalContent = document.getElementById('tbody');
-          modalContent.innerHTML = 
-          //반복문으로 데이터를 채움
-          data.list.forEach(item => {
-            modalContent.innerHTML += `
-            <tr>
-              <td>${item.id}</td>
-              <td>${item.mIdx}</td>
-              <td>${item.icStatus}</td>
-              <td>${item.icCode}</td>
-            </tr>
-            `;
-          });
 
-          // 모달을 표시함
-          var modal = document.getElementById('history_modal');
-          modal.classList.remove('hidden');
+          // 모달에 데이터를 채움
+          var modalContent = $('#tbody'); // jQuery 사용
+          modalContent.empty(); // 기존 내용 지우기
+
+          
+
+          // 반복문으로 데이터를 채움, 문자열 생성 후 한 번에 추가
+          if (data.list && data.list.length > 0) {
+
+            var issueCount = $('#issueCount'); // jQuery 사용
+            issueCount.empty(); // 기존 내용 지우기
+            issueCount.append(data.list.filter(item => item.issuedCouponDTO).length);
+
+            var useCount = $('#useCount'); // jQuery 사용
+            useCount.empty(); // 기존 내용 지우기
+            useCount.append(data.list.filter(item => item.issuedCouponDTO && item.issuedCouponDTO.icStatus === 'USED').length);
+          
+
+            let rowsHtml = '';
+            data.list.forEach(item => {
+                rowsHtml += `
+                    <tr>
+                        <td>${item.issuedCouponDTO.icCode != null ? item.issuedCouponDTO.icCode : '회원지정'}</td>
+                        <td>${item.issuedCouponDTO.mIdx != null ? item.issuedCouponDTO.mIdx : '미발급'}</td>
+                        <td>${item.couponDTO.cpStartEnd.end}</td>
+                        <td>${item.issuedCouponDTO.icStatus === 'USED' ?  item.payTime : '미사용'}</td>
+                        <td>${item.issuedCouponDTO.icStatus === 'USED' ?  item.paymentId : '미사용'}</td>
+                    </tr>
+                `;
+          });
+          modalContent.append(rowsHtml); 
+        } else {
+            // 데이터가 없는 경우 처리
+            modalContent.append('<tr><td colspan="5">등록된 데이터가 없습니다</td></tr>');
+        }
+
+            // 모달을 표시함 (jQuery 사용)
+            $('#modalOverlay').show();
+            $('#addCoupon').hide();
+            $('#history_modal').show();
         })
         .catch(error => {
           console.error('Error fetching coupon details:', error);

@@ -1,6 +1,7 @@
 package com.omakase.omastay.service;
 
 import com.omakase.omastay.dto.IssuedCouponDTO;
+import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.entity.IssuedCoupon;
 import com.omakase.omastay.mapper.IssuedCouponMapper;
 import com.omakase.omastay.repository.IssuedCouponRepository;
@@ -16,9 +17,9 @@ public class IssuedCouponService {
     @Autowired
     private IssuedCouponRepository issuedCouponRepository;
 
-    public List<IssuedCouponDTO> getIssuedCouponsById(Integer cp_idx){
-        List<IssuedCoupon> issuedCoupons = issuedCouponRepository.findByCouponId(cp_idx);
-        return IssuedCouponMapper.INSTANCE.toIssuedCouponDTOList(issuedCoupons);
+    public List<CouponHistoryDTO> getIssuedCouponsById(Integer cp_idx){
+        List<CouponHistoryDTO> issuedCoupons = issuedCouponRepository.findCouponHistoryByCpIdx(cp_idx);
+        return issuedCoupons;
     }
 
 }
