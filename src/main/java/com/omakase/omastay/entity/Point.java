@@ -31,9 +31,6 @@ public class Point {
     @Column(name = "p_date", nullable = false)
     private LocalDateTime pDate;
 
-    @Column(name = "p_none", length = 100)
-    private String pNone;
-
     //영속성 시간 자동추가
     @PrePersist
     public void prePersist() {

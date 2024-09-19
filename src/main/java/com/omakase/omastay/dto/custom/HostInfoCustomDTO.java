@@ -6,20 +6,16 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class HostInfoCustomDTO {
     private HostInfoDTO hostInfo;
     private List<FacilitiesDTO> facilities;
     private List<ImageDTO> images;
-
-    public HostInfoCustomDTO(HostInfoDTO hostInfo, List<FacilitiesDTO> facilities, List<ImageDTO> images) {
-        this.hostInfo = hostInfo;
-        this.facilities= facilities;
-        this.images = images;
-    }
 
 }

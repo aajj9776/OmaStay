@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.omakase.omastay.entity.QHostInfo.hostInfo;
 import static com.omakase.omastay.entity.QRoomInfo.roomInfo;
 
 @Service
@@ -50,10 +51,19 @@ public class FacilitiesService {
         // 검색어 필터링 된 룸인포 키값과 호스트인포 키값 리스트 가져오기(예약이 불가능한 객실 포함)
         List<Tuple> allHostIds = searchKeyword(filterDTO);
 
+        for (Tuple allHostId : allHostIds) {
+            System.out.println("룸인포=" + allHostId.get(roomInfo.id));
+            System.out.println("호스트인포" + allHostId.get(hostInfo.id));
+        }
+
         //튜플에서 룸인포 키값만 가져오기
         List<Integer> roomIdxs = allHostIds.stream()
                 .map(tuple -> tuple.get(roomInfo.id))
                 .collect(Collectors.toList());
+
+        for (Integer roomIdx : roomIdxs) {
+            System.out.println(roomIdx);
+        }
 
         //검색어의 해당하는 리스트중 해당 날짜 예약이 가능한 룸인포 키값과 호스트인포 키값 필터링(roomInfo.id 리스트)
         List<Tuple> availableHostIds = roomInfoRepository.dateFiltering(filterDTO.getStartEndDay(), roomIdxs);
@@ -108,6 +118,8 @@ public class FacilitiesService {
 
         //1. 검색어 필터링(roomInfo.id 리스트)
         List<Integer> keyword = hostInfoRepository.keywordFiltering(filterDTO.getKeyword());
+
+        System.out.println("키워드" + keyword);
 
         //2. 검색어의 해당하는 리스트중 해당 인원수 이상의 숙소만 필터링(roomInfo.id 리스트)
         return  roomInfoRepository.personFiltering(filterDTO.getPerson(), keyword);

@@ -21,6 +21,6 @@ public class PeakVo {
     @Column(name = "peak_end")
     private LocalDateTime peakEnd;
 
-    @Column(name = "peak_price", nullable = false)
+    @Column(name = "peak_price")
     private int peakPrice;
 }

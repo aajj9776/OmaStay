@@ -42,28 +42,52 @@
     <script type="text/javascript" src="/js/countperson.js"></script>
     <script>
       window.onload = function () {
-        //쿠키
         let token = Cookies.get("accessToken");
         console.log("Access Token:", token);
+
         let login = false;
         if (token != null) {
-          console.log("토큰있음");
+          console.log("토큰 있음");
           login = true;
         } else {
-          console.log("토큰없음");
+          console.log("토큰 없음");
           login = false;
         }
+
         localStorage.setItem("isLogin", login.toString());
-        let userInfo = jwt_decode(token); // JWT 디코딩
-        document.getElementById("main_header").setAttribute("value", userInfo);
-        console.log(
-          document.getElementById("main_header").getAttribute("value", userInfo)
-        );
-        console.log(userInfo);
-        if (userInfo.exp < Date.now() / 1000) {
-          alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+
+        if (token) {
+          try {
+            let userInfo = jwt_decode(token);
+            localStorage.setItem("user", JSON.stringify(userInfo));
+            console.log("User Info:", userInfo);
+
+            // JWT 토큰 만료 여부 확인
+            if (userInfo.exp < Date.now() / 1000) {
+              alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+              Cookies.remove("accessToken");
+              localStorage.removeItem("isLogin");
+              window.location.href = "/login";
+            }
+          } catch (error) {
+            console.error("토큰 디코딩 중 오류 발생:", error);
+            alert("잘못된 토큰입니다. 다시 로그인해주세요.");
+            Cookies.remove("accessToken");
+            localStorage.removeItem("isLogin");
+            window.location.href = "/login";
+          }
         }
       };
+      searchAccommodation = () => {
+        let search = document.getElementById("search-accommodation").value;
+        let checkIn = document.getElementById("check-in").value;
+        console.log(checkIn);
+        let checkOut = document.getElementById("check-out").value;
+        console.log(checkOut);
+        let person = document.getElementById("person_count").innerText;
+        let url = `/search/search?keyword=${encodeURIComponent(search)}&startEndDay.start=${encodeURIComponent(checkIn)}&startEndDay.end=${encodeURIComponent(checkOut)}&person=${encodeURIComponent(person)}`;
+        location.href = url;
+      }
     </script>
   </body>
 </html>

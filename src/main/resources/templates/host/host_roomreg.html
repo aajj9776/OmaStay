@@ -5,6 +5,18 @@
       layout:fragment="host">
   <head>
     <meta charset="utf-8" />
+    <link href="/css/index.css" rel="stylesheet" />
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <link href="/css/component/host_swiper.css" rel="stylesheet" />
+    <style>
+      textarea:focus {
+        outline: none;
+        /* 포커스 시 기본 아웃라인 제거 */
+        border-color: rgba(0, 0, 0, 0.23);
+        box-shadow: none;
+        /* 포커스 시 그림자 제거 */
+      }
+    </style>
   </head>
   <body>
       <section
@@ -34,88 +46,60 @@
                 class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
               >
                 <input
+                  id="roomName"
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                   placeholder="객실명"
                   type="text"
                 />
               </div>
-              <div
-                class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-              >
-                <div
-                  class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                >
-                  Helper text
-                </div>
-              </div>
             </div>
           </div>
           <div
-            class="w-[493px] flex flex-row items-center justify-between gap-[20px] max-w-full mq825:flex-wrap"
+            class="w-[493px] flex flex-row items-start justify-between gap-[20px] max-w-full mq825:flex-wrap"
           >
             <b
               class="h-[40px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center min-w-[120px] mq450:text-[20px] mq450:leading-[19px]"
               >객실 유형 :
             </b>
-            <div class="w-[303px] flex flex-col items-start justify-start">
+            <div class="w-[303px] flex flex-col items-start justify-start gap-[10px]">
               <div
-                class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                class="flex-1 rounded-[4px]  box-border flex flex-row items-start justify-start py-[0px] relative min-w-[197px]"
               >
-                <input
-                  class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                  placeholder="객실 유형"
-                  type="text"
-                />
-              </div>
-              <div
-                class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-              >
-                <div
-                  class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                >
-                  Helper text
-                </div>
-              </div>
+              <select id="roomType" class="w-[303px] h-[40px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select">
+                <option value="NULL" disabled>객실 유형</option>
+              </select>
             </div>
+            <input
+              id="customRoomType"
+              class="hidden w-full border-[1px] border-solid border-[rgba(0,0,0,0.23) bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+              placeholder="객실 유형"
+              type="text"
+            />
           </div>
-          <div
-            class="w-[493px] flex flex-row items-start justify-start flex-wrap content-start gap-[25px] max-w-full"
+        </div>
+        <div
+            class="w-[493px] flex flex-row items-center justify-between gap-[20px] max-w-full mq825:flex-wrap"
           >
             <b
-              class="h-[40px] w-[165px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
+              class="h-[40px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center min-w-[120px] mq450:text-[20px] mq450:leading-[19px]"
               >객실 정원 :
             </b>
-            <div
-              class="flex-1 rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] px-[12px] relative min-w-[197px]"
-            >
-              <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-              <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-              <div class="w-[239px] flex flex-row items-start justify-start">
-                <div class="h-[24px] w-0 relative hidden"></div>
-                <div
-                  class="h-[40px] flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left flex items-center"
-                >
-                  객실 정원
-                </div>
-              </div>
+            <div class="w-[303px] flex flex-col items-start justify-start">
               <div
-                class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[3]"
+                class="flex-1 rounded-[4px]  box-border flex flex-row items-start justify-start py-[0px] relative min-w-[197px]"
               >
-                Placeholder
-              </div>
-              <div class="h-0 w-[24px] relative hidden z-[4]"></div>
-              <img
-                class="h-full w-[40px] absolute !m-[0] top-[0px] right-[12px] bottom-[0px] max-h-full overflow-hidden shrink-0 z-[1]"
-                alt=""
-                src="/image/host/arrowdropdownfilled1.svg"
-              />
-
-              <div class="hidden flex-row items-start justify-start z-[6]">
-                <img
-                  class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/image/host/closefilled.svg"
-                />
+              <select id="roomPerson" class="w-[303px] h-[40px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select">
+                <option value="" disabled selected>객실 정원</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+              </select>
               </div>
             </div>
           </div>
@@ -132,85 +116,15 @@
               <div
                 class="flex-1 flex flex-row items-start justify-start min-w-[325px] max-w-full [row-gap:20px] mq825:flex-wrap"
               >
-                <div
-                  class="flex-1 flex flex-col items-start justify-start relative min-w-[315px] max-w-full"
-                >
-                  <div
-                    class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full lg:self-stretch lg:w-auto"
-                  >
-                    <div
-                      class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
-                    >
-                      <div
-                        class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
-                      >
-                        <div class="hidden flex-row items-start justify-start">
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/starsharp-2.svg"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="h-[168px] flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block max-w-full"
-                      >
-                        It is a long established fact that a reader will be
-                        distracted by the readable content of a page when
-                        looking at its layout. The point of using Lorem Ipsum is
-                        that it has a more-or-less normal distribution of
-                        letters, as opposed to using 'Content here, content
-                        here', making it look like readable English.
-                      </div>
-                      <div
-                        class="w-[98px] relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden"
-                      >
-                        Placeholder
-                      </div>
-                      <div
-                        class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
-                      >
-                        <div class="hidden flex-row items-start justify-start">
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/starsharp-2.svg"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[4px] box-border z-[1]"
-                  >
-                    <div
-                      class="relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[30px]"
-                    >
-                      Label
-                    </div>
-                  </div>
-                  <div
-                    class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-                  >
-                    <div
-                      class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                    >
-                      Helper text
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[152px] mq825:w-full mq825:h-[15px]"
-                >
-                  <div
-                    class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
-                  ></div>
-                </div>
+              <textarea
+              class="w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
+              placeholder="객실 소개"
+              id="roomIntro"></textarea>
               </div>
             </div>
             <b
               class="w-[170px] relative text-[25px] tracking-[0.15px] leading-[25px] inline-block font-[Roboto] text-[#000] whitespace-pre-wrap text-left mq450:text-[20px] mq450:leading-[19px]"
-              >요금 설정
+              >※ 요금 설정
             </b>
           </div>
           <div
@@ -230,16 +144,8 @@
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[157px] min-h-[24px]"
                   placeholder="비수기 요금"
                   type="text"
+                  id="regularPrice"
                 />
-              </div>
-              <div
-                class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-              >
-                <div
-                  class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                >
-                  Helper text
-                </div>
               </div>
             </div>
             <div
@@ -248,8 +154,8 @@
               원
             </div>
           </div>
-          <div
-            class="w-[521px] flex flex-row items-center justify-start flex-wrap content-center py-[0px] pl-[0px] pr-[10px] box-border gap-[9.5px] max-w-full"
+          <div id="semiPeakCheck"
+            class="hidden w-[521px] flex flex-row items-center justify-start flex-wrap content-center py-[0px] pl-[0px] pr-[10px] box-border gap-[9.5px] max-w-full"
           >
             <b
               class="h-[40px] w-[180px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
@@ -265,16 +171,8 @@
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[157px] min-h-[24px]"
                   placeholder="준성수기 요금"
                   type="text"
+                  id="semiPrice"
                 />
-              </div>
-              <div
-                class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-              >
-                <div
-                  class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                >
-                  Helper text
-                </div>
               </div>
             </div>
             <div
@@ -283,8 +181,8 @@
               원
             </div>
           </div>
-          <div
-            class="w-[521px] flex flex-row items-center justify-start flex-wrap content-center py-[0px] pl-[0px] pr-[10px] box-border gap-[9.5px] max-w-full"
+          <div id="peakCheck"
+            class="hidden w-[521px] flex flex-row items-center justify-start flex-wrap content-center py-[0px] pl-[0px] pr-[10px] box-border gap-[9.5px] max-w-full"
           >
             <b
               class="h-[40px] w-[180px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
@@ -300,16 +198,8 @@
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[157px] min-h-[24px]"
                   placeholder="성수기 요금"
                   type="text"
+                  id="peakPrice"
                 />
-              </div>
-              <div
-                class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-              >
-                <div
-                  class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                >
-                  Helper text
-                </div>
               </div>
             </div>
             <div
@@ -319,132 +209,64 @@
             </div>
           </div>
           <div
-            class="self-stretch flex flex-row items-start justify-start flex-wrap content-start gap-[26px] max-w-full"
+            class="self-stretch flex flex-row items-start justify-start flex-wrap content-start max-w-full"
           >
             <b
               class="h-[40px] w-[164px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
               >객실 이미지 :</b
             >
-            <div
-              class="flex-1 flex flex-col items-start justify-start gap-[15px] min-w-[572px] max-w-full mq1400:min-w-full"
-            >
-              <button
-                class="cursor-pointer [border:none] py-[7px] px-[22px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
-              >
-                <div class="flex flex-row items-start justify-start gap-[8px]">
-
-                  <b
-                    class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[105px] whitespace-nowrap"
-                    >+ 이미지 추가</b
-                  >
-
-                </div>
-              </button>
+            <div class="w-[520px] flex flex-col items-start justify-start">
               <div
-                class="self-stretch flex flex-row items-start justify-start gap-[20px] lg:flex-wrap"
-              >
-                <div
-                  class="flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[13px] box-border min-w-[210px]"
-                >
-                  <div
-                    class="self-stretch flex flex-row items-start justify-start"
-                  >
-                    <div
-                      class="flex-1 overflow-hidden flex flex-row items-start justify-start"
-                    >
-                      <div
-                        class="flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center py-[103px] px-[20px]"
-                      >
-                        <img
-                          class="h-[64px] w-[64px] relative overflow-hidden shrink-0"
-                          loading="lazy"
-                          alt=""
-                          src="/image/host/photooutlined.svg"
-                        />
+                class="w-[520px] flex flex-col items-start justify-start py-[0px] px-[20px] box-border max-w-full gap-[10px]">
+                <button type="button" id="addimagebutton"
+                  class="cursor-pointer [border:none] py-[7px] px-[22px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start z-[1]">
+                  <div class="flex flex-row items-start justify-start gap-[8px]">
+                    <b
+                      class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[105px] whitespace-nowrap">+
+                      이미지 추가</b>
+                  </div>
+                </button>
+                <div class="roomimage">
+                  <div class="swiper-container w-[520px] overflow-hidden">
+                      <!-- 네비게이션 버튼 -->
+                      <div class="swiper-button-next"></div>
+                      <div class="swiper-button-prev"></div>
+                    <div id="image_container"
+                    class="swiper-wrapper h-[300px] self-stretch flex flex-row items-start justify-start gap-[10px] mq1125:flex-wrap">
+                      <div id="image_template" 
+                        class="w-[240px] h-[300px] flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border min-w-[175px] gap-[10px] display-none hidden">
+                        <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
+                          <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
+                            <div
+                              class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                              <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                                loading="lazy" alt="" />
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="w-[240px] h-[50px] self-stretch flex flex-col items-center justify-center py-[0px] px-[16px]">
+                          <div
+                            class="w-[100px] h-[50px] flex flex-col relative tracking-[0.15px] leading-[160%] font-medium flex items-center mq450:text-[16px] mq450:leading-[26px] gap-[10px]">
+                            <button type="button" class="w-full h-[30px] cursor-pointer [border:none] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] 
+                                        text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff]"
+                              onclick="deletehostimage(this)">삭제</button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div
-                    class="flex flex-row items-start justify-start py-[0px] px-[16px]"
-                  >
-                    <div
-                      class="h-[40px] relative text-[20px] tracking-[0.15px] leading-[160%] font-medium font-[Roboto] text-[rgba(0,0,0,0.87)] text-left flex items-center mq450:text-[16px] mq450:leading-[26px]"
-                    >
-                      New feature available
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[13px] box-border min-w-[210px]"
-                >
-                  <div
-                    class="self-stretch flex flex-row items-start justify-start"
-                  >
-                    <div
-                      class="flex-1 overflow-hidden flex flex-row items-start justify-start"
-                    >
-                      <div
-                        class="flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center py-[103px] px-[20px]"
-                      >
-                        <img
-                          class="h-[64px] w-[64px] relative overflow-hidden shrink-0"
-                          loading="lazy"
-                          alt=""
-                          src="/image/host/photooutlined.svg"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="flex flex-row items-start justify-start py-[0px] px-[16px]"
-                  >
-                    <div
-                      class="h-[40px] relative text-[20px] tracking-[0.15px] leading-[160%] font-medium font-[Roboto] text-[rgba(0,0,0,0.87)] text-left flex items-center mq450:text-[16px] mq450:leading-[26px]"
-                    >
-                      New feature available
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[13px] box-border min-w-[210px]"
-                >
-                  <div
-                    class="self-stretch flex flex-row items-start justify-start"
-                  >
-                    <div
-                      class="flex-1 overflow-hidden flex flex-row items-start justify-start"
-                    >
-                      <div
-                        class="flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center py-[103px] px-[20px]"
-                      >
-                        <img
-                          class="h-[64px] w-[64px] relative overflow-hidden shrink-0"
-                          loading="lazy"
-                          alt=""
-                          src="/image/host/photooutlined.svg"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="flex flex-row items-start justify-start py-[0px] px-[16px]"
-                  >
-                    <div
-                      class="h-[40px] relative text-[20px] tracking-[0.15px] leading-[160%] font-medium font-[Roboto] text-[rgba(0,0,0,0.87)] text-left flex items-center mq450:text-[16px] mq450:leading-[26px]"
-                    >
-                      New feature available
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple />
         </form>
         <div class="self-stretch flex flex-row items-start justify-center">
           <div
             class="w-[258px] flex flex-row items-center justify-between gap-[20px]"
           >
-            <button
+            <button type="button" onclick="saveroominforeg()"
               class="cursor-pointer [border:none] py-[8px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
             >
               <div class="flex flex-row items-center justify-center gap-[8px]">
@@ -456,7 +278,7 @@
 
               </div>
             </button>
-            <button
+            <button type="button" onclick="location.href='/host/roomlist'"
               class="cursor-pointer border-[rgba(33,150,243,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[transparent] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center"
             >
               <div class="flex flex-row items-center justify-center gap-[8px]">
@@ -470,6 +292,9 @@
             </button>
           </div>
         </div>
+        <input id="semiPeak" type="hidden" th:value="${semiPeak}"/>
+        <input id="peak" type="hidden" th:value="${peak}"/>
+        <input id="hCate" type="hidden" th:value="${hCate}"/>
       </section>
       <script src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -477,5 +302,233 @@
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+
+      const roomTypeSelect = $('#roomType');
+      const customRoomTypeInput = $('#customRoomType');
+
+      $(document).ready(function () {
+
+
+            const hCate = $('#hCate').val(); 
+
+            const roomTypeOptions = {
+                'MOTEL': ['일반실', '더블룸', '특실', 'VIP룸'],
+                'HOTEL_RESORT': ['스탠다드', '디럭스 더블', '디럭스 트윈', '스위트'],
+                'POOL_VILLA': ["원룸형", "투룸형", "복층형", "독채형"],
+                'GUESTHOUSE_HANOK': ['도미토리', '개인실', '패밀리룸', '한옥']
+            };
+
+            function updateRoomTypeOptions() {
+                const options = roomTypeOptions[hCate] || [];
+
+                roomTypeSelect.empty();
+                roomTypeSelect.append('<option value="NULL" disabled selected>객실 유형</option>');
+                options.forEach(option => {
+                    roomTypeSelect.append(`<option value="${option}">${option}</option>`);
+                });
+
+                // 사용자 지정 옵션 추가
+                roomTypeSelect.append('<option value="custom">사용자 지정</option>');
+
+                // 사용자 지정 입력 필드 숨기기
+                customRoomTypeInput.addClass('hidden');
+            }
+
+            roomTypeSelect.on('change', function () {
+                if (roomTypeSelect.val() === 'custom') {
+                    customRoomTypeInput.removeClass('hidden');
+                } else {
+                    customRoomTypeInput.addClass('hidden');
+                }
+            });
+
+            // 페이지 로드 시 초기 옵션 설정
+            updateRoomTypeOptions();
+
+
+            const semiPeak = $('#semiPeak').val(); 
+            const peak = $('#peak').val(); 
+
+
+            console.log("semiPeak:", semiPeak);
+            console.log("peak:", peak);
+
+            if (semiPeak) {
+                $('#semiPeakCheck').removeClass('hidden');
+            }
+
+            if (peak) {
+                $('#peakCheck').removeClass('hidden');
+            }
+      });
+
+      var swiper; // 전역 변수로 정의
+
+        $(document).ready(function () {
+            swiper = new Swiper('.swiper-container', {
+                loop: false,
+                slidesPerView: 2,
+                spaceBetween: 10,
+                slidesPerGroup: 1,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    520: {
+                        slidesPerView: 2,
+                    },
+                    0: {
+                        slidesPerView: 1,
+                    },
+                },
+                on: {
+                    init: function () {
+                        updateNavigationButtons(this);
+                    },
+                    slideChange: function () {
+                        updateNavigationButtons(this);
+                    },
+                },
+            });
+
+            function updateNavigationButtons(swiper) {
+                const nextButton = swiper.el.querySelector('.swiper-button-next');
+                const prevButton = swiper.el.querySelector('.swiper-button-prev');
+
+                if (swiper.isEnd) {
+                    nextButton.style.visibility = 'hidden';
+                } else {
+                    nextButton.style.visibility = 'visible';
+                }
+
+                if (swiper.isBeginning) {
+                    prevButton.style.visibility = 'hidden';
+                } else {
+                    prevButton.style.visibility = 'visible';
+                }
+            }
+
+            $('#addimagebutton').click(function () {
+                $('#fileInput').click();
+            });
+
+            $('#fileInput').change(function (event) {
+                var files = event.target.files;
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var $slide = $('<div class="swiper-slide"></div>');
+                            var $template = $('#image_template').clone();
+                            $template.removeClass('hidden');
+                            $template.removeAttr('id');
+                            $template.find('img').attr('src', e.target.result);
+                            $template.css('display', 'flex');
+
+                            // 템플릿 내의 삭제 버튼에 클릭 이벤트 핸들러 연결 (선택 사항)
+                            $template.find('.delete-image-btn').click(function() { 
+                                deletehostimage(this); 
+                            }); 
+
+                            $slide.append($template);
+                            $('#image_container').css('display', 'flex');
+                            $('#image_container').append($slide);
+                            swiper.appendSlide($slide); 
+                            swiper.update();
+                            updateNavigationButtons(swiper);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }  
+            });
+
+            $('#image_container').on('click', '.delete-image-btn', function() { // .delete-image-btn 클래스를 가진 버튼에 대한 클릭 이벤트 처리
+                deletehostimage(this); 
+            });
+
+            // 전역 함수로 정의
+            window.deletehostimage = function(button) {
+              var $slide = $(button).closest('.swiper-slide');
+              var slideIndex = swiper.getSlideIndex($slide[0]); // Swiper.realIndex 사용
+
+              console.log("Deleting slide at index: " + slideIndex);
+
+              swiper.removeSlide(slideIndex); 
+              swiper.update(); 
+
+              console.log("Slide removed. Total slides: " + swiper.slides.length);
+              console.log(swiper.slides); // Swiper 업데이트 확인
+
+              updateNavigationButtons(swiper);
+
+              if (swiper.slides.length === 0) {
+                  $('#image_container').hide();
+              }
+            };
+        });
+
+        // roomType 값을 가져오는 함수
+        function getRoomType() {
+                if (roomTypeSelect.val() === 'custom') {
+                    return customRoomTypeInput.val();
+                } else {
+                    return roomTypeSelect.val();
+                }
+            }
+      
+        function saveroominforeg() {
+            var formData = new FormData();
+
+            var roomRegDTO = {
+                roomInfo: {
+                    roomName: $('#roomName').val(),
+                    roomType: getRoomType(),
+                    roomIntro: $('#roomIntro').val(),
+                    roomPerson: $('#roomPerson').val()
+                  },
+                price: {
+                  regularPrice: $('#regularPrice').val(),
+                  peakVo: {
+                    peakPrice: $('#peakPrice').val()
+                  },
+                  semi: {
+                    semiPrice: $('#semiPrice').val()
+                  }
+                },  
+                images: [] 
+              };
+              console.log(roomPerson);
+            // JSON 데이터를 FormData에 추가
+           formData.append('roomRegDTO', new Blob([JSON.stringify(roomRegDTO)], { type: 'application/json; charset=utf-8' }));  
+            
+            var files = $('#fileInput')[0].files;
+            console.log(files.length);
+            for (var i = 0; i < files.length; i++) {
+                formData.append('images', files[i]);
+            }
+
+            $.ajax({
+                url: '/host/roominforeg', 
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert('저장되었습니다.'); 
+                },
+                error: function (error) {
+                    alert('저장 실패하였습니다.');
+                }
+            });
+        }  
+    </script>
   </body>
 </html>
