@@ -2,6 +2,8 @@ package com.omakase.omastay.controller;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,10 +26,14 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
@@ -37,6 +44,7 @@ import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -69,10 +77,13 @@ public class HostController {
 
     @Autowired
     private HttpServletRequest request;
-    
-    private String upload = "/upload/host";
 
-    private String upload2 = "/upload/room";
+    @Autowired
+    private ServletContext application;
+    
+    private String upload = "src/main/resources/static/upload/host";
+
+    private String upload2 = "src/main/resources/static/upload/room";
 
     @RequestMapping("/login")
     public String host() {
@@ -433,16 +444,18 @@ public class HostController {
             if (images != null) {
             for (MultipartFile f : images) {
             if (f != null && f.getSize() > 0) {
-                String realPath = request.getServletContext().getRealPath(upload);
+                
+
+                System.out.println("호스트이미지 실제 파일 경로: " + upload);
 
                 String oname = f.getOriginalFilename();//실제파일명
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, realPath);
+                String fname = FileRenameUtil.checkSameFileName(oname, upload);
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(realPath);
+                    File uploadDir = new File(upload);
                     if (!uploadDir.exists()) {
                         uploadDir.mkdirs();
                     }
@@ -453,6 +466,8 @@ public class HostController {
                         System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
                         continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
                     }
+
+                    f.transferTo(hostFile);
 
                     ImageDTO imageDTO = new ImageDTO();
                     imageDTO.setImgName(fvo);
@@ -503,16 +518,18 @@ public class HostController {
             if (images != null) {
             for (MultipartFile f : images) {
             if (f != null && f.getSize() > 0) {
-                String realPath = request.getServletContext().getRealPath(upload2);
+                
+
+                System.out.println("룸이미지 실제 파일 경로: " + upload2);
 
                 String oname = f.getOriginalFilename();//실제파일명
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, realPath);
+                String fname = FileRenameUtil.checkSameFileName(oname, upload2);
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(realPath);
+                    File uploadDir = new File(upload2);
                     if (!uploadDir.exists()) {
                         uploadDir.mkdirs();
                     }
@@ -523,6 +540,8 @@ public class HostController {
                         System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
                         continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
                     }
+
+                    f.transferTo(roomFile);
 
                     ImageDTO imageDTO = new ImageDTO();
                     imageDTO.setImgName(fvo);
@@ -561,6 +580,98 @@ public class HostController {
         }
 
         mv.setViewName("host/host_main");
+        return mv;
+    }
+
+    // 룸 전체 리스트
+    @RequestMapping("/roomlist/getList")
+    @ResponseBody
+    public Map<String, Object> roomlist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<RoomInfoDTO> list = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 룸 검색
+    @RequestMapping("/roomlist/search")
+    @ResponseBody
+    public Map<String, Object> roomsearch(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+                System.out.println("룸서치 왔다");
+                System.out.println("type:"+type);
+                System.out.println("keyword:"+keyword);
+
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<RoomInfoDTO> list = roomInfoService.searchRoom(type, keyword, hostInfoDTO);
+
+        System.out.println("컨트롤러리스트:"+list);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 게시물 삭제하기
+    @ResponseBody
+    @RequestMapping("/roomlist/delete")
+    public Map<String, Object> roomdelete(@RequestParam("ids") List<Integer> ids) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        int cnt = roomInfoService.deleteRoom(ids);
+        System.out.println("삭제 완료 개수 : " + cnt);
+
+        map.put("cnt", cnt);
+
+        return map;
+    }
+
+    // 룸 상세보기
+    @RequestMapping(value = "/roomlist/view", method = RequestMethod.GET)
+    public ModelAndView host_notice_detail(@RequestParam("id") String id) {
+
+        ModelAndView mv = new ModelAndView();
+        
+        if (id != null) {
+            RoomInfoDTO room = roomInfoService.getRoom(Integer.parseInt(id));
+            mv.addObject("room", room);
+        }
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            PriceDTO priceDTO = priceService.findPriceDTO(hostInfoDTO);
+            mv.addObject("hostInfoDTO", hostInfoDTO);  
+            mv.addObject("priceDTO", priceDTO);  
+
+            // hCate 값을 추출하여 문자열로 변환
+            if (hostInfoDTO.getHCate() != null) {
+                mv.addObject("hCate", hostInfoDTO.getHCate().name());
+            }
+
+
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi().getSemiStart() != null) {
+                mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
+            }
+
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo().getPeakStart() != null) {
+                mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
+            }
+
+        mv.setViewName("host/host_roomchange");
         return mv;
     }
 }
