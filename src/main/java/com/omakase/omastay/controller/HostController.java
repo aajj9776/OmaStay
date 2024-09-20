@@ -1,30 +1,45 @@
 package com.omakase.omastay.controller;
 
-import com.omakase.omastay.dto.FacilitiesDTO;
-import com.omakase.omastay.dto.custom.HostMypageDTO;
-import com.omakase.omastay.service.FacilitiesService;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.omakase.omastay.dto.AdminMemberDTO;
-
+import com.omakase.omastay.dto.FacilitiesDTO;
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.ImageDTO;
+import com.omakase.omastay.dto.PriceDTO;
+import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
+import com.omakase.omastay.dto.custom.HostMypageDTO;
+import com.omakase.omastay.dto.custom.HostRulesDTO;
+import com.omakase.omastay.dto.custom.RoomRegDTO;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
-import com.omakase.omastay.service.HostMypageService;
+import com.omakase.omastay.service.FacilitiesService;
+import com.omakase.omastay.service.HostInfoService;
+import com.omakase.omastay.service.PriceService;
+import com.omakase.omastay.service.RoomInfoService;
+import com.omakase.omastay.util.FileRenameUtil;
+import com.omakase.omastay.vo.FileImageNameVo;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 
 @Controller
@@ -36,15 +51,28 @@ public class HostController {
     private AdminMemberService adminMemberService;
 
     @Autowired
-    private HostMypageService hostMypageService;
+    private HostInfoService hostInfoService;
 
     @Autowired
     private FacilitiesService facilitiesService;
 
+    @Autowired
+    private PriceService priceService;
+
+    @Autowired
+    private RoomInfoService roomInfoService;
+    
     private final EmailService emailService;
 
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private HttpServletRequest request;
+    
+    private String upload = "/upload/host";
+
+    private String upload2 = "/upload/room";
 
     @RequestMapping("/login")
     public String host() {
@@ -73,7 +101,23 @@ public class HostController {
 
         List<FacilitiesDTO> facilities = facilitiesService.all();
 
-        System.out.println("facilities:"+facilities);
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        if (adminMember != null) {
+            HostMypageDTO hostMypageDTO = hostInfoService.findHostMypageByAdminMember(adminMember);
+
+            if (hostMypageDTO.getHostInfo() == null || hostMypageDTO.getHostInfo().getHStep() == null) {
+                mv.addObject("errorMessage", "이전 단계를 완료해주세요.");
+                mv.setViewName("host/host_mypage");
+                return mv;
+            }
+
+            HostInfoCustomDTO hostInfoCustomDTO = hostInfoService.findHostInfoByHostInfoId(hostMypageDTO.getHostInfo().getId());
+            mv.addObject("hostMypageDTO", hostMypageDTO);
+            mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
+        }
+
+
         mv.addObject("facilities", facilities);
         mv.setViewName("host/host_info");
 
@@ -96,8 +140,26 @@ public class HostController {
     }
 
     @RequestMapping("/main")
-    public String hostmain() {
-        return "host/host_main";
+    public ModelAndView hostmain() {
+
+        ModelAndView mv = new ModelAndView();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        if (adminMember != null) {
+            HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            if (hostInfoDTO != null) {
+                mv.addObject("hostInfoDTO", hostInfoDTO);
+                mv.addObject("hStep", hostInfoDTO.getHStep().name());
+                System.out.println("hStep:"+hostInfoDTO.getHStep().name());
+                if(hostInfoDTO.getHStatus() != null){
+                mv.addObject("hStaus", hostInfoDTO.getHStatus().name());    
+                }
+            } 
+        }
+
+        mv.setViewName("host/host_main");
+        return mv;
     }
 
     @RequestMapping("/mypage")
@@ -108,7 +170,7 @@ public class HostController {
         AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
 
         if (adminMember != null) {
-            HostMypageDTO hostMypageDTO = hostMypageService.findHostMypageByAdminMember(adminMember);
+            HostMypageDTO hostMypageDTO = hostInfoService.findHostMypageByAdminMember(adminMember);
             mv.addObject("hostMypageDTO", hostMypageDTO);
         }
 
@@ -162,13 +224,87 @@ public class HostController {
     }
 
     @RequestMapping("/roomreg")
-    public String hostroomreg() {
-        return "host/host_roomreg";
+    public ModelAndView hostroomreg() {
+
+        ModelAndView mv = new ModelAndView();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        if (adminMember != null) {
+            HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            PriceDTO priceDTO = priceService.findPriceDTO(hostInfoDTO);
+            mv.addObject("hostInfoDTO", hostInfoDTO);  
+
+            // hCate 값을 추출하여 문자열로 변환
+            if (hostInfoDTO.getHCate() != null) {
+                mv.addObject("hCate", hostInfoDTO.getHCate().name());
+            }
+            System.out.println("priceDTO:"+priceDTO);
+            System.out.println("priceDTO.getPeakSet():"+priceDTO.getPeakSet());
+            System.out.println("priceDTO.getSemi().getSemiStart():"+priceDTO.getSemi().getSemiStart());
+            System.out.println("priceDTO.getPeakVo().getPeakStart():"+priceDTO.getPeakVo().getPeakStart());
+           System.out.println(hostInfoDTO.getHCate().name());
+
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi().getSemiStart() != null) {
+                mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
+            }
+
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo().getPeakStart() != null) {
+                mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
+            }
+        }
+
+        mv.setViewName("host/host_roomreg");
+        return mv;
     }
 
     @RequestMapping("/rules")
-    public String hostrules() {
-        return "host/host_rules";
+    public ModelAndView hostrules() {
+
+        ModelAndView mv = new ModelAndView();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        if (adminMember != null) {
+            HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            PriceDTO priceDTO = priceService.findPriceDTO(hostInfoDTO);
+
+            if (priceDTO != null && priceDTO.getSemi() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDateTime semiStart = priceDTO.getSemi().getSemiStart();
+                LocalDateTime semiEnd = priceDTO.getSemi().getSemiEnd();
+                String semiPeriod = "";
+
+                if (semiStart != null && semiEnd != null) {
+                    String formattedSemiStart = semiStart.format(formatter);
+                    String formattedSemiEnd = semiEnd.format(formatter);
+                    semiPeriod = formattedSemiStart + " ~ " + formattedSemiEnd;
+                }
+                mv.addObject("semiStart", semiStart);
+                mv.addObject("semiEnd", semiEnd);
+                mv.addObject("semiPeriod", semiPeriod);
+            }
+    
+            if (priceDTO != null && priceDTO.getPeakVo() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDateTime peakStart = priceDTO.getPeakVo().getPeakStart();
+                LocalDateTime peakEnd = priceDTO.getPeakVo().getPeakEnd();
+                String peakPeriod = "";
+                if (peakStart != null && peakEnd != null) {
+                    String formattedPeakStart = peakStart.format(formatter);
+                    String formattedPeakEnd = peakEnd.format(formatter);
+                    peakPeriod = formattedPeakStart + " ~ " + formattedPeakEnd;
+                }
+                mv.addObject("peakStart", peakStart);
+                mv.addObject("peakEnd", peakEnd);
+                mv.addObject("peakPeriod", peakPeriod);
+            }
+
+            mv.addObject("hostInfoDTO", hostInfoDTO);
+            mv.addObject("priceDTO", priceDTO);
+        }
+        mv.setViewName("host/host_rules");
+        return mv;
     }
 
     @RequestMapping("/sales")
@@ -225,7 +361,7 @@ public class HostController {
         if (adminMemberDTO != null) {
             session.setAttribute("adminMember", adminMemberDTO); // 세션에 사용자 정보 저장
             mv.addObject("adminMember", adminMemberDTO);
-            mv.setViewName("host/host_main");
+            mv.setViewName("redirect:/host/main");
         } else {
             mv.addObject("errorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
             mv.setViewName("host/host_login");
@@ -277,8 +413,154 @@ public class HostController {
             
         adminMemberService.hostchagepw(adminMember.getAdId(), adminMember.getAdminProfile().getEmail(), pw);    
 
-        hostMypageService.saveHostMypage(hostMypageDTO, adminMember);
+        hostInfoService.saveHostMypage(hostMypageDTO, adminMember);
 
         return ResponseEntity.ok("success");
+    }
+
+    @RequestMapping("/hostinforeg")
+    public ResponseEntity<List<String>> hostinforeg(@RequestPart("hostInfoCustomDTO") HostInfoCustomDTO hostInfoCustomDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+        System.out.println(hostInfoCustomDTO.getHostInfo().getYAxis());
+        System.out.println(hostInfoCustomDTO.getImages().size());
+        AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
+
+        List<String> imageUrls = new ArrayList<>();
+
+        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
+        String c_type = request.getContentType();
+        if (c_type.startsWith("multipart")) {
+            List<ImageDTO> imageDTOList = new ArrayList<>();
+            if (images != null) {
+            for (MultipartFile f : images) {
+            if (f != null && f.getSize() > 0) {
+                String realPath = request.getServletContext().getRealPath(upload);
+
+                String oname = f.getOriginalFilename();//실제파일명
+                FileImageNameVo fvo = new FileImageNameVo();
+                fvo.setOName(oname);
+                String fname = FileRenameUtil.checkSameFileName(oname, realPath);
+                fvo.setFName(fname);
+
+                try {
+                    File uploadDir = new File(realPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    // 파일 업로드(upload폴더에 저장)
+                    File hostFile = new File(uploadDir, fname);
+                    if (hostFile.exists()) {
+                        System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
+                        continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
+                    }
+
+                    ImageDTO imageDTO = new ImageDTO();
+                    imageDTO.setImgName(fvo);
+                    imageDTOList.add(imageDTO);
+
+                    String imageUrl = "/upload/host/" + fname;
+                    imageUrls.add(imageUrl);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } 
+            }
+        }
+            hostInfoCustomDTO.setImages(imageDTOList);
+        }
+
+        hostInfoService.saveHostInfo(hostInfoCustomDTO, adminMember);
+
+        //html 에서 hostInfoCustomDTO 받아야함
+        
+        return ResponseEntity.ok(imageUrls);
+    }
+
+    @RequestMapping("/rulesreg")
+    public ResponseEntity<String> rulesreg(@RequestBody HostRulesDTO hostRulesDTO) {
+
+        AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.saverules(hostRulesDTO.getHostInfo(), adminMember);
+        priceService.setpeak(hostInfoDTO, hostRulesDTO.getPrice());
+
+        return ResponseEntity.ok("success");
+    }
+
+    @RequestMapping("/roominforeg")
+    public ResponseEntity<List<String>> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO roomRegDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+
+        AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<String> imageUrls = new ArrayList<>();
+
+        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
+        String c_type = request.getContentType();
+        if (c_type.startsWith("multipart")) {
+            List<ImageDTO> imageDTOList = new ArrayList<>();
+            if (images != null) {
+            for (MultipartFile f : images) {
+            if (f != null && f.getSize() > 0) {
+                String realPath = request.getServletContext().getRealPath(upload2);
+
+                String oname = f.getOriginalFilename();//실제파일명
+                FileImageNameVo fvo = new FileImageNameVo();
+                fvo.setOName(oname);
+                String fname = FileRenameUtil.checkSameFileName(oname, realPath);
+                fvo.setFName(fname);
+
+                try {
+                    File uploadDir = new File(realPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    // 파일 업로드(upload폴더에 저장)
+                    File roomFile = new File(uploadDir, fname);
+                    if (roomFile.exists()) {
+                        System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
+                        continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
+                    }
+
+                    ImageDTO imageDTO = new ImageDTO();
+                    imageDTO.setImgName(fvo);
+                    imageDTOList.add(imageDTO);
+
+                    String imageUrl = "/upload/room/" + fname;
+                    imageUrls.add(imageUrl);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } 
+            }
+        }
+        roomRegDTO.setImages(imageDTOList);
+        }
+
+        roomInfoService.saveRoomInfo(hostInfoDTO, roomRegDTO);
+
+        
+        return ResponseEntity.ok(imageUrls);
+    }
+
+    @RequestMapping("/requestadmin")
+    public ModelAndView requestadmin() {
+
+        ModelAndView mv = new ModelAndView();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        if (adminMember != null) {
+            HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            if (hostInfoDTO != null) {
+                hostInfoService.requestAdmin(hostInfoDTO);
+            } 
+        }
+
+        mv.setViewName("host/host_main");
+        return mv;
     }
 }

@@ -32,7 +32,7 @@ public class Review {
     @JoinColumn(name = "res_idx", referencedColumnName = "res_idx")
     private Reservation reservation = new Reservation();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
     private HostInfo hostInfo = new HostInfo();
 
@@ -52,6 +52,7 @@ public class Review {
     
     @Column(name = "rev_none", length = 100)
     private String revNone;
+    
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "fName", column = @Column(name = "rev_fname", length = 200)),
@@ -59,9 +60,11 @@ public class Review {
     })
     private FileImageNameVo revFileImageNameVo = new FileImageNameVo();
 
-    @Column(name = "`rev_ rating`")
+    @Column(name = "rev_ rating")
     private Float revRating;
 
 
 
+
 }
+

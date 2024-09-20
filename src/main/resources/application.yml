@@ -43,6 +43,9 @@ spring:
       host: 18.116.238.9
       port: 6379
       duration: 600
+  thymeleaf:
+    enums:
+      use-class-for-enum-values: true 
 decorator:
   datasource:
     p6spy:
@@ -50,6 +53,3 @@ decorator:
 custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
-
-
-  

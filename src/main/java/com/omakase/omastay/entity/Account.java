@@ -15,6 +15,7 @@ import lombok.ToString;
 public class Account {
     @Id
     @Column(name = "ac_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)

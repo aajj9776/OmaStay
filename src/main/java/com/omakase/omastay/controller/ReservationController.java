@@ -1,5 +1,7 @@
 package com.omakase.omastay.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,16 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.custom.MemberInfoDTO;
+import com.omakase.omastay.dto.custom.MembercpDTO;
+import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.service.EmailService;
+import com.omakase.omastay.service.MemberService;
+import com.omakase.omastay.service.MyPageService;
 import com.omakase.omastay.service.ReservationService;
 
 import jakarta.mail.MessagingException;
 
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -30,11 +39,17 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
+    private MemberService memberService;
+
+    @Autowired
     private EmailService emailService;
 
     @GetMapping
-    public String reservation() {
-        return "reservation/reservation.html";
+    public ModelAndView reservation(MemberInfoDTO member) {
+        ModelAndView mv = new ModelAndView();
+
+        mv.setViewName("reservation/reservation");
+        return mv;
     }
 
     @GetMapping("/payment_success")
@@ -126,7 +141,6 @@ public class ReservationController {
         ModelAndView mv = new ModelAndView();
 
         mv.setViewName("reservation/reservation_check.html");
-
         return mv;
         
     }
@@ -136,9 +150,8 @@ public class ReservationController {
     public String fail() {
         return "reservation/payment_fail.html";
     }
-    
-    
-    //이거 2개는 모달창
+
+    //이거 3개는 모달창
     @RequestMapping("/room_info")
     public String roomInfo() {
         return "reservation/room_info.html";
@@ -146,6 +159,10 @@ public class ReservationController {
     @RequestMapping("/cancel_content")
     public String checkDetail() {
         return "reservation/cancel_content.html";
+    }
+    @GetMapping("/modal/coupon-modal")
+    public String getCouponModal() {
+        return "reservation/modal/coupon-modal"; // .html 확장자는 생략 가능
     }
     
     

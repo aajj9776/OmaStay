@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 
 
@@ -18,10 +20,12 @@ import java.time.LocalDateTime;
 @Setter
 public class StartEndVo {
     @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "res_start", nullable = false)
     private LocalDateTime start;
 
     @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "res_end", nullable = false)
     private LocalDateTime end;
 }
