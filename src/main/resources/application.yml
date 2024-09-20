@@ -60,4 +60,4 @@ decorator:
 custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
-upload: https://storage.googleapis.com/omastay/   
+upload: https://storage.googleapis.com/omastay/
