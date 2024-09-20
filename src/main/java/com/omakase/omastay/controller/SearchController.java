@@ -45,6 +45,8 @@ public class SearchController {
         System.out.println(search);
         List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(search);
 
+        System.out.println(resultAccommodations);
+
         ModelAndView mv = new ModelAndView();
         mv.addObject("resultAccommodations", resultAccommodations);
         mv.addObject("includeSearchBar", true);

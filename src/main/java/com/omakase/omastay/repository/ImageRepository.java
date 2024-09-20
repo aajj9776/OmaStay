@@ -10,7 +10,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ImageRepository extends JpaRepository<Image, Integer>, ImageRepositoryCustom {
 
     List<Image> findByHostInfoId(int hIdx);
-
-    List<Image> findByRoomInfoId(int rId);
-
 }

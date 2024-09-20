@@ -11,5 +11,5 @@ public interface RoomInfoRepositoryCustom {
 
     List<Tuple> personFiltering(int person, List<Integer> roomInfos);
 
-    HashSet<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs);
+    List<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs);
 }

@@ -1,9 +1,9 @@
 package com.omakase.omastay.repository.custom;
 
+import com.querydsl.core.Tuple;
+
 import java.util.List;
 
 public interface ImageRepositoryCustom {
-
-
-    List<String> findImageNamesByHostIds(List<Integer> hostIds);
+    List<Tuple> findImageNamesByHostIds(List<Integer> hostIds);
 }

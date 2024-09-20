@@ -42,9 +42,6 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepositoryCustom memberRepositoryCustom;
-
-    @Autowired
     private GradeRepository gradeRepository;
 
     @Autowired
@@ -191,6 +188,4 @@ public class MemberService {
     responseDTO.setRefreshToken(refreshToken);
     return responseDTO;  // 토큰 포함한 사용자 정보 반환
 }
-
-
 }
