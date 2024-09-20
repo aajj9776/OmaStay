@@ -97,6 +97,10 @@ public class Member {
     @Column(name = "mem_none", length = 100)
     private String memNone;
 
+public Member orElse(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElse'");
+}
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
 }

@@ -17,7 +17,7 @@ public class CouponDTO {
     private String cpSale;
     private CpCate cpCate;
     private CpMethod cpMethod;
-    private String cpNone;
+    private String cpNone; 
 
     public CouponDTO(Coupon coupon) {
         this.id = coupon.getId();

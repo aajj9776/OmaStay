@@ -7,9 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 
 public interface RoomInfoRepositoryCustom {
-    List<Tuple> dateFiltering(StartEndVo startEndDay, List<Integer> roomInfos);
+    List<Tuple> dateFiltering(StartEndVo startEndDay, List<Integer> hostInfos);
 
-    List<Tuple> personFiltering(int person, List<Integer> roomInfos);
+    List<Tuple> personFiltering(int person, List<Integer> hostInfos); 
 
-    HashSet<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs);
+
+    HashSet<Tuple> findHostIdsByRoomIds(List<Integer> roomIds);
 }
