@@ -71,7 +71,7 @@
             </div>
             <input
               id="customRoomType"
-              class="hidden w-full border-[1px] border-solid border-[rgba(0,0,0,0.23) bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+              class="hidden w-full border-[1px] border-solid border-[rgba(0,0,0,0.23) bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[5px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
               placeholder="객실 유형"
               type="text"
             />
@@ -296,12 +296,6 @@
         <input id="peak" type="hidden" th:value="${peak}"/>
         <input id="hCate" type="hidden" th:value="${hCate}"/>
       </section>
-      <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
 
@@ -489,6 +483,7 @@
 
             var roomRegDTO = {
                 roomInfo: {
+                    id: null,
                     roomName: $('#roomName').val(),
                     roomType: getRoomType(),
                     roomIntro: $('#roomIntro').val(),

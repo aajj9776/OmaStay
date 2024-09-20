@@ -35,7 +35,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "member")
-@ToString(exclude = {"grade"})
+@ToString(exclude = {"reservations", "grade"})
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -103,6 +103,4 @@ public Member orElse(Object object) {
 }
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
-        
-
 }

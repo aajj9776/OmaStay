@@ -1,6 +1,8 @@
 package com.omakase.omastay.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,22 +13,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
-import com.omakase.omastay.dto.custom.MembercpDTO;
-import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.service.EmailService;
+import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.MemberService;
-import com.omakase.omastay.service.MyPageService;
 import com.omakase.omastay.service.ReservationService;
 
 import jakarta.mail.MessagingException;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 
 
 
@@ -42,12 +44,14 @@ public class ReservationController {
     private MemberService memberService;
 
     @Autowired
+    private IssuedCouponService issuedCouponService;
+
+    @Autowired
     private EmailService emailService;
 
     @GetMapping
     public ModelAndView reservation(MemberInfoDTO member) {
         ModelAndView mv = new ModelAndView();
-
         mv.setViewName("reservation/reservation");
         return mv;
     }
@@ -78,7 +82,6 @@ public class ReservationController {
         return ResponseEntity.notFound().build();  
     }
 
-    
 
     @PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation) {
@@ -164,6 +167,20 @@ public class ReservationController {
     public String getCouponModal() {
         return "reservation/modal/coupon-modal"; // .html 확장자는 생략 가능
     }
+
+    @PostMapping("/coupon")
+    @ResponseBody
+    public Map<String,Object> couponInfo(MemberInfoDTO member) {
+        Map<String, Object> map = new HashMap<>();
+        
+        List<IssuedCouponDTO> coupon = issuedCouponService.getCouponPoint(member.getId());
+        
+        System.out.println("쿠폰" + coupon);
+        map.put("coupon", coupon);
+        
+        return map;
+    }
+    
     
     
 }
