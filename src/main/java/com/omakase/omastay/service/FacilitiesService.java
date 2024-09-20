@@ -1,5 +1,4 @@
 package com.omakase.omastay.service;
-
 import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.custom.FilterDTO;
 import com.omakase.omastay.dto.custom.HostAvgPriceDTO;
@@ -14,11 +13,9 @@ import com.querydsl.core.Tuple;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static com.omakase.omastay.entity.QHostInfo.hostInfo;
 import static com.omakase.omastay.entity.QReview.review;
 import static com.omakase.omastay.entity.QRoomInfo.roomInfo;
