@@ -28,6 +28,7 @@ import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.ImageMapper;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.AccountRepository;
+import com.omakase.omastay.repository.AdminMemberRepository;
 import com.omakase.omastay.repository.FacilitiesRepository;
 import com.omakase.omastay.repository.HostFacilitiesRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
@@ -41,6 +42,7 @@ import java.util.Optional;
 
 import org.apache.tomcat.util.http.parser.Host;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -63,6 +65,9 @@ public class HostInfoService {
 
     @Autowired
     private RoomInfoRepository roomInfoRepository;
+
+    @Autowired
+    private AdminMemberRepository adminMemberRepository;
 
     public HostInfoDTO findHostInfoDTO(AdminMemberDTO adminMemberDTO) {
         AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);

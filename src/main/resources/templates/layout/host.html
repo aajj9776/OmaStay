@@ -23,11 +23,9 @@
   </head>
   <body>
     <header
-      id="main_header"
       th:insert="~{component/header/header :: header}"
-      value=""
     />
-    <main layout:fragment="main" />
+    <main layout:fragment="host" />
     <footer th:insert="~{component/footer/footer :: footer}" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script
