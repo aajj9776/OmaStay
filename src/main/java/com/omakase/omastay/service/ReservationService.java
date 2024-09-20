@@ -6,8 +6,10 @@ import com.omakase.omastay.entity.enumurate.PayStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.entity.Coupon;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
@@ -18,6 +20,8 @@ import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
+
+import java.util.List;
 import java.util.Optional;
 import jakarta.transaction.Transactional;
 
@@ -94,5 +98,6 @@ public class ReservationService {
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
     }
+
 
 }
