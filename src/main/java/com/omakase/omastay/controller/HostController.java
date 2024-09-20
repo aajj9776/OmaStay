@@ -5,12 +5,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +42,8 @@ import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.RoomStatus;
+import com.omakase.omastay.entity.enumurate.SCate;
+import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
@@ -42,9 +51,11 @@ import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.RoomInfoService;
+import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -74,6 +85,9 @@ public class HostController {
 
     @Autowired
     private FileUploadService fileUploadService;
+
+    @Autowired
+    private ServiceService serviceService;
     
     private final EmailService emailService;
 
@@ -85,8 +99,6 @@ public class HostController {
 
     @Autowired
     private ServletContext application;
-
-    private String upload2 = "src/main/resources/static/upload/room";
 
     @Value("${upload}")
     private String upload;
@@ -622,7 +634,7 @@ public class HostController {
 
     // 룸 상세보기
     @RequestMapping(value = "/roomlist/view", method = RequestMethod.GET)
-    public ModelAndView host_notice_detail(@RequestParam("id") String id) {
+    public ModelAndView roomdetail(@RequestParam("id") String id) {
 
         ModelAndView mv = new ModelAndView();
         
@@ -652,5 +664,80 @@ public class HostController {
 
         mv.setViewName("host/host_roomchange");
         return mv;
+    }
+
+    // 호스트 공지사항 전체 리스트
+    @RequestMapping("/noticelist/getList")
+    @ResponseBody
+    public Map<String, Object> noticelist() {
+        Map<String, Object> map = new HashMap<>();
+
+        List<ServiceDTO> list = serviceService.getAllServices(SCate.NOTICE, UserAuth.HOST);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 호스트 공지사항 검색
+    @RequestMapping("/noticelist/search")
+    @ResponseBody
+    public Map<String, Object> noticesearch(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        List<ServiceDTO> list = serviceService.searchHostNotice(type, keyword, UserAuth.HOST, SCate.NOTICE);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    @RequestMapping(value = "noticelist/view", method = RequestMethod.GET)
+    public ModelAndView noticedetail(@RequestParam("id") String id) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("host/host_noticedetail");
+        
+        if (id != null) {
+            ServiceDTO sDto = serviceService.getServices(Integer.parseInt(id));
+            mv.addObject("sDto", sDto);
+        }
+
+        return mv;
+    }
+
+    // 파일 다운로드
+    @RequestMapping(value = "/fileDownload", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> fileDownload(@RequestParam("fName") String fName)
+            throws FileNotFoundException, UnsupportedEncodingException {
+
+        String realPath = application.getRealPath(upload);
+
+        // 전체경로를 만들어서 File객체 생성
+        String fullPath = realPath + System.getProperty("file.separator") + fName;
+        File file = new File(fullPath);
+
+        if (!file.exists() || !file.isFile()) {
+            throw new IOException("File not found");
+        }
+        FileInputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        InputStreamResource resource = new InputStreamResource(bis);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment;filename=" + new String(fName.getBytes("UTF-8"), "ISO-8859-1"));
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream;charset=8859_1");
+        headers.add(HttpHeaders.CONTENT_ENCODING, "binary");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 }
