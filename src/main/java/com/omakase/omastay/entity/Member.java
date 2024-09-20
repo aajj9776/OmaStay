@@ -103,6 +103,4 @@ public Member orElse(Object object) {
 }
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
-        
-
 }

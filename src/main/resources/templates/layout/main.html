@@ -22,13 +22,10 @@
     <link rel="stylesheet" type="text/css" href="/css/footer/footer.css" />
   </head>
   <body>
-    <header
-      id="main_header"
-      th:insert="~{component/header/header :: header}"
-      value=""
-    />
-    <main layout:fragment="main" />
-    <footer th:insert="~{component/footer/footer :: footer}" />
+      <header th:insert="~{component/header/header :: header}"/>
+      <div th:if="${includeSearchBar}" th:insert="~{component/search/searchbar :: searchbar}"></div>
+      <main layout:fragment="main"/>
+      <footer th:insert="~{component/footer/footer :: footer}"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -75,6 +72,16 @@
           }
         }
       };
+      searchAccommodation = () => {
+        let search = document.getElementById("search-accommodation").value;
+        let checkIn = document.getElementById("check-in").value;
+        console.log(checkIn);
+        let checkOut = document.getElementById("check-out").value;
+        console.log(checkOut);
+        let person = document.getElementById("person_count").innerText;
+        let url = `/search/search?keyword=${encodeURIComponent(search)}&startEndDay.start=${encodeURIComponent(checkIn)}&startEndDay.end=${encodeURIComponent(checkOut)}&person=${encodeURIComponent(person)}`;
+        location.href = url;
+      }
     </script>
   </body>
 </html>

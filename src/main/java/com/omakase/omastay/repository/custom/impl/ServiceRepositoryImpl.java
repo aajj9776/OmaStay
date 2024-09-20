@@ -39,7 +39,6 @@ public class ServiceRepositoryImpl implements ServiceRepositoryCustom {
                 .fetch();
     }
 
-
     //service 엔티티 검색
     @Override
     public List<Service> searchServices(String type, String keyword, String startDate, String endDate, UserAuth sAuth, SCate sCate) {

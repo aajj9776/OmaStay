@@ -9,6 +9,7 @@ $(document).ready(function () {
     if (startDate && endDate) {
         start = moment(startDate);
         end = moment(endDate);
+
     }
 
     function setDateRangePicker(start, end) {
@@ -19,6 +20,10 @@ $(document).ready(function () {
 
 
         $('#date-range-picker-input').val(displayText);
+
+        // 로컬 날짜 형식으로 값을 설정하는 부분
+        $('#check-in').val(start.format('YYYY-MM-DDTHH:mm:ss'));
+        $('#check-out').val(end.format('YYYY-MM-DDTHH:mm:ss'));
     }
 
     $('#date-range-picker').daterangepicker({
