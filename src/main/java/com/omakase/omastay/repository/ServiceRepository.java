@@ -8,13 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import com.omakase.omastay.entity.enumurate.BooleanStatus;
-import com.omakase.omastay.entity.enumurate.SCate;
-import com.omakase.omastay.entity.enumurate.UserAuth;
-
-
 public interface ServiceRepository extends JpaRepository<Service, Integer>, ServiceRepositoryCustom {
 
     @Modifying

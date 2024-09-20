@@ -50,6 +50,9 @@ spring:
           location: classpath:artful-mystery-436200-n4-154c84a846c8.json
         project-id: artful-mystery-436200-n4
         bucket: omastay
+  thymeleaf:
+    enums:
+      use-class-for-enum-values: true 
 decorator:
   datasource:
     p6spy:

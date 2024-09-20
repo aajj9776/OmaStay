@@ -1,389 +1,101 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/admin}"
-      layout:fragment="admin">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, width=device-width" />
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
 
-    <link rel="stylesheet" href="./global.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=ABeeZee:wght@400&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Work Sans:wght@600&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap"
-    />
-  </head>
-  <body>
-    <div
-      class="w-full relative rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden flex flex-col items-start justify-start py-[55px] px-[125px] box-border gap-[10px] leading-[normal] tracking-[normal] text-left text-[20px] text-[#000] font-[Roboto] lg:pl-[62px] lg:pr-[62px] lg:box-border mq750:pl-[31px] mq750:pr-[31px] mq750:box-border"
-    >
-      <div
-        class="w-[1201px] relative tracking-[0.46px] leading-[20px] uppercase font-medium inline-block max-w-full mq450:text-[16px] mq450:leading-[16px]"
-      >
-        1:1 문의 내역
-      </div>
-      <section
-        class="w-[1200px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start py-[42px] pl-[138px] pr-[136px] box-border gap-[6px] max-w-full text-left text-[12px] text-[rgba(0,0,0,0.6)] font-[Roboto] lg:pl-[69px] lg:pr-[68px] lg:box-border mq450:pt-[27px] mq450:pb-[27px] mq450:box-border mq750:pl-[34px] mq750:pr-[34px] mq750:box-border"
-      >
-        <div
-          class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
-        >
-          제목
-        </div>
-        <div
-          class="w-[666px] flex flex-row items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
-        >
-          <div
-            class="h-[24px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border"
-          >
-            <div class="hidden flex-row items-start justify-start">
-              <img
-                class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                alt=""
-                src="/public/starsharp.svg"
-              />
-            </div>
-          </div>
-          <div
-            class="flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
-          >
-            제목을 입력하세요
-          </div>
-          <div
-            class="w-[110px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden"
-          >
-            Placeholder
-          </div>
-          <div
-            class="h-[24px] w-[24px] hidden flex-row items-center justify-start"
-          >
-            <div class="hidden flex-row items-start justify-start">
-              <img
-                class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                alt=""
-                src="/public/starsharp.svg"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="w-[666px] h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"
-        ></div>
-        <div
-          class="w-[220px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[4px] box-border"
-        >
-          <div
-            class="flex-1 rounded-t-[4px] rounded-b-[0px] bg-[rgba(0,0,0,0.06)] overflow-hidden flex flex-row items-start justify-start p-[12px] relative"
-          >
-            <div
-              class="h-[1px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border z-[0]"
-            >
-              <div class="hidden flex-row items-start justify-start">
-                <img
-                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/public/starsharp.svg"
-                />
-              </div>
-            </div>
-            <input
-              class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[118px] p-[0px]"
-              placeholder="작성자"
-              type="text"
-            />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-            <div
-              class="h-[1px] w-[24px] hidden flex-row items-center justify-center z-[2]"
-            >
-              <div class="hidden flex-row items-start justify-start">
-                <img
-                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/public/starsharp.svg"
-                />
-              </div>
-            </div>
-            <div
-              class="h-[1px] w-[calc(100%_+_1px)] absolute !m-[0] right-[-1px] bottom-[-1px] left-[0px] border-[rgba(0,0,0,0.42)] border-t-[1px] border-solid box-border"
-            ></div>
-          </div>
-        </div>
-        <div
-          class="self-stretch flex flex-row items-start justify-start flex-wrap content-start max-w-full [row-gap:20px]"
-        >
-          <div
-            class="flex-1 flex flex-col items-start justify-start relative max-w-full lg:min-w-full"
-          >
-            <div
-              class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
-            >
-              <div
-                class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
-              >
-                <div
-                  class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
-                >
-                  <div class="hidden flex-row items-start justify-start">
-                    <img
-                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/public/starsharp.svg"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="h-[218px] flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
-                >
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                  The point of using Lorem Ipsum is that it has a more-or-less
-                  normal distribution of letters, as opposed to using 'Content
-                  here, content here', making it look like readable English.
-                </div>
-                <div
-                  class="w-[98px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden"
-                >
-                  Placeholder
-                </div>
-                <div
-                  class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
-                >
-                  <div class="hidden flex-row items-start justify-start">
-                    <img
-                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/public/starsharp.svg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[3px] box-border z-[1]"
-            >
-              <div
-                class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
-              >
-                내용
-              </div>
-            </div>
-            <div
-              class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-            >
-              <div
-                class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-              >
-                Helper text
-              </div>
-            </div>
-          </div>
-          <div
-            class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[202px] mq750:w-full mq750:h-[15px]"
-          >
-            <div
-              class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
-            ></div>
-          </div>
-        </div>
-      </section>
-      <div
-        class="w-[1201px] relative tracking-[0.46px] leading-[20px] uppercase font-medium flex items-center max-w-full mq450:text-[16px] mq450:leading-[16px]"
-      >
-        1:1 문의 답변
-      </div>
-      <section
-        class="w-[1200px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start py-[27px] pl-[138px] pr-[136px] box-border gap-[38px] max-w-full text-left text-[12px] text-[rgba(0,0,0,0.6)] font-[Roboto] lg:pl-[69px] lg:pr-[68px] lg:box-border mq450:pt-[20px] mq450:pb-[20px] mq450:box-border mq750:gap-[19px] mq750:pl-[34px] mq750:pr-[34px] mq750:box-border"
-      >
-        <div
-          class="w-[666px] h-[48px] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[6px] box-border gap-[6px] max-w-full"
-        >
-          <div
-            class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
-          >
-            제목
-          </div>
-          <input
-            class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-start justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
-            placeholder="제목을 입력하세요"
-            type="text"
-          />
+  <link rel="stylesheet" href="./global.css" />
+</head>
 
-          <div
-            class="self-stretch h-[2px] relative border-[#000] border-t-[2px] border-solid box-border"
-          ></div>
-        </div>
-        <div
-          class="self-stretch flex flex-row items-start justify-start max-w-full [row-gap:20px] mq1050:flex-wrap"
-        >
-          <div
-            class="flex-1 flex flex-col items-start justify-start relative max-w-full lg:min-w-full"
-          >
-            <div
-              class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
-            >
-              <div
-                class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
-              >
-                <div
-                  class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
-                >
-                  <div class="hidden flex-row items-start justify-start">
-                    <img
-                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/public/starsharp.svg"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="h-[198px] flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
-                >
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                  The point of using Lorem Ipsum is that it has a more-or-less
-                  normal distribution of letters, as opposed to using 'Content
-                  here, content here', making it look like readable English.
-                </div>
-                <div
-                  class="w-[98px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden"
-                >
-                  Placeholder
-                </div>
-                <div
-                  class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
-                >
-                  <div class="hidden flex-row items-start justify-start">
-                    <img
-                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/public/starsharp.svg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[3px] box-border z-[1]"
-            >
-              <div
-                class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
-              >
-                내용
-              </div>
-            </div>
-            <div
-              class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-            >
-              <div
-                class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-              >
-                Helper text
-              </div>
-            </div>
-          </div>
-          <div
-            class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[182px] mq1050:w-full mq1050:h-[15px]"
-          >
-            <div
-              class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
-            ></div>
-          </div>
-        </div>
-        <div
-          class="w-[327px] flex flex-row items-start justify-between max-w-full gap-[20px] mq450:flex-wrap"
-        >
-          <button
-            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-row items-start justify-start"
-          >
-            <div class="flex flex-row items-start justify-start gap-[8px]">
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon.svg"
-              />
+<body>
+  <div
+    class="w-full relative rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden flex flex-col items-start justify-start py-[55px] px-[125px] box-border gap-[10px] leading-[normal] tracking-[normal] text-left text-[20px] text-[#000] font-[Roboto] lg:pl-[62px] lg:pr-[62px] lg:box-border mq750:pl-[31px] mq750:pr-[31px] mq750:box-border">
+    
+    <!-- 제목 영역 -->
+    <label
+      class="w-[1201px] relative tracking-[0.46px] leading-[20px] uppercase font-medium inline-block max-w-full mq450:text-[16px] mq450:leading-[16px]">
+      1:1 문의 내역
+    </label>
 
-              <div
-                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]"
-              >
-                등록
-              </div>
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon1.svg"
-              />
-            </div>
-          </button>
-          <button
-            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[21px] bg-[rgba(156,39,176,0.04)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
-          >
-            <div class="flex flex-row items-start justify-start gap-[8px]">
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon.svg"
-              />
+    <!-- 문의 내역 조회 영역 -->
+    <section
+      class="w-[1200px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start py-[42px] pl-[138px] pr-[136px] box-border gap-[6px] max-w-full text-left text-[12px] text-[rgba(0,0,0,0.6)] font-[Roboto] lg:pl-[69px] lg:pr-[68px] lg:box-border mq450:pt-[27px] mq450:pb-[27px] mq450:box-border mq750:pl-[34px] mq750:pr-[34px] mq750:box-border">
+      <div th:if="${sDto != null}">
 
-              <div
-                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[61px] whitespace-nowrap"
-              >
-                다시 입력
-              </div>
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon1.svg"
-              />
-            </div>
-          </button>
-          <button
-            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-row items-start justify-start"
-          >
-            <div class="flex flex-row items-start justify-start gap-[8px]">
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon.svg"
-              />
-
-              <div
-                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]"
-              >
-                목록
-              </div>
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon1.svg"
-              />
-            </div>
-          </button>
-        </div>
-      </section>
+        <table summary="게시판 상세보기">
+            <tbody>
+                <tr>
+                    <td><input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}" data-str="제목"
+                            placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
+      text-[#000] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
+      border-solid box-border py-[4px] px-[11px] mb-2" readonly /></td>
+                </tr>
+                <tr><td><div class="mb-[10px] p-2"><span class="text-black">등록일: </span><span class="text-black" th:text="${sDto.sDate}"> </span><span> (* 등록일만 저장됩니다.) </span></div></td></tr>
+                <tr>
+                    <td><textarea th:text="${sDto.sContent}" id="content"
+                            class="bg-[#fff] w-[1000px] h-[500px] text-[#000]" name="sContent" cols="50"
+                            data-str="내용" rows="8" readonly></textarea></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div th:if="${sDto.fileName != null}">
+                            <a th:href="|javascript:down('${sDto.fileName.fName}')|">
+                                <span th:text="${sDto.fileName.fName}"></span>
+                            </a>
+                        </div>
+                        <div th:if="${sDto.fileName == null}">
+                            <span>첨부된 파일이 없습니다.</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-  </body>
+    </section>
+    
+    <!-- 제목 영역 -->
+    <label
+      class="w-[1201px] relative tracking-[0.46px] leading-[20px] uppercase font-medium inline-block max-w-full mq450:text-[16px] mq450:leading-[16px]">
+      1:1 문의 답변
+    </label>
+
+    <section
+      class="w-[1200px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start py-[42px] pl-[138px] pr-[136px] box-border gap-[6px] max-w-full text-left text-[12px] text-[rgba(0,0,0,0.6)] font-[Roboto] lg:pl-[69px] lg:pr-[68px] lg:box-border mq450:pt-[27px] mq450:pb-[27px] mq450:box-border mq750:pl-[34px] mq750:pr-[34px] mq750:box-border">
+      <div th:if="${sDto != null}">
+
+        <table summary="게시판 상세보기">
+            <tbody>
+                <tr>
+                    <td><input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}" data-str="제목"
+                            placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
+      text-[#000] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
+      border-solid box-border py-[4px] px-[11px] mb-2" readonly /></td>
+                </tr>
+                <tr><td><div class="mb-[10px] p-2"><span class="text-black">등록일: </span><span class="text-black" th:text="${sDto.sDate}"> </span><span> (* 등록일만 저장됩니다.) </span></div></td></tr>
+                <tr>
+                    <td><textarea th:text="${sDto.sContent}" id="content"
+                            class="bg-[#fff] w-[1000px] h-[500px] text-[#000]" name="sContent" cols="50"
+                            data-str="내용" rows="8" readonly></textarea></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div th:if="${sDto.fileName != null}">
+                            <a th:href="|javascript:down('${sDto.fileName.fName}')|">
+                                <span th:text="${sDto.fileName.fName}"></span>
+                            </a>
+                        </div>
+                        <div th:if="${sDto.fileName == null}">
+                            <span>첨부된 파일이 없습니다.</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </section>
+  </div>
+</body>
+
 </html>

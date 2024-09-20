@@ -25,5 +25,6 @@ public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer>, Ro
     @Transactional
     @Query("Update RoomInfo r set r.roomStatus = 1 where r.id in :ids")
     int deleteById(@Param("ids") int[] ids);
+    List<RoomInfo> findByHostInfo(HostInfo hostInfo);
 
 }

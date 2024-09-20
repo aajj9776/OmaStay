@@ -1,556 +1,212 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/admin}"
-      layout:fragment="admin">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-  </head>
-  <body>
-    <form
-      class="m-[0px] w-full relative rounded-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-center py-[116px] pl-[30px] pr-[20px] box-border gap-[15px] leading-[normal] tracking-[normal]"
-    >
-      <a
-        class="[text-decoration:none] w-[1575px] h-[40px] relative text-[24px] font-semibold font-[Inter] text-[#000] text-left flex items-center shrink-0 max-w-full mq450:text-[19px]"
-        >포인트 관리</a
-      >
+  <meta charset="utf-8" />
+</head>
+
+<body>
+  <div
+    class="w-full relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]">
+
+    <!-- 제목 영역 -->
+    <label class="h-[40px] text-[24px] font-semibold text-[#000] text-left shrink-0 max-w-full">
+      포인트 관리
+    </label>
+
+    <!-- 검색 영역-->
+    <div
+      class="w-[1300px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[10px] box-border gap-[5px] max-w-full text-center text-[18px]">
+
+      <!-- 등록일 영역 -->
       <div
-        class="w-[817px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start py-[10px] pl-[13px] pr-[10px] box-border max-w-full"
-      >
-        <nav
-          class="m-[0px] self-stretch overflow-hidden flex flex-row items-center justify-start flex-wrap content-center py-[5px] px-[10px] box-border gap-[15px] max-w-full whitespace-nowrap"
-        >
-          <h3
-            class="m-[0px] w-[130px] relative text-[20px] font-light font-[Inter] text-[#000] text-center flex items-center justify-center shrink-0 mq450:text-[16px]"
-          >
-            검색어
-          </h3>
-          <div
-            class="shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px]"
-          >
-            <div
-              class="overflow-hidden flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[15px]"
-            >
-              <div
-                class="relative text-[16px] leading-[24px] font-[ABeeZee] text-[#6c757d] text-left inline-block min-w-[90px]"
-              >
-                Placeholder
-              </div>
-              <div class="h-[18px] w-[1px] relative bg-[#495057] hidden"></div>
-            </div>
-            <div
-              class="flex flex-row items-center justify-center py-[4px] px-[0px]"
-            >
-              <img
-                class="h-[16px] w-[16px] relative"
-                alt=""
-                src="/public/-basetoggleup.svg"
-              />
-            </div>
-          </div>
-          <div
-            class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[260px] max-w-full"
-          >
-            <input
-              class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[226px] max-w-full"
-              placeholder="Placeholder"
-              type="text"
-            />
-
-            <div class="h-[24px] hidden flex-row items-center justify-center">
-              <img
-                class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
-                alt=""
-                src="/public/check.svg"
-              />
-            </div>
-          </div>
-          <div class="flex flex-col items-start justify-start">
-            <div
-              class="rounded-[4px] bg-[#007bff] flex flex-col items-center justify-center py-[6px] px-[11px]"
-            >
-              <div class="flex flex-row items-center justify-center gap-[4px]">
-                <img
-                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                  alt=""
-                  src="/public/l-icon1@2x.png"
-                />
-
-                <div
-                  class="relative text-[16px] leading-[24px] font-[ABeeZee] text-[#fff] text-center inline-block min-w-[32px]"
-                >
-                  검색
-                </div>
-                <img
-                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                  alt=""
-                  src="/public/l-icon1@2x.png"
-                />
-              </div>
-            </div>
-          </div>
-        </nav>
+        class="w-[450px] overflow-hidden flex flex-row items-center justify-center flex-wrap content-center py-[5px] px-[20px] box-border gap-[15px] max-w-full">
+        <label
+          class="m-[0px] w-[100px] relative font-light font-[inherit] flex items-center justify-center shrink-0 mq450:text-[16px]">
+          등록일
+        </label>
+        <div id="date-range-picker"
+          class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[11px]">
+          <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
+          <input readonly id="date-range-picker-input"
+            class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+            type="text" placeholder="전체 기간" />
+        </div>
       </div>
-      <section
-        class="w-[1140px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-center p-[27px] box-border gap-[15px] max-w-full mq700:pt-[20px] mq700:pb-[20px] mq700:box-border"
-      >
-        <button
-          class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[21px] bg-[rgba(156,39,176,0.04)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
-        >
-          <div class="flex flex-row items-center justify-center gap-[8px]">
-            <img
-              class="h-[22px] w-[18px] relative hidden"
-              alt=""
-              src="/public/masked-icon2.svg"
-            />
 
-            <div
-              class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[76px] whitespace-nowrap"
-            >
-              포인트 등록
-            </div>
-            <img
-              class="h-[22px] w-[18px] relative hidden"
-              alt=""
-              src="/public/masked-icon3.svg"
-            />
-          </div>
-        </button>
-        <div
-          class="self-stretch overflow-hidden flex flex-col items-start justify-start pt-[10px] px-[10px] pb-[20px] gap-[10px]"
-        >
-          <div
-            class="self-stretch rounded-[10px] bg-[#e1e1e1] overflow-hidden flex flex-row items-center justify-between py-[20px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq650:flex-wrap"
-          >
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[56px]"
-            >
-              체크박스
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              제목
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[28px]"
-            >
-              내용
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              작성자
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              첨부파일
-            </div>
-            <div
-              class="relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left inline-block min-w-[42px]"
-            >
-              등록일
-            </div>
-            <div
-              class="w-[56px] relative text-[14px] leading-[150%] font-semibold font-['Work_Sans'] text-[#000] text-left flex items-center"
-            >
-              답변상태
-            </div>
+      <!-- 검색어 영역 -->
+      <div class="flex flex-row">
+        <label
+          class="m-[0px] w-[130px] relative text-[20px] font-light font-[Inter] flex items-center justify-center shrink-0 mq450:text-[16px]">
+          검색어
+        </label>
+        <div id="search-input"
+          class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[500px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+          <select id="search-type"
+            class="w-[100px] [border:none] [outline:none] h-[24px] justify-start text-[16px] text-[#6c757d]  px-[5px]">
+            <option value="all">전체</option>
+            <option value="">쿠폰번호</option>
+            <option value="title">쿠폰내용</option>
+            <option value="ffname">쿠폰형식</option>
+            <option value="ffname">할인구분</option>
+            <option value="ffname">할인내용</option>
+          </select>
+          <input id="search-keyword"
+            class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+            type="text" />
+        </div>
+      </div>
+
+      <!-- 버튼 영역 -->
+      <div class="w-[300px] flex-1 box-border flex flex-row items-center justify-center py-[4px] px-[30px] gap-[15px]">
+        <button id="search-button" class="w-[100px] h-[30px] bg-[#d4d8f1] rounded-[4px]">검색</button>
+        <button id="reset-button"
+          class="flex flex-row items-center justify-center w-[100px] h-[30px] border-[2px] border-[#d4d8f1] rounded-[4px]">초기화</button>
+      </div>
+    </div>
+
+    <!-- 포인트 버튼 영역 -->
+    <div class="flex flex-row text-[16px] justify-center items-center gap-4">
+      <button id="addButton" class="w-[100px] h-[35px] bg-[#d4d8f1] rounded-[4px] text-[16px] ml-[30px]">포인트 등록</button>
+      <span class="text-gray-400"> * 포인트는 등록 후 삭제할 수 없으니 유의해주세요</span>
+    </div>
+
+
+    <!-- 본문 영역 -->
+    <section
+      class="w-[1300px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-center p-[27px] box-border gap-[15px] max-w-full mq700:pt-[20px] mq700:pb-[20px] mq700:box-border">
+
+      <div
+        class="self-stretch overflow-hidden flex flex-col items-start justify-start pt-[10px] px-[10px] pb-[20px] gap-[10px]">
+
+        <!-- 테이블 영역 -->
+        <div th:if="${list == null}"
+          class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+          <p class="text-[18px] text-[#6c757d]">포인트 내역이 없습니다.</p>
+        </div>
+
+        <div th:if="${list != null}"
+          class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+
+          <!-- 테이블 데이터 영역-->
+          <div id="table" class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
+            <table id="listTable" class="w-[1200px] hover ">
+              <thead>
+                <tr class="bg-[#d4d8f1] font-medium">
+                  <th>포인트 번호</th>
+                  <th>회원 번호</th>
+                  <th>내용</th>
+                  <th>변동 포인트</th>
+                  <th>변동 후 잔여 포인트</th>
+                  <th>일시</th>
+                </tr>
+              </thead>
+              <tbody class="bg-[#ffffff] pt-[100px] ">
+                <tr th:each="point : ${list}">
+                  <td th:text="${point.id}"></td>
+                  <td th:text="${point.member.id}"></td>
+                  <td th:text="${point.pContent}"></td>
+                  <td th:text="${point.pValue}"></td>
+                  <td th:text="${point.pSum}"></td>
+                  <td th:text="${point.pDate}"></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </section>
-    </form>
-  </body>
+
+      </div>
+    </section>
+
+
+    <!-- 모달 뒷 배경 -->
+    <div id="modalOverlay"
+      class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50 hidden ">
+
+      <!-- 포인트 등록 모달 -->
+      <div id="addPoint"
+        class="bg-[#d9ddf1] p-[0px_30px_30px_30px] max-w-[450px] min-w-[100px] box-border rounded-[12px] flex flex-col items-center justify-center relative top-[40px] m-auto"
+        style="width: auto; height: auto;">
+        <button id="closeModal" class="w-full flex items-end justify-end pb-1 pt-[15px]">
+          <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
+        </button>
+
+        <!--모달 내 흰색 영역 컨텐츠 -->
+        <section
+          class="m-[0px] w-[640px] p-[24px] shadow-[0px_20px_24px_-4px_rgba(16,_24,_40,_0.1),_0px_8px_8px_-4px_rgba(16,_24,_40,_0.04)] rounded-[12px] bg-[#fff] max-w-full overflow-hidden flex flex-col gap-3 items-center justify-start leading-[normal] tracking-[normal]">
+
+          <!-- 제목 영역 -->
+          <section class="self-stretch bg-[#fff] flex flex-col items-center justify-start relative max-w-full">
+            <label
+              class="[text-decoration:none] self-stretch relative text-[18px] leading-[28px] font-semibold font-[Inter] text-[#101828] text-left">
+              포인트 등록
+            </label>
+            <div class="self-stretch relative text-[14px] leading-[20px] font-[Inter] text-[#475467] text-left">
+              등록할 포인트의 정보를 입력해주세요
+            </div>
+          </section>
+
+          <!-- form 영역 -->
+          <form action="/admin/point/add"
+            class="self-stretch flex flex-col items-start justify-start box-border max-w-full text-[16px] font-medium gap-[16px]">
+            <label class="text-[#344154] ">
+              회원 이메일
+            </label>
+            <input type="text" name="email"
+              class="w-full h-[30px] flex-1 min-w-[149px] text-[#344154] border-2 border-solid border-[#d9ddf1] rounded-[4px]"
+              placeholder="admin" />
+            <!-- <label class="text-[#344154]">
+                이메일 구분(소셜 여부)
+              </label>
+              <div class="flex flex-row gap-3">
+                <div><input type="radio" name="social" value="NONE"/> <label>해당 없음</label></div>
+                <div><input type="radio" name="social" value="KAKAO"/> <label>카카오</label></div>
+                <div><input type="radio" name="social" value="NAVER"/> <label>네이버</label></div>
+                <div><input type="radio" name="social" value="GOOGLE"/> <label>구글</label></div>
+              </div> -->
+
+
+            <label class="text-[#344154]">
+              포인트 내용
+            </label>
+            <input type="text" name="pContent"
+              class="w-full h-[30px] flex-1 text-[#344154] border-2 border-solid border-[#d9ddf1] rounded-[4px]"
+              placeholder="예: 생일 축하 포인트 지급" />
+
+            <label class="text-[#344154]">
+              포인트 금액*
+            </label>
+            <div class="flex flex-row gap-3 items-center">
+              <input type="text" name="pValue"
+                class="w-full h-[30px] text-[#344154] border-2 border-solid border-[#d9ddf1] rounded-[4px]"
+                placeholder="예: 10000*" />
+              <span class="text-[#000]">원</span>
+            </div>
+
+            <section
+              class="self-stretch flex flex-row items-start justify-start pt-3 box-border max-w-full text-[18px] m-auto gap-5">
+              <button type="submit" class="w-[50px] bg-violet-300"> 확인 </button>
+              <button class="w-[50px] bg-violet-300"> 취소 </button>
+            </section>
+
+          </form>
+
+
+        </section>
+
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // 포인트 등록 모달
+      $('#addButton').click(function () {
+        $('#modalOverlay').show();
+      });
+    });
+  </script>
+</body>
+
 </html>

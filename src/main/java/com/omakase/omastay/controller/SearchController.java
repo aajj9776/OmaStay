@@ -38,22 +38,37 @@ public class SearchController {
         return mv;
     }
 
+    // //숙소 검색 창(위에꺼 이걸로 변경예정)
+    // @PostMapping(value = "/search")
+    // @ResponseBody
+    // public FilterDTO search(@RequestBody @Valid FilterDTO filterDTO) {
+    //     List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(filterDTO);
 
+    //     return filterDTO;
+    // }
+  
     //숙소 검색 창(위에꺼 이걸로 변경예정)
-    @PostMapping(value = "/search")
-    @ResponseBody
-    public FilterDTO search(@RequestBody @Valid FilterDTO filterDTO) {
-        List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(filterDTO);
+    @ GetMapping(value = "/search")
+    public ModelAndView search(@ModelAttribute @Valid FilterDTO search) {
+        System.out.println(search);
+        List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(search);
 
-        return filterDTO;
+        System.out.println(resultAccommodations);
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("resultAccommodations", resultAccommodations);
+        mv.addObject("includeSearchBar", true);
+        mv.setViewName("search/domestic-accommodations");
+
+        return mv;
     }
 
-    //숙소 검색 필터링
-    public FilterDTO filtering(@RequestBody @Valid FilterDTO filterDTO) {
-        System.out.println(filterDTO);
+    // //숙소 검색 필터링
+    // public FilterDTO filtering(@RequestBody @Valid FilterDTO filterDTO) {
+    //     System.out.println(filterDTO);
 
-        List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.filteringAccommodations(filterDTO);
+    //     List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.filteringAccommodations(filterDTO);
 
-        return filterDTO;
-    }
+    //     return filterDTO;
+    // }
 }

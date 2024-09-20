@@ -5,18 +5,17 @@ import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.Tuple;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public interface RoomInfoRepositoryCustom {
-    Set<Integer> dateFiltering(StartEndVo startEndDay, List<Integer> hostInfos);
+    List<Tuple> dateFiltering(StartEndVo startEndDay, List<Integer> roomInfos);
 
-    List<Integer> personFiltering(int person, Set<Integer> hostInfos);
+    List<Tuple> personFiltering(int person, List<Integer> roomInfos);
 
-    HashSet<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs);
+    List<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs);
 
     List<RoomInfo> searchRoom(String type, String keyword, HostInfo hostInfo);
 
 
 }
+

@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +26,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.omakase.omastay.dto.CouponDTO;
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.InquiryDTO;
+import com.omakase.omastay.dto.IssuedCouponDTO;
+import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.dto.custom.CouponHistoryDTO;
+import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
+import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
+import com.omakase.omastay.service.CouponService;
+import com.omakase.omastay.service.HostInfoService;
+import com.omakase.omastay.service.InquiryService;
+import com.omakase.omastay.service.IssuedCouponService;
+import com.omakase.omastay.service.MemberService;
+import com.omakase.omastay.service.PointService;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
+import com.omakase.omastay.vo.StartEndVo;
 
 import io.jsonwebtoken.io.IOException;
+import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -43,6 +64,24 @@ public class AdminController {
 
     @Autowired
     ServiceService ss;
+
+    @Autowired
+    CouponService cs;
+
+    @Autowired
+    IssuedCouponService ics;
+
+    @Autowired
+    PointService ps;
+
+    @Autowired
+    MemberService ms;
+
+    @Autowired
+    InquiryService is;
+
+    @Autowired
+    HostInfoService hs;
 
     @Autowired
     private ServletContext application;
@@ -60,21 +99,35 @@ public class AdminController {
         return "admins/main";
     }
 
+    /************************ 입점 요청 시작 ************************/
     @RequestMapping("/request")
-    public String request() {
-        return "admins/request";
+    public ModelAndView request() {
+        ModelAndView mv = new ModelAndView();
+
+        List<HostInfoDTO> list = hs.getAllHostInfos();
+
+        mv.addObject("list", list);
+        mv.setViewName("admins/request");
+        return mv;
     }
 
-    @RequestMapping("/request_detail")
-    public String request_detail() {
-        return "admins/request_detail";
+    @RequestMapping("/request/detail")
+    public ModelAndView request_detail(@RequestParam("id") String id) {
+        ModelAndView mv = new ModelAndView();
+
+        HostRequestInfoDTO host = hs.getHostRequestInfo(Integer.parseInt(id));
+        System.out.println(host);
+        
+        mv.addObject("host", host);
+        mv.setViewName("admins/request_detail");
+        return mv;
     }
 
     @RequestMapping("/request_room")
     public String request_room() {
         return "admins/modals/request_room";
     }
-
+    /************************ 입점 요청 끝 ************************/
     @RequestMapping("/payment")
     public String payment() {
         return "admins/payment";
@@ -344,25 +397,41 @@ public class AdminController {
                 .body(resource);
     }
 
-    
+    /***************************** 1:1문의 시작 *****************************/
 
     @RequestMapping("/host_inquiry")
-    public String host_inquiry() {
-        return "admins/host_inquiry";
+    public ModelAndView host_inquiry() {
+        ModelAndView mv = new ModelAndView();
+
+        List<InquiryDTO> list = is.getAllInquiries();
+        mv.addObject("list", list);
+
+        mv.setViewName("admins/host_inquiry");
+
+        return mv;
     }
 
-    @RequestMapping("/host_inquiry_answer")
+    @RequestMapping("/host_inquiry/answer")
     public String host_inquiry_answer() {
         return "admins/host_inquiry_answer";
     }
 
+    /***************************** 1:1문의 끝 *****************************/
+    /***************************** 회원 조회 시작 *****************************/
     @RequestMapping("/member")
-    public String member() {
-        return "admins/member";
+    public ModelAndView member() {
+        ModelAndView mv = new ModelAndView();
+
+        List<MemberDTO> list = ms.getAllMembers();
+        mv.addObject("list", list);
+
+        mv.setViewName("admins/member");
+        
+        return mv;
     }
 
-
-    /***************************** 회원 공지사항 *****************************/
+    /***************************** 회원 조회 끝 *****************************/
+    /***************************** 회원 공지사항 시작 *****************************/
 
      // 회원 공지사항 리스트로 이동
     @RequestMapping("/user_notice")
@@ -530,11 +599,86 @@ public class AdminController {
         return mv;
     }
 
-    /***************************** 회원 공지사항 *****************************/
+    /***************************** 회원 공지사항 끝 *****************************/
 
+    /***************************** 쿠폰 시작 *****************************/
+    // 쿠폰 리스트 select 후 쿠폰 관리로 이동
     @RequestMapping("/coupon")
-    public String coupon() {
-        return "admins/coupon";
+    public ModelAndView coupon() {
+        ModelAndView mv = new ModelAndView();
+
+        List<CouponDTO> list =  cs.getAllCoupons();
+        mv.addObject("list", list);
+        mv.setViewName("admins/coupon");
+        return mv;
+    }
+
+    // 쿠폰 발급 내역 리스트 가져오기
+    @RequestMapping("/coupon/history")
+    @ResponseBody
+    public Map<String, Object> coupon_history(@RequestParam("id") String id){
+        Map<String, Object> map = new HashMap<>();
+
+        int idx = Integer.parseInt(id);
+
+        List<CouponHistoryDTO> list = ics.getIssuedCouponsById(idx);
+
+        for(CouponHistoryDTO item : list){
+            System.out.println("item : " + item);
+        }
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 쿠폰 등록 후 쿠폰 관리로 이동
+    @RequestMapping("/coupon/add")
+    public String coupon_add(CouponDTO cDto, @RequestParam("date") String date,
+                            @RequestParam(value = "selectGrade", required = false) String selectGrade,
+                            @RequestParam(value = "code", required = false) String code,
+                            @RequestParam(value = "count", required = false) Integer count)  {    
+        
+        // DateTimeFormatter를 사용하여 문자열을 LocalDate로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 날짜 형식에 맞게 패턴을 설정
+        LocalDate localDate = LocalDate.parse(date, formatter);
+
+        // LocalDateTime으로 변환하고 시간 부분을 23:59:59로 설정
+        LocalDateTime endDate = localDate.atTime(LocalTime.MAX);
+
+        StartEndVo tempDate = new StartEndVo();
+        tempDate.setStart(LocalDateTime.now());
+        tempDate.setEnd(endDate);
+                                
+        cDto.setCpStartEnd(tempDate);
+
+        System.out.println("cDto : " + cDto);
+        System.out.println("cDto : " + cDto.getCpStartEnd().getEnd());
+        System.out.println("selectGrade : " + selectGrade);
+        System.out.println("code : " + code);
+        System.out.println("count : " + count);
+        System.out.println("date : " + date);
+
+        int cnt;
+        switch(cDto.getCpMethod()){
+            case DESIGNATED:
+                cnt = cs.issueDesignatedCoupon(cDto, selectGrade);
+                break;
+            case SINGLE_USE:
+                cnt = cs.issueSingleUseCoupon(cDto, count);
+                break;
+            case MULTI_USE:
+                cnt = cs.issueMultiUseCoupon(cDto, code, count);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown coupon method: " + cDto.getCpMethod());
+        }
+        if(cnt < 1){
+            System.out.println("쿠폰 발급 실패");
+            return "error";
+        }
+        return "redirect:/admin/coupon";
     }
 
     @RequestMapping("/coupon_history")
@@ -542,20 +686,38 @@ public class AdminController {
         return "admins/modals/coupon_history";
     }
 
-    @RequestMapping("/add_coupon")
-    public String add_coupon() {
-        return "admins/modals/add_coupon";
-    }
+    /***************************** 쿠폰 끝 *****************************/
 
+    /***************************** 포인트 시작 *****************************/
     @RequestMapping("/point")
-    public String point() {
-        return "admins/point";
+    public ModelAndView point() {
+
+        ModelAndView mv = new ModelAndView();
+
+        List<PointDTO> list = ps.getAllPoints();
+
+        mv.addObject("list", list);
+        mv.setViewName("admins/point");
+
+        return mv;
     }
 
-    @RequestMapping("/add_point")
-    public String add_point() {
-        return "admins/modals/add_point";
+    @RequestMapping("/point/add")
+    public String add_point(@RequestParam("email") String email, PointDTO pDto) {
+        System.out.println("email : " + email);
+        System.out.println("pDto : " + pDto);
+
+        int cnt = ps.addPoint(email, pDto);
+
+        if(cnt < 1){
+            System.out.println("포인트 추가 실패");
+            return "error";
+        }
+
+        return "redirect:/admin/point";
     }
+
+    /***************************** 포인트 끝 *****************************/
 
     @RequestMapping("/recommendation")
     public String recommend() {

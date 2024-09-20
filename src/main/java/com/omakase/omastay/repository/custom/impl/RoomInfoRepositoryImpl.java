@@ -19,7 +19,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.omakase.omastay.entity.QHostInfo.hostInfo;
 import static com.omakase.omastay.entity.QReservation.reservation;
@@ -33,64 +32,66 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
     }
 
     @Override
-    public Set<Integer> dateFiltering(StartEndVo startEndDay, List<Integer> hIdxs) {
+    public List<Tuple> dateFiltering(StartEndVo startEndDay, List<Integer> roomInfos) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        // 1번 조건: hIdxs의 값이 roomInfo의 hostInfo.id의 값과 같은지
-        builder.and(roomInfo.hostInfo.id.in(hIdxs));
+        // 조건 1: roomInfos 목록에 있는 RoomInfo 아이디와 일치하는 RoomInfo
+        builder.and(roomInfo.id.in(roomInfos));
 
-        // 2번 조건: 예약이 가능한 날짜인지
-        builder.and(startEndDayNotBetween(startEndDay));
+        // 조건 2: 예약이 가능한 날짜인지 확인
+        builder.and(startEndDayNotBetween(startEndDay).or(reservation.isNull()));
 
-        // 3번 조건: res_status가 0,1이 아닌 경우 (예약 상태를 확인하기 위해 조인)
+        // 조건 3: 예약 상태를 확인 (PENDING 또는 CONFIRMED이 아닌 경우, 또는 예약 정보가 없는 경우)
         builder.and(
-                reservation.resStatus.ne(ResStatus.PENDING)
-                        .and(reservation.resStatus.ne(ResStatus.COMPLETED))
-                        .or(reservation.isNull())
+                reservation.isNull()
+                        .or(startEndDayNotBetween(startEndDay)
+                                .and(reservation.resStatus.ne(ResStatus.PENDING))
+                                .and(reservation.resStatus.ne(ResStatus.CONFIRMED)))
         );
 
-
-        return new HashSet<>(queryFactory
-                .select(roomInfo.id)
+        return queryFactory
+                .select(roomInfo.id, hostInfo.id)
                 .from(roomInfo)
-                .leftJoin(reservation).on(reservation.roomInfo.id.eq(roomInfo.id)).fetchJoin()
-                .where(builder)
-                .fetch());
+                .join(roomInfo.hostInfo, hostInfo)
+                .leftJoin(reservation).on(roomInfo.eq(reservation.roomInfo))
+                .where(builder).distinct()
+                .fetch();
     }
 
     @Override
-    public List<Integer> personFiltering(int person, Set<Integer> hostInfos) {
+    public List<Tuple> personFiltering(int person, List<Integer> roomInfos) {
         BooleanBuilder builder = new BooleanBuilder();
 
         // 1. room_status true인 것
         builder.and(roomInfo.roomStatus.eq(BooleanStatus.TRUE));
 
         // 2. hostInfo의 id가 hostInfos에 포함되어 있는 것
-        builder.and(roomInfo.hostInfo.id.in(hostInfos));
+        builder.and(roomInfo.id.in(roomInfos));
 
         // 3. room_person이 person보다 크거나 같은 것
         builder.and(roomInfo.roomPerson.goe(person));
 
         return queryFactory
-                .select(roomInfo.id)
-                .from(roomInfo)
-                .where(builder)
+                .select(roomInfo.id, hostInfo.id)
+                .from(roomInfo).
+                join(roomInfo.hostInfo, hostInfo)
+                .where(builder).distinct()
                 .fetch();
     }
 
     @Override
-    public HashSet<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs) {
-        return new HashSet<>(queryFactory
-                .select(roomInfo.hostInfo.id, hostInfo.hname, hostInfo.xAxis, hostInfo.yAxis)  // hname 변경
+    public List<Tuple> findHostIdsByRoomIds(List<Integer> roomIdxs) {
+        return (queryFactory
+                .select(hostInfo.id, hostInfo.hname, hostInfo.xAxis, hostInfo.yAxis)  // hname 변경
                 .from(roomInfo)
                 .join(hostInfo).on(roomInfo.hostInfo.id.eq(hostInfo.id)).fetchJoin()
-                .where(roomInfo.id.in(roomIdxs))
+                .where(roomInfo.id.in(roomIdxs)).distinct()
                 .fetch());
     }
 
     private BooleanExpression startEndDayNotBetween(StartEndVo startEndDay) {
         LocalDateTime start = startEndDay.getStart();
-        LocalDateTime end = startEndDay.getEnd();
+        LocalDateTime end = startEndDay.getEnd().minusDays(1).withHour(23).withMinute(59).withSecond(59);
 
         return reservation.startEndVo.start.goe(end).or(reservation.startEndVo.end.loe(start));
     }
