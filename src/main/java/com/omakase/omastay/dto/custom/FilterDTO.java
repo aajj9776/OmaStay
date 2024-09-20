@@ -12,15 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FilterDTO {
-    private List<Integer> facilities;
-    private Integer hCate;
     @NotNull
     private String keyword;
-    private Integer startPrice;
-    private Integer endPrice;
-    @NotNull
-    private Integer person;
     @NotNull
     private StartEndVo startEndDay;
+    @NotNull
+    private Integer person;
+    private Integer startPrice;
+    private Integer endPrice;
+    private List<Integer> facilities;
+    private Integer hCate;
     private String filter;
 }
