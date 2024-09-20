@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,7 @@ import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
+import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.RoomInfoService;
@@ -69,6 +71,9 @@ public class HostController {
 
     @Autowired
     private RoomInfoService roomInfoService;
+
+    @Autowired
+    private FileUploadService fileUploadService;
     
     private final EmailService emailService;
 
@@ -80,10 +85,11 @@ public class HostController {
 
     @Autowired
     private ServletContext application;
-    
-    private String upload = "src/main/resources/static/upload/host";
 
     private String upload2 = "src/main/resources/static/upload/room";
+
+    @Value("${upload}")
+    private String upload;
 
     @RequestMapping("/login")
     public String host() {
@@ -430,12 +436,10 @@ public class HostController {
     }
 
     @RequestMapping("/hostinforeg")
-    public ResponseEntity<List<String>> hostinforeg(@RequestPart("hostInfoCustomDTO") HostInfoCustomDTO hostInfoCustomDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+    public ResponseEntity<String> hostinforeg(@RequestPart("hostInfoCustomDTO") HostInfoCustomDTO hostInfoCustomDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         System.out.println(hostInfoCustomDTO.getHostInfo().getYAxis());
         System.out.println(hostInfoCustomDTO.getImages().size());
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
-
-        List<String> imageUrls = new ArrayList<>();
 
         // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
         String c_type = request.getContentType();
@@ -445,36 +449,24 @@ public class HostController {
             for (MultipartFile f : images) {
             if (f != null && f.getSize() > 0) {
                 
-
-                System.out.println("호스트이미지 실제 파일 경로: " + upload);
+                String hostupload = upload + "host";
+                System.out.println("호스트이미지 실제 파일 경로: " + hostupload);
 
                 String oname = f.getOriginalFilename();//실제파일명
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, upload);
+                String fname = FileRenameUtil.checkSameFileName(oname, hostupload);
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(upload);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
+                   // 실제 파일 업로드를 서비스로 위임
+                   String fileUrl = fileUploadService.uploadFile(f, "host", fname);
+                   System.out.println("파일 업로드 URL: " + fileUrl);
 
-                    // 파일 업로드(upload폴더에 저장)
-                    File hostFile = new File(uploadDir, fname);
-                    if (hostFile.exists()) {
-                        System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
-                        continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
-                    }
+                   ImageDTO imageDTO = new ImageDTO();
+                   imageDTO.setImgName(fvo);
+                   imageDTOList.add(imageDTO);
 
-                    f.transferTo(hostFile);
-
-                    ImageDTO imageDTO = new ImageDTO();
-                    imageDTO.setImgName(fvo);
-                    imageDTOList.add(imageDTO);
-
-                    String imageUrl = "/upload/host/" + fname;
-                    imageUrls.add(imageUrl);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -489,7 +481,7 @@ public class HostController {
 
         //html 에서 hostInfoCustomDTO 받아야함
         
-        return ResponseEntity.ok(imageUrls);
+        return ResponseEntity.ok("success");
     }
 
     @RequestMapping("/rulesreg")
@@ -519,40 +511,27 @@ public class HostController {
             for (MultipartFile f : images) {
             if (f != null && f.getSize() > 0) {
                 
-
-                System.out.println("룸이미지 실제 파일 경로: " + upload2);
+                String roomupload = upload + "room";
+                System.out.println("룸이미지 실제 파일 경로: " + roomupload);
 
                 String oname = f.getOriginalFilename();//실제파일명
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, upload2);
+                String fname = FileRenameUtil.checkSameFileName(oname, roomupload);
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(upload2);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    // 파일 업로드(upload폴더에 저장)
-                    File roomFile = new File(uploadDir, fname);
-                    if (roomFile.exists()) {
-                        System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
-                        continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
-                    }
-
-                    f.transferTo(roomFile);
-
+                    // 실제 파일 업로드를 서비스로 위임
+                    String fileUrl = fileUploadService.uploadFile(f, "room", fname);
+                    System.out.println("파일 업로드 URL: " + fileUrl);
+ 
                     ImageDTO imageDTO = new ImageDTO();
                     imageDTO.setImgName(fvo);
                     imageDTOList.add(imageDTO);
-
-                    String imageUrl = "/upload/room/" + fname;
-                    imageUrls.add(imageUrl);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+ 
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                 } 
             } 
             }
         }

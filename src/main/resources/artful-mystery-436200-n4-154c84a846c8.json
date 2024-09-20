@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "artful-mystery-436200-n4",
+  "private_key_id": "154c84a846c82da269d127d16b49e84527c832e9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQMdQ1GquzJL4A\nnHLrZeRvRGZ9DJ4JIZiQqv5tUuRehWs7wRhc0/WBFSSZF2lV3RtHHauBSS5HCCAl\nB4L/NDGzK/OZ00dwbJSnJvZ4eAJ672cx8ucpNSmMgLlF50o7EhpE5WOeom9pdrot\n+dS7fAUVMZatiZm/pcHwLh0ujbiI6Oagu51ifjKWh+rEUntg+h2jW5AOSNeK3uJs\nISqS14AOFfowxsKRmu6cuYbGgSXD//bg9FsS+nkQAnS6DOezJGZBlle3PMVlgB7j\n0ouGw2URQGM11BlIm6wCuW8eT97pO+cF4u2BLtSlq186/u2+3fNqEcFKtPgjTsLr\n39PZ80wtAgMBAAECggEAE0IcuVnReqWCLt/J8JTxC8rVuSkG4FzbdjxfAyFZDxZD\n3FfpB0MzEUDxrPihrYfhq1MnB3NLxNXPVWWLvEwpccO1yaulztQ4bvrXbz7YqeMF\n1nS75c+tW3oXyUvTDcJHrEpUy/qGGEkbgT+8KiiXdsWqxLw2/OeaGDvHxsPkx0Mr\nKLC1298bb5ys00FGHqs5vBV6JHEOY16P3qYXVjgzRjue+sFJg0/qsnPikChyq7AP\nGc3KHn2V277LVdC7n7TDiI+DQm5RST/qUwdfBHwmvbt8yTJAFtUo2A04qs6/+he3\nEOOufYdByc1s85Ucnlmk/LcBHXhFx1yR0RuYOUVMSQKBgQD4epDK00D9SIgG01qX\n/8I0yTY75H0p+8f/Cml42XYoYSsSPCLtZXU/s+vrnvz8oHEpN7FisEzIyBOpRQmh\noNibH+WJvnLQVTmaOTQXMlBdHJ/mXImxWjE0VYK2IQVy1xb0DRlyr/EJWmJklqfi\nMw7NKuuDztr64Gky4ALOqwR4hQKBgQDWfxsqCFIA266lNAMzPzW3v5Xuo4LR3jpR\ng/IImKQYc5t5zBF1DluhO5wfxXNXAQFTV2f8oM8j1gPM0Hdk7Af8RZ1YRc99mJ94\nM2uu5Xnk692J8UOt+XK57J3+bCeabxTM8MueDFcg4NbISLj28LFPrccowt/GUPnN\nwYCsbLOpiQKBgESWQGVcDrJbVQDdUkJmnIrJh6jclxgBoeDqVNbA3/aha6wq4VE6\nEjU1SsfNKPPqrZG9B7+//lHluFee8NumdGPNWCS/Zx3OiInjhFdq0fgBsLl7jZ5g\n0PgrKltvnftnF7Th8MZRfm0gf8xYMZskkM9dK4lEjfl1/FPItb2qQx+pAoGAKAIN\nTwm+Qeq36JiLAEQKAPv7O0fEXuDUf9/chT3zXZwyo8UsfGjxLmGv/T0XBmNpm+Hx\nw207NbP1gX5gxrI/yw4xCwX6bbLKC+GLdFPZKJnV+KTHuuuMOqGn1ozV1jhh6NgB\nIrmqhrdpWHI4DddXO0VuoGu40YTJE1fEaGTeHgECgYBVXXlyJlBVlr2kGyRMp/gn\nXweLvLphvDrll1P76+FufG+wVEZuE9RRJzf5H6EgZ6VEERp/1MMrP1ieNFU7vOzA\nq+Rnqm0YwMsn7pIGR61KWy6rlkIilsEO66hTcUhWzahDKnuG6UPSRBEaOxURZ9xg\n3lLYnCV2ZuEsQRMv5CtZFQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "springboot-storage-access@artful-mystery-436200-n4.iam.gserviceaccount.com",
+  "client_id": "116000255002696455451",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/springboot-storage-access%40artful-mystery-436200-n4.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
