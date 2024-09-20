@@ -45,7 +45,9 @@ spring:
       duration: 600
   thymeleaf:
     enums:
-      use-class-for-enum-values: true 
+      use-class-for-enum-values: true
+  jackson:
+    property-naming-strategy: LOWER_CAMEL_CASE
 decorator:
   datasource:
     p6spy:

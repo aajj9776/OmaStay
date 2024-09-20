@@ -6,6 +6,7 @@ import com.omakase.omastay.dto.custom.ResultAccommodationsDTO;
 import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.Price;
 import com.omakase.omastay.entity.QImage;
+import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.repository.*;
 import com.omakase.omastay.vo.StartEndVo;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import static com.omakase.omastay.entity.QHostInfo.hostInfo;
+import static com.omakase.omastay.entity.QImage.image;
 import static com.omakase.omastay.entity.QReview.review;
 import static com.omakase.omastay.entity.QRoomInfo.roomInfo;
 
@@ -58,17 +60,20 @@ public class FacilitiesService {
                 .map(tuple -> tuple.get(roomInfo.id))
                 .collect(Collectors.toList());
 
+        System.out.println("룸인포 키값만 가져오기=" + roomIdxs);
+
         // 검색어의 해당하는 리스트 중 해당 날짜 예약이 가능한 룸인포 키값과 호스트인포 키값 필터링(roomInfo.id 리스트)
         List<Tuple> availableHost = roomInfoRepository.dateFiltering(filterDTO.getStartEndDay(), roomIdxs);
 
         // 호스트 키값이랑 호텔 이름, x좌표, y좌표 가져오기(ResultAccommodationsDTO에 셋)
-        List<Tuple> hostInfos = roomInfoRepository.findHostIdsByRoomIds(roomIdxs);
+        List<Tuple> hostInfos = roomInfoRepository.findHostsByRoomIds(roomIdxs);
+
+        System.out.println("호스트 키값이랑 호텔 이름, x좌표, y좌표 가져오기=" + hostInfos);
 
         // 튜플에서 호스트 키값만 가져오기
         List<Integer> hostIds = hostInfos.stream()
                 .map(tuple -> tuple.get(hostInfo.id))
                 .collect(Collectors.toList());
-
 
         // 예약 가능한 룸 ID 추출
         Set<Integer> availableRoomIds = availableHost.stream()
@@ -110,7 +115,7 @@ public class FacilitiesService {
 
         // 3. 이미지 가져오기(ResultAccommodationsDTO에 셋)
         List<Tuple> imageNames = imageRepository.findImageNamesByHostIds(hostIds);
-        System.out.println("이미지 가져오기=" + imageNames);
+
 
         // ResultAccommodationsDTO 생성하여 필요한 데이터 세팅
         Map<Integer, ResultAccommodationsDTO> resultMap = new HashMap<>();
@@ -120,6 +125,7 @@ public class FacilitiesService {
             Integer hostId = hostInfoTuple.get(hostInfo.id);
             ResultAccommodationsDTO resultAccommodationsDTO = new ResultAccommodationsDTO();
             resultAccommodationsDTO.setHIdx(hostId);
+            resultAccommodationsDTO.setHCate(HCate.getHCateTypeInKorean(hostInfoTuple.get(hostInfo.hCate).ordinal()));
             resultAccommodationsDTO.setHName(hostInfoTuple.get(hostInfo.hname));
             resultAccommodationsDTO.setXAxis(hostInfoTuple.get(hostInfo.xAxis));
             resultAccommodationsDTO.setYAxis(hostInfoTuple.get(hostInfo.yAxis));
@@ -158,12 +164,12 @@ public class FacilitiesService {
         }
 
         // 4. 이미지 이름을 세팅
-        for (Tuple image : imageNames) {
-            Integer hostId = image.get(hostInfo.id);
+        for (Tuple imageTuple : imageNames) {
+            Integer hostId = imageTuple.get(hostInfo.id);
             ResultAccommodationsDTO resultAccommodationsDTO = resultMap.get(hostId);
 
             if (resultAccommodationsDTO != null) {
-                resultAccommodationsDTO.setImg_url(image.get(QImage.image.imgName.fName));
+                resultAccommodationsDTO.setImg_url(imageTuple.get(image.imgName.fName));
             }
         }
 
@@ -192,7 +198,7 @@ public class FacilitiesService {
         LocalDateTime checkIn = startEndDay.getStart();
         LocalDateTime checkOut = startEndDay.getEnd();
 
-        //가격 리스트를 순회하며 각 호스트의 평균가격을 계산하고, HostAvgPriceDTO 리스트로 변환
+        // 가격 리스트를 순회하며 각 호스트의 평균가격을 계산하고, HostAvgPriceDTO 리스트로 변환
         return priceList.stream()
                 .map(price -> {
                     Integer avgPrice = calculateAveragePrice(price, checkIn, checkOut);
@@ -210,31 +216,45 @@ public class FacilitiesService {
         // 체크인 날짜부터 체크아웃 날짜 전까지 순회
         while (!current.isEqual(checkOut)) {
             // 하루 가격을 계산하여 총 가격에 더한다
-            totalPrice += calculateDailyPrice(price, current);
+            int dailyPrice = calculateDailyPrice(price, current);
+            totalPrice += dailyPrice;
             current = current.plusDays(1); // 다음 날짜로 이동
             totalDays++; // 총 날짜 수 증가
         }
+
+        // totalDays가 0일 경우를 대비
+        if (totalDays == 0) {
+            return 0; // 예외 또는 기본값 설정 가능
+        }
+
 
         // 평균 가격을 계산하여 반환
         return totalPrice / totalDays;
     }
 
-
     private int calculateDailyPrice(Price price, LocalDateTime current) {
-        // 주어진 날짜가 피크 기간에 속하는지 여부를 확인하고, 해당하면 피크 가격을 반환합니다.
-        if (isWithinRange(current, price.getPeakVo().getPeakStart(), price.getPeakVo().getPeakEnd())) {
+        // 피크 가격 계산
+        if (price.getPeakVo() != null && isWithinRange(current, price.getPeakVo().getPeakStart(), price.getPeakVo().getPeakEnd())) {
             return price.getPeakVo().getPeakPrice();
-            // 피크 기간이 아니라면 세미 피크 기간에 속하는지 여부를 확인하고, 해당하면 세미 피크 가격을 반환합니다.
-        } else if (isWithinRange(current, price.getSemi().getSemiStart(), price.getSemi().getSemiEnd())) {
+        }
+        // 세미피크 가격 계산
+        else if (price.getSemi() != null && isWithinRange(current, price.getSemi().getSemiStart(), price.getSemi().getSemiEnd())) {
             return price.getSemi().getSemiPrice();
-            // 피크 기간이나 세미 피크 기간이 아닌 경우, 정규 가격을 반환합니다.
-        } else {
+        }
+        // 세미피크와 피크가 설정되지 않은 경우 정규 가격 반환
+        else {
             return price.getRegularPrice();
         }
     }
 
     private boolean isWithinRange(LocalDateTime current, LocalDateTime start, LocalDateTime end) {
-        // 날짜가 시작일과 같거나 시작일 이후이며, 종료일과 같거나 종료일 이전인지 확인합니다.
-        return (current.isEqual(start) || current.isAfter(start)) && (current.isEqual(end) || current.isBefore(end));
+        if (current == null) {
+            return false; // `current`가 null이면 범위에 포함되지 않음
+        }
+
+        boolean afterOrEqualStart = start == null || current.isEqual(start) || current.isAfter(start);
+        boolean beforeOrEqualEnd = end == null || current.isEqual(end) || current.isBefore(end);
+
+        return afterOrEqualStart && beforeOrEqualEnd;
     }
 }
