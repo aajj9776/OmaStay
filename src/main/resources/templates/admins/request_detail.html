@@ -5,11 +5,10 @@
 <head>
   <meta charset="UTF-8" />
   <style>
-    input{
+    input {
       border: 1px solid #dddddd;
       border-radius: 4px;
       padding: 5px;
-      readonly: true;
     }
   </style>
 </head>
@@ -37,33 +36,36 @@
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
           <label>숙소명 : </label>
-          <input type="text" th:value="${host.hostInfo.hname}" readonly/>
+          <input type="text" th:value="${host.hostInfo.hname}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>아이디 : </label>
-          <input type="text" />
+          <input type="text" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>담당자명 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hostContactInfo.contactName}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>담당자 이메일 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hostContactInfo.contactEmail}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>숙소 URL : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hurl}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>대표번호 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hphone}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>정산계좌 : </label>
-          <input type="text" placeholder="거래 은행" class="border-solid border-[1px] w-[150px]" />
-          <input type="text" placeholder="계좌 번호" class="border-solid border-[1px] w-[300px]" />
-          <input type="text" placeholder="예금주" class="border-solid border-[1px] w-[150px]" />
+          <input type="text" placeholder="거래 은행" class="border-solid border-[1px] w-[150px]"
+            th:value="${host.account.acBank}" readonly />
+          <input type="text" placeholder="계좌 번호" class="border-solid border-[1px] w-[300px]"
+            th:value="${host.account.acNum}" readonly />
+          <input type="text" placeholder="예금주" class="border-solid border-[1px] w-[150px]"
+            th:value="${host.account.acName}" readonly />
         </div>
       </div>
 
@@ -76,78 +78,91 @@
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
           <label>숙소명 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hname}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>숙소 유형 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo?.hCate?.description} ?: '알 수 없는 유형'" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>주소 : </label>
-          <input type="text" placeholder="우편번호" class="border-solid border-[1px] w-[150px]" />
-          <input type="text" placeholder="주소" class="border-solid border-[1px] w-[300px]" />
-          <input type="text" placeholder="상세주소" class="border-solid border-[1px] w-[300px]" />
+          <input type="text" placeholder="우편번호" class="border-solid border-[1px] w-[100px]" 
+            th:value="${host.hostInfo.addressVo.postCode}" readonly/>
+          <input type="text" placeholder="주소" class="border-solid border-[1px] w-[500px]" 
+            th:value="${host.hostInfo.addressVo.street}" readonly/>
+          <input type="text" placeholder="상세주소" class="border-solid border-[1px] w-[300px]" 
+            th:value="${host.hostInfo.addressVo.detail}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>호스트 이름 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hostOwnerInfo.hostName}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>호스트 소개 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[200px] w-[800px]" th:value="${host.hostInfo.hostOwnerInfo.hintro}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>편의시설 : </label>
           <div class="flex flex-col gap-[10px]">
             <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '주방/식당'])}"
+                readonly />
               <label>주방/식당</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '세탁기'])}" readonly />
               <label>세탁기</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '엘레베이터'])}"
+                readonly />
               <label>엘레베이터</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '주차장'])}" readonly />
               <label>주차장</label>
-            </div>
-            <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '와이파이'])}" readonly />
               <label>와이파이</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '욕실용품'])}" readonly />
               <label>욕실용품</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '에어컨'])}" readonly />
               <label>에어컨</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '냉장고'])}" readonly />
               <label>냉장고</label>
             </div>
             <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '욕조'])}" readonly />
               <label>욕조</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '드라이기'])}" readonly />
               <label>드라이기</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '금연'])}" readonly />
               <label>금연</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '반려동물동반'])}"
+                readonly />
               <label>반려동물동반</label>
-            </div>
-            <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '바베큐'])}" readonly />
               <label>바베큐</label>
-              <input type="checkbox" />
-              <label>객실내 취사</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '객실내취사'])}" readonly />
+              <label>객실내취사</label>
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '전자레인지'])}" readonly />
               <label>전자레인지</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == 'TV'])}" readonly />
               <label>TV</label>
             </div>
           </div>
         </div>
+
         <div class="flex flex-row gap-[16px]">
           <label>오시는 길 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.directions}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>업체 이미지 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <table>
+            <thead>
+
+            </thead>
+            <tbody>
+              <tr th:each="images : ${host.images}">
+                <td th:text="${images.imgName.fName}"></td>
+              </tr>
+            </tbody>
+            
+          </table>
         </div>
       </div>
 
@@ -159,27 +174,31 @@
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
           <label>체크인 시간 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.checkin}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>체크아웃 시간 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.checkout}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>성수기 : </label>
-          <input type="text" />
+          <input type="text" readonly/>
+          <label> ~ </label>
+          <input type="text" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>준성수기 : </label>
           <input type="text" />
+          <label> ~ </label>
+          <input type="text" />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>숙소 이용 규칙 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.rules}" readonly/>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>현장 요금 추가 정보 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.priceAdd}" readonly/>
         </div>
       </div>
 
@@ -190,8 +209,21 @@
       <div
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
-          <label>여기엔 객실 리스트 표가 들어가요 </label>
-          <input type="text" />
+          <table>
+            <thead >
+              <tr >
+                <th class="border-solid border-[1px] border-gray-300 p-[10px]">객실명</th>
+                <th class="border-solid border-[1px] border-gray-300 p-[10px]">객실타입</th>
+              </tr>
+            </thead>
+            <tbody >
+              <tr th:each="roomInfo : ${host.roomInfo}">
+                <td class="border-solid border-[1px] border-gray-300 p-[10px]" th:text="${roomInfo.roomName}"></td>
+                <td class="border-solid border-[1px] border-gray-300 p-[10px]" th:text="${roomInfo.roomType}"></td>
+              </tr>
+            </tbody>
+            
+          </table>
         </div>
       </div>
 
