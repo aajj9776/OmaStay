@@ -8,14 +8,17 @@ import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
+import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
 import com.omakase.omastay.entity.Account;
 import com.omakase.omastay.entity.AdminMember;
 import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.HostFacilities;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.Image;
+import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.HCate;
+import com.omakase.omastay.entity.enumurate.HStatus;
 import com.omakase.omastay.entity.enumurate.HStep;
 import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.mapper.AccountMapper;
@@ -23,16 +26,20 @@ import com.omakase.omastay.mapper.AdminMemberMapper;
 import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.ImageMapper;
+import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.AccountRepository;
 import com.omakase.omastay.repository.FacilitiesRepository;
 import com.omakase.omastay.repository.HostFacilitiesRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.ImageRepository;
+import com.omakase.omastay.repository.RoomInfoRepository;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
+import org.apache.tomcat.util.http.parser.Host;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +60,15 @@ public class HostInfoService {
 
     @Autowired
     private FacilitiesRepository facilitiesRepository;
+
+    @Autowired
+    private RoomInfoRepository roomInfoRepository;
+
+    public HostInfoDTO findHostInfoDTO(AdminMemberDTO adminMemberDTO) {
+        AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
+        HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
+        return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
+    }
 
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
@@ -102,6 +118,11 @@ public class HostInfoService {
             try {
                 accountDTO = AccountMapper.INSTANCE.toAccountDTO(account);
                 System.out.println(accountDTO);
+                if (account.getHostInfo() != null) {
+                    System.out.println(account.getHostInfo());
+                } else {
+                    System.out.println("HostInfo is null for the given account");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -127,8 +148,11 @@ public class HostInfoService {
         
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
 
-        hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
-        hostInfo.setHCate(hostInfoCustomDTO.getHostInfo().getHCate());
+        if(hostInfo.getHStep() == HStep.MYPAGE) {
+            hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
+        }
+        
+        hostInfo.setHCate(HCate.valueOf(hostInfoCustomDTO.getHostInfo().getHCate().name()));
         hostInfo.setRegion(hostInfoCustomDTO.getHostInfo().getRegion());
         hostInfo.setXAxis(hostInfoCustomDTO.getHostInfo().getXAxis());
         hostInfo.setYAxis(hostInfoCustomDTO.getHostInfo().getYAxis());
@@ -206,5 +230,75 @@ public class HostInfoService {
         hostInfoCustomDTO.setImages(imageDTO);
         
         return hostInfoCustomDTO;
+    }
+
+    public HostInfoDTO saverules(HostInfoDTO hostInfoDTO, AdminMemberDTO adminMemberDTO) {
+
+        AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
+        
+        HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
+
+        if(hostInfo.getHStep() == HStep.INFO) {
+            hostInfo.setHStep(HStep.RULE); // hStep을 2로 설정
+        }
+
+        hostInfo.setCheckin(hostInfoDTO.getCheckin());
+        hostInfo.setCheckout(hostInfoDTO.getCheckout());
+        hostInfo.setRules(hostInfoDTO.getRules());
+        hostInfo.setPriceAdd(hostInfoDTO.getPriceAdd());
+        hostInfoRepository.save(hostInfo);
+
+        return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
+    }
+
+    public void requestAdmin(HostInfoDTO hostInfoDTO) {
+
+        HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
+
+        hostInfo.setHStatus(HStatus.APPLY);
+
+        hostInfoRepository.save(hostInfo);
+    }
+
+
+
+    /* 관리자에서 쓰는 거 */
+    public List<HostInfoDTO> getAllHostInfos() {
+        List<HostInfo> hostInfos = hostInfoRepository.hostInfos();
+        return HostInfoMapper.INSTANCE.toHostInfoDTOList(hostInfos);
+    }
+
+    public HostRequestInfoDTO getHostRequestInfo(int id){
+        HostRequestInfoDTO hostRequestInfoDTO = new HostRequestInfoDTO();
+
+        HostInfo hostInfo = hostInfoRepository.findById(id);
+        System.out.println(hostInfo);
+        hostRequestInfoDTO.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo));
+
+        Account account = accountRepository.findByHostInfoId(hostInfo.getId());
+        System.out.println(account);
+        hostRequestInfoDTO.setAccount(AccountMapper.INSTANCE.toAccountDTO(account));
+
+        List<HostFacilitiesDTO> hostFacilities = hostFacilitiesRepository.findByHostInfoIdAndFacilities(hostInfo.getId());
+        System.out.println(hostFacilities);
+
+        List<Facilities> facilities = new ArrayList<>();
+
+        for(HostFacilitiesDTO hf : hostFacilities){
+            Facilities facility = facilitiesRepository.findById2(hf.getFIdx());
+            facilities.add(facility);
+        }
+        System.out.println(facilities);
+        hostRequestInfoDTO.setFacilities(FacilitiesMapper.INSTANCE.toFacilitiesDTOList(facilities));
+
+        List<RoomInfo> roomInfos = roomInfoRepository.findByHostInfo(hostInfo);
+        System.out.println(roomInfos);
+        hostRequestInfoDTO.setRoomInfo(RoomInfoMapper.INSTANCE.toRoomInfoDTOList(roomInfos)); 
+        
+        List<Image> images = imageRepository.findByHostInfoId(hostInfo.getId());
+        System.out.println(images);
+        hostRequestInfoDTO.setImages(ImageMapper.INSTANCE.toImageDTOList(images));
+
+        return hostRequestInfoDTO;
     }
 }

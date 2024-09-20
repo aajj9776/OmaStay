@@ -11,10 +11,17 @@ import com.omakase.omastay.repository.custom.IssuedCouponRepositoryCustom;
 
 public interface IssuedCouponRepository extends JpaRepository<IssuedCoupon, Integer>, IssuedCouponRepositoryCustom {
 
+    boolean existsByIcCode(String icCode);
+
+    @Query("SELECT ic FROM IssuedCoupon ic WHERE ic.coupon.id = :cp_idx")
+    List<IssuedCoupon> findByCouponId(@Param("cp_idx") Integer cp_idx);
+
+    
     @Query("SELECT ic FROM IssuedCoupon ic " +
     "JOIN ic.coupon c " +
     "WHERE ic.member.id = :memberId " +
     "AND c.cpStartEnd.end > CURRENT_DATE " +
     "AND ic.icStatus = UNUSED")
     List<IssuedCoupon> findValidCouponsByMemberId(@Param("memberId") int memberId);
+
 }
