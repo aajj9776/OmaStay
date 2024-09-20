@@ -42,9 +42,6 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepositoryCustom memberRepositoryCustom;
-
-    @Autowired
     private GradeRepository gradeRepository;
 
     @Autowired

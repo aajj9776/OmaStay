@@ -70,6 +70,10 @@
       <input type="hidden" id="paymentKey" name="paymentKey" value="" />
     </form>
 
+    <form action="/coupon/use" id="updateCoupon" method="post">
+      <input type="hidden" id="couponId" name="id" value="" />
+    </form>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -85,6 +89,7 @@
       const payStatus = urlParams.get("payStatus");
       const resEmail = urlParams.get("resEmail");
       const resName = urlParams.get("resName");
+      const couponId = urlParams.get("couponId");
 
       let pay_method;
       let pay_content;
@@ -166,7 +171,20 @@
           window.location.href = `/reservation/payment_fail`;
         } else {
           sendData(); // 결제 성공 시 sendData 호출
+          sendCoupon(); // 쿠폰 사용 시 sendCoupon 호출
         }
+      }
+
+      function sendCoupon() {
+        $.ajax({
+          url: "/coupon/use",
+          type: "POST",
+          data: {
+            id: couponId,
+          },
+        }).done(function (data) {
+          console.log(data);
+        });
       }
     </script>
   </body>
