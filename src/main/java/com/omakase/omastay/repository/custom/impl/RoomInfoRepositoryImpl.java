@@ -1,7 +1,14 @@
 package com.omakase.omastay.repository.custom.impl;
 
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.entity.HostInfo;
+import com.omakase.omastay.entity.RoomInfo;
+import com.omakase.omastay.entity.Service;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
+import com.omakase.omastay.entity.enumurate.RoomStatus;
+import com.omakase.omastay.entity.enumurate.SCate;
+import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.repository.custom.RoomInfoRepositoryCustom;
 import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.BooleanBuilder;
@@ -87,5 +94,34 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
         LocalDateTime end = startEndDay.getEnd().minusDays(1).withHour(23).withMinute(59).withSecond(59);
 
         return reservation.startEndVo.start.goe(end).or(reservation.startEndVo.end.loe(start));
+    }
+
+    @Override
+    public List<RoomInfo> searchRoom(String type, String keyword, HostInfo hostInfo) {
+        return queryFactory.selectFrom(roomInfo)
+                .where(
+                    containsKeyword(type, keyword),
+                    roomInfo.hostInfo.eq(hostInfo),
+                    roomInfo.roomStatus.eq(BooleanStatus.TRUE)
+                )
+                .orderBy(roomInfo.id.desc())
+                .fetch();
+    }
+
+    private BooleanExpression containsKeyword(String type, String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return null;
+        }
+        switch (type) {
+            case "all":
+                return roomInfo.roomName.contains(keyword)
+                        .or(roomInfo.roomType.contains(keyword));
+            case "roomType":
+                return roomInfo.roomType.contains(keyword);
+            case "roomName":
+                return roomInfo.roomName.contains(keyword);
+            default:
+                return null;
+        }
     }
 }

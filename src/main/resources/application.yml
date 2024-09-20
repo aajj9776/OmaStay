@@ -43,6 +43,13 @@ spring:
       host: 18.116.238.9
       port: 6379
       duration: 600
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          location: classpath:artful-mystery-436200-n4-154c84a846c8.json
+        project-id: artful-mystery-436200-n4
+        bucket: omastay
   thymeleaf:
     enums:
       use-class-for-enum-values: true 
@@ -53,3 +60,4 @@ decorator:
 custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
+upload: https://storage.googleapis.com/omastay/   
