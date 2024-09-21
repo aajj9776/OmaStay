@@ -2,16 +2,27 @@ package com.omakase.omastay.controller;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,20 +34,30 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.RoomStatus;
+import com.omakase.omastay.entity.enumurate.SCate;
+import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
+import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.RoomInfoService;
+import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
 
+import io.jsonwebtoken.io.IOException;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +82,12 @@ public class HostController {
 
     @Autowired
     private RoomInfoService roomInfoService;
+
+    @Autowired
+    private FileUploadService fileUploadService;
+
+    @Autowired
+    private ServiceService serviceService;
     
     private final EmailService emailService;
 
@@ -69,10 +96,12 @@ public class HostController {
 
     @Autowired
     private HttpServletRequest request;
-    
-    private String upload = "/upload/host";
 
-    private String upload2 = "/upload/room";
+    @Autowired
+    private ServletContext application;
+
+    @Value("${upload}")
+    private String upload;
 
     @RequestMapping("/login")
     public String host() {
@@ -419,12 +448,10 @@ public class HostController {
     }
 
     @RequestMapping("/hostinforeg")
-    public ResponseEntity<List<String>> hostinforeg(@RequestPart("hostInfoCustomDTO") HostInfoCustomDTO hostInfoCustomDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+    public ResponseEntity<String> hostinforeg(@RequestPart("hostInfoCustomDTO") HostInfoCustomDTO hostInfoCustomDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         System.out.println(hostInfoCustomDTO.getHostInfo().getYAxis());
         System.out.println(hostInfoCustomDTO.getImages().size());
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
-
-        List<String> imageUrls = new ArrayList<>();
 
         // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
         String c_type = request.getContentType();
@@ -433,33 +460,25 @@ public class HostController {
             if (images != null) {
             for (MultipartFile f : images) {
             if (f != null && f.getSize() > 0) {
-                String realPath = request.getServletContext().getRealPath(upload);
+                
+                String hostupload = upload + "host";
+                System.out.println("호스트이미지 실제 파일 경로: " + hostupload);
 
                 String oname = f.getOriginalFilename();//실제파일명
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, realPath);
+                String fname = FileRenameUtil.checkSameFileName(oname, hostupload);
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(realPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
+                   // 실제 파일 업로드를 서비스로 위임
+                   String fileUrl = fileUploadService.uploadFile(f, "host", fname);
+                   System.out.println("파일 업로드 URL: " + fileUrl);
 
-                    // 파일 업로드(upload폴더에 저장)
-                    File hostFile = new File(uploadDir, fname);
-                    if (hostFile.exists()) {
-                        System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
-                        continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
-                    }
+                   ImageDTO imageDTO = new ImageDTO();
+                   imageDTO.setImgName(fvo);
+                   imageDTOList.add(imageDTO);
 
-                    ImageDTO imageDTO = new ImageDTO();
-                    imageDTO.setImgName(fvo);
-                    imageDTOList.add(imageDTO);
-
-                    String imageUrl = "/upload/host/" + fname;
-                    imageUrls.add(imageUrl);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -474,7 +493,7 @@ public class HostController {
 
         //html 에서 hostInfoCustomDTO 받아야함
         
-        return ResponseEntity.ok(imageUrls);
+        return ResponseEntity.ok("success");
     }
 
     @RequestMapping("/rulesreg")
@@ -503,37 +522,28 @@ public class HostController {
             if (images != null) {
             for (MultipartFile f : images) {
             if (f != null && f.getSize() > 0) {
-                String realPath = request.getServletContext().getRealPath(upload2);
+                
+                String roomupload = upload + "room";
+                System.out.println("룸이미지 실제 파일 경로: " + roomupload);
 
                 String oname = f.getOriginalFilename();//실제파일명
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, realPath);
+                String fname = FileRenameUtil.checkSameFileName(oname, roomupload);
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(realPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    // 파일 업로드(upload폴더에 저장)
-                    File roomFile = new File(uploadDir, fname);
-                    if (roomFile.exists()) {
-                        System.out.println("파일 이름이 중복되어 업로드를 중단합니다: " + fname);
-                        continue; // 중복된 파일이 있으면 업로드를 중단하고 다음 파일로 넘어갑니다.
-                    }
-
+                    // 실제 파일 업로드를 서비스로 위임
+                    String fileUrl = fileUploadService.uploadFile(f, "room", fname);
+                    System.out.println("파일 업로드 URL: " + fileUrl);
+ 
                     ImageDTO imageDTO = new ImageDTO();
                     imageDTO.setImgName(fvo);
                     imageDTOList.add(imageDTO);
-
-                    String imageUrl = "/upload/room/" + fname;
-                    imageUrls.add(imageUrl);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+ 
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                 } 
             } 
             }
         }
@@ -562,5 +572,172 @@ public class HostController {
 
         mv.setViewName("host/host_main");
         return mv;
+    }
+
+    // 룸 전체 리스트
+    @RequestMapping("/roomlist/getList")
+    @ResponseBody
+    public Map<String, Object> roomlist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<RoomInfoDTO> list = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 룸 검색
+    @RequestMapping("/roomlist/search")
+    @ResponseBody
+    public Map<String, Object> roomsearch(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+                System.out.println("룸서치 왔다");
+                System.out.println("type:"+type);
+                System.out.println("keyword:"+keyword);
+
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<RoomInfoDTO> list = roomInfoService.searchRoom(type, keyword, hostInfoDTO);
+
+        System.out.println("컨트롤러리스트:"+list);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 게시물 삭제하기
+    @ResponseBody
+    @RequestMapping("/roomlist/delete")
+    public Map<String, Object> roomdelete(@RequestParam("ids") List<Integer> ids) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        int cnt = roomInfoService.deleteRoom(ids);
+        System.out.println("삭제 완료 개수 : " + cnt);
+
+        map.put("cnt", cnt);
+
+        return map;
+    }
+
+    // 룸 상세보기
+    @RequestMapping(value = "/roomlist/view", method = RequestMethod.GET)
+    public ModelAndView roomdetail(@RequestParam("id") String id) {
+
+        ModelAndView mv = new ModelAndView();
+        
+        if (id != null) {
+            RoomInfoDTO room = roomInfoService.getRoom(Integer.parseInt(id));
+            mv.addObject("room", room);
+        }
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            PriceDTO priceDTO = priceService.findPriceDTO(hostInfoDTO);
+            mv.addObject("hostInfoDTO", hostInfoDTO);  
+            mv.addObject("priceDTO", priceDTO);  
+
+            // hCate 값을 추출하여 문자열로 변환
+            if (hostInfoDTO.getHCate() != null) {
+                mv.addObject("hCate", hostInfoDTO.getHCate().name());
+            }
+
+
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi().getSemiStart() != null) {
+                mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
+            }
+
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo().getPeakStart() != null) {
+                mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
+            }
+
+        mv.setViewName("host/host_roomchange");
+        return mv;
+    }
+
+    // 호스트 공지사항 전체 리스트
+    @RequestMapping("/noticelist/getList")
+    @ResponseBody
+    public Map<String, Object> noticelist() {
+        Map<String, Object> map = new HashMap<>();
+
+        List<ServiceDTO> list = serviceService.getAllServices(SCate.NOTICE, UserAuth.HOST);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 호스트 공지사항 검색
+    @RequestMapping("/noticelist/search")
+    @ResponseBody
+    public Map<String, Object> noticesearch(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        List<ServiceDTO> list = serviceService.searchHostNotice(type, keyword, UserAuth.HOST, SCate.NOTICE);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    @RequestMapping(value = "noticelist/view", method = RequestMethod.GET)
+    public ModelAndView noticedetail(@RequestParam("id") String id) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("host/host_noticedetail");
+        
+        if (id != null) {
+            ServiceDTO sDto = serviceService.getServices(Integer.parseInt(id));
+            mv.addObject("sDto", sDto);
+        }
+
+        return mv;
+    }
+
+    // 파일 다운로드
+    @RequestMapping(value = "/fileDownload", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> fileDownload(@RequestParam("fName") String fName)
+            throws FileNotFoundException, UnsupportedEncodingException {
+
+        String realPath = application.getRealPath(upload);
+
+        // 전체경로를 만들어서 File객체 생성
+        String fullPath = realPath + System.getProperty("file.separator") + fName;
+        File file = new File(fullPath);
+
+        if (!file.exists() || !file.isFile()) {
+            throw new IOException("File not found");
+        }
+        FileInputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        InputStreamResource resource = new InputStreamResource(bis);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment;filename=" + new String(fName.getBytes("UTF-8"), "ISO-8859-1"));
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream;charset=8859_1");
+        headers.add(HttpHeaders.CONTENT_ENCODING, "binary");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 }

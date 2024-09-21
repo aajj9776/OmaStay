@@ -148,7 +148,10 @@ public class HostInfoService {
         
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
 
-        hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
+        if(hostInfo.getHStep() == HStep.MYPAGE) {
+            hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
+        }
+        
         hostInfo.setHCate(HCate.valueOf(hostInfoCustomDTO.getHostInfo().getHCate().name()));
         hostInfo.setRegion(hostInfoCustomDTO.getHostInfo().getRegion());
         hostInfo.setXAxis(hostInfoCustomDTO.getHostInfo().getXAxis());
@@ -235,7 +238,10 @@ public class HostInfoService {
         
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
 
-        hostInfo.setHStep(HStep.RULE); // hStep을 2로 설정
+        if(hostInfo.getHStep() == HStep.INFO) {
+            hostInfo.setHStep(HStep.RULE); // hStep을 2로 설정
+        }
+
         hostInfo.setCheckin(hostInfoDTO.getCheckin());
         hostInfo.setCheckout(hostInfoDTO.getCheckout());
         hostInfo.setRules(hostInfoDTO.getRules());

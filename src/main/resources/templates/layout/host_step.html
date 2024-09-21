@@ -34,31 +34,43 @@
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      document.addEventListener('htmx:afterOnLoad', function(evt) {
-        // 비동기 요청 후 스타일 재적용
+      function applyStyles() {
         var currentPath = window.location.pathname;
 
         if (currentPath.includes("/host/mypage")) {
-          $("#mypage-link img").css("background-color", "#2196f3");
+          $("#mypage-link img").css("background-color", "#2196f3 !important");
         } else if (currentPath.includes("/host/info")) {
-          $("#info-link img").css("background-color", "#2196f3");
+          $("#info-link img").css("background-color", "#2196f3 !important");
         } else if (currentPath.includes("/host/rules")) {
-          $("#rules-link img").css("background-color", "#2196f3");
+          $("#rules-link img").css("background-color", "#2196f3 !important");
         } else if (currentPath.includes("/host/roomlist")) {
-          $("#room-link img").css("background-color", "#2196f3");
+          $("#room-link img").css("background-color", "#2196f3 !important");
         } else if (currentPath.includes("/host/roomchange")) {
-          $("#room-link img").css("background-color", "#2196f3");
+          $("#room-link img").css("background-color", "#2196f3 !important");
         } else if (currentPath.includes("/host/roomreg")) {
-          $("#room-link img").css("background-color", "#2196f3");
+          $("#room-link img").css("background-color", "#2196f3 !important");
         }
-        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown'))
+
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown'));
         var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-          return new    
-        bootstrap.Dropdown(dropdownToggleEl   
-        ) 
-        })
+          return new bootstrap.Dropdown(dropdownToggleEl);
+        });
+      }
+
+      document.addEventListener('htmx:afterOnLoad', function(evt) {
+        console.log('htmx:afterOnLoad event triggered');
+        applyStyles();
       });
 
+      document.addEventListener('htmx:afterSwap', function(evt) {
+        console.log('htmx:afterSwap event triggered');
+        applyStyles();
+      });
+
+      // 페이지 로드 시에도 스타일 적용
+      $(document).ready(function() {
+        applyStyles();
+      });
     </script>
   </body>
 </html>
