@@ -14,7 +14,7 @@ public interface IssuedCouponMapper {
 
     @Mapping(source = "member.id", target = "MIdx")
     @Mapping(source = "coupon.id", target = "cpIdx")
-    IssuedCouponDTO ㅡ드toIssuedCouponDTO(IssuedCoupon issuedCoupon);
+    IssuedCouponDTO toIssuedCouponDTO(IssuedCoupon issuedCoupon);
 
     @Mapping(source = "MIdx", target = "member.id")
     @Mapping(source = "cpIdx", target = "coupon.id")

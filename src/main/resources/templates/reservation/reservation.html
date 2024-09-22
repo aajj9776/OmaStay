@@ -186,17 +186,17 @@
               >
                 <input
                   class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
-                  placeholder="쿠폰 입력"
+                  placeholder="쿠폰"
                   type="text"
                   id="coupon_input"
                 />
               </div>
               <button
                 id="couponButton"
-                class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
+                class="open-modal w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
               >
                 <div
-                  class="open-modal text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center shrink-0"
+                  class="text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center shrink-0"
                 >
                   쿠폰 조회
                 </div>
@@ -207,7 +207,10 @@
                 id="couponModal"
               >
                 <!-- Modal Content -->
-                <div class="bg-white rounded-lg w-80 p-5">
+                <div
+                  class="bg-white rounded-lg p-5 flex flex-col"
+                  style="width: 380px; height: 500px"
+                >
                   <!-- Modal Header -->
                   <div class="flex justify-between items-center border-b pb-3">
                     <h2 class="text-lg font-semibold text-black">쿠폰 적용</h2>
@@ -220,42 +223,34 @@
                   </div>
 
                   <!-- Coupon List -->
-                  <div class="mt-4">
-                    <h3 class="font-semibold mb-2 text-black">일반 쿠폰 1장</h3>
-                    <div class="border rounded-md">
+                  <div
+                    class="mt-4 flex-1 overflow-y-auto"
+                    style="max-height: 300px"
+                  >
+                    <h3 class="font-semibold mb-2 text-black">일반 쿠폰</h3>
+                    <div class="border rounded-md mb-1">
                       <!-- No Coupon Option -->
                       <label class="flex items-center p-3 border-b text-black">
                         <input
                           type="radio"
                           name="coupon"
                           class="mr-2 text-blue-600"
+                          value="0"
                           checked
                         />
                         적용안함
                       </label>
-                      <!-- Coupon Option -->
-                      <label class="flex items-center p-3 text-black">
-                        <input
-                          type="radio"
-                          name="coupon"
-                          class="mr-2 text-blue-600"
-                        />
-                        <span>
-                          2,000원<br />
-                          <span class="text-black text-sm"
-                            >선착순 마감 전까지 오늘만 사용 가능</span
-                          >
-                        </span>
-                      </label>
                     </div>
+                    <div id="modal"></div>
                   </div>
 
                   <!-- Apply Button -->
                   <div class="mt-5">
                     <button
+                      id="couponBtn"
                       class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
                     >
-                      0원 적용하기
+                      적용하기
                     </button>
                   </div>
                 </div>
@@ -266,10 +261,13 @@
           <div
             class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
           >
+            <div th:each="c : ${coupon}">
+              <span th:text="${c.coupon.id} + '원'"></span>
+            </div>
             <div
               class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
             >
-              상품권
+              포인트
             </div>
             <div
               class="self-stretch flex flex-row items-start justify-start gap-[4px]"
@@ -279,9 +277,10 @@
               >
                 <input
                   class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
-                  placeholder="상품권 입력"
+                  placeholder="포인트"
                   type="text"
                   id="point_input"
+                  readonly
                 />
               </div>
               <button
@@ -439,7 +438,7 @@
                       type="text"
                       id="sale_price"
                       class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[20px] leading-[24px] text-[#f45858] mq450:text-[16px] mq450:leading-[19px]"
-                      value="0"
+                      value="50000"
                       readonly
                     />
                     <b
@@ -484,21 +483,101 @@
       let timerExpired = false;
       let login = localStorage.getItem("isLogin") === "true";
       let user = JSON.parse(localStorage.getItem("user"));
+      let couponId;
+      let couponData;
+      let totalPrice;
+      let couponCheck = false;
 
       function userInfo() {
+        console.log("하이");
         $.ajax({
-          url: "/reservation",
-          type: "GET",
+          url: "/reservation/coupon",
+          type: "POST",
           data: {
             id: user.id,
           },
-        }).done(function (data) {});
+        }).done(function (data) {
+          let coupon = $("#modal");
+          let couponList = "";
+          couponData = {};
+          let couponBtn = $("#couponBtn");
+          let couponIdx;
+
+          for (let i = 0; i < data.coupon.length; i++) {
+            console.log(data.coupon[i]);
+            couponIdx = data.coupon[i].id;
+            couponData = data.coupon[i].coupon;
+            couponList += `
+                        <div class="mb-1"> <!-- 항목 간의 간격 -->
+                          <label class="flex items-start p-3 border rounded-lg shadow-sm text-black">
+                              <input
+                                  id="coupon"
+                                  type="radio"
+                                  name="coupon"
+                                  class="mr-2 text-blue-600"
+                                  value="${couponIdx}"
+                              />
+                              <div>
+                                  <span class="block font-semibold">${
+                                    couponData.cpContent
+                                  }</span>
+                                 <span>${
+                                   couponData.cpCate === "PERCENT"
+                                     ? `${couponData.cpSale}% 할인`
+                                     : `${couponData.cpSale}원 할인`
+                                 }</span>
+                              </div>
+                          </label>
+                      </div>`;
+          }
+          coupon.html(couponList);
+
+          couponBtn.click(function () {
+            couponId = $("input[name='coupon']:checked").val();
+            console.log(couponId);
+            $("#coupon_input").val(couponData.cpContent);
+
+            $("#couponModal").addClass("hidden");
+            $("body").removeClass("overflow-hidden");
+            couponCheck = true;
+            changePrice();
+          });
+        });
+      }
+
+      function changePrice() {
+        let price = parseInt($("#sale_price").val()); // 입력된 가격을 숫자로 변환
+        let couponPrice = 0; // 초기 쿠폰 할인 금액 설정
+
+        console.log(couponData.cpCate);
+        if (couponData.cpCate === "PERCENT") {
+          couponPrice = price * (couponData.cpSale / 100); // 퍼센트 할인 계산
+        } else if (couponData.cpCate === "AMOUNT") {
+          couponPrice = parseInt(couponData.cpSale); // 정액 할인 계산
+        }
+        console.log(price);
+        console.log(couponPrice);
+
+        // 최종 결제 금액 계산
+        totalPrice = price - couponPrice;
+
+        // 최소 결제 금액이 0 미만이 되지 않도록 처리
+        if (totalPrice < 0) {
+          totalPrice = 0;
+        }
+
+        // 총 결제 금액을 readonly 필드에 업데이트
+        $("#sale_price").val(totalPrice);
       }
 
       $(function () {
-        userInfo();
         // Open Modal
         $(".open-modal").click(function () {
+          if (couponCheck) {
+            alert("이미 쿠폰을 적용하셨습니다.");
+            return;
+          }
+          userInfo();
           $("#couponModal").removeClass("hidden");
           $("body").addClass("overflow-hidden");
         });
@@ -664,7 +743,7 @@
           method: "CARD", // 카드 결제
           amount: {
             currency: "KRW",
-            value: 50000,
+            value: totalPrice, // 결제 금액
           },
           orderId: orderNumber, // 고유 주분번호
           orderName: "한별이~^^", //방이름
@@ -673,7 +752,9 @@
             "/reservation/payment_success?resName=" +
             encodeURIComponent(resName) +
             "&resEmail=" +
-            encodeURIComponent(resEmail), // 결제 요청이 성공하면 리다이렉트되는 URL
+            encodeURIComponent(resEmail) +
+            "&couponId=" +
+            encodeURIComponent(couponId), // 결제 요청이 성공하면 리다이렉트되는 URL
           failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
           customerEmail: resEmail, //회원 이메일
           customerName: resName, //회원이름

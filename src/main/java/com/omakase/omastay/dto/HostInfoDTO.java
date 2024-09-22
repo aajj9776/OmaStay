@@ -1,5 +1,6 @@
 package com.omakase.omastay.dto;
 
+import com.omakase.omastay.entity.AdminMember;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;
@@ -19,6 +20,7 @@ import lombok.Setter;
 public class HostInfoDTO {
     private Integer id;
     private Integer adIdx;
+    private AdminMember adminMember = new AdminMember();
     private AddressVo addressVo = new AddressVo();
     private String region;
     private HCate hCate; // 추가된 필드

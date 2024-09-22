@@ -15,6 +15,7 @@ public class IssuedCouponDTO {
     private IcStatus icStatus;
     private String icCode;
     private String icNone;
+    private CouponDTO coupon;
 
     public IssuedCouponDTO(IssuedCoupon issuedCoupon) {
         this.id = issuedCoupon.getId();
@@ -23,6 +24,7 @@ public class IssuedCouponDTO {
         this.icStatus = issuedCoupon.getIcStatus();
         this.icCode = issuedCoupon.getIcCode();
         this.icNone = issuedCoupon.getIcNone();
+        this.coupon = issuedCoupon.getCoupon() != null ? new CouponDTO(issuedCoupon.getCoupon()) : null;
     }
 
     @QueryProjection

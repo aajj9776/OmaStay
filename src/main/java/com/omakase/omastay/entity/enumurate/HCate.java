@@ -6,10 +6,20 @@ public enum HCate {
     * 풀빌라
     * 게하/한옥
     * */
-    MOTEL,
-    HOTEL_RESORT,
-    POOL_VILLA,
-    GUESTHOUSE_HANOK;
+    MOTEL("모텔"),
+    HOTEL_RESORT("호텔/리조트"),
+    POOL_VILLA("풀빌라"),
+    GUESTHOUSE_HANOK("게하/한옥");
+
+    private final String description;
+
+    HCate(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     public static String getHCateTypeInKorean(int typeIndex) {
         // 숫자를 Enum으로 변환
@@ -24,4 +34,5 @@ public enum HCate {
             default -> throw new IllegalArgumentException("Unknown accommodation type index: " + typeIndex);
         };
     }
+
 }

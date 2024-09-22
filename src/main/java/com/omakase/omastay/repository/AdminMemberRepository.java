@@ -12,4 +12,5 @@ public interface AdminMemberRepository extends JpaRepository<AdminMember, Intege
     int countByAdId(String adId);
 
     AdminMember findByAdId(String adId);
+
 }
