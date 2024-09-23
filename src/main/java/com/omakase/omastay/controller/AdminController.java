@@ -13,12 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,22 +31,27 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.InquiryDTO;
 import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PointDTO;
+import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
+import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.CouponService;
 import com.omakase.omastay.service.HostInfoService;
+import com.omakase.omastay.service.ImageService;
 import com.omakase.omastay.service.InquiryService;
 import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.MemberService;
 import com.omakase.omastay.service.PointService;
+import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -75,6 +83,9 @@ public class AdminController {
     PointService ps;
 
     @Autowired
+    PriceService prs;
+
+    @Autowired
     MemberService ms;
 
     @Autowired
@@ -84,10 +95,16 @@ public class AdminController {
     HostInfoService hs;
 
     @Autowired
+    ImageService ims;
+
+    @Autowired
     private ServletContext application;
 
     @Autowired
     private HttpServletRequest request;
+
+    @Value("${upload}")
+    private String storage;
 
     @RequestMapping("/login")
     public String login() {
@@ -119,14 +136,27 @@ public class AdminController {
         System.out.println(host);
         
         mv.addObject("host", host);
+        mv.addObject("storage", storage);
         mv.setViewName("admins/request_detail");
         return mv;
     }
 
-    @RequestMapping("/request_room")
-    public String request_room() {
-        return "admins/modals/request_room";
+    @ResponseBody
+    @RequestMapping("/request/roomPrice")
+    public Map<String, Object> request_room(@RequestParam("roomId") String roomId) {
+        Map<String, Object> map = new HashMap<>();
+
+        PriceDTO price = prs.getPrice(Integer.parseInt(roomId));
+
+        map.put("price", price);
+
+        List<ImageDTO> images = ims.getImages(Integer.parseInt(roomId));
+
+        map.put("images", images);
+
+        return map;
     }
+
     /************************ 입점 요청 끝 ************************/
     @RequestMapping("/payment")
     public String payment() {
