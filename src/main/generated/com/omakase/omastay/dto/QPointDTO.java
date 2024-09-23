@@ -13,8 +13,8 @@ public class QPointDTO extends ConstructorExpression<PointDTO> {
 
     private static final long serialVersionUID = 519612288L;
 
-    public QPointDTO(com.querydsl.core.types.Expression<Integer> id, com.querydsl.core.types.Expression<Integer> memIdx, com.querydsl.core.types.Expression<Integer> pSum, com.querydsl.core.types.Expression<Integer> pValue, com.querydsl.core.types.Expression<java.time.LocalDateTime> pDate) {
-        super(PointDTO.class, new Class<?>[]{int.class, int.class, int.class, int.class, java.time.LocalDateTime.class}, id, memIdx, pSum, pValue, pDate);
+    public QPointDTO(com.querydsl.core.types.Expression<Integer> id, com.querydsl.core.types.Expression<Integer> memIdx, com.querydsl.core.types.Expression<Integer> pSum, com.querydsl.core.types.Expression<Integer> pValue, com.querydsl.core.types.Expression<java.time.LocalDateTime> pDate, com.querydsl.core.types.Expression<String> pContent) {
+        super(PointDTO.class, new Class<?>[]{int.class, int.class, int.class, int.class, java.time.LocalDateTime.class, String.class}, id, memIdx, pSum, pValue, pDate, pContent);
     }
 
 }
