@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" layout:decorate="~{layout/main}"
+      layout:fragment="main"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
-    <link rel="stylesheet" href="/css/component/slider.css">
+    <link href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css" rel="stylesheet">
+    <link href="/css/component/slider.css" rel="stylesheet">
 </head>
 <body>
 <div
@@ -53,14 +53,9 @@
                             <div
                                     class="self-stretch overflow-hidden flex flex-row items-start justify-start py-[0px] pl-[0px] [row-gap:20px] mq450:pr-[20px] mq450:box-border mq750:flex-wrap mq750:pr-[267px] mq750:box-border"
                             >
-                                <h3
-                                        class="m-[0px] w-max relative text-[24px] font-bold font-[inherit] flex items-center mq450:text-[19px] mq750:w-full mq750:h-[9px]"
-                                >
-                                    '
-                                    <span id="keyword_value"></span>
-                                    ' 숙소
-                                    <span th:text="${resultAccommodations.size()}"></span>
-                                    개
+                                <h3 class="m-[0px] w-max relative text-[24px] font-bold font-[inherit] flex items-center mq450:text-[19px] mq750:w-full mq750:h-[9px]">
+                                    '<span id="keyword_value"></span>' 검색 결과&nbsp;
+                                    <span th:text="${resultAccommodations.size()} + '개'"></span>
                                 </h3>
                             </div>
                         </div>
@@ -68,27 +63,27 @@
                                 class="flex flex-col items-start justify-start text-[15px]"
                         >
 
-                                <div id="dropdown-filter"
-                                        class="dropdown pr-[9px] min-w-[41.48px]"
-                                >
-                                    <button id="dropdown-filter-button"
-                                            class="btn btn-light dropdown-toggle w-[100%]"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false" value="rating">
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li value="rating"><p class="dropdown-item">평점높은순</p></li>
-                                        <li value="review"><p class="dropdown-item">리뷰많은순</p></li>
-                                        <li value="lowPrice"><p class="dropdown-item">낮은가격순</p></li>
-                                        <li value="highPrice"><p class="dropdown-item">높은가격순</p></li>
-                                    </ul>
-                                </div>
+                            <div class="dropdown pr-[9px] min-w-[41.48px]"
+                                 id="dropdown-filter"
+                            >
+                                <button aria-expanded="false"
+                                        class="btn btn-light dropdown-toggle w-[100%]"
+                                        data-bs-toggle="dropdown" id="dropdown-filter-button" type="button" value="rating">
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li value="rating"><p class="dropdown-item">평점높은순</p></li>
+                                    <li value="review"><p class="dropdown-item">리뷰많은순</p></li>
+                                    <li value="lowPrice"><p class="dropdown-item">낮은가격순</p></li>
+                                    <li value="highPrice"><p class="dropdown-item">높은가격순</p></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div
-                            class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid box-border flex flex-col items-start justify-start pt-[20px] px-[0px] pb-[19px] max-w-full cursor-pointer"
+                            class="self-stretch bg-[#fff] border-solid box-border flex flex-col items-start justify-start px-[0px] pb-[19px] max-w-full cursor-pointer"
                             id="cardWrapperContainer">
-                        <div
-                                class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap"
+                        <div id="card"
+                                class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]"
                         >
                             <div
                                     class="h-[240px] w-[396px] flex flex-col items-start justify-center min-w-[396px] max-w-full mq750:flex-1 mq750:min-w-full"
@@ -100,8 +95,8 @@
                                         src="https://storage.googleapis.com/omastay/host/Frame 1422.jpg"
                                 />
                             </div>
-                            <div
-                                    class="flex-1 overflow-hidden flex flex-col items-start justify-between py-[0px] pl-[20px] pr-[0px] box-border min-w-[315px] min-h-[240px] max-w-full mq750:min-h-[auto]"
+                            <div class="flex-1 overflow-hidden flex flex-col items-start justify-between py-[0px] pl-[20px] pr-[0px] box-border min-w-[315px] min-h-[240px] max-w-full mq750:min-h-[auto]"
+                                 th:each="accommodation : ${resultAccommodations}"
                             >
                                 <div
                                         class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px]"
@@ -118,8 +113,8 @@
                                                 <div
                                                         class="flex flex-row items-center justify-start"
                                                 >
-                                                    <div
-                                                            class="relative font-semibold inline-block min-w-[21px]"
+                                                    <div class="relative font-semibold inline-block min-w-[21px]"
+                                                         th:text="${accommodation.HCate.getDescription()}"
                                                     >
                                                         펜션
                                                     </div>
@@ -128,7 +123,7 @@
                                             <div
                                                     class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]"
                                             >
-                                                <b class="self-stretch relative"
+                                                <b class="self-stretch relative" th:text="${accommodation.HName}"
                                                 >강릉 라임비치 스파 펜션</b
                                                 >
                                             </div>
@@ -149,7 +144,7 @@
                                                                 class="overflow-hidden flex flex-col items-center justify-center"
                                                         >
                                                             <img
-                                                                    alt=""
+                                                                    alt="img error"
                                                                     class="w-[12px] h-[12px] relative"
                                                                     src="/image/domestic-accommodations/frame.svg"
                                                             />
@@ -159,7 +154,8 @@
                                                             class="flex flex-col items-start justify-start"
                                                     >
                                                         <b class="relative inline-block min-w-[19px]"
-                                                        >9.2</b
+                                                           th:text="${accommodation.rating}"
+                                                        >???</b
                                                         >
                                                     </div>
                                                 </div>
@@ -167,10 +163,10 @@
                                             <div
                                                     class="flex flex-col items-start justify-start text-[12.3px] text-[#707070] mq450:ml-[0px]"
                                             >
-                                                <div
-                                                        class="relative font-medium inline-block min-w-[56px]"
+                                                <div class="relative font-medium inline-block min-w-[56px]"
+                                                     th:text="${accommodation.reviewCount + '명 평가'}"
                                                 >
-                                                    54명 평가
+                                                    ???
                                                 </div>
                                             </div>
                                         </div>
@@ -182,114 +178,120 @@
                                     <div
                                             class="self-stretch flex flex-col items-end justify-start"
                                     >
-                                        <div class="flex flex-col items-start justify-start">
-                                            <div class="flex flex-col items-end justify-start">
-                                                <div
-                                                        class="relative font-medium inline-block min-w-[74px] whitespace-nowrap"
-                                                >
-                                                    다른 날짜 확인
-                                                </div>
+                                        <div class="flex flex-col items-end justify-start">
+                                            <div class="relative font-medium inline-block min-w-[74px] whitespace-nowrap"
+                                                 th:if="${accommodation.soldOut}">
+                                                다른 날짜 확인
+                                            </div>
+                                            <div class="self-stretch flex flex-row items-end justify-start"
+                                                 th:unless="${accommodation.soldOut}"
+                                            >
+                                                <b class="relative inline-block min-w-[80px] text-[19.2px] font-bold text-[#333]"
+                                                   th:text="${accommodation.oneDayPrice}">
+                                                    ???
+                                                </b>
+                                                <b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div
-                            class="self-stretch flex flex-row items-start justify-center pt-[40px] px-[20px] pb-[0px] text-center text-[12px] text-[#000]"
-                    >
-                        <div class="flex flex-col items-start justify-start">
-                            <div class="flex flex-row items-center justify-center">
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[4px]"
-                                >
+                        <div
+                                class="self-stretch flex flex-row items-start justify-center pt-[40px] px-[20px] pb-[0px] text-center text-[12px] text-[#000]"
+                        >
+                            <div class="flex flex-col items-start justify-start">
+                                <div class="flex flex-row items-center justify-center">
                                     <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center p-[8px] box-border"
-                                    >
-                                        <img
-                                                alt=""
-                                                class="h-[16px] w-[16px] relative"
-                                                src="/image/domestic-accommodations/svg-2.svg"
-                                        />
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
+                                            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[4px]"
                                     >
                                         <div
-                                                class="relative font-semibold inline-block min-w-[8px]"
+                                                class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center p-[8px] box-border"
                                         >
-                                            6
+                                            <img
+                                                    alt=""
+                                                    class="h-[16px] w-[16px] relative"
+                                                    src="/image/domestic-accommodations/svg-2.svg"
+                                            />
                                         </div>
                                     </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
                                     <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
+                                            class="flex flex-col items-start justify-start py-[0px] px-[4px]"
                                     >
                                         <div
-                                                class="w-[8px] relative font-semibold flex items-center justify-center min-w-[8px]"
+                                                class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
                                         >
-                                            7
+                                            <div
+                                                    class="relative font-semibold inline-block min-w-[8px]"
+                                            >
+                                                6
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
                                     <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
+                                            class="flex flex-col items-start justify-start py-[0px] px-[4px]"
                                     >
                                         <div
-                                                class="relative font-semibold inline-block min-w-[8px]"
+                                                class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
                                         >
-                                            8
+                                            <div
+                                                    class="w-[8px] relative font-semibold flex items-center justify-center min-w-[8px]"
+                                            >
+                                                7
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
                                     <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
+                                            class="flex flex-col items-start justify-start py-[0px] px-[4px]"
                                     >
                                         <div
-                                                class="relative font-semibold inline-block min-w-[8px]"
+                                                class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
                                         >
-                                            9
+                                            <div
+                                                    class="relative font-semibold inline-block min-w-[8px]"
+                                            >
+                                                8
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px] text-[11.6px] text-[#fff]"
-                                >
                                     <div
-                                            class="w-[32px] h-[32px] rounded-[500px] bg-[#1273e4] flex flex-row items-center justify-center p-[9px] box-border"
+                                            class="flex flex-col items-start justify-start py-[0px] px-[4px]"
                                     >
                                         <div
-                                                class="w-[14px] relative font-semibold flex items-center justify-center min-w-[14px]"
+                                                class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
                                         >
-                                            10
+                                            <div
+                                                    class="relative font-semibold inline-block min-w-[8px]"
+                                            >
+                                                9
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] pl-[4px] pr-[0px]"
-                                >
                                     <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center p-[8px] box-border"
+                                            class="flex flex-col items-start justify-start py-[0px] px-[4px] text-[11.6px] text-[#fff]"
                                     >
-                                        <img
-                                                alt=""
-                                                class="h-[16px] w-[16px] relative"
-                                                src="/image/domestic-accommodations/svg-3.svg"
-                                        />
+                                        <div
+                                                class="w-[32px] h-[32px] rounded-[500px] bg-[#1273e4] flex flex-row items-center justify-center p-[9px] box-border"
+                                        >
+                                            <div
+                                                    class="w-[14px] relative font-semibold flex items-center justify-center min-w-[14px]"
+                                            >
+                                                10
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                            class="flex flex-col items-start justify-start py-[0px] pl-[4px] pr-[0px]"
+                                    >
+                                        <div
+                                                class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center p-[8px] box-border"
+                                        >
+                                            <img
+                                                    alt=""
+                                                    class="h-[16px] w-[16px] relative"
+                                                    src="/image/domestic-accommodations/svg-3.svg"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -302,7 +304,7 @@
 </div>
 <div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden"
      id="modal-wrap">
-    <div class="bg-white w-[90%] h-[90%]" id="modal"  th:include="~{/search/modal :: search_modal}"
+    <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{/search/modal :: search_modal}"
          th:with="accommodations=${resultAccommodations}"></div>
 </div>
 <script
@@ -311,12 +313,18 @@
     let hCate;
     let f_idx = [];
     let resultAccommodations;
+    // 전역 변수로 sliderValues를 정의합니다.
+    var sliderValues = {
+        start: 0,
+        end: 500000
+    };
+
 
     $(document).ready(function () {
 
         resultAccommodations = /*[[${resultAccommodations}]]*/ '[]';
 
-        initializeSlider('main');  // 메인 슬라���더 초기화
+        initializeSlider('main');  // 메인 슬라이더 초기화
         initializeFilters('main'); // 초기 필터 상태 설정
 
         let s_count = sessionStorage.getItem('count');
@@ -356,6 +364,11 @@
         $("#keyword_value").text(sessionStorage.getItem('keyword'));
     });
 
+
+    function synchronizeSliders(targetSlider) {
+        targetSlider.noUiSlider.set([sliderValues.start, sliderValues.end]);
+    }
+
     // 슬라이더 초기화 함수
     function initializeSlider(identifier) {
         var sliderElement = document.getElementById('slider-' + identifier);
@@ -368,7 +381,7 @@
         }
 
         noUiSlider.create(sliderElement, {
-            start: [0, 500000],
+            start: [sliderValues.start, sliderValues.end],
             connect: true,
             range: {
                 'min': 0,
@@ -384,18 +397,32 @@
         });
 
         sliderElement.noUiSlider.on('update', function (values, handle) {
-            var startValue = parseInt(values[0]);
-            var endValue = parseInt(values[1]);
+            sliderValues.start = parseInt(values[0]);
+            sliderValues.end = parseInt(values[1]);
 
-            if (endValue === 500000) {
-                valueElement.innerText = startValue + '원 - ' + '500,000원 이상';
+            if (sliderValues.end === 500000) {
+                valueElement.innerText = sliderValues.start + '원 - ' + '500,000원 이상';
             } else {
-                valueElement.innerText = startValue + '원 - ' + endValue + '원 미만';
+                valueElement.innerText = sliderValues.start + '원 - ' + sliderValues.end + '원 미만';
             }
 
-            startInput.value = startValue;
-            endInput.value = endValue;
+            startInput.value = sliderValues.start;
+            endInput.value = sliderValues.end;
         });
+
+        if (identifier === 'main') {
+            sliderElement.noUiSlider.on('change', function (values, handle) {
+                sliderValues.start = parseInt(values[0]);
+                sliderValues.end = parseInt(values[1]);
+
+                // Perform search only after user stops dragging the slider
+                performSearch(identifier);
+
+                // Synchronize with modal slider
+                var modalSlider = document.getElementById('slider-modal');
+                synchronizeSliders(modalSlider);
+            });
+        }
 
         // 초기 필터 상태 설정
         handleFilter(identifier);
@@ -513,9 +540,8 @@
         }
     }
 
-    // 필터 상태 저장 함수
     function handleFilter(identifier) {
-        console.log(identifier)
+        console.log(identifier);
         const isMain = (identifier === 'main');
         const prefix = isMain ? '' : '#modal '; // 모달 창에서만 사용되는 접두사
 
@@ -549,13 +575,37 @@
 
         //iso-8601 형식으로 변환
         if (startDay) {
-            startDay = new Date(startDay).toISOString()
+            startDay = new Date(startDay).toISOString();
         }
         if (endDay) {
-            endDay = new Date(endDay).toISOString()
+            endDay = new Date(endDay).toISOString();
         }
 
         console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter, person + "되냐?");
+    }
+
+    // 검색 실행 함수
+    function performSearch(identifier) {
+        handleFilter(identifier);
+        const facilities = JSON.parse(sessionStorage.getItem('facilities'));
+        const hCate = sessionStorage.getItem('hCate');
+        const startPrice = sessionStorage.getItem('startPrice');
+        const endPrice = sessionStorage.getItem('endPrice');
+        const keyword = sessionStorage.getItem('keyword');
+        let startDay = sessionStorage.getItem('startDate');
+        let endDay = sessionStorage.getItem('endDate');
+        const person = sessionStorage.getItem('people');
+        const filter = document.getElementById('dropdown-filter-button').value;
+
+        //iso-8601 형식으로 변환
+        if (startDay) {
+            startDay = new Date(startDay).toISOString();
+        }
+        if (endDay) {
+            endDay = new Date(endDay).toISOString();
+        }
+
+        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter, person + "실행되냐?");
 
         $.ajax({
             type: "post",
@@ -574,11 +624,14 @@
                 },
                 filter: filter
             }),
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
             }
         });
     }
+
+
+
 
     // 티맵 초기화
     var markers = [];

@@ -1,5 +1,6 @@
 package com.omakase.omastay.mapper;
 
+import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.entity.Coupon;
 import com.omakase.omastay.entity.IssuedCoupon;
@@ -10,13 +11,13 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-20T10:12:44+0900",
+    date = "2024-09-22T16:50:41+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.12 (JetBrains s.r.o.)"
 )
 public class IssuedCouponMapperImpl implements IssuedCouponMapper {
 
     @Override
-    public IssuedCouponDTO ㅡ드toIssuedCouponDTO(IssuedCoupon issuedCoupon) {
+    public IssuedCouponDTO toIssuedCouponDTO(IssuedCoupon issuedCoupon) {
         if ( issuedCoupon == null ) {
             return null;
         }
@@ -29,6 +30,7 @@ public class IssuedCouponMapperImpl implements IssuedCouponMapper {
         issuedCouponDTO.setIcStatus( issuedCoupon.getIcStatus() );
         issuedCouponDTO.setIcCode( issuedCoupon.getIcCode() );
         issuedCouponDTO.setIcNone( issuedCoupon.getIcNone() );
+        issuedCouponDTO.setCoupon( couponToCouponDTO( issuedCoupon.getCoupon() ) );
 
         return issuedCouponDTO;
     }
@@ -59,7 +61,7 @@ public class IssuedCouponMapperImpl implements IssuedCouponMapper {
 
         List<IssuedCouponDTO> list = new ArrayList<IssuedCouponDTO>( issuedCouponList.size() );
         for ( IssuedCoupon issuedCoupon : issuedCouponList ) {
-            list.add( ㅡ드toIssuedCouponDTO( issuedCoupon ) );
+            list.add( toIssuedCouponDTO( issuedCoupon ) );
         }
 
         return list;
@@ -107,6 +109,24 @@ public class IssuedCouponMapperImpl implements IssuedCouponMapper {
             return null;
         }
         return id;
+    }
+
+    protected CouponDTO couponToCouponDTO(Coupon coupon) {
+        if ( coupon == null ) {
+            return null;
+        }
+
+        CouponDTO couponDTO = new CouponDTO();
+
+        couponDTO.setId( coupon.getId() );
+        couponDTO.setCpContent( coupon.getCpContent() );
+        couponDTO.setCpStartEnd( coupon.getCpStartEnd() );
+        couponDTO.setCpSale( coupon.getCpSale() );
+        couponDTO.setCpCate( coupon.getCpCate() );
+        couponDTO.setCpMethod( coupon.getCpMethod() );
+        couponDTO.setCpNone( coupon.getCpNone() );
+
+        return couponDTO;
     }
 
     protected Member issuedCouponDTOToMember(IssuedCouponDTO issuedCouponDTO) {

@@ -9,7 +9,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-20T10:12:44+0900",
+    date = "2024-09-22T16:50:41+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.12 (JetBrains s.r.o.)"
 )
 public class HostInfoMapperImpl implements HostInfoMapper {
@@ -26,6 +26,7 @@ public class HostInfoMapperImpl implements HostInfoMapper {
         hostInfoDTO.setAddressVo( hostInfo.getHostAddress() );
         hostInfoDTO.setHostOwnerInfo( hostInfo.getHostOwnerInfo() );
         hostInfoDTO.setId( hostInfo.getId() );
+        hostInfoDTO.setAdminMember( hostInfo.getAdminMember() );
         hostInfoDTO.setRegion( hostInfo.getRegion() );
         hostInfoDTO.setHCate( hostInfo.getHCate() );
         hostInfoDTO.setXAxis( hostInfo.getXAxis() );
