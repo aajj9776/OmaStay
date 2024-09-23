@@ -283,17 +283,12 @@ public class HostController {
             if (hostInfoDTO.getHCate() != null) {
                 mv.addObject("hCate", hostInfoDTO.getHCate().name());
             }
-            System.out.println("priceDTO:"+priceDTO);
-            System.out.println("priceDTO.getPeakSet():"+priceDTO.getPeakSet());
-            System.out.println("priceDTO.getSemi().getSemiStart():"+priceDTO.getSemi().getSemiStart());
-            System.out.println("priceDTO.getPeakVo().getPeakStart():"+priceDTO.getPeakVo().getPeakStart());
-           System.out.println(hostInfoDTO.getHCate().name());
 
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi().getSemiStart() != null) {
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi() != null && priceDTO.getSemi().getSemiStart() != null) {
                 mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
             }
 
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo().getPeakStart() != null) {
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo() != null && priceDTO.getPeakVo().getPeakStart() != null) {
                 mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
             }
         }
@@ -301,6 +296,8 @@ public class HostController {
         mv.setViewName("host/host_roomreg");
         return mv;
     }
+
+
 
     @RequestMapping("/rules")
     public ModelAndView hostrules() {
