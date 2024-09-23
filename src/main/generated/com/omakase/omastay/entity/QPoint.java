@@ -26,6 +26,8 @@ public class QPoint extends EntityPathBase<Point> {
 
     public final QMember member;
 
+    public final StringPath pContent = createString("pContent");
+
     public final DateTimePath<java.time.LocalDateTime> pDate = createDateTime("pDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> pSum = createNumber("pSum", Integer.class);

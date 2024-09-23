@@ -1,21 +1,19 @@
 package com.omakase.omastay.mapper;
 
-import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.NonMember;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
-import com.omakase.omastay.entity.enumurate.PayMethod;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-19T14:51:42+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Amazon.com Inc.)"
+    date = "2024-09-20T10:12:44+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.12 (JetBrains s.r.o.)"
 )
 public class ReservationMapperImpl implements ReservationMapper {
 
@@ -31,9 +29,9 @@ public class ReservationMapperImpl implements ReservationMapper {
         reservationDTO.setMemIdx( reservationMemberId( reservation ) );
         reservationDTO.setNonIdx( reservationNonMemberId( reservation ) );
         reservationDTO.setPayIdx( reservationPaymentId( reservation ) );
-        reservationDTO.setStartEndVo( reservation.getStartEndVo() );
         reservationDTO.setId( reservation.getId() );
         reservationDTO.setResNum( reservation.getResNum() );
+        reservationDTO.setStartEndVo( reservation.getStartEndVo() );
         reservationDTO.setResPerson( reservation.getResPerson() );
         reservationDTO.setResPrice( reservation.getResPrice() );
         reservationDTO.setResStatus( reservation.getResStatus() );
@@ -55,21 +53,12 @@ public class ReservationMapperImpl implements ReservationMapper {
         reservation.setRoomInfo( reservationDTOToRoomInfo( reservationDTO ) );
         reservation.setMember( reservationDTOToMember( reservationDTO ) );
         reservation.setNonMember( reservationDTOToNonMember( reservationDTO ) );
-        if ( reservationDTO.getPayment() != null ) {
-            if ( reservation.getPayment() == null ) {
-                reservation.setPayment( new Payment() );
-            }
-            paymentDTOToPayment( reservationDTO.getPayment(), reservation.getPayment() );
-        }
-        if ( reservation.getPayment() == null ) {
-            reservation.setPayment( new Payment() );
-        }
-        reservationDTOToPayment( reservationDTO, reservation.getPayment() );
-        reservation.setStartEndVo( reservationDTO.getStartEndVo() );
+        reservation.setPayment( reservationDTOToPayment( reservationDTO ) );
         reservation.setId( reservationDTO.getId() );
         reservation.setResNum( reservationDTO.getResNum() );
         reservation.setResName( reservationDTO.getResName() );
         reservation.setResEmail( reservationDTO.getResEmail() );
+        reservation.setStartEndVo( reservationDTO.getStartEndVo() );
         reservation.setResPerson( reservationDTO.getResPerson() );
         reservation.setResPrice( reservationDTO.getResPrice() );
         reservation.setResStatus( reservationDTO.getResStatus() );
@@ -202,33 +191,15 @@ public class ReservationMapperImpl implements ReservationMapper {
         return nonMember;
     }
 
-    protected void paymentDTOToPayment(PaymentDTO paymentDTO, Payment mappingTarget) {
-        if ( paymentDTO == null ) {
-            return;
-        }
-
-        mappingTarget.setId( paymentDTO.getId() );
-        mappingTarget.setPayStatus( paymentDTO.getPayStatus() );
-        if ( paymentDTO.getPayMethod() != null ) {
-            mappingTarget.setPayMethod( Enum.valueOf( PayMethod.class, paymentDTO.getPayMethod() ) );
-        }
-        else {
-            mappingTarget.setPayMethod( null );
-        }
-        mappingTarget.setPayContent( paymentDTO.getPayContent() );
-        mappingTarget.setNsalePrice( paymentDTO.getNsalePrice() );
-        mappingTarget.setCancelContent( paymentDTO.getCancelContent() );
-        mappingTarget.setPayDate( paymentDTO.getPayDate() );
-        mappingTarget.setCancelDate( paymentDTO.getCancelDate() );
-        mappingTarget.setPaymentKey( paymentDTO.getPaymentKey() );
-        mappingTarget.setPayNone( paymentDTO.getPayNone() );
-    }
-
-    protected void reservationDTOToPayment(ReservationDTO reservationDTO, Payment mappingTarget) {
+    protected Payment reservationDTOToPayment(ReservationDTO reservationDTO) {
         if ( reservationDTO == null ) {
-            return;
+            return null;
         }
 
-        mappingTarget.setId( reservationDTO.getPayIdx() );
+        Payment payment = new Payment();
+
+        payment.setId( reservationDTO.getPayIdx() );
+
+        return payment;
     }
 }

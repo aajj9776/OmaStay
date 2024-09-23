@@ -1,4 +1,5 @@
 package com.omakase.omastay.repository.custom.impl;
+import com.omakase.omastay.entity.QHostInfo;
 import com.omakase.omastay.entity.QImage;
 import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.repository.custom.ImageRepositoryCustom;
@@ -8,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
 
+import static com.omakase.omastay.entity.QHostInfo.hostInfo;
 import static com.omakase.omastay.entity.QImage.image;
 
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
@@ -22,7 +24,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
         QImage imageSub = new QImage("imageSub");
 
         return queryFactory
-                .select(image.imgName.fName, image.hostInfo.id)
+                .select(image.imgName.fName, hostInfo.id)
                 .from(image)
                 .where(
                         image.hostInfo.id.in(hostIds)
