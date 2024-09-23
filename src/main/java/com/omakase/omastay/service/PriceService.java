@@ -49,4 +49,9 @@ public class PriceService {
         priceRepository.save(price);
     }
 
+    public PriceDTO getPrice(Integer id) { 
+        Price priceDTO = priceRepository.findFirstByHostInfoId(id);
+
+        return PriceMapper.INSTANCE.toPriceDTO(priceDTO);
+    }
 }

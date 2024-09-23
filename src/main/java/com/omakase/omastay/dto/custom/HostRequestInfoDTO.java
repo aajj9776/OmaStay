@@ -23,7 +23,7 @@ public class HostRequestInfoDTO {
     private List<FacilitiesDTO> facilities;
 
     private List<RoomInfoDTO> roomInfo;
-    private List<PriceDTO> price;
+    private PriceDTO price;
 
     private List<ImageDTO> images;
     

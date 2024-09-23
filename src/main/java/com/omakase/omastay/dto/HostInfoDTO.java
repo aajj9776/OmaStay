@@ -20,7 +20,7 @@ import lombok.Setter;
 public class HostInfoDTO {
     private Integer id;
     private Integer adIdx;
-    private AdminMember adminMember = new AdminMember();
+    private AdminMember adminMember;
     private AddressVo addressVo = new AddressVo();
     private String region;
     private HCate hCate; // 추가된 필드
