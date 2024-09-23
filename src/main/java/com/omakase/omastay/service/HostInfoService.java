@@ -50,6 +50,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HostInfoService {
@@ -323,10 +324,18 @@ public class HostInfoService {
         System.out.println(images);
         hostRequestInfoDTO.setImages(ImageMapper.INSTANCE.toImageDTOList(images));
 
-        Hibernate.initialize(hostRequestInfoDTO.getHostInfo().getAdminMember());
+        Hibernate.initialize(hostRequestInfoDTO.getHostInfo().getAdIdx());
 
         return hostRequestInfoDTO;
     }
 
-    
+    @Transactional 
+    public void approveHost(int hidx){
+        hostInfoRepository.approveHost(hidx);
+    }
+
+    @Transactional 
+    public void rejectHost(int hidx){
+        hostInfoRepository.rejectHost(hidx);
+    }
 }
