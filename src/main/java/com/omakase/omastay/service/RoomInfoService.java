@@ -3,6 +3,7 @@ package com.omakase.omastay.service;
 
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
+import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
 import com.omakase.omastay.entity.HostInfo;
@@ -23,6 +24,7 @@ import com.omakase.omastay.vo.PeakVo;
 import com.omakase.omastay.vo.SemiPeakVo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,13 +66,21 @@ public class RoomInfoService {
         Price price = priceset.get(0);
         if(price.getRoomInfo() == null) {
             // PeakVo 객체를 가져와서 필요한 값을 설정
-            PeakVo peakVo = price.getPeakVo();
-            peakVo.setPeakPrice(roomRegDTO.getPrice().getPeakVo().getPeakPrice());
+            PeakVo peakVo = Optional.ofNullable(price.getPeakVo()).orElse(new PeakVo());
+            Integer peakPrice = Optional.ofNullable(roomRegDTO.getPrice())
+                                    .map(PriceDTO::getPeakVo)
+                                    .map(PeakVo::getPeakPrice)
+                                    .orElse(null);
+            peakVo.setPeakPrice(peakPrice);
             price.setPeakVo(peakVo);
 
             // Semi 객체를 가져와서 필요한 값을 설정
-            SemiPeakVo semi = price.getSemi();
-            semi.setSemiPrice(roomRegDTO.getPrice().getSemi().getSemiPrice());
+            SemiPeakVo semi = Optional.ofNullable(price.getSemi()).orElse(new SemiPeakVo());
+            Integer semiPrice = Optional.ofNullable(roomRegDTO.getPrice())
+                            .map(PriceDTO::getSemi)
+                            .map(SemiPeakVo::getSemiPrice)
+                            .orElse(null);
+            semi.setSemiPrice(semiPrice);
             price.setSemi(semi);
 
             price.setRoomInfo(roomInfo);
@@ -85,17 +95,33 @@ public class RoomInfoService {
             newPrice.setPeakSet(price.getPeakSet());
             
             // PeakVo 객체를 가져와서 필요한 값을 설정
-            PeakVo peakVo = newPrice.getPeakVo();
-            peakVo.setPeakStart(price.getPeakVo().getPeakStart());
-            peakVo.setPeakEnd(price.getPeakVo().getPeakEnd());
-            peakVo.setPeakPrice(roomRegDTO.getPrice().getPeakVo().getPeakPrice());
+            PeakVo peakVo = Optional.ofNullable(newPrice.getPeakVo()).orElse(new PeakVo());
+            peakVo.setPeakStart(Optional.ofNullable(price.getPeakVo())
+                                        .map(PeakVo::getPeakStart)
+                                        .orElse(null));
+            peakVo.setPeakEnd(Optional.ofNullable(price.getPeakVo())
+                                    .map(PeakVo::getPeakEnd)
+                                    .orElse(null));
+            Integer peakPrice = Optional.ofNullable(roomRegDTO.getPrice())
+                                        .map(PriceDTO::getPeakVo)
+                                        .map(PeakVo::getPeakPrice)
+                                        .orElse(null);
+            peakVo.setPeakPrice(peakPrice);
             newPrice.setPeakVo(peakVo);
 
             // Semi 객체를 가져와서 필요한 값을 설정
-            SemiPeakVo semi = newPrice.getSemi();
-            semi.setSemiStart(price.getSemi().getSemiStart());
-            semi.setSemiEnd(price.getSemi().getSemiEnd());
-            semi.setSemiPrice(roomRegDTO.getPrice().getSemi().getSemiPrice());
+            SemiPeakVo semi = Optional.ofNullable(newPrice.getSemi()).orElse(new SemiPeakVo());
+            semi.setSemiStart(Optional.ofNullable(price.getSemi())
+                                    .map(SemiPeakVo::getSemiStart)
+                                    .orElse(null));
+            semi.setSemiEnd(Optional.ofNullable(price.getSemi())
+                                    .map(SemiPeakVo::getSemiEnd)
+                                    .orElse(null));
+            Integer semiPrice = Optional.ofNullable(roomRegDTO.getPrice())
+                                        .map(PriceDTO::getSemi)
+                                        .map(SemiPeakVo::getSemiPrice)
+                                        .orElse(null);
+            semi.setSemiPrice(semiPrice);
             newPrice.setSemi(semi);
 
             newPrice.setRoomInfo(roomInfo);
