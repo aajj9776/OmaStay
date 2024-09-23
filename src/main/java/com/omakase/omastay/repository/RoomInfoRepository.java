@@ -21,6 +21,8 @@ public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer>, Ro
 
     List<RoomInfo> findByHostInfoAndRoomStatus(HostInfo hostInfo, BooleanStatus roomStatus);
 
+    
+
     @Modifying
     @Transactional
     @Query("Update RoomInfo r set r.roomStatus = 1 where r.id in :ids")
