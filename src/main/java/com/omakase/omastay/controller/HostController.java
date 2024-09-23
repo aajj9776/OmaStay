@@ -34,6 +34,7 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
+import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
@@ -50,6 +51,7 @@ import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.PriceService;
+import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
@@ -88,6 +90,9 @@ public class HostController {
 
     @Autowired
     private ServiceService serviceService;
+
+    @Autowired
+    private ReviewService reviewService;
     
     private final EmailService emailService;
 
@@ -119,8 +124,18 @@ public class HostController {
     }
 
     @RequestMapping("/faq")
-    public String hostfaq() {
-        return "host/host_faq";
+    public ModelAndView hostfaq() {
+        
+        ModelAndView mv = new ModelAndView();
+
+        List<ServiceDTO> list = serviceService.getAllServices(SCate.FAQ, UserAuth.HOST);
+
+        mv.addObject("list", list);
+        
+        mv.setViewName("host/host_faq");
+
+        return mv;
+
     }
 
     @RequestMapping("/info")
@@ -740,4 +755,44 @@ public class HostController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
+
+    // 호스트 리뷰 전체 리스트
+    @RequestMapping("/reviewlist/getList")
+    @ResponseBody
+    public Map<String, Object> reviewlist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<ReviewDTO> list = reviewService.getAllReview(hostInfoDTO);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 호스트 리뷰 검색
+    @RequestMapping("/reviewlist/search")
+    @ResponseBody
+    public Map<String, Object> reviewsearch(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        int hIdx = hostInfoDTO.getId();
+
+        List<ReviewDTO> list = reviewService.searchHostReview(type, keyword, hIdx);
+
+        map.put("list", list);
+
+        return map;
+    }
+
 }
