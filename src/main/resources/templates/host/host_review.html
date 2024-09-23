@@ -1,266 +1,211 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/host}"
-      layout:fragment="host">
-  <head>
-    <meta charset="utf-8" />
-  </head>
-  <body>
-    <div
-      class="w-full relative bg-[#e4e7eb] flex flex-row items-start justify-center py-[100px] pl-[24px] pr-[20px] box-border leading-[normal] tracking-[normal]"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/host}" layout:fragment="host">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+  <style>
+    .dt-length select {
+      font-size: 12px;
+      padding: 5px;
+      height: auto;
+    }
+
+    .dt-length label {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .dt-info {
+      font-size: 12px;
+    }
+
+    .dt-paging button {
+      font-size: 12px;
+      padding: 5px 8px;
+    }
+
+    .dt-paging a {
+      /* 페이지 번호 스타일 */
+      padding: 5px 8px;
+    }
+
+    .dt-info {
+      display: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .dt-container .dt-layout-row {
+    margin: 0.2em 0 !important; 
+    }
+  </style>
+</head>
+
+<body>
+  <div
+      class="w-full relative bg-[#fff] flex flex-row items-start justify-start leading-[normal] tracking-[normal]"
     >
       <main
-        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-center pt-[95px] pb-[80px] pl-[129px] pr-[104px] box-border gap-[111px] max-w-full text-left text-[50px] text-[#000] font-[Roboto] lg:pb-[52px] lg:pl-[64px] lg:pr-[52px] lg:box-border mq450:gap-[28px] mq750:gap-[55px] mq750:pt-[40px] mq750:pb-[34px] mq750:pl-[32px] mq750:pr-[26px] mq750:box-border"
+        class="flex-1 bg-[#e4e7eb] flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
       >
-        <b
-          class="w-[300px] relative tracking-[0.15px] leading-[24px] flex items-center mq450:text-[30px] mq450:leading-[14px] mq1050:text-[40px] mq1050:leading-[19px]"
-          >리뷰관리</b
-        >
-        <section
-          class="self-stretch flex flex-row items-start justify-center max-w-full"
-        >
+  <section
+    class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[100px] box-border gap-[80px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border">
+    <h1
+      class="m-[0px] w-[300px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center mq450:text-[36px] mq450:leading-[14px] mq750:text-[48px] mq750:leading-[19px]">
+      리뷰관리
+    </h1>
+    <div
+      class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[18px] pb-[39.5px] box-border max-w-full">
+      <div class="flex-1 flex flex-col items-start justify-start max-w-full mq750:gap-[30px] mq1050:gap-[59px]">
+        <div class="self-stretch flex flex-row items-start justify-end max-w-full gap-[20px] mq1225:flex-wrap">
           <div
-            class="w-[1000px] flex flex-col items-start justify-start gap-[94.5px] max-w-full lg:gap-[47px] mq750:gap-[24px]"
-          >
-            <div
-              class="self-stretch flex flex-col items-end justify-start gap-[44.5px] max-w-full mq750:gap-[22px]"
-            >
-              <form
-                class="m-[0px] w-[474px] flex flex-row items-start justify-start flex-wrap content-start gap-[5px] max-w-full"
-              >
-                <div
-                  class="w-[100px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[-2px] px-[12px] relative"
-                >
-                  <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-                  <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-                  <div
-                    class="h-[24px] w-0 absolute !m-[0] top-[calc(50%_-_12px)] left-[12px]"
-                  ></div>
-                  <div
-                    class="flex-1 flex flex-row items-start justify-start relative"
-                  >
-                    <div
-                      class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
-                    >
-                      제목
-                    </div>
-                    <img
-                      class="h-full w-[24px] absolute !m-[0] top-[0px] right-[0px] bottom-[0px] max-h-full overflow-hidden shrink-0 z-[1]"
-                      alt=""
-                      src="/image/host/arrowdropdownfilled.svg"
-                    />
-                  </div>
-                  <div
-                    class="self-stretch flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[4]"
-                  >
-                    Placeholder
-                  </div>
-                  <div
-                    class="h-0 w-[24px] absolute !m-[0] top-[calc(50%_-_0px)] right-[12px]"
-                  ></div>
-                  <div class="hidden flex-row items-start justify-start z-[6]">
-                    <img
-                      class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/image/host/closefilled.svg"
-                    />
-                  </div>
+            class="w-[550px] flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px] box-border max-w-full">
+            <form class="m-[0px] self-stretch flex flex-row items-start justify-start mq750:flex-wrap">
+              <!-- 검색어 입력 영역 -->
+              <div
+                class="w-[550px] overflow-hidden flex flex-row items-center justify-center flex-wrap content-center py-[5px] px-[5px] box-border gap-[15px] max-w-full">
+                <div id="search-input"
+                  class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+                  <select id="search-type"
+                    class="w-[120px] [border:none] [outline:none] h-[24px] justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]">
+                    <option value="all">전체</option>
+                    <option value="revWriter">작성자</option>
+                    <option value="revContent">리뷰내용</option>
+                  </select>
+                  <input id="search-keyword"
+                    class="w-full [border:none] [outline:none] h-[30px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+                    type="text" placeholder="검색어를 입력하세요." />
                 </div>
-                <div
-                  class="flex-1 flex flex-col items-start justify-start py-[0px] px-[10px] box-border min-w-[189px]"
-                >
-                  <div
-                    class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                  >
-                    <input
-                      class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[148px] min-h-[24px]"
-                      placeholder="검색어를 입력하세요."
-                      type="text"
-                    />
-                  </div>
-                  <div
-                    class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                  >
-                    <div
-                      class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                    >
-                      Helper text
-                    </div>
-                  </div>
-                </div>
-                <button
-                  class="cursor-pointer [border:none] py-[7px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
-                >
-                  <div
-                    class="flex flex-row items-start justify-start gap-[8px]"
-                  >
-                    <img
-                      class="h-[22px] w-[18px] relative hidden"
-                      alt=""
-                      src="/image/host/masked-icon.svg"
-                    />
+              </div>
 
-                    <div
-                      class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[31px]"
-                    >
-                      검색
-                    </div>
-                    <img
-                      class="h-[22px] w-[18px] relative hidden"
-                      alt=""
-                      src="/image/host/masked-icon1.svg"
-                    />
-                  </div>
+              <!-- 검색 버튼 영역 -->
+              <div
+                class="w-[300px] flex-1 box-border flex flex-row items-center justify-center py-[4px] px-[30px] gap-[15px]">
+                <button type="button" id="search-button"
+                  class="w-[100px] h-[40px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] text-[#fff] text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto]">
+                  검색
                 </button>
-              </form>
-              <div
-                class="self-stretch h-[571px] flex flex-row items-start justify-start max-w-full"
-              >
-                <div
-                  class="self-stretch w-[1004px] flex flex-row items-center justify-center bg-[url('/image/host/tables.png')] bg-cover bg-no-repeat bg-[top] max-w-full"
-                >
-                  <img
-                    class="w-[1010.9px] relative max-h-full object-cover hidden max-w-full"
-                    alt=""
-                    src="/image/host/tables.png"
-                  />
-                </div>
               </div>
-            </div>
-            <footer
-              class="w-[996px] flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full text-center text-[14px] text-[rgba(0,0,0,0.87)] font-[Roboto]"
-            >
-              <div
-                class="overflow-hidden flex flex-row items-start justify-start gap-[10px] max-w-full mq750:flex-wrap"
-              >
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem.svg"
-                />
-
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-1.svg"
-                />
-
-                <div
-                  class="overflow-hidden flex flex-row items-start justify-start text-[#fff]"
-                >
-                  <div
-                    class="rounded-[4px] bg-[#2196f3] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                    >
-                      1
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="overflow-hidden flex flex-row items-start justify-start"
-                >
-                  <div
-                    class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                    >
-                      2
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="overflow-hidden flex flex-row items-start justify-start"
-                >
-                  <div
-                    class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                    >
-                      3
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="overflow-hidden flex flex-row items-start justify-start"
-                >
-                  <div
-                    class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                    >
-                      4
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="overflow-hidden flex flex-row items-start justify-start"
-                >
-                  <div
-                    class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                    >
-                      5
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="overflow-hidden flex flex-row items-start justify-start"
-                >
-                  <div
-                    class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                    >
-                      6
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="overflow-hidden flex flex-row items-start justify-start"
-                >
-                  <div
-                    class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                    >
-                      7
-                    </div>
-                  </div>
-                </div>
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-1.svg"
-                />
-
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-3.svg"
-                />
-              </div>
-            </footer>
+            </form>
           </div>
-        </section>
-      </main>
+        </div>
+        <div
+          class="self-stretch flex flex-row items-start justify-start py-[0px] px-[5px] box-border max-w-full">
+            <div id="table" class="w-full px-[10px] pb-[10px] gap-[10px] m-auto">
+              <table id="listTable"
+                class="w-[1140px] text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit]  text-[16px] hover">
+                <thead>
+                  <tr class="py-[20px] pl-[30px] pr-[634px] gap-[20px]">
+                    <th>번호</th>
+                    <th>작성자</th>
+                    <th>리뷰내용</th>
+                    <th>평점</th>
+                    <th>등록일</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-[#ffffff] pt-[100px]"></tbody>
+              </table>
+          </div>
+        </div>
+      </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </body>
+  </section>
+</main>
+</div>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js" defer></script>
+  <script>
+
+    $(document).ready(function () {
+      $('#listTable').DataTable({
+        "searching": false,
+
+        ajax: {
+          url: '/host/reviewlist/getList',
+          type: 'GET',
+          dataSrc: 'data'
+        },
+
+        columns: [
+          { "data": null, // 데이터 소스가 아닌 계산된 값
+            "render": function(data, type, row, meta) {
+                return meta.row + 1; // 인덱스는 0부터 시작하므로 1을 더합니다.
+            } 
+          }, 
+          {
+            data: 'revwriter',
+          },
+          {
+            data: 'revcontent',
+            render: function (data, type, row) {
+              return '<a href="/host/reviewlist/view?id=' + row.id + '">' + data + '</a>';
+            }
+          },
+          {
+            data: 'revrating',
+          },
+          {
+            data: 'revdate',
+            render: function (data, type, row) {
+            if (data) {
+              var date = new Date(data);
+              var year = date.getFullYear();
+              var month = ('0' + (date.getMonth() + 1)).slice(-2);
+              var day = ('0' + date.getDate()).slice(-2);
+              return year + '-' + month + '-' + day;;
+            }
+            return data;
+          }
+          }
+        ],
+        columnDefs: [
+        { width: 80, targets: 0 },
+        { width: 170 , targets: 1 },
+        { width: 170, targets: 2 },
+        { width: 170, targets: 3 },
+        { width: 140, targets: 4 }
+        ],
+
+      });
+
+      // 검색 버튼 클릭 이벤트 처리
+      $('#search-button').on('click', function () {
+        var searchType = $('#search-type').val();
+        var searchKeyword = $('#search-keyword').val().trim();
+
+        // 검색 요청
+        $.ajax({
+          url: '/host/reviewlist/search',
+          type: 'GET',
+          data: {
+            type: searchType,
+            keyword: searchKeyword,
+          },
+          success: function (data) {
+
+            console.log(data);
+            var table = $('#listTable').DataTable();
+            table.clear();
+            table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신
+
+          },
+          error: function (error) {
+            alert("검색 중 오류가 발생했습니다.");
+            console.error(error);
+          }
+        });
+      });
+    });
+  </script>
+</body>
 </html>
