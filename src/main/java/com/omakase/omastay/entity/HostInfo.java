@@ -25,9 +25,9 @@ public class HostInfo {
     @Column(name = "h_idx", nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ad_idx", referencedColumnName = "ad_idx")
-    private AdminMember adminMember = new AdminMember();
+    private AdminMember adminMember;
 
     //주소
     //우편번호, 주소, 상세주소

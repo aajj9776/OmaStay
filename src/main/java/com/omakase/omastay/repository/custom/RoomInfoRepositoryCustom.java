@@ -14,4 +14,6 @@ public interface RoomInfoRepositoryCustom {
     List<Tuple> personFiltering(int person, List<Integer> roomInfos);
 
     List<Tuple> findHostsByRoomIds(List<Integer> roomIdxs);
+
+    List<RoomInfo> searchRoom(String type, String keyword, HostInfo hostInfo);
 }
