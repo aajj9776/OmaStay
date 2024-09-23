@@ -260,7 +260,11 @@ public class HostInfoService {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
 
-        hostInfo.setHStatus(HStatus.APPLY);
+        if(hostInfo.getHStep() == HStep.ROOM) {
+            if(hostInfo.getHStatus() != HStatus.APPLY && hostInfo.getHStatus() != HStatus.APPROVE) {
+                hostInfo.setHStatus(HStatus.APPLY); // hStep을 3으로 설정
+            }
+        }
 
         hostInfoRepository.save(hostInfo);
     }
