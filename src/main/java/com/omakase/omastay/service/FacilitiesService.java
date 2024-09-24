@@ -175,7 +175,7 @@ public class FacilitiesService {
             ResultAccommodationsDTO resultAccommodationsDTO = resultMap.get(hostId);
 
             if (resultAccommodationsDTO != null) {
-                resultAccommodationsDTO.setImg_url(imageTuple.get(image.imgName.fName));
+                resultAccommodationsDTO.setImg_url(realPath + "host/" + imageTuple.get(image.imgName.fName));
             }
         }
 
