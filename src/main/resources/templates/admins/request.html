@@ -3,7 +3,8 @@
   layout:decorate="~{layout/admin}" layout:fragment="admin">
 
 <head>
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+ 
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
 </head>
 
 <body>
@@ -46,7 +47,13 @@
               <td th:text="${host.addressVo.postCode}"></td>
               <td th:text="${host.addressVo.street}"></td>
               <td th:text="${host.addressVo.detail}"></td>
-              <td th:text="${host.hStatus}"></td>
+              <td th:switch="${host.hStatus.name()}">
+                <span th:case="'APPLY'">신청</span>
+                <span th:case="'APPROVE'">승인</span>
+                <span th:case="'REJECT'">거절</span>
+                <span th:case="'RELEASE'">해제</span>
+                <span th:case="*">알 수 없음</span> <!-- 기본값 -->
+            </td>
             </tr>
           </tbody>
         </table>
@@ -55,10 +62,12 @@
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('#listTable').DataTable();
+      $('#listTable').DataTable({
+          order: [] // 큰따옴표(")로 묶인 문자열 사용
+      });
 
       //행을 누르면 id 값을 가져와서 컨트롤러로 보내기 
       $('#listTable tbody').on('click', 'tr', function () {
