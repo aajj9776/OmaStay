@@ -156,9 +156,6 @@
         <div class="flex flex-row gap-[16px]">
           <label>업체 이미지 : </label>
           <table>
-            <thead>
-
-            </thead>
             <tbody>
               <tr th:each="images : ${host.images}">
                 <td>
@@ -249,104 +246,88 @@
         </div>
       </div>
 
-      <div class="w-[1200px] flex flex-row items-center justify-center gap-[20px] m-[30px]">
-        <button class="bg-[#d4d8f1] h-[40px] w-[80px] rounded-[4px]">승인</button>
-        <button class="border-[2px] border-[#d4d8f1] h-[40px] w-[80px] rounded-[4px]">반려</button>
+      <div th:if="${#strings.toString(host.hostInfo.hStatus) == #strings.toString(T(com.omakase.omastay.entity.enumurate.HStatus).APPLY)}"  
+          class="w-[1200px] flex flex-row items-center justify-center gap-[20px] p-[30px]">
+        <button id="approveButton" class="bg-[#d4d8f1] h-[40px] w-[80px] rounded-[4px]">승인</button>
+        <button id="rejectButton" class="border-[2px] border-[#0f0f13] h-[40px] w-[80px] rounded-[4px]">반려</button>
       </div>
+      <div class="w-[1200px] text-center text-[16px] text-gray-400">* 입점요청 상태가 '신청'일 때만 [승인] 혹은 [반려]가 가능합니다</div>
     </section>
 
-    
+
 
     <!-- 객실 상세 모달 -->
     <div id="detailModal" class=" fixed inset-0 z-50 hidden items-center justify-center m-auto bg-black bg-opacity-75">
-      <div class="bg-white rounded-lg shadow-lg m-auto relative top-[20px]">
+      <div class="bg-white rounded-lg shadow-lg m-auto">
         <header
-          class="self-stretch rounded-t-[30px] rounded-b-[0px] bg-[#8492e6] flex flex-row items-start justify-center py-[15px] px-[20px] box-border top-[0] z-[99] sticky max-w-full text-center text-[30px] text-[#fff] font-[Roboto]">
+          class="self-stretch rounded-lg rounded-b-[0px] bg-[#8492e6] flex flex-row items-center justify-between py-[15px] px-4 text-center text-[24px] text-[#fff] gap-[100px]">
           <h3
-            class="m-[0px] h-[30px] w-[382px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center justify-center shrink-0 whitespace-nowrap max-w-full">
+            class="m-[0px] h-[30px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold flex items-center justify-center shrink-0 whitespace-nowrap">
             객실 상세보기
           </h3>
-          <button class="absolute top-2 right-2 p-2 rounded-lg z-10 close2">
-            <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
+          <button class="close2">
+            <img class="h-6 w-6 " alt="" src="/image/admin/icon-cancel.png" />
           </button>
         </header>
 
-        <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
-          <div class="flex-1 relative tracking-[0.15px] leading-[24px]">
+        <div class="p-[20px] text-[20px] px-[30px]">
+          <label class="text-[24px] w-full text-left font-semibold m-2">객실 정보</label>
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
             <h3>객실명 : </h3>
-          </div>
-          <div>
             <input id="modalName" type="text" placeholder="객실명" readonly />
           </div>
-        </div>
-        <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
-          <div class="flex-1 relative tracking-[0.15px] leading-[24px]">
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
             <h3>객실유형 : </h3>
-          </div>
-          <div>
             <input id="modalType" type="text" placeholder="객실유형" readonly />
           </div>
-        </div>
-        <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
-          <div class="flex-1 relative tracking-[0.15px] leading-[24px]">
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
             <h3>객실정원 : </h3>
-          </div>
-          <div>
             <input id="modalNumber" type="text" placeholder="객실정원" readonly />
           </div>
-        </div>
-        <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
-          <div class="flex-1 relative tracking-[0.15px] leading-[24px]">
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
             <h3>객실소개 : </h3>
-          </div>
-          <div>
             <input id="modalDiscript" type="textarea" placeholder="객실소개" readonly />
           </div>
         </div>
-        <div id="modalContent">
-          <h2>요금 설정</h2>
-          <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
-            <label>기본(비수기) : </label>
-            <div>
-              <input type="textarea" placeholder="비수기 요금" readonly />
-            </div>
+        <div id="modalContent" class="p-[20px] text-[20px] px-[30px]">
+          <label class="text-[24px] w-full text-left font-semibold m-2">요금 설정</label>
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+            <h3>기본(비수기) : </h3>
+            <input type="textarea" placeholder="비수기 요금" readonly />
             <span>원 </span>
           </div>
-          <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
+          <div class="w-full flex flex-row items-start justify-center py-[10px] gap-[20px]">
             <label>준성수기 : </label>
-            <div>
-              <input type="textarea" placeholder="준성수기 요금" readonly />
-            </div>
+            <input type="textarea" placeholder="준성수기 요금" readonly />
             <span>원 </span>
           </div>
-          <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
+          <div class="w-full flex flex-row items-start justify-center py-[10px] gap-[20px]">
             <label>성수기 : </label>
-            <div>
-              <input type="textarea" placeholder="성수기 요금" readonly />
-            </div>
+            <input type="textarea" placeholder="성수기 요금" readonly />
             <span>원 </span>
           </div>
-
         </div>
-        <div id="ImageContent">
-          <label>객실 이미지</label>
+        <div class="flex flex-col text-[20px] p-[20px] pb-[30px] items-start justify-center">
+          <label class="text-[24px] w-full text-left font-semibold m-2">객실 이미지</label>
+          <div id="ImageContent">
 
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 이미지 모달 -->
-    <div id="imageModal" class=" fixed inset-0 z-50 hidden items-center justify-center m-auto bg-black bg-opacity-75">
-      <div class="bg-white rounded-lg shadow-lg w-1/3 m-auto relative top-[20px]">
-        <div>
-          <div id="caption" class="p-4 text-center text-[16px] text-gray-700"></div>
-          <button class="absolute top-2 right-2 p-2 rounded-lg z-10 close">
-            <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
-          </button>
-        </div>
-        <img class="modal-content max-w-full h-auto rounded-lg" id="modalImage" />
+    <div id="imageModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-white rounded-lg shadow-lg w-1/3 m-auto">
+          <div class="flex justify-between items-center p-2">
+              <div id="caption" class="text-[16px] text-gray-700"></div>
+              <button class="close">
+                  <img class="h-6 w-6" alt="Close" src="/image/admin/icon-cancel.png" />
+              </button>
+          </div>
+          <img class="modal-content max-w-full h-auto rounded-lg" id="modalImage" />
       </div>
-    </div>
+  </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -362,19 +343,20 @@
       const captionText = $('#caption');
       const closeBtn = $('.close');
 
+
       $('.image-link').on('click', function (event) {
         event.preventDefault();
         const imgName = $(this).data('img-name');
 
         // 이미지 URL 설정 (서버에서 이미지를 제공하는 URL로 변경 필요)
-        const imageUrl = `${storage}room/${imgName}`;
+        const imageUrl = `${storage}host/${imgName}`;
         console.log(imageUrl);
 
         // 모달 표시
         modal.css('display', 'flex');
         modalImg.attr('src', imageUrl);
         captionText.text(imgName);
-      });
+      }); 
 
       // 모달 닫기
       closeBtn.on('click', function () {
@@ -397,7 +379,7 @@
         const modalImage = $('#ImageContent');
         const index = $(this).data('index');
 
-        
+
         $('#modalName').val(`${host.roomInfo[index].roomName}`);
         $('#modalType').val(`${host.roomInfo[index].roomType}`);
         $('#modalNumber').val(`${host.roomInfo[index].roomPerson}`);
@@ -410,28 +392,22 @@
             console.log(data);
             // 모달에 객실 상세 정보를 표시합니다.
             if (data.price != null) {
-              
+
               modalContent.html(`
-              <h2>요금 설정</h2>
-              <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
+              <label class="text-[24px] w-full text-left font-semibold m-2">요금 설정</label>
+              <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
                 <label>기본(비수기) : </label>
-                <div>
-                  <input type="textarea" value="${data.price.regularPrice}" readonly />
-                </div>
+                <input type="text" class="w-[200px]" value="${data.price.regularPrice}" readonly />
                 <span>원 </span>
               </div>
-              <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
+              <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
                 <label>준성수기 : </label>
-                <div>
-                  <input type="textarea" value="${data.price.semi.semiPrice}" readonly />
-                </div>
+                <input type="text" class="w-[200px]" value="${data.price.semi.semiPrice}" readonly />
                 <span>원 </span>
               </div>
-              <div class="w-full flex flex-row items-start justify-start py-[10px] px-[60px] box-border">
+              <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
                 <label>성수기 : </label>
-                <div>
-                  <input type="textarea" value="${data.price.peakVo.peakPrice}" readonly />
-                </div>
+                <input type="text" class="w-[200px]" value="${data.price.peakVo.peakPrice}" readonly />
                 <span>원 </span>
               </div>
             `);
@@ -441,11 +417,12 @@
             modal2.css('display', 'flex');
           })
           .catch(error => console.error('Error fetching room details:', error));
+
       });
 
       // 모달 닫기
       closeBtn2.on('click', function () {
-        modal.css('display', 'none');
+        modal2.css('display', 'none');
       });
 
       $(window).on('click', function (event) {
@@ -454,35 +431,50 @@
         }
 
       });
+
+      $('#approveButton').on('click', function () {
+        console.log('승인 버튼 클릭');
+        $.ajax({
+          url: '/admin/request/approve', // 실제 컨트롤러 URL로 변경
+          data: { hidx: host.hostInfo.id },
+          type: 'POST',
+          success: function (response) {
+            alert('승인되었습니다.');
+          },
+          error: function (error) {
+            alert('승인에 실패했습니다.');
+          }
+        });
+      });
+
+      $('#rejectButton').on('click', function () {
+        console.log('반려 버튼 클릭');
+        $.ajax({
+          url: '/admin/request/reject', // 실제 컨트롤러 URL로 변경
+          data: { hidx: host.hostInfo.id },
+          type: 'POST',
+          success: function (response) {
+            alert('반려되었습니다.');
+          },
+          error: function (error) {
+            alert('반려에 실패했습니다.');
+          }
+        });
+      });
     });
 
 
     function modalImagef(data) {
       const imagesHtml = data.images.map(image => `
-                <tr>
                     <a href="#" onclick="showImageModal('${image.imgName.fname}')">${image.imgName.fname}</a>
-                </tr>
             `).join('');
 
-      const modalHtml = `
-                <label>객실 이미지</label>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>이미지 제목</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${imagesHtml}
-                    </tbody>
-                </table>
-            `;
-
-      document.getElementById('ImageContent').innerHTML = modalHtml;
+      document.getElementById('ImageContent').innerHTML = imagesHtml;
     }
 
     function showImageModal(imgName) {
       const imageUrl = `${storage}room/${imgName}`;
+      $('#caption').text(imgName);
       document.getElementById('modalImage').src = imageUrl;
       document.getElementById('imageModal').style.display = 'block';
     }

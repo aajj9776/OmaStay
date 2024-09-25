@@ -67,8 +67,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class AdminController {
 
     // 파일 업로드 경로 -> application.properties에 설정
-    // @Value("${upload}")
-    private String upload = "/upload/admin";
+    @Value("${upload}")
+    private String upload;
 
     @Autowired
     ServiceService ss;
@@ -157,6 +157,28 @@ public class AdminController {
         return map;
     }
 
+    @ResponseBody
+    @RequestMapping("/request/approve")
+    public Map<String, Object> request_approve(@RequestParam("hidx") String hidx) {
+        Map<String, Object> map = new HashMap<>();
+
+        hs.approveHost(Integer.parseInt(hidx));
+
+        return map;
+    }
+
+    @ResponseBody
+    @RequestMapping("/request/reject")
+    public Map<String, Object> request_reject(@RequestParam("hidx") String hidx) {
+        Map<String, Object> map = new HashMap<>();
+
+        hs.rejectHost(Integer.parseInt(hidx));
+
+
+        return map;
+    }
+
+
     /************************ 입점 요청 끝 ************************/
     @RequestMapping("/payment")
     public String payment() {
@@ -168,10 +190,15 @@ public class AdminController {
         return "admins/payment_detail";
     }
 
+
+    /************************ 판매 실적 시작 ************************/
     @RequestMapping("/sales")
     public String sales() {
         return "admins/sales";
     }
+
+
+    /************************ 판매 실적 끝 ************************/
 
     /****************************** 가맹점 공지사항 ******************************/
     // 가맹점 공지사항 리스트로 이동
@@ -267,7 +294,7 @@ public class AdminController {
 
         // 파일이 수정되었을 경우
         if(f.getSize() > 0) {
-            String realPath = application.getRealPath(upload);
+            String realPath = upload+"host";
             String fname = f.getOriginalFilename();
             FileImageNameVo fvo = new FileImageNameVo();
             fvo.setOName(fname);
