@@ -190,10 +190,15 @@ public class AdminController {
         return "admins/payment_detail";
     }
 
+
+    /************************ 판매 실적 시작 ************************/
     @RequestMapping("/sales")
     public String sales() {
         return "admins/sales";
     }
+
+
+    /************************ 판매 실적 끝 ************************/
 
     /****************************** 가맹점 공지사항 ******************************/
     // 가맹점 공지사항 리스트로 이동
