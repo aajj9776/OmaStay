@@ -80,5 +80,14 @@ public class ServiceService {
         return ServiceMapper.INSTANCE.toServiceDTOList(services);
     }
 
+    // 호스트 공지사항 검색
+    public List<ServiceDTO> searchHostNotice(String type, String keyword, UserAuth sAuth, SCate sCate){
+        List<com.omakase.omastay.entity.Service> services;
+
+        services = serviceRepository.searchHostNotice(type, keyword, sAuth, sCate);
+ 
+        return ServiceMapper.INSTANCE.toServiceDTOList(services);
+    }
+
     
 }

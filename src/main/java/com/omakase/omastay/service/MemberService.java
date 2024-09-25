@@ -1,5 +1,21 @@
 package com.omakase.omastay.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.custom.MemberInfoDTO;
+import com.omakase.omastay.dto.custom.MembercpDTO;
+import com.omakase.omastay.entity.Grade;
+import com.omakase.omastay.entity.Member;
+import com.omakase.omastay.entity.Reservation;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.Gender;
+import com.omakase.omastay.entity.enumurate.Social;
+import com.omakase.omastay.jwt.JwtProvider;
+import com.omakase.omastay.mapper.MemberMapper;
+import com.omakase.omastay.repository.GradeRepository;
+import com.omakase.omastay.repository.MemberRepository;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

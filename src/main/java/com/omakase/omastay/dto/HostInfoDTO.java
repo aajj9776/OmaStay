@@ -1,5 +1,4 @@
 package com.omakase.omastay.dto;
-
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;

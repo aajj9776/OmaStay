@@ -1,6 +1,7 @@
 package com.omakase.omastay.dto.custom;
 
 import com.omakase.omastay.dto.AccountDTO;
+import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
@@ -22,7 +23,7 @@ public class HostRequestInfoDTO {
     private List<FacilitiesDTO> facilities;
 
     private List<RoomInfoDTO> roomInfo;
-    private List<PriceDTO> price;
+    private PriceDTO price;
 
     private List<ImageDTO> images;
     

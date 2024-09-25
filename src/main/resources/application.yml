@@ -52,7 +52,9 @@ spring:
         bucket: omastay
   thymeleaf:
     enums:
-      use-class-for-enum-values: true 
+      use-class-for-enum-values: true
+  jackson:
+    property-naming-strategy: LOWER_CAMEL_CASE
 decorator:
   datasource:
     p6spy:
@@ -60,4 +62,4 @@ decorator:
 custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
-upload: https://storage.googleapis.com/omastay/   
+upload: https://storage.googleapis.com/omastay/

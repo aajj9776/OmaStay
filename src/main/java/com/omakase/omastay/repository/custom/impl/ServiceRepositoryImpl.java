@@ -105,4 +105,35 @@ public class ServiceRepositoryImpl implements ServiceRepositoryCustom {
         }
         return service.sCate.eq(sCate);
     }
+
+    //service 엔티티 검색
+    @Override
+    public List<Service> searchHostNotice(String type, String keyword, UserAuth sAuth, SCate sCate) {
+        return queryFactory.selectFrom(service)
+                .where(
+                    containsKeyword2(type, keyword),
+                    service.sAuth.eq(sAuth),
+                    eqSCate(sCate),
+                    service.sStatus.eq(BooleanStatus.TRUE)
+                )
+                .orderBy(service.id.desc())
+                .fetch();
+    }
+
+    private BooleanExpression containsKeyword2(String type, String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return null;
+        }
+        switch (type) {
+            case "all":
+                return service.sTitle.contains(keyword)
+                        .or(service.sContent.contains(keyword));
+            case "sTitle":
+                return service.sTitle.contains(keyword);
+            case "sContent":
+                return service.sContent.contains(keyword);
+            default:
+                return null;
+        }
+    }
 }

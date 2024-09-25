@@ -166,7 +166,12 @@
                   return '<input type="checkbox" class="itemCheckbox" value="' + row.id + '">';
                 }
               },
-              { data: 'id' }, // ID 칼럼 추가
+              { 
+                "data": null, // 데이터 소스가 아닌 계산된 값
+                "render": function(data, type, row, meta) {
+                    return meta.row + 1; // 인덱스는 0부터 시작하므로 1을 더합니다.
+                }  
+              }, 
               {
                 data: 'roomName',
                 render: function (data, type, row) {

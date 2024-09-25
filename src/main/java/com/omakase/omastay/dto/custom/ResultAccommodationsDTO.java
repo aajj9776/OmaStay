@@ -1,20 +1,40 @@
 package com.omakase.omastay.dto.custom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//필터 조회 결과를 담을 DTO
+// 필터 조회 결과를 담을 DTO
 @Data
 @NoArgsConstructor
 public class ResultAccommodationsDTO {
+    @JsonProperty("hidx")
     private Integer hIdx;
-    private String h_cate;
+
+    @JsonProperty("hcate")
+    private String hCate;
+
+    @JsonProperty("hname")
     private String hName;
+
+    @JsonProperty("oneDayPrice")
     private Integer oneDayPrice; //평균 가격
-    private  String xAxis;
+
+    @JsonProperty("xaxis")
+    private String xAxis;
+
+    @JsonProperty("yaxis")
     private String yAxis;
+
+    @JsonProperty("img_url")
     private String img_url;
-    private double rating;
-    private Integer reviewCount;
+
+    @JsonProperty("rating")
+    private Double rating;
+
+    @JsonProperty("reviewCount")
+    private int reviewCount;
+
+    @JsonProperty("soldOut")
     private boolean soldOut;
 }
