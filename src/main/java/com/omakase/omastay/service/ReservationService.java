@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.omakase.omastay.dto.IssuedCouponDTO;
@@ -31,7 +32,6 @@ public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
 
-    
     @Autowired
     private PaymentRepository paymentRepository;
 
@@ -100,4 +100,12 @@ public class ReservationService {
     }
 
 
+    /********** 체크 아웃 시점 이후 [확정]->[사용 완료] 예약 상태 변경 **********/
+    // 30분마다 실행
+    @Transactional
+    @Scheduled(fixedRate = 1800000) // 30분 = 1800000 milliseconds
+    public void checkAndUpdateExpiredStatus() {
+        System.out.println("예약 상태 업데이트");
+        reservationRepository.updateExpiredStatuses();
+    }
 }

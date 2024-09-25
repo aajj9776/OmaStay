@@ -15,9 +15,6 @@ import com.omakase.omastay.jwt.JwtProvider;
 import com.omakase.omastay.mapper.MemberMapper;
 import com.omakase.omastay.repository.GradeRepository;
 import com.omakase.omastay.repository.MemberRepository;
-import com.omakase.omastay.repository.ReservationRepository;
-import com.omakase.omastay.repository.custom.MemberRepositoryCustom;
-import com.omakase.omastay.vo.UserProfileVo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
