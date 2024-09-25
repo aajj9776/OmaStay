@@ -54,4 +54,24 @@ public class PointService {
         return cnt;
     }
 
+    public List<PointDTO> getPoint(int id) {
+        List<Point> pList = pointRepository.findByMemIdx(id); // 속성 이름이 mIdx인지 확인
+
+        return PointMapper.INSTANCE.toPointDTOList(pList);
+    }
+
+    public PointDTO savePoint(PointDTO pointDTO) {
+        Point res = PointMapper.INSTANCE.toPoint(pointDTO);
+        
+        Integer sum = pointRepository.findLatestPSumByMemIdx(pointDTO.getMemIdx());
+        System.out.println("sum : " + sum);
+        
+        res.setPDate(LocalDateTime.now());
+        res.setPSum(null);
+        Point point = pointRepository.save(res);
+        PointDTO dto = PointMapper.INSTANCE.toPointDTO(point);
+        return dto;
+    }
+
+   
 }

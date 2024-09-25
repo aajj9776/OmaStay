@@ -1,6 +1,5 @@
 package com.omakase.omastay.service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.omakase.omastay.dto.PaymentDTO;

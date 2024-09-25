@@ -16,7 +16,7 @@
       class="flex-1 bg-[#fff] flex flex-row items-start justify-center pt-[74px] px-[352px] pb-[86px] box-border gap-[67px] max-w-full text-left text-[13.2px] text-[#c7c2c2] font-[Roboto] mq1800:flex-wrap mq925:gap-[17px] mq925:pt-[48px] mq925:px-[88px] mq925:pb-[56px] mq925:box-border mq1350:gap-[33px] mq1350:pl-[176px] mq1350:pr-[176px] mq1350:box-border"
     >
       <div
-        class="m-[0px] w-[794px] flex flex-col items-start justify-start gap-[27.5px] min-w-[794px] max-w-full mq1800:flex-1 mq1800:min-w-full"
+        class="m-[0px] w-[600px] flex flex-col items-start justify-start gap-[27.5px] min-w-[600px] max-w-full mq1800:flex-1 mq1800:min-w-full"
       >
         <div
           class="w-[340px] flex flex-col items-start justify-start pt-0 px-0 pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
@@ -235,7 +235,7 @@
                           type="radio"
                           name="coupon"
                           class="mr-2 text-blue-600"
-                          value="0"
+                          value=""
                           checked
                         />
                         적용안함
@@ -261,13 +261,10 @@
           <div
             class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
           >
-            <div th:each="c : ${coupon}">
-              <span th:text="${c.coupon.id} + '원'"></span>
-            </div>
             <div
-              class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
+              class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left inline-flex items-center"
             >
-              포인트
+              <span>포인트</span>
             </div>
             <div
               class="self-stretch flex flex-row items-start justify-start gap-[4px]"
@@ -284,6 +281,7 @@
                 />
               </div>
               <button
+                id="openPointModal"
                 class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
               >
                 <div
@@ -292,6 +290,104 @@
                   잔액 확인
                 </div>
               </button>
+
+              <!-- 포인트 모달-->
+              <div
+                id="pointModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center hidden z-50"
+              >
+                <div class="bg-white rounded-lg shadow-lg max-w-md w-full">
+                  <div class="p-6">
+                    <!-- 타이틀 -->
+                    <div class="flex items-center justify-between mb-4">
+                      <h2 class="text-2xl font-bold text-gray-800">
+                        포인트 잔액 및 적립 내역
+                      </h2>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-6 h-6 text-gray-400"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 4.75L12 12m0 0l-7 7m7-7h7"
+                        />
+                      </svg>
+                    </div>
+
+                    <!-- 설명 -->
+                    <p class="text-gray-500 mb-4">
+                      현재 사용 가능한 포인트는 다음과 같습니다.
+                    </p>
+
+                    <!-- 잔여 포인트 -->
+                    <div class="mb-4">
+                      <p
+                        class="text-gray-800 font-bold text-3xl"
+                        id="totalPoints"
+                      >
+                        1,650 P
+                      </p>
+                    </div>
+
+                    <!-- 포인트 사용 입력 -->
+                    <div class="mb-6">
+                      <label
+                        for="usePoints"
+                        class="block text-lg font-semibold text-gray-700 mb-2"
+                      >
+                        사용할 포인트 입력
+                      </label>
+                      <input
+                        type="number"
+                        id="usePoints"
+                        class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="0"
+                        value=""
+                      />
+                      <small
+                        id="availablePoint"
+                        class="text-gray-500 mt-1 block"
+                        >최대 사용 가능 포인트: 0 P</small
+                      >
+                    </div>
+
+                    <!-- 포인트 적립 내역 -->
+                    <div class="mb-6">
+                      <h3
+                        class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2"
+                      >
+                        포인트 적립 내역
+                      </h3>
+                      <div class="overflow-y-auto h-50">
+                        <ul class="space-y-3" id="pointList">
+                          <!-- 동적으로 추가될 포인트 적립 내역 -->
+                        </ul>
+                      </div>
+                    </div>
+
+                    <!-- 하단 버튼 -->
+                    <div class="flex justify-end space-x-3">
+                      <button
+                        id="closePointModal"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded"
+                      >
+                        닫기
+                      </button>
+                      <button
+                        id="usePointBtn"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                      >
+                        포인트 사용
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -386,7 +482,7 @@
             class="self-stretch rounded-[12px] border-[#333] border-[1px] border-solid flex flex-col items-start justify-start py-[23px] pl-[25px] pr-[23px] gap-[31.8px] text-[#333] mq450:gap-[16px]"
           >
             <div
-              class="self-stretch flex flex-col items-start justify-start gap-[16.1px]"
+              class="self-stretch flex flex-col items-start justify-start gap-[16.1px] mt-4"
             >
               <b
                 class="relative text-[16.9px] leading-[21px] inline-block min-w-[66.6px] whitespace-nowrap"
@@ -407,7 +503,7 @@
                     id="nsale_price"
                     class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] mq450:text-[16px] mq450:leading-[19px]"
                     placeholder="가격 입력"
-                    value="10000"
+                    value="50000"
                   />
                   <div
                     class="relative text-[15px] leading-[24px] font-semibold text-right inline-block min-w-[20px] mq450:text-[16px] mq450:leading-[19px]"
@@ -416,6 +512,82 @@
                   </div>
                 </div>
               </div>
+
+              <!-- 멤버십 할인 문구 추가 -->
+              <div
+                class="self-stretch flex flex-row items-start justify-between"
+              >
+                <div
+                  class="w-[70px] relative leading-[20px] flex items-center shrink-0"
+                >
+                  멤버십 할인
+                </div>
+                <div class="flex-1 flex justify-end items-center">
+                  <input
+                    type="text"
+                    id="membership_discount"
+                    class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] text-[#388e3c] mq450:text-[16px] mq450:leading-[19px]"
+                    value=""
+                    readonly
+                  />
+                  <div
+                    class="relative text-[15px] leading-[24px] font-semibold text-right inline-block min-w-[20px] mq450:text-[16px] mq450:leading-[19px]"
+                  >
+                    원
+                  </div>
+                </div>
+              </div>
+
+              <!-- 쿠폰 할인 -->
+              <div
+                class="self-stretch flex flex-row items-start justify-between"
+              >
+                <div
+                  class="w-[70px] relative leading-[20px] flex items-center shrink-0"
+                >
+                  쿠폰 할인
+                </div>
+                <div class="flex-1 flex justify-end items-center">
+                  <input
+                    type="text"
+                    id="coupon_discount"
+                    class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] text-[#388e3c] mq450:text-[16px] mq450:leading-[19px]"
+                    value="0"
+                    readonly
+                  />
+                  <div
+                    class="relative text-[15px] leading-[24px] font-semibold text-right inline-block min-w-[20px] mq450:text-[16px] mq450:leading-[19px]"
+                  >
+                    원
+                  </div>
+                </div>
+              </div>
+
+              <!-- 포인트 할인 -->
+              <div
+                class="self-stretch flex flex-row items-start justify-between"
+              >
+                <div
+                  class="w-[70px] relative leading-[20px] flex items-center shrink-0"
+                >
+                  포인트 할인
+                </div>
+                <div class="flex-1 flex justify-end items-center">
+                  <input
+                    type="text"
+                    id="point_discount"
+                    class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] text-[#388e3c] mq450:text-[16px] mq450:leading-[19px]"
+                    value="2000"
+                    readonly
+                  />
+                  <div
+                    class="relative text-[15px] leading-[24px] font-semibold text-right inline-block min-w-[20px] mq450:text-[16px] mq450:leading-[19px]"
+                  >
+                    원
+                  </div>
+                </div>
+              </div>
+
               <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
               <div
                 class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[3px] pr-[0px]"
@@ -454,7 +626,7 @@
             >
               <button
                 onclick="requestPayment()"
-                class="self-stretch rounded-[10px] bg-[#1273e4] flex flex-row items-start justify-center py-[14.5px] px-[20px] whitespace-nowrap text-center text-[15.4px] text-[#fff]"
+                class="self-stretch rounded-[10px] bg-[#1273e4] flex flex-row items-start justify-center py-[14.5px] px-[20px] whitespace-nowrap text-center text-[15.4px] text-[#fff] -mb-[33px]"
               >
                 결제하기
               </button>
@@ -485,13 +657,37 @@
       let user = JSON.parse(localStorage.getItem("user"));
       let couponId;
       let couponData;
-      let totalPrice;
       let couponCheck = false;
+      let originPrice = parseInt($("#sale_price").val());
+      let totalPrice = originPrice; // 최종 결제 금액을 위한 변수
+      let finalPrice = 0; // 최종 결제 금액을 위한 변수
+
+      function membershipSale() {
+        let gradeSale = localStorage.getItem("grade");
+        console.log("멤버쉽" + gradeSale);
+        console.log("가겨" + originPrice);
+
+        let grade = JSON.parse(gradeSale);
+        console.log(originPrice);
+        console.log(grade.gsale);
+
+        if (grade != null) {
+          let amount = originPrice * (grade.gsale / 100);
+          console.log(amount);
+          totalPrice = originPrice - amount;
+          finalPrice = totalPrice;
+          $("#membership_discount").val(amount);
+        } else {
+          totalPrice = originPrice;
+          finalPrice = totalPrice;
+        }
+        console.log(finalPrice);
+        $("#sale_price").val(finalPrice);
+      }
 
       function userInfo() {
-        console.log("하이");
         $.ajax({
-          url: "/reservation/coupon",
+          url: "/coupon",
           type: "POST",
           data: {
             id: user.id,
@@ -508,26 +704,29 @@
             couponIdx = data.coupon[i].id;
             couponData = data.coupon[i].coupon;
             couponList += `
-                        <div class="mb-1"> <!-- 항목 간의 간격 -->
-                          <label class="flex items-start p-3 border rounded-lg shadow-sm text-black">
-                              <input
-                                  id="coupon"
-                                  type="radio"
-                                  name="coupon"
-                                  class="mr-2 text-blue-600"
-                                  value="${couponIdx}"
-                              />
-                              <div>
-                                  <span class="block font-semibold">${
-                                    couponData.cpContent
-                                  }</span>
-                                 <span>${
-                                   couponData.cpCate === "PERCENT"
-                                     ? `${couponData.cpSale}% 할인`
-                                     : `${couponData.cpSale}원 할인`
-                                 }</span>
-                              </div>
-                          </label>
+            <div class="mb-1"> <!-- 항목 간의 간격 -->
+              <label class="flex items-start p-3 border rounded-lg shadow-sm text-black">
+                <input
+                id="coupon"
+                type="radio"
+                name="coupon"
+                class="mr-2 text-blue-600"
+                value="${couponIdx}"
+                data-content="${couponData.cpContent}"
+                data-sale="${couponData.cpSale}"
+                data-cate="${couponData.cpCate}"
+                />
+                <div>
+                  <span class="block font-semibold">${
+                    couponData.cpContent
+                  }</span>
+                    <span>${
+                      couponData.cpCate === "PERCENT"
+                        ? `${couponData.cpSale}% 할인`
+                        : `${couponData.cpSale}원 할인`
+                    }</span>
+                      </div>
+                      </label>
                       </div>`;
           }
           coupon.html(couponList);
@@ -535,42 +734,112 @@
           couponBtn.click(function () {
             couponId = $("input[name='coupon']:checked").val();
             console.log(couponId);
-            $("#coupon_input").val(couponData.cpContent);
+            let selectedCoupon = $("input[name='coupon']:checked");
+
+            // 선택된 쿠폰의 데이터를 읽어옴
+            let couponContent = selectedCoupon.data("content");
+            let couponSale = selectedCoupon.data("sale");
+            let couponCate = selectedCoupon.data("cate");
+
+            $("#coupon_input").val(couponContent);
 
             $("#couponModal").addClass("hidden");
             $("body").removeClass("overflow-hidden");
+
+            couponData = {
+              cpContent: couponContent,
+              cpSale: couponSale,
+              cpCate: couponCate,
+            };
+
             couponCheck = true;
             changePrice();
           });
         });
       }
 
+      $("#openPointModal").click(function () {
+        $("#pointModal").removeClass("hidden");
+        $.ajax({
+          url: "/point",
+          type: "POST",
+          data: {
+            id: user.id,
+          },
+        }).done(function (data) {
+          let pointList = $("#pointList");
+          let totalPoint = $("#totalPoints");
+          let availablePoint = $("#availablePoint");
+          pointList.empty();
+          console.log(data.point);
+          for (let i = 0; i < data.point.length; i++) {
+            console.log(data.point[i].pcontent);
+            let point = data.point[i];
+            let formattedDate = point.pdate.slice(0, 10);
+
+            let pointItem = `<li class="flex justify-between items-center p-4 bg-white rounded-lg shadow-md mb-3">
+                              <div class="flex flex-col">
+                                <span class="font-medium text-gray-800">${point.pcontent}</span>
+                                <span class="text-sm text-gray-500">${formattedDate}</span>
+                              </div>
+                              <div class="text-green-500 font-bold">
+                                + ${point.pvalue} P
+                              </div>
+                            </li>`;
+            pointList.append(pointItem);
+            totalPoint.text(`${point.psum} P`);
+            availablePoint.text(`최대 사용 가능 포인트: ${point.psum} P`);
+          }
+        });
+      });
+
+      $("#closePointModal").click(function () {
+        $("#pointModal").addClass("hidden");
+      });
+
+      $("#usePointBtn").click(function () {
+        let usePoints = $("#usePoints").val();
+        $.ajax({
+          url: "/point/use",
+          type: "POST",
+          data: {
+            memIdx: user.id,
+            pValue: usePoints,
+          },
+        }).done(function (data) {
+          if (data == "success") {
+            alert("포인트 사용이 완료되었습니다.");
+            $("#pointModal").addClass("hidden");
+            membershipSale();
+          }
+        });
+      });
+
       function changePrice() {
-        let price = parseInt($("#sale_price").val()); // 입력된 가격을 숫자로 변환
         let couponPrice = 0; // 초기 쿠폰 할인 금액 설정
 
-        console.log(couponData.cpCate);
+        console.log("바바" + JSON.stringify(couponData));
         if (couponData.cpCate === "PERCENT") {
-          couponPrice = price * (couponData.cpSale / 100); // 퍼센트 할인 계산
-        } else if (couponData.cpCate === "AMOUNT") {
+          couponPrice = nsale_price * (couponData.cpSale / 100); // 퍼센트 할인 계산
+        } else if (couponData.cpCate === "PRICE") {
           couponPrice = parseInt(couponData.cpSale); // 정액 할인 계산
         }
-        console.log(price);
-        console.log(couponPrice);
+        $("#coupon_discount").val(couponPrice);
 
         // 최종 결제 금액 계산
-        totalPrice = price - couponPrice;
+        finalPrice = totalPrice - couponPrice;
 
         // 최소 결제 금액이 0 미만이 되지 않도록 처리
-        if (totalPrice < 0) {
-          totalPrice = 0;
+        if (finalPrice < 0) {
+          finalPrice = 0;
         }
 
         // 총 결제 금액을 readonly 필드에 업데이트
-        $("#sale_price").val(totalPrice);
+        $("#sale_price").val(finalPrice);
       }
 
       $(function () {
+        membershipSale();
         // Open Modal
         $(".open-modal").click(function () {
           if (couponCheck) {
@@ -743,7 +1012,7 @@
           method: "CARD", // 카드 결제
           amount: {
             currency: "KRW",
-            value: totalPrice, // 결제 금액
+            value: finalPrice, // 결제 금액
           },
           orderId: orderNumber, // 고유 주분번호
           orderName: "한별이~^^", //방이름
@@ -754,7 +1023,9 @@
             "&resEmail=" +
             encodeURIComponent(resEmail) +
             "&couponId=" +
-            encodeURIComponent(couponId), // 결제 요청이 성공하면 리다이렉트되는 URL
+            encodeURIComponent(couponId) +
+            "&nsalePrice=" +
+            encodeURIComponent(nsale_price), // 결제 요청이 성공하면 리다이렉트되는 URL
           failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
           customerEmail: resEmail, //회원 이메일
           customerName: resName, //회원이름
