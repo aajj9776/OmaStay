@@ -68,6 +68,10 @@
       <input type="hidden" id="resEmail" name="resEmail" value="" />
       <input type="hidden" id="resName" name="resName" value="" />
       <input type="hidden" id="paymentKey" name="paymentKey" value="" />
+      <input type="hidden" id="payCoupon" name="payCoupon" value="" />
+      <input type="hidden" id="payPoint" name="payPoint" value="" />
+      <input type="hidden" id="payGrade" name="payGrade" value="" />
+      <input type="hidden" id="memIdx" name="memIdx" value="" />
     </form>
 
     <form action="/coupon/use" id="updateCoupon" method="post">
@@ -91,6 +95,10 @@
       const resName = urlParams.get("resName");
       const couponId = urlParams.get("couponId");
       const nsale_price = urlParams.get("nsalePrice");
+      const payCoupon = urlParams.get("payCoupon");
+      const payGrade = urlParams.get("payGrade");
+      const payPoint = urlParams.get("payPoint");
+      const memIdx = urlParams.get("memIdx");
 
       let pay_method;
       let pay_content;
@@ -104,8 +112,6 @@
         // 결제 내용
         $("#pay_content").val("방이름");
 
-        console.log(nsale_price);
-
         // 할인 전 금액
         $("#nsale_price").val(nsale_price);
 
@@ -118,8 +124,34 @@
         $("#resEmail").val(resEmail);
         $("#resName").val(resName);
 
+        console.log(payGrade);
+        console.log(payCoupon);
+        console.log(payPoint);
+        $("#payCoupon").val(payCoupon);
+        $("#payGrade").val(payGrade);
+        $("#payPoint").val(payPoint);
+
+        $("#memIdx").val(memIdx);
+
+        if (couponId != null) {
+          sendCoupon(); // 쿠폰 사용 처리
+        }
+        if (payPoint != null) {
+          usePoint(); // 포인트 사용 처리
+        }
         // 폼 전송
         $("#insertPayment").submit();
+      }
+
+      function usePoint() {
+        $.ajax({
+          url: "/point/use",
+          type: "POST",
+          data: {
+            memIdx: memIdx,
+            pValue: payPoint,
+          },
+        }).done(function (data) {});
       }
 
       function goIndex() {
@@ -166,10 +198,10 @@
 
         if (!response.ok) {
           // 결제 실패 비즈니스 로직을 구현하세요.
+          console.log("결제실패");
           window.location.href = `/reservation/payment_fail`;
         } else {
           sendData(); // 결제 성공 시 sendData 호출
-          sendCoupon(); // 쿠폰 사용 시 sendCoupon 호출
         }
       }
 

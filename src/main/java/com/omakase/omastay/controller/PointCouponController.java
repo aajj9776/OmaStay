@@ -15,10 +15,6 @@ import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
 import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.PointService;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
-
 
 @Controller
 public class PointCouponController {
@@ -44,6 +40,7 @@ public class PointCouponController {
     }
 
     @PostMapping("/coupon/use")
+    @ResponseBody
     public String useCoupon(IssuedCouponDTO issuedCouponDTO) {
         System.out.println("useCoupon" + issuedCouponDTO.getId());
         IssuedCouponDTO res = issuedCouponService.useCoupon(issuedCouponDTO);
@@ -53,7 +50,6 @@ public class PointCouponController {
         } else {
             result = "fail";
         }
-
         return result;
         
     }
@@ -64,8 +60,10 @@ public class PointCouponController {
         Map<String, Object> map = new HashMap<>();
 
         List<PointDTO> point = pointService.getPoint(id);
+        Integer sum = pointService.getSumPoint(id);
         System.out.println("포인트 내역" + point);
         map.put("point", point);
+        map.put("sum", sum);
 
         return map;
     }
@@ -73,14 +71,9 @@ public class PointCouponController {
     @PostMapping("/point/use")
     @ResponseBody
     public Map<String, Object> usePoint(PointDTO pointDTO) {
-        System.out.println("usePoint" + pointDTO);
         Map<String, Object> map = new HashMap<>();
+        System.out.println("포인트 사용" + pointDTO);
         PointDTO res = pointService.savePoint(pointDTO);
-        if( res != null) {
-            map.put("result", "success");
-        } else {
-            map.put("result", "fail");
-        }
         
         return map;
     }

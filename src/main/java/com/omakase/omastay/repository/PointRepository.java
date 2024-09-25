@@ -15,11 +15,11 @@ public interface PointRepository extends JpaRepository<Point, Integer>, PointRep
     @Query("SELECT p FROM Point p WHERE p.member.id = :memIdx ORDER BY p.pDate DESC")
     Integer getSumPoint(@Param("memIdx") Integer memIdx); // 속성 이름이 mIdx인지 확인
 
-    @Query("SELECT p FROM Point p WHERE p.member.id = :memIdx")
+    @Query("SELECT p FROM Point p WHERE p.member.id = :memIdx ORDER BY p.pDate DESC")
     List<Point> findByMemIdx(@Param("memIdx") Integer memIdx); 
 
     @Query("SELECT p.pSum FROM Point p WHERE p.member.id = :memIdx ORDER BY p.pDate DESC")
-    Integer findLatestPSumByMemIdx(@Param("memIdx") Integer memIdx);
+    List<Integer> findLatestPSumByMemIdx(@Param("memIdx") Integer memIdx);
 
     @Query("SELECT p.pSum FROM Point p WHERE p.member.id = :memIdx AND p.pDate = (SELECT MAX(p2.pDate) FROM Point p2 WHERE p2.member.id = :memIdx)")
     Integer getSumPoint(@Param("memIdx") int memIdx); // 속성 이름이 mIdx인지 확인

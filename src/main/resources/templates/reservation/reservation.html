@@ -349,11 +349,6 @@
                         placeholder="0"
                         value=""
                       />
-                      <small
-                        id="availablePoint"
-                        class="text-gray-500 mt-1 block"
-                        >최대 사용 가능 포인트: 0 P</small
-                      >
                     </div>
 
                     <!-- 포인트 적립 내역 -->
@@ -363,7 +358,7 @@
                       >
                         포인트 적립 내역
                       </h3>
-                      <div class="overflow-y-auto h-50">
+                      <div class="overflow-y-auto h-[275px]">
                         <ul class="space-y-3" id="pointList">
                           <!-- 동적으로 추가될 포인트 적립 내역 -->
                         </ul>
@@ -527,7 +522,7 @@
                     type="text"
                     id="membership_discount"
                     class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] text-[#388e3c] mq450:text-[16px] mq450:leading-[19px]"
-                    value=""
+                    value="0"
                     readonly
                   />
                   <div
@@ -577,7 +572,7 @@
                     type="text"
                     id="point_discount"
                     class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] text-[#388e3c] mq450:text-[16px] mq450:leading-[19px]"
-                    value="2000"
+                    value="0"
                     readonly
                   />
                   <div
@@ -661,6 +656,10 @@
       let originPrice = parseInt($("#sale_price").val());
       let totalPrice = originPrice; // 최종 결제 금액을 위한 변수
       let finalPrice = 0; // 최종 결제 금액을 위한 변수
+      let amount = 0; // 멤버십 할인 금액을 위한 변수
+      let usePoints = 0; // 사용할 포인트를 위한 변수
+      let couponPrice = 0; // 쿠폰 할인 금액을 위한 변수
+      let sum; // 포인트 총합을 위한 변수
 
       function membershipSale() {
         let gradeSale = localStorage.getItem("grade");
@@ -672,7 +671,7 @@
         console.log(grade.gsale);
 
         if (grade != null) {
-          let amount = originPrice * (grade.gsale / 100);
+          amount = originPrice * (grade.gsale / 100);
           console.log(amount);
           totalPrice = originPrice - amount;
           finalPrice = totalPrice;
@@ -769,26 +768,34 @@
         }).done(function (data) {
           let pointList = $("#pointList");
           let totalPoint = $("#totalPoints");
-          let availablePoint = $("#availablePoint");
           pointList.empty();
           console.log(data.point);
           for (let i = 0; i < data.point.length; i++) {
             console.log(data.point[i].pcontent);
             let point = data.point[i];
             let formattedDate = point.pdate.slice(0, 10);
+            let value = point.pvalue;
+            sum = data.sum;
+
+            let pointSign = "+";
+            let pointValueClass = "text-green-500 font-bold";
+
+            if (value < 0) {
+              pointValueClass = "text-red-500 font-bold"; // 글자색을 빨간색으로 변경
+              pointSign = ""; // 부호를 빈 문자열로 설정
+            }
 
             let pointItem = `<li class="flex justify-between items-center p-4 bg-white rounded-lg shadow-md mb-3">
                               <div class="flex flex-col">
                                 <span class="font-medium text-gray-800">${point.pcontent}</span>
                                 <span class="text-sm text-gray-500">${formattedDate}</span>
                               </div>
-                              <div class="text-green-500 font-bold">
-                                + ${point.pvalue} P
+                              <div class="${pointValueClass}">
+                                ${pointSign}  ${value} P
                               </div>
                             </li>`;
             pointList.append(pointItem);
-            totalPoint.text(`${point.psum} P`);
-            availablePoint.text(`최대 사용 가능 포인트: ${point.psum} P`);
+            totalPoint.text(`${sum} P`);
           }
         });
       });
@@ -798,25 +805,29 @@
       });
 
       $("#usePointBtn").click(function () {
-        let usePoints = $("#usePoints").val();
-        $.ajax({
-          url: "/point/use",
-          type: "POST",
-          data: {
-            memIdx: user.id,
-            pValue: usePoints,
-          },
-        }).done(function (data) {
-          if (data == "success") {
-            alert("포인트 사용이 완료되었습니다.");
-            $("#pointModal").addClass("hidden");
-            membershipSale();
-          }
-        });
+        usePoints = $("#usePoints").val();
+        let totalPoints = $("#totalPoints").text().split(" ")[0];
+        if (usePoints > sum) {
+          alert("포인트가 부족합니다.");
+          return;
+        } else {
+          $("#point_input").val(usePoints);
+          $("#point_discount").val(usePoints);
+        }
+
+        $("#pointModal").addClass("hidden");
+
+        if (usePoints == 0) {
+          $("#point_discount").val(0);
+          return;
+        }
+        finalPrice = totalPrice - usePoints;
+
+        $("#sale_price").val(finalPrice);
       });
 
       function changePrice() {
-        let couponPrice = 0; // 초기 쿠폰 할인 금액 설정
+        // 초기 쿠폰 할인 금액 설정
 
         console.log("바바" + JSON.stringify(couponData));
         if (couponData.cpCate === "PERCENT") {
@@ -981,11 +992,11 @@
       // ------  SDK 초기화 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
       const clientKey = "test_ck_PBal2vxj81jDG7MyAXLR35RQgOAN";
-      const customerKey = "aasdlfkjal"; //회원번호
+      const customerKey = "reserver" + user.id; //회원번호
       const tossPayments = TossPayments(clientKey);
       // 회원 결제
       // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
-      const payment = tossPayments.payment({ customerKey });
+
       // 비회원 결제
       // const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
 
@@ -1006,6 +1017,8 @@
           return;
         }
 
+        const payment = tossPayments.payment({ customerKey });
+
         // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
         // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
         await payment.requestPayment({
@@ -1025,7 +1038,15 @@
             "&couponId=" +
             encodeURIComponent(couponId) +
             "&nsalePrice=" +
-            encodeURIComponent(nsale_price), // 결제 요청이 성공하면 리다이렉트되는 URL
+            encodeURIComponent(nsale_price) +
+            "&payCoupon=" +
+            encodeURIComponent(couponPrice) +
+            "&payPoint=" +
+            encodeURIComponent(usePoints) +
+            "&payGrade=" +
+            encodeURIComponent(amount) +
+            "&memIdx=" +
+            encodeURIComponent(user.id), // 결제 요청이 성공하면 리다이렉트되는 URL
           failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
           customerEmail: resEmail, //회원 이메일
           customerName: resName, //회원이름

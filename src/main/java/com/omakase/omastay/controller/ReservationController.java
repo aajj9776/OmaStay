@@ -81,7 +81,7 @@ public class ReservationController {
 
     @PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation) {
-        System.out.println("payment" + payment.getNsalePrice());
+        System.out.println("payment" + payment);
 
         System.out.println("reservation이메일 이름 들어와야함" + reservation);
 
@@ -102,11 +102,12 @@ public class ReservationController {
         if( res.getPayStatus() == PayStatus.PAY) {
             reservation.setPayIdx(res.getId());
             reserve = reservationService.insertReservationInfo(reservation, res);
+            System.out.println("예약결과" + reserve);
         } else {
             return "redirect:/reservation/payment_fail";
         }
         if( reserve != null){
-            if( reserve.getResStatus() == ResStatus.COMPLETED) {
+            if( reserve.getResStatus() == ResStatus.PENDING) {
                 redirectAttributes.addAttribute("orderId", reserve.getResNum());
                 redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
                 redirectAttributes.addAttribute("amount", reserve.getResPrice());

@@ -85,6 +85,7 @@ public class ReservationService {
             res.setPayStatus(PayStatus.PAY);
             res.setPayDate(LocalDateTime.now());
             
+            
             Payment pay = paymentRepository.save(res);
             
             PaymentDTO dto = PaymentMapper.INSTANCE.toPaymentDTO(pay);
@@ -105,12 +106,7 @@ public class ReservationService {
         startEndVo.setEnd(LocalDateTime.now().plusDays(1));
         res.setStartEndVo(startEndVo);
 
-        
-
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
-        Member member = new Member();
-        member.setId(1);
-        res.setMember(member);
         res.setResPerson(2);
         res.setRoomInfo(roomInfo);
         res.setStartEndVo(startEndVo);
@@ -129,9 +125,6 @@ public class ReservationService {
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
     }
-
-  
-
 
     /********** 체크 아웃 시점 이후 [확정]->[사용 완료] 예약 상태 변경 **********/
     // 30분마다 실행
