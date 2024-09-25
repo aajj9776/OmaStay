@@ -38,17 +38,17 @@
         var currentPath = window.location.pathname;
 
         if (currentPath.includes("/host/mypage")) {
-          $("#mypage-link img").css("background-color", "#2196f3 !important");
+          $("#mypage-link img").css("background-color", "#2196f3");
         } else if (currentPath.includes("/host/info")) {
-          $("#info-link img").css("background-color", "#2196f3 !important");
+          $("#info-link img").css("background-color", "#2196f3");
         } else if (currentPath.includes("/host/rules")) {
-          $("#rules-link img").css("background-color", "#2196f3 !important");
+          $("#rules-link img").css("background-color", "#2196f3");
         } else if (currentPath.includes("/host/roomlist")) {
-          $("#room-link img").css("background-color", "#2196f3 !important");
+          $("#room-link img").css("background-color", "#2196f3");
         } else if (currentPath.includes("/host/roomchange")) {
-          $("#room-link img").css("background-color", "#2196f3 !important");
+          $("#room-link img").css("background-color", "#2196f3");
         } else if (currentPath.includes("/host/roomreg")) {
-          $("#room-link img").css("background-color", "#2196f3 !important");
+          $("#room-link img").css("background-color", "#2196f3");
         }
 
         var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown'));
@@ -56,6 +56,7 @@
           return new bootstrap.Dropdown(dropdownToggleEl);
         });
       }
+
 
       document.addEventListener('htmx:afterOnLoad', function(evt) {
         console.log('htmx:afterOnLoad event triggered');

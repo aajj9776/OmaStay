@@ -1,6 +1,7 @@
 package com.omakase.omastay.service;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ReviewDTO;
+import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Reservation;
@@ -8,6 +9,7 @@ import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.ReviewMapper;
+import com.omakase.omastay.mapper.ServiceMapper;
 import com.omakase.omastay.repository.ReviewRepository;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -81,6 +83,12 @@ public class ReviewService {
         List<Review> review = reviewRepository.searchHostReview(type, keyword, hIdx);
  
         return ReviewMapper.INSTANCE.toReviewDTOList(review);
+    }
+
+    // 게시글 id 값으로 serviceDTO 가져오기
+    public ReviewDTO getReview(int id) {
+        Review review  = reviewRepository.findById(id).get();
+        return ReviewMapper.INSTANCE.toReviewDTO(review);
     }
 
 }

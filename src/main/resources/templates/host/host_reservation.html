@@ -5,6 +5,42 @@
       layout:fragment="host">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <style>
+      .dt-length select {
+          font-size: 12px; 
+          padding: 5px; 
+          height: auto; 
+      }
+  
+      .dt-length label {
+          font-size: 12px; 
+          margin-left: 5px; 
+      }
+  
+      .dt-info {
+          font-size: 12px; 
+      }
+  
+      .dt-paging button {
+          font-size: 12px;
+          padding: 5px 8px; 
+      }
+
+      .dt-paging a { /* 페이지 번호 스타일 */
+          padding: 5px 8px;
+      }
+
+      .dt-info { 
+          display: none;
+      }
+
+      a {
+          text-decoration: none;
+      }
+
+  </style>
   </head>
   <body>
     <div
@@ -14,10 +50,10 @@
         class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[70px] box-border max-w-full lg:pb-[45px] lg:box-border mq750:pb-[29px] mq750:box-border"
       >
         <section
-          class="self-stretch flex flex-row items-start justify-start pt-[76px] px-[50px] pb-[20px] box-border gap-[10px] max-w-full text-left text-[45px] text-[rgba(0,0,0,0.87)] font-[Roboto] lg:pl-[25px] lg:pr-[25px] lg:box-border"
+          class="self-stretch flex flex-row items-start justify-start pt-[100px] px-[50px] pb-[50px] box-border gap-[10px] max-w-full text-left text-[45px] text-[rgba(0,0,0,0.87)] font-[Roboto] lg:pl-[25px] lg:pr-[25px] lg:box-border"
         >
           <div
-            class="flex-1 flex flex-col items-start justify-start max-w-full"
+            class="pl-[50px] flex-1 flex flex-col items-start justify-start max-w-full"
           >
             <h1
               class="m-[0px] self-stretch relative text-inherit leading-[52px] font-normal font-[inherit] mq450:text-[27px] mq450:leading-[31px] mq1050:text-[36px] mq1050:leading-[42px]"
@@ -30,345 +66,308 @@
               Reservation Management
             </div>
           </div>
-          <div
-            class="h-[48px] w-[48px] rounded-[100px] overflow-hidden shrink-0 hidden flex-col items-center justify-center p-[8px] box-border"
-          >
-            <div
-              class="flex flex-row items-start justify-start py-[0px] px-[4px]"
-            >
-              <img
-                class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                alt=""
-                src="/image/host/starsharp-2.svg"
-              />
-            </div>
-          </div>
         </section>
         <section
-          class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[48.5px] box-border max-w-full"
+          class="self-stretch flex flex-row items-start justify-start pt-[20px] px-[50px] pb-[20px] box-border max-w-full"
         >
           <div
             class="flex-1 flex flex-row items-start justify-between py-[19px] px-[50px] box-border max-w-full gap-[20px] lg:flex-wrap lg:pl-[25px] lg:pr-[25px] lg:box-border"
           >
             <form
-              class="m-[0px] w-[755px] flex flex-row items-start justify-start gap-[24.5px] max-w-full mq750:flex-wrap"
+              class="m-[0px] w-[650px] flex flex-row items-start justify-start gap-[20px] max-w-full mq750:flex-wrap"
             >
               <h3
                 class="m-[0px] h-[40px] w-[41px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-normal font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[16px] mq450:leading-[21px]"
               >
                 상태
               </h3>
-              <div
-                class="w-[100px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[6px] px-[12px] relative"
-              >
-                <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-                <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-                <div
-                  class="h-[24px] w-0 absolute !m-[0] top-[calc(50%_-_12px)] left-[12px]"
-                ></div>
-                <div
-                  class="flex-1 flex flex-row items-start justify-start relative"
-                >
-                  <div
-                    class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
-                  >
-                    미확정
+             
+                  <div class="w-[140px] h-[40px] flex-1 rounded-[4px] bg-[#fff] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-center justify-center py-[4px]">
+                    <select id="resStatus" class="w-[130px] h-[30px] [border:none] [outline:none] h-[24px] justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[5px]">
+                      <option value="ALL">전체</option>
+                      <option value="PENDING">예약대기</option>
+                      <option value="CONFIRMED">예약확정</option>
+                      <option value="CANCELLED">예약취소</option>
+                      <option value="COMPLETED">사용완료</option>
+                      <option value="NO_SHOW">사용미완료</option>
+                    </select>
                   </div>
-                  <img
-                    class="h-full w-[24px] absolute !m-[0] top-[0px] right-[0px] bottom-[0px] max-h-full overflow-hidden shrink-0 z-[1]"
-                    alt=""
-                    src="/image/host/arrowdropdownfilled.svg"
-                  />
-                </div>
-                <div
-                  class="self-stretch flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[4]"
-                >
-                  Placeholder
-                </div>
-                <div
-                  class="h-0 w-[24px] absolute !m-[0] top-[calc(50%_-_0px)] right-[12px]"
-                ></div>
-                <div class="hidden flex-row items-start justify-start z-[6]">
-                  <img
-                    class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                    alt=""
-                    src="/image/host/closefilled.svg"
-                  />
-                </div>
-              </div>
+         
               <h3
                 class="m-[0px] h-[40px] w-[52px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-normal font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[16px] mq450:leading-[21px]"
               >
                 기간
               </h3>
               <div
-                class="flex-1 flex flex-col items-start justify-start min-w-[97px]"
+                class="flex-1 flex flex-col items-start justify-start"
               >
-                <div
-                  class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+                <div id="date-range-picker"
+                  class="w-[230px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[15px]"
                 >
                   <input
-                    class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
-                    placeholder="예약 시작일"
+                    class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-center py-[8px] px-[0px] box-border text-[16px] text-[#6c757d] min-w-[76px] min-h-[24px]"
+                    placeholder="예약기간"
                     type="text"
+                    id="date-range-picker-input"
                   />
                 </div>
-                <div
-                  class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                >
-                  <div
-                    class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                  >
-                    Helper text
-                  </div>
-                </div>
               </div>
-              <h3
-                class="m-[0px] h-[40px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-normal font-[Roboto] text-[#000] text-left flex items-center min-w-[15px] mq450:text-[16px] mq450:leading-[21px] mq750:w-full mq750:h-[15px]"
-              >
-                ~
-              </h3>
-              <div
-                class="flex-1 flex flex-col items-start justify-start min-w-[97px]"
-              >
-                <div
-                  class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                >
-                  <input
-                    class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
-                    placeholder="예약 종료일"
-                    type="text"
-                  />
-                </div>
-                <div
-                  class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                >
-                  <div
-                    class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                  >
-                    Helper text
-                  </div>
-                </div>
-              </div>
-              <button
+              <button type="button" id="search-button"
                 class="cursor-pointer [border:none] py-[8px] px-[31px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
               >
                 <div class="flex flex-row items-start justify-start gap-[8px]">
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon.svg"
-                  />
-
                   <b
                     class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[37px]"
                     >검색</b
                   >
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon1.svg"
-                  />
                 </div>
               </button>
             </form>
             <div
               class="w-[230px] flex flex-row items-start justify-start gap-[30px]"
             >
-              <button
+              <button type="button" id="confirm-button"
                 class="cursor-pointer [border:none] py-[8px] px-[31px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
               >
                 <div class="flex flex-row items-start justify-start gap-[8px]">
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon.svg"
-                  />
-
                   <b
                     class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[37px]"
                     >확정</b
                   >
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon1.svg"
-                  />
                 </div>
               </button>
-              <button
+              <button type="button" id="reject-button"
                 class="cursor-pointer border-[#2196f3] border-[1px] border-solid py-[6px] pl-[31px] pr-[30px] bg-[#fff] flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
               >
                 <div class="flex flex-row items-start justify-start gap-[8px]">
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon.svg"
-                  />
-
                   <div
                     class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left inline-block min-w-[37px]"
                   >
                     취소
                   </div>
-                  <img
-                    class="h-[22px] w-[18px] relative hidden"
-                    alt=""
-                    src="/image/host/masked-icon1.svg"
-                  />
                 </div>
               </button>
             </div>
           </div>
         </section>
-        <section
-          class="self-stretch flex flex-row items-start justify-start py-[0px] px-[50px] box-border max-w-full text-center text-[14px] text-[rgba(0,0,0,0.87)] font-[Roboto] lg:pl-[25px] lg:pr-[25px] lg:box-border"
-        >
-          <div
-            class="flex-1 flex flex-col items-start justify-start gap-[118.5px] max-w-full mq450:gap-[30px] mq750:gap-[59px]"
-          >
-            <div
-              class="self-stretch h-[573px] flex flex-row items-center justify-center bg-[url('/image/host/image-17@2x.png')] bg-cover bg-no-repeat bg-[top] max-w-full"
-            >
-              <img
-                class="w-[1300px] relative max-h-full object-cover hidden max-w-full"
-                alt=""
-                src="/image/host/image-17@2x.png"
-              />
-            </div>
-            <div
-              class="self-stretch flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full"
+        <div
+              class="self-stretch h-[571px] flex flex-row items-start justify-start py-[0px] px-[5px] box-border max-w-full"
             >
               <div
-                class="w-[540px] overflow-hidden shrink-0 flex flex-row items-start justify-center flex-wrap content-start gap-[10px] max-w-full"
+                class="self-stretch flex-1 flex flex-row items-start justify-center max-w-full"
               >
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem.svg"
-                />
-
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-1.svg"
-                />
-
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px] text-[#fff]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] bg-[#2196f3] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      1
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      2
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      3
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      4
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      5
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      6
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      7
-                    </div>
-                  </div>
-                </div>
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-1.svg"
-                />
-
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-3.svg"
-                />
+              <div id="table" class="pt-[20px] px-[10px] pb-[10px] gap-[10px]">
+                <table id="listTable" class="w-[1140px] text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit]  text-[16px] hover">
+                  <thead>
+                    <tr class="py-[20px] pl-[30px] pr-[634px] gap-[20px]">
+                      <th data-orderable="false"><input type="checkbox" id="selectAllCheckbox"/></th>
+                      <th>예약번호</th>
+                      <th>객실명</th>
+                      <th>예약자</th>
+                      <th>인원</th>
+                      <th>예약기간</th>
+                      <th>예약상태</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-[#ffffff] pt-[100px]"></tbody>
+                </table>
+              </div>
+              <div class="dataTables_paginate paging_simple_numbers pagination-sm"></div> 
               </div>
             </div>
-          </div>
-        </section>
       </main>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js" defer></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="/js/datepicker-search.js"></script>
+      <script>
+
+        $(document).ready(function () {
+          $('#listTable').DataTable({
+            "searching": false,
+      
+            ajax: {
+              url: '/host/reslist/getList',
+              type: 'GET',
+              dataSrc: 'data'
+            },
+      
+            columns: [
+              {
+                data: null,
+                render: function (data, type, row) {
+                  return '<input type="checkbox" class="itemCheckbox" value="' + row.id + '">';
+                }
+              },
+              { 
+                data: 'resNum', 
+                render: function (data, type, row) {
+                  return '<a href="/host/reslist/view?id=' + row.id + '">' + data + '</a>';
+                }
+              }, 
+              {
+                data: 'roomName',
+              },
+              {
+                data: 'resName',
+              },
+              {
+                data: 'resPerson',
+              },
+              {
+                data: 'startEndVo',
+                  render: function (data, type, row) {
+                  if (data) {
+                    var start = new Date(data.start);
+                    var startyear = start.getFullYear();
+                    var startmonth = ('0' + (start.getMonth() + 1)).slice(-2);
+                    var startday = ('0' + start.getDate()).slice(-2);
+                    
+                    var end = new Date(data.end);
+                    var endyear = end.getFullYear();
+                    var endmonth = ('0' + (end.getMonth() + 1)).slice(-2);
+                    var endday = ('0' + end.getDate()).slice(-2);
+                    
+                    return startyear + '-' + startmonth + '-' + startday + '~' + endyear + '-' + endmonth + '-' + endday;
+                  }
+                  return '';
+                }
+              },
+              {
+                data: 'resStatus',
+                render: function (data, type, row) {
+                  if (data === 'PENDING') {
+                    return '예약대기';
+                  } else if (data === 'CONFIRMED') {
+                    return '예약확정';
+                  } else if (data === 'CANCELLED') {
+                    return '예약취소';
+                  } else if (data === 'COMPLETED') {
+                    return '사용완료';
+                  } else if (data === 'NO_SHOW') {
+                    return '사용미완료';
+                  }
+                }
+              }
+            ],
+            columnDefs: [{ width: 50, targets: 0 },
+              {width: 210, targets: 1},
+              {width: 180, targets: 2},
+              {width: 140, targets: 3},
+              {width: 75, targets: 4},
+              {width: 250, targets: 5},
+              {width: 105, targets: 6}
+            ],
+      
+          });
+
+      
+          // 전체 선택 체크박스 이벤트 처리
+          $('#selectAllCheckbox').on('click', function () {
+            $('.itemCheckbox').prop('checked', this.checked);
+          });
+      
+          // 검색 버튼 클릭 이벤트 처리
+          $('#search-button').on('click', function () {
+            var resStatus = $('#resStatus').val();
+            var dateValue = $('#date-range-picker-input').val().trim();
+      
+            // 검색 요청
+            $.ajax({
+              url: '/host/reslist/search',
+              type: 'GET',
+              data: {
+                resStatus: resStatus,
+                dateValue: dateValue
+              },
+              success: function (data) {
+      
+                console.log(data);
+                var table = $('#listTable').DataTable();
+                table.clear();
+                table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신
+      
+              },
+              error: function (error) {
+                alert("검색 중 오류가 발생했습니다.");
+                console.error(error);
+              }
+            });
+          });
+      
+      
+          // 확정 버튼 클릭 이벤트 처리
+          $('#confirm-button').on('click', function () {
+            var selectedIds = [];
+            $('.itemCheckbox:checked').each(function () {
+              selectedIds.push($(this).val());
+            });
+      
+            if (selectedIds.length === 0) {
+              alert("확정하실 예약 건을 선택해주세요");
+              return;
+            }
+      
+            if (confirm("해당 예약 건을 확정하시겠습니까?")) {
+      
+              $.ajax({
+                url: '/host/reslist/confirm', 
+                type: 'POST',
+                data: { ids: selectedIds },
+              }).done(function (response) {
+                alert("확정이 완료되었습니다.");
+      
+                console.log(response);
+      
+                $('#listTable').DataTable().ajax.reload();
+      
+              }).fail(function (error) {
+                alert("확정 가능한 상태가 아닙니다.");
+                console.error(error);
+              });
+            }
+          });
+
+          // 취소 버튼 클릭 이벤트 처리
+          $('#reject-button').on('click', function () {
+            var selectedIds = [];
+            $('.itemCheckbox:checked').each(function () {
+              selectedIds.push($(this).val());
+            });
+      
+            if (selectedIds.length === 0) {
+              alert("취소하실 예약 건을 선택해주세요");
+              return;
+            }
+      
+            if (confirm("해당 예약 건을 취소하시겠습니까?")) {
+      
+              $.ajax({
+                url: '/host/reslist/reject', 
+                type: 'POST',
+                data: { ids: selectedIds },
+              }).done(function (response) {
+                alert("취소 완료되었습니다.");
+      
+                console.log(response);
+      
+                $('#listTable').DataTable().ajax.reload();
+      
+              }).fail(function (error) {
+                alert("취소 가능한 상태가 아닙니다.");
+                console.error(error);
+              });
+            }
+          });
+      
+          
+        });
+      
+      </script>
+
   </body>
 </html>

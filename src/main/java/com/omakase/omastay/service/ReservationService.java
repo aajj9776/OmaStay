@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.entity.Coupon;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Payment;
@@ -18,11 +20,13 @@ import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
+import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import jakarta.transaction.Transactional;
 
@@ -99,6 +103,70 @@ public class ReservationService {
         return dto;
     }
 
+    public List<HostReservationDTO> getAllRes(List<RoomInfoDTO> roomInfoDTOList) {
+        List<Reservation> allReservations = new ArrayList<>();
+
+    for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+        RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+        List<Reservation> reservations = reservationRepository.findByRoomInfo(roomInfo);
+        allReservations.addAll(reservations);
+    }
+        return ReservationMapper.INSTANCE.toHostReservationDTOList(allReservations);
+    }
+
+    public List<HostReservationDTO> searchRes(String resStatus, String dateValue, List<RoomInfoDTO> roomInfoDTOList) {
+        List<Reservation> allReservations = new ArrayList<>();
+
+        if (dateValue != null && !dateValue.trim().isEmpty()) {
+            String[] date = dateValue.split(" ~ ");
+            if (date.length < 2 || date[0].trim().isEmpty() || date[1].trim().isEmpty()) {
+                throw new IllegalArgumentException("Invalid date range format");
+            }
+            String startDate = date[0];
+            String endDate = date[1];
+            for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+                RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+                List<Reservation> reservations = reservationRepository.searchRes(resStatus, startDate, endDate, roomInfo);
+                allReservations.addAll(reservations);
+            }
+        } else {
+            for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+                RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+                List<Reservation> reservations = reservationRepository.searchRes(resStatus, null, null, roomInfo);
+                allReservations.addAll(reservations);
+            }
+        }
+
+        return ReservationMapper.INSTANCE.toHostReservationDTOList(allReservations);
+    }
+
+    // 예약 확정
+    public int confirmRes(List<Integer> ids) {
+        int[] idArray = new int[ids.size()];
+        for (int i = 0; i < ids.size(); i++) {
+            idArray[i] = ids.get(i);
+        }
+
+        int cnt = reservationRepository.confirmById(idArray);
+        return cnt;
+    }
+
+    // 예약 취소
+    public int rejectRes(List<Integer> ids) {
+        int[] idArray = new int[ids.size()];
+        for (int i = 0; i < ids.size(); i++) {
+            idArray[i] = ids.get(i);
+        }
+
+        int cnt = reservationRepository.rejectById(idArray);
+        return cnt;
+    }
+
+    //호스트 예약 상세
+    public HostReservationDTO getHostRes(int id) {
+        Reservation res = reservationRepository.findById(id).get();
+        return ReservationMapper.INSTANCE.toHostReservationDTO(res);
+    }
 
     /********** 체크 아웃 시점 이후 [확정]->[사용 완료] 예약 상태 변경 **********/
     // 30분마다 실행

@@ -435,7 +435,10 @@
             alert("인증번호가 일치합니다.");
             sessionStorage.setItem("emailVerified", "true");
             clearTimeout(timerId);
-
+            $('#email_check').attr('readonly', 'readonly');
+            $('#verification').removeAttr('onclick');
+            $('#verification').removeClass('cursor-pointer');
+            $('#verification').text('인증 완료');
             $('#pw').prop('disabled', false);
             $('#pw_check').prop('disabled', false);
           } 
