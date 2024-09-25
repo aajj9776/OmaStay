@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.omakase.omastay.dto.IssuedCouponDTO;
+import java.util.Optional;
+
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.entity.Coupon;
+
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
@@ -25,9 +27,10 @@ import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
 
+
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Optional;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -40,54 +43,83 @@ public class ReservationService {
     private PaymentRepository paymentRepository;
 
     @Transactional
+    public ReservationDTO checkReservation(ReservationDTO reservation) {
+
+        Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
+
+        RoomInfo roomInfo = new RoomInfo();
+        roomInfo.setId(2);
+        res.setRoomInfo(roomInfo);
+        StartEndVo startEndVo = new StartEndVo();
+        startEndVo.setStart(LocalDateTime.now());
+        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
+        res.setStartEndVo(startEndVo);
+
+         // 방 중복 체크 시 Pessimistic Lock 적용
+         Optional<Reservation> checkRoom = reservationRepository.findConflictingReservationWithLock(
+            res.getRoomInfo().getId(), 
+            res.getStartEndVo().getStart(), 
+            res.getStartEndVo().getEnd()
+        );
+
+        if( checkRoom.isPresent() ) {
+            return ReservationMapper.INSTANCE.toReservationDTO(checkRoom.get());
+        }
+
+        // 방 중복이 없는 경우
+        return null;
+    }
+
+    @Transactional
     public PaymentDTO insertPaymentInfo(PaymentDTO payment) {
         System.out.println("얍"+ payment);
 
         // 결제 ID를 기준으로 비관적 락을 걸고 기존 결제 정보 조회
-        payment.setId(1);
         Payment checkPay = paymentRepository.findByPaymentKeyWithLock(payment.getPaymentKey());
+        System.out.println("checkPay"+ checkPay);
 
         // 이미 결제가 완료된 경우 중복 처리 방지
         if (checkPay != null) {
             throw new IllegalStateException("이미 결제가 완료된 상태입니다.");
+        } else {
+            Payment res = PaymentMapper.INSTANCE.toPayment(payment);
+            System.out.println("여기뭐가나와요?"+ res);
+            res.setIssuedCoupon(null);
+            res.setPoint(null);
+            
+            if( payment.getNsalePrice() == null ){
+                res.setNsalePrice("0");
+            }
+            
+            res.setPayStatus(PayStatus.PAY);
+            res.setPayDate(LocalDateTime.now());
+            
+            
+            Payment pay = paymentRepository.save(res);
+            
+            PaymentDTO dto = PaymentMapper.INSTANCE.toPaymentDTO(pay);
+            return dto;
         }
-
-        Payment res = PaymentMapper.INSTANCE.toPayment(payment);
-        System.out.println("여기뭐가나와요?"+ res);
-        res.setIssuedCoupon(null);
-        res.setPoint(null);
-
-        if( payment.getNsalePrice() == null ){
-            res.setNsalePrice("0");
-        }
-
-        res.setPayStatus(PayStatus.PAY);
-        res.setPayDate(LocalDateTime.now());
-
-        Payment pay = paymentRepository.save(res);
-
-        PaymentDTO dto = PaymentMapper.INSTANCE.toPaymentDTO(pay);
-        return dto;
     }
 
     @Transactional
     public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
 
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
-
-        res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
-        Member member = new Member();
-        member.setId(2);
-        res.setMember(member);
-        res.setResPerson(2);
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(1);
+        roomInfo.setId(2);
         res.setRoomInfo(roomInfo);
+
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
         startEndVo.setEnd(LocalDateTime.now().plusDays(1));
         res.setStartEndVo(startEndVo);
-        res.setResStatus(ResStatus.COMPLETED);
+
+        res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
+        res.setResPerson(2);
+        res.setRoomInfo(roomInfo);
+        res.setStartEndVo(startEndVo);
+        res.setResStatus(ResStatus.PENDING);
         res.setNonMember(null);
 
         Reservation result = reservationRepository.save(res);
@@ -167,6 +199,7 @@ public class ReservationService {
         Reservation res = reservationRepository.findById(id).get();
         return ReservationMapper.INSTANCE.toHostReservationDTO(res);
     }
+
 
     /********** 체크 아웃 시점 이후 [확정]->[사용 완료] 예약 상태 변경 **********/
     // 30분마다 실행

@@ -6,6 +6,9 @@ import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.mapper.PointMapper;
 import com.omakase.omastay.repository.MemberRepository;
 import com.omakase.omastay.repository.PointRepository;
+
+import jakarta.persistence.criteria.CriteriaBuilder.In;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -54,4 +57,36 @@ public class PointService {
         return cnt;
     }
 
+    public List<PointDTO> getPoint(int id) {
+        List<Point> pList = pointRepository.findByMemIdx(id); // 속성 이름이 mIdx인지 확인
+
+        return PointMapper.INSTANCE.toPointDTOList(pList);
+    }
+
+    public PointDTO savePoint(PointDTO pointDTO) {
+        Point res = PointMapper.INSTANCE.toPoint(pointDTO);
+        
+        List<Integer> sum = pointRepository.findLatestPSumByMemIdx(pointDTO.getMemIdx());
+        System.out.println("sum : " + sum.get(0));
+        int sumPoint =  sum.get(0) - pointDTO.getPValue();
+        System.out.println(sumPoint);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("-").append(pointDTO.getPValue());
+        res.setPValue(Integer.parseInt(sb.toString()));
+        res.setPDate(LocalDateTime.now());
+        res.setPSum(sumPoint);
+        res.setPContent("포인트 사용");
+        Point point = pointRepository.save(res);
+        PointDTO dto = PointMapper.INSTANCE.toPointDTO(point);
+        return dto;
+    }
+
+    public Integer getSumPoint(int id) {
+        List<Integer> sum = pointRepository.findLatestPSumByMemIdx(id);
+        return sum.get(0);
+
+    }
+
+   
 }
