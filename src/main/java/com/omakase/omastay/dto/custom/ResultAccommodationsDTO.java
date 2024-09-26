@@ -1,6 +1,7 @@
 package com.omakase.omastay.dto.custom;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omakase.omastay.entity.enumurate.HCate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,13 +13,13 @@ public class ResultAccommodationsDTO {
     private Integer hIdx;
 
     @JsonProperty("hcate")
-    private String hCate;
+    private HCate hCate;
 
     @JsonProperty("hname")
     private String hName;
 
     @JsonProperty("oneDayPrice")
-    private Integer oneDayPrice; //평균 가격
+    private String oneDayPrice; //평균 가격
 
     @JsonProperty("xaxis")
     private String xAxis;
@@ -30,7 +31,7 @@ public class ResultAccommodationsDTO {
     private String img_url;
 
     @JsonProperty("rating")
-    private Double rating;
+    private double rating;
 
     @JsonProperty("reviewCount")
     private int reviewCount;
