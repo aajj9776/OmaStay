@@ -4,12 +4,27 @@
 
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.css" />
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+  <style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border-radius: 2px;
+    }
+  </style>
 </head>
 
 <body>
   <div
     class="w-full relative rounded-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start py-[30px] px-[20px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]">
-    
+
     <!-- 제목 영역 -->
     <label
       class="m-[0px] self-stretch h-[40px] relative text-inherit font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px]">
@@ -18,72 +33,230 @@
 
     <!-- 검색과 차트 영역-->
     <section
-      class="w-[1500px] flex flex-row items-start justify-center gap-[10px] max-w-full text-left text-[20px] text-[#000] font-[Roboto] mq1300:flex-wrap">
-      <div
-        class="w-[888px] gap-2 rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-start justify-center py-[25.5px] px-[24px] box-border min-w-[888px] max-w-full mq1125:min-w-full mq1300:flex-1">
-        <label
-          class="m-[0px] w-[800px] relative text-inherit tracking-[0.4px] leading-[166%] font-medium font-[inherit] flex items-center max-w-full mq450:text-[16px] mq450:leading-[27px]">
-          검색 필터
-        </label>
-        <div id="regionSection" class="flex flex-col w-full gap-2">
-          <div class="flex flex-row text-[18px] gap-2">
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">전체</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">서울</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">부산</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">인천</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">대구</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">대전</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">광주</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">울산</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">세종</button>
-          </div>
-          <div class="flex flex-row text-[18px] gap-2">
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">경기</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">충북</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">충남</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">전북</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">전남</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">경북</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">경남</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">강원</button>
-            <button class="border-[1px] rounded-md border-violet-300 w-[80px]">제주도</button>
-          </div>
-        </div>
-        
+      class="w-[1670px] flex flex-row items-start justify-start gap-[10px] max-w-full text-left text-[20px] text-[#000] font-[Roboto] mq1300:flex-wrap">
+
+
+      <!-- 검색 영역 -->
+      <div class="gap-3 rounded-[30px] bg-[#eaecf8] flex flex-col items-start justify-center p-[20px] box-border ">
+        <form id="search-form" action="admin/sales/search" class="flex flex-col gap-3">
+            <label class="font-semibold w-full">
+              매출 확정일 기간
+            </label>
+            <div id="date-range-picker"
+              class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[10px]">
+              <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
+              <input readonly id="date-range-picker-input" name="dateRange"
+                class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+                type="text" placeholder="전체 기간" />
+            </div>
+
+            <label class="font-semibold w-full">
+              지역
+            </label>
+            <select id="region-value" name="region" data-str="게시판 유형"
+              class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+              <option value="all">전체</option>
+              <option value="서울">서울</option>
+              <option value="부산">부산</option>
+              <option value="인천">인천</option>
+              <option value="대구">대구</option>
+              <option value="대전">대전</option>
+              <option value="광주">광주</option>
+              <option value="울산">울산</option>
+              <option value="세종">세종</option>
+              <option value="경기">경기</option>
+              <option value="충북">충북</option>
+              <option value="충남">충남</option>
+              <option value="전북">전북</option>
+              <option value="전남">전남</option>
+              <option value="경북">경북</option>
+              <option value="경남">경남</option>
+              <option value="강원">강원</option>
+              <option value="제주도">제주도</option>
+            </select>
+        </form>
+        <!-- 버튼 -->
         <div
-          class="w-full flex flex-row items-center justify-start box-border gap-[10px] text-[18px]">
-          <label>
-            기간
-          </label>
-          <input class="border-[1px] border-violet-300 h-[24px]" />
+          class="w-[300px] flex-1 box-border flex flex-row items-center justify-start py-[4px] px-[10px] gap-[10px] text-[16px]">
+          <button id="search-button" class="w-[100px] h-[30px] bg-[#d4d8f1] rounded-[4px]">검색</button>
+          <button id="reset-button"
+            class="flex flex-row items-center justify-center w-[100px] h-[30px] border-[2px] border-[#d4d8f1] rounded-[4px]">초기화</button>
         </div>
-        <div
-          class="w-[595px] flex flex-row items-center justify-start gap-[15px] text-[18px] ">
-          <label>
-            검색어
-          </label>
-          <select>
-            <option>호스트명</option>
-            <option>예약자명</option>
-            <option>결제내용</option>
-          </select>
-          <input class="border-[1px] border-violet-300 h-[24px]" />
-          <button>검색</button>
-        </div>
+
+        <div class="text-gray-400 text-[16px]"> * 판매실적은 예약종료일 다음날 매출이 확정된 뒤 등록됩니다.</div>
       </div>
-      <!-- 판매실적 차트-->
+
+
+
+      <!-- 판매실적 Top5 -->
       <div
-        class="flex-1 rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-row items-start justify-start py-[17px] px-[20px] box-border min-w-[434px] max-w-full text-[22px] text-[#111618] font-[Lato] mq800:min-w-full">
-        
+        class="w-full h-[400px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start py-[17px] px-[20px] box-border ">
+
+        <div th:if="${region == null}">
+          <label class="font-semibold">
+            전체 지역 판매실적 Top5
+          </label>
+        </div>
+
+        <div th:if="${region != null}">
+          <label class="font-semibold">
+            [[${region}] 지역 판매실적 Top5
+          </label>
+        </div>
+
+        <canvas id="myChart"></canvas>
       </div>
     </section>
-
 
     <section
-      class="w-[1565px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[20px] box-border max-w-full text-left text-[14px] text-[#000] font-['Work_Sans']">
-      
+      class="w-[1670px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-center justify-start p-[20px] box-border max-w-full text-left text-[14px] ">
+
+      <table id="DataTable">
+        <thead>
+          <tr>
+            <th>매출번호</th>
+            <th>호스트번호</th>
+            <th>지역</th>
+            <th>업체명</th>
+            <th>예약번호</th>
+            <th>결제내용</th>
+            <th>예약시작일</th>
+            <th>예약종료일</th>
+            <th>결제일</th>
+            <th>할인전금액</th>
+            <th>할인후금액</th>
+            <th>쿠폰할인금액</th>
+            <th>포인트할인금액</th>
+            <th>등급할인금액</th>
+            <th>매출확정일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="data : ${list}">
+            <td th:text="${data.sales.id}"></td>
+            <td th:text="${data.hostInfo.id}"></td>
+            <td th:text="${data.hostInfo.region}"></td>
+            <td th:text="${data.hostInfo.hname}"></td>
+            <td th:text="${data.reservation.id}"></td>
+            <td th:text="${data.payment.payContent}"></td>
+            <td th:text="${#temporals.format(data.reservation.startEndVo.start, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(data.reservation.startEndVo.end, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(data.payment.payDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${data.payment.nsalePrice}"></td>
+            <td th:text="${data.payment.amount}"></td> <!--할인 후 금액-->
+            <td th:text="${data.payment.payCoupon}"></td>
+            <td th:text="${data.payment.payPoint}"></td>
+            <td th:text="${data.payment.payGrade}"></td>
+            <td th:text="${data.sales.salDate}"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tfoot>
+      </table>
+
     </section>
   </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script type="text/javascript" src="/js/datepicker-search.js"></script>
+  <script th:inline="javascript">
+
+
+    $(document).ready(function () {
+      $('#DataTable').DataTable({
+        initComplete: function () {
+          this.api()
+            .columns()
+            .every(function () {
+              let column = this;
+              let title = column.header().textContent;
+
+              // Create input element
+              let input = document.createElement('input');
+              input.placeholder = title;
+
+              column.footer().replaceChildren(input);
+
+                input.addEventListener('keyup', () => {
+                  if (column.search() !== this.value) {
+                    column.search(input.value).draw();
+                  }
+                });
+            });
+        }
+      });
+
+
+      // 검색 버튼 클릭 이벤트 처리
+      $('#search-button').on('click', function () {
+        $('#search-form').submit();
+      });
+
+      // 초기화 버튼 클릭 이벤트 처리
+      $('#reset-button').on('click', function () {
+        $('#date-range-picker-input').val('');
+        $('#search-keyword').val('');
+        $('#search-type').val('all');
+        $('#region-value').val('all');
+      });
+    });
+
+
+    // 차트 데이터
+    var top5List = /*[[${top5List}]]*/[];
+    console.log(top5List);
+
+    var label = top5List.map(function (item) {
+      return item.hostName; // Assuming Top5SalesDTO has a field 'regionName'
+    });
+
+    var data = top5List.map(function (item) {
+      return item.totalSales; // Assuming Top5SalesDTO has a field 'salesAmount'
+    });
+
+    var ctx = document.getElementById('myChart');
+    var salesChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: label,
+        datasets: [{
+          label: 'Sales Amount',
+          data: data,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+  </script>
 </body>
 
 </html>
