@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/search")
@@ -26,7 +27,7 @@ public class SearchController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("search/detail_host");
         mv.addObject("includeSearchBar", true);
-        return mv;
+        return mv;  
     }
 
     //숙소 검색 창(변경 예정)
@@ -56,4 +57,12 @@ public class SearchController {
 
         return filterDTO;
     }
+
+    @RequestMapping("/recomm-host")
+    public ModelAndView recommHost() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("search/recomm-host");
+        return mv;
+    }
+    
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ReviewRepositoryCustom {
     List<Tuple> findReviewStatsByHostIds(List<Integer> hostIds);
+    
 }

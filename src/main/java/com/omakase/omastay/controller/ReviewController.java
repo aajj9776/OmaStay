@@ -10,14 +10,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.groovy.runtime.dgmimpl.arrays.IntegerArrayGetAtMetaMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import com.mysql.cj.conf.HostInfo;
+import com.omakase.omastay.dto.GradeDTO;
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.ReviewCommentDTO;
 import com.omakase.omastay.dto.ReviewDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.entity.Review;
+import com.omakase.omastay.entity.ReviewComment;
+import com.omakase.omastay.service.ReviewCommentService;
 import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.util.FileRenameUtil;
 
@@ -39,10 +50,14 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ReviewCommentService reviewCommentService;
+
 
     @RequestMapping("/review_insert")
     @ResponseBody
-    public String addReview(@RequestParam Map<String, String> params) { 
+    public ResponseEntity<Integer> addReview(@RequestParam Map<String, String> params) { 
+        System.out.println("들어는 왔니?");
         System.out.println("param"+params);
         ReviewDTO reviewDTO = new ReviewDTO();
         String revContent = params.get("revContent");
@@ -65,10 +80,55 @@ public class ReviewController {
             } else {
                 break; 
             }
-           reviewService.addReview(reviewDTO, onames, fnames);
-        }
-    return null;
+           
+        } 
+
+        Integer newRevIdx = reviewService.addReview(reviewDTO, onames, fnames);
+
+        return ResponseEntity.ok(newRevIdx);   
     }
+
+    @RequestMapping("/review_list")
+    @ResponseBody
+    public ResponseEntity<List<Map<String, Object>>> allReviewList() {
+           List<Review> reviewList = reviewService.findAllReview(); // 전체 리뷰 목록 조회
+
+            List<Map<String, Object>> responseList = new ArrayList<>();
+            for (Review review : reviewList) {
+                ReviewDTO reviewDTO = new ReviewDTO();
+                reviewDTO.setRevContent(review.getRevContent());
+                reviewDTO.setRevRating(review.getRevRating());
+                reviewDTO.setMemIdx(review.getMember().getId()) ;
+                reviewDTO.setResIdx(review.getReservation().getId()); 
+                reviewDTO.setHIdx(review.getHostInfo().getId());
+                reviewDTO.setRevDate(review.getRevDate());
+
+                MemberDTO memberDTO = new MemberDTO();
+                memberDTO.setMemName(review.getMember().getMemName()); 
+
+                RoomInfoDTO roomInfoDTO = new RoomInfoDTO();
+                roomInfoDTO.setRoomName(review.getReservation().getRoomInfo().getRoomName());
+
+                HostInfoDTO hostInfoDTO = new HostInfoDTO();
+                hostInfoDTO.setHname(review.getHostInfo().getHname());
+
+                GradeDTO gradeDTO = new GradeDTO();
+                gradeDTO.setGCate(review.getMember().getGrade().getGCate());
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("review", reviewDTO);
+                response.put("member", memberDTO);
+                response.put("hostinfo",hostInfoDTO);
+                response.put("room", roomInfoDTO);
+                response.put("grade",gradeDTO);
+
+                responseList.add(response);
+            
+
+            }
+                return ResponseEntity.ok(responseList);
+        }
+    
     
     //review 모달창 띄우기
     @GetMapping("/review_write")
@@ -124,6 +184,10 @@ public class ReviewController {
             throw new RuntimeException("파일을 찾을 수 없습니다.", e);
         }
     }
+
+   
+
+    
 
     
 }

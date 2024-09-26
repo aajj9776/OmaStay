@@ -63,6 +63,11 @@ public class Review {
     @Column(name = "rev_ rating")
     private Float revRating;
 
+    public Object getRevIdx() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRevIdx'");
+    }
+
 
 
 
