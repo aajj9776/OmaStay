@@ -1,12 +1,23 @@
 package com.omakase.omastay.service;
 
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.PaymentDTO;
+import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.SalesDTO;
+import com.omakase.omastay.dto.custom.SalesCustomDTO;
+import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.Sales;
+import com.omakase.omastay.mapper.HostInfoMapper;
+import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
+import com.omakase.omastay.mapper.SalesMapper;
+import com.omakase.omastay.repository.HostInfoRepository;
+import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.SalesRepository;
@@ -14,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
@@ -30,6 +42,13 @@ public class SalesService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private HostInfoRepository hostInfoRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
+    
 
     /********** 예약이 사용완료가 되면 체크아웃 다음날 매출 테이블로 들어감 **********/
     @Transactional 
@@ -52,6 +71,71 @@ public class SalesService {
         }
 
         System.out.println("매출 테이블 추가");
+    }
+
+
+    public List<SalesCustomDTO> getAllSales(){
+        List<SalesCustomDTO> salesCustomDTOs = new ArrayList<>();
+
+        List<Sales> sales = salesRepository.findAll();
+        System.out.println(sales);
+
+        for(Sales s: sales){
+            HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
+            ReservationDTO reservationDTO = ReservationMapper.INSTANCE.toReservationDTO(s.getReservation());
+            PaymentDTO paymentDTO = PaymentMapper.INSTANCE.toPaymentDTO(s.getReservation().getPayment());
+            SalesDTO salesDTO = SalesMapper.INSTANCE.toSalesDTO(s);
+            SalesCustomDTO salesCustomDTO = new SalesCustomDTO(hostInfoDTO, reservationDTO, paymentDTO, salesDTO);
+            salesCustomDTOs.add(salesCustomDTO);
+        }
+
+        return salesCustomDTOs;
+    }
+
+    public List<Top5SalesDTO> getTop5SalesByRegion(String region){
+        //List<Top5SalesDTO> top5SalesDTOs = new ArrayList<>();
+
+        List<Top5SalesDTO> top5SalesDTOs = salesRepository.findTop5SalesByRegion(region);
+
+        // for(Sales s: sales){
+        //     HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
+        //     ReservationDTO reservationDTO = ReservationMapper.INSTANCE.toReservationDTO(s.getReservation());
+        //     PaymentDTO paymentDTO = PaymentMapper.INSTANCE.toPaymentDTO(s.getReservation().getPayment());
+        //     SalesDTO salesDTO = SalesMapper.INSTANCE.toSalesDTO(s);
+        //     Top5SalesDTO top5SalesDTO = new Top5SalesDTO(hostInfoDTO, reservationDTO, paymentDTO, salesDTO);
+        //     top5SalesDTOs.add(top5SalesDTO);
+        // }
+
+        return top5SalesDTOs;
+    }
+
+    public List<SalesCustomDTO> searchSales(String dateRange, String region){
+        List<SalesCustomDTO> salesCustomDTOs = new ArrayList<>();
+
+        String startDate = null;
+        String endDate = null;
+
+        if(dateRange != null && dateRange.length() > 0){
+            String[] dateRangeArr = dateRange.split(" ~ ");
+            System.out.println("dateRangeArr: "+dateRangeArr[0]);
+            System.out.println("dateRangeArr: "+dateRangeArr[1]);
+            startDate = dateRangeArr[0];
+            endDate = dateRangeArr[1];
+        }
+        
+        List<Sales> sales = salesRepository.searchSales(startDate, endDate, region);
+
+        for(Sales s: sales){
+            HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
+            ReservationDTO reservationDTO = ReservationMapper.INSTANCE.toReservationDTO(s.getReservation());
+            PaymentDTO paymentDTO = PaymentMapper.INSTANCE.toPaymentDTO(s.getReservation().getPayment());
+            SalesDTO salesDTO = SalesMapper.INSTANCE.toSalesDTO(s);
+            SalesCustomDTO salesCustomDTO = new SalesCustomDTO(hostInfoDTO, reservationDTO, paymentDTO, salesDTO);
+            salesCustomDTOs.add(salesCustomDTO);
+        }
+
+        return salesCustomDTOs;
+
     }
     
     @Transactional(readOnly = true)
