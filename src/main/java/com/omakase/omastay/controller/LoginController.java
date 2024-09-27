@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.omakase.omastay.entity.Grade;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import com.omakase.omastay.dto.GradeDTO;
 import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.custom.MemberInfoDTO;
+import com.omakase.omastay.service.GradeService;
 import com.omakase.omastay.service.MemberService;
 import com.omakase.omastay.session.UserSession;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.UserProfileVo;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 
 
 @Controller
@@ -36,7 +44,7 @@ public class LoginController {
     private UserSession userSession;  // 세션 관리
 
     @Autowired
-    private HttpSession session;
+    private GradeService gradeService;
 
 
      @Autowired
@@ -192,6 +200,20 @@ public class LoginController {
         return "login/user_login";  // 로그인 페이지로 다시 이동
         }  
     }
+
+    @RequestMapping("/userInfo")
+    @ResponseBody
+    public Map<String, Object> requestMethodName(MemberInfoDTO member) {
+        System.out.println(member);
+        Map<String, Object> map = new HashMap<>();
+        MemberDTO memberDTO = memberService.getMemberInfo(member.getId());
+        System.out.println("회원등급" + memberDTO);
+        Grade grade = gradeService.getGrade(memberDTO.getGIdx());
+        System.out.println("회원등급" + grade);
+        map.put("grade", grade);
+        return map;
+    }
+    
 
 }
 

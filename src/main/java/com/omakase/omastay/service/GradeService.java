@@ -1,5 +1,6 @@
 package com.omakase.omastay.service;
 
+import com.omakase.omastay.entity.Grade;
 import com.omakase.omastay.repository.GradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,10 @@ public class GradeService {
 
     @Autowired
     private GradeRepository gradeRepository;
+
+    public Grade getGrade(Integer gIdx) {
+        return gradeRepository.findById(gIdx).get();
+    }
 
 
 }

@@ -1,5 +1,6 @@
-package com.omakase.omastay.dto;
+package com.omakase.omastay.dto.custom;
 
+import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.vo.StartEndVo;
@@ -10,9 +11,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ReservationDTO {
+public class HostReservationDTO {
     private Integer id;
     private Integer roomIdx;
+    private String roomName;
     private Integer memIdx;
     private Integer nonIdx;
     private Integer payIdx;
@@ -24,12 +26,12 @@ public class ReservationDTO {
     private String resName;
     private String resEmail;
     private String resNone;
-
     private PaymentDTO payment;
 
-    public ReservationDTO(Reservation reservation) {
+    public HostReservationDTO(Reservation reservation) {
         this.id = reservation.getId();
         this.roomIdx = reservation.getRoomInfo() != null ? reservation.getRoomInfo().getId() : null;
+        this.roomName = reservation.getRoomInfo() != null ? reservation.getRoomInfo().getRoomName() : null; 
         this.memIdx = reservation.getMember() != null ? reservation.getMember().getId() : null;
         this.nonIdx = reservation.getNonMember() != null ? reservation.getNonMember().getId() : null;
         this.payIdx = reservation.getPayment() != null ? reservation.getPayment().getId() : null;
@@ -41,14 +43,16 @@ public class ReservationDTO {
         this.resName = reservation.getResName();
         this.resEmail = reservation.getResEmail();
         this.resNone = reservation.getResNone();
+        this.payment = new PaymentDTO(reservation.getPayment());
     }
 
     @QueryProjection
-    public ReservationDTO(Integer id, Integer roomIdx, Integer memIdx, Integer nonIdx, Integer paymentId, String resNum,
+    public HostReservationDTO(Integer id, Integer roomIdx, String roomName, Integer memIdx, Integer nonIdx, Integer paymentId, String resNum,
                           StartEndVo startEndVo, String resName, String resEmail,
-                        Integer resPerson, Integer resPrice, ResStatus resStatus, String resNone) {
+                          Integer resPerson, Integer resPrice, ResStatus resStatus, String resNone, PaymentDTO payment) {
         this.id = id;
         this.roomIdx = roomIdx;
+        this.roomName = roomName; // roomName 초기화
         this.memIdx = memIdx;
         this.nonIdx = nonIdx;
         this.payIdx = paymentId;
@@ -60,5 +64,7 @@ public class ReservationDTO {
         this.resEmail = resEmail;
         this.resStatus = resStatus;
         this.resNone = resNone;
+        this.payment = payment;
     }
+    
 }
