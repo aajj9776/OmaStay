@@ -230,9 +230,30 @@
     <script>
       $(document).ready(function() {
         var hStep =  $("#hStep").val();
-        var hStatus =  $("#hStatus").val();
+
+        function updateStepImages(hStep) {
+                if (hStep.trim().toUpperCase() === "MYPAGE") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                } else if (hStep.trim().toUpperCase() === "INFO") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                    $("#info-link img").attr("src", "/image/host/check.png");
+                } else if (hStep.trim().toUpperCase() === "RULES") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                    $("#info-link img").attr("src", "/image/host/check.png");
+                    $("#rules-link img").attr("src", "/image/host/check.png");
+                } else if (hStep.trim().toUpperCase() === "ROOM") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                    $("#info-link img").attr("src", "/image/host/check.png");
+                    $("#rules-link img").attr("src", "/image/host/check.png");
+                    $("#room-link img").attr("src", "/image/host/check.png");
+                }
+            }
+
+            updateStepImages(hStep);
 
         var registerButton = $("#registerButton");
+
+        var hStatus =  $("#hStatus").val();
 
         if (hStatus === "APPLY") {
           registerButton.css("background-color", "#ffffff");
@@ -263,25 +284,10 @@
             alert("등록 단계를 모두 진행해 주세요.");
           }
         };
-
-
-          if (hStep.trim().toUpperCase() === "MYPAGE") {
-            $("#mypage-link img").attr("src", "/image/host/check.png");
-          } else if (hStep.trim().toUpperCase() === "INFO") {
-            $("#mypage-link img").attr("src", "/image/host/check.png");
-            $("#info-link img").attr("src", "/image/host/check.png");
-          } else if (hStep.trim().toUpperCase() === "RULES") {
-            $("#mypage-link img").attr("src", "/image/host/check.png");
-            $("#info-link img").attr("src", "/image/host/check.png");
-            $("#rules-link img").attr("src", "/image/host/check.png");
-          } else if (hStep.trim().toUpperCase() === "ROOM") {
-            $("#mypage-link img").attr("src", "/image/host/check.png");
-            $("#info-link img").attr("src", "/image/host/check.png");
-            $("#rules-link img").attr("src", "/image/host/check.png");
-            $("#room-link img").attr("src", "/image/host/check.png");
-          } 
         
       });
+
+      
 
     </script>
   </body>

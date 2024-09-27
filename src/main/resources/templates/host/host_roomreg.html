@@ -518,6 +518,18 @@
                 contentType: false,
                 success: function (response) {
                     alert('저장되었습니다.'); 
+                    $.ajax({
+                            url: '/host/updateSession',
+                            type: 'POST',
+                            success: function(sessionResponse) {
+                                if (sessionResponse === 'success') {
+                                  location.reload();
+                                }
+                            },
+                            error: function(error) {
+                                console.error('Error updating session:', error);
+                            }
+                        });
                 },
                 error: function (error) {
                     alert('저장 실패하였습니다.');
