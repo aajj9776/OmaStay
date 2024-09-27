@@ -37,9 +37,12 @@ import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.PriceDTO;
+import com.omakase.omastay.dto.SalesDTO;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
+import com.omakase.omastay.dto.custom.SalesCustomDTO;
+import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.entity.enumurate.SCate;
@@ -52,6 +55,7 @@ import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.MemberService;
 import com.omakase.omastay.service.PointService;
 import com.omakase.omastay.service.PriceService;
+import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -96,6 +100,9 @@ public class AdminController {
 
     @Autowired
     ImageService ims;
+
+    @Autowired 
+    SalesService salesService;
 
     @Autowired
     private ServletContext application;
@@ -174,7 +181,6 @@ public class AdminController {
 
         hs.rejectHost(Integer.parseInt(hidx));
 
-
         return map;
     }
 
@@ -193,8 +199,48 @@ public class AdminController {
 
     /************************ 판매 실적 시작 ************************/
     @RequestMapping("/sales")
-    public String sales() {
-        return "admins/sales";
+    public ModelAndView sales(@RequestParam(value="region", required=false) String region) {
+        ModelAndView mv = new ModelAndView();
+        
+        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
+        mv.addObject("top5List", top5List);
+
+        List<SalesCustomDTO> list = salesService.getAllSales();
+        mv.addObject("list", list);
+
+        // if(region != null){ //지역이 있으면
+
+        //     List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
+        //     mv.addObject("top5List", top5List);
+        //     List<SalesCustomDTO> list = salesService.getAllSales();
+        //     mv.addObject("list", list);
+
+        // } else{ //지역이 없으면
+
+        //      //테이블
+        //     List<SalesCustomDTO> list = salesService.getAllSales();
+        //     mv.addObject("list", list);
+        // }
+
+        mv.setViewName("admins/sales");
+
+        return mv;
+    }
+
+    //판매실적 검색(동기식)
+    @RequestMapping("/sales/search")
+    public ModelAndView sales_search(@RequestParam(value="dateRange", required=false) String dateRange,
+                                        @RequestParam(value="region", required=false) String region) {
+
+        ModelAndView mv = new ModelAndView();
+
+        List<SalesCustomDTO> list = salesService.searchSales(dateRange, region);
+
+        mv.addObject("list", list);
+
+        mv.setViewName("admins/sales");
+
+        return mv;
     }
 
 

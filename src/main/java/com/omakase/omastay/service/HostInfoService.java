@@ -6,7 +6,6 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostFacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
-import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
@@ -44,11 +43,9 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
-import org.apache.tomcat.util.http.parser.Host;
-import org.checkerframework.checker.units.qual.A;
+
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,6 +82,7 @@ public class HostInfoService {
         return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
     }
 
+    @Transactional
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
 
@@ -155,6 +153,7 @@ public class HostInfoService {
         return new HostMypageDTO(accountDTO, hostInfoDTO);
     }
 
+    @Transactional 
     public void saveHostInfo(HostInfoCustomDTO hostInfoCustomDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostInfoCustomDTO.getHostInfo().getAddressVo().getStreet());
         System.out.println(adminMemberDTO);
@@ -247,6 +246,7 @@ public class HostInfoService {
         return hostInfoCustomDTO;
     }
 
+    @Transactional 
     public HostInfoDTO saverules(HostInfoDTO hostInfoDTO, AdminMemberDTO adminMemberDTO) {
 
         AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);

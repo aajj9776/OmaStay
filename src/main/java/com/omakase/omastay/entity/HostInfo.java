@@ -1,5 +1,7 @@
 package com.omakase.omastay.entity;
 
+import java.time.LocalDateTime;
+
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
@@ -67,13 +69,15 @@ public class HostInfo {
     @Column(name = "checkout", length = 100)
     private String checkout;
 
-    @Column(name = "directions", length = 100)
+    @Lob
+    @Column(name = "directions")
     private String directions;
 
-    @Column(name = "rules", length = 100)
+    @Lob
+    @Column(name = "rules")
     private String rules;
 
-    @Column(name = "price_add", length = 100)
+    @Column(name = "price_add", length = 1000)
     private String priceAdd;
 
     //신청 승인 반려 해제
@@ -96,5 +100,8 @@ public class HostInfo {
     //대표번호
     @Column(name = "h_phone", nullable = false, length = 100)
     private String hphone;
+
+    @Column(name = "h_reg_time")
+    private LocalDateTime hRegTime;
 
 }

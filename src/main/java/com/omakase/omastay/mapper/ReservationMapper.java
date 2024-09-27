@@ -30,12 +30,4 @@ public interface ReservationMapper {
 
     List<Reservation> toReservationList(List<ReservationDTO> reservationDTOList);
 
-    @Mapping(source = "roomInfo.id", target = "roomIdx")
-    @Mapping(source = "roomInfo.roomName", target = "roomName")
-    @Mapping(source = "member.id", target = "memIdx")
-    @Mapping(source = "nonMember.id", target = "nonIdx")
-    @Mapping(source = "payment.id", target = "payIdx")
-    HostReservationDTO toHostReservationDTO(Reservation reservation);
-
-    List<HostReservationDTO> toHostReservationDTOList(List<Reservation> reservationList);
 }

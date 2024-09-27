@@ -161,6 +161,62 @@
           alert(errorMessage);
       }
       /*]]>*/
+      $(document).ready(function() {
+            var hStep = $("#hStep").val();
+
+            function updateStepImages(hStep) {
+                if (hStep.trim().toUpperCase() === "MYPAGE") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                } else if (hStep.trim().toUpperCase() === "INFO") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                    $("#info-link img").attr("src", "/image/host/check.png");
+                } else if (hStep.trim().toUpperCase() === "RULES") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                    $("#info-link img").attr("src", "/image/host/check.png");
+                    $("#rules-link img").attr("src", "/image/host/check.png");
+                } else if (hStep.trim().toUpperCase() === "ROOM") {
+                    $("#mypage-link img").attr("src", "/image/host/check.png");
+                    $("#info-link img").attr("src", "/image/host/check.png");
+                    $("#rules-link img").attr("src", "/image/host/check.png");
+                    $("#room-link img").attr("src", "/image/host/check.png");
+                }
+            }
+
+            updateStepImages(hStep);
+
+            var registerButton = $("#registerButton");
+            var hStatus = $("#hStatus").val();
+
+            if (hStatus === "APPLY") {
+                registerButton.css("background-color", "#ffffff");
+                registerButton.find(".text-white").removeClass("text-white").addClass("text-blue-500").text("숙소 등록 검수중");
+            } else if (hStatus === "APPROVE") {
+                registerButton.css("background-color", "#ffffff");
+                registerButton.find(".text-white").removeClass("text-white").addClass("text-blue-500").text("숙소 등록 완료");
+            } else if (hStatus === "REJECT" || hStatus === "RELEASE") {
+                registerButton.css("background-color", "#2196f3");
+                registerButton.find(".text-white").css("color", "#ffffff").text("업체 정보 등록");
+            }
+
+            console.log("hStep 값:", hStep);
+
+            window.requestadmin = function() {
+                if (hStep.trim().toUpperCase() === "ROOM") {
+                    $.ajax({
+                        url: '/host/requestadmin',
+                        type: 'POST',
+                        success: function(response) {
+                            alert('등록 요청되었습니다.');
+                        },
+                        error: function(error) {
+                            alert('등록 요청 실패하였습니다.');
+                        }
+                    });
+                } else {
+                    alert("등록 단계를 모두 진행해 주세요.");
+                }
+            };
+        });
   </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -22,6 +22,7 @@ $(document).ready(function () {
         },
         showDropdowns: true,
         autoApply: true,
+        linkedCalendars: false,
         minDate: moment().add(-36, 'months'),
         maxDate: moment(),
         timePicker: false,

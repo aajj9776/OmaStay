@@ -79,7 +79,7 @@
                                         type="radio"
                                         id = "all"
                                         value="all"
-                                        th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 />
                             </div>
                             <div
@@ -102,7 +102,7 @@
                                         type="radio"
                                         id = "motel"
                                         value="0"
-                                        th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 />
                             </div>
                             <div
@@ -125,7 +125,7 @@
                                         type="radio"
                                         id = "hotel"
                                         value="1"
-                                        th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 />
                             </div>
                             <div
@@ -148,7 +148,7 @@
                                         type="radio"
                                         id = "pension"
                                         value="2"
-                                        th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 />
                             </div>
                             <div
@@ -171,7 +171,7 @@
                                         type="radio"
                                         id = "guesthouse"
                                         value="3"
-                                        th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 />
                             </div>
                             <div
@@ -243,7 +243,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max"
-                                    id="f_idx3" type="button" name="f_idx" value="4" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    id="f_idx3" type="button" name="f_idx" value="4" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 엘리베이터
                             </button>
@@ -253,7 +253,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max" id="f_idx4"
-                                    type="button" name="f_idx" value="3"  th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    type="button" name="f_idx" value="3"  th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 주차장
                             </button>
@@ -262,7 +262,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max" id="f_idx13"
-                                    type="button" name="f_idx" value="13" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    type="button" name="f_idx" value="13" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 바베큐
                             </button>
@@ -272,7 +272,7 @@
                             class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border "
                     >
                         <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max" id="f_idx1"
-                                type="button" name="f_idx" value="1" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                type="button" name="f_idx" value="1" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                         >
                             주방/식당
                         </button>
@@ -295,7 +295,7 @@
                                     class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                             >
                                 <button class="btn btn-secondary w-max text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx15"
-                                        type="button" name="f_idx" value="15" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        type="button" name="f_idx" value="15" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 >
                                     전자레인지
                                 </button>
@@ -304,7 +304,7 @@
                                     class="w-[85px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                             >
                                 <button class="btn btn-secondary  w-max text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx5"
-                                        type="button" name="f_idx" value="5" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        type="button" name="f_idx" value="5" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 >
                                     와이파이
                                 </button>
@@ -313,7 +313,7 @@
                                     class="w-max !m-[0] absolute right-[-62px] bottom-[-0.2px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px] ]"
                             >
                                 <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max" id="f_idx7"
-                                        type="button" name="f_idx" value="7" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        type="button" name="f_idx" value="7" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 >
                                     에어컨
                                 </button>
@@ -323,7 +323,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary w-max text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx10"
-                                    type="button" name="f_idx" value="10" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    type="button" name="f_idx" value="10" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 드라이기
                             </button>
@@ -332,7 +332,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border relative max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max" id="f_idx2"
-                                    type="button" name="f_idx" value="2" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    type="button" name="f_idx" value="2" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 세탁기
                             </button>
@@ -340,7 +340,7 @@
                                     class="w-[85px] !m-[0] absolute bottom-[-39.7px] left-[-23px] flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px] ]"
                             >
                                 <button class="btn btn-secondary w-max  text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx6"
-                                        type="button" name="f_idx" value="6" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                        type="button" name="f_idx" value="6" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                                 >
                                     욕실용품
                                 </button>
@@ -354,7 +354,7 @@
                                 class="flex-1 flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx8"
-                                    type="button"  name="f_idx" value="8" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    type="button"  name="f_idx" value="8" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 냉장고
                             </button>
@@ -363,7 +363,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx16"
-                                    type="button" name="f_idx" value="16" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    type="button" name="f_idx" value="16" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 TV
                             </button>
@@ -372,7 +372,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx9"
-                                    type="button" name="f_idx" value="9" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                    type="button" name="f_idx" value="9" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 욕조
                             </button>
@@ -391,7 +391,7 @@
                             class="flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                     >
                         <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center" id="f_idx14"
-                                type="button" name="f_idx" value="14" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                type="button" name="f_idx" value="14" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                         >
                             객실내취사
                         </button>
@@ -400,7 +400,7 @@
                             class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                     >
                         <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
-                                id="f_idx11" type="button" name="f_idx" value="11" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                id="f_idx11" type="button" name="f_idx" value="11" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                         >
                             흡연
                         </button>
@@ -409,7 +409,7 @@
                             class="flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                     >
                         <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center"
-                                id="f_idx12" type="button" name="f_idx" value="12" th:attr="onclick='handleFilter(\'' + ${identifier} + '\')'"
+                                id="f_idx12" type="button" name="f_idx" value="12" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                         >
                             반려동물동반
                         </button>
