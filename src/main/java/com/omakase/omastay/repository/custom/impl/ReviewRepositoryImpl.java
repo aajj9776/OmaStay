@@ -21,12 +21,12 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     @Override
     public List<Tuple> findReviewStatsByHostIds(List<Integer> hostIds) {
-        //리뷰 평점과 리뷰 몇명이 남겼는지 가져오기
-        //리뷰 평점은 리뷰의 평점을 모두 더한 후 리뷰의 개수로 나눠야됨
+        //리뷰 평점과 리뷰 총 갯수 구하기
+        //리뷰 평점은 리뷰의 평점을 모두 더한 후 리뷰의 총 개수로 나눠야됨
 
         return queryFactory
                 .select(
-                        review.hostInfo.id, review.revRating.avg(), review.count()
+                        review.hostInfo.id,review.revRating.avg().coalesce(0.0), review.count()
                 )
                 .from(review)
                 .where(review.hostInfo.id.in(hostIds))

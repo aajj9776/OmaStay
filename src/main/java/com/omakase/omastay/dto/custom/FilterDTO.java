@@ -14,7 +14,6 @@ import java.util.List;
 public class FilterDTO {
     @NotNull
     private String keyword;
-    @NotNull
     private StartEndVo startEndDay;
     @NotNull
     private Integer person;
@@ -23,4 +22,6 @@ public class FilterDTO {
     private List<Integer> facilities;
     private Integer hCate;
     private String filter;
+    private String sortType;
+    boolean soldOut;
 }

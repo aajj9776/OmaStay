@@ -24,7 +24,7 @@
   </head>
   <body>
       <header th:insert="~{component/header/header :: header}"/>
-      <div th:if="${includeSearchBar}" th:insert="~{component/search/searchbar :: searchbar}"></div>
+      <header th:if="${includeSearchBar}" th:insert="~{component/search/searchbar :: searchbar}"></header>
       <main layout:fragment="main"/>
       <footer th:insert="~{component/footer/footer :: footer}"/>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
