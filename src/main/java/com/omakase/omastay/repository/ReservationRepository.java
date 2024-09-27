@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import java.util.List;
 
+import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
@@ -43,4 +44,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
     Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx")
+    List<Reservation> findByMemIdx(@Param("memIdx") int memIdx);
 }

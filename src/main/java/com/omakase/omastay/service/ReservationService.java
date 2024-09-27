@@ -13,9 +13,7 @@ import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
-import com.omakase.omastay.entity.Coupon;
 
-import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
@@ -127,6 +125,7 @@ public class ReservationService {
         return dto;
     }
 
+    @Transactional
     public ReservationDTO getReservation(int resIdx ) {
         Reservation res = reservationRepository.findById(resIdx).get();
         res.setResStatus(ResStatus.CANCELLED);
@@ -135,6 +134,7 @@ public class ReservationService {
         return dto;
     }
 
+    
     public List<HostReservationDTO> getAllRes(List<RoomInfoDTO> roomInfoDTOList) {
         List<Reservation> allReservations = new ArrayList<>();
 

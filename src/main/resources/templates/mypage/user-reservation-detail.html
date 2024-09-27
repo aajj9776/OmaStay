@@ -149,9 +149,9 @@
                       <div
                         class="w-[424px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[30px] max-w-full mq450:flex-wrap"
                       >
-                        <div
+                        <img src="" alt="호텔사진" id="img"
                           class="h-[145px] w-[151px] relative rounded-[10px] bg-[#999] min-w-[151px] mq450:flex-1"
-                        ></div>
+                        ></img>
                         <div
                           class="flex-1 flex flex-col items-start justify-start pt-[19px] px-[0px] pb-[0px] box-border min-w-[145px]"
                         >
@@ -159,12 +159,14 @@
                             class="self-stretch flex flex-col items-start justify-start gap-[20px]"
                           >
                             <b
+                              id="hName"
                               class="w-[175px] relative leading-[23px] flex items-center"
-                              >서울시 중랑구</b
+                              ></b
                             >
                             <b
-                              class="self-stretch relative text-[12px] leading-[21px] text-[#999]"
-                              >용마산로 115길 109 201동 2201호</b
+                              id="hAddress"
+                              class="self-stretch relative text-[12px] leading-[21px] text-[#999] w-[300px]"
+                              ></b
                             >
                           </div>
                         </div>
@@ -180,8 +182,9 @@
                             >일정</b
                           >
                           <b
+                            id="resDate"
                             class="flex-1 relative text-[12px] leading-[20px] inline-block text-[rgba(0,0,0,0.87)] min-w-[39px] max-w-full"
-                            >스탠다드?</b
+                            ></b
                           >
                         </div>
                       </div>
@@ -203,8 +206,8 @@
                         <div
                           class="w-[131px] flex flex-col items-start justify-start gap-[9px] text-[12px] text-[rgba(0,0,0,0.87)]"
                         >
-                          <b class="self-stretch relative leading-[20px]"
-                            >STANDARD</b
+                          <b id="roomName" class="self-stretch relative leading-[20px]"
+                            ></b
                           >
                           <b
                             class="w-[59px] relative text-[13.2px] leading-[20px] flex text-[#0248fc] items-center"
@@ -243,26 +246,31 @@
                           >예약자 이름</b
                         >
                         <b class="self-stretch relative leading-[20px]"
-                          >예약자 연락처</b
+                          >예약자 이메일</b
                         >
                       </div>
                       <div
                         class="flex-1 flex flex-col items-start justify-start gap-[14.5px] min-w-[253px] max-w-full text-[12px] text-[rgba(0,0,0,0.87)]"
                       >
-                        <b class="self-stretch relative leading-[20px]"
-                          >ASDFHHKD#</b
-                        >
+                        <b
+                          id="resNum"
+                          class="self-stretch relative leading-[20px]"
+                        ></b>
                         <div
                           class="w-[133px] flex flex-row items-start justify-start py-[0px] px-[1px] box-border"
                         >
-                          <b class="flex-1 relative leading-[20px]">이주현</b>
+                          <b
+                            id="reserverName"
+                            class="flex-1 relative leading-[20px]"
+                          ></b>
                         </div>
                         <div
                           class="w-[133px] flex flex-row items-start justify-start py-[0px] px-[1px] box-border"
                         >
-                          <b class="flex-1 relative leading-[20px]"
-                            >01097763713</b
-                          >
+                          <b
+                            id="reserverEmail"
+                            class="flex-1 relative leading-[20px]"
+                          ></b>
                         </div>
                       </div>
                     </div>
@@ -307,13 +315,16 @@
                         class="self-stretch flex flex-col items-end justify-start gap-[11px]"
                       >
                         <b
-                          class="w-[124px] relative leading-[20px] flex items-center min-w-[124px] whitespace-nowrap"
-                          >2024.08.06 (화) 10:22</b
-                        >
+                          id="payDate"
+                          class="w-[124px] relative leading-[20px] flex justify-end items-center min-w-[124px] whitespace-nowrap"
+                        ></b>
                         <div
                           class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[0px] pr-[1px]"
                         >
-                          <b class="flex-1 relative leading-[20px]">토스페이</b>
+                          <b
+                            id="payMethod"
+                            class="flex-1 relative leading-[20px]"
+                          ></b>
                         </div>
                       </div>
                     </div>
@@ -338,12 +349,14 @@
                             >
                               <b
                                 class="self-stretch relative leading-[20px] justify-end"
-                                >객실 가격 (1박)</b
+                                >객실 가격</b
                               >
                             </div>
                             <b
+                              id="nsalePrice"
                               class="w-[124px] relative text-[12px] leading-[20px] flex text-[#707070] text-right items-center shrink-0 justify-end"
-                              >40000 원</b
+                            >
+                              원</b
                             >
                           </div>
                         </div>
@@ -358,9 +371,9 @@
                             >
                           </div>
                           <b
+                            id="payCoupon"
                             class="w-[124px] relative text-[12px] leading-[20px] flex text-[#707070] text-right items-center shrink-0 justify-end"
-                            >-8000 원</b
-                          >
+                          ></b>
                         </div>
                       </div>
                       <div
@@ -371,9 +384,10 @@
                           >사용 포인트</b
                         >
                         <b
+                          id="payPoint"
                           class="w-[126px] relative text-[12px] leading-[21px] flex text-[#707070] text-right items-center shrink-0 justify-end"
-                          >-0 원</b
                         >
+                        </b>
                       </div>
                     </div>
                     <div
@@ -389,9 +403,10 @@
                       <div
                         class="w-[124px] flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] box-border text-right text-[12px] text-[#f21111]"
                       >
-                        <b class="self-stretch relative leading-[20px]"
-                          >32000 원</b
-                        >
+                        <b
+                          id="totalAmount"
+                          class="self-stretch relative leading-[20px]"
+                        ></b>
                       </div>
                     </div>
                   </div>
@@ -440,18 +455,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
+      function formatDate(dateString) {
+        return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
+      }
       $(function () {
         let urlParams = new URLSearchParams(window.location.search);
         let id = urlParams.get("id"); // 'id' 파라미터 값을 추출
         console.log(id);
 
-        let accessToken = Cookies.get("accessToken");
-        let member = jwt_decode(accessToken);
         let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
         let resIdx;
         let payIdx;
-
-        console.log(member);
 
         // 예약 정보를 불러오는 AJAX 요청
         $.ajax({
@@ -463,6 +477,52 @@
           console.log(res);
           paymentKey = res.payment.paymentKey;
           payIdx = res.payment.id;
+
+          let img = res.image;
+          let hName = res.host.hname;
+          let hAddress = res.host.addressVo.street;
+          let resDate = res.reservation.startEndVo;
+          let roomName = res.room.roomName;
+
+          let resNum = res.reservation.resNum;
+          let reserverName = res.reservation.resName;
+          let reserverEmail = res.reservation.resEmail;
+          let date = res.payment.payDate;
+          let payMethod = res.payment.payMethod;
+          let nSale = res.payment.nsalePrice;
+          let totalAmount = res.payment.amount;
+          let coupon = res.payment.payCoupon;
+          let point = res.payment.payPoint;
+          let payGrade = res.payment.payGrade;
+          let payDate = formatDate(date);
+
+          let start = formatDate(resDate.start);
+          let end = formatDate(resDate.end);
+
+          $("#img").attr("src", img);
+          $("#hName").text(hName);
+          $("#hAddress").text(hAddress);
+          $("#resDate").text(start + " ~ " + end);
+          $("#roomName").text(roomName);
+
+          $("#resNum").text(resNum);
+          $("#reserverName").text(reserverName);
+          $("#reserverEmail").text(reserverEmail);
+          $("#payDate").text(payDate);
+          $("#payMethod").text(payMethod);
+          $("#nsalePrice").text(nSale + " 원");
+          $("#totalAmount").text(totalAmount + " 원");
+
+          if (coupon == null) {
+            coupon = 0;
+          }
+
+          if (point == null) {
+            point = 0;
+          }
+
+          $("#payCoupon").text(coupon + " 원");
+          $("#payPoint").text(point + " 원");
         });
 
         // 취소 버튼 클릭 시 이벤트 처리
@@ -487,17 +547,6 @@
           }
         });
       });
-
-      function getPaymentData() {
-        $.ajax({
-          url: "/mypage/reservation_check", // 호출하고자 하는 URL
-          method: "POST",
-          contentType: "application/json; charset=utf-8",
-          data: JSON.stringify({ id }), // member 객체를 JSON으로 변환해서 전송
-        }).done(function (res) {
-          console.log(res);
-        });
-      }
     </script>
   </body>
 </html>

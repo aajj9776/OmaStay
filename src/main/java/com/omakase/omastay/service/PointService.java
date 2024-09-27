@@ -8,6 +8,7 @@ import com.omakase.omastay.repository.MemberRepository;
 import com.omakase.omastay.repository.PointRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class PointService {
         return PointMapper.INSTANCE.toPointDTOList(pList);
     }
 
+    
     public int addPoint(String email, PointDTO pDto){
         int cnt=0; 
 
@@ -63,6 +65,7 @@ public class PointService {
         return PointMapper.INSTANCE.toPointDTOList(pList);
     }
 
+    @Transactional
     public PointDTO savePoint(PointDTO pointDTO) {
         Point res = PointMapper.INSTANCE.toPoint(pointDTO);
         
