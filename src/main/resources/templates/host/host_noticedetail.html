@@ -66,9 +66,9 @@
                 <div
                   class="flex-1 flex flex-col items-start justify-start relative max-w-[calc(100%_-_15px)]"
                 >
-                  <textarea th:text="${sDto.sContent}" id="content"
+                  <div th:utext="${sDto.sContent}" id="content"
                   class="py-[16px] h-[500px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]" name="sContent" cols="50"
-                  data-str="내용" rows="8" readonly></textarea>
+                  data-str="내용" rows="8" readonly></div>
                 </div>
               </div>
               <div>

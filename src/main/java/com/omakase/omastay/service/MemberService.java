@@ -30,6 +30,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.entity.Grade;
+import com.omakase.omastay.entity.Member;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.Gender;
+import com.omakase.omastay.entity.enumurate.Social;
+import com.omakase.omastay.jwt.JwtProvider;
+import com.omakase.omastay.mapper.MemberMapper;
+import com.omakase.omastay.repository.GradeRepository;
+import com.omakase.omastay.repository.MemberRepository;
+
+import jakarta.persistence.EntityManager;
+
 @Service
 public class MemberService {
 
@@ -188,6 +203,14 @@ public class MemberService {
     public List<MemberDTO> getAllMembers(){
         List<Member> members = memberRepository.findAll();
         return MemberMapper.INSTANCE.toMemberDTOList(members);
+    }
+
+    @Transactional
+    public MemberDTO getMemberInfo(int id) {
+        Member member = memberRepository.findMemberWithGrade(id);
+        System.out.println("회원정보 조회 서비스 호출" + member);
+        MemberDTO res = MemberMapper.INSTANCE.toMemberDTO(member);
+        return res;
     }
     
 }

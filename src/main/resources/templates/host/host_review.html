@@ -143,19 +143,19 @@
             } 
           }, 
           {
-            data: 'revwriter',
+            data: 'revWriter',
           },
           {
-            data: 'revcontent',
+            data: 'revContent',
             render: function (data, type, row) {
               return '<a href="/host/reviewlist/view?id=' + row.id + '">' + data + '</a>';
             }
           },
           {
-            data: 'revrating',
+            data: 'revRating',
           },
           {
-            data: 'revdate',
+            data: 'revDate',
             render: function (data, type, row) {
             if (data) {
               var date = new Date(data);
@@ -171,8 +171,8 @@
         columnDefs: [
         { width: 80, targets: 0 },
         { width: 170 , targets: 1 },
-        { width: 170, targets: 2 },
-        { width: 170, targets: 3 },
+        { width: 200, targets: 2 },
+        { width: 140, targets: 3 },
         { width: 140, targets: 4 }
         ],
 

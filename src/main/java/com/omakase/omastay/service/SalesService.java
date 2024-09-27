@@ -6,7 +6,11 @@ import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.SalesDTO;
 import com.omakase.omastay.dto.custom.SalesCustomDTO;
 import com.omakase.omastay.dto.custom.Top5SalesDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.dto.custom.HostReservationDTO;
+import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.entity.Reservation;
+import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.Sales;
 import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
@@ -14,6 +18,7 @@ import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.mapper.SalesMapper;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.PaymentRepository;
+import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +29,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SalesService {
@@ -131,4 +137,28 @@ public class SalesService {
         return salesCustomDTOs;
 
     }
+    
+    public List<HostSalesDTO> getHostSales(Integer hidx) {
+        return salesRepository.findHostSales(hidx);
+    }
+
+    public List<HostSalesDTO> searchHostSales(String roomType, String dateValue, Integer hidx) {
+        
+        if (dateValue != null && !dateValue.trim().isEmpty()) {
+            String[] date = dateValue.split(" ~ ");
+            if (date.length < 2 || date[0].trim().isEmpty() || date[1].trim().isEmpty()) {
+                throw new IllegalArgumentException("Invalid date range format");
+            }
+            String startDate = date[0];
+            String endDate = date[1];
+
+            return salesRepository.searchHostSales(roomType, startDate, endDate, hidx);
+
+        } else {
+
+            return salesRepository.searchHostSales(roomType, null, null, hidx);
+        }
+
+    }
+
 }

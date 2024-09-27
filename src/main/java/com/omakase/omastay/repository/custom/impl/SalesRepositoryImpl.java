@@ -2,6 +2,15 @@ package com.omakase.omastay.repository.custom.impl;
 
 import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.entity.QHostInfo;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import java.util.List;
+
+import com.omakase.omastay.dto.custom.HostSalesDTO;
+import com.omakase.omastay.dto.custom.QHostSalesDTO;
 import com.omakase.omastay.entity.QPayment;
 import com.omakase.omastay.entity.QReservation;
 import com.omakase.omastay.entity.QRoomInfo;
@@ -12,24 +21,21 @@ import com.omakase.omastay.repository.custom.SalesRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import groovy.transform.Undefined.EXCEPTION;
 
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.time.LocalDate;
-
 public class SalesRepositoryImpl implements SalesRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
-    private QSales s = QSales.sales;
-    private QHostInfo hi = QHostInfo.hostInfo;
-    private QReservation r = QReservation.reservation;
-    private QPayment p = QPayment.payment;
-    private QRoomInfo ri = QRoomInfo.roomInfo;
+    public static final QSales sales = QSales.sales;
+    public static final QReservation reservation = QReservation.reservation;
+    public static final QRoomInfo roomInfo = QRoomInfo.roomInfo;
+    public static final QPayment payment = QPayment.payment;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    private QHostInfo hi = QHostInfo.hostInfo;
 
 
     public SalesRepositoryImpl(JPAQueryFactory queryFactory) {
@@ -39,8 +45,8 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
     public List<Top5SalesDTO> findTop5SalesByRegion(String region){
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(s.salDate.month().eq(LocalDate.now().getMonthValue()));
-        builder.and(p.payStatus.eq(PayStatus.PAY));
+        builder.and(sales.salDate.month().eq(LocalDate.now().getMonthValue()));
+        builder.and(payment.payStatus.eq(PayStatus.PAY));
 
         if (region != null) {
             builder.and(hi.region.eq(region)); 
@@ -50,16 +56,16 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
                 .select(Projections.constructor( // Top5SalesDTO 생성자 사용
                         Top5SalesDTO.class,
                         hi.hname.as("hostName"),
-                        p.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
+                        payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
                 ))
-                .from(s)
-                .join(s.hostInfo, hi)
-                .join(s.reservation, r)
-                .join(r.roomInfo, ri) // roomInfo 조인 추가
-                .join(r.payment, p)
+                .from(sales)
+                .join(sales.hostInfo, hi)
+                .join(sales.reservation, reservation)
+                .join(reservation.roomInfo, roomInfo) // roomInfo 조인 추가
+                .join(reservation.payment, payment)
                 .where(builder)
                 .groupBy(hi.hname)
-                .orderBy(p.nsalePrice.castToNum(Integer.class).sum().desc())
+                .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc())
                 .limit(5)
                 .fetch();
     }
@@ -68,17 +74,17 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
     @Override
     public List<Sales> searchSales(String startDate, String endDate, String region) {
 
-        return queryFactory.selectFrom(s)
-                .join(s.hostInfo, hi)
-                .join(s.reservation, r)
-                .join(r.payment, p)
-                .join(r.roomInfo, ri)
+        return queryFactory.selectFrom(sales)
+                .join(sales.hostInfo, hi)
+                .join(sales.reservation, reservation)
+                .join(reservation.payment, payment)
+                .join(reservation.roomInfo, roomInfo)
                 .where(
                     eqRegion(region),
                     isAfterStartDate(startDate),
                     isBeforeEndDate(endDate)
                 )
-                .orderBy(s.id.desc())
+                .orderBy(sales.id.desc())
                 .fetch();
     }
 
@@ -87,7 +93,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         if (region.equals("전체")) {
             return null;
         }
-        return s.hostInfo.region.contains(region);
+        return sales.hostInfo.region.contains(region);
     }
 
     private BooleanExpression isAfterStartDate(String startDate) {
@@ -96,7 +102,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         }
         try {
             LocalDate startDateTime = LocalDate.parse(startDate, formatter);
-            return s.reservation.startEndVo.start.goe(startDateTime.atStartOfDay());
+            return sales.reservation.startEndVo.start.goe(startDateTime.atStartOfDay());
         } catch (EXCEPTION e) {
             // 날짜 형식이 잘못된 경우 처리
             return null;
@@ -109,11 +115,49 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         }
         try {
             LocalDate endDateTime = LocalDate.parse(endDate, formatter);
-            return s.reservation.startEndVo.end.loe(endDateTime.atTime(23, 59, 59));
+            return sales.reservation.startEndVo.end.loe(endDateTime.atTime(23, 59, 59));
         } catch (EXCEPTION e) {
             // 날짜 형식이 잘못된 경우 처리
             return null;
         }
+    }
+
+    @Override
+    public List<HostSalesDTO> findHostSales(Integer hidx) {
+        return queryFactory
+        .select(Projections.constructor(HostSalesDTO.class,roomInfo.roomName, roomInfo.roomType, reservation.startEndVo, reservation.resNum, payment.payMethod, payment.payDate, sales.salDate, payment.nsalePrice))
+                .from(sales)
+                .join(sales.reservation, reservation)
+                .join(reservation.roomInfo, roomInfo)
+                .join(reservation.payment, payment)
+                .where(roomInfo.hostInfo.id.eq(hidx))
+                .orderBy(sales.id.desc())
+                .fetch();
+    }
+     
+    
+
+    @Override
+    public List<HostSalesDTO> searchHostSales(String roomType, String startDate, String endDate, Integer hidx) {
+        LocalDateTime startDateTime = null;
+        LocalDateTime endDateTime = null;
+        if (startDate != null && endDate != null) {
+        startDateTime = LocalDate.parse(startDate, formatter).atStartOfDay();
+        endDateTime = LocalDate.parse(endDate, formatter).atTime(23, 59, 59);
+        }
+
+        return queryFactory
+        .select(Projections.constructor(HostSalesDTO.class,roomInfo.roomName, roomInfo.roomType, reservation.startEndVo, reservation.resNum, payment.payMethod, payment.payDate, sales.salDate, payment.nsalePrice))
+                .from(sales)
+                .join(sales.reservation, reservation)
+                .join(reservation.roomInfo, roomInfo)
+                .join(reservation.payment, payment)
+                .where(roomInfo.hostInfo.id.eq(hidx)
+                        .and(roomType != null ? roomInfo.roomType.eq(roomType) : null)
+                        .and(startDate != null ? reservation.startEndVo.start.after(startDateTime) : null)
+                        .and(endDate != null ? reservation.startEndVo.end.before(endDateTime) : null))
+                .orderBy(sales.id.desc())
+                .fetch();
     }
 
 }

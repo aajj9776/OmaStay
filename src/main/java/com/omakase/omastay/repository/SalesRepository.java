@@ -10,6 +10,10 @@ import jakarta.persistence.TypedQuery;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import com.omakase.omastay.dto.custom.HostSalesDTO;
+
+import java.time.LocalDateTime;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

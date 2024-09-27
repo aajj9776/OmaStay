@@ -37,19 +37,6 @@
   ></div>
 </div>
 </div>
-<div
-class="h-[48px] w-[48px] rounded-[100px] overflow-hidden shrink-0 hidden flex-col items-center justify-center p-[8px] box-border"
->
-<div
-class="flex flex-row items-start justify-start py-[0px] px-[4px]"
->
-<img
-class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-alt=""
-src="/image/host/starsharp-2.svg"
-/>
-</div>
-</div>
 
         </section>
         <form
@@ -89,16 +76,9 @@ src="/image/host/starsharp-2.svg"
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="예약 번호"
                         type="text"
+                        readonly
+                        th:value="${hres.resNum}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -115,20 +95,14 @@ src="/image/host/starsharp-2.svg"
                     <div
                       class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
                     >
-                      <input
-                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                        placeholder="예약 상태"
-                        type="text"
-                      />
+                      <div class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                        th:switch="${hres.resStatus.name}">
+                        <span th:case="'PENDING'" th:text="'예약 대기'"></span>
+                        <span th:case="'CONFIRMED'" th:text="'예약 획정'"></span>
+                        <span th:case="'CANCELLED'" th:text="'예약 취소'"></span>
+                        <span th:case="'COMPLETED'" th:text="'사용 완료'"></span>
+                        <span th:case="'NO_SHOW'" th:text="'사용미완료'"></span>
                     </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -149,16 +123,9 @@ src="/image/host/starsharp-2.svg"
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="객실명"
                         type="text"
+                        readonly
+                        th:value="${hres.roomName}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -182,16 +149,9 @@ src="/image/host/starsharp-2.svg"
                           class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
                           placeholder="예약 시작일"
                           type="text"
+                          readonly
+                          th:value="${start}"
                         />
-                      </div>
-                      <div
-                        class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                      >
-                        <div
-                          class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                        >
-                          Helper text
-                        </div>
                       </div>
                     </div>
                     <div
@@ -209,16 +169,8 @@ src="/image/host/starsharp-2.svg"
                           class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[76px] min-h-[24px]"
                           placeholder="예약 종료일"
                           type="text"
+                          th:value="${end}"
                         />
-                      </div>
-                      <div
-                        class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                      >
-                        <div
-                          class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                        >
-                          Helper text
-                        </div>
                       </div>
                     </div>
                     <div
@@ -233,16 +185,10 @@ src="/image/host/starsharp-2.svg"
                         class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[8px] px-[0px] box-border relative min-h-[24px]"
                       >
                         <div
-                          class="h-[24px] w-[32px] !m-[0] absolute top-[8px] left-[0px] hidden z-[0]"
-                        ></div>
-                        <div
                           class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left"
-                        >
-                          박
+                          th:text="${diff}"
+                        > 
                         </div>
-                        <div
-                          class="h-[24px] w-[24px] !m-[0] absolute top-[8px] left-[172px] hidden z-[2]"
-                        ></div>
                       </div>
                     </div>
                     <div
@@ -269,16 +215,9 @@ src="/image/host/starsharp-2.svg"
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[52px] min-h-[24px]"
                         placeholder="인원"
                         type="text"
+                        readonly
+                        th:value="${hres.resPerson}"
                       />
-                    </div>
-                    <div
-                      class="self-stretch hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -326,16 +265,9 @@ src="/image/host/starsharp-2.svg"
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="예약자 이름"
                         type="text"
+                        readonly
+                        th:value="${hres.resName}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -344,7 +276,7 @@ src="/image/host/starsharp-2.svg"
                 >
                   <b
                     class="h-[40px] w-[113px] relative text-[25px] tracking-[0.15px] leading-[24px] flex font-[Roboto] text-[#000] whitespace-pre-wrap text-left items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]"
-                    >연락처 :
+                    >이메일 :
                   </b>
                   <div
                     class="w-[303px] flex flex-col items-start justify-start"
@@ -354,18 +286,11 @@ src="/image/host/starsharp-2.svg"
                     >
                       <input
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                        placeholder="연락처"
+                        placeholder="이메일"
                         type="text"
+                        readonly
+                        th:value="${hres.resEmail}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -413,16 +338,9 @@ src="/image/host/starsharp-2.svg"
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="결제 일시"
                         type="text"
+                        readonly
+                        th:value="${payDate}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -443,16 +361,9 @@ src="/image/host/starsharp-2.svg"
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="결제 수단"
                         type="text"
+                        readonly
+                        th:value="${hres.payMethod}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -473,16 +384,9 @@ src="/image/host/starsharp-2.svg"
                         class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
                         placeholder="결제 금액"
                         type="text"
+                        readonly
+                        th:value="${hres.nsalePrice}"
                       />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -499,25 +403,14 @@ src="/image/host/starsharp-2.svg"
           <div
             class="self-stretch h-[143px] flex flex-row items-start justify-center py-[25px] px-[20px] box-border"
           >
-            <button
+            <button type="button" onclick="location.href='/host/reservation'"
               class="cursor-pointer [border:none] py-[12px] px-[37px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
             >
               <div class="flex flex-row items-center justify-center gap-[8px]">
-                <img
-                  class="h-[22px] w-[18px] relative hidden"
-                  alt=""
-                  src="/image/host/masked-icon.svg"
-                />
-
                 <b
                   class="relative text-[20px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[75px] whitespace-nowrap mq450:text-[16px] mq450:leading-[21px]"
                   >목록보기</b
                 >
-                <img
-                  class="h-[22px] w-[18px] relative hidden"
-                  alt=""
-                  src="/image/host/masked-icon1.svg"
-                />
               </div>
             </button>
           </div>
@@ -528,5 +421,7 @@ src="/image/host/starsharp-2.svg"
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+  </script>
   </body>
 </html>

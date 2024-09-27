@@ -25,14 +25,6 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
         //조건1 h_status가 1(승인)인지
         // 조건1: h_status가 APPROVE인지 확인
         builder.and(hostInfo.hStatus.eq(HStatus.APPROVE));
-        //조건2 h_name에 keyword가 포함되어 있는지
-        builder.or(hostNameContains(keyword)); //업체명
-        //조건3 h_post_code에 keyword가 포함되어 있는지
-        builder.or(postCodeContains(keyword)); //우편번호
-        //조건4 h_street 에 keyword가 포함되어 있는지
-        builder.or(streetContains(keyword)); //주소
-        //조건5 region에 keyword가 포함되어 있는지
-        builder.or(regionContains(keyword)); //지역
 
         // 조건2: h_name, h_post_code, h_street, region 중 하나라도 keyword가 포함되어 있는지 확인
         BooleanBuilder orBuilder = new BooleanBuilder();
