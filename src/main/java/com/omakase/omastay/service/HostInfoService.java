@@ -85,6 +85,7 @@ public class HostInfoService {
         return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
     }
 
+    @Transactional
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostMypageDTO);
 
@@ -155,6 +156,7 @@ public class HostInfoService {
         return new HostMypageDTO(accountDTO, hostInfoDTO);
     }
 
+    @Transactional 
     public void saveHostInfo(HostInfoCustomDTO hostInfoCustomDTO, AdminMemberDTO adminMemberDTO) {
         System.out.println(hostInfoCustomDTO.getHostInfo().getAddressVo().getStreet());
         System.out.println(adminMemberDTO);
@@ -247,6 +249,7 @@ public class HostInfoService {
         return hostInfoCustomDTO;
     }
 
+    @Transactional 
     public HostInfoDTO saverules(HostInfoDTO hostInfoDTO, AdminMemberDTO adminMemberDTO) {
 
         AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);

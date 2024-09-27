@@ -1,7 +1,13 @@
 package com.omakase.omastay.service;
 
+import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.dto.custom.HostReservationDTO;
+import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.entity.Reservation;
+import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.Sales;
+import com.omakase.omastay.mapper.ReservationMapper;
+import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,4 +53,28 @@ public class SalesService {
 
         System.out.println("매출 테이블 추가");
     }
+    
+    public List<HostSalesDTO> getHostSales(Integer hidx) {
+        return salesRepository.findHostSales(hidx);
+    }
+
+    public List<HostSalesDTO> searchHostSales(String roomType, String dateValue, Integer hidx) {
+        
+        if (dateValue != null && !dateValue.trim().isEmpty()) {
+            String[] date = dateValue.split(" ~ ");
+            if (date.length < 2 || date[0].trim().isEmpty() || date[1].trim().isEmpty()) {
+                throw new IllegalArgumentException("Invalid date range format");
+            }
+            String startDate = date[0];
+            String endDate = date[1];
+
+            return salesRepository.searchHostSales(roomType, startDate, endDate, hidx);
+
+        } else {
+
+            return salesRepository.searchHostSales(roomType, null, null, hidx);
+        }
+
+    }
+
 }

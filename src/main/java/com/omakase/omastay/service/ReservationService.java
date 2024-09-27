@@ -104,18 +104,21 @@ public class ReservationService {
     }
 
     public List<HostReservationDTO> getAllRes(List<RoomInfoDTO> roomInfoDTOList) {
-        List<Reservation> allReservations = new ArrayList<>();
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
 
     for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
         RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
         List<Reservation> reservations = reservationRepository.findByRoomInfo(roomInfo);
-        allReservations.addAll(reservations);
+        for (Reservation reservation : reservations) {
+            HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+            hostReservationAll.add(hostReservationDTO);
+        }
     }
-        return ReservationMapper.INSTANCE.toHostReservationDTOList(allReservations);
+       return hostReservationAll;
     }
 
     public List<HostReservationDTO> searchRes(String resStatus, String dateValue, List<RoomInfoDTO> roomInfoDTOList) {
-        List<Reservation> allReservations = new ArrayList<>();
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
 
         if (dateValue != null && !dateValue.trim().isEmpty()) {
             String[] date = dateValue.split(" ~ ");
@@ -127,17 +130,23 @@ public class ReservationService {
             for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
                 RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
                 List<Reservation> reservations = reservationRepository.searchRes(resStatus, startDate, endDate, roomInfo);
-                allReservations.addAll(reservations);
+                for (Reservation reservation : reservations) {
+                    HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                    hostReservationAll.add(hostReservationDTO);
+                }
             }
         } else {
             for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
                 RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
                 List<Reservation> reservations = reservationRepository.searchRes(resStatus, null, null, roomInfo);
-                allReservations.addAll(reservations);
+                for (Reservation reservation : reservations) {
+                    HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                    hostReservationAll.add(hostReservationDTO);
+                }
             }
         }
 
-        return ReservationMapper.INSTANCE.toHostReservationDTOList(allReservations);
+        return hostReservationAll;
     }
 
     // 예약 확정
@@ -165,7 +174,8 @@ public class ReservationService {
     //호스트 예약 상세
     public HostReservationDTO getHostRes(int id) {
         Reservation res = reservationRepository.findById(id).get();
-        return ReservationMapper.INSTANCE.toHostReservationDTO(res);
+        HostReservationDTO hostReservationDTO = new HostReservationDTO(res);
+        return hostReservationDTO;
     }
 
     /********** 체크 아웃 시점 이후 [확정]->[사용 완료] 예약 상태 변경 **********/
