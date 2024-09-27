@@ -1,5 +1,7 @@
 package com.omakase.omastay.entity;
 
+import java.time.LocalDateTime;
+
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
@@ -98,5 +100,8 @@ public class HostInfo {
     //대표번호
     @Column(name = "h_phone", nullable = false, length = 100)
     private String hphone;
+
+    @Column(name = "h_reg_time")
+    private LocalDateTime hRegTime;
 
 }
