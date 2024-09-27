@@ -29,13 +29,15 @@ import groovy.transform.Undefined.EXCEPTION;
 public class SalesRepositoryImpl implements SalesRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public static final QSales sales = QSales.sales;
     public static final QReservation reservation = QReservation.reservation;
     public static final QRoomInfo roomInfo = QRoomInfo.roomInfo;
     public static final QPayment payment = QPayment.payment;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    private QHostInfo hi = QHostInfo.hostInfo;
+    
+    public static final QHostInfo hostInfo = QHostInfo.hostInfo;
 
 
     public SalesRepositoryImpl(JPAQueryFactory queryFactory) {
@@ -47,27 +49,29 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(sales.salDate.month().eq(LocalDate.now().getMonthValue()));
         builder.and(payment.payStatus.eq(PayStatus.PAY));
+        builder.and(hostInfo.hname.isNotNull());
 
         if (region != null) {
-            builder.and(hi.region.eq(region)); 
+            builder.and(hostInfo.region.eq(region)); 
         }
 
         return queryFactory
-                .select(Projections.constructor( // Top5SalesDTO 생성자 사용
-                        Top5SalesDTO.class,
-                        hi.hname.as("hostName"),
-                        payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
-                ))
-                .from(sales)
-                .join(sales.hostInfo, hi)
-                .join(sales.reservation, reservation)
-                .join(reservation.roomInfo, roomInfo) // roomInfo 조인 추가
-                .join(reservation.payment, payment)
-                .where(builder)
-                .groupBy(hi.hname)
-                .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc())
-                .limit(5)
-                .fetch();
+                        .select(Projections.constructor(
+                                Top5SalesDTO.class,
+                                hostInfo.hname.as("hostName"),
+                                payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
+                            ))
+                        .from(sales)
+                        .join(sales.hostInfo, hostInfo)
+                        .join(sales.reservation, reservation)
+                        .join(reservation.roomInfo, roomInfo)
+                        .join(reservation.payment, payment)
+                        .where() // hname이 null이 아닌 조건을 추가
+                        .groupBy(hostInfo.hname) // hname으로 그룹핑
+                        .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc()) // 총 매출로 정렬
+                        .limit(5) // 상위 5개 제한
+                        .fetch();
+    
     }
 
     //Sales 테이블 검색
@@ -75,7 +79,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
     public List<Sales> searchSales(String startDate, String endDate, String region) {
 
         return queryFactory.selectFrom(sales)
-                .join(sales.hostInfo, hi)
+                .join(sales.hostInfo, hostInfo)
                 .join(sales.reservation, reservation)
                 .join(reservation.payment, payment)
                 .join(reservation.roomInfo, roomInfo)

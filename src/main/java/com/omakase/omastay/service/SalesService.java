@@ -54,6 +54,7 @@ public class SalesService {
     @Transactional 
     @Scheduled(fixedRate = 1800000) // 30분 = 1800000 milliseconds
     public void insertSales() {
+        int cnt =0;
 
         // 현재 시간에서 하루 전 날짜를 계산
         LocalDateTime yesterday = LocalDateTime.now().minus(1, ChronoUnit.DAYS);
@@ -68,9 +69,12 @@ public class SalesService {
             sales.setSalDate(LocalDate.now());  // 현재 날짜 설정
             sales.setHostInfo(reservation.getRoomInfo().getHostInfo());
             salesRepository.save(sales); // Sales 테이블에 삽입
+            cnt ++;
         }
 
-        System.out.println("매출 테이블 추가");
+        if(cnt > 0){
+            System.out.println("매출 테이블에 "+cnt+"건 추가");
+        }
     }
 
 
@@ -93,18 +97,8 @@ public class SalesService {
     }
 
     public List<Top5SalesDTO> getTop5SalesByRegion(String region){
-        //List<Top5SalesDTO> top5SalesDTOs = new ArrayList<>();
 
         List<Top5SalesDTO> top5SalesDTOs = salesRepository.findTop5SalesByRegion(region);
-
-        // for(Sales s: sales){
-        //     HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
-        //     ReservationDTO reservationDTO = ReservationMapper.INSTANCE.toReservationDTO(s.getReservation());
-        //     PaymentDTO paymentDTO = PaymentMapper.INSTANCE.toPaymentDTO(s.getReservation().getPayment());
-        //     SalesDTO salesDTO = SalesMapper.INSTANCE.toSalesDTO(s);
-        //     Top5SalesDTO top5SalesDTO = new Top5SalesDTO(hostInfoDTO, reservationDTO, paymentDTO, salesDTO);
-        //     top5SalesDTOs.add(top5SalesDTO);
-        // }
 
         return top5SalesDTOs;
     }

@@ -10,5 +10,5 @@ public class CalculationService {
     @Autowired
     private CalculationRepository calculationRepository;
 
-
+    
 }

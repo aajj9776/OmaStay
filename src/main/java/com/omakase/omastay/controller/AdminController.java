@@ -118,11 +118,17 @@ public class AdminController {
         return "admins/login";
     }
 
+    /************************ 메인 시작 ************************/
     @RequestMapping("/main")
-    public String main() {
-        return "admins/main";
+    public ModelAndView main() {
+        ModelAndView mv = new ModelAndView();
+        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(null);
+        System.out.println("top5List : " + top5List);
+        mv.addObject("top5List", top5List);
+        mv.setViewName("admins/main");
+        return mv;
     }
-
+    /************************ 메인 끝 ************************/
     /************************ 입점 요청 시작 ************************/
     @RequestMapping("/request")
     public ModelAndView request() {
@@ -187,8 +193,14 @@ public class AdminController {
 
     /************************ 입점 요청 끝 ************************/
     @RequestMapping("/payment")
-    public String payment() {
-        return "admins/payment";
+    public ModelAndView payment() {
+        ModelAndView mv = new ModelAndView();
+
+        List<SalesDTO> list = salesService.getAllPayments();
+
+        mv.setViewName("admins/payment");
+
+        return mv;
     }
 
     @RequestMapping("/payment_detail")
@@ -203,6 +215,9 @@ public class AdminController {
         ModelAndView mv = new ModelAndView();
         
         List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
+
+        System.out.println("top5List : " + top5List);
+
         mv.addObject("top5List", top5List);
 
         List<SalesCustomDTO> list = salesService.getAllSales();
