@@ -8,7 +8,6 @@ import com.omakase.omastay.entity.QRoomInfo;
 import com.omakase.omastay.entity.QSales;
 import com.omakase.omastay.entity.Sales;
 import com.omakase.omastay.entity.enumurate.PayStatus;
-import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.repository.custom.SalesRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -17,9 +16,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import groovy.transform.Undefined.EXCEPTION;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import org.threeten.bp.LocalDate;
+import java.time.LocalDate;
 
 public class SalesRepositoryImpl implements SalesRepositoryCustom {
 
@@ -30,6 +29,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
     private QReservation r = QReservation.reservation;
     private QPayment p = QPayment.payment;
     private QRoomInfo ri = QRoomInfo.roomInfo;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 
     public SalesRepositoryImpl(JPAQueryFactory queryFactory) {
@@ -69,6 +69,10 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
     public List<Sales> searchSales(String startDate, String endDate, String region) {
 
         return queryFactory.selectFrom(s)
+                .join(s.hostInfo, hi)
+                .join(s.reservation, r)
+                .join(r.payment, p)
+                .join(r.roomInfo, ri)
                 .where(
                     eqRegion(region),
                     isAfterStartDate(startDate),
@@ -80,10 +84,10 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
 
     //region이 null이 아닌 경우 region 조건 추가
     private BooleanExpression eqRegion(String region) {
-        if (region == null) {
+        if (region.equals("전체")) {
             return null;
         }
-        return service.hi.region.eq(region);
+        return s.hostInfo.region.contains(region);
     }
 
     private BooleanExpression isAfterStartDate(String startDate) {
@@ -92,7 +96,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         }
         try {
             LocalDate startDateTime = LocalDate.parse(startDate, formatter);
-            return service.sDate.goe(startDateTime.atStartOfDay());
+            return s.reservation.startEndVo.start.goe(startDateTime.atStartOfDay());
         } catch (EXCEPTION e) {
             // 날짜 형식이 잘못된 경우 처리
             return null;
@@ -105,7 +109,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         }
         try {
             LocalDate endDateTime = LocalDate.parse(endDate, formatter);
-            return service.sDate.loe(endDateTime.atTime(23, 59, 59));
+            return s.reservation.startEndVo.end.loe(endDateTime.atTime(23, 59, 59));
         } catch (EXCEPTION e) {
             // 날짜 형식이 잘못된 경우 처리
             return null;

@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.omakase.omastay.entity.QService;
-import com.omakase.omastay.entity.Sales;
 import com.omakase.omastay.entity.Service;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
@@ -42,7 +41,7 @@ public class ServiceRepositoryImpl implements ServiceRepositoryCustom {
 
     //service 엔티티 검색
     @Override
-    public List<Sales> searchSales(String startDate, String endDate, String region) {
+    public List<Service> searchServices(String type, String keyword, String startDate, String endDate, UserAuth sAuth, SCate sCate) {
         return queryFactory.selectFrom(service)
                 .where(
                     containsKeyword(type, keyword),

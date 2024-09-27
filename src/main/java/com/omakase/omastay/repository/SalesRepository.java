@@ -21,5 +21,5 @@ public interface SalesRepository extends JpaRepository<Sales, Integer>, SalesRep
            "JOIN FETCH r.payment p")
     List<Sales> getAllSales();
 
-
+    
 }

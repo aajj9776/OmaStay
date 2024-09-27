@@ -106,10 +106,17 @@ public class SalesService {
     public List<SalesCustomDTO> searchSales(String dateRange, String region){
         List<SalesCustomDTO> salesCustomDTOs = new ArrayList<>();
 
-        String[] dateRangeArr = dateRange.split(" ~ ");
-        String startDate = dateRangeArr[0];
-        String endDate = dateRangeArr[1];
+        String startDate = null;
+        String endDate = null;
 
+        if(dateRange != null && dateRange.length() > 0){
+            String[] dateRangeArr = dateRange.split(" ~ ");
+            System.out.println("dateRangeArr: "+dateRangeArr[0]);
+            System.out.println("dateRangeArr: "+dateRangeArr[1]);
+            startDate = dateRangeArr[0];
+            endDate = dateRangeArr[1];
+        }
+        
         List<Sales> sales = salesRepository.searchSales(startDate, endDate, region);
 
         for(Sales s: sales){

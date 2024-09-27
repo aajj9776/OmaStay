@@ -236,6 +236,8 @@ public class AdminController {
 
         List<SalesCustomDTO> list = salesService.searchSales(dateRange, region);
 
+        mv.addObject("list", list);
+
         mv.setViewName("admins/sales");
 
         return mv;
