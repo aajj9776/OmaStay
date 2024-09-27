@@ -164,4 +164,36 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<HostSalesDTO> findHostYearSales(Integer hidx, Integer year) {
+
+        return queryFactory
+        .select(Projections.constructor(HostSalesDTO.class,roomInfo.roomName, roomInfo.roomType, reservation.startEndVo, reservation.resNum, payment.payMethod, payment.payDate, sales.salDate, payment.nsalePrice))
+                .from(sales)
+                .join(sales.reservation, reservation)
+                .join(reservation.roomInfo, roomInfo)
+                .join(reservation.payment, payment)
+                .where(roomInfo.hostInfo.id.eq(hidx)
+                        .and(year != null ? payment.payDate.year().eq(year) : null))
+                .orderBy(sales.id.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<HostSalesDTO> findHostMonthSales(Integer hidx, Integer year, Integer month) {
+
+        return queryFactory
+        .select(Projections.constructor(HostSalesDTO.class,roomInfo.roomName, roomInfo.roomType, reservation.startEndVo, reservation.resNum, payment.payMethod, payment.payDate, sales.salDate, payment.nsalePrice))
+                .from(sales)
+                .join(sales.reservation, reservation)
+                .join(reservation.roomInfo, roomInfo)
+                .join(reservation.payment, payment)
+                .where(roomInfo.hostInfo.id.eq(hidx)
+                        .and(year != null ? payment.payDate.year().eq(year) : null)
+                        .and(month != null ? payment.payDate.month().eq(month) : null))
+                .orderBy(sales.id.desc())
+                .fetch();
+    }
+
+
 }

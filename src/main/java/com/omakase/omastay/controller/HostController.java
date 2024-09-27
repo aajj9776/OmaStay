@@ -48,6 +48,7 @@ import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.CancelRequestDTO;
+import com.omakase.omastay.dto.custom.HostCalculationDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
@@ -61,6 +62,7 @@ import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.AdminMemberService;
+import com.omakase.omastay.service.CalculationService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.FileUploadService;
@@ -121,6 +123,9 @@ public class HostController {
 
     @Autowired
     private SalesService salesService;
+
+    @Autowired
+    private CalculationService calculationService; 
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -1039,6 +1044,68 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         List<HostSalesDTO> list = salesService.searchHostSales(roomType, dateValue, hostInfoDTO.getId());
 
         map.put("list", list);
+
+        return map;
+    }
+
+    // 정산 현재년도 전체 리스트
+    @RequestMapping("/paylist/getList")
+    @ResponseBody
+    public Map<String, Object> paylist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        Integer nowYear = LocalDate.now().getYear();
+
+        List<HostCalculationDTO> list = calculationService.getAllHostCal(hostInfoDTO.getId(),nowYear);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 정산 년도 검색 리스트
+    @RequestMapping("/paylist/search")
+    @ResponseBody
+    public Map<String, Object> paySearch(@RequestParam(value = "year", required = false) Integer year) {
+        System.out.println("정산년도 검색 왔다");
+        System.out.println("year:"+year);
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<HostCalculationDTO> list = calculationService.getAllHostCal(hostInfoDTO.getId(),year);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 정산 요청하기
+    @RequestMapping("/paylist/request")
+    @ResponseBody
+    public Map<String, Object> payRequest(@RequestBody List<HostCalculationDTO> items) {
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        Integer hIdx = hostInfoDTO.getId();
+
+        Map<String, Object> map = new HashMap<>();
+        
+        int cnt = 0;
+
+        for(HostCalculationDTO item : items){
+            cnt += calculationService.insertCal(item, hIdx);
+        }
+
+        map.put("cnt", cnt);
 
         return map;
     }

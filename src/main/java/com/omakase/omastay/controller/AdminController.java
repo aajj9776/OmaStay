@@ -196,7 +196,7 @@ public class AdminController {
     public ModelAndView payment() {
         ModelAndView mv = new ModelAndView();
 
-        List<SalesDTO> list = salesService.getAllPayments();
+        //List<SalesDTO> list = salesService.getAllPayments();
 
         mv.setViewName("admins/payment");
 

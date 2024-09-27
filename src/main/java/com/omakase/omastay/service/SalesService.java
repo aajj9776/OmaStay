@@ -132,12 +132,13 @@ public class SalesService {
 
     }
     
+    @Transactional(readOnly = true)
     public List<HostSalesDTO> getHostSales(Integer hidx) {
         return salesRepository.findHostSales(hidx);
     }
 
+    @Transactional(readOnly = true)
     public List<HostSalesDTO> searchHostSales(String roomType, String dateValue, Integer hidx) {
-        
         if (dateValue != null && !dateValue.trim().isEmpty()) {
             String[] date = dateValue.split(" ~ ");
             if (date.length < 2 || date[0].trim().isEmpty() || date[1].trim().isEmpty()) {
@@ -152,7 +153,18 @@ public class SalesService {
 
             return salesRepository.searchHostSales(roomType, null, null, hidx);
         }
+    }
 
+    //호스트 년매출 구하기
+    @Transactional(readOnly = true)
+    public List<HostSalesDTO> getHostYearSales(Integer hidx, int year) {
+        return salesRepository.findHostYearSales(hidx, year);
+    }
+
+    //호스트 월매출 구하기
+    @Transactional(readOnly = true)
+    public List<HostSalesDTO> getHostMonthSales(Integer hidx, int year, int month) {
+        return salesRepository.findHostMonthSales(hidx, year, month);
     }
 
 }
