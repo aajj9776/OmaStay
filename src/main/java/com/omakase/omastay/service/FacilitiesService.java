@@ -1,19 +1,21 @@
 package com.omakase.omastay.service;
 import com.omakase.omastay.dto.FacilitiesDTO;
-import com.omakase.omastay.dto.custom.FilterDTO;
-import com.omakase.omastay.dto.custom.HostAvgPriceDTO;
-import com.omakase.omastay.dto.custom.ResultAccommodationsDTO;
+import com.omakase.omastay.dto.custom.*;
 import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.Price;
-import com.omakase.omastay.entity.QImage;
-import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.repository.*;
 import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.Tuple;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,6 +44,9 @@ public class FacilitiesService {
     @Autowired
     PriceRepository priceRepository;
 
+    @Value("${upload}")
+    private String realPath;
+
     public List<FacilitiesDTO> all() {
 
         List<Facilities> facilities = facilitiesRepository.findAll();
@@ -49,9 +54,8 @@ public class FacilitiesService {
         return FacilitiesMapper.INSTANCE.toFacilitiesDTOList(facilities);
     }
 
-    //숙소 검색 필터링
     // 숙소 검색 필터링
-    public List<ResultAccommodationsDTO> search(FilterDTO filterDTO) {
+    public AccommodationResponseDTO search(FilterDTO filterDTO, Pageable pageable) {
         // 검색어 필터링 된 룸인포 키값과 호스트인포 키값 리스트 가져오기(예약이 불가능한 객실 포함)
         List<Tuple> allHostRoomIds = searchKeyword(filterDTO);
 
@@ -76,9 +80,9 @@ public class FacilitiesService {
                 .collect(Collectors.toList());
 
         // 예약 가능한 룸 ID 추출
-        Set<Integer> availableRoomIds = availableHost.stream()
+        List<Integer> availableRoomIds = availableHost.stream().distinct()
                 .map(tuple -> tuple.get(roomInfo.id))
-                .collect(Collectors.toSet());
+                .toList();
 
         // 예약 가능한 호스트 ID 추출
         List<Integer> availableHostIds = availableHost.stream()
@@ -125,7 +129,7 @@ public class FacilitiesService {
             Integer hostId = hostInfoTuple.get(hostInfo.id);
             ResultAccommodationsDTO resultAccommodationsDTO = new ResultAccommodationsDTO();
             resultAccommodationsDTO.setHIdx(hostId);
-            resultAccommodationsDTO.setHCate(HCate.getHCateTypeInKorean(hostInfoTuple.get(hostInfo.hCate).ordinal()));
+            resultAccommodationsDTO.setHCate((hostInfoTuple.get(hostInfo.hCate)));
             resultAccommodationsDTO.setHName(hostInfoTuple.get(hostInfo.hname));
             resultAccommodationsDTO.setXAxis(hostInfoTuple.get(hostInfo.xAxis));
             resultAccommodationsDTO.setYAxis(hostInfoTuple.get(hostInfo.yAxis));
@@ -158,8 +162,10 @@ public class FacilitiesService {
             Integer hostId = priceDTO.getHostIdx();
             ResultAccommodationsDTO resultAccommodationsDTO = resultMap.get(hostId);
 
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.KOREA);
+
             if (resultAccommodationsDTO != null) {
-                resultAccommodationsDTO.setOneDayPrice(priceDTO.getAvgPrice());
+                resultAccommodationsDTO.setOneDayPrice(numberFormat.format(priceDTO.getAvgPrice()));
             }
         }
 
@@ -169,12 +175,44 @@ public class FacilitiesService {
             ResultAccommodationsDTO resultAccommodationsDTO = resultMap.get(hostId);
 
             if (resultAccommodationsDTO != null) {
-                resultAccommodationsDTO.setImg_url(imageTuple.get(image.imgName.fName));
+                resultAccommodationsDTO.setImg_url(realPath + "host/" + imageTuple.get(image.imgName.fName));
             }
         }
 
-        // 최종 결과 리스트로 반환
-        return new ArrayList<>(resultMap.values());
+        // 5. 예약 가능 여부를 세팅
+        for (Map.Entry<Integer, ResultAccommodationsDTO> entry : resultMap.entrySet()) {
+            Integer hostId = entry.getKey();
+            ResultAccommodationsDTO resultAccommodationsDTO = entry.getValue();
+
+            if (unavailableHostIds.contains(hostId)) {
+                resultAccommodationsDTO.setSoldOut(true);
+            } else {
+                resultAccommodationsDTO.setSoldOut(false);
+            }
+        }
+
+        List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), resultAccommodationsDTOList.size());
+        Page<ResultAccommodationsDTO> resultPage = new PageImpl<>(resultAccommodationsDTOList.subList(start, end), pageable, resultAccommodationsDTOList.size());
+
+        // PageNation 설정
+        PageNation pageNation = new PageNation();
+        pageNation.setPageNumber(resultPage.getNumber());
+        pageNation.setPageSize(resultPage.getSize());
+        pageNation.setTotalElements(resultPage.getTotalElements());
+        pageNation.setTotalPages(resultPage.getTotalPages());
+        pageNation.setLast(resultPage.isLast());
+
+
+        AccommodationResponseDTO result = new AccommodationResponseDTO();
+
+        result.setAccommodations(resultAccommodationsDTOList);
+        result.setPageNation(pageNation);
+
+        // 최종 결과 반환
+        return result;
     }
 
     //숙소 검색 필터링

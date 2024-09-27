@@ -2,6 +2,7 @@ package com.omakase.omastay.dto;
 
 import java.time.LocalDateTime;
 
+import com.omakase.omastay.entity.Grade;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.Gender;
@@ -10,12 +11,14 @@ import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.UserProfileVo;
 import com.querydsl.core.annotations.QueryProjection;
 
+import groovy.transform.ToString;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
+@ToString
 public class MemberDTO {
     private Integer id;
     private Integer gIdx;
@@ -32,6 +35,7 @@ public class MemberDTO {
     private String refreshToken;
     private String memNone;
     private List<ReservationDTO> reservations;
+    private GradeDTO grade;
 
     public MemberDTO(Member member) {
         this.id = member.getId();
@@ -48,6 +52,7 @@ public class MemberDTO {
         this.accessToken = member.getAccessToken();
         this.refreshToken = member.getRefreshToken();
         this.memNone = member.getMemNone();
+        this.grade = new GradeDTO(member.getGrade());
     }
 
     @QueryProjection

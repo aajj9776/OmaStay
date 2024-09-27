@@ -27,7 +27,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -35,7 +34,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "member")
-@ToString(exclude = {"reservations", "grade"})
+@ToString(exclude = {"reservations"})
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
