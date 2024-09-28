@@ -1,5 +1,7 @@
 package com.omakase.omastay.dto.custom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.vo.StartEndVo;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,7 @@ public class FilterDTO {
     private Integer startPrice;
     private Integer endPrice;
     private List<Integer> facilities;
-    private Integer hCate;
+    private HCate hCate;
     private String filter;
     private String sortType;
     boolean soldOut;

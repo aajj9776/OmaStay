@@ -75,17 +75,18 @@
                         >
 
                             <div class="dropdown pr-[9px] min-w-[41.48px]"
-                                 id="dropdown-filter"
+                                 id="sortTypeDropdown"
                             >
                                 <button aria-expanded="false"
                                         class="btn btn-light dropdown-toggle w-[100%]"
-                                        data-bs-toggle="dropdown" id="dropdown-filter-button" type="button" value="rating">
+                                        data-bs-toggle="dropdown" id="dropdown-sortType-button" type="button" value="rating">
+                                    평점높은순
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li value="rating"><p class="dropdown-item">평점높은순</p></li>
-                                    <li value="review"><p class="dropdown-item">리뷰많은순</p></li>
-                                    <li value="lowPrice"><p class="dropdown-item">낮은가격순</p></li>
-                                    <li value="highPrice"><p class="dropdown-item">높은가격순</p></li>
+                                    <li data-value="rating"><p class="dropdown-item">평점높은순</p></li>
+                                    <li data-value="review"><p class="dropdown-item">리뷰많은순</p></li>
+                                    <li data-value="lowPrice"><p class="dropdown-item">낮은가격순</p></li>
+                                    <li data-value="highPrice"><p class="dropdown-item">높은가격순</p></li>
                                 </ul>
                             </div>
                         </div>
@@ -245,7 +246,7 @@
         </section>
     </main>
 </div>
-<div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden"
+<div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden z-50"
      id="modal-wrap">
     <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{/search/modal :: search_modal}"
          th:with="accommodations=${resultAccommodations}"></div>
@@ -256,7 +257,15 @@
     let f_idx = [];
     let resultAccommodations;
 
-    var sliderValues = {
+    // URL 변수
+    let sortTypeValue= null;
+    let facilitiesValue = [];
+    let hCateValue = null;
+    let startPriceValue = null;
+    let endPriceValue = null;
+    let keywordValue = null;
+
+    let sliderValues = {
         start: 0,
         end: 500000
     };
@@ -265,42 +274,38 @@
         resultAccommodations = /*[[${resultAccommodations}]]*/ '[]';
 
         // URL에서 필터 값을 받아오기
-        const filterValue = getUrlParameter('filter');
-        const facilitiesValue = getUrlParameter('facilities');
-        const hCateValue = getUrlParameter('hCate');
-        const startPriceValue = getUrlParameter('startPrice');
-        const endPriceValue = getUrlParameter('endPrice');
+        sortTypeValue= getUrlParameter('sortType');
+        facilitiesValue = getUrlParameter('facilities');
+        hCateValue = getUrlParameter('hCate');
+        startPriceValue = getUrlParameter('startPrice');
+        endPriceValue = getUrlParameter('endPrice');
+        keywordValue = getUrlParameter('keyword');
+
+        console.log(sortTypeValue+ " sortTypeValue");
+        console.log(facilitiesValue + " facilitiesValue");
+        console.log(hCateValue + " hCateValue");
+        console.log(startPriceValue + " startPriceValue");
+        console.log(endPriceValue + " endPriceValue");
 
         initializeSlider('main');  // 메인 슬라이더 초기화
-        initializeFilters('main'); // 초기 필터 상태 설정
 
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
             $("#person_count2").val(s_count);
         }
 
-        // URL에서 필터 값을 가져와 드롭다운 메뉴 설정
-        if (filterValue) {
-            var filterText = $('#dropdown-filter .dropdown-item[value="' + filterValue + '"]').text();
-            $("#dropdown-filter-button").text(filterText);
-            $("#dropdown-filter-button").val(filterValue);
-        } else {
-            $("#dropdown-filter-button").text("평점높은순");
-            $("#dropdown-filter-button").val("rating");
-        }
-
         // 드롭다운 메뉴 클릭 핸들러
-        $('#dropdown-filter .dropdown-item').on('click', function () {
-            var selectedText = $(this).text();
-            var selectedValue = $(this).attr('value');
+        $('#sortTypeDropdown .dropdown-item').on('click', function () {
+            let selectedText = $(this).text();
+            let selectedValue = $(this).closest('li').data('value'); // 'data-value' 속성을 가져옴
 
-            $('#dropdown-filter-button').text(selectedText);
-            $('#dropdown-filter-button').val(selectedValue);
-            facilitiesHandler('main'); // 필터 변경 시 상태 저장
+            $('#dropdown-sortType-button').text(selectedText);
+            $('#dropdown-sortType-button').val(selectedValue);
         });
 
         // 시설 필터 버튼 클릭 이벤트 핸들러
         const btns = document.querySelectorAll('[id^="f_idx"]');
+        console.log(btns + " btns");
         btns.forEach(btn => {
             btn.addEventListener('click', () => {
                 if (btn.classList.contains('bg-gray-300')) {
@@ -313,35 +318,126 @@
             });
         });
 
-        $("#keyword_value").text(sessionStorage.getItem('keyword'));
+        $("#keyword_value").text(getUrlParameter('keyword'));
+
+        setSortType(sortTypeValue);
+        setFacilities(facilitiesValue, "main");
+        setHCate(hCateValue, "main");
     });
 
+    // 필터 버튼 셋팅하는 함수
+    // 필터 버튼 셋팅하는 함수
+    function setSortType(sortTypeValue = null) {
+        console.log(sortTypeValue + " sortTypeValue");
+        let filterButton = $("#dropdown-sortType-button");
 
-    function getUrlParameter(param) {
-        const params = new URLSearchParams(window.location.search);
-        return params.get(param);
+        if (sortTypeValue) {
+            let filterText = $('#sortTypeDropdown li[data-value="' + sortTypeValue + '"] .dropdown-item').text();
+            console.log(filterText + " filterText");
+            filterButton.text(filterText);
+            filterButton.val(sortTypeValue); // 여기서 sortTypeValue를 사용합니다.
+        } else {
+            filterButton.text("평점높은순");
+            filterButton.val("rating");
+        }
     }
 
 
+    // 시설 필터 셋팅하는 함수
+    function setFacilities(value = [], identifier = "") {
+        console.log(value + " value");
+        if (value !== null) {
+            let facilities = value.split(',');
+            facilities.forEach(facility => {
+                let btn = $('#f_idx' + facility + '-' + identifier);
+                btn.addClass('bg-gray-300');
+                btn.addClass('f_idx');
+            });
+        }
+    }
+
+    function setHCate(hCate = null, identifier = "") {
+        console.log(hCate + " hCate");
+
+        // name이 'hCate'인 모든 input 요소 중에서 id가 identifier를 포함하는 요소 선택
+        let radioButtons = document.querySelectorAll('input[name="hCate"][id*="' + identifier + '"]');
+        console.log(radioButtons.values() + " radioButtons");
+        radioButtons.forEach(function (radioButton) {
+            console.log(radioButton.value + " radioButton.value");
+            if (hCate !== null && hCate !== "") {
+                if (radioButton.value === hCate) {
+                    radioButton.checked = true;
+                }
+            } else {
+                if (radioButton.value === 'all') {
+                    radioButton.checked = true;
+                }
+            }
+        });
+    }
+
+    // 필터 값을 가져오는 함수
+    function getSortType() {
+        let filterButton = document.getElementById('dropdown-sortType-button');
+        if (filterButton) {
+            return filterButton.value;
+        } else {
+            console.error('Dropdown filter button not found');
+            return null;
+        }
+    }
+    // 선택된 카테고리 값을 가져오는 함수
+    function getHCate(identifier = "") {
+        const selectedHCate = document.querySelector('input[name="hCate"]:checked');
+        if (selectedHCate && selectedHCate.value === 'all') {
+            return null;
+        }
+        return selectedHCate ? selectedHCate.value : null;
+    }
+
+    // 선택된 시설 값을 가져오는 함수
+    function getSelectedFacilities(identifier = "") {
+        const selectedBtns = document.querySelectorAll('.f_idx[id*="' + identifier + '"]');
+        return Array.from(selectedBtns).map(btn => btn.value);
+    }
+
+    // URL 파라미터 값을 가져오는 함수
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        let results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
     function synchronizeSliders(targetSlider) {
-        targetSlider.noUiSlider.set([sliderValues.start, sliderValues.end]);
+        if (targetSlider && targetSlider.noUiSlider) {
+            targetSlider.noUiSlider.set([sliderValues.start, sliderValues.end]);
+        }
     }
 
     // 슬라이더 초기화 함수
     function initializeSlider(identifier) {
-        var sliderElement = document.getElementById('slider-' + identifier);
-        var valueElement = document.getElementById('price-range-value-' + identifier);
-        var startInput = document.getElementById('slider-start-' + identifier);
-        var endInput = document.getElementById('slider-end-' + identifier);
+        let sliderElement = document.getElementById('slider-' + identifier);
+        let valueElement = document.getElementById('price-range-value-' + identifier);
+        let startInput = document.getElementById('slider-start-' + identifier);
+        let endInput = document.getElementById('slider-end-' + identifier);
+
+        // 필수 요소 확인
+        if (!sliderElement || !valueElement || !startInput || !endInput) {
+            console.error('One of the required elements is missing for identifier:', identifier);
+            return;
+        }
 
         const startPrice = getUrlParameter('startPrice') ? parseInt(getUrlParameter('startPrice')) : 0;
         const endPrice = getUrlParameter('endPrice') ? parseInt(getUrlParameter('endPrice')) : 500000;
 
+        // 공통된 슬라이더 값 객체
         const sliderValues = {
             start: startPrice,
             end: endPrice
         };
 
+        // 슬라이더 초기화
         noUiSlider.create(sliderElement, {
             start: [sliderValues.start, sliderValues.end],
             connect: true,
@@ -357,7 +453,7 @@
             snap: true // 스냅 기능 활성화
         });
 
-        // 각 핸들의 동작 중 업데이트
+        // 슬라이더 업데이트 핸들러
         sliderElement.noUiSlider.on('update', function (values) {
             sliderValues.start = parseInt(values[0]);
             sliderValues.end = parseInt(values[1]);
@@ -372,7 +468,7 @@
             endInput.value = sliderValues.end;
         });
 
-        // 최소 간격 상태 체크 및 강제 조정
+        // 슬라이더 슬라이드 핸들러
         sliderElement.noUiSlider.on('slide', function (values, handle) {
             let start = parseInt(values[0]);
             let end = parseInt(values[1]);
@@ -386,10 +482,12 @@
             }
         });
 
+        // 슬라이더 시작 핸들러
         sliderElement.noUiSlider.on('start', function () {
             sliderElement.classList.add('noUi-moving'); // 드래그 할 때 클래스 추가
         });
 
+        // 슬라이더 종료 핸들러
         sliderElement.noUiSlider.on('end', function () {
             sliderElement.classList.remove('noUi-moving'); // 드래그 종료 시 클래스 제거
         });
@@ -401,209 +499,143 @@
 
                 performSearch(identifier);
 
-                var modalSlider = document.getElementById('slider-modal');
-                synchronizeSliders(modalSlider);
+                let modalSlider = document.getElementById('slider-modal');
+                synchronizeSliders(modalSlider); // 모달 슬라이더 동기화
             });
         }
-
-        // 초기 필터 상태 설정
-        facilitiesHandler(identifier);
     }
 
     // 모달 창 열기
     function showMap() {
-        copyFilter('modal');
-
-        $("#search_bar").css("display", "none");
-        $("#main-filter").css("display", "none");
-        $("#searchbar").css("display", "none");
         $("#modal-wrap").css("display", "flex");
         $("body").css("overflow", "hidden");
-        $("footer").css("display", "none");
+
         loadKaKaoMap();
 
-        initializeSlider('modal'); // 모달 슬라이더 초기화
+        setFacilities(facilitiesValue, "modal");
+        setHCate(hCateValue, "modal");
+
+        document.getElementById('keyword_value_modal').innerText = "'" + keywordValue + "' 숙소 검색 결과";
+
+        // 모달 슬라이더 초기화 및 값 동기화
+        destroySlider('modal');
+        let mainStart = parseInt(document.getElementById('slider-start-main').value) || 0;
+        let mainEnd = parseInt(document.getElementById('slider-end-main').value) || 500000;
+        initializeSliderWithValues('modal', mainStart, mainEnd);
+    }
+
+    // 슬라이더 초기화 해제 함수
+    function destroySlider(identifier) {
+        let sliderElement = document.getElementById('slider-' + identifier);
+
+        if (sliderElement && sliderElement.noUiSlider) {
+            sliderElement.noUiSlider.destroy();
+            console.log('Slider destroyed for identifier:', identifier);
+        }
+    }
+
+    // 값으로 슬라이더 초기화 함수
+    function initializeSliderWithValues(identifier, startValue, endValue) {
+        let sliderElement = document.getElementById('slider-' + identifier);
+
+        // 반드시 슬라이더 제거 후 재초기화
+        if (sliderElement.noUiSlider) {
+            sliderElement.noUiSlider.destroy();
+        }
+
+        noUiSlider.create(sliderElement, {
+            start: [startValue, endValue],
+            connect: true,
+            range: {
+                'min': 0,
+                '20%': 100000,
+                '40%': 200000,
+                '60%': 300000,
+                '80%': 400000,
+                'max': 500000
+            },
+            margin: 100000, // 두 핸들 간 최소 간격 설정
+            snap: true // 스냅 기능 활성화
+        });
     }
 
     // 모달 창 닫기
     $("#modal_close").click(function () {
-        $("#search_bar").css("display", "flex");
-        $("#main-filter").css("display", "flex");
         $("#modal-wrap").css("display", "none");
-        $("#searchbar").css("display", "flex");
         $("body").css("overflow", "auto");
-        $("footer").css("display", "flex");
 
-        copyFilter('main');
+        setSortType(sortTypeValue);
+        setFacilities(facilitiesValue, "main");
+        setHCate(hCateValue, "main");
     });
-
-    // 메인 필터를 모달 필터로 복사
-    function copyFilter(subject) {
-        const facilities = JSON.parse(sessionStorage.getItem('facilities') || '[]');
-        const selectedHCate = sessionStorage.getItem('hCate');
-        const startPrice = sessionStorage.getItem('startPrice');
-        const endPrice = sessionStorage.getItem('endPrice');
-
-        console.log(facilities, selectedHCate, startPrice, endPrice + "되냐?");
-
-        // 모달 필터 초기값 설정
-        initializeFilters(subject, facilities, selectedHCate, startPrice, endPrice);
-    }
-
-    // 필터 초기화 함수
-    function initializeFilters(identifier, facilities = null, hCate = null, startPrice = null, endPrice = null) {
-        const isMain = (identifier === 'main');
-
-        if (!facilities) {
-            facilities = isMain ? JSON.parse(sessionStorage.getItem('facilities') || '[]') : [];
-        }
-        if (!hCate) {
-            hCate = isMain ? sessionStorage.getItem('hCate') : null;
-        }
-        if (!startPrice) {
-            startPrice = isMain ? sessionStorage.getItem('startPrice') : null;
-        }
-        if (!endPrice) {
-            endPrice = isMain ? sessionStorage.getItem('endPrice') : null;
-        }
-
-        const prefix = identifier === 'modal' ? '#modal ' : '';
-
-        const f_idxElements = document.querySelectorAll(`${prefix}button[name="f_idx"]`);
-        f_idxElements.forEach(elem => {
-            elem.classList.remove('bg-gray-300');
-        });
-
-        const hCateElements = document.querySelectorAll(`${prefix}input[name="hCate"]`);
-        hCateElements.forEach(elem => {
-            elem.checked = false;
-        });
-
-        if (Array.isArray(facilities)) {
-            facilities.forEach(facility => {
-                const element = document.querySelector(`${prefix}button[name="f_idx"][value="${facility}"]`);
-                if (element) {
-                    element.classList.add('bg-gray-300');
-                }
-            });
-        }
-
-        if (hCate) {
-            const hCateElement = document.querySelector(`${prefix}input[name="hCate"][value="${hCate}"]`);
-            if (hCateElement) {
-                hCateElement.checked = true;
-            }
-        } else if (isMain) {
-            const defaultAllElement = document.querySelector(`${prefix}input[name="hCate"][value="all"]`);
-            if (defaultAllElement) {
-                defaultAllElement.checked = true;
-            }
-        }
-
-        if (startPrice) {
-            const startPriceElement = document.querySelector(`${prefix}#slider-start-${identifier}`);
-            if (startPriceElement) {
-                startPriceElement.value = startPrice;
-            }
-        }
-
-        if (endPrice) {
-            const endPriceElement = document.querySelector(`${prefix}#slider-end-${identifier}`);
-            if (endPriceElement) {
-                endPriceElement.value = endPrice;
-            }
-        }
-    }
-
-    //세션에 저장하는 함수
-    function facilitiesHandler(identifier) {
-        const isMain = (identifier === 'main');
-        const prefix = isMain ? '' : '#modal ';
-        const f_idxElements = document.querySelectorAll(`${prefix}.f_idx`);
-        const facilities = Array.from(f_idxElements, elem => elem.value);
-        const hCateElement = document.querySelector(`${prefix}input[name="hCate"]:checked`);
-
-        let hCate = hCateElement ? hCateElement.value : (isMain ? "all" : null);
-        let startPriceElement = document.getElementById(`slider-start-${identifier}`);
-        let endPriceElement = document.getElementById(`slider-end-${identifier}`);
-        let startPrice = startPriceElement ? startPriceElement.value : null;
-        let endPrice = endPriceElement ? endPriceElement.value : null;
-
-        // 필터 상태를 세션 스토리지에 저장 (메인 페이지에서만)
-        if (isMain) {
-            sessionStorage.setItem('facilities', JSON.stringify(facilities));
-            sessionStorage.setItem('hCate', hCate);
-            sessionStorage.setItem('startPrice', startPrice);
-            sessionStorage.setItem('endPrice', endPrice);
-        }
-    }
-
-    function updateFilterState() {
-        const selectedFacilities = Array.from(document.querySelectorAll('.f_idx')).map(btn => btn.value);
-        sessionStorage.setItem('facilities', JSON.stringify(selectedFacilities));
-        facilitiesHandler('main');
-    }
 
     // 검색 실행 함수
     function debouncedPerformSearch(identifier, page = 1) {
-        facilitiesHandler(identifier);
-        const facilities = JSON.parse(sessionStorage.getItem('facilities') || '[]');
-        console.log(facilities);
-        let hCate = sessionStorage.getItem('hCate');
-        if (hCate === 'all') {
-            hCate = null;
-        }
-        let startPrice = sessionStorage.getItem('startPrice');
-        let endPrice = sessionStorage.getItem('endPrice');
-        let keyword = sessionStorage.getItem('keyword');
-        let startDay = sessionStorage.getItem('startDate');
-        let endDay = sessionStorage.getItem('endDate');
-        const person = sessionStorage.getItem('people');
-        const filter = document.getElementById('dropdown-filter-button').value;
+        // 동적으로 가져온 값을 사용
+        if (identifier == "main") {
+            const facilities = getSelectedFacilities(identifier);
+            console.log(facilities);
+            let hCate = getHCate(identifier);
+            let startPrice = $('#slider-start-' + identifier).val();
+            let endPrice = $('#slider-end-' + identifier).val();
+            let keyword = sessionStorage.getItem('keyword');
+            let startDay = sessionStorage.getItem('startDate');
+            let endDay = sessionStorage.getItem('endDate');
+            const person = sessionStorage.getItem('people');
+            const sortType = getSortType(identifier);
+            let page = sessionStorage.getItem('page'); // 페이지 정보 추가
 
-        // Query String 구성
-        let queryString = '?';
+            console.log("sortType: ", sortType);
 
-        if (keyword) {
-            queryString += `keyword=${encodeURIComponent(keyword)}&`;
-        }
-        if (startDay) {
-            queryString += `checkIn=${encodeURIComponent(startDay)}&`;
-        }
-        if (endDay) {
-            queryString += `checkOut=${encodeURIComponent(endDay)}&`;
-        }
-        if (person) {
-            queryString += `person=${encodeURIComponent(person)}&`;
-        }
-        if (hCate) {
-            queryString += `hCate=${encodeURIComponent(hCate)}&`;
-        }
-        if (facilities && facilities.length > 0) {
-            queryString += `facilities=${encodeURIComponent(facilities.join(','))}&`;
-        }
-        if (startPrice) {
-            queryString += `startPrice=${encodeURIComponent(startPrice)}&`;
-        }
-        if (endPrice) {
-            queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
-        }
-        if (filter) {
-            queryString += `filter=${encodeURIComponent(filter)}&`;
-        }
-        if (page && page > 1) {
-            queryString += `page=${encodeURIComponent(page)}&`;
-        }
+            // Query String 구성
+            let queryString = '?';
 
-        // 끝에 붙은 &를 제거
-        if (queryString.endsWith('&')) {
-            queryString = queryString.slice(0, -1);
-        }
+            if (keyword) {
+                queryString += `keyword=${encodeURIComponent(keyword)}&`;
+            }
+            if (startDay) {
+                queryString += `checkIn=${encodeURIComponent(startDay)}&`;
+            }
+            if (endDay) {
+                queryString += `checkOut=${encodeURIComponent(endDay)}&`;
+            }
+            if (person) {
+                queryString += `person=${encodeURIComponent(person)}&`;
+            }
+            if (hCate) {
+                queryString += `hCate=${encodeURIComponent(hCate)}&`;
+            }
+            if (facilities && facilities.length > 0) {
+                queryString += `facilities=${encodeURIComponent(facilities.join(','))}&`;
+            }
+            if (startPrice) {
+                queryString += `startPrice=${encodeURIComponent(startPrice)}&`;
+            }
+            if (endPrice) {
+                queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
+            }
+            if (sortType) {
+                queryString += `sortType=${encodeURIComponent(sortType)}&`;
+            }
+            if (page && page > 1) {
+                queryString += `page=${encodeURIComponent(page)}&`;
+            }
 
-        // URL 변경 및 페이지 리로드
-        window.location.href = `/search/domestic-accommodations${queryString}`;
+            // 끝에 붙은 &를 제거
+            if (queryString.endsWith('&')) {
+                queryString = queryString.slice(0, -1);
+            }
+
+            console.log(queryString);
+
+            // URL 변경 및 페이지 리로드
+            window.location.href = `/search/domestic-accommodations${queryString}`;
+        } else if (identifier == "modal") {
+            // modal에 대한 로직 추가 (현재 비어 있습니다)
+        }
     }
 
+    // 검색 실행 함수를 지연시키는 함수
     const performSearch = debounce(debouncedPerformSearch, 300);
 
     //동작 지연시키기
@@ -621,7 +653,6 @@
 
 
 
-
     // 카카오맵 로드
     function loadKaKaoMap() {
         initKaKaoMap();
@@ -633,7 +664,7 @@
     let clickedMarkerId = null; // 클릭된 마커 ID 보관 변수
 
     function initKaKaoMap() {
-        var container = document.getElementById('map');
+        let container = document.getElementById('map');
         let options = {
             center: new kakao.maps.LatLng(37.5665, 126.9780),
             level: 7
@@ -644,7 +675,7 @@
     function addMarkersTooMuch() {
         removeMarkers(); // 이전의 마커를 제거합니다.
 
-        var bounds = new kakao.maps.LatLngBounds();
+        let bounds = new kakao.maps.LatLngBounds();
 
         resultAccommodations.forEach((accommodation) => {
             let position = new kakao.maps.LatLng(parseFloat(accommodation.yaxis), parseFloat(accommodation.xaxis));
@@ -815,7 +846,7 @@
 
     // 마커를 제거하는 함수
     function removeMarkers() {
-        for (var i = 0; i < markers.length; i++) {
+        for (let i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
         markers = [];
