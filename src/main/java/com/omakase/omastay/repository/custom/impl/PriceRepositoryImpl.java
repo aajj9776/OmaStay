@@ -1,7 +1,7 @@
 package com.omakase.omastay.repository.custom.impl;
 import com.omakase.omastay.repository.custom.PriceRepositoryCustom;
 import com.omakase.omastay.vo.StartEndVo;
-import com.querydsl.core.BooleanBuilder;
+
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
