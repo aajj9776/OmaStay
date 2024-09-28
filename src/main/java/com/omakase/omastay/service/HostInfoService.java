@@ -8,12 +8,15 @@ import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
+import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
 import com.omakase.omastay.entity.Account;
 import com.omakase.omastay.entity.AdminMember;
 import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.HostFacilities;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.Image;
+import com.omakase.omastay.entity.Price;
+import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;
@@ -24,19 +27,27 @@ import com.omakase.omastay.mapper.AdminMemberMapper;
 import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.ImageMapper;
+import com.omakase.omastay.mapper.PriceMapper;
+import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.AccountRepository;
+import com.omakase.omastay.repository.AdminMemberRepository;
 import com.omakase.omastay.repository.FacilitiesRepository;
 import com.omakase.omastay.repository.HostFacilitiesRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.ImageRepository;
+import com.omakase.omastay.repository.PriceRepository;
+import com.omakase.omastay.repository.RoomInfoRepository;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
-import org.apache.tomcat.util.http.parser.Host;
+
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HostInfoService {
@@ -55,6 +66,15 @@ public class HostInfoService {
 
     @Autowired
     private FacilitiesRepository facilitiesRepository;
+
+    @Autowired
+    private RoomInfoRepository roomInfoRepository;
+
+    @Autowired
+    private AdminMemberRepository adminMemberRepository;
+
+    @Autowired
+    private PriceRepository priceRepository;
 
     public HostInfoDTO findHostInfoDTO(AdminMemberDTO adminMemberDTO) {
         AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
@@ -140,7 +160,10 @@ public class HostInfoService {
         
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
 
-        hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
+        if(hostInfo.getHStep() == HStep.MYPAGE) {
+            hostInfo.setHStep(HStep.INFO); // hStep을 1로 설정
+        }
+        
         hostInfo.setHCate(HCate.valueOf(hostInfoCustomDTO.getHostInfo().getHCate().name()));
         hostInfo.setRegion(hostInfoCustomDTO.getHostInfo().getRegion());
         hostInfo.setXAxis(hostInfoCustomDTO.getHostInfo().getXAxis());
@@ -227,7 +250,10 @@ public class HostInfoService {
         
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
 
-        hostInfo.setHStep(HStep.RULE); // hStep을 2로 설정
+        if(hostInfo.getHStep() == HStep.INFO) {
+            hostInfo.setHStep(HStep.RULE); // hStep을 2로 설정
+        }
+
         hostInfo.setCheckin(hostInfoDTO.getCheckin());
         hostInfo.setCheckout(hostInfoDTO.getCheckout());
         hostInfo.setRules(hostInfoDTO.getRules());
@@ -241,8 +267,72 @@ public class HostInfoService {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
 
-        hostInfo.setHStatus(HStatus.APPLY);
+        if(hostInfo.getHStep() == HStep.ROOM) {
+            if(hostInfo.getHStatus() != HStatus.APPLY && hostInfo.getHStatus() != HStatus.APPROVE) {
+                hostInfo.setHStatus(HStatus.APPLY); // hStep을 3으로 설정
+            }
+        }
 
         hostInfoRepository.save(hostInfo);
+    }
+
+
+
+    /* 관리자에서 쓰는 거 */
+    public List<HostInfoDTO> getAllHostInfos() {
+        List<HostInfo> hostInfos = hostInfoRepository.hostInfos();
+        return HostInfoMapper.INSTANCE.toHostInfoDTOList(hostInfos);
+    }
+
+    public HostRequestInfoDTO getHostRequestInfo(int id){
+        HostRequestInfoDTO hostRequestInfoDTO = new HostRequestInfoDTO();
+
+        HostInfo hostInfo = hostInfoRepository.findById(id);
+        System.out.println(hostInfo);
+         // adminMember 엔티티를 명시적으로 로드
+        
+        hostRequestInfoDTO.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo));
+
+        Account account = accountRepository.findByHostInfoId(hostInfo.getId());
+        System.out.println(account);
+        hostRequestInfoDTO.setAccount(AccountMapper.INSTANCE.toAccountDTO(account));
+
+        List<HostFacilitiesDTO> hostFacilities = hostFacilitiesRepository.findByHostInfoIdAndFacilities(hostInfo.getId());
+        System.out.println(hostFacilities);
+
+        List<Facilities> facilities = new ArrayList<>();
+
+        for(HostFacilitiesDTO hf : hostFacilities){
+            Facilities facility = facilitiesRepository.findById2(hf.getFIdx());
+            facilities.add(facility);
+        }
+        System.out.println(facilities);
+        hostRequestInfoDTO.setFacilities(FacilitiesMapper.INSTANCE.toFacilitiesDTOList(facilities));
+
+        List<RoomInfo> roomInfos = roomInfoRepository.findByHostInfo(hostInfo);
+        System.out.println(roomInfos);
+        hostRequestInfoDTO.setRoomInfo(RoomInfoMapper.INSTANCE.toRoomInfoDTOList(roomInfos)); 
+        
+        Price price = priceRepository.findFirstByHostInfoId(hostInfo.getId());
+
+        hostRequestInfoDTO.setPrice(PriceMapper.INSTANCE.toPriceDTO(price));
+
+        List<Image> images = imageRepository.findByHostInfoId(hostInfo.getId());
+        System.out.println(images);
+        hostRequestInfoDTO.setImages(ImageMapper.INSTANCE.toImageDTOList(images));
+
+        Hibernate.initialize(hostRequestInfoDTO.getHostInfo().getAdIdx());
+
+        return hostRequestInfoDTO;
+    }
+
+    @Transactional 
+    public void approveHost(int hidx){
+        hostInfoRepository.approveHost(hidx);
+    }
+
+    @Transactional 
+    public void rejectHost(int hidx){
+        hostInfoRepository.rejectHost(hidx);
     }
 }

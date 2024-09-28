@@ -2,6 +2,7 @@ package com.omakase.omastay.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class HostOwnerInfoVo {
     @Column(name = "host_name", length = 100)
     private String hostName;
 
-    @Column(name = "h_intro", length = 100)
+    @Lob
+    @Column(name = "h_intro")
     private String hintro;
 }

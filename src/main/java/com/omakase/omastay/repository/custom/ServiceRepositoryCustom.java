@@ -13,4 +13,6 @@ public interface ServiceRepositoryCustom {
 
     List<Service> searchServices(String type, String keyword, String startDate, String endDate, UserAuth sAuth, SCate sCate);
 
+    List<Service> searchHostNotice(String type, String keyword, UserAuth sAuth, SCate sCate);
+
 }

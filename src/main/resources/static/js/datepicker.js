@@ -22,8 +22,8 @@ $(document).ready(function () {
         $('#date-range-picker-input').val(displayText);
 
         // 로컬 날짜 형식으로 값을 설정하는 부분
-        $('#check-in').val(start.format('YYYY-MM-DDTHH:mm:ss'));
-        $('#check-out').val(end.format('YYYY-MM-DDTHH:mm:ss'));
+        $('#check-in').val(start.format('YYYY-MM-DD'));
+        $('#check-out').val(end.format('YYYY-MM-DD'));
     }
 
     $('#date-range-picker').daterangepicker({
@@ -37,6 +37,7 @@ $(document).ready(function () {
         },
         showDropdowns: true,
         autoApply: true,
+        linkedCalendars: false,
         minDate: moment(),
         maxDate: moment().add(6, 'months'),
         timePicker: false,
