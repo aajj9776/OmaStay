@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '17'
-        distribution: 'adopt'
+        distribution: 'temurin'
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.4
@@ -29,7 +29,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /home/ubuntu/OmaStay && sudo chown ubuntu:ubuntu /home/ubuntu/OmaStay"
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "ls -la /home/ubuntu"
 
-    - name: List files
+    - name: List local files
       run: ls -la
 
     - name: Copy files to EC2
@@ -65,17 +65,13 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew clean build --no-daemon
 
-    - name: Install Docker using official script
+    - name: Install Docker using convenience script
       run: |
-        sudo apt-get update
         curl -fsSL https://get.docker.com -o get-docker.sh
         sudo sh get-docker.sh
 
-    - name: Add user in the Docker group
+    - name: Add user to Docker group
       run: sudo usermod -aG docker $USER
-
-    - name: Reload Docker session
-      run: sudo chmod 666 /var/run/docker.sock
 
     - name: SSH into EC2 and run Docker Compose
       run: |
