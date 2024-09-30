@@ -24,23 +24,31 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-      # Ensure Directory and Validate Addition
+      # Ensure Remote Directory Exists 단계 추가
       - name: Ensure Remote Directory Exists
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          mkdir -p /home/ubuntu/OmaStay
-          ls -ld /home/ubuntu/OmaStay
+          sudo mkdir -p /home/ubuntu/OmaStay
+          sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay
+          ls -ld /home/ubuntu/OmaStay || echo "Directory was not created"
+          EOF
+
+      # Validate Remote Directory before copying files
+      - name: Validate Remote Directory Before SCP
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+          if [ -d "/home/ubuntu/OmaStay" ]; then echo "Directory exists before SCP"; else echo "Directory does not exist before SCP"; exit 1; fi
           EOF
 
       - name: Copy files to EC2
         run: |
-          scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+          scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay || (echo "SCP failed"; exit 1)
         
       # Validate Remote Directory after copy
-      - name: Validate Remote Directory
+      - name: Validate Remote Directory After SCP
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          if [ -d "/home/ubuntu/OmaStay" ]; then echo "Directory exists"; else echo "Directory does not exist"; exit 1; fi
+          if [ -d "/home/ubuntu/OmaStay" ]; then echo "Directory exists after SCP"; else echo "Directory does not exist after SCP"; exit 1; fi
           EOF
 
       - name: Set up Node.js
