@@ -29,6 +29,9 @@ jobs:
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /home/ubuntu/OmaStay && sudo chown ubuntu:ubuntu /home/ubuntu/OmaStay"
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "ls -la /home/ubuntu"
 
+    - name: List files
+      run: ls -la
+
     - name: Copy files to EC2
       run: scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
 
