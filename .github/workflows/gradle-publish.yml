@@ -40,13 +40,14 @@ jobs:
       with:
         node-version: '14'
 
-    - name: Install tailwindcss
+    - name: Install tailwindcss and dependencies
       run: |
         cd src/main/frontend
         npm install
+        npm install @popperjs/core@^2.11.8
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+      uses: gradle/actions/setup-gradle@v4.0.0
 
     - name: Cache Gradle packages
       uses: actions/cache@v3
@@ -64,10 +65,11 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew clean build --no-daemon
 
-    - name: Install Docker
+    - name: Install Docker using official script
       run: |
         sudo apt-get update
-        sudo apt-get install -y docker.io
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
 
     - name: Add user in the Docker group
       run: sudo usermod -aG docker $USER
