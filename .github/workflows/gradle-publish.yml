@@ -42,7 +42,7 @@ jobs:
       - name: Copy files to EC2
         run: |
           echo "Starting SCP..."
-          scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+          scp -r -o StrictHostKeyChecking=no ./ ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
           if [ $? -ne 0 ]; then
             echo "SCP failed"
             exit 1
