@@ -67,16 +67,16 @@ jobs:
 
     - name: Install Docker using convenience script
       run: |
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sudo sh get-docker.sh
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
-    - name: Add user to Docker group
-      run: sudo usermod -aG docker $USER
-
-    - name: SSH into EC2 and run Docker Compose
+    - name: Add ubuntu user to Docker group and restart Docker
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          cd /home/ubuntu/OmaStay
-          docker-compose down
-          docker-compose up -d --build
+          sudo usermod -aG docker ubuntu
+          sudo systemctl restart docker
+          exit
         EOF
+
+    - name: SSH into EC2 and verify Docker permissions
+      run: |
+        ssh -o StrictHost
