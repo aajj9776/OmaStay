@@ -26,7 +26,7 @@ jobs:
 
     - name: Create directory on remote server
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "mkdir -p /home/ubuntu/OmaStay"
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /home/ubuntu/OmaStay && sudo chown ubuntu:ubuntu /home/ubuntu/OmaStay"
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "ls -la /home/ubuntu"
 
     - name: Copy files to EC2
