@@ -34,7 +34,7 @@ jobs:
 
     - name: Copy files to EC2
       run: |
-        scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:home/ubuntu/OmaStay
+        scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
 
     
     - name: Set up Node.js
