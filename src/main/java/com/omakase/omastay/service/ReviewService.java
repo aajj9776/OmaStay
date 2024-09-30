@@ -1,11 +1,15 @@
 package com.omakase.omastay.service;
+import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ReviewDTO;
+import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.ReviewMapper;
+import com.omakase.omastay.mapper.ServiceMapper;
 import com.omakase.omastay.repository.ReviewRepository;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -62,5 +66,30 @@ public class ReviewService {
         return res;
     
     }
+
+     // 호스트 전체 리뷰 가져오기
+    public List<ReviewDTO> getAllReview(HostInfoDTO hostInfoDTO) {
+
+        HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
+
+        List<Review> review = reviewRepository.findByHostInfoAndRevStatus(hostInfo, BooleanStatus.TRUE);
+
+        return ReviewMapper.INSTANCE.toReviewDTOList(review);
+    }
+
+    // 호스트 리뷰 검색
+    public List<ReviewDTO> searchHostReview(String type, String keyword, int hIdx){
+
+        List<Review> review = reviewRepository.searchHostReview(type, keyword, hIdx);
+ 
+        return ReviewMapper.INSTANCE.toReviewDTOList(review);
+    }
+
+    // 게시글 id 값으로 serviceDTO 가져오기
+    public ReviewDTO getReview(int id) {
+        Review review  = reviewRepository.findById(id).get();
+        return ReviewMapper.INSTANCE.toReviewDTO(review);
+    }
+
 }
     

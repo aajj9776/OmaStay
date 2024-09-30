@@ -13,12 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,22 +31,31 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.InquiryDTO;
 import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PointDTO;
+import com.omakase.omastay.dto.PriceDTO;
+import com.omakase.omastay.dto.SalesDTO;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
+import com.omakase.omastay.dto.custom.SalesCustomDTO;
+import com.omakase.omastay.dto.custom.Top5SalesDTO;
+import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.CouponService;
 import com.omakase.omastay.service.HostInfoService;
+import com.omakase.omastay.service.ImageService;
 import com.omakase.omastay.service.InquiryService;
 import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.MemberService;
 import com.omakase.omastay.service.PointService;
+import com.omakase.omastay.service.PriceService;
+import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -59,8 +71,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class AdminController {
 
     // 파일 업로드 경로 -> application.properties에 설정
-    // @Value("${upload}")
-    private String upload = "/upload/admin";
+    @Value("${upload}")
+    private String upload;
 
     @Autowired
     ServiceService ss;
@@ -75,6 +87,9 @@ public class AdminController {
     PointService ps;
 
     @Autowired
+    PriceService prs;
+
+    @Autowired
     MemberService ms;
 
     @Autowired
@@ -84,10 +99,19 @@ public class AdminController {
     HostInfoService hs;
 
     @Autowired
+    ImageService ims;
+
+    @Autowired 
+    SalesService salesService;
+
+    @Autowired
     private ServletContext application;
 
     @Autowired
     private HttpServletRequest request;
+
+    @Value("${upload}")
+    private String storage;
 
     @RequestMapping("/login")
     public String login() {
@@ -119,14 +143,48 @@ public class AdminController {
         System.out.println(host);
         
         mv.addObject("host", host);
+        mv.addObject("storage", storage);
         mv.setViewName("admins/request_detail");
         return mv;
     }
 
-    @RequestMapping("/request_room")
-    public String request_room() {
-        return "admins/modals/request_room";
+    @ResponseBody
+    @RequestMapping("/request/roomPrice")
+    public Map<String, Object> request_room(@RequestParam("roomId") String roomId) {
+        Map<String, Object> map = new HashMap<>();
+
+        PriceDTO price = prs.getPrice(Integer.parseInt(roomId));
+
+        map.put("price", price);
+
+        List<ImageDTO> images = ims.getImages(Integer.parseInt(roomId));
+
+        map.put("images", images);
+
+        return map;
     }
+
+    @ResponseBody
+    @RequestMapping("/request/approve")
+    public Map<String, Object> request_approve(@RequestParam("hidx") String hidx) {
+        Map<String, Object> map = new HashMap<>();
+
+        hs.approveHost(Integer.parseInt(hidx));
+
+        return map;
+    }
+
+    @ResponseBody
+    @RequestMapping("/request/reject")
+    public Map<String, Object> request_reject(@RequestParam("hidx") String hidx) {
+        Map<String, Object> map = new HashMap<>();
+
+        hs.rejectHost(Integer.parseInt(hidx));
+
+        return map;
+    }
+
+
     /************************ 입점 요청 끝 ************************/
     @RequestMapping("/payment")
     public String payment() {
@@ -138,10 +196,55 @@ public class AdminController {
         return "admins/payment_detail";
     }
 
+
+    /************************ 판매 실적 시작 ************************/
     @RequestMapping("/sales")
-    public String sales() {
-        return "admins/sales";
+    public ModelAndView sales(@RequestParam(value="region", required=false) String region) {
+        ModelAndView mv = new ModelAndView();
+        
+        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
+        mv.addObject("top5List", top5List);
+
+        List<SalesCustomDTO> list = salesService.getAllSales();
+        mv.addObject("list", list);
+
+        // if(region != null){ //지역이 있으면
+
+        //     List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
+        //     mv.addObject("top5List", top5List);
+        //     List<SalesCustomDTO> list = salesService.getAllSales();
+        //     mv.addObject("list", list);
+
+        // } else{ //지역이 없으면
+
+        //      //테이블
+        //     List<SalesCustomDTO> list = salesService.getAllSales();
+        //     mv.addObject("list", list);
+        // }
+
+        mv.setViewName("admins/sales");
+
+        return mv;
     }
+
+    //판매실적 검색(동기식)
+    @RequestMapping("/sales/search")
+    public ModelAndView sales_search(@RequestParam(value="dateRange", required=false) String dateRange,
+                                        @RequestParam(value="region", required=false) String region) {
+
+        ModelAndView mv = new ModelAndView();
+
+        List<SalesCustomDTO> list = salesService.searchSales(dateRange, region);
+
+        mv.addObject("list", list);
+
+        mv.setViewName("admins/sales");
+
+        return mv;
+    }
+
+
+    /************************ 판매 실적 끝 ************************/
 
     /****************************** 가맹점 공지사항 ******************************/
     // 가맹점 공지사항 리스트로 이동
@@ -237,7 +340,7 @@ public class AdminController {
 
         // 파일이 수정되었을 경우
         if(f.getSize() > 0) {
-            String realPath = application.getRealPath(upload);
+            String realPath = upload+"host";
             String fname = f.getOriginalFilename();
             FileImageNameVo fvo = new FileImageNameVo();
             fvo.setOName(fname);

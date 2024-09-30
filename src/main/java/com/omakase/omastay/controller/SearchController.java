@@ -1,9 +1,12 @@
 package com.omakase.omastay.controller;
 
+import com.omakase.omastay.dto.custom.AccommodationResponseDTO;
 import com.omakase.omastay.dto.custom.FilterDTO;
 import com.omakase.omastay.dto.custom.ResultAccommodationsDTO;
 import com.omakase.omastay.service.FacilitiesService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,44 +32,32 @@ public class SearchController {
         return mv;
     }
 
-    //숙소 검색 창(변경 예정)
-    @RequestMapping("/domestic-accommodations")
-    public ModelAndView domesticAccommodations() {
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("includeSearchBar", true);
-        mv.setViewName("search/domestic-accommodations");
-        return mv;
-    }
+    @GetMapping(value = "/search")
+    public ModelAndView search(@ModelAttribute @Valid FilterDTO search,
+                               @RequestParam(name = "page", defaultValue = "1") int page,
+                               @RequestParam(name = "size", defaultValue = "5") int size)
+    {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable);
 
-    // //숙소 검색 창(위에꺼 이걸로 변경예정)
-    // @PostMapping(value = "/search")
-    // @ResponseBody
-    // public FilterDTO search(@RequestBody @Valid FilterDTO filterDTO) {
-    //     List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(filterDTO);
+        List<ResultAccommodationsDTO> resultAccommodations = accommodationResponseDTO.getAccommodations();
 
-    //     return filterDTO;
-    // }
-  
-    //숙소 검색 창(위에꺼 이걸로 변경예정)
-    @ GetMapping(value = "/search")
-    public ModelAndView search(@ModelAttribute @Valid FilterDTO search) {
-        System.out.println(search);
-        List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.search(search);
+
+        System.out.println(resultAccommodations);
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("resultAccommodations", resultAccommodations);
+        mv.addObject("pageNation", accommodationResponseDTO.getPageNation());
         mv.addObject("includeSearchBar", true);
         mv.setViewName("search/domestic-accommodations");
 
         return mv;
     }
 
-    // //숙소 검색 필터링
-    // public FilterDTO filtering(@RequestBody @Valid FilterDTO filterDTO) {
-    //     System.out.println(filterDTO);
-
-    //     List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.filteringAccommodations(filterDTO);
-
-    //     return filterDTO;
-    // }
+    //숙소 검색 필터링
+    public FilterDTO filtering(@RequestBody @Valid FilterDTO filterDTO) {
+        System.out.println(filterDTO);
+        List<ResultAccommodationsDTO> resultAccommodations = facilitiesService.filteringAccommodations(filterDTO);
+        return null;
+    }
 }

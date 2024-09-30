@@ -33,6 +33,7 @@ $(document).ready(function () {
         },
         showDropdowns: true,
         autoApply: true,
+        linkedCalendars: false,
         timePicker: false,
         singleDatePicker: false,
         startDate: start,

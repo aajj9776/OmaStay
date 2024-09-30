@@ -22,6 +22,7 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
     public List<Integer> keywordFiltering(String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
 
+        //조건1 h_status가 1(승인)인지
         // 조건1: h_status가 APPROVE인지 확인
         builder.and(hostInfo.hStatus.eq(HStatus.APPROVE));
 

@@ -7,8 +7,6 @@ import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
-import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor

@@ -9,4 +9,5 @@ public class IqCommentRepositoryImpl implements IqCommentRepositoryCustom {
     public IqCommentRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
+
 }

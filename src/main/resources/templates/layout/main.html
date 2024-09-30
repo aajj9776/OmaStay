@@ -19,13 +19,23 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
     <link rel="stylesheet" type="text/css" href="/css/footer/footer.css" />
   </head>
   <body>
-      <header th:insert="~{component/header/header :: header}"/>
-      <div th:if="${includeSearchBar}" th:insert="~{component/search/searchbar :: searchbar}"></div>
-      <main layout:fragment="main"/>
-      <footer th:insert="~{component/footer/footer :: footer}"/>
+    <header th:insert="~{component/header/header :: header}" />
+    <div
+      th:if="${includeSearchBar}"
+      th:insert="~{component/search/searchbar :: searchbar}"
+    ></div>
+    <main layout:fragment="main" />
+    <footer th:insert="~{component/footer/footer :: footer}" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -34,6 +44,16 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+    ></script>
+    <script type="text/javascript" src="/js/datepicker.js"></script>
+    <script type="text/javascript" src="/js/countperson.js"></script>
     <script>
       window.onload = function () {
         let token = Cookies.get("accessToken");
@@ -53,6 +73,16 @@
         if (token) {
           try {
             let userInfo = jwt_decode(token);
+            if (token != null && userInfo != null) {
+              $.ajax({
+                url: "/login/userInfo",
+                type: "GET",
+                data: { id: userInfo.id },
+              }).done(function (data) {
+                console.log("두두:", data.grade);
+                localStorage.setItem("grade", JSON.stringify(data.grade));
+              });
+            }
             localStorage.setItem("user", JSON.stringify(userInfo));
             console.log("User Info:", userInfo);
 
@@ -61,7 +91,9 @@
               alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
               Cookies.remove("accessToken");
               localStorage.removeItem("isLogin");
-              window.location.href = "/login";
+              if (confirm("로그인 페이지로 이동하시겠습니까?")) {
+                window.location.href = "/login";
+              }
             }
           } catch (error) {
             console.error("토큰 디코딩 중 오류 발생:", error);
@@ -72,16 +104,6 @@
           }
         }
       };
-      searchAccommodation = () => {
-        let search = document.getElementById("search-accommodation").value;
-        let checkIn = document.getElementById("check-in").value;
-        console.log(checkIn);
-        let checkOut = document.getElementById("check-out").value;
-        console.log(checkOut);
-        let person = document.getElementById("person_count").innerText;
-        let url = `/search/search?keyword=${encodeURIComponent(search)}&startEndDay.start=${encodeURIComponent(checkIn)}&startEndDay.end=${encodeURIComponent(checkOut)}&person=${encodeURIComponent(person)}`;
-        location.href = url;
-      }
     </script>
   </body>
 </html>

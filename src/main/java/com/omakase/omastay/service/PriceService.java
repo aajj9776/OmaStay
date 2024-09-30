@@ -41,12 +41,17 @@ public class PriceService {
         }
 
         price.setPeakSet(priceDTO.getPeakSet());
-        price.setPeakVo(new PeakVo(priceDTO.getPeakVo().getPeakStart(), priceDTO.getPeakVo().getPeakEnd(), 0));
-        price.setSemi(new SemiPeakVo(priceDTO.getSemi().getSemiStart(), priceDTO.getSemi().getSemiEnd(), 0));
+        price.setPeakVo(new PeakVo(priceDTO.getPeakVo().getPeakStart(), priceDTO.getPeakVo().getPeakEnd(), null));
+        price.setSemi(new SemiPeakVo(priceDTO.getSemi().getSemiStart(), priceDTO.getSemi().getSemiEnd(), null));
 
         price.setRoomInfo(null);
 
         priceRepository.save(price);
     }
 
+    public PriceDTO getPrice(Integer id) { 
+        Price priceDTO = priceRepository.findFirstByHostInfoId(id);
+
+        return PriceMapper.INSTANCE.toPriceDTO(priceDTO);
+    }
 }
