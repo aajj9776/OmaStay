@@ -43,4 +43,20 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
     Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    
+    //오늘날짜 예약 조회
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :date AND r.startEndVo.end >= :date) AND (r.resStatus = 1 OR r.resStatus = 3)")
+    List<Reservation> findReservationsByDate(@Param("date") LocalDateTime date, @Param("roomInfo") RoomInfo roomInfo);
+
+    //이번주 예약 조회
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :endOfWeek AND r.startEndVo.end >= :startOfWeek) AND (r.resStatus = 1 OR r.resStatus = 3)")
+    List<Reservation> findReservationsByWeek(@Param("startOfWeek") LocalDateTime startOfWeek, @Param("endOfWeek") LocalDateTime endOfWeek, @Param("roomInfo") RoomInfo roomInfo);
+
+    //이번달 예약 조회
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :endOfMonth AND r.startEndVo.end >= :startOfMonth) AND (r.resStatus = 1 OR r.resStatus = 3)")
+    List<Reservation> findReservationsByMonth(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth, @Param("roomInfo") RoomInfo roomInfo);
+
+    //입실예정정보(시작일 제일 빠른 순으로 정렬)
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start >= :nowDate AND r.resStatus = 1) ORDER BY r.startEndVo.start ASC")
+    List<Reservation> findReservationsByCheckIn(@Param("nowDate") LocalDateTime nowDate, @Param("roomInfo") RoomInfo roomInfo);
 }
