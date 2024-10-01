@@ -3,6 +3,7 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.custom.*;
 import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.Price;
+import com.omakase.omastay.entity.QRoomInfo;
 import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.repository.*;
 import com.omakase.omastay.vo.StartEndVo;
@@ -46,6 +47,9 @@ public class FacilitiesService {
     @Autowired
     PriceRepository priceRepository;
 
+    @Autowired
+    HostFacilitiesRepository hostFacilitiesRepository;
+
     @Value("${upload}")
     private String realPath;
 
@@ -62,7 +66,34 @@ public class FacilitiesService {
         // 검색어 필터링 된 룸인포 키값과 호스트인포 키값 리스트 가져오기(예약이 불가능한 객실 포함)
         List<Tuple> allHostRoomIds = searchKeyword(filterDTO);
 
-        System.out.println("올룸아이디=" + allHostRoomIds);
+        if (filterDTO.getStartPrice() != null){
+            List<Integer> allRoomIds = allHostRoomIds.stream()
+                    .map(tuple -> tuple.get(roomInfo.id))
+                    .distinct()
+                    .toList();
+
+            //가격 필터링
+            allHostRoomIds = roomInfoRepository.priceFiltering(filterDTO, allHostRoomIds);
+
+        }
+
+        if (filterDTO.getFacilities() != null && !filterDTO.getFacilities().isEmpty()) {
+            List<Integer> allHostIds = allHostRoomIds.stream()
+                    .map(tuple -> tuple.get(hostInfo.id))
+                    .distinct()
+                    .toList();
+
+            // 필요한 시설 수
+            Long facilityCount = (long) filterDTO.getFacilities().size();
+
+            // 필요한 시설을 만족하는 호스트 ID 목록 조회
+            List<Integer> validHostIds = hostFacilitiesRepository.findFacilitiesIdsByHostId(filterDTO.getFacilities(), allHostIds);
+
+            // 유효한 호텔 ID를 가진 튜플 필터링
+            allHostRoomIds = allHostRoomIds.stream()
+                    .filter(tuple -> validHostIds.contains(tuple.get(hostInfo.id)))
+                    .toList();
+        }
 
         // 튜플에서 룸인포 키값만 가져오기
         List<Integer> roomIdxs = allHostRoomIds.stream()
@@ -99,7 +130,7 @@ public class FacilitiesService {
         Set<Integer> unavailableHostIds = hostToRoomsMap.entrySet().stream()
                 .filter(entry -> entry.getValue().stream()
                         .map(tuple -> tuple.get(roomInfo.id))
-                        .allMatch(roomId -> !availableRoomIds.contains(roomId)))
+                        .noneMatch(availableRoomIds::contains))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
 
@@ -107,7 +138,7 @@ public class FacilitiesService {
         List<Tuple> ratingAndReviewCount = reviewRepository.findReviewStatsByHostIds(hostIds);
 
         // 가격엔티티 가져오기
-        List<Price> priceList = priceRepository.findAvgPriceByHostIds((List<Integer>) availableHostIds);
+        List<Price> priceList = priceRepository.findAvgPriceByHostIds(availableHostIds, filterDTO.getStartPrice(), filterDTO.getEndPrice());
 
         // 호스트별(예약 가능한 호스트) 평균가격(ResultAccommodationsDTO에 셋)
         List<HostAvgPriceDTO> avgPrice = AvgPrice(priceList, filterDTO.getStartEndDay());
@@ -221,13 +252,14 @@ public class FacilitiesService {
     protected List<Tuple> searchKeyword(FilterDTO filterDTO) {
 
         //1. 검색어 필터링(roomInfo.id 리스트)
-        List<Integer> keyword = hostInfoRepository.keywordFiltering(filterDTO.getKeyword());
-
-        System.out.println("검색어 필터링 결과=" + keyword);
+        List<Integer> keyword = hostInfoRepository.keywordFiltering(filterDTO);
 
         //2. 검색어의 해당하는 리스트중 해당 인원수 이상의 숙소만 필터링(roomInfo.id 리스트)
-        return roomInfoRepository.personFiltering(filterDTO.getPerson(), keyword);
+        return roomInfoRepository.personFiltering(filterDTO, keyword);
     }
+
+
+
 
     public List<HostAvgPriceDTO> AvgPrice(List<Price> priceList, @NotNull StartEndVo startEndDay) {
         System.out.println("가격 리스트=" + priceList);

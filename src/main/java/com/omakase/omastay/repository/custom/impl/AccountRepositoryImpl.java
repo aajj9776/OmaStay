@@ -11,7 +11,4 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
     public AccountRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
-
-
-
 }

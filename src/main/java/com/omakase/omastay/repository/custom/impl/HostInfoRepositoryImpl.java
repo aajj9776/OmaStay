@@ -1,12 +1,17 @@
 package com.omakase.omastay.repository.custom.impl;
+import com.omakase.omastay.dto.custom.FilterDTO;
+import com.omakase.omastay.entity.QHostFacilities;
+import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;
 import com.omakase.omastay.repository.custom.HostInfoRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
 
+import static com.omakase.omastay.entity.QHostFacilities.hostFacilities;
 import static com.omakase.omastay.entity.QHostInfo.hostInfo;
 import static com.omakase.omastay.entity.QRoomInfo.roomInfo;
 
@@ -19,22 +24,29 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
     }
 
     @Override
-    public List<Integer> keywordFiltering(String keyword) {
+    public List<Integer> keywordFiltering(FilterDTO filterDTO) {
         BooleanBuilder builder = new BooleanBuilder();
 
+        String keyword = filterDTO.getKeyword();
+        HCate hCate = filterDTO.getHCate();
+
         //조건1 h_status가 1(승인)인지
-        // 조건1: h_status가 APPROVE인지 확인
         builder.and(hostInfo.hStatus.eq(HStatus.APPROVE));
 
-        // 조건2: h_name, h_post_code, h_street, region 중 하나라도 keyword가 포함되어 있는지 확인
+        //조건 2: hCate가 존재한다면 hCate가 일치하는지 확인
+        if (hCate != null) {
+            builder.and(hostInfo.hCate.eq(hCate));
+        }
+
+        // 조건3: h_name, h_post_code, h_street, region 중 하나라도 keyword가 포함되어 있는지 확인
         BooleanBuilder orBuilder = new BooleanBuilder();
-        // 조건 2-1: h_name이 keyword를 포함하는지 확인
+        // 조건 3-1: h_name이 keyword를 포함하는지 확인
         orBuilder.or(hostNameContains(keyword));
-        // 조건 2-2: h_post_code가 keyword를 포함하는지 확인
+        // 조건 3-2: h_post_code가 keyword를 포함하는지 확인
         orBuilder.or(postCodeContains(keyword));
-        // 조건 2-3: h_street이 keyword를 포함하는지 확인
+        // 조건 3-3: h_street이 keyword를 포함하는지 확인
         orBuilder.or(streetContains(keyword));
-        // 조건 2-4: region이 keyword를 포함하는지 확인
+        // 조건 3-4: region이 keyword를 포함하는지 확인
         orBuilder.or(regionContains(keyword));
 
         // 조건 결합: h_status가 APPROVE이고 (h_name, h_post_code, h_street, region 중 하나가 keyword를 포함)
