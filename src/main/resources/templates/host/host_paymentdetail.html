@@ -5,6 +5,42 @@
       layout:fragment="host">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <style>
+      .dt-length select {
+          font-size: 12px; 
+          padding: 5px; 
+          height: auto; 
+      }
+  
+      .dt-length label {
+          font-size: 12px; 
+          margin-left: 5px; 
+      }
+  
+      .dt-info {
+          font-size: 12px; 
+      }
+  
+      .dt-paging button {
+          font-size: 12px;
+          padding: 5px 8px; 
+      }
+
+      .dt-paging a { /* 페이지 번호 스타일 */
+          padding: 5px 8px;
+      }
+
+      .dt-info { 
+          display: none;
+      }
+
+      a {
+          text-decoration: none;
+      }
+
+  </style>
   </head>
   <body>
     <div
@@ -17,7 +53,7 @@
           class="self-stretch flex flex-row items-start justify-start pt-[76px] px-[50px] pb-[20px] box-border gap-[10px] max-w-full text-left text-[45px] text-[rgba(0,0,0,0.87)] font-[Roboto] lg:pl-[25px] lg:pr-[25px] lg:box-border"
         >
           <div
-            class="flex-1 flex flex-col items-start justify-start max-w-full"
+            class="pl-[50px] flex-1 flex flex-col items-start justify-start max-w-full"
           >
             <h1
               class="m-[0px] self-stretch relative text-inherit leading-[52px] font-normal font-[inherit] mq450:text-[27px] mq450:leading-[31px] mq1050:text-[36px] mq1050:leading-[42px]"
@@ -30,25 +66,12 @@
               Payment Detail
             </div>
           </div>
-          <div
-            class="h-[48px] w-[48px] rounded-[100px] overflow-hidden shrink-0 hidden flex-col items-center justify-center p-[8px] box-border"
-          >
-            <div
-              class="flex flex-row items-start justify-start py-[0px] px-[4px]"
-            >
-              <img
-                class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                alt=""
-                src="/image/host/starsharp-2.svg"
-              />
-            </div>
-          </div>
         </section>
         <section
-          class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[48.5px] box-border max-w-full"
+          class="self-stretch flex flex-row items-start justify-start pt-[20px] px-[0px] pb-[20px] box-border max-w-full"
         >
           <form
-            class="m-[0px] flex-1 flex flex-row items-start justify-start py-[19px] px-[50px] box-border gap-[23.8px] max-w-full mq750:flex-wrap mq750:pl-[25px] mq750:pr-[25px] mq750:box-border"
+            class="m-[0px] flex-1 flex flex-row items-start justify-start py-[19px] px-[80px] box-border gap-[23.8px] max-w-full mq750:flex-wrap mq750:pl-[25px] mq750:pr-[25px] mq750:box-border"
           >
             <h3
               class="m-[0px] h-[42px] w-[41px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-normal font-[Roboto] text-[#000] text-left flex items-center shrink-0 mq450:text-[16px] mq450:leading-[21px]"
@@ -58,40 +81,21 @@
             <div
               class="w-[142px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[6px] px-[12px] relative"
             >
-              <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-              <div class="h-[24px] w-[71px] hidden z-[1]"></div>
               <div
                 class="h-[24px] w-0 absolute !m-[0] top-[calc(50%_-_12px)] left-[12px]"
               ></div>
               <div
                 class="flex-1 flex flex-row items-start justify-start relative"
               >
-                <div
+                <select id="year"
                   class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
                 >
-                  2024
-                </div>
-                <img
-                  class="h-full w-[24px] absolute !m-[0] top-[0px] right-[0px] bottom-[0px] max-h-full overflow-hidden shrink-0"
-                  alt=""
-                  src="/image/host/arrowdropdownfilled.svg"
-                />
-              </div>
-              <div
-                class="self-stretch flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[4]"
-              >
-                Placeholder
+                  year
+                </select>
               </div>
               <div
                 class="h-0 w-[24px] absolute !m-[0] top-[calc(50%_-_0px)] right-[54px]"
               ></div>
-              <div class="hidden flex-row items-start justify-start z-[6]">
-                <img
-                  class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/image/host/closefilled.svg"
-                />
-              </div>
             </div>
             <h3
               class="m-[0px] h-[40px] relative text-[20px] tracking-[0.46px] leading-[26px] uppercase font-normal font-[Roboto] text-[#000] text-left flex items-center min-w-[21px] mq450:text-[16px] mq450:leading-[21px]"
@@ -101,212 +105,175 @@
             <div
               class="w-[142px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[6px] px-[12px] relative"
             >
-              <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-              <div class="h-[24px] w-[71px] hidden z-[1]"></div>
               <div
                 class="h-[24px] w-0 absolute !m-[0] top-[calc(50%_-_12px)] left-[12px]"
               ></div>
               <div
                 class="flex-1 flex flex-row items-start justify-start relative"
               >
-                <div
+                <select id="month"
+
                   class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
                 >
-                  08
-                </div>
-                <img
-                  class="h-full w-[24px] absolute !m-[0] top-[0px] right-[0px] bottom-[0px] max-h-full overflow-hidden shrink-0"
-                  alt=""
-                  src="/image/host/arrowdropdownfilled.svg"
-                />
-              </div>
-              <div
-                class="self-stretch flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[4]"
-              >
-                Placeholder
+                <option value="1" th:selected="${month == 1}">1월</option>
+                <option value="2" th:selected="${month == 2}">2월</option>
+                <option value="3" th:selected="${month == 3}">3월</option>
+                <option value="4" th:selected="${month == 4}">4월</option>
+                <option value="5" th:selected="${month == 5}">5월</option>
+                <option value="6" th:selected="${month == 6}">6월</option>
+                <option value="7" th:selected="${month == 7}">7월</option>
+                <option value="8" th:selected="${month == 8}">8월</option>
+                <option value="9" th:selected="${month == 9}">9월</option>
+                <option value="10" th:selected="${month == 10}">10월</option>
+                <option value="11" th:selected="${month == 11}">11월</option>
+                <option value="12" th:selected="${month == 12}">12월</option>
+                </select>
               </div>
               <div
                 class="h-0 w-[24px] absolute !m-[0] top-[calc(50%_-_0px)] right-[54px]"
               ></div>
-              <div class="hidden flex-row items-start justify-start z-[6]">
-                <img
-                  class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/image/host/closefilled.svg"
-                />
-              </div>
             </div>
-            <button
-              class="cursor-pointer [border:none] py-[8px] px-[31px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
+            <button type="button" id="search-button"
+              class="h-[35px] cursor-pointer [border:none] py-[5px] px-[31px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
             >
               <div class="flex flex-row items-start justify-start gap-[8px]">
-                <img
-                  class="h-[22px] w-[18px] relative hidden"
-                  alt=""
-                  src="/image/host/masked-icon.svg"
-                />
-
                 <b
                   class="relative text-[18px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[37px]"
                   >검색</b
                 >
-                <img
-                  class="h-[22px] w-[18px] relative hidden"
-                  alt=""
-                  src="/image/host/masked-icon1.svg"
-                />
               </div>
             </button>
           </form>
         </section>
-        <section
-          class="self-stretch flex flex-row items-start justify-start py-[0px] px-[50px] box-border max-w-full text-center text-[14px] text-[rgba(0,0,0,0.87)] font-[Roboto] lg:pl-[25px] lg:pr-[25px] lg:box-border"
-        >
-          <div
-            class="flex-1 flex flex-col items-start justify-start gap-[118.5px] max-w-full mq450:gap-[30px] mq750:gap-[59px]"
-          >
-            <div
-              class="self-stretch h-[573px] flex flex-row items-center justify-center bg-[url('/image/host/image-17@2x.png')] bg-cover bg-no-repeat bg-[top] max-w-full"
-            >
-              <img
-                class="w-[1300px] relative max-h-full object-cover hidden max-w-full"
-                alt=""
-                src="/image/host/image-17@2x.png"
-              />
-            </div>
-            <div
-              class="self-stretch flex flex-row items-start justify-center py-[0px] px-[20px] box-border max-w-full"
+        <div
+              class="self-stretch h-[571px] flex flex-row items-start justify-start py-[0px] px-[5px] box-border max-w-full"
             >
               <div
-                class="w-[540px] overflow-hidden shrink-0 flex flex-row items-start justify-center flex-wrap content-start gap-[10px] max-w-full"
+                class="self-stretch flex-1 flex flex-row items-start justify-center max-w-full"
               >
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem.svg"
-                />
-
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-1.svg"
-                />
-
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px] text-[#fff]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] bg-[#2196f3] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      1
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      2
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      3
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      4
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      5
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      6
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="flex-1 overflow-hidden flex flex-row items-start justify-start min-w-[26px]"
-                >
-                  <div
-                    class="flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start py-[10px] px-[15px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] inline-block min-w-[9px]"
-                    >
-                      7
-                    </div>
-                  </div>
-                </div>
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-1.svg"
-                />
-
-                <img
-                  class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/host/paginationitem-3.svg"
-                />
+              <div id="table" class="pt-[20px] px-[10px] pb-[10px] gap-[10px]">
+                <table id="listTable" class="w-[1140px] text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit]  text-[16px] hover">
+                  <thead>
+                    <tr class="py-[20px] pl-[30px] pr-[634px] gap-[20px]">
+                      <th>예약번호</th>
+                      <th>객실유형</th>
+                      <th>객실명</th>
+                      <th>예약기간</th>
+                      <th>결제금액</th>
+                      <th>결제일</th>
+                      <th>매출확정일</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-[#ffffff] pt-[100px]"></tbody>
+                </table>
+              </div>
+              <div class="dataTables_paginate paging_simple_numbers pagination-sm"></div> 
               </div>
             </div>
-          </div>
-        </section>
       </main>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js" defer></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      var selectedYear = /*[[${year}]]*/ 'defaultYear'; // 서버에서 전달된 year 값
+      var list = /*[[${list}]]*/'[]'; // 서버에서 전달된 리스트 데이터
+      /*]]>*/
+    </script>
+    <script>
+       $(document).ready(function() {
+        function yearSetting() {
+                let select = $('#year');
+                var nowYear = new Date().getFullYear();
+                console.log(selectedYear);
+                select.empty(); // 기존 옵션 제거
+                for (var i = nowYear - 3; i <= nowYear; i++) {
+                  if (i == selectedYear) {
+                        select.append('<option value="' + i + '" selected>' + i + '</option>');
+                    } else {
+                        select.append('<option value="' + i + '">' + i + '</option>');
+                    }
+                }
+            }
+            yearSetting();
+
+            try {
+                var parsedList = JSON.parse(list);
+            } catch (e) {
+                console.error("JSON 파싱 오류:", e);
+                var parsedList = [];
+            }
+
+            var table = $('#listTable').DataTable({
+                "searching": false,
+                 data: parsedList,
+                 columns: [
+                    { data: 'resNum' },
+                    { data: 'roomType' },
+                    { data: 'roomName' },
+                    {
+                        data: 'startEndVo',
+                        render: function(data, type, row) {
+                            if (data) {
+                                var start = moment(data.start, 'YYYY-MM-DD HH:mm:ss');
+                                var startyear = start.year();
+                                var startmonth = ('0' + (start.month() + 1)).slice(-2);
+                                var startday = ('0' + start.date()).slice(-2);
+                                
+                                var end =  moment(data.end, 'YYYY-MM-DD HH:mm:ss');
+                                var endyear = end.year();
+                                var endmonth = ('0' + (end.month() + 1)).slice(-2);
+                                var endday = ('0' + end.date()).slice(-2);
+                                
+                                return startyear + '-' + startmonth + '-' + startday + '~' + endyear + '-' + endmonth + '-' + endday;
+                            }
+                            return '';
+                        }
+                    },
+                    { data: 'nsalePrice' },
+                    {
+                        data: 'payDate',
+                        render: function(data, type, row) {
+                            var date = moment(data, 'YYYY-MM-DD HH:mm:ss');
+                            var year = date.year();
+                            var month = ('0' + (date.month() + 1)).slice(-2);
+                            var day = ('0' + date.date()).slice(-2);
+                            return year + '-' + month + '-' + day;
+                        }
+                    },
+                    { data: 'salDate',
+                      render: function(data, type, row) {
+                            var date = moment(data, 'YYYY-MM-DD HH:mm:ss');
+                            var year = date.year();
+                            var month = ('0' + (date.month() + 1)).slice(-2);
+                            var day = ('0' + date.date()).slice(-2);
+                            return year + '-' + month + '-' + day;
+                        }
+                     }
+                ],
+                columnDefs: [
+                    { width: 200, targets: 0 },
+                    { width: 130, targets: 1 },
+                    { width: 120, targets: 2 },
+                    { width: 230, targets: 3 },
+                    { width: 120, targets: 4 },
+                    { width: 110, targets: 5 },
+                    { width: 130, targets: 6 }
+                ]
+            });
+
+            // 검색 버튼 클릭 이벤트 처리
+            $('#search-button').on('click', function() {
+                var year = $('#year').val();
+                var month = $('#month').val();
+
+                // 동기식으로 페이지 이동
+                 location.href = '/host/paylist/view?year=' + year + '&month=' + month;
+            });
+      });
+    </script>
   </body>
 </html>

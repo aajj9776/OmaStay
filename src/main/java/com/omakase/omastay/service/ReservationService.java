@@ -4,10 +4,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 
 import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
@@ -240,5 +245,84 @@ public class ReservationService {
     public void checkAndUpdateExpiredStatus() {
         System.out.println("예약 상태 업데이트");
         reservationRepository.updateExpiredStatuses();
+    }
+
+    @Transactional
+    public List<HostReservationDTO> getReservationsDay(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime date = LocalDate.now().atStartOfDay();
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByDate(date, roomInfo);
+
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
+    }
+
+    @Transactional
+    public List<HostReservationDTO> getReservationsWeek(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime now = LocalDate.now().atStartOfDay();
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).with(LocalTime.MAX);
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByWeek(startOfWeek, endOfWeek, roomInfo);
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
+    }
+
+    //이번달 예약정보
+    @Transactional
+    public List<HostReservationDTO> getReservationsMonth(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime now = LocalDate.now().atStartOfDay();
+        LocalDateTime startOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MAX);
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByMonth(startOfMonth, endOfMonth, roomInfo);
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
+    }
+
+    //입실예정정보
+    @Transactional
+    public List<HostReservationDTO> findReservationsByCheckIn(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime nowDate = LocalDate.now().atStartOfDay();
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByCheckIn(nowDate, roomInfo);
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
     }
 }

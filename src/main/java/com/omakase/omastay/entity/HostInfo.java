@@ -27,7 +27,7 @@ public class HostInfo {
     @Column(name = "h_idx", nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_idx", referencedColumnName = "ad_idx")
     private AdminMember adminMember;
 
