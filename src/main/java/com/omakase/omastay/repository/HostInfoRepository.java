@@ -24,4 +24,6 @@ public interface HostInfoRepository extends JpaRepository<HostInfo, Integer>, Ho
     @Modifying 
     @Query("UPDATE HostInfo h SET h.hStatus = 2 WHERE h.id = :hidx")
     void rejectHost(@Param("hidx") int hidx);
+
+
 }

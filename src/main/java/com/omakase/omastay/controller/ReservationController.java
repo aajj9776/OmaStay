@@ -13,17 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.omakase.omastay.dto.IssuedCouponDTO;
+import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
-import com.omakase.omastay.entity.Payment;
+import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.IssuedCouponService;
-import com.omakase.omastay.service.MemberService;
-import com.omakase.omastay.service.PaymentService;
+import com.omakase.omastay.service.NonMemberService;
 import com.omakase.omastay.service.ReservationService;
 
 import jakarta.mail.MessagingException;
@@ -41,6 +40,9 @@ public class ReservationController {
 
     @Autowired
     private IssuedCouponService issuedCouponService;
+
+    @Autowired
+    private NonMemberService nonMemberService;
 
     @Autowired
     private EmailService emailService;
@@ -80,7 +82,7 @@ public class ReservationController {
 
 
     @PostMapping("/payment_success")
-    public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation) {
+    public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation, NonMemberDTO nonMember) {
         System.out.println("payment" + payment);
 
         System.out.println("reservation이메일 이름 들어와야함" + reservation);
@@ -101,7 +103,14 @@ public class ReservationController {
         ReservationDTO reserve = null;
         if( res.getPayStatus() == PayStatus.PAY) {
             reservation.setPayIdx(res.getId());
-            reserve = reservationService.insertReservationInfo(reservation, res);
+
+            if( nonMember != null){
+                NonMemberDTO dt = nonMemberService.insertNonMember(nonMember);
+                reserve = reservationService.insertReservationInfo(reservation, res, dt);
+            } else {
+                reserve = reservationService.insertReservationInfo(reservation, res, nonMember);
+            }
+
             System.out.println("예약결과" + reserve);
         } else {
             return "redirect:/reservation/payment_fail";
@@ -128,10 +137,6 @@ public class ReservationController {
     }
     
 
-    @RequestMapping("/no_reservation")
-    public String noReservation() {
-        return "reservation/no_reservation.html";
-    }
 
     @RequestMapping("/check_detail")
     public ModelAndView check_detail() {
@@ -156,29 +161,31 @@ public class ReservationController {
     public String fail() {
         return "reservation/payment_fail.html";
     }
-
-    //이거 3개는 모달창
-    @RequestMapping("/room_info")
-    public String roomInfo() {
-        return "reservation/room_info.html";
-    }
-    @RequestMapping("/cancel_content")
-    public String checkDetail() {
-        return "reservation/cancel_content.html";
-    }
+   
     @GetMapping("/modal/coupon-modal")
     public String getCouponModal() {
         return "reservation/modal/coupon-modal"; // .html 확장자는 생략 가능
     }
 
-   
-
     @GetMapping("error")
     public String error() {
         return "reservation/error";
     }
-    
-    
-    
-    
+
+    @GetMapping("/noReservation")
+    public ModelAndView noReservation() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/reservation/no_login");
+        return mv;
+    }
+
+    @PostMapping("/noReservation")
+    @ResponseBody
+    public Map<String, Object> postMethodName(NonMemberDTO nonMember) {
+        System.out.println("nonMember" + nonMember);
+        Map<String, Object> map = new HashMap<>();
+        
+        return map;
+    }
+
 }

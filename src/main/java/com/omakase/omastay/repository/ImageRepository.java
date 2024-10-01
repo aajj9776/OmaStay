@@ -1,6 +1,7 @@
 package com.omakase.omastay.repository;
 
 import com.omakase.omastay.entity.Image;
+import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.repository.custom.ImageRepositoryCustom;
 
 import java.util.List;

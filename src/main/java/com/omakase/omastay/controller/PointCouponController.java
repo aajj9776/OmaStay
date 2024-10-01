@@ -74,6 +74,13 @@ public class PointCouponController {
         Map<String, Object> map = new HashMap<>();
         System.out.println("포인트 사용" + pointDTO);
         PointDTO res = pointService.savePoint(pointDTO);
+        String result = "";
+        if (res != null) {
+            result = "success";
+        } else {
+            result = "fail";
+        }
+        map.put("result", result);
         
         return map;
     }
