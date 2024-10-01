@@ -128,6 +128,14 @@ public class RoomInfoService {
             newPrice.setRegularPrice(roomRegDTO.getPrice().getRegularPrice());
             priceRepository.save(newPrice);
         }
+
+        List<Image> existingImages = imageRepository.findByRoomInfoId(roomInfo.getId());
+        if(existingImages != null) {
+            for (Image existingImage : existingImages) {
+                existingImage.setImgStatus(BooleanStatus.FALSE);
+                imageRepository.save(existingImage);
+            }
+        }
         
         for (ImageDTO imageDTO : roomRegDTO.getImages()) {
                 Image newImage = new Image();

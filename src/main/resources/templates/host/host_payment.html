@@ -100,7 +100,7 @@
             <div
               class="w-[280px] flex flex-row items-start justify-start gap-[30px]"
             >
-            <button type="button" onclick="location.href='/host/paymentdetail'"
+            <button type="button" id="detail-button"
             class="cursor-pointer border-[#2196f3] border-[1px] border-solid py-[6px] px-[25px] bg-[#fff] flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
           >
             <div class="flex flex-row items-start justify-start gap-[8px]">
@@ -217,13 +217,23 @@
               {width: 180, targets: 5},
               {width: 180, targets: 6}
             ],
-      
+            rowCallback: function(row, data) {
+                // 정산 상태가 ''(널)인 경우를 제외하고 모든 경우에 체크박스를 비활성화합니다.
+                if (data.calStatus !== '') {
+                    $(row).find('.itemCheckbox').prop('disabled', true);
+                }
+            }
           });
 
       
           // 전체 선택 체크박스 이벤트 처리
           $('#selectAllCheckbox').on('click', function () {
-            $('.itemCheckbox').prop('checked', this.checked);
+            var isChecked = $(this).is(':checked');
+            $('.itemCheckbox').each(function() {
+                if (!$(this).prop('disabled')) {
+                    $(this).prop('checked', isChecked);
+                }
+            });
           });
       
           // 검색 버튼 클릭 이벤트 처리
@@ -257,6 +267,15 @@
 
           // 요청 버튼 클릭 이벤트 처리
           $('#request-button').on('click', function () {
+            /*
+            var nowdate = new Date();
+            var nowday = nowdate.getDate();
+
+            if(!(nowday >= 1 && nowday <= 7)) {
+              alert("정산요청은 매월 1일부터 7일까지 가능합니다.");
+              return;
+            }
+            */
             var table = $('#listTable').DataTable();
             var selectedItems = [];
             $('.itemCheckbox:checked').each(function () {
@@ -297,6 +316,37 @@
                 console.error(error);
               });
             }
+          });
+
+          // 상세보기 버튼 클릭 이벤트 처리
+          $('#detail-button').on('click', function () {
+            var table = $('#listTable').DataTable();
+            var selectedItems = [];
+            $('.itemCheckbox:checked').each(function () {
+              var row = table.row($(this).closest('tr')).data();
+              selectedItems.push({
+                year: row.year,
+                month: row.month
+              });
+            });
+      
+            if (selectedItems.length === 0) {
+              alert("상세보기할 정산 건을 선택하세요");
+              return;
+            }
+      
+            if (selectedItems.length > 1) {
+              alert("한 건만 선택해주세요");
+              return;
+            }
+
+            var selectedItem = selectedItems[0];
+            var year = selectedItem.year;
+            var month = selectedItem.month;
+
+            // 동기식으로 페이지 이동
+            location.href = '/host/paylist/view?year=' + year + '&month=' + month;
+            
           });
 
           function yearSetting() {
