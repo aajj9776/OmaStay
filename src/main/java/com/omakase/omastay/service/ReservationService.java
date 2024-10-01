@@ -1,33 +1,34 @@
 package com.omakase.omastay.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import com.omakase.omastay.entity.enumurate.PayStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
+import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
-
+import com.omakase.omastay.entity.Member;
+import com.omakase.omastay.entity.NonMember;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
+import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
+import com.omakase.omastay.mapper.MemberMapper;
+import com.omakase.omastay.mapper.NonMemberMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
-
-
-import java.util.List;
-import java.util.ArrayList;
 
 import jakarta.transaction.Transactional;
 
@@ -46,7 +47,7 @@ public class ReservationService {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
 
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(2);
+        roomInfo.setId(12);
         res.setRoomInfo(roomInfo);
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
@@ -101,29 +102,49 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
-
+    public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO nonMember) {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(2);
+        roomInfo.setId(9);
         res.setRoomInfo(roomInfo);
-
+        
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
         startEndVo.setEnd(LocalDateTime.now().plusDays(1));
         res.setStartEndVo(startEndVo);
-
+        
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
         res.setResPerson(2);
         res.setRoomInfo(roomInfo);
         res.setStartEndVo(startEndVo);
         res.setResStatus(ResStatus.PENDING);
-        res.setNonMember(null);
+        
+        // 회원일 경우 Member 정보가 들어오고, 비회원일 경우 NonMember 정보만 들어온다고 가정
+        if (nonMember != null && nonMember.getId() != null) {
+            NonMember non = NonMemberMapper.INSTANCE.toNonMember(nonMember);
+            // 비회원 예약이므로 NonMember 정보를 설정하고 Member는 null로 설정
+            res.setNonMember(non);  // 비회원 정보 저장
+            res.setMember(null);    // 회원 정보는 null로 설정
+            res.setResEmail(non.getNonEmail());
+            res.setResName(non.getNonName());
+        } else if (reservationDTO.getMemIdx() != null) {
+            // 회원 예약이므로 Member 정보는 유지하고 NonMember는 null로 설정
+            Member member = new Member();
+            member.setId(reservationDTO.getMemIdx());
+            res.setMember(member);
+            res.setNonMember(null);  // 비회원 정보는 null로 설정
+        } else {
+            System.out.println("암것도없음");
+            // 회원 정보도 비회원 정보도 없는 경우 기본값 설정 (optional)
+            res.setNonMember(null);
+            res.setMember(null);
+        }
 
         Reservation result = reservationRepository.save(res);
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
     }
+
 
     @Transactional
     public ReservationDTO getReservation(int resIdx ) {
@@ -133,6 +154,7 @@ public class ReservationService {
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
     }
+
 
     
     public List<HostReservationDTO> getAllRes(List<RoomInfoDTO> roomInfoDTOList) {

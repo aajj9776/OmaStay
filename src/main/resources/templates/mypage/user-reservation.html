@@ -225,6 +225,37 @@
         location.href = "/mypage/reservation_check?id=" + id;
       }
 
+      function cancelDetail(id) {
+        console.log(id);
+        $.ajax({
+          url: "/mypage/cancel_content",
+          method: "GET",
+        }).done(function (data) {
+          $("#cancelModalContent").removeClass("hidden");
+          $("#cancelModalContent").html(data);
+          $.ajax({
+            url: "/mypage/cancel_content",
+            method: "POST",
+            data: {
+              id: id,
+            },
+          }).done(function (data) {
+            console.log(data);
+            $("#paymentPrice").text(data.payment.nsalePrice);
+            $("#totalPrice").text(data.payment.amount);
+            $("#paymentMethod").text(data.payment.payMethod);
+            $("#pointPrice").text(data.payment.payPoint);
+            $("#couponPrice").text(data.payment.payCoupon);
+            $("#cancelDate").text(formatDate(data.payment.cancelDate));
+            $("#membershipDiscount").text(data.payment.payGrade);
+
+            $("#closePay").click(function () {
+              $("#cancelModalContent").addClass("hidden");
+            });
+          });
+        });
+      }
+
       let member = JSON.parse(localStorage.getItem("user"));
       console.log(JSON.stringify(member));
       $(function () {
@@ -254,7 +285,7 @@
             reservation = data.reservation[i];
             images = reservation.image;
             name = reservation.hostName;
-            let resStatus = reservation.resStatus;
+            let resStatus = reservation.reservation.resStatus;
             let statusText = "";
             let statusColor = "";
 
@@ -272,13 +303,15 @@
               statusColor = "#000000";
             }
 
+            console.log("Status Text: ", statusText);
+            console.log("Status Color: ", statusColor);
+
             let startDate = formatDate(
               reservation.reservation.startEndVo.start
             );
             let endDate = formatDate(reservation.reservation.startEndVo.end);
 
             let date = totalDate(startDate, endDate);
-            console.log("날짜차이" + date);
 
             let tableData = `
                             <div class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap w-[1100px] mb-[15px]">
@@ -297,7 +330,9 @@
                                 </div>
 
                                 <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
-                                  <b class="flex-1 relative leading-[21px]">${reservation.reservation.resNum}</b>
+                                  <b class="flex-1 relative leading-[21px]">${
+                                    reservation.reservation.resNum
+                                  }</b>
                                 </div>
 
                                 <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
@@ -306,14 +341,29 @@
                                   </span>
                                 </div>
                               </div>
+                              <div id="cancelModalContent" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+                              <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
+                              </div>
+                              </div>
 
                               <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
                                 <div class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
                                   <button class="flex-1 relative font-semibold">다시예약</button>
                                 </div>
-                                <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
-                                  <button class="flex-1 relative font-semibold" onClick="reservationDetail(${reservation.reservation.id})">예약 상세</button>
-                                </div>
+                                ${
+                                  resStatus !== "CANCELLED"
+                                    ? `<div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                                    <button class="flex-1 relative font-semibold" onClick="reservationDetail(${reservation.reservation.id})">예약 상세</button>
+                                  </div>`
+                                    : ""
+                                }
+                                ${
+                                  resStatus === "CANCELLED"
+                                    ? `<div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                                        <button class="flex-1 relative font-semibold" onClick="cancelDetail(${reservation.reservation.id})">취소 상세</button>
+                                      </div>`
+                                    : ""
+                                }
                               </div>
                             </div>
 

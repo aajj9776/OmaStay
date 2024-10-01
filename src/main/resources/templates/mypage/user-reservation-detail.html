@@ -209,10 +209,28 @@
                           <b id="roomName" class="self-stretch relative leading-[20px]"
                             ></b
                           >
-                          <b
-                            class="w-[59px] relative text-[13.2px] leading-[20px] flex text-[#0248fc] items-center"
-                            >구매정보</b
+                          <button onclick="openRoomModal()"
+                            class="w-[70px] h-[35px] text-[14px] leading-[20px] flex items-center justify-center text-white bg-blue-500 hover:bg-blue-600 active:bg-blue-700 rounded-md shadow-md transition-all duration-300 ease-in-out relative mt-[5px]"
+                            >구매정보</button
                           >
+                              <!-- 모달 백그라운드 -->
+                          <div
+                          id="roomInfoModal"
+                          class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        >
+                            <!-- 모달 닫기 버튼 -->
+                            <button
+                              onclick="closeRoomModal()"
+                              class="text-right mb-4 text-[20px] text-gray-600 hover:text-gray-900"
+                            >
+                              &times;
+                            </button>
+
+                            <!-- AJAX로 불러온 HTML이 삽입될 영역 -->
+                            <div id="modalContent" class="w-full">
+                              <!-- 여기에 AJAX로 불러온 HTML이 들어갑니다 -->
+                            </div>
+                        </div>
                         </div>
                       </div>
                     </div>
@@ -455,9 +473,42 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
+      let start;
+      let end;
+      let roomRule;
+
       function formatDate(dateString) {
         return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
       }
+      
+      function openRoomModal() {
+        $.ajax({
+          url: '/mypage/room_info', // 불러올 HTML 파일 경로
+          method: 'GET'
+        }).done(function(data){
+          console.log(data);
+
+          $('#modalContent').html(data);
+            // 모달을 보이도록 설정
+          $('#roomInfoModal').removeClass('hidden');
+
+           // 닫기 버튼 클릭 시 모달 닫기 기능 추가
+           $('#closeModalButton').click(function () {
+            closeRoomModal();
+            });
+
+            $("#roomSelectDate").text(start);
+            $("#startDate").text(start);
+            $("#endDate").text(end);
+            $("#roomRule").text(roomRule);
+
+        });
+      }
+
+      function closeRoomModal() {
+        $('#roomInfoModal').addClass('hidden');
+      }
+
       $(function () {
         let urlParams = new URLSearchParams(window.location.search);
         let id = urlParams.get("id"); // 'id' 파라미터 값을 추출
@@ -466,6 +517,8 @@
         let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
         let resIdx;
         let payIdx;
+        let payInfo;
+        
 
         // 예약 정보를 불러오는 AJAX 요청
         $.ajax({
@@ -477,10 +530,12 @@
           console.log(res);
           paymentKey = res.payment.paymentKey;
           payIdx = res.payment.id;
+          payInfo = res.payment;
 
           let img = res.image;
           let hName = res.host.hname;
           let hAddress = res.host.addressVo.street;
+          roomRule = res.host.rules;
           let resDate = res.reservation.startEndVo;
           let roomName = res.room.roomName;
 
@@ -496,8 +551,8 @@
           let payGrade = res.payment.payGrade;
           let payDate = formatDate(date);
 
-          let start = formatDate(resDate.start);
-          let end = formatDate(resDate.end);
+          start = formatDate(resDate.start);
+          end = formatDate(resDate.end);
 
           $("#img").attr("src", img);
           $("#hName").text(hName);

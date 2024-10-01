@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-import com.omakase.omastay.dto.GradeDTO;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
 import com.omakase.omastay.service.GradeService;
@@ -32,7 +32,6 @@ import com.omakase.omastay.service.MemberService;
 import com.omakase.omastay.session.UserSession;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.UserProfileVo;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 
 
@@ -213,6 +212,9 @@ public class LoginController {
         map.put("grade", grade);
         return map;
     }
+
+
+
     
 
 }

@@ -992,13 +992,17 @@
       // ------  SDK 초기화 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
       const clientKey = "test_ck_PBal2vxj81jDG7MyAXLR35RQgOAN";
-      const customerKey = "reserver" + user.id; //회원번호
+      let customerKey;
+      if (user != null) {
+        customerKey = "reserver" + user.id; //회원번호
+      } else {
+        customerKey = TossPayments.ANONYMOUS;
+      }
       const tossPayments = TossPayments(clientKey);
       // 회원 결제
       // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
 
       // 비회원 결제
-      // const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
 
       // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
@@ -1019,6 +1023,29 @@
 
         const payment = tossPayments.payment({ customerKey });
 
+        let url =
+          "?resName=" +
+          encodeURIComponent(resName) +
+          "&resEmail=" +
+          encodeURIComponent(resEmail) +
+          "&couponId=" +
+          encodeURIComponent(couponId) +
+          "&nsalePrice=" +
+          encodeURIComponent(nsale_price) +
+          "&payCoupon=" +
+          encodeURIComponent(couponPrice) +
+          "&payPoint=" +
+          encodeURIComponent(usePoints) +
+          "&payGrade=" +
+          encodeURIComponent(amount);
+
+        if (user != null) {
+          url += "&memIdx=" + encodeURIComponent(user.id);
+        }
+
+        let successUrl =
+          window.location.origin + "/reservation/payment_success" + url;
+
         // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
         // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
         await payment.requestPayment({
@@ -1029,24 +1056,7 @@
           },
           orderId: orderNumber, // 고유 주분번호
           orderName: "한별이~^^", //방이름
-          successUrl:
-            window.location.origin +
-            "/reservation/payment_success?resName=" +
-            encodeURIComponent(resName) +
-            "&resEmail=" +
-            encodeURIComponent(resEmail) +
-            "&couponId=" +
-            encodeURIComponent(couponId) +
-            "&nsalePrice=" +
-            encodeURIComponent(nsale_price) +
-            "&payCoupon=" +
-            encodeURIComponent(couponPrice) +
-            "&payPoint=" +
-            encodeURIComponent(usePoints) +
-            "&payGrade=" +
-            encodeURIComponent(amount) +
-            "&memIdx=" +
-            encodeURIComponent(user.id), // 결제 요청이 성공하면 리다이렉트되는 URL
+          successUrl: successUrl, // 결제 요청이 성공하면 리다이렉트되는 URL
           failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
           customerEmail: resEmail, //회원 이메일
           customerName: resName, //회원이름

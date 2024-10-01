@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,6 +23,7 @@ import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
 import com.omakase.omastay.dto.custom.ReservationWithImage;
+import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.service.MyPageService;
 import com.omakase.omastay.service.RoomInfoService;
 
@@ -107,7 +109,6 @@ public class MypageController {
         mv.setViewName("mypage/user-reservation-detail");
         return mv;
     }
-    
 
     @PostMapping("/reservation_check")
     @ResponseBody
@@ -127,5 +128,27 @@ public class MypageController {
         map.put("reservation", res);
         map.put("payment", payment);
         return map;
+    }
+
+    @GetMapping("/cancel_content")
+    public String checkDetail() {
+        return "mypage/modal/cancel_content";
+    }
+
+
+    @PostMapping("/cancel_content")
+    @ResponseBody
+    public Map<String, Object> checkDetail(@RequestParam("id") Integer id) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        ReservationDTO res = myPageService.getReservation(id);
+        PaymentDTO payment = myPageService.getPayment(res.getPayIdx());
+        map.put("payment", payment);
+        return map;
+    }
+
+    //이거 3개는 모달창
+    @RequestMapping("/room_info")
+    public String roomInfo() {
+        return "mypage/modal/room_info";
     }
 }
