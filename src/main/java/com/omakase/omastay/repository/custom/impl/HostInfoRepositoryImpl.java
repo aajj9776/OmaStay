@@ -1,17 +1,14 @@
 package com.omakase.omastay.repository.custom.impl;
 import com.omakase.omastay.dto.custom.FilterDTO;
-import com.omakase.omastay.entity.QHostFacilities;
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;
 import com.omakase.omastay.repository.custom.HostInfoRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
 
-import static com.omakase.omastay.entity.QHostFacilities.hostFacilities;
 import static com.omakase.omastay.entity.QHostInfo.hostInfo;
 import static com.omakase.omastay.entity.QRoomInfo.roomInfo;
 

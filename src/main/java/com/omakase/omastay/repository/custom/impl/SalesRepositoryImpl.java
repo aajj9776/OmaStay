@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.omakase.omastay.dto.custom.HostSalesDTO;
-import com.omakase.omastay.dto.custom.QHostSalesDTO;
 import com.omakase.omastay.entity.QPayment;
 import com.omakase.omastay.entity.QReservation;
 import com.omakase.omastay.entity.QRoomInfo;
@@ -21,7 +20,6 @@ import com.omakase.omastay.repository.custom.SalesRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import groovy.transform.Undefined.EXCEPTION;

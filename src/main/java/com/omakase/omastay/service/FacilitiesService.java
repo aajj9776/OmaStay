@@ -3,7 +3,6 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.custom.*;
 import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.Price;
-import com.omakase.omastay.entity.QRoomInfo;
 import com.omakase.omastay.mapper.FacilitiesMapper;
 import com.omakase.omastay.repository.*;
 import com.omakase.omastay.vo.StartEndVo;
@@ -73,8 +72,7 @@ public class FacilitiesService {
                     .toList();
 
             //가격 필터링
-            allHostRoomIds = roomInfoRepository.priceFiltering(filterDTO, allHostRoomIds);
-
+            /*allHostRoomIds = priceRepository.priceFiltering(filterDTO, allRoomIds);*/
         }
 
         if (filterDTO.getFacilities() != null && !filterDTO.getFacilities().isEmpty()) {
@@ -82,9 +80,6 @@ public class FacilitiesService {
                     .map(tuple -> tuple.get(hostInfo.id))
                     .distinct()
                     .toList();
-
-            // 필요한 시설 수
-            Long facilityCount = (long) filterDTO.getFacilities().size();
 
             // 필요한 시설을 만족하는 호스트 ID 목록 조회
             List<Integer> validHostIds = hostFacilitiesRepository.findFacilitiesIdsByHostId(filterDTO.getFacilities(), allHostIds);
@@ -138,7 +133,7 @@ public class FacilitiesService {
         List<Tuple> ratingAndReviewCount = reviewRepository.findReviewStatsByHostIds(hostIds);
 
         // 가격엔티티 가져오기
-        List<Price> priceList = priceRepository.findAvgPriceByHostIds(availableHostIds, filterDTO.getStartPrice(), filterDTO.getEndPrice());
+        List<Price> priceList = priceRepository.findAvgPriceByHostIds(availableHostIds);
 
         // 호스트별(예약 가능한 호스트) 평균가격(ResultAccommodationsDTO에 셋)
         List<HostAvgPriceDTO> avgPrice = AvgPrice(priceList, filterDTO.getStartEndDay());
