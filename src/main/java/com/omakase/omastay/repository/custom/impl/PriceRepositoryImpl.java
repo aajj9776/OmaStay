@@ -1,4 +1,5 @@
 package com.omakase.omastay.repository.custom.impl;
+import com.omakase.omastay.dto.custom.FilterDTO;
 import com.omakase.omastay.entity.Price;
 import com.omakase.omastay.entity.QPrice;
 import com.omakase.omastay.repository.custom.PriceRepositoryCustom;
@@ -45,6 +46,36 @@ public class PriceRepositoryImpl implements PriceRepositoryCustom {
         return queryFactory
                 .selectFrom(price)
                 .where(price.roomInfo.id.in(lowestPricesByHost))
+                .fetch();
+    }
+
+    @Override
+    public List<Integer> priceFiltering(FilterDTO filterDTO, List<Integer> allRoomIds) {
+
+        Integer startPrice = filterDTO.getStartPrice();
+        Integer endPrice = filterDTO.getEndPrice();
+
+        if(startPrice == null){
+            startPrice = 0;
+        }
+        if (endPrice == null){
+            endPrice = 500000;
+        }
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (endPrice != 500000) {
+            builder.and(price.regularPrice.between(startPrice, endPrice));
+        } else {
+            builder.and(price.regularPrice.goe(startPrice));
+        }
+
+        return queryFactory
+                .select(price.roomInfo.id)
+                .from(price)
+                .where(price.roomInfo.id.in(allRoomIds)
+                        .and(builder)
+                )
                 .fetch();
     }
 }

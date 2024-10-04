@@ -70,7 +70,7 @@ public class SearchController {
         System.out.println("서치: "  + search);
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable, false);
+        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable);
 
         List<ResultAccommodationsDTO> resultAccommodations = accommodationResponseDTO.getAccommodations();
 
