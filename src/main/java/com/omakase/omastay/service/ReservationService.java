@@ -52,7 +52,7 @@ public class ReservationService {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
 
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(12);
+        roomInfo.setId(9);
         res.setRoomInfo(roomInfo);
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
@@ -60,18 +60,18 @@ public class ReservationService {
         res.setStartEndVo(startEndVo);
 
          // 방 중복 체크 시 Pessimistic Lock 적용
-         Optional<Reservation> checkRoom = reservationRepository.findConflictingReservationWithLock(
+         List<Reservation> checkRoom = reservationRepository.checkSameRoom(
             res.getRoomInfo().getId(), 
             res.getStartEndVo().getStart(), 
             res.getStartEndVo().getEnd()
         );
 
-        if( checkRoom.isPresent() ) {
-            return ReservationMapper.INSTANCE.toReservationDTO(checkRoom.get());
+        if (checkRoom != null && checkRoom.size() > 0 ){
+            return ReservationMapper.INSTANCE.toReservationDTOList(checkRoom).get(0);
+        } else {
+            return null;
         }
 
-        // 방 중복이 없는 경우
-        return null;
     }
 
     @Transactional
@@ -107,7 +107,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO nonMember) {
+    public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
         RoomInfo roomInfo = new RoomInfo();
         roomInfo.setId(9);
@@ -117,34 +117,45 @@ public class ReservationService {
         startEndVo.setStart(LocalDateTime.now());
         startEndVo.setEnd(LocalDateTime.now().plusDays(1));
         res.setStartEndVo(startEndVo);
-        
+        res.setNonMember(null);
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
         res.setResPerson(2);
         res.setRoomInfo(roomInfo);
         res.setStartEndVo(startEndVo);
         res.setResStatus(ResStatus.PENDING);
         
-        // 회원일 경우 Member 정보가 들어오고, 비회원일 경우 NonMember 정보만 들어온다고 가정
-        if (nonMember != null && nonMember.getId() != null) {
-            NonMember non = NonMemberMapper.INSTANCE.toNonMember(nonMember);
-            // 비회원 예약이므로 NonMember 정보를 설정하고 Member는 null로 설정
-            res.setNonMember(non);  // 비회원 정보 저장
-            res.setMember(null);    // 회원 정보는 null로 설정
-            res.setResEmail(non.getNonEmail());
-            res.setResName(non.getNonName());
-        } else if (reservationDTO.getMemIdx() != null) {
-            // 회원 예약이므로 Member 정보는 유지하고 NonMember는 null로 설정
-            Member member = new Member();
-            member.setId(reservationDTO.getMemIdx());
-            res.setMember(member);
-            res.setNonMember(null);  // 비회원 정보는 null로 설정
-        } else {
-            System.out.println("암것도없음");
-            // 회원 정보도 비회원 정보도 없는 경우 기본값 설정 (optional)
-            res.setNonMember(null);
-            res.setMember(null);
-        }
+        Reservation result = reservationRepository.save(res);
+        ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
+        return dto;
+    }
 
+
+    @Transactional
+    public ReservationDTO insertNonMemberReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO noMember) {
+        Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
+        RoomInfo roomInfo = new RoomInfo();
+        roomInfo.setId(9);
+        res.setRoomInfo(roomInfo);
+
+        res.setMember(null);
+
+        NonMember nonMember = new NonMember();
+        nonMember.setId(noMember.getId());
+        res.setNonMember(nonMember);
+
+        StartEndVo startEndVo = new StartEndVo();
+        startEndVo.setStart(LocalDateTime.now());
+        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
+        res.setStartEndVo(startEndVo);
+        
+        res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
+        res.setResPerson(2);
+        res.setRoomInfo(roomInfo);
+        res.setResStatus(ResStatus.PENDING);
+        Payment payment = new Payment();
+        payment.setId(paymentDTO.getId());
+        res.setPayment(payment);
+        
         Reservation result = reservationRepository.save(res);
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
@@ -325,4 +336,5 @@ public class ReservationService {
            return hostReservationAll;
     
     }
+
 }

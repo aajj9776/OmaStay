@@ -28,7 +28,7 @@ public class MyPageService {
     @Transactional
     public  List<ReservationDTO> getReservationInfo(int memIdx) {
         // Reservation을 조회하는 로직
-        List<Reservation> reservation = reservationRepository.findByMemIdx(memIdx);
+        List<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memIdx);
         return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
     }
 

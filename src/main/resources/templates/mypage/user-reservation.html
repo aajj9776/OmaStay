@@ -256,22 +256,26 @@
         });
       }
 
-      let member = JSON.parse(localStorage.getItem("user"));
-      console.log(JSON.stringify(member));
+      let user = JSON.parse(localStorage.getItem("user"));
       $(function () {
+        console.log(localStorage.getItem("user"));
         let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
         let payIdx;
         let resIdx;
-        console.log();
+        console.log("호이호이");
 
         // 예약 정보를 불러오는 AJAX 요청
+        loadReservation();
+       
+      });
+
+      function loadReservation(){
         $.ajax({
           url: "/mypage/reservation", // 호출하고자 하는 URL
           method: "POST",
           contentType: "application/json; charset=utf-8",
           data: JSON.stringify({
-            // data 필드에 JSON 문자열로 id 값을 포함
-            id: member.id, // member 객체에서 id 값만 전송
+            id: user.id, // member 객체에서 id 값만 전송
           }), // member 객체를 JSON으로 변환해서 전송
         }).done(function (data) {
           let reservation;
@@ -372,7 +376,7 @@
             tableBody.append(tableData);
           }
         });
-      });
+      }
     </script>
   </body>
 </html>
