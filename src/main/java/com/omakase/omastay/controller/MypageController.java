@@ -88,6 +88,7 @@ public class MypageController {
             RoomInfoDTO room = roomInfoService.getRoomInfo(res.getRoomIdx());
             System.out.println("호텔정보" + room.getHIdx());
             ImageDTO image = roomInfoService.getImage(room.getHIdx());
+            System.out.println("이미지" + image);
             String img = realPath + "host/" + image.getImgName().getFName();
 
             HostInfoDTO host = roomInfoService.getHostInfo(room.getHIdx());
@@ -113,6 +114,7 @@ public class MypageController {
     @PostMapping("/reservation_check")
     @ResponseBody
     public Map<String, Object> reservationCheckProc(@RequestBody ReservationDTO reservation) {
+        System.out.println("하이");
         Map<String, Object> map = new HashMap<String, Object>();
         ReservationDTO res = myPageService.getReservation(reservation.getId());
         System.out.println("예약정보" + res);

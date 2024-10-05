@@ -197,7 +197,9 @@ public class RoomInfoService {
     }
 
     public ImageDTO getImage(Integer hIdx) {
+        System.out.println(ImgCate.HOST);
         Image image = imageRepository.findByHostInfoAndImgCate(hIdx, ImgCate.HOST).get(0);
+        System.out.println("서비스 이미지" + image);
         return ImageMapper.INSTANCE.toImageDTO(image);
     }
 
