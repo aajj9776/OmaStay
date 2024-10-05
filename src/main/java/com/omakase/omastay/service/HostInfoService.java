@@ -338,4 +338,6 @@ public class HostInfoService {
     public void rejectHost(int hidx){
         hostInfoRepository.rejectHost(hidx);
     }
+
+
 }

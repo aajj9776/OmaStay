@@ -20,4 +20,5 @@ public class StartEndVo {
 
     @Column(name = "res_end", nullable = false)
     private LocalDateTime end;
+
 }

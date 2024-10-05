@@ -23,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -211,6 +213,15 @@ public class MemberService {
         System.out.println("회원정보 조회 서비스 호출" + member);
         MemberDTO res = MemberMapper.INSTANCE.toMemberDTO(member);
         return res;
+    }
+
+    public MemberDTO getMember(Integer memId) {
+        Optional<Member> mem = memberRepository.findById(memId);
+        
+        Member member = mem.get();
+
+        return MemberMapper.INSTANCE.toMemberDTO(member);
+
     }
     
 }

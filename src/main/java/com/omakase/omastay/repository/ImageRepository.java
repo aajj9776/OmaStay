@@ -1,6 +1,7 @@
 package com.omakase.omastay.repository;
 
 import com.omakase.omastay.entity.Image;
+import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.repository.custom.ImageRepositoryCustom;
 
 import java.util.List;
@@ -15,4 +16,11 @@ public interface ImageRepository extends JpaRepository<Image, Integer>, ImageRep
 
     @Query("SELECT i FROM Image i WHERE i.roomInfo.id = :rIdx")
     List<Image> findByRoomInfoId(@Param("rIdx") Integer rIdx);
+
+    @Query("SELECT i FROM Image i WHERE i.hostInfo.id = :hIdx AND i.imgCate = 0")
+    List<Image> findByHostInfoIdAndImgCate(@Param("hIdx") Integer hIdx);
+
+    //지우지마
+    @Query("SELECT i FROM Image i WHERE i.hostInfo.id = :hIdx AND i.imgCate = :imgCate")
+    List<Image> findByHostInfoAndImgCate(@Param("hIdx") Integer hIdx, @Param("imgCate") ImgCate imgCate);
 }

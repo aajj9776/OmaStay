@@ -10,6 +10,57 @@
       #registerButton {
         border: 1px solid #2196f3;
       }
+      .dt-length select {
+      font-size: 12px;
+      padding: 5px;
+      height: auto;
+    }
+
+    .dt-length label {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .dt-info {
+      font-size: 12px;
+    }
+
+    .dt-paging button {
+      font-size: 12px;
+      padding: 5px 8px;
+    }
+
+    .dt-paging a {
+      /* 페이지 번호 스타일 */
+      padding: 5px 8px;
+    }
+
+    .dt-info {
+      display: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .dt-container .dt-layout-row {
+    margin: 0.2em 0 !important; 
+    }
+
+    #table th span {
+      font-size: 15px !important;
+    }
+
+    #table td {
+      font-size: 12px !important; /* 원하는 글자 크기로 설정 */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #table td a {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     </style>
   </head>
   <body>
@@ -44,7 +95,7 @@
                 class="flex-1 flex flex-row items-start justify-start gap-[59px] max-w-full mq750:gap-[29px] mq1050:flex-wrap"
               >
                 <div
-                  class="w-[535px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[33px] pb-[32px] pl-[53px] pr-[42px] box-border gap-[16px] min-w-[535px] max-w-full mq750:py-[21px] mq750:pl-[26px] mq750:pr-[21px] mq750:box-border mq750:min-w-full mq1050:flex-1"
+                  class="w-[535px] h-[683px] mt-[7px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[35px] pb-[32px] pl-[53px] pr-[42px] box-border gap-[16px] min-w-[535px] max-w-full mq750:py-[21px] mq750:pl-[26px] mq750:pr-[21px] mq750:box-border mq750:min-w-full mq1050:flex-1"
                 >
                   <div
                     class="w-[430px] flex flex-row items-start justify-between gap-[20px] max-w-full mq450:flex-wrap"
@@ -63,12 +114,19 @@
                   <div
                     class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] box-border max-w-full"
                   >
-                    <img
-                      class="h-[583px] flex-1 relative max-w-full overflow-hidden object-cover"
-                      loading="lazy"
-                      alt=""
-                      src="/image/host/image-16@2x.png"
-                    />
+                    <div id="table" class="w-full pb-[10px] gap-[10px] m-auto">
+                      <table id="noticeListTable"
+                        class="w-[1140px] text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit]  text-[16px] hover">
+                        <thead>
+                          <tr class="py-[20px] pl-[30px] pr-[634px] gap-[20px]">
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>등록일</th>
+                          </tr>
+                        </thead>
+                        <tbody class="bg-[#ffffff] pt-[100px]"></tbody>
+                      </table>
+                  </div>
                   </div>
                 </div>
                 <div
@@ -102,15 +160,15 @@
                         <div
                           class="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq450:flex-wrap"
                         >
-                          <b
+                          <b th:if="${resDayCount != null}" th:text="${resDayCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b
+                          <b th:if="${resWeekCount != null}" th:text="${resWeekCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b
+                          <b th:if="${resMonthCount != null}" th:text="${resMonthCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
@@ -158,15 +216,15 @@
                         <div
                           class="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq450:flex-wrap"
                         >
-                          <b
+                          <b th:if="${revDayCount != null}" th:text="${revDayCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b
+                          <b th:if="${revDayCount != null}" th:text="${revDayCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b
+                          <b th:if="${revDayCount != null}" th:text="${revDayCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
@@ -196,13 +254,13 @@
           </div>
         </section>
         <section
-          class="self-stretch overflow-hidden flex flex-col items-center justify-center py-[0px] px-[20px] box-border max-w-full text-left text-[25px] text-[#333] font-[Inter]"
+          class="self-stretch overflow-hidden flex flex-col items-center justify-start gap-[50px] py-[0px] px-[20px] box-border max-w-full text-left text-[25px] text-[#333] font-[Inter]"
         >
           <div
-            class="w-[1186px] rounded-[30px] bg-[#fff] flex flex-col items-center justify-between py-[57px] px-[20px] box-border min-h-[778px] max-w-full mq450:pt-[24px] mq450:pb-[24px] mq450:box-border mq1050:pt-[37px] mq1050:pb-[37px] mq1050:box-border"
+            class="w-[1186px] rounded-[30px] bg-[#fff] flex flex-col items-center justify-start gap-[50px] py-[57px] px-[80px] box-border min-h-[778px] max-w-full mq450:pt-[24px] mq450:pb-[24px] mq450:box-border mq1050:pt-[37px] mq1050:pb-[37px] mq1050:box-border"
           >
             <div
-              class="w-[984px] flex flex-row items-center justify-between gap-[20px] max-w-full mq450:flex-wrap"
+              class="w-full flex flex-row items-center justify-between gap-[20px] max-w-full mq450:flex-wrap"
             >
               <b
                 class="h-[41px] w-[216px] relative tracking-[-0.16px] flex items-center shrink-0 mq450:text-[20px]"
@@ -215,18 +273,35 @@
               >
               </a>
             </div>
-            <img
-              class="w-[1010.9px] relative max-h-full object-cover max-w-full"
-              loading="lazy"
-              alt=""
-              src="/image/host/image-17@2x.png"
-            />
+            <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] box-border max-w-full">
+              <div id="table2" class="w-full pb-[10px] gap-[10px] m-auto">
+                <table id="checkInListTable"
+                  class="w-[1140px] text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit]  text-[16px] hover">
+                  <thead>
+                    <tr class="py-[20px] pl-[30px] pr-[634px] gap-[20px]">
+                      <th>예약번호</th>
+                      <th>객실명</th>
+                      <th>예약자</th>
+                      <th>이메일</th>
+                      <th>이용기간</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-[#ffffff] pt-[100px]"></tbody>
+                </table>
+            </div>
           </div>
+        </div>
         </section>
       </main>
       <input type="hidden" id="hStep" th:value="${hStep}" />
       <input type="hidden" id="hStatus" th:value="${hStatus}" />
     </div>
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js" defer></script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      var checkInList = /*[[${checkInList}]]*/ [];
+      /*]]>*/
+    </script>
     <script>
       $(document).ready(function() {
         var hStep =  $("#hStep").val();
@@ -284,6 +359,108 @@
             alert("등록 단계를 모두 진행해 주세요.");
           }
         };
+
+        $('#noticeListTable').DataTable({
+        "searching": false,
+
+        ajax: {
+          url: '/host/noticelist/getList',
+          type: 'GET',
+          dataSrc: function(json) {
+            // 데이터의 첫 10개 항목만 반환
+            return json.data.slice(0, 10);
+          }
+        },
+
+        columns: [
+          { "data": null, // 데이터 소스가 아닌 계산된 값
+            "render": function(data, type, row, meta) {
+                return meta.row + 1; // 인덱스는 0부터 시작하므로 1을 더합니다.
+            } 
+          }, 
+          {
+            data: 'stitle',
+            render: function (data, type, row) {
+              var truncatedData = data.length > 30 ? data.substring(0, 22) + '...' : data;
+              return '<a href="/host/noticelist/view?id=' + row.id + '">' + truncatedData + '</a>';
+            }
+          },
+          {
+            data: 'sdate',
+            render: function (data, type, row) {
+            if (data) {
+              var date = new Date(data);
+              var year = date.getFullYear();
+              var month = ('0' + (date.getMonth() + 1)).slice(-2);
+              var day = ('0' + date.getDate()).slice(-2);
+              return year + '-' + month + '-' + day;;
+            }
+            return data;
+          }
+          }
+        ],
+        columnDefs: [
+        { width: 70, targets: 0 },
+        { width: 220, targets: 1 },
+        { width: 100, targets: 2 }
+        ],
+
+      });
+
+        $('#checkInListTable').DataTable({
+          "searching": false,
+
+          ajax: {
+            url: '/host/checkInList/getList',
+            type: 'GET',
+            dataSrc: 'data'
+          },
+          
+          columns: [
+            { 
+              data: 'resNum', 
+              render: function (data, type, row) {
+                return '<a href="/host/reslist/view?id=' + row.id + '">' + data + '</a>';
+              }
+            }, 
+            {
+              data: 'roomName',
+            },
+            {
+              data: 'resName',
+            },
+            {
+              data: 'resEmail',
+            },
+            {
+              data: 'startEndVo',
+                render: function (data, type, row) {
+                if (data) {
+                  var start = new Date(data.start);
+                  var startyear = start.getFullYear();
+                  var startmonth = ('0' + (start.getMonth() + 1)).slice(-2);
+                  var startday = ('0' + start.getDate()).slice(-2);
+                  
+                  var end = new Date(data.end);
+                  var endyear = end.getFullYear();
+                  var endmonth = ('0' + (end.getMonth() + 1)).slice(-2);
+                  var endday = ('0' + end.getDate()).slice(-2);
+                  
+                  return startyear + '-' + startmonth + '-' + startday + '~' + endyear + '-' + endmonth + '-' + endday;
+                }
+                return '';
+              }
+            }
+          ],
+          columnDefs: [
+            {width: 200, targets: 0},
+            {width: 150, targets: 1},
+            {width: 100, targets: 2},
+            {width: 150, targets: 3},
+            {width: 200, targets: 4}
+          ],
+    
+        });
         
       });
 
