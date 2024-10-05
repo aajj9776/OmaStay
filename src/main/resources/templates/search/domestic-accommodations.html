@@ -614,7 +614,7 @@
             if (endPrice) {
                 queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
             }
-            if (sortType) {
+            if (sortType && sortType !== 'rating') {
                 queryString += `sortType=${encodeURIComponent(sortType)}&`;
             }
             if (page && page > 1) {

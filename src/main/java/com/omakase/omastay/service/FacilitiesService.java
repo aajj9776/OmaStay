@@ -188,6 +188,30 @@ public class FacilitiesService {
 
         List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
 
+        if (filterDTO.getSortType() == null) {
+            // 기본 정렬은 평점순
+            resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getRating).reversed());
+        } else {
+            switch (filterDTO.getSortType()) {
+                case "lowPrice" -> {
+                    // 가격 낮은 순
+                    resultAccommodationsDTOList.sort(Comparator.comparing(result -> Integer.parseInt(result.getOneDayPrice().replace("₩", "").replace(",", ""))));
+                }
+                case "highPrice" -> {
+                    // 가격 높은 순
+                    resultAccommodationsDTOList.sort(Comparator.comparing((ResultAccommodationsDTO result) -> Integer.parseInt(result.getOneDayPrice().replace("₩", "").replace(",", ""))).reversed());
+                }
+                case "review" -> {
+                    // 리뷰 많은 순
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getReviewCount).reversed());
+                }
+                default -> {
+                    // 기본 정렬은 평점순
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getRating).reversed());
+                }
+            }
+        }
+
         // top100 플래그가 true일 경우 최대 100개의 데이터만 반환
         if (top100) {
             resultAccommodationsDTOList = resultAccommodationsDTOList.stream().limit(100).collect(Collectors.toList());

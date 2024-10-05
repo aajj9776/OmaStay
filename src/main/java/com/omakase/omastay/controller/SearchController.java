@@ -44,6 +44,7 @@ public class SearchController {
         return mv;
     }
 
+    @Transactional
     @GetMapping(value = "/domestic-accommodations")
     public ModelAndView search(@ModelAttribute @Valid FilterDTO search,
                                BindingResult bindingResult,
