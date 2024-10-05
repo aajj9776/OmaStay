@@ -94,8 +94,9 @@
                     <div
                             class="self-stretch bg-[#fff] border-solid box-border flex flex-col items-start justify-start px-[0px] pb-[19px] max-w-full cursor-pointer"
                             id="cardWrapperContainer">
-                        <div id="card" th:each="accommodation : ${resultAccommodations}"
-                             class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]"
+                        <a id="card" th:each="accommodation : ${resultAccommodations}"
+                           th:href="@{'/search/detail-host?id=' + ${accommodation.HIdx}}"
+                           class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]"
                         >
                             <div
                                     class="h-[240px] w-[396px] flex flex-col items-start justify-center min-w-[396px] max-w-full mq750:flex-1 mq750:min-w-full"
@@ -192,11 +193,11 @@
                                     >
                                         <div class="flex flex-col items-end justify-start">
                                             <div class="relative font-medium inline-block min-w-[74px] whitespace-nowrap"
-                                                 th:if="${accommodation.soldOut}">
+                                                 th:if="${accommodation.oneDayPrice == null}">
                                                 다른 날짜 확인
                                             </div>
                                             <div class="self-stretch flex flex-row items-end justify-start"
-                                                 th:unless="${accommodation.soldOut}"
+                                                 th:if="${accommodation.oneDayPrice}"
                                             >
                                                 <b class="relative inline-block min-w-[80px] text-[19.2px] font-bold text-[#333]"
                                                    th:text="${accommodation.oneDayPrice}">
@@ -208,7 +209,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <div
                                 class="self-stretch flex flex-row items-start justify-center pt-[40px] px-[20px] pb-[0px] text-center text-[12px] text-[#000]"
                         >
@@ -281,6 +282,7 @@
         endPriceValue = getUrlParameter('endPrice');
         keywordValue = getUrlParameter('keyword');
 
+
         console.log(sortTypeValue+ " sortTypeValue");
         console.log(facilitiesValue + " facilitiesValue");
         console.log(hCateValue + " hCateValue");
@@ -323,6 +325,14 @@
         setSortType(sortTypeValue);
         setFacilities(facilitiesValue, "main");
         setHCate(hCateValue, "main");
+
+        //card 클릭시 url 이동
+        let checkIn = sessionStorage.getItem('startDate');
+        let checkOut = sessionStorage.getItem('endDate');
+        let person = sessionStorage.getItem('people');
+        $('#card').attr('href', function(i, href) {
+            return href + '&checkIn=' + checkIn + '&checkOut=' + checkOut + '&person=' + person;
+        });
     });
 
     // 필터 버튼 셋팅하는 함수
@@ -572,7 +582,7 @@
     // 검색 실행 함수
     function debouncedPerformSearch(identifier, page = 1) {
         // 동적으로 가져온 값을 사용
-        if (identifier == "main") {
+        if (identifier === "main") {
             const facilities = getSelectedFacilities(identifier);
             console.log(facilities);
             let hCate = getHCate(identifier);
@@ -582,10 +592,9 @@
             let startDay = sessionStorage.getItem('startDate');
             let endDay = sessionStorage.getItem('endDate');
             const person = sessionStorage.getItem('people');
-            const sortType = getSortType(identifier);
-            let page = sessionStorage.getItem('page'); // 페이지 정보 추가
+            const sortType = getSortType(identifier)
 
-            console.log("sortType: ", sortType);
+            console.log("page: ", page);
 
             // Query String 구성
             let queryString = '?';
@@ -697,7 +706,7 @@
             let infowindowContent = document.createElement('a');
             infowindowContent.className = 'bg-[#fff] overflow-hidden flex flex-row items-start justify-start w-[324px] h-[173px] p-[14px] box-border rounded-[20px] shadow-lg';
             infowindowContent.id = `infowindow-${accommodation.hidx}`;
-            infowindowContent.href = `/search//${accommodation.hidx}`;
+            infowindowContent.href = `/search/detail-host?id=${accommodation.hidx}&checkIn=${sessionStorage.getItem('startDate')}&checkOut=${sessionStorage.getItem('endDate')}&person=${sessionStorage.getItem('people')}`;
 
             infowindowContent.innerHTML = `
         <img class="self-stretch w-[116px] relative h-full object-cover rounded-[20px]" loading="lazy" alt="" src="${accommodation.img_url}"/>
@@ -753,11 +762,11 @@
             let marker = new kakao.maps.CustomOverlay({
                 position: position,
                 content: markerContent,
-                yAnchor: 1
+                yAnchor: 1.2
             });
 
             let infowindow = new kakao.maps.CustomOverlay({
-                position: new kakao.maps.LatLng(position.getLat() - 0.001, position.getLng()), // 마커 아래로 조정
+                position: position,
                 content: infowindowContent,
                 yAnchor: 0,
                 zIndex: 50,

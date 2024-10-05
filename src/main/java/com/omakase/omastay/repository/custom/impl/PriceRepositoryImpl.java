@@ -1,11 +1,11 @@
 package com.omakase.omastay.repository.custom.impl;
+import com.omakase.omastay.dto.custom.FilterDTO;
 import com.omakase.omastay.entity.Price;
 import com.omakase.omastay.entity.QPrice;
 import com.omakase.omastay.repository.custom.PriceRepositoryCustom;
-import com.omakase.omastay.vo.StartEndVo;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.omakase.omastay.entity.QPrice.price;
@@ -21,6 +21,9 @@ public class PriceRepositoryImpl implements PriceRepositoryCustom {
     @Override
     public List<Price> findAvgPriceByHostIds(List<Integer> hostIds) {
         QPrice price2 = new QPrice("price2");
+
+        // 조건 빌더 초기화
+        BooleanBuilder builder = new BooleanBuilder();
 
         // 1. 각 호스트별 최저 가격 방 ID를 가져옴
         List<Integer> lowestPricesByHost = queryFactory
@@ -38,10 +41,41 @@ public class PriceRepositoryImpl implements PriceRepositoryCustom {
                 .fetch();
 
         System.out.println("lowestPricesByHost = " + lowestPricesByHost);
+
         // 2. 최저 가격의 방에 해당하는 price 객체를 가져옴
         return queryFactory
                 .selectFrom(price)
                 .where(price.roomInfo.id.in(lowestPricesByHost))
+                .fetch();
+    }
+
+    @Override
+    public List<Integer> priceFiltering(FilterDTO filterDTO, List<Integer> allRoomIds) {
+
+        Integer startPrice = filterDTO.getStartPrice();
+        Integer endPrice = filterDTO.getEndPrice();
+
+        if(startPrice == null){
+            startPrice = 0;
+        }
+        if (endPrice == null){
+            endPrice = 500000;
+        }
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (endPrice != 500000) {
+            builder.and(price.regularPrice.between(startPrice, endPrice));
+        } else {
+            builder.and(price.regularPrice.goe(startPrice));
+        }
+
+        return queryFactory
+                .select(price.roomInfo.id)
+                .from(price)
+                .where(price.roomInfo.id.in(allRoomIds)
+                        .and(builder)
+                )
                 .fetch();
     }
 }

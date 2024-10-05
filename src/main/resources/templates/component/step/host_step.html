@@ -75,7 +75,6 @@
           console.log("addEventListeners 함수 실행됨");
           document.body.removeEventListener('htmx:beforeRequest', handleBeforeRequest); // 중복 등록 방지
           document.body.addEventListener('htmx:beforeRequest', handleBeforeRequest);
-          applyStyles();
         }
 
         function handleBeforeRequest(event) {
@@ -93,6 +92,7 @@
         document.body.addEventListener('htmx:afterSwap', function() {
           setTimeout(addEventListeners, 0); // 약간의 지연 후 addEventListeners 실행
         });
+        
       });
 
     </script>

@@ -9,7 +9,7 @@ public class WebCORSConfig implements WebMvcConfigurer { // CORS 설정
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:9090") // 특정 출처만 허용
+                .allowedOrigins("http://localhost:9090", "http://http://18.116.238.9/") // 특정 출처만 허용
                 .allowedHeaders("*")
                 .allowedMethods("*")
                 .allowCredentials(true); // 인증 정보 허용

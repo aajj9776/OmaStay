@@ -9,6 +9,8 @@ public class AccommodationResponseDTO {
 
     private List<ResultAccommodationsDTO> accommodations;
 
+    private List<ResultAccommodationsDTO> accommodationsMap;
+
     private PageNation pageNation;
 
 }

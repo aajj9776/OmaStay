@@ -1,5 +1,4 @@
 package com.omakase.omastay.repository.custom.impl;
-import com.omakase.omastay.entity.QHostInfo;
 import com.omakase.omastay.entity.QImage;
 import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.repository.custom.ImageRepositoryCustom;
