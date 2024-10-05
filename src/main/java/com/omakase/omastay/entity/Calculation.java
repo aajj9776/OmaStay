@@ -1,6 +1,7 @@
 package com.omakase.omastay.entity;
 
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.CalStatus;
 import com.omakase.omastay.vo.StartEndVo;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -32,26 +33,19 @@ public class Calculation {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "cal_status", nullable = false)
-    private BooleanStatus calStatus;
+    private CalStatus calStatus;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "start", column = @Column(name = "cal_start", nullable = false)),
-            @AttributeOverride(name = "end", column = @Column(name = "cal_end", nullable = false))
-    })
-    private StartEndVo calStartEnd = new StartEndVo();
+    @Column(name = "cal_month", nullable = false)
+    private LocalDateTime calMonth;
 
-    @Column(name = "cal_leg_time")
-    private LocalDateTime calLegTime;
+    @Column(name = "cal_reg_time")
+    private LocalDateTime calRegTime;
 
     @Column(name = "cal_confirm_time")
     private LocalDateTime calConfirmTime;
 
     @Column(name = "cal_complete_time")
     private LocalDateTime calCompleteTime;
-
-    @Column(name = "cal_cancel_time")
-    private LocalDateTime calCancelTime;
 
     @Column(name = "cal_none", length = 100)
     private String calNone;

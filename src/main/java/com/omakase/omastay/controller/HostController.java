@@ -4,22 +4,27 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.io.File;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,28 +34,45 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
+import com.omakase.omastay.dto.ReviewCommentDTO;
+import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.dto.custom.CancelRequestDTO;
+import com.omakase.omastay.dto.custom.HostCalculationDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
+import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.HostRulesDTO;
+import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
+import com.omakase.omastay.entity.AdminMember;
+import com.omakase.omastay.entity.Image;
+import com.omakase.omastay.entity.Sales;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
-import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.AdminMemberService;
+import com.omakase.omastay.service.CalculationService;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
+import com.omakase.omastay.service.ImageService;
+import com.omakase.omastay.service.PaymentService;
 import com.omakase.omastay.service.PriceService;
+import com.omakase.omastay.service.ReservationService;
+import com.omakase.omastay.service.ReviewCommentService;
+import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
+import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -88,6 +110,27 @@ public class HostController {
 
     @Autowired
     private ServiceService serviceService;
+
+    @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
+    private ReviewCommentService reviewCommentService;
+
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private SalesService salesService;
+
+    @Autowired
+    private CalculationService calculationService; 
+
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private ApplicationContext applicationContext;
     
     private final EmailService emailService;
 
@@ -102,6 +145,18 @@ public class HostController {
 
     @Value("${upload}")
     private String upload;
+
+    @RequestMapping("/updateSession")
+    public ResponseEntity<String> updateSession(HttpSession session) {
+        AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+        if (hostInfoDTO != null) {
+            session.setAttribute("hStep", hostInfoDTO.getHStep() != null ? hostInfoDTO.getHStep().name() : null);
+            session.setAttribute("hStatus", hostInfoDTO.getHStatus() != null ? hostInfoDTO.getHStatus().name() : null);
+        }
+
+        return ResponseEntity.ok("success");
+    }
 
     @RequestMapping("/login")
     public String host() {
@@ -119,8 +174,18 @@ public class HostController {
     }
 
     @RequestMapping("/faq")
-    public String hostfaq() {
-        return "host/host_faq";
+    public ModelAndView hostfaq() {
+        
+        ModelAndView mv = new ModelAndView();
+
+        List<ServiceDTO> list = serviceService.getAllServices(SCate.FAQ, UserAuth.HOST);
+
+        mv.addObject("list", list);
+        
+        mv.setViewName("host/host_faq");
+
+        return mv;
+
     }
 
     @RequestMapping("/info")
@@ -142,11 +207,14 @@ public class HostController {
             }
 
             HostInfoCustomDTO hostInfoCustomDTO = hostInfoService.findHostInfoByHostInfoId(hostMypageDTO.getHostInfo().getId());
+            List<ImageDTO> image = imageService.getHostImages(hostMypageDTO.getHostInfo().getId());
+            System.out.println("이미지:"+image.get(0).getImgName().getFName());
+            mv.addObject("image", image);
             mv.addObject("hostMypageDTO", hostMypageDTO);
             mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
         }
-
-
+        System.out.println("storage:"+upload);
+        mv.addObject("storage", upload);
         mv.addObject("facilities", facilities);
         mv.setViewName("host/host_info");
 
@@ -182,9 +250,46 @@ public class HostController {
                 mv.addObject("hStep", hostInfoDTO.getHStep().name());
                 System.out.println("hStep:"+hostInfoDTO.getHStep().name());
                 if(hostInfoDTO.getHStatus() != null){
-                mv.addObject("hStaus", hostInfoDTO.getHStatus().name());    
+                mv.addObject("hStatus", hostInfoDTO.getHStatus().name());    
+                }
+                List<ReviewDTO> dayList = reviewService.getReviewDay(hostInfoDTO);
+                if(dayList != null){
+                    mv.addObject("revDayCount", dayList.size());
+                    System.out.println("revDayCount:"+dayList.size());
+                }
+                List<ReviewDTO> weekList = reviewService.getReviewWeek(hostInfoDTO);
+                if(weekList != null){
+                    mv.addObject("revWeekCount", weekList.size());
+                    System.out.println("revWeekCount:"+weekList.size());
+                }
+                List<ReviewDTO> monthList = reviewService.getReviewMonth(hostInfoDTO);
+                if(monthList != null){
+                    mv.addObject("revMonthCount", monthList.size());
+                    System.out.println("revMonthCount:"+monthList.size());
                 }
             } 
+            List<RoomInfoDTO> roomInfoDTO = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+            if(roomInfoDTO != null){
+                List<HostReservationDTO> dayList = reservationService.getReservationsDay(roomInfoDTO);
+                if(dayList != null){
+                    mv.addObject("resDayCount", dayList.size());
+                    System.out.println("resDayCount:"+dayList.size());
+                }
+                List<HostReservationDTO> weekList = reservationService.getReservationsWeek(roomInfoDTO);
+                if(weekList != null){
+                    mv.addObject("resWeekCount", weekList.size());
+                    System.out.println("resWeekCount:"+weekList.size());
+                }
+                List<HostReservationDTO> monthList = reservationService.getReservationsMonth(roomInfoDTO);
+                if(monthList != null){
+                    mv.addObject("resMonthCount", monthList.size());
+                    System.out.println("resMonthCount:"+monthList.size());
+                }
+            
+                mv.addObject("roomInfoDTO", roomInfoDTO);
+                
+            }
+
         }
 
         mv.setViewName("host/host_main");
@@ -224,6 +329,7 @@ public class HostController {
 
     @RequestMapping("/paymentdetail")
     public String hostpaymentdetail() {
+
         return "host/host_paymentdetail";
     }
     
@@ -268,17 +374,12 @@ public class HostController {
             if (hostInfoDTO.getHCate() != null) {
                 mv.addObject("hCate", hostInfoDTO.getHCate().name());
             }
-            System.out.println("priceDTO:"+priceDTO);
-            System.out.println("priceDTO.getPeakSet():"+priceDTO.getPeakSet());
-            System.out.println("priceDTO.getSemi().getSemiStart():"+priceDTO.getSemi().getSemiStart());
-            System.out.println("priceDTO.getPeakVo().getPeakStart():"+priceDTO.getPeakVo().getPeakStart());
-           System.out.println(hostInfoDTO.getHCate().name());
 
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi().getSemiStart() != null) {
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi() != null && priceDTO.getSemi().getSemiStart() != null) {
                 mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
             }
 
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo().getPeakStart() != null) {
+            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo() != null && priceDTO.getPeakVo().getPeakStart() != null) {
                 mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
             }
         }
@@ -286,6 +387,8 @@ public class HostController {
         mv.setViewName("host/host_roomreg");
         return mv;
     }
+
+
 
     @RequestMapping("/rules")
     public ModelAndView hostrules() {
@@ -389,6 +492,7 @@ public class HostController {
         ModelAndView mv = new ModelAndView();
         if (adminMemberDTO != null) {
             session.setAttribute("adminMember", adminMemberDTO); // 세션에 사용자 정보 저장
+            updateSession(session);
             mv.addObject("adminMember", adminMemberDTO);
             mv.setViewName("redirect:/host/main");
         } else {
@@ -436,6 +540,7 @@ public class HostController {
         System.out.println(hostMypageDTO.getHostInfo().getHphone());
 
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
+
         System.out.println(adminMember);
 
         String pw = hostMypageDTO.getPw();
@@ -490,8 +595,6 @@ public class HostController {
         }
 
         hostInfoService.saveHostInfo(hostInfoCustomDTO, adminMember);
-
-        //html 에서 hostInfoCustomDTO 받아야함
         
         return ResponseEntity.ok("success");
     }
@@ -502,7 +605,9 @@ public class HostController {
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
 
         HostInfoDTO hostInfoDTO = hostInfoService.saverules(hostRulesDTO.getHostInfo(), adminMember);
+
         priceService.setpeak(hostInfoDTO, hostRulesDTO.getPrice());
+
 
         return ResponseEntity.ok("success");
     }
@@ -570,7 +675,7 @@ public class HostController {
             } 
         }
 
-        mv.setViewName("host/host_main");
+        mv.setViewName("redirect:/host/main");
         return mv;
     }
 
@@ -653,15 +758,20 @@ public class HostController {
                 mv.addObject("hCate", hostInfoDTO.getHCate().name());
             }
 
-
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi().getSemiStart() != null) {
-                mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
+            if (priceDTO.getPeakSet() == 1) {
+                if (priceDTO.getSemi() != null && priceDTO.getSemi().getSemiStart() != null) {
+                    mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
+                }
+    
+                if (priceDTO.getPeakVo() != null && priceDTO.getPeakVo().getPeakStart() != null) {
+                    mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
+                }
             }
 
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo().getPeakStart() != null) {
-                mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
-            }
+            List<ImageDTO> image = imageService.getImages(Integer.parseInt(id));
+            mv.addObject("image", image);
 
+        mv.addObject("storage", upload);    
         mv.setViewName("host/host_roomchange");
         return mv;
     }
@@ -740,4 +850,362 @@ public class HostController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
+
+    // 호스트 리뷰 전체 리스트
+    @RequestMapping("/reviewlist/getList")
+    @ResponseBody
+    public Map<String, Object> reviewlist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<ReviewDTO> list = reviewService.getAllReview(hostInfoDTO);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 호스트 리뷰 검색
+    @RequestMapping("/reviewlist/search")
+    @ResponseBody
+    public Map<String, Object> reviewsearch(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        int hIdx = hostInfoDTO.getId();
+
+        List<ReviewDTO> list = reviewService.searchHostReview(type, keyword, hIdx);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    @RequestMapping(value = "reviewlist/view", method = RequestMethod.GET)
+    public ModelAndView reviewdetail(@RequestParam("id") String id) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("host/host_reviewdetail");
+        
+        
+        ReviewDTO review = reviewService.getReview(Integer.parseInt(id));
+        mv.addObject("review", review);
+        
+        ReviewCommentDTO reviewCommentDTO = reviewCommentService.getRevComment(review);
+        mv.addObject("reviewCommentDTO", reviewCommentDTO);
+        
+        return mv;
+    }
+
+    @RequestMapping(value = "/regRevComment")
+public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revIdx, @RequestParam("rcComment") String rcComment) {
+    
+    ReviewDTO reviewDTO = reviewService.getReview(Integer.parseInt(revIdx));
+    reviewCommentService.regRevComment(reviewDTO, rcComment);
+
+    return ResponseEntity.ok("success");
+    }
+
+    @ResponseBody
+    @RequestMapping("/delRevComment")
+    public ResponseEntity<String> delRevComment(@RequestParam("revIdx") String revIdx) {
+
+
+        ReviewDTO reviewDTO = reviewService.getReview(Integer.parseInt(revIdx));
+
+        reviewCommentService.delRevComment(reviewDTO);
+        
+
+        return ResponseEntity.ok("success");
+    }
+
+    // 예약 전체 리스트
+    @RequestMapping("/reslist/getList")
+    @ResponseBody
+    public Map<String, Object> reslist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<RoomInfoDTO> roomInfoDTO = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+
+        List<HostReservationDTO> list = reservationService.getAllRes(roomInfoDTO);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 예약 검색
+    @RequestMapping("/reslist/search")
+    @ResponseBody
+    public Map<String, Object> resSearch(
+            @RequestParam(value = "resStatus", required = false) String resStatus,
+            @RequestParam(value = "dateValue", required = false) String dateValue) {
+
+        System.out.println("resStatus:"+resStatus);
+        System.out.println("dateValue:"+dateValue);
+        
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<RoomInfoDTO> roomInfoDTO = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+
+        List<HostReservationDTO> list = reservationService.searchRes(resStatus, dateValue, roomInfoDTO);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 예약 확정
+    @ResponseBody
+    @RequestMapping("/reslist/confirm")
+    public Map<String, Object> resConfirm(@RequestParam("ids") List<Integer> ids) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        int cnt = reservationService.confirmRes(ids);
+
+        map.put("cnt", cnt);
+
+        return map;
+    }
+
+    // 예약 취소
+    @ResponseBody
+    @RequestMapping("/reslist/reject")
+    public Map<String, Object> resReject(@RequestParam("ids") List<Integer> ids) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        int cnt = reservationService.rejectRes(ids);
+        System.out.println("취소 완료 개수 : " + cnt);
+        map.put("cnt", cnt);
+
+        if(cnt > 0){
+          for (Integer id : ids) {  
+          HostReservationDTO reservationDTO = reservationService.getHostRes(id);
+          System.out.println("reservationDTO:"+reservationDTO);
+          if (reservationDTO != null && reservationDTO.getPayIdx() != null) {
+            int payIdx = reservationDTO.getPayIdx();
+            System.out.println("payIdx:"+payIdx);
+            String paymentKey = reservationDTO.getPaymentKey();
+            System.out.println("paymentKey:"+paymentKey);
+            CancelRequestDTO cancelRequest = new CancelRequestDTO();
+            cancelRequest.setResIdx(id);  
+            cancelRequest.setPayIdx(payIdx);
+            cancelRequest.setPaymentKey(paymentKey);
+            cancelRequest.setCancelReason("호스트가 예약을 취소하였습니다.");
+            PaymentController paymentController = applicationContext.getBean(PaymentController.class);
+            paymentController.cancelPayment(cancelRequest);
+          }
+        }
+        }
+
+        return map;
+    }
+
+    // 예약 상세보기
+    @RequestMapping(value = "/reslist/view", method = RequestMethod.GET)
+    public ModelAndView resDetail(@RequestParam("id") String id) {
+
+        ModelAndView mv = new ModelAndView();
+        
+        if (id != null) {
+            HostReservationDTO hres = reservationService.getHostRes(Integer.parseInt(id));
+            mv.addObject("hres", hres);
+            LocalDate start = hres.getStartEndVo().getStart().toLocalDate();
+            LocalDate end = hres.getStartEndVo().getEnd().toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime payDate = hres.getPayDate();
+            String formattedPayDate = payDate.format(formatter);
+            mv.addObject("start", start);
+            mv.addObject("end", end);
+            mv.addObject("payDate", formattedPayDate);
+            int diff = end.compareTo(start);
+            mv.addObject("diff", diff);
+        }
+
+        mv.setViewName("host/host_reservationdetail");
+        return mv;
+    }
+
+    // 매출 전체 리스트
+    @RequestMapping("/saleslist/getList")
+    @ResponseBody
+    public Map<String, Object> saleslist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<HostSalesDTO> list = salesService.getHostSales(hostInfoDTO.getId());
+
+        Set<String> roomType = list.stream()
+                                         .map(HostSalesDTO::getRoomType)
+                                         .collect(Collectors.toSet());
+
+        map.put("data", list);
+        map.put("roomType", roomType);
+
+        System.out.println("매출전체리스트출력 완료:"+list);
+
+        return map;
+    }
+ 
+    // 매출 검색
+    @RequestMapping("/saleslist/search")
+    @ResponseBody
+    public Map<String, Object> salesSearch(
+            @RequestParam(value = "roomType", required = false) String roomType,
+            @RequestParam(value = "dateValue", required = false) String dateValue) {
+
+        System.out.println("roomType:"+roomType);
+        System.out.println("dateValue:"+dateValue);
+        
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        if ("ALL".equals(roomType)) {
+            roomType = null;
+        }
+
+        List<HostSalesDTO> list = salesService.searchHostSales(roomType, dateValue, hostInfoDTO.getId());
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 정산 현재년도 전체 리스트
+    @RequestMapping("/paylist/getList")
+    @ResponseBody
+    public Map<String, Object> paylist() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        Integer nowYear = LocalDate.now().getYear();
+
+        List<HostCalculationDTO> list = calculationService.getAllHostCal(hostInfoDTO.getId(),nowYear);
+
+        map.put("data", list);
+
+        return map;
+    }
+
+    // 정산 년도 검색 리스트
+    @RequestMapping("/paylist/search")
+    @ResponseBody
+    public Map<String, Object> paySearch(@RequestParam(value = "year", required = false) Integer year) {
+        System.out.println("정산년도 검색 왔다");
+        System.out.println("year:"+year);
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<HostCalculationDTO> list = calculationService.getAllHostCal(hostInfoDTO.getId(),year);
+
+        map.put("list", list);
+
+        return map;
+    }
+
+    // 정산 요청하기
+    @RequestMapping("/paylist/request")
+    @ResponseBody
+    public Map<String, Object> payRequest(@RequestBody List<HostCalculationDTO> items) {
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        Integer hIdx = hostInfoDTO.getId();
+
+        Map<String, Object> map = new HashMap<>();
+        
+        int cnt = 0;
+
+        for(HostCalculationDTO item : items){
+            cnt += calculationService.insertCal(item, hIdx);
+        }
+        if(cnt > 0){
+            map.put("cnt", cnt);
+        }else{
+            map.put("cnt", "정산 요청 가능한 상태가 아닙니다.");
+        }
+
+        return map;
+    }
+
+    // 정산 상세보기
+    @RequestMapping(value = "/paylist/view", method = RequestMethod.GET)
+    public ModelAndView payDetail(@RequestParam("year") Integer year, @RequestParam("month") Integer month) throws Exception {
+
+        ModelAndView mv = new ModelAndView();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<HostSalesDTO> list = calculationService.getMonthHostCal(hostInfoDTO.getId(),year,month);
+        // ObjectMapper를 사용하여 list를 JSON 문자열로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String jsonList = objectMapper.writeValueAsString(list);
+
+        mv.addObject("list", jsonList); // JSON 문자열을 추가
+        mv.addObject("year", year);
+        mv.addObject("month", month);
+        mv.setViewName("host/host_paymentdetail");
+        
+        return mv;
+        
+    }
+
+    // 호스트 입실예정 리스트
+    @RequestMapping("/checkInList/getList")
+    @ResponseBody
+    public Map<String, Object> checkInList() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+        if (adminMember != null) {
+            HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            if (hostInfoDTO != null) {
+                List<RoomInfoDTO> roomInfoDTO = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+                if(roomInfoDTO != null){
+                    List<HostReservationDTO> checkInList = reservationService.findReservationsByCheckIn(roomInfoDTO);
+                    map.put("data", checkInList);
+                }
+            }
+        }
+
+        return map;
+    }
+
+
 }

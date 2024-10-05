@@ -7,18 +7,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-    <link href="/css/global.css" rel="stylesheet"/>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
     />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
   </head>
   <body>
     <div
       class="w-full relative overflow-y-auto bg-[#e4e7eb] max-w-full flex flex-row items-start justify-center py-[100px] px-[20px] box-border leading-[normal] tracking-[normal]"
     >
       <div
-        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[73px] px-[129px] pb-[20px] box-border gap-[79px] max-w-full text-left text-[50px] text-[#000] font-[Roboto] lg:pl-[64px] lg:pr-[64px] lg:box-border mq450:gap-[20px] mq750:gap-[39px] mq750:pl-[32px] mq750:pr-[32px] mq750:box-border"
+        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[73px] px-[129px] pb-[50px] box-border gap-[79px] max-w-full text-left text-[50px] text-[#000] font-[Roboto] lg:pl-[64px] lg:pr-[64px] lg:box-border mq450:gap-[20px] mq750:gap-[39px] mq750:pl-[32px] mq750:pr-[32px] mq750:box-border"
       >
         <b
           class="relative tracking-[0.15px] leading-[48px] mq1050:text-[40px] mq1050:leading-[19px] mq450:text-[30px] mq450:leading-[14px]"
@@ -27,57 +27,31 @@
         <div
           class="self-stretch flex flex-row items-start justify-start py-[0px] px-[21px] box-border max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
         >
-          <div
-            class="flex-1 flex flex-row items-end justify-start flex-wrap content-end max-w-full [row-gap:20px]"
-          >
-            <img
-              class="h-[48.1px] w-[50px] relative object-cover"
-              alt=""
-              src="/image/host/faq-logo@2x.png"
-            />
-
-            <div
-              class="flex-1 rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start relative min-w-[682px] max-w-full mq1050:min-w-full"
-            >
-              <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-              <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-              <div
-                class="h-[24px] w-0 absolute !m-[0] top-[calc(50%_-_12px)] left-[0px]"
-              ></div>
-              <div
-                class="h-[50px] w-[921px] relative tracking-[0.15px] leading-[24px] flex items-center shrink-0 max-w-full"
-              >
-                나는 언제쯤 우석이를 자만추할 수 있는 날이 올까?
-              </div>
-              <div
-                class="flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden z-[4]"
-              >
-                Placeholder
-              </div>
-              <div
-                class="h-0 w-[24px] absolute !m-[0] top-[calc(50%_-_0px)] left-[239px] z-[1]"
-              ></div>
-              <img
-                class="h-full w-[40px] absolute !m-[0] top-[0px] right-[0px] bottom-[0px] max-h-full overflow-hidden shrink-0"
-                alt=""
-                src="/image/host/arrowdropdownfilled.svg"
-              />
-
-              <div class="hidden flex-row items-start justify-start z-[7]">
-                <img
-                  class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/image/host/closefilled.svg"
-                />
-              </div>
+        <div role="cdb-accordion" class="cdb-accordion w-full">
+          <div class="accordion" id="accordionExample">
+          <div class="accordion-item" th:each="faq, iterStat : ${list}">
+            <h2 class="accordion-header" th:id="'heading' + ${iterStat.count}">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                        th:data-bs-target="'#collapse' + ${iterStat.count}" aria-expanded="false" 
+                        th:aria-controls="'collapse' + ${iterStat.count}">
+                    <div th:utext="${faq.sTitle}">질문</div> 
+                </button>
+            </h2>
+            <div th:id="'collapse' + ${iterStat.count}" class="accordion-collapse collapse" 
+                 th:aria-labelledby="'heading' + ${iterStat.count}" data-bs-parent="#accordionExample">
+                <div class="accordion-body visible">
+                    <div th:utext="${faq.sContent}">답변</div> 
+                </div>
             </div>
-          </div>
+        </div>
+      
+        </div>
+      </div>
         </div>
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
   </body>
 </html>

@@ -27,4 +27,6 @@ public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer>, Ro
     int deleteById(@Param("ids") int[] ids);
     List<RoomInfo> findByHostInfo(HostInfo hostInfo);
 
+
+
 }

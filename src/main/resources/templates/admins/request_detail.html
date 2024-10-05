@@ -5,11 +5,10 @@
 <head>
   <meta charset="UTF-8" />
   <style>
-    input{
+    input {
       border: 1px solid #dddddd;
       border-radius: 4px;
       padding: 5px;
-      readonly: true;
     }
   </style>
 </head>
@@ -37,33 +36,36 @@
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
           <label>숙소명 : </label>
-          <input type="text" th:value="${host.hostInfo.hname}" readonly/>
+          <input type="text" th:value="${host.hostInfo.hname}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>아이디 : </label>
-          <input type="text" />
+          <input type="text" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>담당자명 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hostContactInfo.contactName}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>담당자 이메일 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hostContactInfo.contactEmail}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>숙소 URL : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hurl}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>대표번호 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hphone}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>정산계좌 : </label>
-          <input type="text" placeholder="거래 은행" class="border-solid border-[1px] w-[150px]" />
-          <input type="text" placeholder="계좌 번호" class="border-solid border-[1px] w-[300px]" />
-          <input type="text" placeholder="예금주" class="border-solid border-[1px] w-[150px]" />
+          <input type="text" placeholder="거래 은행" class="border-solid border-[1px] w-[150px]"
+            th:value="${host.account.acBank}" readonly />
+          <input type="text" placeholder="계좌 번호" class="border-solid border-[1px] w-[300px]"
+            th:value="${host.account.acNum}" readonly />
+          <input type="text" placeholder="예금주" class="border-solid border-[1px] w-[150px]"
+            th:value="${host.account.acName}" readonly />
         </div>
       </div>
 
@@ -76,78 +78,94 @@
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
           <label>숙소명 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hname}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>숙소 유형 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo?.hCate?.description} ?: '알 수 없는 유형'" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>주소 : </label>
-          <input type="text" placeholder="우편번호" class="border-solid border-[1px] w-[150px]" />
-          <input type="text" placeholder="주소" class="border-solid border-[1px] w-[300px]" />
-          <input type="text" placeholder="상세주소" class="border-solid border-[1px] w-[300px]" />
+          <input type="text" placeholder="우편번호" class="border-solid border-[1px] w-[100px]"
+            th:value="${host.hostInfo.addressVo.postCode}" readonly />
+          <input type="text" placeholder="주소" class="border-solid border-[1px] w-[500px]"
+            th:value="${host.hostInfo.addressVo.street}" readonly />
+          <input type="text" placeholder="상세주소" class="border-solid border-[1px] w-[300px]"
+            th:value="${host.hostInfo.addressVo.detail}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>호스트 이름 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.hostOwnerInfo.hostName}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>호스트 소개 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[200px] w-[800px]" th:value="${host.hostInfo.hostOwnerInfo.hintro}"
+            readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>편의시설 : </label>
           <div class="flex flex-col gap-[10px]">
             <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '주방/식당'])}"
+                readonly />
               <label>주방/식당</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '세탁기'])}" readonly />
               <label>세탁기</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '엘레베이터'])}"
+                readonly />
               <label>엘레베이터</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '주차장'])}" readonly />
               <label>주차장</label>
-            </div>
-            <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '와이파이'])}" readonly />
               <label>와이파이</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '욕실용품'])}" readonly />
               <label>욕실용품</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '에어컨'])}" readonly />
               <label>에어컨</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '냉장고'])}" readonly />
               <label>냉장고</label>
             </div>
             <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '욕조'])}" readonly />
               <label>욕조</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '드라이기'])}" readonly />
               <label>드라이기</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '금연'])}" readonly />
               <label>금연</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '반려동물동반'])}"
+                readonly />
               <label>반려동물동반</label>
-            </div>
-            <div class="flex flex-row gap-[10px]">
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '바베큐'])}" readonly />
               <label>바베큐</label>
-              <input type="checkbox" />
-              <label>객실내 취사</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '객실내취사'])}"
+                readonly />
+              <label>객실내취사</label>
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == '전자레인지'])}"
+                readonly />
               <label>전자레인지</label>
-              <input type="checkbox" />
+              <input type="checkbox" th:checked="${not #lists.isEmpty(host.facilities?.?[fCate == 'TV'])}" readonly />
               <label>TV</label>
             </div>
           </div>
         </div>
+
         <div class="flex flex-row gap-[16px]">
           <label>오시는 길 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.directions}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>업체 이미지 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <table>
+            <tbody>
+              <tr th:each="images : ${host.images}">
+                <td>
+                  <a href="#" class="image-link" th:data-img-name="${images.imgName.fName}"
+                    th:text="${images.imgName.fName}"></a>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
         </div>
       </div>
 
@@ -159,49 +177,308 @@
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
           <label>체크인 시간 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.checkin}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>체크아웃 시간 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.hostInfo.checkout}" readonly />
         </div>
-        <div class="flex flex-row gap-[16px]">
+        <div th:if="${host.price != null and #lists.size(host.price) > 0}" class="flex flex-row gap-[16px]">
           <label>성수기 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.price.peakVo?.peakStart ?: '성수기 정보 없음'}" readonly />
+          <label> ~ </label>
+          <input type="text" th:value="${host.price.peakVo?.peakStart ?: '성수기 정보 없음'}" readonly />
         </div>
-        <div class="flex flex-row gap-[16px]">
+        <div th:unless="${host.price != null and #lists.size(host.price) > 0}">
+          성수기 정보 없음
+        </div>
+        <div th:if="${host.price != null and #lists.size(host.price) > 0}" class="flex flex-row gap-[16px]">
           <label>준성수기 : </label>
-          <input type="text" />
+          <input type="text" th:value="${host.price.semi?.semiStart ?: '준성수기 정보 없음'}" readonly />
+          <label> ~ </label>
+          <input type="text" th:value="${host.price.semi?.semiEnd ?: '준성수기 정보 없음'}" readonly />
+        </div>
+        <div th:unless="${host.price != null and #lists.size(host.price) > 0}">
+          준성수기 정보 없음
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>숙소 이용 규칙 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.rules}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>현장 요금 추가 정보 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" />
+          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.priceAdd}" readonly />
         </div>
       </div>
 
-      <label class="font-semibold">
-        객실 관리
-      </label>
-
+      <div class="flex flex-row justify-center items-center">
+        <label class="font-semibold">
+          객실 관리
+        </label>
+        <span class="text-[14px]">
+          * 객실명을 클릭하면 객실 상세보기 모달이 열립니다.
+        </span>
+      </div>
       <div
         class="w-[1200px] rounded-[10px] bg-[#fff] flex flex-col items-start justify-start p-[30px] box-border gap-[15px] text-[18px] font-light">
         <div class="flex flex-row gap-[16px]">
-          <label>여기엔 객실 리스트 표가 들어가요 </label>
-          <input type="text" />
+          <table>
+            <thead>
+              <tr>
+                <th class="border-solid border-[1px] border-gray-300 p-[10px]">객실명</th>
+                <th class="border-solid border-[1px] border-gray-300 p-[10px]">객실타입</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="roomInfo, iterStat : ${host.roomInfo}">
+                <td class="border-solid border-[1px] border-gray-300 p-[10px]">
+                  <a href="#" class="room-link" th:data-room-id="${roomInfo.id}" th:data-index="${iterStat.index}"
+                    th:text="${roomInfo.roomName}"></a>
+                </td>
+                <td class="border-solid border-[1px] border-gray-300 p-[10px]">
+                  <a href="#" class="room-link" th:data-room-id="${roomInfo.id}" th:data-index="${iterStat.index}"
+                    th:text="${roomInfo.roomType}"></a>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
         </div>
       </div>
 
-      <div class="w-[1200px] flex flex-row items-center justify-center gap-[20px] m-[30px]">
-        <button class="bg-[#d4d8f1] h-[40px] w-[80px] rounded-[4px]">승인</button>
-        <button class="border-[2px] border-[#d4d8f1] h-[40px] w-[80px] rounded-[4px]">반려</button>
+      <div th:if="${#strings.toString(host.hostInfo.hStatus) == #strings.toString(T(com.omakase.omastay.entity.enumurate.HStatus).APPLY)}"  
+          class="w-[1200px] flex flex-row items-center justify-center gap-[20px] p-[30px]">
+        <button id="approveButton" class="bg-[#d4d8f1] h-[40px] w-[80px] rounded-[4px]">승인</button>
+        <button id="rejectButton" class="border-[2px] border-[#0f0f13] h-[40px] w-[80px] rounded-[4px]">반려</button>
       </div>
+      <div class="w-[1200px] text-center text-[16px] text-gray-400">* 입점요청 상태가 '신청'일 때만 [승인] 혹은 [반려]가 가능합니다</div>
     </section>
 
+
+
+    <!-- 객실 상세 모달 -->
+    <div id="detailModal" class=" fixed inset-0 z-50 hidden items-center justify-center m-auto bg-black bg-opacity-75">
+      <div class="bg-white rounded-lg shadow-lg m-auto">
+        <header
+          class="self-stretch rounded-lg rounded-b-[0px] bg-[#8492e6] flex flex-row items-center justify-between py-[15px] px-4 text-center text-[24px] text-[#fff] gap-[100px]">
+          <h3
+            class="m-[0px] h-[30px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold flex items-center justify-center shrink-0 whitespace-nowrap">
+            객실 상세보기
+          </h3>
+          <button class="close2">
+            <img class="h-6 w-6 " alt="" src="/image/admin/icon-cancel.png" />
+          </button>
+        </header>
+
+        <div class="p-[20px] text-[20px] px-[30px]">
+          <label class="text-[24px] w-full text-left font-semibold m-2">객실 정보</label>
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+            <h3>객실명 : </h3>
+            <input id="modalName" type="text" placeholder="객실명" readonly />
+          </div>
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+            <h3>객실유형 : </h3>
+            <input id="modalType" type="text" placeholder="객실유형" readonly />
+          </div>
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+            <h3>객실정원 : </h3>
+            <input id="modalNumber" type="text" placeholder="객실정원" readonly />
+          </div>
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+            <h3>객실소개 : </h3>
+            <input id="modalDiscript" type="textarea" placeholder="객실소개" readonly />
+          </div>
+        </div>
+        <div id="modalContent" class="p-[20px] text-[20px] px-[30px]">
+          <label class="text-[24px] w-full text-left font-semibold m-2">요금 설정</label>
+          <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+            <h3>기본(비수기) : </h3>
+            <input type="textarea" placeholder="비수기 요금" readonly />
+            <span>원 </span>
+          </div>
+          <div class="w-full flex flex-row items-start justify-center py-[10px] gap-[20px]">
+            <label>준성수기 : </label>
+            <input type="textarea" placeholder="준성수기 요금" readonly />
+            <span>원 </span>
+          </div>
+          <div class="w-full flex flex-row items-start justify-center py-[10px] gap-[20px]">
+            <label>성수기 : </label>
+            <input type="textarea" placeholder="성수기 요금" readonly />
+            <span>원 </span>
+          </div>
+        </div>
+        <div class="flex flex-col text-[20px] p-[20px] pb-[30px] items-start justify-center">
+          <label class="text-[24px] w-full text-left font-semibold m-2">객실 이미지</label>
+          <div id="ImageContent">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 이미지 모달 -->
+    <div id="imageModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-75">
+      <div class="bg-white rounded-lg shadow-lg w-1/3 m-auto">
+          <div class="flex justify-between items-center p-2">
+              <div id="caption" class="text-[16px] text-gray-700"></div>
+              <button class="close">
+                  <img class="h-6 w-6" alt="Close" src="/image/admin/icon-cancel.png" />
+              </button>
+          </div>
+          <img class="modal-content max-w-full h-auto rounded-lg" id="modalImage" />
+      </div>
   </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    var storage = /*[[${storage}]]*/ 'defaultStorageValue';
+    var host = /*[[${host}]]*/ {};
+  </script>
+  <script>
+
+    $(document).ready(function () {
+      const modal = $('#imageModal');
+      const modalImg = $('#modalImage');
+      const captionText = $('#caption');
+      const closeBtn = $('.close');
+
+
+      $('.image-link').on('click', function (event) {
+        event.preventDefault();
+        const imgName = $(this).data('img-name');
+
+        // 이미지 URL 설정 (서버에서 이미지를 제공하는 URL로 변경 필요)
+        const imageUrl = `${storage}host/${imgName}`;
+        console.log(imageUrl);
+
+        // 모달 표시
+        modal.css('display', 'flex');
+        modalImg.attr('src', imageUrl);
+        captionText.text(imgName);
+      }); 
+
+      // 모달 닫기
+      closeBtn.on('click', function () {
+        modal.css('display', 'none');
+      });
+
+      $(window).on('click', function (event) {
+        if ($(event.target).is(modal)) {
+          modal.css('display', 'none');
+        }
+      });
+
+      const modal2 = $('#detailModal');
+      const closeBtn2 = $('.close2');
+
+      $('.room-link').on('click', function (event) {
+        event.preventDefault();
+        const roomId = $(this).data('room-id');
+        const modalContent = $('#modalContent');
+        const modalImage = $('#ImageContent');
+        const index = $(this).data('index');
+
+
+        $('#modalName').val(`${host.roomInfo[index].roomName}`);
+        $('#modalType').val(`${host.roomInfo[index].roomType}`);
+        $('#modalNumber').val(`${host.roomInfo[index].roomPerson}`);
+        $('#modalDiscript').val(`${host.roomInfo[index].roomIntro}`);
+
+        // AJAX 요청을 통해 객실 상세 정보를 가져옵니다.
+        fetch(`/admin/request/roomPrice?roomId=${roomId}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            // 모달에 객실 상세 정보를 표시합니다.
+            if (data.price != null) {
+
+              modalContent.html(`
+              <label class="text-[24px] w-full text-left font-semibold m-2">요금 설정</label>
+              <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+                <label>기본(비수기) : </label>
+                <input type="text" class="w-[200px]" value="${data.price.regularPrice}" readonly />
+                <span>원 </span>
+              </div>
+              <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+                <label>준성수기 : </label>
+                <input type="text" class="w-[200px]" value="${data.price.semi.semiPrice}" readonly />
+                <span>원 </span>
+              </div>
+              <div class="w-full flex flex-row items-center justify-start py-[10px] gap-[20px]">
+                <label>성수기 : </label>
+                <input type="text" class="w-[200px]" value="${data.price.peakVo.peakPrice}" readonly />
+                <span>원 </span>
+              </div>
+            `);
+            }
+            modalImagef(data);
+
+            modal2.css('display', 'flex');
+          })
+          .catch(error => console.error('Error fetching room details:', error));
+
+      });
+
+      // 모달 닫기
+      closeBtn2.on('click', function () {
+        modal2.css('display', 'none');
+      });
+
+      $(window).on('click', function (event) {
+        if ($(event.target).is(modal2)) {
+          modal2.css('display', 'none');
+        }
+
+      });
+
+      $('#approveButton').on('click', function () {
+        console.log('승인 버튼 클릭');
+        $.ajax({
+          url: '/admin/request/approve', // 실제 컨트롤러 URL로 변경
+          data: { hidx: host.hostInfo.id },
+          type: 'POST',
+          success: function (response) {
+            alert('승인되었습니다.');
+          },
+          error: function (error) {
+            alert('승인에 실패했습니다.');
+          }
+        });
+      });
+
+      $('#rejectButton').on('click', function () {
+        console.log('반려 버튼 클릭');
+        $.ajax({
+          url: '/admin/request/reject', // 실제 컨트롤러 URL로 변경
+          data: { hidx: host.hostInfo.id },
+          type: 'POST',
+          success: function (response) {
+            alert('반려되었습니다.');
+          },
+          error: function (error) {
+            alert('반려에 실패했습니다.');
+          }
+        });
+      });
+    });
+
+
+    function modalImagef(data) {
+      const imagesHtml = data.images.map(image => `
+                    <a href="#" onclick="showImageModal('${image.imgName.fname}')">${image.imgName.fname}</a>
+            `).join('');
+
+      document.getElementById('ImageContent').innerHTML = imagesHtml;
+    }
+
+    function showImageModal(imgName) {
+      const imageUrl = `${storage}room/${imgName}`;
+      $('#caption').text(imgName);
+      document.getElementById('modalImage').src = imageUrl;
+      document.getElementById('imageModal').style.display = 'block';
+    }
+  </script>
 </body>
 
 </html>

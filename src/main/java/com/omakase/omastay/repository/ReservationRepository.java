@@ -1,10 +1,66 @@
 package com.omakase.omastay.repository;
 
-import com.omakase.omastay.entity.Reservation;
-import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import jakarta.persistence.LockModeType;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import java.util.List;
+
+import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.entity.Reservation;
+import com.omakase.omastay.entity.RoomInfo;
+import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
+
+
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer>, ReservationRepositoryCustom {
 
+    List<Reservation> findByRoomInfo(RoomInfo roomInfo);
 
+    @Modifying
+    @Transactional
+    @Query("Update Reservation r set r.resStatus = 1 where r.id in :ids AND r.resStatus = 0")
+    int confirmById(@Param("ids") int[] ids);
+
+    @Modifying
+    @Transactional
+    @Query("Update Reservation r set r.resStatus = 2 where r.id in :ids AND (r.resStatus = 0 or r.resStatus = 1)")
+    int rejectById(@Param("ids") int[] ids);
+
+    @Modifying
+    @Query("UPDATE Reservation r SET r.resStatus = 3 WHERE r.startEndVo.end < CURRENT_TIMESTAMP AND r.resStatus = 1")
+    void updateExpiredStatuses();
+
+    // 하루가 지난 예약 중 Sale 테이블에 없는 예약의 ID를 조회
+    @Query("SELECT r FROM Reservation r LEFT JOIN FETCH Sales s ON r.id = s.reservation.id WHERE r.startEndVo.end < :yesterday AND s.id IS NULL")
+    List<Reservation> findExpiredReservationsNotInSale(@Param("yesterday") LocalDateTime yesterday);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
+    Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx")
+    List<Reservation> findByMemIdx(@Param("memIdx") int memIdx);
+    
+    //오늘날짜 예약 조회
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :date AND r.startEndVo.end >= :date) AND (r.resStatus = 1 OR r.resStatus = 3)")
+    List<Reservation> findReservationsByDate(@Param("date") LocalDateTime date, @Param("roomInfo") RoomInfo roomInfo);
+
+    //이번주 예약 조회
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :endOfWeek AND r.startEndVo.end >= :startOfWeek) AND (r.resStatus = 1 OR r.resStatus = 3)")
+    List<Reservation> findReservationsByWeek(@Param("startOfWeek") LocalDateTime startOfWeek, @Param("endOfWeek") LocalDateTime endOfWeek, @Param("roomInfo") RoomInfo roomInfo);
+
+    //이번달 예약 조회
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :endOfMonth AND r.startEndVo.end >= :startOfMonth) AND (r.resStatus = 1 OR r.resStatus = 3)")
+    List<Reservation> findReservationsByMonth(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth, @Param("roomInfo") RoomInfo roomInfo);
+
+    //입실예정정보(시작일 제일 빠른 순으로 정렬)
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start >= :nowDate AND r.resStatus = 1) ORDER BY r.startEndVo.start ASC")
+    List<Reservation> findReservationsByCheckIn(@Param("nowDate") LocalDateTime nowDate, @Param("roomInfo") RoomInfo roomInfo);
 }

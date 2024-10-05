@@ -16,6 +16,7 @@
       /* 포커스 시 그림자 제거 */
     }
   </style>
+  
 </head>
 
 <body>
@@ -300,6 +301,7 @@
                     이미지 추가</b>
                 </div>
               </button>
+              <div class="font-[Roboto] text-[16px]">※ 첫번째 이미지가 업체 메인이미지로 사용됩니다.</div>
               <div class="hostimage">
                 <div class="swiper-container w-[520px] overflow-hidden">
                     <!-- 네비게이션 버튼 -->
@@ -328,33 +330,25 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <!--
-                  <div id="saved_images" th:classappend="${#lists.isEmpty(imageUrls)} ? 'hidden' : ''"
-                  class="swiper-wrapper h-[300px] self-stretch flex flex-row items-start justify-start gap-[10px] mq1125:flex-wrap">
-                    <div id="saved_images_template" th:each="image : ${hostInfoCustomDTO.images}"
-                      class="w-[240px] h-[300px] flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border min-w-[175px] gap-[10px] display-none hidden">
-                      <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
+                    <!-- Thymeleaf를 사용하여 이미지 리스트를 반복문으로 렌더링 -->
+                <div th:if="${image}" th:each="image, iterStat : ${image}" class="swiper-slide">
+                <div class="w-[240px] h-[300px] flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border min-w-[175px] gap-[10px]">
+                    <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                         <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
-                          <div
-                            class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
-                            <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
-                              loading="lazy" alt="" th:src="@{${imageUrl}}" />
-                          </div>
+                            <div class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                              <img th:src="@{${storage} + 'host/' + ${image.imgName.fName}}" class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                              loading="lazy" alt="" />
+                            </div>
                         </div>
-                      </div>
-                      <div
-                        class="w-[240px] h-[50px] self-stretch flex flex-col items-center justify-center py-[0px] px-[16px]">
-                        <div
-                          class="w-[100px] h-[50px] flex flex-col relative tracking-[0.15px] leading-[160%] font-medium flex items-center mq450:text-[16px] mq450:leading-[26px] gap-[10px]">
-                          <button type="button" class="w-full h-[30px] cursor-pointer [border:none] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] 
-                                      text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff]"
-                            onclick="deletehostimage(this)">삭제</button>
-                        </div>
-                      </div>
                     </div>
+                    <div class="w-[240px] h-[50px] self-stretch flex flex-col items-center justify-center py-[0px] px-[16px]">
+                        <div class="w-[100px] h-[50px] flex flex-col relative tracking-[0.15px] leading-[160%] font-medium flex items-center mq450:text-[16px] mq450:leading-[26px] gap-[10px]">
+                            <button type="button" class="w-full h-[30px] cursor-pointer [border:none] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff]" onclick="deletehostimage(this)">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
                   </div>
-                  -->
                 </div>
               </div>
             </div>
@@ -593,25 +587,18 @@
                 contentType: false,
                 success: function (response) {
                     alert('저장되었습니다.');
-                    // 서버에서 반환된 이미지 URL을 사용하여 이미지를 표시
-                    /*
-                    $('#image_container').hide();
-                    $('#saved_images').show();
-                    for (var i = 0; i < response.length; i++) {
-                        var imageUrl = response[i];
-                        var $slide = $('<div class="swiper-slide"></div>');
-                        var $template = $('#image_template').clone();
-                        $template.removeClass('hidden');
-                        $template.removeAttr('id');
-                        $template.find('img').attr('src', imageUrl);
-                        $template.css('display', 'flex');
-                        $slide.append($template);
-                        $('#saved_images .swiper-wrapper').append($slide);
-                        swiper.appendSlide($slide);
-                        swiper.update();
-                        updateNavigationButtons(swiper);
-                      }
-                      */ 
+                     $.ajax({
+                            url: '/host/updateSession',
+                            type: 'POST',
+                            success: function(sessionResponse) {
+                                if (sessionResponse === 'success') {
+                                  location.reload();
+                                }
+                            },
+                            error: function(error) {
+                                console.error('Error updating session:', error);
+                            }
+                        });
                 },
                 error: function (error) {
                     alert('저장 실패하였습니다.');

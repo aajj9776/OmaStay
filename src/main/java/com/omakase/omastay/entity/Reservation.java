@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @Getter
 @Setter
@@ -26,7 +24,7 @@ public class Reservation {
     @JoinColumn(name = "room_idx", referencedColumnName = "room_idx")
     private RoomInfo roomInfo = new RoomInfo();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
     private Member member = new Member();
 

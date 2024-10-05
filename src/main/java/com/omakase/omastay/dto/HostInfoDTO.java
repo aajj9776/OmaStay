@@ -1,4 +1,5 @@
 package com.omakase.omastay.dto;
+import java.time.LocalDateTime;
 
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.enumurate.HCate;
@@ -37,6 +38,7 @@ public class HostInfoDTO {
     private String hNone;
     private String hname;
     private String hphone;
+    private LocalDateTime hRegTime;
 
     public HostInfoDTO(HostInfo hostInfo) {
         this.id = hostInfo.getId();
@@ -59,10 +61,11 @@ public class HostInfoDTO {
         this.hNone = hostInfo.getHNone();
         this.hname = hostInfo.getHname();
         this.hphone = hostInfo.getHphone();
+        this.hRegTime = hostInfo.getHRegTime();
     }
 
     @QueryProjection
-    public HostInfoDTO(Integer id, Integer adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hurl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, HStep hStep, String hNone, String hname, String hphone) {
+    public HostInfoDTO(Integer id, Integer adIdx, AddressVo addressVo, String region, HCate hCate, String xAxis, String yAxis, HostOwnerInfoVo hostOwnerInfo, HostContactInfoVo hostContactInfo, String hurl, String checkin, String checkout, String directions, String rules, String priceAdd, HStatus hStatus, HStep hStep, String hNone, String hname, String hphone, LocalDateTime hRegTime) {
         this.id = id;
         this.adIdx = adIdx;
         this.addressVo = addressVo;
@@ -83,6 +86,7 @@ public class HostInfoDTO {
         this.hNone = hNone;
         this.hname = hname;
         this.hphone = hphone;
+        this.hRegTime = hRegTime;
     }
 
     @QueryProjection
