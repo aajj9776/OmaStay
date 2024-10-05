@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.List;
-
+import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
-import com.omakase.omastay.dto.custom.QHostSalesDTO;
 import com.omakase.omastay.entity.QPayment;
 import com.omakase.omastay.entity.QReservation;
+import com.omakase.omastay.entity.QReview;
 import com.omakase.omastay.entity.QRoomInfo;
 import com.omakase.omastay.entity.QSales;
 import com.omakase.omastay.entity.Sales;
@@ -21,7 +21,7 @@ import com.omakase.omastay.repository.custom.SalesRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import groovy.transform.Undefined.EXCEPTION;
@@ -29,13 +29,16 @@ import groovy.transform.Undefined.EXCEPTION;
 public class SalesRepositoryImpl implements SalesRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public static final QSales sales = QSales.sales;
     public static final QReservation reservation = QReservation.reservation;
     public static final QRoomInfo roomInfo = QRoomInfo.roomInfo;
     public static final QPayment payment = QPayment.payment;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    private QHostInfo hi = QHostInfo.hostInfo;
+    
+    public static final QHostInfo hostInfo = QHostInfo.hostInfo;
+    public static final QReview review = QReview.review;
 
 
     public SalesRepositoryImpl(JPAQueryFactory queryFactory) {
@@ -47,27 +50,29 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(sales.salDate.month().eq(LocalDate.now().getMonthValue()));
         builder.and(payment.payStatus.eq(PayStatus.PAY));
+        builder.and(hostInfo.hname.isNotNull());
 
         if (region != null) {
-            builder.and(hi.region.eq(region)); 
+            builder.and(hostInfo.region.eq(region)); 
         }
 
         return queryFactory
-                .select(Projections.constructor( // Top5SalesDTO 생성자 사용
-                        Top5SalesDTO.class,
-                        hi.hname.as("hostName"),
-                        payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
-                ))
-                .from(sales)
-                .join(sales.hostInfo, hi)
-                .join(sales.reservation, reservation)
-                .join(reservation.roomInfo, roomInfo) // roomInfo 조인 추가
-                .join(reservation.payment, payment)
-                .where(builder)
-                .groupBy(hi.hname)
-                .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc())
-                .limit(5)
-                .fetch();
+                        .select(Projections.constructor(
+                                Top5SalesDTO.class,
+                                hostInfo.hname.as("hostName"),
+                                payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
+                            ))
+                        .from(sales)
+                        .join(sales.hostInfo, hostInfo)
+                        .join(sales.reservation, reservation)
+                        .join(reservation.roomInfo, roomInfo)
+                        .join(reservation.payment, payment)
+                        .where() // hname이 null이 아닌 조건을 추가
+                        .groupBy(hostInfo.hname) // hname으로 그룹핑
+                        .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc()) // 총 매출로 정렬
+                        .limit(5) // 상위 5개 제한
+                        .fetch();
+    
     }
 
     //Sales 테이블 검색
@@ -75,7 +80,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
     public List<Sales> searchSales(String startDate, String endDate, String region) {
 
         return queryFactory.selectFrom(sales)
-                .join(sales.hostInfo, hi)
+                .join(sales.hostInfo, hostInfo)
                 .join(sales.reservation, reservation)
                 .join(reservation.payment, payment)
                 .join(reservation.roomInfo, roomInfo)
@@ -191,5 +196,22 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
                 .fetch();
     }
 
+
+    @Override
+    public CalculationCustomDTO findHostMonthPayment(Integer hIdx, LocalDate firstDay, LocalDate lastDay){
+
+        return queryFactory
+        .select(Projections.constructor(CalculationCustomDTO.class,
+            Expressions.asNumber(sales.reservation.payment.nsalePrice.castToNum(Integer.class)).sum().intValue(), // nsalePrice를 Integer로 변환 후 sum() 적용
+            Expressions.asNumber(sales.reservation.payment.salePrice.castToNum(Integer.class)).sum().intValue())) 
+        .from(sales)
+        .join(sales.reservation, reservation)
+        .join(sales.reservation.payment, payment)
+        .where(sales.hostInfo.id.eq(hIdx)
+            .and(sales.salDate.between(firstDay, lastDay)))
+        .fetchOne(); // 결과가 하나일 경우 fetchOne() 사용
+    }
+
+    
 
 }

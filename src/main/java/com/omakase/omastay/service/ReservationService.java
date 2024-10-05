@@ -3,31 +3,30 @@ package com.omakase.omastay.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.time.LocalTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
-import com.omakase.omastay.entity.Member;
+import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.entity.NonMember;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
-import com.omakase.omastay.mapper.MemberMapper;
-import com.omakase.omastay.mapper.NonMemberMapper;
+import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.mapper.RoomInfoMapper;
@@ -258,6 +257,40 @@ public class ReservationService {
         reservationRepository.updateExpiredStatuses();
     }
 
+
+    //admin의 회원조회에서 회원의 최근 예약 기록을 가져옴
+    public Map<String, Object> member_reservation(Integer memId){
+
+        Map<String, Object> map = new HashMap<>();
+
+        LocalDateTime month3 = LocalDateTime.now().minusMonths(3).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        //최근 3개월 내 예약 건수를 가져옴
+        Integer monthCount = reservationRepository.get3MonthCount(memId, month3);
+        System.out.println("monthCount: "+monthCount);
+        map.put("monthCount", monthCount);
+
+        //전체 예약 건수를 가져옴
+        Integer totalCount = reservationRepository.getTotalCount(memId);
+        System.out.println("totalCount: "+totalCount);
+        map.put("totalCount", totalCount);
+
+        //최근 예약 내역 5건 가져옴
+        List<Reservation> list = reservationRepository.get5List(memId);
+
+        List<MemberCustomDTO> recentList = new ArrayList<>();
+
+        for(Reservation item : list){
+            MemberCustomDTO dto = new MemberCustomDTO();
+            dto.setReservation(ReservationMapper.INSTANCE.toReservationDTO(item));
+            dto.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(item.getRoomInfo().getHostInfo()));
+            recentList.add(dto);
+        }
+        System.out.println("list: "+recentList);
+        map.put("recentList", recentList);
+
+        return map;
+
+    }
     @Transactional
     public List<HostReservationDTO> getReservationsDay(List<RoomInfoDTO> roomInfoDTOList) {
         List<HostReservationDTO> hostReservationAll = new ArrayList<>();
