@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import java.util.List;
 
+import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
@@ -43,4 +44,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
     Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+
+    //admin의 회원조회에서 회원의 최근 3개월 예약 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r JOIN r.payment p WHERE r.member.id = :memId AND p.payDate >= :time")
+    Integer get3MonthCount(@Param("memId") Integer memId, @Param("time") LocalDateTime time);
+    
+    //admin의 회원조회에서 회원의 전체 예약 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.member.id = :memId")
+    Integer getTotalCount(@Param("memId") Integer memId);
+
 }

@@ -3,36 +3,31 @@ package com.omakase.omastay.repository.custom.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.threeten.bp.LocalDate;
+import java.time.LocalDate;
 
-import com.omakase.omastay.dto.custom.Top5SalesDTO;
+import com.omakase.omastay.dto.RecommendationDTO;
 import com.omakase.omastay.entity.QHostInfo;
 import com.omakase.omastay.entity.QPayment;
-import com.omakase.omastay.entity.QRecommendation;
 import com.omakase.omastay.entity.QReservation;
-import com.omakase.omastay.entity.QRoomInfo;
-import com.omakase.omastay.entity.QSales;
+import com.omakase.omastay.entity.QReview;
 import com.omakase.omastay.entity.Recommendation;
+
+import static com.omakase.omastay.entity.QSales.sales;
 import com.omakase.omastay.entity.enumurate.HCate;
-import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.repository.custom.RecommendationRepositoryCustom;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 public class RecommendationRepositoryImpl implements RecommendationRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
-    QHostInfo hostInfo = QHostInfo.hostInfo;
-    public static final QSales sales = QSales.sales;
-    public static final QReservation reservation = QReservation.reservation;
-    public static final QRoomInfo roomInfo = QRoomInfo.roomInfo;
+   
 
     public RecommendationRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
 
-    final static QRecommendation recommendation = QRecommendation.recommendation;
 
     // public List<Recommendation> getTypeRecommendations(HCate Type){
 
@@ -84,4 +79,38 @@ public class RecommendationRepositoryImpl implements RecommendationRepositoryCus
     //             .limit(5)
     //             .fetch();
     // }
+
+    @Override
+    public List<Recommendation> findR(HCate hCate, LocalDate startDate, LocalDate endDate) {
+        QHostInfo hostInfo = QHostInfo.hostInfo;
+        QReservation reservation = QReservation.reservation;
+        QPayment payment = QPayment.payment;
+        QReview review = QReview.review;
+
+        startDate = LocalDate.now().minusMonths(1);
+        
+        return queryFactory
+            .select(Projections.constructor(
+                Recommendation.class, 
+                hostInfo,
+                hostInfo.hCate,
+                payment.nsalePrice.castToNum(Integer.class).sum(),
+                Expressions.constant(LocalDateTime.now()))
+            )
+            .from(sales)
+            .join(sales.hostInfo, hostInfo)
+            .join(sales.reservation, reservation)
+            .join(reservation.payment, payment) 
+            //.leftJoin(review).on(review.hostInfo.eq(hostInfo))
+            .where(
+                hostInfo.hname.isNotNull(),  // hname이 null이 아닌 조건
+                hostInfo.hCate.eq(hCate),    // hCate가 현재 enum 값인 조건 추가
+                sales.salDate.between(startDate, endDate) // 날짜 범위 조건 추가
+            )
+            .groupBy(hostInfo.id)  
+            //.having(review.revRating.avg().goe(4.0))  // 평점이 4.0 이상인 호스트만 추천
+            .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc())  // 총 매출로 정렬
+            .limit(5)  // 상위 5개 제한 
+            .fetch();
+    }   
 }

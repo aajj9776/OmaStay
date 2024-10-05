@@ -1,21 +1,20 @@
 package com.omakase.omastay.service;
 
 import com.omakase.omastay.dto.CalculationDTO;
+import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.HostCalculationDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
+import com.omakase.omastay.entity.Calculation;
 import com.omakase.omastay.entity.enumurate.CalStatus;
 import com.omakase.omastay.mapper.CalculationMapper;
 import com.omakase.omastay.repository.CalculationRepository;
 import com.omakase.omastay.repository.SalesRepository;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,4 +78,71 @@ public class CalculationService {
     }
 
 
+    // 정산 리스트 가져오기
+    public List<CalculationCustomDTO> getCalculationMonthly(String period){
+
+        List<CalculationCustomDTO> calList = new ArrayList<CalculationCustomDTO>();
+
+        if(period == null){ //검색된 기간이 없을 경우 -> 정산 요청한 월을 기준으로 보여줌
+
+            //정산할 매출의 달 (ex. 정산요청 10월 -> 매출달 9월)
+            LocalDateTime firstDateTime = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth().minus(1), 1, 0, 0);
+            
+            //정산 기준 월으로 정산 리스트 가져오기
+            List<Calculation> calculation = calculationRepository.calculationMonthly(firstDateTime);
+
+            for(Calculation cal : calculation){ 
+                //엔티티 -> DTO로 변환
+                CalculationCustomDTO calDTO = new CalculationCustomDTO();
+                calDTO.setCalculationDTO(CalculationMapper.INSTANCE.toCalculationDTO(cal));
+                calDTO.setHIdx(cal.getHostInfo().getId()); 
+                calDTO.setHostName(cal.getHostInfo().getHname());
+                calDTO.setRequestSum(cal.getCalAmount());
+    
+                //요청된 정산금이 맞는지 검증, 지난달 매출을 기준으로 검증
+                LocalDate lastMonthStart = LocalDate.of(firstDateTime.getYear(), firstDateTime.getMonth(), 1);  
+                LocalDate lastMonthEnd = LocalDate.of(firstDateTime.getYear(), firstDateTime.getMonth(), firstDateTime.getMonth().maxLength());
+
+                CalculationCustomDTO temp = salesRepository.findHostMonthPayment(cal.getHostInfo().getId(), lastMonthStart, lastMonthEnd); //cost, sales, commission, calAmount 계산, 검증
+                
+                calDTO.setCost(temp.getCost()); //매출 원가
+                calDTO.setSell(temp.getSales()); //할인액
+                calDTO.setSales(temp.getCost() - temp.getSales()); //할인액 (본사 부담 할인)
+                calDTO.setCommission((int) (temp.getCost() * 0.1)); //수수료
+                calDTO.setCalAmount(calDTO.getCost() - calDTO.getCommission()); //정산금 (매출 원가 - 수수료)
+
+                if(calDTO.getRequestSum().equals(calDTO.getCalAmount())){
+                    System.out.println("정산금액이 일치합니다.");
+                } else {
+                    System.out.println("정산금액이 일치하지 않습니다.");
+                    calDTO.setCost(0); 
+                    calDTO.setSales(0); 
+                    calDTO.setCommission(0); 
+                    calDTO.setCalAmount(0); 
+                }
+                calList.add(calDTO);
+            }
+        }
+        
+        return calList;
+    }
+
+    // 정산 승인
+    @Transactional
+    public void approveCalculation(Integer id){
+        calculationRepository.approveCalculation(id);
+    }
+
+    // 정산 완료
+    @Transactional
+    public void completeCalculation(Integer id){
+        calculationRepository.completeCalculation(id);
+    }
+
+    public CalculationDTO getCal(Integer cIdx){
+        Calculation cal = calculationRepository.findOneById(cIdx);
+        CalculationDTO calDTO = CalculationMapper.INSTANCE.toCalculationDTO(cal);
+        calDTO.setHname(cal.getHostInfo().getHname());
+        return calDTO;
+    }
 }

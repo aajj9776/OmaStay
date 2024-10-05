@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.List;
-
+import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
-import com.omakase.omastay.dto.custom.QHostSalesDTO;
 import com.omakase.omastay.entity.QPayment;
 import com.omakase.omastay.entity.QReservation;
+import com.omakase.omastay.entity.QReview;
 import com.omakase.omastay.entity.QRoomInfo;
 import com.omakase.omastay.entity.QSales;
 import com.omakase.omastay.entity.Sales;
@@ -21,7 +21,7 @@ import com.omakase.omastay.repository.custom.SalesRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import groovy.transform.Undefined.EXCEPTION;
@@ -38,6 +38,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
     public static final QPayment payment = QPayment.payment;
     
     public static final QHostInfo hostInfo = QHostInfo.hostInfo;
+    public static final QReview review = QReview.review;
 
 
     public SalesRepositoryImpl(JPAQueryFactory queryFactory) {
@@ -195,5 +196,22 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
                 .fetch();
     }
 
+
+    @Override
+    public CalculationCustomDTO findHostMonthPayment(Integer hIdx, LocalDate firstDay, LocalDate lastDay){
+
+        return queryFactory
+        .select(Projections.constructor(CalculationCustomDTO.class,
+            Expressions.asNumber(sales.reservation.payment.nsalePrice.castToNum(Integer.class)).sum().intValue(), // nsalePrice를 Integer로 변환 후 sum() 적용
+            Expressions.asNumber(sales.reservation.payment.salePrice.castToNum(Integer.class)).sum().intValue())) 
+        .from(sales)
+        .join(sales.reservation, reservation)
+        .join(sales.reservation.payment, payment)
+        .where(sales.hostInfo.id.eq(hIdx)
+            .and(sales.salDate.between(firstDay, lastDay)))
+        .fetchOne(); // 결과가 하나일 경우 fetchOne() 사용
+    }
+
+    
 
 }

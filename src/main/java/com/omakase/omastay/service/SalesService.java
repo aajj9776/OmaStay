@@ -1,7 +1,9 @@
 package com.omakase.omastay.service;
 
+import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.PaymentDTO;
+import com.omakase.omastay.dto.RecommendationDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.SalesDTO;
 import com.omakase.omastay.dto.custom.SalesCustomDTO;
@@ -9,6 +11,7 @@ import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
+import com.omakase.omastay.entity.Calculation;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.Sales;
@@ -16,12 +19,16 @@ import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.mapper.SalesMapper;
+import com.omakase.omastay.repository.CalculationRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.SalesRepository;
+
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +51,9 @@ public class SalesService {
     private ReservationRepository reservationRepository;
 
     @Autowired
+    private CalculationRepository calculationRepository;
+
+    @Autowired
     private HostInfoRepository hostInfoRepository;
 
     @Autowired
@@ -54,7 +64,6 @@ public class SalesService {
     @Transactional 
     @Scheduled(fixedRate = 1800000) // 30분 = 1800000 milliseconds
     public void insertSales() {
-        int cnt =0;
 
         // 현재 시간에서 하루 전 날짜를 계산
         LocalDateTime yesterday = LocalDateTime.now().minus(1, ChronoUnit.DAYS);
@@ -69,12 +78,9 @@ public class SalesService {
             sales.setSalDate(LocalDate.now());  // 현재 날짜 설정
             sales.setHostInfo(reservation.getRoomInfo().getHostInfo());
             salesRepository.save(sales); // Sales 테이블에 삽입
-            cnt ++;
         }
 
-        if(cnt > 0){
-            System.out.println("매출 테이블에 "+cnt+"건 추가");
-        }
+        System.out.println("매출 테이블 추가");
     }
 
 
@@ -167,4 +173,27 @@ public class SalesService {
         return salesRepository.findHostMonthSales(hidx, year, month);
     }
 
+
+    //특정 호스트의 월별 매출을 구하는 메소드
+    public List<SalesCustomDTO> getMonthlySalesByHost(CalculationDTO calculation){
+
+        List<SalesCustomDTO> salesCustomDTOs = new ArrayList<>();
+       
+        LocalDate startDate = calculation.getCalMonth().toLocalDate();
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        List<Sales> sales = salesRepository.findByHidx(startDate, endDate, calculation.getHIdx());
+        System.out.println(sales);
+
+        for(Sales s: sales){
+            HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
+            ReservationDTO reservationDTO = ReservationMapper.INSTANCE.toReservationDTO(s.getReservation());
+            PaymentDTO paymentDTO = PaymentMapper.INSTANCE.toPaymentDTO(s.getReservation().getPayment());
+            SalesDTO salesDTO = SalesMapper.INSTANCE.toSalesDTO(s);
+            SalesCustomDTO salesCustomDTO = new SalesCustomDTO(hostInfoDTO, reservationDTO, paymentDTO, salesDTO);
+            salesCustomDTOs.add(salesCustomDTO);
+        }
+
+        return salesCustomDTOs;
+    }
 }

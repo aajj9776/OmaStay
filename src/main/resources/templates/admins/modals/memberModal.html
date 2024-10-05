@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<head>
+
+</head>
+<div id="modalOverlay"
+    class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50 hidden text-[14px]">
+    <div
+        class="w-[615px] rounded-[50px] bg-[#e2e3f5] overflow-hidden shrink-0 flex flex-col items-center justify-center p-[30px]">
+
+        <div
+            class="w-full rounded-[20px] bg-[#fff] overflow-hidden shrink-0 flex flex-col items-start justify-start py-[10px] px-[30px] gap-[15px] ">
+            <button id="closeModal" class="w-full items-end justify-end flex">
+                <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
+            </button>
+
+
+            <div class="w-full h-[50px] flex flex-row items-center justify-center gap-3">
+                <img class="h-[50px] w-[50px] rounded-[100px] border-yellow-300 border-[2px] object-cover shrink-0"
+                    alt="" src="/image/admin/개척자.png" />
+
+
+                <label id="memberName" class="text-[24px]">홍길동</label>
+            </div>
+
+            <label class="">
+                회원 등급
+            </label>
+            <div class="flex flex-row justify-center items-center gap-2 w-full">
+                <input type="radio" name="grade" value="1" /> <label>방랑자</label>
+                <input type="radio" name="grade" value="1" /> <label>탐험가</label>
+                <input type="radio" name="grade" value="1" /> <label>개척자</label>
+            </div>
+
+            <label class="">
+                실명
+            </label>
+            <input
+                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
+                placeholder="실명" type="text" />
+
+            <label class="">아이디</label>
+            <input
+                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
+                placeholder="아이디" type="text" />
+
+            <label class="">이메일</label>
+            <input
+                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
+                placeholder="이메일" type="text" />
+
+            <div class="">가입일</div>
+            <input
+                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
+                placeholder="가입일" type="text" />
+
+            <div class="">예약내역</div>
+            <div class="flex flex-row w-full">
+                <div
+                    class="w-1/2 py-[10px] border-solid border-[1px] border-[#a4a4a4] rounded-l-[20px] flex flex-col items-center justify-center">
+                    <div>최근 3개월 내 예약 건수</div>
+                    <input id="monthCount" placeholder="n건"/>
+                </div>
+                <div
+                    class="w-1/2 py-[10px] border-solid border-[1px] border-[#a4a4a4] rounded-r-[20px] flex flex-col items-center justify-center">
+                    <div>전체 예약 건수</div>
+                    <input id="totalCount" placeholder="n건"/>
+                </div>
+            </div>
+
+            <div class="">최근 예약 내역</div>
+            <div class="w-full">
+                <table id="modalTable" class="hover">
+                    <thead>
+                        <tr class="bg-[#d4d8f1] font-medium">
+                            <th>예약 번호</th>
+                            <th>숙소명</th>
+                            <th>체크인</th>
+                            <th>체크아웃</th>
+                            <th>예약일</th>
+                            <th>예약상태</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-[#ffffff] pt-[100px] ">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
