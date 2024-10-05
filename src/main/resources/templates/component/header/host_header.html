@@ -21,8 +21,8 @@
         <div
           class="flex flex-row items-start justify-start pt-[17.5px] px-[0px] pb-[0px] gap-[20px]"
         >
-        <div class="dropdown">
-          <button
+        <div>
+          <button  onclick="changPage(1)"
             class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] px-[27px] bg-[#fff] rounded-[10px] flex flex-row items-start justify-start hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
             type="button" data-bs-toggle="dropdown" aria-expanded="false"
             >
@@ -31,15 +31,11 @@
               >마이페이지</div
             >
           </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" onclick="changPage(1)">마이페이지</a></li>
-            <li><a class="dropdown-item" onclick="changPage(2)">나의 1:1 문의</a></li>
-          </ul>
         </div> 
         <button
         class="cursor-pointer border-[#ebebeb] border-[1px] border-solid py-[14px] pl-[35px] pr-[34px] bg-[#fff] rounded-[10px] flex flex-row items-start justify-start hover:bg-[#e6e6e6] hover:border-[#d1d1d1] hover:border-[1px] hover:border-solid hover:box-border"
       >
-        <a onclick="changPage(3)"
+        <a onclick="changPage(2)"
           class="w-[70px] [text-decoration:none] relative text-[16px] leading-[20px] font-semibold font-[Inter] text-[#333] text-center inline-block min-w-[59px]"
           >로그아웃</a
         >
@@ -66,10 +62,10 @@
               >
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" onclick="changPage(4)">숙소 소개</a></li>
-              <li><a class="dropdown-item" onclick="changPage(5)">이용규칙 관리</a></li>
-              <li><a class="dropdown-item" onclick="changPage(6)">객실 관리</a></li>
-              <li><a class="dropdown-item" onclick="changPage(7)">리뷰 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(3)">숙소 소개</a></li>
+              <li><a class="dropdown-item" onclick="changPage(4)">이용규칙 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(5)">객실 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(6)">리뷰 관리</a></li>
             </ul>
             </div>
             <div class="dropdown">
@@ -83,9 +79,9 @@
               >
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" onclick="changPage(8)">예약 관리</a></li>
-              <li><a class="dropdown-item" onclick="changPage(9)">매출 관리</a></li>
-              <li><a class="dropdown-item" onclick="changPage(10)">정산 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(7)">예약 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(8)">매출 관리</a></li>
+              <li><a class="dropdown-item" onclick="changPage(9)">정산 관리</a></li>
             </ul>
             </div>
             <div class="dropdown">
@@ -99,9 +95,8 @@
               >
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" onclick="changPage(11)">공지사항</a></li>
-              <li><a class="dropdown-item" onclick="changPage(12)">자주 묻는 질문</a></li>
-              <li><a class="dropdown-item" onclick="changPage(13)">1:1 문의</a></li>
+              <li><a class="dropdown-item" onclick="changPage(10)">공지사항</a></li>
+              <li><a class="dropdown-item" onclick="changPage(11)">자주 묻는 질문</a></li>
             </ul>
             </div>
           </div>
@@ -128,7 +123,6 @@
             const hrefs = [
                 "/host/main", 
                 "/host/mypage",
-                "/host/inquiry",
                 "/host/logout", 
                 "/host/info", 
                 "/host/rules", 
@@ -139,7 +133,6 @@
                 "/host/payment", 
                 "/host/notice", 
                 "/host/faq", 
-                "/host/inquiry" 
             ];
 
             const hStep = /*[[${session.hStep}]]*/ null;

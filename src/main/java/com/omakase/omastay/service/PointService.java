@@ -8,6 +8,7 @@ import com.omakase.omastay.repository.MemberRepository;
 import com.omakase.omastay.repository.PointRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class PointService {
         return PointMapper.INSTANCE.toPointDTOList(pList);
     }
 
+    
     public int addPoint(String email, PointDTO pDto){
         int cnt=0; 
 
@@ -63,23 +65,25 @@ public class PointService {
         return PointMapper.INSTANCE.toPointDTOList(pList);
     }
 
+    @Transactional
     public PointDTO savePoint(PointDTO pointDTO) {
         Point res = PointMapper.INSTANCE.toPoint(pointDTO);
         
         List<Integer> sum = pointRepository.findLatestPSumByMemIdx(pointDTO.getMemIdx());
-        System.out.println("sum : " + sum.get(0));
-        int sumPoint =  sum.get(0) - pointDTO.getPValue();
-        System.out.println(sumPoint);
+        if( sum != null && sum.size() > 0){
+            int sumPoint =  sum.get(0) - pointDTO.getPValue();
+            StringBuilder sb = new StringBuilder();
+            sb.append("-").append(pointDTO.getPValue());
+            res.setPValue(Integer.parseInt(sb.toString()));
+            res.setPDate(LocalDateTime.now());
+            res.setPSum(sumPoint);
+            res.setPContent("포인트 사용");
+            Point point = pointRepository.save(res);
+            PointDTO dto = PointMapper.INSTANCE.toPointDTO(point);
+            return dto;
+        }
+        return null;
         
-        StringBuilder sb = new StringBuilder();
-        sb.append("-").append(pointDTO.getPValue());
-        res.setPValue(Integer.parseInt(sb.toString()));
-        res.setPDate(LocalDateTime.now());
-        res.setPSum(sumPoint);
-        res.setPContent("포인트 사용");
-        Point point = pointRepository.save(res);
-        PointDTO dto = PointMapper.INSTANCE.toPointDTO(point);
-        return dto;
     }
 
     public Integer getSumPoint(int id) {

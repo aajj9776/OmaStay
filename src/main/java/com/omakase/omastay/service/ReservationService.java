@@ -1,27 +1,30 @@
 package com.omakase.omastay.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalTime;
 
-import com.omakase.omastay.entity.enumurate.PayStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.MemberCustomDTO;
-import com.omakase.omastay.entity.Coupon;
-
-import com.omakase.omastay.entity.Member;
+import com.omakase.omastay.entity.NonMember;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
+import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
@@ -30,10 +33,6 @@ import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
-
-
-import java.util.List;
-import java.util.ArrayList;
 
 import jakarta.transaction.Transactional;
 
@@ -52,7 +51,7 @@ public class ReservationService {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
 
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(2);
+        roomInfo.setId(9);
         res.setRoomInfo(roomInfo);
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
@@ -60,18 +59,18 @@ public class ReservationService {
         res.setStartEndVo(startEndVo);
 
          // 방 중복 체크 시 Pessimistic Lock 적용
-         Optional<Reservation> checkRoom = reservationRepository.findConflictingReservationWithLock(
+         List<Reservation> checkRoom = reservationRepository.checkSameRoom(
             res.getRoomInfo().getId(), 
             res.getStartEndVo().getStart(), 
             res.getStartEndVo().getEnd()
         );
 
-        if( checkRoom.isPresent() ) {
-            return ReservationMapper.INSTANCE.toReservationDTO(checkRoom.get());
+        if (checkRoom != null && checkRoom.size() > 0 ){
+            return ReservationMapper.INSTANCE.toReservationDTOList(checkRoom).get(0);
+        } else {
+            return null;
         }
 
-        // 방 중복이 없는 경우
-        return null;
     }
 
     @Transactional
@@ -108,29 +107,61 @@ public class ReservationService {
 
     @Transactional
     public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
-
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(2);
+        roomInfo.setId(9);
         res.setRoomInfo(roomInfo);
-
+        
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
         startEndVo.setEnd(LocalDateTime.now().plusDays(1));
         res.setStartEndVo(startEndVo);
-
+        res.setNonMember(null);
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
         res.setResPerson(2);
         res.setRoomInfo(roomInfo);
         res.setStartEndVo(startEndVo);
         res.setResStatus(ResStatus.PENDING);
-        res.setNonMember(null);
-
+        
         Reservation result = reservationRepository.save(res);
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
     }
 
+
+    @Transactional
+    public ReservationDTO insertNonMemberReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO noMember) {
+        Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
+        RoomInfo roomInfo = new RoomInfo();
+        roomInfo.setId(9);
+        res.setRoomInfo(roomInfo);
+
+        res.setMember(null);
+
+        NonMember nonMember = new NonMember();
+        nonMember.setId(noMember.getId());
+        res.setNonMember(nonMember);
+
+        StartEndVo startEndVo = new StartEndVo();
+        startEndVo.setStart(LocalDateTime.now());
+        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
+        res.setStartEndVo(startEndVo);
+        
+        res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
+        res.setResPerson(2);
+        res.setRoomInfo(roomInfo);
+        res.setResStatus(ResStatus.PENDING);
+        Payment payment = new Payment();
+        payment.setId(paymentDTO.getId());
+        res.setPayment(payment);
+        
+        Reservation result = reservationRepository.save(res);
+        ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
+        return dto;
+    }
+
+
+    @Transactional
     public ReservationDTO getReservation(int resIdx ) {
         Reservation res = reservationRepository.findById(resIdx).get();
         res.setResStatus(ResStatus.CANCELLED);
@@ -139,6 +170,8 @@ public class ReservationService {
         return dto;
     }
 
+
+    
     public List<HostReservationDTO> getAllRes(List<RoomInfoDTO> roomInfoDTOList) {
         List<HostReservationDTO> hostReservationAll = new ArrayList<>();
 
@@ -258,4 +291,83 @@ public class ReservationService {
         return map;
 
     }
+    @Transactional
+    public List<HostReservationDTO> getReservationsDay(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime date = LocalDate.now().atStartOfDay();
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByDate(date, roomInfo);
+
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
+    }
+
+    @Transactional
+    public List<HostReservationDTO> getReservationsWeek(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime now = LocalDate.now().atStartOfDay();
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).with(LocalTime.MAX);
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByWeek(startOfWeek, endOfWeek, roomInfo);
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
+    }
+
+    //이번달 예약정보
+    @Transactional
+    public List<HostReservationDTO> getReservationsMonth(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime now = LocalDate.now().atStartOfDay();
+        LocalDateTime startOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MAX);
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByMonth(startOfMonth, endOfMonth, roomInfo);
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
+    }
+
+    //입실예정정보
+    @Transactional
+    public List<HostReservationDTO> findReservationsByCheckIn(List<RoomInfoDTO> roomInfoDTOList) {
+        List<HostReservationDTO> hostReservationAll = new ArrayList<>();
+
+        LocalDateTime nowDate = LocalDate.now().atStartOfDay();
+
+        for (RoomInfoDTO roomInfoDTO : roomInfoDTOList) {
+            RoomInfo roomInfo = RoomInfoMapper.INSTANCE.toRoomInfo(roomInfoDTO);
+            List<Reservation> reservations = reservationRepository.findReservationsByCheckIn(nowDate, roomInfo);
+            for (Reservation reservation : reservations) {
+                HostReservationDTO hostReservationDTO = new HostReservationDTO(reservation);
+                hostReservationAll.add(hostReservationDTO);
+            }
+        }
+           return hostReservationAll;
+    
+    }
+
 }

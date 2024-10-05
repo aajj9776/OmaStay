@@ -4,6 +4,7 @@ import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.Tuple;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;

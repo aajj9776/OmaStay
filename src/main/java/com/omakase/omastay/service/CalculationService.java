@@ -66,7 +66,9 @@ public class CalculationService {
     }
 
     public int insertCal(HostCalculationDTO item, Integer hIdx){
-        CalculationDTO cal = new CalculationDTO();
+        CalculationDTO cal = calculationRepository.findHostAndMonth(hIdx, item.getMonth());
+        if(cal == null) {
+        cal = new CalculationDTO();
         cal.setHIdx(hIdx);
         cal.setCalAmount(item.getCalAmount());
         LocalDateTime calMonth = LocalDateTime.of(item.getYear(), item.getMonth(), 1, 0, 0, 0);
@@ -75,6 +77,18 @@ public class CalculationService {
         cal.setCalRegTime(LocalDateTime.now());
         calculationRepository.save(CalculationMapper.INSTANCE.toCalculation(cal));
         return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    //호스트 월별 정산 리스트 
+    @Transactional(readOnly = true)
+    public List<HostSalesDTO> getMonthHostCal(Integer hidx, Integer year, Integer month) {
+
+        List<HostSalesDTO> hostsal = salesRepository.findHostMonthSales(hidx, year, month);
+
+        return hostsal;
     }
 
 

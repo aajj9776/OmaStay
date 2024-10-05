@@ -19,7 +19,7 @@
         class="m-[0px] w-[600px] flex flex-col items-start justify-start gap-[27.5px] min-w-[600px] max-w-full mq1800:flex-1 mq1800:min-w-full"
       >
         <div
-          class="w-[340px] flex flex-col items-start justify-start pt-0 px-0 pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
+          class="w-[700px] flex flex-col items-start justify-start pt-0 px-0 pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
         >
           <div
             class="w-[211.8px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[10px] mb-[40px]"
@@ -165,11 +165,20 @@
               </a>
             </div>
             <div class="self-stretch h-[1px] relative bg-[#f5f5f5]"></div>
-            <b
-              class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[66.6px] whitespace-nowrap mb-[10px]"
-              >할인 적용</b
-            >
           </div>
+   
+          <div id="noLogin" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-4 rounded-lg shadow-lg flex items-center justify-between w-full mb-6">
+            <div class="flex items-center space-x-3">
+              <svg class="h-5 w-5 text-white opacity-80"><!-- Paintbrush icon --></svg>
+              <span class="text-sm font-semibold tracking-wide">로그인 하시면 할인 쿠폰을 이용할 수 있습니다.</span>
+            </div>
+            <svg class="h-5 w-5 text-white opacity-80"><!-- ChevronRight icon --></svg>
+          </div>
+
+          <div id="login">
+          <b
+          class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[66.6px] whitespace-nowrap mb-[10px]"
+          >할인 적용</b>
           <div
             class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
           >
@@ -386,7 +395,41 @@
             </div>
           </div>
         </div>
+
+          <div class="mt-6 w-[550px]">
+            <h3 class="text-lg font-semibold mb-3 flex items-center text-blue-600">
+              예약 안내
+            </h3>
+            <ul class="space-y-3 text-sm text-gray-700">
+              <li class="flex items-start">
+                <img src="/image/reservation/image1.png" class="w-5 h-5 mr-2 text-blue-500"></img>
+                <div>
+                  <span class="font-semibold">체크인/아웃:</span><br>
+                  체크인: 오후 3시 이후<br>
+                  체크아웃: 오전 11시까지
+                </div>
+              </li>
+              <li class="flex items-start">
+                <img src="/image/reservation/image2.png" class="w-5 h-5 mr-2 text-blue-500"><!-- Car icon --></img>
+                <div>
+                  <span class="font-semibold">주차:</span><br>
+                  무료 주차 가능 (사전 예약 필요)
+                </div>
+              </li>
+              <li class="flex items-start">
+                <img src="/image/reservation/image3.png" class="w-5 h-5 mr-2 text-blue-500"><!-- Cancel icon --></img>
+                <div>
+                  <span class="font-semibold">취소 정책:</span><br>
+                  체크인 3일 전까지 무료 취소 가능
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
+
+
+
       <div
         class="w-[340px] flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
       >
@@ -663,12 +706,8 @@
 
       function membershipSale() {
         let gradeSale = localStorage.getItem("grade");
-        console.log("멤버쉽" + gradeSale);
-        console.log("가겨" + originPrice);
 
         let grade = JSON.parse(gradeSale);
-        console.log(originPrice);
-        console.log(grade.gsale);
 
         if (grade != null) {
           amount = originPrice * (grade.gsale / 100);
@@ -874,7 +913,23 @@
             $("body").removeClass("overflow-hidden"); // 모달이 닫히면 스크롤 허용
           }
         });
+        loginCheck();
+
       });
+
+      function loginCheck(){
+        if( user != null){
+          $("#login").removeClass("hidden");
+          $("#noLogin").addClass("hidden")
+        } else {
+          $("#login").addClass("hidden");
+          $("#noLogin").removeClass("hidden")
+        }
+      }
+
+      $("#noLogin").click(function(){
+        location.href = "/login/user";
+      })
 
       function verifyCode() {
         if (timerExpired) {
@@ -992,13 +1047,17 @@
       // ------  SDK 초기화 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
       const clientKey = "test_ck_PBal2vxj81jDG7MyAXLR35RQgOAN";
-      const customerKey = "reserver" + user.id; //회원번호
+      let customerKey;
+      if (user != null) {
+        customerKey = "reserver" + user.id; //회원번호
+      } else {
+        customerKey = TossPayments.ANONYMOUS;
+      }
       const tossPayments = TossPayments(clientKey);
       // 회원 결제
       // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
 
       // 비회원 결제
-      // const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
 
       // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
@@ -1019,6 +1078,29 @@
 
         const payment = tossPayments.payment({ customerKey });
 
+        let url =
+          "?resName=" +
+          encodeURIComponent(resName) +
+          "&resEmail=" +
+          encodeURIComponent(resEmail) +
+          "&couponId=" +
+          encodeURIComponent(couponId) +
+          "&nsalePrice=" +
+          encodeURIComponent(nsale_price) +
+          "&payCoupon=" +
+          encodeURIComponent(couponPrice) +
+          "&payPoint=" +
+          encodeURIComponent(usePoints) +
+          "&payGrade=" +
+          encodeURIComponent(amount);
+
+        if (user != null) {
+          url += "&memIdx=" + encodeURIComponent(user.id);
+        }
+
+        let successUrl =
+          window.location.origin + "/reservation/payment_success" + url;
+
         // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
         // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
         await payment.requestPayment({
@@ -1029,24 +1111,7 @@
           },
           orderId: orderNumber, // 고유 주분번호
           orderName: "한별이~^^", //방이름
-          successUrl:
-            window.location.origin +
-            "/reservation/payment_success?resName=" +
-            encodeURIComponent(resName) +
-            "&resEmail=" +
-            encodeURIComponent(resEmail) +
-            "&couponId=" +
-            encodeURIComponent(couponId) +
-            "&nsalePrice=" +
-            encodeURIComponent(nsale_price) +
-            "&payCoupon=" +
-            encodeURIComponent(couponPrice) +
-            "&payPoint=" +
-            encodeURIComponent(usePoints) +
-            "&payGrade=" +
-            encodeURIComponent(amount) +
-            "&memIdx=" +
-            encodeURIComponent(user.id), // 결제 요청이 성공하면 리다이렉트되는 URL
+          successUrl: successUrl, // 결제 요청이 성공하면 리다이렉트되는 URL
           failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
           customerEmail: resEmail, //회원 이메일
           customerName: resName, //회원이름
