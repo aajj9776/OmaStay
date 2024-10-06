@@ -78,9 +78,9 @@ jobs:
         run: |
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker rm -f certbot || true"
 
-      - name: Create required directory on EC2 and set permissions
+      - name: Create and set permissions for required directory on EC2
         run: |
-          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /var/www/certbot && sudo chmod 777 /var/www/certbot && echo 'Directory created and permissions set to 777.'"
+          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /var/www/certbot && sudo chmod 777 /var/www/certbot"
 
       - name: Verify directory creation and permissions on EC2
         run: |
