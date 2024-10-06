@@ -80,7 +80,9 @@ jobs:
 
       - name: Create and set permissions for required directory on EC2
         run: |
+          echo "Creating /var/www/certbot directory"
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /var/www/certbot && sudo chmod 777 /var/www/certbot"
+          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "ls -ld /var/www/certbot && echo 'Directory successfully created and permissions set' || echo 'Failed to create directory'"
 
       - name: Verify directory creation and permissions on EC2
         run: |
