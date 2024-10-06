@@ -8,6 +8,7 @@ import com.omakase.omastay.vo.StartEndVo;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -19,8 +20,7 @@ import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -73,18 +73,62 @@ public class SearchController {
         AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable);
 
         List<ResultAccommodationsDTO> resultAccommodations = accommodationResponseDTO.getAccommodations();
-
+        List<ResultAccommodationsDTO> resultAccommodationsMap = accommodationResponseDTO.getAccommodationsMap();
 
         System.out.println(resultAccommodations);
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("resultAccommodations", resultAccommodations);
         mv.addObject("pageNation", accommodationResponseDTO.getPageNation());
+        mv.addObject("resultAccommodationsMap", resultAccommodationsMap);
         mv.addObject("includeSearchBar", true);
         mv.setViewName("search/domestic-accommodations");
 
         return mv;
     }
+
+
+    @PostMapping(value = "/domestic-accommodations")
+    public ResponseEntity<Map<String, Object>> searchModal(@ModelAttribute @Valid FilterDTO search,
+                                                           BindingResult bindingResult,
+                                                           @RequestParam(name = "checkIn") String checkIn,
+                                                           @RequestParam(name = "checkOut") String checkOut,
+                                                           @RequestParam(name = "page", defaultValue = "1") int page,
+                                                           @RequestParam(name = "size", defaultValue = "1") int size) {
+        // Validation error 존재시 처리
+        if (bindingResult.hasErrors()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("error", "Validation failed");
+            response.put("details", bindingResult.getAllErrors());
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // yyyy-MM-dd 형식의 문자열을 LocalDate로 파싱
+        LocalDate checkInDate = LocalDate.parse(checkIn, DATE_FORMATTER);
+        LocalDate checkOutDate = LocalDate.parse(checkOut, DATE_FORMATTER);
+
+        // LocalDate를 LocalDateTime으로 변환
+        LocalDateTime checkInDateTime = checkInDate.atStartOfDay();
+        LocalDateTime checkOutDateTime = checkOutDate.atStartOfDay();
+
+        // StartEndVo 객체 생성 후 FilterDTO에 설정
+        search.setStartEndDay(new StartEndVo(checkInDateTime, checkOutDateTime));
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable);
+
+        List<ResultAccommodationsDTO> resultAccommodations = accommodationResponseDTO.getAccommodations();
+        List<ResultAccommodationsDTO> resultAccommodationsMap = accommodationResponseDTO.getAccommodationsMap();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("resultAccommodations", resultAccommodations);
+        response.put("pageNation", accommodationResponseDTO.getPageNation());
+        response.put("resultAccommodationsMap", resultAccommodationsMap);
+        response.put("includeSearchBar", true);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
     @InitBinder

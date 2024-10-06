@@ -23,9 +23,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Member
     @Query("SELECT m FROM Member m WHERE m.memberProfile.email = :email")
     Member findByEmail(@Param("email") String email);
 
-    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.reservations WHERE m.id = :memberId")
-    Optional<Member> findMemberWithReservations(@Param("memberId") int memberId);
-
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.grade WHERE m.id = :memberId")
     Member findMemberWithGrade(@Param("memberId") int memberId);
 

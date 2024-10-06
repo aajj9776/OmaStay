@@ -13,8 +13,8 @@ import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.HStep;
 import com.omakase.omastay.entity.enumurate.ImgCate;
-import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.omakase.omastay.mapper.HostInfoMapper;
+import com.omakase.omastay.mapper.ImageMapper;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.ImageRepository;
@@ -128,6 +128,14 @@ public class RoomInfoService {
             newPrice.setRegularPrice(roomRegDTO.getPrice().getRegularPrice());
             priceRepository.save(newPrice);
         }
+
+        List<Image> existingImages = imageRepository.findByRoomInfoId(roomInfo.getId());
+        if(existingImages != null) {
+            for (Image existingImage : existingImages) {
+                existingImage.setImgStatus(BooleanStatus.FALSE);
+                imageRepository.save(existingImage);
+            }
+        }
         
         for (ImageDTO imageDTO : roomRegDTO.getImages()) {
                 Image newImage = new Image();
@@ -182,4 +190,21 @@ public class RoomInfoService {
         RoomInfo roomInfo = roomInfoRepository.findById(id);
         return RoomInfoMapper.INSTANCE.toRoomInfoDTO(roomInfo);
     }
+
+    public RoomInfoDTO getRoomInfo(Integer roomIdx) {
+        RoomInfo res = roomInfoRepository.findById(roomIdx).get();
+        return RoomInfoMapper.INSTANCE.toRoomInfoDTO(res);
+    }
+
+    public ImageDTO getImage(Integer hIdx) {
+        System.out.println(ImgCate.HOST);
+        Image image = imageRepository.findByHostInfoAndImgCate(hIdx, ImgCate.HOST).get(0);
+        System.out.println("서비스 이미지" + image);
+        return ImageMapper.INSTANCE.toImageDTO(image);
+    }
+
+    public HostInfoDTO getHostInfo(Integer hIdx) {
+        return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfoRepository.findById(hIdx).get());
+    }
+
 }

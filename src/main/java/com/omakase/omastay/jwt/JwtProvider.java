@@ -44,7 +44,7 @@ public class JwtProvider {
         //그냥 생성자로 생성해서 만들면 인자들이 뭐가 뭔지 몰라서 빌드 패턴을
         // 쓰는게 가독성이 좋다
         JwtBuilder jwtBuilder = Jwts.builder()
-                                    .subject("ljh")//토큰이름 지정 
+                                    .subject("user")//토큰이름 지정 
                                     .expiration(accessTokenExpiresIn); //유효시간 설정
         
         // map 담겨있는 개인정보를 뺴서 set에 담음

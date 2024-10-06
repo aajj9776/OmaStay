@@ -10,13 +10,13 @@ spring:
     password: omastay18
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 100
-      minimum-idle: 10
+      maximum-pool-size: 50
+      minimum-idle: 5
       idle-timeout: 600000
-      max-lifetime: 1800000
+      max-lifetime: 30000
       connection-timeout: 30000
       validation-timeout: 5000
-      leak-detection-threshold: 15000
+      leak-detection-threshold: 30000
       pool-name: HikariPool
       register-mbeans: true
   jpa:
@@ -48,6 +48,7 @@ spring:
           encoding: UTF-8
     auth-code-expiration-millis: 180000
   data:
+    # Redis aws에 설치함 컴포즈에 만들어야됨
     redis:
       host: 18.116.238.9
       port: 6379
@@ -60,6 +61,8 @@ spring:
         project-id: artful-mystery-436200-n4
         bucket: omastay
   thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
     enums:
       use-class-for-enum-values: true
   jackson:

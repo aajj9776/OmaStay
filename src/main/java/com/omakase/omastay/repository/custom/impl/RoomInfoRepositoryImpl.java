@@ -78,12 +78,12 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
 
 
     @Override
-    public List<Tuple> findHostsByRoomIds(List<Integer> roomIdxs) {
+    public List<Tuple> findHostsByRoomIds(List<Integer> roomIds) {
         return (queryFactory
                 .select(hostInfo.id, hostInfo.hname, hostInfo.hCate, hostInfo.xAxis, hostInfo.yAxis)  // hname 변경
                 .from(roomInfo)
                 .join(hostInfo).on(roomInfo.hostInfo.id.eq(hostInfo.id))
-                .where(roomInfo.id.in(roomIdxs)).distinct()
+                .where(roomInfo.id.in(roomIds)).distinct()
                 .fetch());
     }
 
