@@ -60,11 +60,11 @@ jobs:
 
     - name: Install Docker using convenience script on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
+        ssh -t -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
     - name: Add ubuntu user to Docker group and restart Docker on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -t -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo usermod -aG docker ubuntu
           sudo systemctl restart docker
           exit
@@ -72,17 +72,22 @@ jobs:
 
     - name: Verify Docker permissions on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
+        ssh -t -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
 
-    - name: SSH into EC2 and run Certbot for SSL certificates
+    - name: Remove existing Certbot container if exists
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -t -o StrictHostKeyChecking-no ubuntu@${{ secrets.HOST }} "docker rm -f certbot || true"
+
+    - name: SSH into EC2, create required directory, and run Certbot for SSL certificates
+      run: |
+        ssh -t -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+          sudo mkdir -p /var/www/certbot
           docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d certbot/certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org
         EOF
 
     - name: SSH into EC2 and run Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -t -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
           docker-compose down
           docker-compose up -d --build
