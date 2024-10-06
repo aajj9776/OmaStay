@@ -88,8 +88,15 @@ jobs:
         run: |
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "if [ -d '/var/www/certbot' ]; then echo 'Directory exists and permissions are set.'; else echo 'Directory does not exist or permissions not set correctly.'; fi"
 
+      - name: Verify certbot directory and permissions
+        run: |
+          echo "Verifying certbot directory and permissions"
+          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo ls -ld /var/www/certbot"
+          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo ls -l /var/www"
+
       - name: Run Certbot for SSL certificates on EC2
         run: |
+          echo "Running certbot"
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d certbot/certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org"
 
       - name: SSH into EC2 and run Docker Compose down
