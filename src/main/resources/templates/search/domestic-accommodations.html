@@ -250,7 +250,7 @@
 <div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden z-50"
      id="modal-wrap">
     <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{/search/modal :: search_modal}"
-         th:with="accommodations=${resultAccommodations}"></div>
+         th:with="resultAccommodations=${resultAccommodationsMap}"></div>
 </div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212"></script>
 <script th:inline="javascript">
@@ -272,7 +272,7 @@
     };
 
     $(document).ready(function () {
-        resultAccommodations = /*[[${resultAccommodations}]]*/ '[]';
+        resultAccommodations = /*[[${resultAccommodationsMap}]]*/ '[]';
 
         // URL에서 필터 값을 받아오기
         sortTypeValue= getUrlParameter('sortType');
@@ -303,6 +303,8 @@
 
             $('#dropdown-sortType-button').text(selectedText);
             $('#dropdown-sortType-button').val(selectedValue);
+
+            performSearch('main');
         });
 
         // 시설 필터 버튼 클릭 이벤트 핸들러
@@ -520,7 +522,7 @@
         $("#modal-wrap").css("display", "flex");
         $("body").css("overflow", "hidden");
 
-        loadKaKaoMap();
+        loadKaKaoMap(resultAccommodations);
 
         setFacilities(facilitiesValue, "modal");
         setHCate(hCateValue, "modal");
@@ -582,18 +584,35 @@
     // 검색 실행 함수
     function debouncedPerformSearch(identifier, page = 1) {
         // 동적으로 가져온 값을 사용
+        const facilities = getSelectedFacilities(identifier);
+        console.log(facilities);
+        let hCate = getHCate(identifier);
+        let startPrice = $('#slider-start-' + identifier).val();
+        let endPrice = $('#slider-end-' + identifier).val();
+        let keyword = sessionStorage.getItem('keyword');
+        let startDay = sessionStorage.getItem('startDate');
+        let endDay = sessionStorage.getItem('endDate');
+        const person = sessionStorage.getItem('people');
+        const sortType = getSortType(identifier)
+        console.log(facilities
+            + " facilities"
+            + hCate
+            + " hCate"
+            + startPrice
+            + " startPrice"
+            + endPrice
+            + " endPrice"
+            + keyword
+            + " keyword"
+            + startDay
+            + " startDay"
+            + endDay
+            + " endDay"
+            + person
+            + " person"
+            + sortType
+            + " sortType");
         if (identifier === "main") {
-            const facilities = getSelectedFacilities(identifier);
-            console.log(facilities);
-            let hCate = getHCate(identifier);
-            let startPrice = $('#slider-start-' + identifier).val();
-            let endPrice = $('#slider-end-' + identifier).val();
-            let keyword = sessionStorage.getItem('keyword');
-            let startDay = sessionStorage.getItem('startDate');
-            let endDay = sessionStorage.getItem('endDate');
-            const person = sessionStorage.getItem('people');
-            const sortType = getSortType(identifier)
-
             console.log("page: ", page);
 
             // Query String 구성
@@ -641,6 +660,29 @@
             window.location.href = `/search/domestic-accommodations${queryString}`;
         } else if (identifier == "modal") {
             // modal에 대한 로직 추가 (현재 비어 있습니다)
+            //f_idx클래스를 가진 버튼들의 value값을 가져와서 배열에 저장
+            $.ajax({
+                url: "/search/domestic-accommodations",
+                type: "POST",
+                data: {
+                    facilities: facilities,
+                    hCate: hCate,
+                    startPrice: startPrice,
+                    endPrice: endPrice,
+                    keyword: keyword,
+                    checkIn: startDay,
+                    checkOut: endDay,
+                    person: person,
+                    sortType: sortType,
+                    page: page
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
         }
     }
 
@@ -663,14 +705,15 @@
 
 
     // 카카오맵 로드
-    function loadKaKaoMap() {
+    function loadKaKaoMap(resultAccommodations) {
         initKaKaoMap();
-        addMarkersTooMuch();
+        addMarkersTooMuch(resultAccommodations);
     }
 
     let map;
     let markers = [];
     let clickedMarkerId = null; // 클릭된 마커 ID 보관 변수
+    let prevInfoWindow = null;
 
     function initKaKaoMap() {
         let container = document.getElementById('map');
@@ -681,7 +724,7 @@
         map = new kakao.maps.Map(container, options);
     }
 
-    function addMarkersTooMuch() {
+    function addMarkersTooMuch(resultAccommodations) {
         removeMarkers(); // 이전의 마커를 제거합니다.
 
         let bounds = new kakao.maps.LatLngBounds();
@@ -851,6 +894,48 @@
         });
 
         map.setBounds(bounds);
+    }
+
+    function handleAccommodationClick(hidx) {
+        console.log(hidx);
+        if (!map) {
+            console.error("Map 객체가 초기화되지 않았습니다.");
+            return;
+        }
+
+        let marker = markers[hidx];
+        let infowindow = infowindows[hidx];
+        if (marker && infowindow) {
+            // 이전 마커 및 인포윈도우 닫기
+            if (clickedMarkerId !== null) {
+                let prevMarkerElement = document.getElementById(`marker-${clickedMarkerId}`);
+                let prevMarkerWrapperElement = document.getElementById(`marker-wrapper-${clickedMarkerId}`);
+                if (prevMarkerElement) {
+                    prevMarkerElement.classList.remove('bg-black');
+                    prevMarkerWrapperElement.querySelector(".custom-arrow").classList.remove('border-t-black');
+                    prevMarkerElement.classList.add('bg-gray-400');
+                }
+                if (prevInfoWindow) prevInfoWindow.setMap(null);
+            }
+
+            // 클릭된 마커 및 인포윈도우 열기
+            if (clickedMarkerId !== hidx) {
+                clickedMarkerId = hidx;
+                prevInfoWindow = infowindow;
+                let markerElement = document.getElementById(`marker-${hidx}`);
+                let markerWrapperElement = document.getElementById(`marker-wrapper-${hidx}`);
+                markerElement.classList.remove('bg-gray-400');
+                markerElement.classList.add('bg-black');
+                markerWrapperElement.querySelector(".custom-arrow").classList.add('border-t-black');
+                infowindow.setMap(map);
+                map.panTo(marker.getPosition());
+            } else {
+                clickedMarkerId = null;
+                prevInfoWindow = null;
+            }
+        } else {
+            console.warn(`Marker or Infowindow for hidx ${hidx}가 존재하지 않습니다.`);
+        }
     }
 
     // 마커를 제거하는 함수

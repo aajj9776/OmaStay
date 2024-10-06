@@ -68,21 +68,6 @@ public class FacilitiesService {
 
         System.out.println("검색어 필터링 후: " + allHostRoomIds);
 
-        if (isPriceFilteringRequired(filterDTO)) {
-            List<Integer> allRoomIds = allHostRoomIds.stream()
-                    .map(tuple -> tuple.get(roomInfo.id))
-                    .distinct()
-                    .toList();
-
-            // 가격 필터링
-            List<Integer> validAllRoomId = priceRepository.priceFiltering(filterDTO, allRoomIds);
-
-            // 유효한 호텔 ID를 가진 튜플 필터링
-            allHostRoomIds = allHostRoomIds.stream()
-                    .filter(tuple -> validAllRoomId.contains(tuple.get(roomInfo.id)))
-                    .toList();
-        }
-
         if (filterDTO.getFacilities() != null && !filterDTO.getFacilities().isEmpty()) {
             List<Integer> allHostIds = allHostRoomIds.stream()
                     .map(tuple -> tuple.get(hostInfo.id))
@@ -98,6 +83,46 @@ public class FacilitiesService {
                     .toList();
         }
 
+        List<Integer> allHostIds = allHostRoomIds.stream()
+                .map(tuple -> tuple.get(hostInfo.id))
+                .distinct()
+                .toList();
+
+
+        // 가격엔티티 가져오기
+        List<Price> priceList = priceRepository.findAvgPriceByHostIds(allHostIds);
+
+        // 호스트별(예약 가능한 호스트) 평균가격(ResultAccommodationsDTO에 셋)
+        List<HostAvgPriceDTO> avgPrice = AvgPrice(priceList, filterDTO.getStartEndDay());
+
+        if (isPriceFilteringRequired(filterDTO)) {
+            Integer startPrice = filterDTO.getStartPrice();
+            Integer endPrice = filterDTO.getEndPrice();
+
+            final int finalStartPrice = (startPrice != null) ? startPrice : 0;
+
+            if (endPrice == null || endPrice == 500000) {
+                // startPrice 이상의 가격만 필터링
+                avgPrice = avgPrice.stream()
+                        .filter(price -> price.getAvgPrice() >= finalStartPrice)
+                        .collect(Collectors.toList());
+            } else {
+                // startPrice와 endPrice 범위 내의 가격만 필터링
+                final int finalEndPrice = endPrice;
+                avgPrice = avgPrice.stream()
+                        .filter(price -> price.getAvgPrice() >= finalStartPrice && price.getAvgPrice() < finalEndPrice)
+                        .collect(Collectors.toList());
+            }
+
+            List<Integer> avgPriceHostIds = avgPrice.stream()
+                    .map(HostAvgPriceDTO::getHostIdx)
+                    .toList();
+
+            allHostRoomIds = allHostRoomIds.stream()
+                    .filter(tuple -> avgPriceHostIds.contains(tuple.get(hostInfo.id)))
+                    .toList();
+        }
+
         // 튜플에서 룸인포 키값만 가져오기
         List<Integer> roomIdxs = allHostRoomIds.stream()
                 .map(tuple -> tuple.get(roomInfo.id))
@@ -106,11 +131,37 @@ public class FacilitiesService {
         // 검색어의 해당하는 리스트 중 해당 날짜 예약이 가능한 룸인포 키값과 호스트인포 키값 필터링(roomInfo.id 리스트)
         List<Tuple> availableHost = roomInfoRepository.dateFiltering(filterDTO.getStartEndDay(), roomIdxs);
 
+
+        if (isPriceFilteringRequired(filterDTO))
+        {
+            // 예약 가능한 호스트 ID 추출
+            List<Integer> availableHostIds = availableHost.stream()
+                    .map(tuple -> tuple.get(hostInfo.id))
+                    .distinct()
+                    .toList();
+
+            //예약 불가능 호스트 ID 추출
+            List<Integer> unavailableHostIds = allHostIds.stream()
+                    .filter(hostId -> !availableHostIds.contains(hostId))
+                    .toList();
+
+            //avgPrice에서 예약 불가능 호스트 ID를 가진 avgPrice의 가격을 null 처리
+            avgPrice = avgPrice.stream()
+                    .peek(price -> {
+                        if (unavailableHostIds.contains(price.getHostIdx())) {
+                            price.setAvgPrice(null);
+                        }
+                    })
+                    .collect(Collectors.toList());
+        }
+
+
         if (filterDTO.isSoldOut()) {
             roomIdxs = availableHost.stream()
                     .map(tuple -> tuple.get(roomInfo.id))
                     .collect(Collectors.toList());
         }
+
 
         // 호스트 키값이랑 호텔 이름, x좌표, y좌표 가져오기(ResultAccommodationsDTO에 셋)
         List<Tuple> hostInfos = roomInfoRepository.findHostsByRoomIds(roomIdxs);
@@ -120,18 +171,8 @@ public class FacilitiesService {
                 .map(tuple -> tuple.get(hostInfo.id))
                 .collect(Collectors.toList());
 
-        // 예약 가능한 호스트 ID 추출
-        List<Integer> availableHostIds = availableHost.stream()
-                .map(tuple -> tuple.get(hostInfo.id)).distinct().collect(Collectors.toList());
-
         // 리뷰 평점과 리뷰 몇 명이 남겼는지 가져오기(ResultAccommodationsDTO에 셋)
         List<Tuple> ratingAndReviewCount = reviewRepository.findReviewStatsByHostIds(hostIds);
-
-        // 가격엔티티 가져오기
-        List<Price> priceList = priceRepository.findAvgPriceByHostIds(availableHostIds);
-
-        // 호스트별(예약 가능한 호스트) 평균가격(ResultAccommodationsDTO에 셋)
-        List<HostAvgPriceDTO> avgPrice = AvgPrice(priceList, filterDTO.getStartEndDay());
 
         // 이미지 가져오기
         List<Tuple> imageNames = imageRepository.findImageNamesByHostIds(hostIds);
@@ -145,7 +186,7 @@ public class FacilitiesService {
             ResultAccommodationsDTO resultAccommodationsDTO = new ResultAccommodationsDTO();
             resultAccommodationsDTO.setHIdx(hostId);
             resultAccommodationsDTO.setHCate((hostInfoTuple.get(hostInfo.hCate)));
-            resultAccommodationsDTO.setHCateKo(hostInfoTuple.get(hostInfo.hCate).getDescription());
+            resultAccommodationsDTO.setHCateKo(Objects.requireNonNull(hostInfoTuple.get(hostInfo.hCate)).getDescription());
             resultAccommodationsDTO.setHName(hostInfoTuple.get(hostInfo.hname));
             resultAccommodationsDTO.setXAxis(hostInfoTuple.get(hostInfo.xAxis));
             resultAccommodationsDTO.setYAxis(hostInfoTuple.get(hostInfo.yAxis));
@@ -185,6 +226,8 @@ public class FacilitiesService {
             }
         }
 
+
+
         // 4. 이미지 이름을 세팅
         for (Tuple imageTuple : imageNames) {
             Integer hostId = imageTuple.get(hostInfo.id);
@@ -195,7 +238,25 @@ public class FacilitiesService {
             }
         }
 
-        // 모든 결과 리스트
+        //모든 결과 리스트
+
+        // 최종 결과 반환
+        return paginateAccommodations(pageable, resultMap);
+    }
+
+
+    //숙소 검색 필터링(roomInfo.id 리스트 반환)
+    @Transactional(readOnly = true)
+    protected List<Tuple> searchKeyword(FilterDTO filterDTO) {
+
+        //1. 검색어 필터링(roomInfo.id 리스트)
+        List<Integer> keyword = hostInfoRepository.keywordFiltering(filterDTO);
+
+        //2. 검색어의 해당하는 리스트중 해당 인원수 이상의 숙소만 필터링(roomInfo.id 리스트)
+        return roomInfoRepository.personFiltering(filterDTO, keyword);
+    }
+
+    private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap) {
         List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
 
         // 기본 페이지네이션 결과 생성
@@ -206,13 +267,13 @@ public class FacilitiesService {
         // 100개의 항목을 기준으로 한 페이지네이션 처리
         List<ResultAccommodationsDTO> limitedResultList = new ArrayList<>();
 
-        int limitedPageStart = start; // 첫 번째 페이지 시작 인덱스 그대로 사용
-        int limitedPageEnd = limitedPageStart + 100; // 첫 번째 페이지 start + 100개의 항목
+        // 첫 번째 페이지 시작 인덱스 그대로 사용
+        int limitedPageEnd = start + 100; // 첫 번째 페이지 start + 100개의 항목
 
         limitedPageEnd = Math.min(limitedPageEnd, resultAccommodationsDTOList.size());
 
-        if (limitedPageStart < resultAccommodationsDTOList.size()) {
-            limitedResultList = resultAccommodationsDTOList.subList(limitedPageStart, limitedPageEnd);
+        if (start < resultAccommodationsDTOList.size()) {
+            limitedResultList = resultAccommodationsDTOList.subList(start, limitedPageEnd);
         }
 
         // Pagination 정보 설정 (기본 페이지네이션 기준)
@@ -231,21 +292,9 @@ public class FacilitiesService {
         result.setAccommodations(paginatedList);
         result.setPageNation(pageNation);
         result.setAccommodationsMap(limitedResultList); // 수정된 limitedResultList 설정
-
-        // 최종 결과 반환
         return result;
     }
 
-    //숙소 검색 필터링(roomInfo.id 리스트 반환)
-    @Transactional(readOnly = true)
-    protected List<Tuple> searchKeyword(FilterDTO filterDTO) {
-
-        //1. 검색어 필터링(roomInfo.id 리스트)
-        List<Integer> keyword = hostInfoRepository.keywordFiltering(filterDTO);
-
-        //2. 검색어의 해당하는 리스트중 해당 인원수 이상의 숙소만 필터링(roomInfo.id 리스트)
-        return roomInfoRepository.personFiltering(filterDTO, keyword);
-    }
 
 
 
