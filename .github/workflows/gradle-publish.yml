@@ -62,13 +62,13 @@ jobs:
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
-    - name: Add ubuntu user to Docker group and restart Docker on EC2
+    - name: Add ubuntu user to Docker group
       run: |
-        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          sudo usermod -aG docker ubuntu
-          sudo systemctl restart docker
-          exit
-        EOF
+        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo usermod -aG docker ubuntu"
+
+    - name: Restart Docker on EC2
+      run: |
+        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo systemctl restart docker"
 
     - name: Verify Docker permissions on EC2
       run: |
@@ -78,15 +78,18 @@ jobs:
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker rm -f certbot || true"
 
-    - name: SSH into EC2, create required directory, and run Certbot for SSL certificates
+    - name: Create required directory on EC2
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /var/www/certbot"
+
+    - name: Run Certbot for SSL certificates on EC2
+      run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d certbot/certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org"
 
-    - name: SSH into EC2 and run Docker Compose
+    - name: SSH into EC2 and run Docker Compose down
       run: |
-        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          cd /home/ubuntu/OmaStay
-          docker-compose down
-          docker-compose up -d --build
-        EOF
+        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && docker-compose down"
+
+    - name: SSH into EC2 and run Docker Compose up
+      run: |
+        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && docker-compose up -d --build"
