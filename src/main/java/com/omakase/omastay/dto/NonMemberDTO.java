@@ -2,12 +2,13 @@ package com.omakase.omastay.dto;
 
 import com.omakase.omastay.entity.NonMember;
 import com.querydsl.core.annotations.QueryProjection;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class NonMemberDTO {
     private Integer id;
@@ -15,9 +16,6 @@ public class NonMemberDTO {
     private String nonPhone;
     private String nonEmail;
     private String nonNone;
-
-
-
 
     public NonMemberDTO(NonMember nonMember) {
         this.id = nonMember.getId();

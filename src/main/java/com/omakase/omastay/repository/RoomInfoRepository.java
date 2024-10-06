@@ -1,4 +1,5 @@
 package com.omakase.omastay.repository;
+
 import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+
 public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer>, RoomInfoRepositoryCustom {
 
     RoomInfo findByHostInfoId(int hIdx);

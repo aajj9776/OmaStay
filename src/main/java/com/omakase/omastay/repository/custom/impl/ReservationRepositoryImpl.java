@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.omakase.omastay.entity.QHostInfo;
+import com.omakase.omastay.entity.QPayment;
 import com.omakase.omastay.entity.QReservation;
+import com.omakase.omastay.entity.QRoomInfo;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.ResStatus;
@@ -18,6 +21,9 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private static final QReservation reservation = QReservation.reservation;
+    private static final QRoomInfo roomInfo = QRoomInfo.roomInfo;
+    private static final QHostInfo hostInfo = QHostInfo.hostInfo;
+    private static final QPayment payment = QPayment.payment;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public ReservationRepositoryImpl(JPAQueryFactory queryFactory) {
@@ -57,6 +63,19 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
         } else {       
 		    return reservation.resStatus.eq(ResStatus.valueOf(resStatus));
         }
+    }
+
+    public List<Reservation> get5List(Integer memId) {
+        return queryFactory
+                .select(reservation)
+                .from(reservation)
+                .join(reservation.roomInfo, roomInfo)
+                .join(roomInfo.hostInfo, hostInfo)
+                .join(reservation.payment, payment)
+                .where(reservation.member.id.eq(memId))
+                .orderBy(payment.payDate.desc())
+                .limit(5) // 결과를 5건으로 제한
+                .fetch();
     }
 
 }

@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.apache.tomcat.util.http.parser.Host;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -24,7 +23,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,13 +34,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
-import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.PriceDTO;
-import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.ReviewCommentDTO;
 import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
@@ -56,9 +54,9 @@ import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
 import com.omakase.omastay.entity.AdminMember;
+import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Sales;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
-import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.AdminMemberService;
@@ -67,6 +65,7 @@ import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
+import com.omakase.omastay.service.ImageService;
 import com.omakase.omastay.service.PaymentService;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.ReservationService;
@@ -126,6 +125,9 @@ public class HostController {
 
     @Autowired
     private CalculationService calculationService; 
+
+    @Autowired
+    private ImageService imageService;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -205,11 +207,14 @@ public class HostController {
             }
 
             HostInfoCustomDTO hostInfoCustomDTO = hostInfoService.findHostInfoByHostInfoId(hostMypageDTO.getHostInfo().getId());
+            List<ImageDTO> image = imageService.getHostImages(hostMypageDTO.getHostInfo().getId());
+            System.out.println("이미지:"+image.get(0).getImgName().getFName());
+            mv.addObject("image", image);
             mv.addObject("hostMypageDTO", hostMypageDTO);
             mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
         }
-
-
+        System.out.println("storage:"+upload);
+        mv.addObject("storage", upload);
         mv.addObject("facilities", facilities);
         mv.setViewName("host/host_info");
 
@@ -247,7 +252,44 @@ public class HostController {
                 if(hostInfoDTO.getHStatus() != null){
                 mv.addObject("hStatus", hostInfoDTO.getHStatus().name());    
                 }
+                List<ReviewDTO> dayList = reviewService.getReviewDay(hostInfoDTO);
+                if(dayList != null){
+                    mv.addObject("revDayCount", dayList.size());
+                    System.out.println("revDayCount:"+dayList.size());
+                }
+                List<ReviewDTO> weekList = reviewService.getReviewWeek(hostInfoDTO);
+                if(weekList != null){
+                    mv.addObject("revWeekCount", weekList.size());
+                    System.out.println("revWeekCount:"+weekList.size());
+                }
+                List<ReviewDTO> monthList = reviewService.getReviewMonth(hostInfoDTO);
+                if(monthList != null){
+                    mv.addObject("revMonthCount", monthList.size());
+                    System.out.println("revMonthCount:"+monthList.size());
+                }
             } 
+            List<RoomInfoDTO> roomInfoDTO = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+            if(roomInfoDTO != null){
+                List<HostReservationDTO> dayList = reservationService.getReservationsDay(roomInfoDTO);
+                if(dayList != null){
+                    mv.addObject("resDayCount", dayList.size());
+                    System.out.println("resDayCount:"+dayList.size());
+                }
+                List<HostReservationDTO> weekList = reservationService.getReservationsWeek(roomInfoDTO);
+                if(weekList != null){
+                    mv.addObject("resWeekCount", weekList.size());
+                    System.out.println("resWeekCount:"+weekList.size());
+                }
+                List<HostReservationDTO> monthList = reservationService.getReservationsMonth(roomInfoDTO);
+                if(monthList != null){
+                    mv.addObject("resMonthCount", monthList.size());
+                    System.out.println("resMonthCount:"+monthList.size());
+                }
+            
+                mv.addObject("roomInfoDTO", roomInfoDTO);
+                
+            }
+
         }
 
         mv.setViewName("host/host_main");
@@ -287,6 +329,7 @@ public class HostController {
 
     @RequestMapping("/paymentdetail")
     public String hostpaymentdetail() {
+
         return "host/host_paymentdetail";
     }
     
@@ -715,15 +758,20 @@ public class HostController {
                 mv.addObject("hCate", hostInfoDTO.getHCate().name());
             }
 
-
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getSemi().getSemiStart() != null) {
-                mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
+            if (priceDTO.getPeakSet() == 1) {
+                if (priceDTO.getSemi() != null && priceDTO.getSemi().getSemiStart() != null) {
+                    mv.addObject("semiPeak", priceDTO.getSemi().getSemiStart());
+                }
+    
+                if (priceDTO.getPeakVo() != null && priceDTO.getPeakVo().getPeakStart() != null) {
+                    mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
+                }
             }
 
-            if (priceDTO.getPeakSet() == 1 && priceDTO.getPeakVo().getPeakStart() != null) {
-                mv.addObject("peak", priceDTO.getPeakVo().getPeakStart());
-            }
+            List<ImageDTO> image = imageService.getImages(Integer.parseInt(id));
+            mv.addObject("image", image);
 
+        mv.addObject("storage", upload);    
         mv.setViewName("host/host_roomchange");
         return mv;
     }
@@ -1104,10 +1152,60 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         for(HostCalculationDTO item : items){
             cnt += calculationService.insertCal(item, hIdx);
         }
-
-        map.put("cnt", cnt);
+        if(cnt > 0){
+            map.put("cnt", cnt);
+        }else{
+            map.put("cnt", "정산 요청 가능한 상태가 아닙니다.");
+        }
 
         return map;
     }
+
+    // 정산 상세보기
+    @RequestMapping(value = "/paylist/view", method = RequestMethod.GET)
+    public ModelAndView payDetail(@RequestParam("year") Integer year, @RequestParam("month") Integer month) throws Exception {
+
+        ModelAndView mv = new ModelAndView();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+
+        List<HostSalesDTO> list = calculationService.getMonthHostCal(hostInfoDTO.getId(),year,month);
+        // ObjectMapper를 사용하여 list를 JSON 문자열로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String jsonList = objectMapper.writeValueAsString(list);
+
+        mv.addObject("list", jsonList); // JSON 문자열을 추가
+        mv.addObject("year", year);
+        mv.addObject("month", month);
+        mv.setViewName("host/host_paymentdetail");
+        
+        return mv;
+        
+    }
+
+    // 호스트 입실예정 리스트
+    @RequestMapping("/checkInList/getList")
+    @ResponseBody
+    public Map<String, Object> checkInList() {
+        Map<String, Object> map = new HashMap<>();
+
+        AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+        if (adminMember != null) {
+            HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+            if (hostInfoDTO != null) {
+                List<RoomInfoDTO> roomInfoDTO = roomInfoService.getAllRoom(hostInfoDTO, BooleanStatus.TRUE);
+                if(roomInfoDTO != null){
+                    List<HostReservationDTO> checkInList = reservationService.findReservationsByCheckIn(roomInfoDTO);
+                    map.put("data", checkInList);
+                }
+            }
+        }
+
+        return map;
+    }
+
 
 }

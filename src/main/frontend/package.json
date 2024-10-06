@@ -4,7 +4,7 @@
   "description": "A frontend project setup with Tailwind CSS and Bootstrap.",
   "repository": {
     "type": "git",
-    "url": "git+https://your-repo-url.git"
+    "url": "git+https://github.com/HaunLee/OmaStay.git"
   },
   "license": "MIT",
   "devDependencies": {

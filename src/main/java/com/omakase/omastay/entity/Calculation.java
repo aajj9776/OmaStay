@@ -35,7 +35,7 @@ public class Calculation {
     @Column(name = "cal_status", nullable = false)
     private CalStatus calStatus;
 
-    @Column(name = "cal_month")
+    @Column(name = "cal_month", nullable = false)
     private LocalDateTime calMonth;
 
     @Column(name = "cal_reg_time")

@@ -20,4 +20,9 @@ public class ImageService {
 
         return ImageMapper.INSTANCE.toImageDTOList(images);
     }
+
+    public List<ImageDTO> getHostImages(Integer hostId) {
+        List<Image> images = imageRepository.findByHostInfoIdAndImgCate(hostId);
+        return ImageMapper.INSTANCE.toImageDTOList(images);
+    }
 }
