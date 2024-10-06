@@ -1,7 +1,5 @@
 package com.omakase.omastay.repository.custom.impl;
 
-import java.util.List;
-
 import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.entity.QCalculation;

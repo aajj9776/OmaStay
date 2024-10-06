@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <style>
-    input {
+    input, textarea{
       border: 1px solid #dddddd;
       border-radius: 4px;
       padding: 5px;
@@ -39,8 +39,13 @@
           <input type="text" th:value="${host.hostInfo.hname}" readonly />
         </div>
         <div class="flex flex-row gap-[16px]">
-          <label>아이디 : </label>
-          <input type="text" readonly />
+          <label>상태 : </label>
+          <div th:switch="${host.hostInfo.hStatus.name()}">
+            <input th:case="'APPLY'" type="text" th:value="신청" readonly />
+            <input th:case="'APPROVE'" type="text" th:value="승인" readonly />
+            <input th:case="'REJECT'" type="text" th:value="거절" readonly />
+            <input th:case="'RELEASE'" type="text" th:value="해제" readonly />
+          </div>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>담당자명 : </label>
@@ -99,8 +104,8 @@
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>호스트 소개 : </label>
-          <input type="textarea" class="h-[200px] w-[800px]" th:value="${host.hostInfo.hostOwnerInfo.hintro}"
-            readonly />
+          <textarea class="h-[200px] w-[800px]" th:text="${host.hostInfo.hostOwnerInfo.hintro}"
+            readonly></textarea>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>편의시설 : </label>
@@ -151,7 +156,7 @@
 
         <div class="flex flex-row gap-[16px]">
           <label>오시는 길 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.directions}" readonly />
+          <textarea class="h-[100px] w-[500px]" th:text="${host.hostInfo.directions}" readonly></textarea>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>업체 이미지 : </label>
@@ -203,11 +208,11 @@
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>숙소 이용 규칙 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.rules}" readonly />
+          <textarea class="h-[100px] w-[500px]" th:text="${host.hostInfo.rules}" readonly></textarea>
         </div>
         <div class="flex flex-row gap-[16px]">
           <label>현장 요금 추가 정보 : </label>
-          <input type="textarea" class="h-[100px] w-[500px]" th:value="${host.hostInfo.priceAdd}" readonly />
+          <textarea class="h-[100px] w-[500px]" th:text="${host.hostInfo.priceAdd}" readonly></textarea>
         </div>
       </div>
 

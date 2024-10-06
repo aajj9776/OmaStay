@@ -1,7 +1,9 @@
 package com.omakase.omastay.service;
 
+import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.PaymentDTO;
+import com.omakase.omastay.dto.RecommendationDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.SalesDTO;
 import com.omakase.omastay.dto.custom.SalesCustomDTO;
@@ -9,6 +11,7 @@ import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
+import com.omakase.omastay.entity.Calculation;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.Sales;
@@ -16,12 +19,16 @@ import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.mapper.SalesMapper;
+import com.omakase.omastay.repository.CalculationRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.SalesRepository;
+
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +49,9 @@ public class SalesService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private CalculationRepository calculationRepository;
 
     @Autowired
     private HostInfoRepository hostInfoRepository;
@@ -93,18 +103,8 @@ public class SalesService {
     }
 
     public List<Top5SalesDTO> getTop5SalesByRegion(String region){
-        //List<Top5SalesDTO> top5SalesDTOs = new ArrayList<>();
 
         List<Top5SalesDTO> top5SalesDTOs = salesRepository.findTop5SalesByRegion(region);
-
-        // for(Sales s: sales){
-        //     HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
-        //     ReservationDTO reservationDTO = ReservationMapper.INSTANCE.toReservationDTO(s.getReservation());
-        //     PaymentDTO paymentDTO = PaymentMapper.INSTANCE.toPaymentDTO(s.getReservation().getPayment());
-        //     SalesDTO salesDTO = SalesMapper.INSTANCE.toSalesDTO(s);
-        //     Top5SalesDTO top5SalesDTO = new Top5SalesDTO(hostInfoDTO, reservationDTO, paymentDTO, salesDTO);
-        //     top5SalesDTOs.add(top5SalesDTO);
-        // }
 
         return top5SalesDTOs;
     }
@@ -173,4 +173,27 @@ public class SalesService {
         return salesRepository.findHostMonthSales(hidx, year, month);
     }
 
+
+    //특정 호스트의 월별 매출을 구하는 메소드
+    public List<SalesCustomDTO> getMonthlySalesByHost(CalculationDTO calculation){
+
+        List<SalesCustomDTO> salesCustomDTOs = new ArrayList<>();
+       
+        LocalDate startDate = calculation.getCalMonth().toLocalDate();
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        List<Sales> sales = salesRepository.findByHidx(startDate, endDate, calculation.getHIdx());
+        System.out.println(sales);
+
+        for(Sales s: sales){
+            HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
+            ReservationDTO reservationDTO = ReservationMapper.INSTANCE.toReservationDTO(s.getReservation());
+            PaymentDTO paymentDTO = PaymentMapper.INSTANCE.toPaymentDTO(s.getReservation().getPayment());
+            SalesDTO salesDTO = SalesMapper.INSTANCE.toSalesDTO(s);
+            SalesCustomDTO salesCustomDTO = new SalesCustomDTO(hostInfoDTO, reservationDTO, paymentDTO, salesDTO);
+            salesCustomDTOs.add(salesCustomDTO);
+        }
+
+        return salesCustomDTOs;
+    }
 }
