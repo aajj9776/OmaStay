@@ -76,7 +76,7 @@ jobs:
 
     - name: Remove existing Certbot container if exists
       run: |
-        ssh -t -o StrictHostKeyChecking-no ubuntu@${{ secrets.HOST }} "docker rm -f certbot || true"
+        ssh -t -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker rm -f certbot || true"
 
     - name: SSH into EC2, create required directory, and run Certbot for SSL certificates
       run: |
