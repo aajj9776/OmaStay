@@ -23,7 +23,7 @@ public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "s_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @Enumerated
     @Column(name = "s_cate", nullable = false)
@@ -42,10 +42,10 @@ public class Service {
     //파일이름, 파일원본이름
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "fName", column = @Column(name = "s_fname", nullable = false, length = 500)),
-            @AttributeOverride(name = "oName", column = @Column(name = "s_oname", nullable = false, length = 500))
+            @AttributeOverride(name = "fName", column = @Column(name = "s_fname", length = 500)),
+            @AttributeOverride(name = "oName", column = @Column(name = "s_oname", length = 500))
     })
-    private FileImageNameVo fileName;
+    private FileImageNameVo fileName = new FileImageNameVo();
 
     @Column(name = "s_date", nullable = false)
     private LocalDateTime sDate;

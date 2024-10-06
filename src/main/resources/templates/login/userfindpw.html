@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 찾기</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    
+    <!-- 본문 (중앙 정렬) -->
+    <main class="flex-grow flex items-center justify-center">
+        <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md w-full">
+            <h2 class="text-xl font-semibold mb-4 text-center">비밀번호 찾기</h2>
+
+            <!-- 이메일 입력 -->
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">이메일 <span class="text-red-500">*</span></label>
+                <div class="flex">
+                    <input id="email" name="email" type="email"
+                     placeholder="이메일을 입력하세요" class="flex-grow p-2 border rounded-l-lg" required>
+                    <button id="send-code" class="bg-blue-500 text-white p-2 rounded-r-lg" onclick="sendVerificationCode()">이메일 인증번호 전송</button>
+                </div>
+                <div id="emailCheckResult" class="text-red-500 mt-2" style="display:none;">이미 가입된 이메일입니다</div>
+            </div>
+
+            <!-- 인증번호 입력 -->
+            <div class="mb-4">
+                <label for="code" class="block text-sm font-medium text-gray-700">인증번호를 입력하세요</label>
+                <div class="flex items-center">
+                    <input id="code" name="code" type="text" placeholder="인증번호를 입력하세요" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <span id="timer" class="ml-2 text-gray-500">03:00</span>
+                </div>
+                <div class="mt-2 text-right">
+                    <span id="verification-result" class="text-sm font-medium"></span>
+                </div>
+            </div>
+
+            <!-- 인증번호 확인 버튼 -->
+            <div class="flex justify-between">
+                <button id="verify-code" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700" onclick="verifyCode()">인증번호 확인</button>
+            </div>
+            <div class="mt-4">
+              <button id="change-password" class="w-full py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow hover:bg-green-700" onclick="changePassword()">비밀번호 변경</button>
+          </div>
+        </div>
+    </main>
+
+
+    <script>
+        var isEmailVerified = false;
+        let timeLeft = 3 * 60; // 3분 타이머 설정
+        let timerId = null;
+
+        // 이메일 인증번호 전송 함수
+        function sendVerificationCode() {
+            const email = document.getElementById('email').value;
+
+            if (!validateEmail(email)) {
+                alert('유효한 이메일 주소를 입력하세요.');
+                return;
+            }
+
+            fetch('/login/sendVerificationCode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('인증번호가 전송되었습니다.');
+                    startTimer();
+                } else {
+                    alert('인증번호 전송 실패');
+                }
+            })
+            .catch((error) => {
+                console.error('오류 발생:', error);
+                alert('이메일 전송 중 오류가 발생했습니다.');
+            });
+        }
+
+        // 타이머 시작 함수
+        function startTimer() {
+            timeLeft = 5 * 60;
+            timerId = setInterval(updateTimer, 1000);
+        }
+
+        // 타이머 업데이트 함수
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                clearInterval(timerId);
+                alert('시간 초과. 인증번호를 다시 요청하세요.');
+            }
+        }
+
+        // 인증번호 확인 함수
+        function verifyCode() {
+            const email = document.getElementById('email').value;
+            const code = document.getElementById('code').value;
+
+            if (!code) {
+                alert('인증번호를 입력하세요.');
+                return;
+            }
+
+            fetch('/login/verifyCode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email, code: code }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const verificationResult = document.getElementById('verification-result');
+                if (data.isVerified) {
+                    alert('인증 완료');
+                    clearInterval(timerId); // 타이머 중지
+                    verificationResult.textContent = '인증 성공';
+                    verificationResult.style.color = 'green';
+                    isEmailVerified = true;
+                } else {
+                    alert('인증번호가 잘못되었습니다.');
+                    verificationResult.textContent = '인증 실패';
+                    verificationResult.style.color = 'red';
+                    isEmailVerified = false;
+                }
+            })
+            .catch((error) => {
+                console.error('오류 발생:', error);
+                alert('오류가 발생했습니다.');
+            });
+        }
+
+        // 비밀번호 변경 함수
+        function changePassword() {
+            if (isEmailVerified) {
+                const email = document.getElementById('email').value;
+
+                // 이메일을 세션에 저장
+                fetch('/login/checkEmail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        // 이메일이 존재하면 비밀번호 변경 페이지로 이동
+                        window.location.href = '/login/userchangepw';
+                    } else {
+                        // 이메일이 존재하지 않으면 경고 메시지 출력
+                        alert('해당 이메일로 가입된 사용자가 없습니다.');
+                        window.location.href = '/login'; // 로그인 페이지로 이동
+                    }
+                })
+                .catch((error) => {
+                    console.error('오류 발생:', error);
+                    alert('서버와 통신 중 오류가 발생했습니다.');
+                });
+            } else {
+                alert('이메일 인증을 완료해주세요.');
+            }
+        }
+        // 이메일 유효성 검사 함수
+        function validateEmail(email) {
+            var re = /\S+@\S+\.\S+/;
+            return re.test(email);
+        }
+    </script>
+</body>
+</html>

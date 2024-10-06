@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -20,15 +21,15 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pay_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ic_idx", referencedColumnName = "ic_idx")
-    private IssuedCoupon issuedCoupon;
+    @JoinColumn(name = "ic_idx", referencedColumnName = "ic_idx", nullable = true)
+    private IssuedCoupon issuedCoupon = new IssuedCoupon();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_idx", referencedColumnName = "p_idx")
-    private Point point;
+    @JoinColumn(name = "p_idx", referencedColumnName = "p_idx", nullable = true)
+    private Point point = new Point();
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "pay_status", nullable = false)
@@ -41,14 +42,12 @@ public class Payment {
     @Column(name = "pay_content", nullable = false, length = 500)
     private String payContent;
 
+    //amount
     @Column(name = "sale_price", length = 100)
     private String salePrice;
 
     @Column(name = "nsale_price", length = 100)
     private String nsalePrice;
-
-    @Column(name = "cancel_time", length = 100)
-    private String cancelTime;
 
     @Column(name = "cancel_content", length = 100)
     private String cancelContent;
@@ -59,7 +58,9 @@ public class Payment {
     @Column(name = "cancel_date")
     private LocalDateTime cancelDate;
 
+    @Column(name = "payment_key", length = 500)
+    private String paymentKey;
+    
     @Column(name = "pay_none", length = 100)
     private String payNone;
-
 }

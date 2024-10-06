@@ -16,11 +16,11 @@ import lombok.ToString;
 public class Recommendation {
     @Id
     @Column(name = "rec_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
     @Column(name = "rec_point")
     private Float recPoint;

@@ -6,51 +6,52 @@
     <meta content="initial-scale=1, width=device-width" name="viewport"/>
     <link href="/css/global.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Whisper:wght@400&family=Roboto:wght@400;500;700&family=Inter:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Oswald:wght@400;500;700&display=swap"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
   </head>
   <body>
     <div
-      class="w-full relative overflow-y-auto flex flex-row items-start justify-center pt-[530px] px-[20px] pb-[532.2px] box-border bg-[url('/image/host/host-login@3x.png')] bg-cover bg-no-repeat bg-[top] leading-[normal] tracking-[normal] text-center text-[80px] text-[#fff] font-[Whisper]"
+      class="w-full relative overflow-y-auto flex flex-row items-start justify-center py-[115px] pl-[66px] pr-[20px] box-border bg-[url('/image/host/host-login@3x.png')] bg-cover bg-no-repeat bg-[top] leading-[normal] tracking-[normal] text-center text-[70px] text-[#fff] font-[Whisper] mq675:pl-[33px] mq675:box-border"
     >
       <div
-        class="w-[600px] flex flex-col items-center justify-center gap-[5px] max-w-full"
+        class="w-[400px] flex flex-col items-center justify-center pt-[100px] px-[0px] pb-[96px] box-border max-w-full mq750:pt-[65px] mq750:pb-[62px] mq750:box-border"
       >
         <img
-          class="self-stretch h-[123.8px] relative max-w-full overflow-hidden shrink-0 object-cover"
+          class="self-stretch h-[80px] relative max-w-full overflow-hidden shrink-0 object-cover"
           loading="lazy"
           alt=""
           src="/image/logo/logo.png"
         />
 
         <h1
-          class="m-[0px] self-stretch relative text-inherit leading-[70px] font-normal font-[inherit] mq450:text-[24px] mq450:leading-[28px] mq750:text-[40px] mq750:leading-[42px]"
+          class="m-[0px] self-stretch h-[50px] relative text-inherit font-normal font-[inherit] flex items-center justify-center shrink-0 mq450:text-[42px] mq750:text-[56px]"
         >
           HostHouse
         </h1>
-        <form
-          class="m-[0px] self-stretch rounded-[50px] bg-[rgba(255,255,255,0.6)] flex flex-col items-center justify-center py-[104px] px-[20px] gap-[8px] mq675:pt-[68px] mq675:pb-[68px] mq675:box-border"
+        <form action="/host/hostlogin" method="post"
+          class="m-[0px] self-stretch rounded-[50px] bg-[rgba(255,255,255,0.6)] flex flex-col items-center justify-center py-[40px] px-[75px] gap-[5px] mq450:py-[26px] mq450:px-[20px] mq450:box-border"
         >
           <h1
-            class="m-[0px] w-[84px] h-[40px] relative text-[32px] leading-[40px] font-normal font-[Roboto] text-[#000] text-center flex items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap shrink-0 mq450:text-[19px] mq450:leading-[24px] mq750:text-[26px] mq750:leading-[32px]"
+            class="m-[0px] w-[79px] relative text-[32px] leading-[40px] font-normal font-[Roboto] text-[#000] text-center flex items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap mq450:text-[19px] mq450:leading-[24px] mq750:text-[26px] mq750:leading-[32px]"
           >
             Login
           </h1>
           <div
-            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[7px]"
+            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[3px]"
           >
-            <div class="w-[1px] h-[16px] relative"></div>
-          </div>
+            <div class="w-[1px] h-[10px] relative"></div>
+          </div> 
           <div
-            class="w-[300px] flex flex-col items-start justify-start relative"
+            class="self-stretch flex flex-col items-start justify-start relative"
           >
             <div
-              class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
+              class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[12px]"
             >
-              <input
-                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
-                placeholder="john@gmail.com"
-                type="text"
-              />
+            <input
+            class="w-[196px] [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[15px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+            id="id" name="id"
+            placeholder="**********"
+            type="text"
+            />
             </div>
             <div
               class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[4px] box-border z-[1]"
@@ -61,31 +62,19 @@
                 ID
               </div>
             </div>
-            <div
-              class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-            >
-              <div
-                class="self-stretch h-[20px] relative text-[12px] tracking-[0.4px] leading-[166%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-              >
-                Helper text
-              </div>
-            </div>
           </div>
           <div
-            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[7px]"
-          >
-            <div class="w-[1px] h-[16px] relative"></div>
-          </div>
-          <div
-            class="w-[300px] flex flex-col items-start justify-start relative"
+            class="self-stretch flex flex-col items-start justify-start relative"
           >
             <div
               class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
             >
-              <input
-                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+                <input
+                id="pw"
+                name="pw"
+                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[56px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[16px] px-[0px] box-border font-[Roboto] text-[15px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
                 placeholder="**********"
-                type="text"
+                type="password"
               />
             </div>
             <div
@@ -97,80 +86,75 @@
                 Password
               </div>
             </div>
-            <div
-              class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-            >
-              <div
-                class="self-stretch h-[20px] relative text-[12px] tracking-[0.4px] leading-[166%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-              >
-                Helper text
-              </div>
-            </div>
           </div>
           <div
-            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[7px]"
+            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[3px]"
           >
-            <div class="w-[1px] h-[16px] relative"></div>
+            <div class="w-[1px] h-[8px] relative"></div>
           </div>
-          <div class="w-[300px] flex flex-row items-center justify-end">
-            <div
-              class="overflow-hidden hidden flex-row items-center justify-start"
-            >
-              <div
-                class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-start justify-start p-[9px] box-border"
-              >
-                <img
-                  class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/image/host/-hidden.svg"
-                />
-              </div>
-            </div>
+          <div
+            class="self-stretch flex flex-row items-center justify-end py-[0px] px-[15px]"
+          >
             <div class="flex flex-col items-start justify-start">
               <div
                 class="relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[101px] whitespace-nowrap"
-              >
+              ><a th:href="@{/host/findpw}">
                 *비밀번호 찾기
+              </a>
               </div>
             </div>
           </div>
           <div
-            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[7px]"
+            class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[3px]"
           >
-            <div class="w-[1px] h-[16px] relative"></div>
+            <div class="w-[1px] h-[8px] relative"></div>
           </div>
           <button
-            class="cursor-pointer [border:none] py-[7px] px-[20px] bg-[#2196f3] w-[300px] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center box-border"
+            type="submit"
+            id="login"
+            class="cursor-pointer [border:none] py-[7px] px-[46px] bg-[#2196f3] w-[140px] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center box-border"
           >
             <div
-              class="w-[47px] flex flex-row items-center justify-center gap-[8px]"
+              class="self-stretch flex flex-row items-center justify-center gap-[8px]"
             >
               <div
-                class="flex-1 relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left"
+                class="w-[47px] relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block"
               >
                 로그인
               </div>
             </div>
           </button>
           <button
-            class="cursor-pointer [border:none] py-[7px] px-[20px] bg-[#fff] w-[300px] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center box-border"
+            class="cursor-pointer [border:none] py-[7px] px-[41px] bg-[#fff] rounded-[4px] flex flex-col items-center justify-center"
           >
             <div class="flex flex-row items-center justify-center gap-[8px]">
               <div
                 class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left inline-block min-w-[57px]"
-              >
+              ><a th:href="@{/host/register}">
                 회원가입
+              </a>
               </div>
             </div>
           </button>
         </form>
         <b
-          class="self-stretch h-[49px] relative text-[20px] tracking-[0.15px] leading-[24px] flex font-[Roboto] items-center justify-center shrink-0 mq450:text-[16px] mq450:leading-[19px]"
+          class="self-stretch relative text-[15px] tracking-[0.15px] leading-[24px] font-[Roboto]"
           >Copyright GC COMPANY Corp. All rights Reserved</b
         >
       </div>
     </div>
+    <script th:inline="javascript">
+      /*<![CDATA[*/ 
+      var errorMessage = /*[[${errorMessage}]]*/ null; 
+      if (errorMessage) {
+          alert(errorMessage);
+      }
+      /*]]>*/
+  </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
   </body>
 </html>

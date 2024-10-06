@@ -3,341 +3,190 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main}"
       layout:fragment="main">
-    <head>
-  </head>
-  <body>
-    <div
-      class="w-full relative bg-background-paper-elevation-8 overflow-hidden flex flex-row items-start justify-start leading-[normal] tracking-[normal] [row-gap:20px] text-left text-xl text-black font-menu-itemdefault mq1525:flex-wrap"
-    >
-      <div
-        class="h-[1084px] w-[370px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-11 pl-[38px] pr-[34px] box-border max-w-full mq450:pt-[29px] mq450:pb-[29px] mq450:box-border"
-      >
-        <div class="flex-1 flex flex-col items-start justify-start">
-          <div
-            class="self-stretch rounded-t-3xs rounded-b-none bg-background-paper-elevation-8 border-silver-300 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5"
-          >
-            <div
-              class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-0 px-0 pb-1.5 box-border"
-            >
-              <div class="flex-1 relative mq450:text-base">예약 내역</div>
-            </div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+  <style>
+    /* 메인 섹션이 중앙에 정렬되도록 함 */
+    @media (min-width: 1024px) {
+      section {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    /* 화면 크기가 줄어들 때 중앙에 위치하도록 조정 */
+    @media (max-width: 1024px) {
+      section {
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="flex">
+    <!-- Sidebar -->
+    <div class="w-[370px] h-auto flex-none flex flex-col justify-start py-11 pl-[38px] pr-[34px] box-border">
+      <div class="flex-1 flex flex-col items-start justify-start">
+        <div class="self-stretch rounded-t-3xs rounded-b-none bg-white border-gray-300 border-[1px] border-solid flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5">
+          <div class="w-[97px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+            <a class="text-lg" href="/mypage/reservation">예약 내역</a>
           </div>
-          <div
-            class="self-stretch bg-background-paper-elevation-8 border-silver-300 border-r-[1px] border-solid border-silver-300 border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-5 px-[38px] pb-[21px]"
-          >
-            <div
-              class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-            >
-              <div
-                class="h-[33px] flex-1 relative flex items-center mq450:text-base"
-              >
-                포인트
-              </div>
-            </div>
+        </div>
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
+          <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+            <a class="text-lg" href="/mypage/point">포인트</a>
           </div>
-          <div
-            class="self-stretch bg-background-paper-elevation-8 border-silver-300 border-t-[1px] border-solid border-silver-300 border-r-[1px] border-solid border-silver-300 border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-9 pb-[21px]"
-          >
-            <div
-              class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-            >
-              <div
-                class="h-[33px] flex-1 relative flex items-center mq450:text-base"
-              >
-                쿠폰
-              </div>
-            </div>
+        </div>
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
+          <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+            <a class="text-lg" href="/mypage/coupon">쿠폰</a>
           </div>
-          <div
-            class="self-stretch bg-background-paper-elevation-8 border-silver-300 border-t-[1px] border-solid border-silver-300 border-r-[1px] border-solid border-silver-300 border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]"
-          >
-            <div
-              class="w-[113px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-0 px-0 pb-1.5 box-border"
-            >
-              <div class="flex-1 relative mq450:text-base">내 정보 관리</div>
-            </div>
+        </div>
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]">
+          <div class="w-[113px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+            <a class="text-lg" href="/mypage/info">내 정보 관리</a>
           </div>
-          <div
-            class="self-stretch rounded-t-none rounded-b-3xs bg-background-paper-elevation-8 border-silver-300 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]"
-          >
-            <div
-              class="w-[76px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-0 px-0 pb-1.5 box-border"
-            >
-              <div class="flex-1 relative mq450:text-base">내 리뷰</div>
-            </div>
+        </div>
+        <div class="self-stretch rounded-b-3xs bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]">
+          <div class="w-[76px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+            <a class="text-lg" href="/mypage/review">내 리뷰</a>
           </div>
         </div>
       </div>
-      <div class="h-12 w-[350px] relative hidden max-w-full"></div>
-      <section
-        class="w-[1244px] flex flex-col items-start justify-start pt-[106px] px-0 pb-0 box-border max-w-full text-left text-2xl text-darkslategray font-inter mq450:pt-[45px] mq450:box-border mq1225:pt-[69px] mq1225:box-border"
-      >
-        <div
-          class="self-stretch flex flex-col items-start justify-start max-w-full"
-        >
-          <div
-            class="w-[1232px] flex flex-row items-start justify-start py-0 px-[21px] box-border max-w-full"
-          >
-            <header
-              class="flex-1 flex flex-col items-start justify-start gap-[59px] max-w-full text-center text-13xl text-darkslategray font-menu-itemdefault mq850:gap-[29px]"
-            >
-              <div
-                class="flex flex-row items-start justify-start py-0 px-[15px]"
-              >
-                <a
-                  class="[text-decoration:none] relative leading-[29px] font-bold text-[inherit] inline-block min-w-[97px] whitespace-nowrap"
-                  >내 리뷰</a
-                >
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-start gap-[30px]"
-              >
-                <input
-                  class="w-[400px] [border:none] [outline:none] bg-[transparent] h-[50px] flex flex-row items-start justify-start py-0 px-[15px] box-border font-menu-itemdefault font-bold text-5xl text-lightslategray"
-                  placeholder="내가 작성한 리뷰"
-                  type="text"
-                />
-
-                <div
-                  class="self-stretch h-px relative border-silver-200 border-t-[1px] border-solid box-border z-[1]"
-                ></div>
-              </div>
-            </header>
-          </div>
-          <div
-            class="self-stretch h-[842px] overflow-y-auto shrink-0 flex flex-col items-start justify-start pt-5 px-5 pb-[374px] box-border gap-[23px] max-w-full mt-[-4px] mq850:pb-[158px] mq850:box-border mq1225:pb-[243px] mq1225:box-border"
-          >
-            <div
-              class="w-[1187px] rounded-mini bg-whitesmoke-300 overflow-hidden shrink-0 flex flex-col items-start justify-start py-[36.9px] px-[59px] box-border gap-[11px] max-w-full mq450:pt-5 mq450:pb-6 mq450:box-border mq1225:pl-[29px] mq1225:pr-[29px] mq1225:box-border"
-            >
-              <b
-                class="w-[500px] h-[50px] relative leading-[21px] flex font-menu-itemdefault text-darkgray-400 items-center max-w-full mq450:text-mid mq450:leading-[17px]"
-                >은평 씨에스에비뉴 호텔 - 디럭스 더블</b
-              >
-              <div class="flex flex-row items-start justify-start gap-[5px]">
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector2.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector-11.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector-2.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector-3.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector2.svg"
-                />
-              </div>
-              <div
-                class="w-[1069px] overflow-x-auto flex flex-row items-start justify-start gap-[27px] max-w-full"
-              >
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide-1@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide-2@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide-2@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-smi overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/06a9e8f9a59a46798fd0232a09dc4c8d-w420-h420jpg@2x.png"
-                />
-              </div>
-              <div
-                class="self-stretch overflow-hidden flex flex-row items-end justify-start pt-0 px-0 pb-[0.1px] box-border max-w-full text-sm-9"
-              >
-                <div
-                  class="flex-1 relative leading-[22px] inline-block max-w-full"
-                >
-                  <p class="m-0">️객실</p>
-                  <p class="m-0">
-                    -객실이 아주 넓고 쾌적했어요. 침구류도 편안했습니다. 티비
-                    화면도 크고, 에어컨도 설정한 온도대로 잘 나와서 시원했어요.
-                    창문도 조금 열 수 있어서 환기
-                  </p>
-                  <p class="m-0">
-                    하기 좋았어요. 무엇보다 광안대교를 정면으로 펼쳐지는 오션
-                    뷰가 너무 좋았어요. 제가 투숙한 날에 비가 왔음에도 뷰가 정말
-                    아름다웠어요.…
-                  </p>
-                </div>
-              </div>
-              <div
-                class="flex flex-row items-start justify-start text-center text-sm-1"
-              >
-                <div class="relative font-semibold inline-block min-w-[36.5px]">
-                  더보기
-                </div>
-                <img
-                  class="h-4 w-4 relative min-h-[16px]"
-                  alt=""
-                  src="/image/user/svg11.svg"
-                />
-              </div>
-            </div>
-            <div
-              class="w-[1187px] rounded-mini bg-whitesmoke-300 overflow-hidden shrink-0 flex flex-col items-start justify-start py-[36.9px] px-[59px] box-border gap-[11px] max-w-full mq450:pt-5 mq450:pb-6 mq450:box-border mq1225:pl-[29px] mq1225:pr-[29px] mq1225:box-border"
-            >
-              <b
-                class="w-[325px] h-[21px] relative leading-[21px] flex font-menu-itemdefault text-darkgray-400 items-center max-w-full mq450:text-mid mq450:leading-[17px]"
-                >은평 씨에스에비뉴 호텔 - 디럭스 더블</b
-              >
-              <div class="flex flex-row items-start justify-start gap-[5px]">
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector2.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector-11.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector-2.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector-3.svg"
-                />
-
-                <img
-                  class="h-[17.3px] w-[17.3px] relative min-h-[17px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/vector2.svg"
-                />
-              </div>
-              <div
-                class="w-[1069px] overflow-x-auto flex flex-row items-start justify-start gap-[27px] max-w-full"
-              >
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide-1@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide-2@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-xl overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/group--slide-2@2x.png"
-                />
-
-                <img
-                  class="h-[210px] w-[210px] relative rounded-smi overflow-hidden shrink-0 object-cover min-h-[210px]"
-                  loading="lazy"
-                  alt=""
-                  src="/image/user/06a9e8f9a59a46798fd0232a09dc4c8d-w420-h420jpg@2x.png"
-                />
-              </div>
-              <div
-                class="self-stretch overflow-hidden flex flex-row items-end justify-start pt-0 px-0 pb-[0.1px] box-border max-w-full text-sm-9"
-              >
-                <div
-                  class="flex-1 relative leading-[22px] inline-block max-w-full"
-                >
-                  <p class="m-0">️객실</p>
-                  <p class="m-0">
-                    -객실이 아주 넓고 쾌적했어요. 침구류도 편안했습니다. 티비
-                    화면도 크고, 에어컨도 설정한 온도대로 잘 나와서 시원했어요.
-                    창문도 조금 열 수 있어서 환기
-                  </p>
-                  <p class="m-0">
-                    하기 좋았어요. 무엇보다 광안대교를 정면으로 펼쳐지는 오션
-                    뷰가 너무 좋았어요. 제가 투숙한 날에 비가 왔음에도 뷰가 정말
-                    아름다웠어요.…
-                  </p>
-                </div>
-              </div>
-              <div
-                class="flex flex-row items-start justify-start text-center text-sm-1"
-              >
-                <div
-                  class="h-4 relative font-semibold flex items-center justify-center"
-                >
-                  더보기
-                </div>
-                <img
-                  class="h-4 w-4 relative min-h-[16px]"
-                  alt=""
-                  src="/image/user/svg11.svg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
-  </body>
+
+    <!-- Main Content -->
+    <section class="flex-grow flex flex-col items-center justify-start pt-[106px] pb-10 px-6 bg-white max-w-[1232px] w-full box-border">
+      <div class="flex flex-col items-start justify-start w-full">
+        <div class="flex flex-row items-start justify-start py-0 px-[21px] box-border">
+          <header class="flex-1 flex flex-col items-start justify-start gap-[59px] text-lg font-bold text-darkslategray">
+            <div class="flex flex-row items-start justify-start py-0 px-[15px]">
+              <a class="[text-decoration:none] relative leading-[29px] font-bold text-[inherit] inline-block min-w-[97px] whitespace-nowrap text-lg">내 리뷰</a>
+            </div>
+            <div class="self-stretch flex flex-col items-start justify-start gap-[30px]">
+              <a
+                class="w-[400px] [border:none] [outline:none] h-[50px] flex flex-row items-start justify-start py-0 px-[15px] box-border text-3xl text-lightslategray"
+                
+              >내가 작성한 리뷰
+            </a>
+              <div class="self-stretch h-px relative border-silver-200 border-t-[1px] border-solid box-border"></div>
+            </div>
+          </header>
+        </div>
+        <div class="flex flex-col items-start justify-start gap-8 w-full">
+
+          <!--해당 구역 시작 -->
+
+          <!-- 추가된 리뷰 카드 -->
+          <!-- <div class="w-full rounded-mini bg-whitesmoke-300 flex flex-col items-start justify-start py-9 px-14 gap-4">
+            <b class="w-[500px] relative leading-[21px] text-darkgray-400">은평 씨에스에비뉴 호텔 - 디럭스 더블</b>
+            <div class="flex flex-row items-start justify-start gap-[5px]">
+              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector2.svg"/>
+              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-11.svg"/>
+              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-2.svg"/>
+              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-3.svg"/>
+              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector2.svg"/>
+            </div>
+            <div class="flex flex-row items-start justify-start gap-6 w-full">
+              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide@2x.png"/>
+              <img class="h-[210px] w-[210px] rounded-xl object-cover" th:src="${imageUrl}" alt="리뷰 이미지"/>
+              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide-1@2x.png"/>
+              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide-2@2x.png"/>
+              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide-2@2x.png"/>
+              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/06a9e8f9a59a46798fd0232a09dc4c8d-w420-h420jpg@2x.png"/>
+            </div>
+            <div class="flex-1 flex flex-row items-end justify-start pt-0 px-0 pb-[0.1px] box-border max-w-full text-sm-9">
+              <div class="flex-1 relative leading-[22px]">
+                <p class="m-0">️객실</p>
+                <p class="m-0">
+                  -객실이 아주 넓고 쾌적했어요. 침구류도 편안했습니다. 티비 화면도 크고, 에어컨도 설정한 온도대로 잘 나와서 시원했어요. 창문도 조금 열 수 있어서 환기
+                </p>
+                <p class="m-0">
+                  하기 좋았어요. 무엇보다 광안대교를 정면으로 펼쳐지는 오션 뷰가 너무 좋았어요. 제가 투숙한 날에 비가 왔음에도 뷰가 정말 아름다웠어요.…
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-row items-start justify-start text-center text-sm-1">
+              <div class="h-4 relative font-semibold flex items-center justify-center">
+                더보기
+              </div>
+              <img class="h-4 w-4" alt="" src="/image/user/svg11.svg"/>
+            </div> -->
+          </div>
+          <div id="reviewsContainer" class="flex flex-col items-start justify-start gap-8 w-full"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    user = JSON.parse(localStorage.getItem('user'));
+    console.log("로컬 스토리지에서 가져온 유저 정보:", user);
+    let memIdx = user ? user.id : null;
+
+    if (memIdx) {
+        console.log("memIdx 값:", memIdx);
+        fetch('/mypage/review', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ memIdx: memIdx })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('리뷰 데이터 (DTO):', data);
+
+            const reviewsContainer = document.getElementById('reviewsContainer');
+            data.forEach(review => {
+                console.log("리뷰 데이터:", review);
+                
+                // 리뷰 카드 HTML 생성
+                const reviewCard = `
+                    <div class="w-full rounded-mini bg-whitesmoke-300 flex flex-col items-start justify-start py-9 px-14 gap-4">
+                        <div class="flex flex-row items-start justify-start gap-[5px]">
+                          <a class="m-1">${review.revRating}/5점</a>
+                          <img class="m-1 h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-11.svg"/>
+                           <b class="w-[300px] relative leading-[21px] text-darkgray-400">
+                            ${review.hotelName} - ${review.roomName} 
+                            </b>
+                        </div>
+                        <div class="flex flex-row items-start justify-start gap-6 w-full">
+                            ${review.imageUrls.map(url => {
+                                console.log("이미지 URL:", url);  // 콘솔 로그 추가
+                                return `<img class="h-[210px] w-[210px] rounded-xl object-cover" src="${url}" alt="리뷰 이미지" />`;
+                            }).join('')}
+                        </div>
+                        <div class="flex-1 flex flex-row items-end justify-start pt-0 px-0 pb-[0.1px] box-border max-w-full text-sm-9">
+                            <div class="flex-1 relative leading-[22px]">
+                                <p class="m-0">${review.revContent}</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-row items-start justify-start text-center text-sm-1">
+                            <div class="h-4 relative font-semibold flex items-center justify-center">
+                                더보기
+                            </div>
+                        </div>
+                    </div>
+                `;
+                reviewsContainer.insertAdjacentHTML('beforeend', reviewCard);
+            });
+        })
+        .catch(error => {
+            console.error('리뷰 데이터를 가져오는 중 오류 발생:', error);
+        });
+    } else {
+        console.error('로컬스토리지에 mem_idx 정보가 없습니다.');
+    }
+});
+
+</script>
 </html>

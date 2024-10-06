@@ -19,15 +19,15 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "img_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ri_idx", referencedColumnName = "ri_idx")
-    private RoomInfo roomInfo;
+    @JoinColumn(name = "room_idx", referencedColumnName = "room_idx")
+    private RoomInfo roomInfo = new RoomInfo();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "img_cate")
@@ -36,10 +36,10 @@ public class Image {
     //파일이름, 파일원본이름
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "fName", column = @Column(name = "f_name", nullable = false, length = 200)),
-            @AttributeOverride(name = "oName", column = @Column(name = "ori_name", nullable = false, length = 200))
+            @AttributeOverride(name = "fName", column = @Column(name = "f_name", length = 200)),
+            @AttributeOverride(name = "oName", column = @Column(name = "ori_name", length = 200))
     })
-    private FileImageNameVo imgName;
+    private FileImageNameVo imgName = new FileImageNameVo();
 
     //FALSE:삭제, TRUE:존재
     @Enumerated(EnumType.ORDINAL)

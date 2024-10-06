@@ -1,7 +1,8 @@
 package com.omakase.omastay.dto;
 
 import com.omakase.omastay.entity.RoomInfo;
-import com.omakase.omastay.entity.enumurate.RiStatus;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.RoomStatus;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,38 +10,35 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class RoomInfoDTO {
-    private int id;
-    private int hostInfoId;
-    private String riName;
-    private String riType;
-    private int riCount;
-    private String riIntro;
-    private RiStatus riStatus;
-    private String riNone;
-    private int riPerson;
+    private Integer id;
+    private Integer hIdx;
+    private String roomName;
+    private String roomType;
+    private Integer roomPerson;
+    private String roomIntro;
+    private BooleanStatus roomStatus;
+    private String roomNone;
 
     public RoomInfoDTO(RoomInfo roomInfo) {
         this.id = roomInfo.getId();
-        this.hostInfoId = roomInfo.getHostInfo() != null ? roomInfo.getHostInfo().getId() : null;
-        this.riName = roomInfo.getRiName();
-        this.riType = roomInfo.getRiType();
-        this.riCount = roomInfo.getRiCount();
-        this.riIntro = roomInfo.getRiIntro();
-        this.riStatus = roomInfo.getRiStatus();
-        this.riNone = roomInfo.getRiNone();
-        this.riPerson = roomInfo.getRiPerson();
+        this.hIdx = roomInfo.getHostInfo() != null ? roomInfo.getHostInfo().getId() : null;
+        this.roomName = roomInfo.getRoomName();
+        this.roomType = roomInfo.getRoomType();
+        this.roomPerson = roomInfo.getRoomPerson();
+        this.roomIntro = roomInfo.getRoomIntro();
+        this.roomStatus = roomInfo.getRoomStatus();
+        this.roomNone = roomInfo.getRoomNone();
     }
 
     @QueryProjection
-    public RoomInfoDTO(int id, int hostInfoId, String riName, String riType, int riCount, String riIntro, RiStatus riStatus, String riNone, int riPerson) {
+    public RoomInfoDTO(Integer id, Integer hIdx, String roomName, String roomType, String riIntro, BooleanStatus roomStatus, String roomNone, Integer roomPerson) {
         this.id = id;
-        this.hostInfoId = hostInfoId;
-        this.riName = riName;
-        this.riType = riType;
-        this.riCount = riCount;
-        this.riIntro = riIntro;
-        this.riStatus = riStatus;
-        this.riNone = riNone;
-        this.riPerson = riPerson;
+        this.hIdx = hIdx;
+        this.roomName = roomName;
+        this.roomType = roomType;
+        this.roomIntro = riIntro;
+        this.roomPerson = roomPerson;
+        this.roomStatus = roomStatus;
+        this.roomNone = roomNone;
     }
 }

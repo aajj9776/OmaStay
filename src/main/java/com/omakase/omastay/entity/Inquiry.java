@@ -22,11 +22,11 @@ public class Inquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iq_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx" , referencedColumnName = "mem_idx")
-    private Member member;
+    private Member member = new Member();
 
     @Column(name = "iq_title", nullable = false, length = 100)
     private String iqTitle;
@@ -39,7 +39,7 @@ public class Inquiry {
 
     //파일이름, 파일원본이름
     @Embedded
-    private FileImageNameVo fileName;
+    private FileImageNameVo fileName = new FileImageNameVo();
 
     @Column(name = "iq_date", nullable = false)
     private LocalDateTime iqDate;

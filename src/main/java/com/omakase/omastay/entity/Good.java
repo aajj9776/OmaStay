@@ -19,15 +19,15 @@ public class Good {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "good_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rev_idx" , referencedColumnName = "rev_idx")
-    private Review review;
+    private Review review = new Review();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx" , referencedColumnName = "mem_idx")
-    private Member member;
+    private Member member = new Member();
 
     @Column(name = "good_date", nullable = false)
     private LocalDateTime goodDate;

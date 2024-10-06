@@ -14,12 +14,16 @@ import lombok.ToString;
 @ToString(exclude = "hostInfo")
 public class Account {
     @Id
-    @Column(name = "ac_num", nullable = false, length = 100)
-    private String id;
+    @Column(name = "ac_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
     private HostInfo hostInfo;
+
+    @Column(name = "ac_num", nullable = false, length = 100)
+    private String acNum;
 
     @Column(name = "ac_bank", nullable = false, length = 100)
     private String acBank;

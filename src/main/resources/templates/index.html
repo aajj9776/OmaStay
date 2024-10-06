@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" layout:decorate="~{layout/main}"
+      layout:fragment="main"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link href="/css/index.css" rel="stylesheet"/>
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <link href="/css/component/swiper.css" rel="stylesheet"/>
-</head>
-<body >
+    <link href="/css/component/swiper.css" rel="stylesheet"/></head>
+<body>
 <div class="wrarp">
     <section class="main-content">
         <div class="column0">
@@ -32,35 +30,7 @@
                     <div class="search_title">국내 숙소</div>
                 </div>
                 <div class="search-area">
-                    <div class="search-bar">
-                        <div class="search_wrapper1">
-                                <img alt="" class="search-icon" src="/image/index/vector.svg"/>
-                            <input type="text" class="search_input" placeholder="여행지나 숙소를 검색해보세요."/>
-                        </div>
-                        <div class="button2" id="date-range-picker">
-                            <div class="input-wrapper">
-                                <img alt="" class="search-icon" src="/image/index/svg-1.svg"/>
-                                <input type="text" id="date-range-picker-input" readonly/>
-                            </div>
-                        </div>
-                        <div
-                                class="w-[298px] rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start whitespace-nowrap text-[16px]"
-                        >
-                            <img
-                                    alt=""
-                                    class="h-[48px] w-[44px] relative min-h-[48px]"
-                                    src="/image/domestic-accommodations/search-img.svg"
-                            />
-
-                            <a
-                                    class="[text-decoration:none] h-[48px] flex-1 relative font-semibold text-[inherit] flex items-center"
-                            >인원 2</a
-                            >
-                        </div>
-                        <button class="btn btn-primary w-[120px] h-[47.3px] font-bold">
-                            검색
-                        </button>
-                    </div>
+                    <div class="search-bar" th:include="/component/search/searchbar :: searchbar"></div>
                 </div>
             </div>
         </div>
@@ -73,14 +43,14 @@
                 <div>더보기</div>
             </div>
         </div>
-        <div class="swiper-container">
+        <div class="swiper-container z-0">
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-wrapper">
-                <img  th:each="i : ${#numbers.sequence(1, 5)}"
-                        class="swiper-slide"
-                        loading="lazy"
-                        src="/image/index/group--slide--link-----@2x.png"
+                <img class="swiper-slide"
+                     loading="lazy"
+                     src="/image/index/group--slide--link-----@2x.png"
+                     th:each="i : ${#numbers.sequence(1, 5)}"
                 />
 
             </div>
@@ -96,7 +66,7 @@
 
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"  th:each="i : ${#numbers.sequence(1, 10)}">
+                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
                     <img alt="" class="container-icon" loading="lazy" src="/image/index/container@2x.png"/>
                     <div class="span1">
                         <div class="div8">제주도</div>
@@ -117,7 +87,7 @@
                     로그인 하면 엠버서더 할인가로 예약할 수 있어요.
                 </div>
                 <div class="column3-action">
-                        <button type="button" class="btn btn-primary w-[150px] h-[48px] font-bold">로그인/회원가입</button>
+                    <button class="btn btn-primary w-[150px] h-[48px] font-bold" type="button">로그인/회원가입</button>
                     <a class="pl-4 text-center color text-primary">혜택 자세히 보기</a>
                 </div>
             </div>
@@ -158,7 +128,7 @@
             </div>
         </div>
         <div class="swiper-container">
-            <div class="swiper-wrapper" >
+            <div class="swiper-wrapper">
                 <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
                     <div class="card">
                         <div class="div23">
@@ -219,8 +189,8 @@
             </div>
         </div>
         <div class="swiper-container">
-            <div class="swiper-wrapper" >
-                <div class="swiper-slide"  th:each="i : ${#numbers.sequence(1, 5)}">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 5)}">
                     <img
                             alt=""
                             class="cc123e1c51f2b16e4bc19b5f014752-icon"
@@ -259,137 +229,156 @@
         </div>
     </section>
 </div>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script type="text/javascript" src="/js/datepicker.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const swiper1 = new Swiper('.column1 .swiper-container', {
-                loop: true,
-                slidesPerView: 3,
-                spaceBetween: 15,
-                slidesPerGroup: 3,
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    nextEl: '.column1 .swiper-button-next',
-                    prevEl: '.column1 .swiper-button-prev',
-                },
-                pagination: {
-                    el: '.column1 .swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    1200: {
-                        slidesPerView: 3,
-                    },
-                    0: {
-                        slidesPerView: 1,
-                    }
-                },
-            });
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function (){
+        //세션스토리지의 값 searh_bar에 넣기
+        let s_count = sessionStorage.getItem('count');
+        if (s_count) {
+            $("#person_count2").text(s_count);
+        }
 
-            const swiper2 = new Swiper('.column2 .swiper-container', {
-                loop: false,
-                slidesPerView: 6,
-                spaceBetween: 15,
-                slidesPerGroup: 6,
-                navigation: {
-                    nextEl: '.column2 .swiper-button-next',
-                    prevEl: '.column2 .swiper-button-prev',
-                },
-                breakpoints: {
-                    1200: {
-                        slidesPerView: 6,
-                    },
-                    0: {
-                        slidesPerView: 1,
-                    }
-                },
-                on: {
-                    init: function () {
-                        updateNavigationButtons(this);
-                    },
-                    slideChange: function () {
-                        updateNavigationButtons(this);
-                    }
-                }
-            });
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeSearch = urlParams.get("activeSearch");
+        if (activeSearch === "domestic") {
+          $("#search-accommodation").focus();
+          $("#search-accommodation").trigger("click");
+        }
 
-            const swiper3 = new Swiper('.column4 .swiper-container', {
-                loop: false,
-                slidesPerView: 4,
-                spaceBetween: 15,
-                slidesPerGroup: 4,
-                navigation: {
-                    nextEl: '.column4 .swiper-button-next',
-                    prevEl: '.column4 .swiper-button-prev'
-                },
-                breakpoints: {
-                    1200: {
-                        slidesPerView: 4,
-                    },
-                    0: {
-                        slidesPerView: 1,
-                    }
-                },
-                on: {
-                    init: function () {
-                        updateNavigationButtons(this);
-                    },
-                    slideChange: function () {
-                        updateNavigationButtons(this);
-                    }
-                }
-            });
 
-            const swiper5 = new Swiper('.column6 .swiper-container', { // Ensure the class name matches the HTML
-                loop: true,
-                slidesPerView: 2.4,
-                slidesPerGroup: 1,
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    nextEl: '.column6 .swiper-button-next',
-                    prevEl: '.column6 .swiper-button-prev',
-                },
-                pagination: {
-                    el: '.column6 .swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    1200: {
-                        slidesPerView: 2.4,
-                    },
-                    0: {
-                        slidesPerView: 1,
-                    }
-                },
-            });
+        /*--------------*/
 
-            function updateNavigationButtons(swiper) {
-                const nextButton = swiper.el.querySelector('.swiper-button-next');
-                const prevButton = swiper.el.querySelector('.swiper-button-prev');
-
-                if (swiper.isEnd) {
-                    nextButton.style.visibility = 'hidden';
-                } else {
-                    nextButton.style.visibility = 'visible';
-                }
-
-                if (swiper.isBeginning) {
-                    prevButton.style.visibility = 'hidden';
-                } else {
-                    prevButton.style.visibility = 'visible';
+        const swiper1 = new Swiper(".column1 .swiper-container", {
+            loop: true,
+            slidesPerView: 3,
+            spaceBetween: 15,
+            slidesPerGroup: 3,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".column1 .swiper-button-next",
+                prevEl: ".column1 .swiper-button-prev",
+            },
+            pagination: {
+                el: ".column1 .swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                1200: {
+                    slidesPerView: 3,
+                },
+                0: {
+                    slidesPerView: 1,
                 }
             }
         });
-    </script>
+    });
+
+        const swiper2 = new Swiper(".column2 .swiper-container", {
+          loop: false,
+          slidesPerView: 6,
+          spaceBetween: 15,
+          slidesPerGroup: 6,
+          navigation: {
+            nextEl: ".column2 .swiper-button-next",
+            prevEl: ".column2 .swiper-button-prev",
+          },
+          breakpoints: {
+            1200: {
+              slidesPerView: 6,
+            },
+            0: {
+              slidesPerView: 1,
+            },
+          },
+          on: {
+            init: function () {
+              updateNavigationButtons(this);
+            },
+            slideChange: function () {
+              updateNavigationButtons(this);
+            },
+          },
+        });
+
+        const swiper4 = new Swiper(".column4 .swiper-container", {
+          loop: false,
+          slidesPerView: 4,
+          spaceBetween: 15,
+          slidesPerGroup: 4,
+          navigation: {
+            nextEl: ".column4 .swiper-button-next",
+            prevEl: ".column4 .swiper-button-prev",
+          },
+          pagination: {
+            el: ".column4 .swiper-pagination",
+            clickable: true,
+          },
+          breakpoints: {
+            1200: {
+              slidesPerView: 4,
+            },
+            0: {
+              slidesPerView: 1,
+            },
+          },
+            on: {
+                init: function () {
+                    updateNavigationButtons(this);
+                },
+                slideChange: function () {
+                    updateNavigationButtons(this);
+                },
+            },
+        });
+
+    const swiper5 = new Swiper('.column6 .swiper-container', {
+        loop: true,
+        slidesPerView: 2.4,
+        slidesPerGroup: 1,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: '.column6 .swiper-button-next',
+            prevEl: '.column6 .swiper-button-prev',
+        },
+        pagination: {
+            el: '.column6 .swiper-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            1200: {
+                slidesPerView: 2.4,
+            },
+            0: {
+                slidesPerView: 1,
+            }
+        },
+    });
+
+    function updateNavigationButtons(swiper) {
+        const nextButton = swiper.el.querySelector('.swiper-button-next');
+        const prevButton = swiper.el.querySelector('.swiper-button-prev');
+
+        if (swiper.isEnd) {
+            nextButton.style.visibility = 'hidden';
+        } else {
+            nextButton.style.visibility = 'visible';
+        }
+
+        if (swiper.isBeginning) {
+            prevButton.style.visibility = 'hidden';
+        } else {
+            prevButton.style.visibility = 'visible';
+        }
+    }
+
+
+</script>
 </body>
 </html>

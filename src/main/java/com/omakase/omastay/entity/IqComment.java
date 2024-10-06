@@ -19,11 +19,11 @@ public class IqComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iqc_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "iq_idx", referencedColumnName = "iq_idx")
-    private Inquiry inquiry;
+    private Inquiry inquiry = new Inquiry();
 
     @Column(name = "iqc_title", nullable = false, length = 100)
     private String iqcTitle;

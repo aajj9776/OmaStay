@@ -16,12 +16,14 @@ public interface MemberMapper {
     @Mapping(source = "memberProfile.email", target = "memberProfile.email")
     @Mapping(source = "memberProfile.pw", target = "memberProfile.pw")
     @Mapping(source = "memberProfile.status", target = "memberProfile.status")
+    @Mapping(target = "reservations", ignore = true)
     MemberDTO toMemberDTO(Member member);
 
     @Mapping(source = "GIdx", target = "grade.id")
     @Mapping(source = "memberProfile.email", target = "memberProfile.email")
     @Mapping(source = "memberProfile.pw", target = "memberProfile.pw")
     @Mapping(source = "memberProfile.status", target = "memberProfile.status")
+    @Mapping(target = "reservations", ignore = true)
     Member toMember(MemberDTO memberDTO);
 
     List<MemberDTO> toMemberDTOList(List<Member> memberList);

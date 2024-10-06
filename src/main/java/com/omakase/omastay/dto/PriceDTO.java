@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PriceDTO {
-    private int id;
-    private int hIdx;
-    private int riIdx;
-    private int regularPrice;
+    private Integer id;
+    private Integer hIdx;
+    private Integer riIdx;
+    private Integer regularPrice;
     private PeakVo peakVo;
     private SemiPeakVo semi;
-    private int peakSet;
+    private Integer peakSet;
     private String priNone;
 
     public PriceDTO(Price price) {
@@ -31,7 +31,7 @@ public class PriceDTO {
     }
 
     @QueryProjection
-    public PriceDTO(int id, int hIdx, int riIdx, int regularPrice, PeakVo peakVo, SemiPeakVo semi, int peakSet, String priNone) {
+    public PriceDTO(Integer id, Integer hIdx, Integer riIdx, Integer regularPrice, PeakVo peakVo, SemiPeakVo semi, Integer peakSet, String priNone) {
         this.id = id;
         this.hIdx = hIdx;
         this.riIdx = riIdx;

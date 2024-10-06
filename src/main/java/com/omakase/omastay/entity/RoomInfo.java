@@ -1,16 +1,12 @@
 package com.omakase.omastay.entity;
 
-import com.omakase.omastay.entity.enumurate.PayStatus;
-import com.omakase.omastay.entity.enumurate.RiStatus;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
+import com.omakase.omastay.entity.enumurate.RoomStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.tomcat.util.http.parser.Host;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -21,32 +17,29 @@ import java.util.List;
 public class RoomInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ri_idx", nullable = false)
-    private int id;
+    @Column(name = "room_idx", nullable = false)
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "h_idx", referencedColumnName = "h_idx")
-    private HostInfo hostInfo;
+    private HostInfo hostInfo = new HostInfo();
 
-    @Column(name = "ri_name", nullable = false, length = 100)
-    private String riName;
+    @Column(name = "room_name", nullable = false, length = 100)
+    private String roomName;
 
-    @Column(name = "ri_type", nullable = false, length = 100)
-    private String riType;
+    @Column(name = "room_type", nullable = false, length = 100)
+    private String roomType;
 
-    @Column(name = "ri_count", nullable = false)
-    private int riCount;
-
-    @Column(name = "ri_intro", nullable = false, length = 500)
-    private String riIntro;
+    @Column(name = "room_intro", nullable = false, length = 500)
+    private String roomIntro;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "ri_status", nullable = false)
-    private RiStatus riStatus;
+    @Column(name = "room_status", nullable = false)
+    private BooleanStatus roomStatus;
 
-    @Column(name = "ri_person", nullable = false)
-    private int riPerson;
+    @Column(name = "room_person", nullable = false)
+    private int roomPerson;
 
-    @Column(name = "ri_none", length = 100)
-    private String riNone;
+    @Column(name = "room_none", length = 100)
+    private String roomNone;
 }

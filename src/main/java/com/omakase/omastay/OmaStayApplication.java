@@ -8,6 +8,8 @@ public class OmaStayApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(OmaStayApplication.class, args);
+
     }
 
+    
 }

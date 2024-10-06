@@ -15,24 +15,24 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "reservation")
-@ToString(exclude = {"member", "roomFacility", "nonMember", "payment"})
+@ToString(exclude = {"member", "roomInfo", "nonMember", "payment"})
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "res_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_idx", referencedColumnName = "room_idx")
-    private RoomFacilities roomFacility;
+    private RoomInfo roomInfo = new RoomInfo();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
-    private Member member;
+    private Member member = new Member();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "non_idx", referencedColumnName = "non_idx")
-    private NonMember nonMember;
+    private NonMember nonMember = new NonMember();
 
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -42,21 +42,22 @@ public class Reservation {
     @Column(name = "res_num", nullable = false, length = 100)
     private String resNum;
 
+
+    @Column(name = "res_name", nullable = false, length = 100)
+    private String resName;
+
+    @Column(name = "res_email", nullable = false, length = 100)
+    private String resEmail;
+
     //예약 시작일 종료일
     @Embedded
-    private StartEndVo startEndVo;
-
-    @Column(name = "res_start", nullable = false, insertable = false, updatable = false)
-    private LocalDateTime resStart;
-
-    @Column(name = "res_end", nullable = false, insertable = false, updatable = false)
-    private LocalDateTime resEnd;
+    private StartEndVo startEndVo = new StartEndVo();
 
     @Column(name = "res_person", nullable = false)
-    private int resPerson;
+    private Integer resPerson;
 
     @Column(name = "res_price", nullable = false)
-    private int resPrice;
+    private Integer resPrice;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "res_status", nullable = false)

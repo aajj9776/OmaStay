@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class InquiryDTO {
-    private int id;
-    private int mIdx;
+    private Integer id;
+    private Integer mIdx;
     private String iqTitle;
     private String iqContent;
     private String iqWriter;
-    private FileImageNameVo fileName;
+    private FileImageNameVo fileName = new FileImageNameVo();
     private LocalDateTime iqDate;
     private BooleanStatus iqStatus;
     private CStatus cStatus;
@@ -41,7 +41,7 @@ public class InquiryDTO {
     }
 
     @QueryProjection
-    public InquiryDTO(int id, int mIdx, String iqTitle, String iqContent, String iqWriter, FileImageNameVo fileName, LocalDateTime iqDate, BooleanStatus iqStatus, CStatus cStatus, UserAuth iqAuth, String iqNone) {
+    public InquiryDTO(Integer id, Integer mIdx, String iqTitle, String iqContent, String iqWriter, FileImageNameVo fileName, LocalDateTime iqDate, BooleanStatus iqStatus, CStatus cStatus, UserAuth iqAuth, String iqNone) {
         this.id = id;
         this.mIdx = mIdx;
         this.iqTitle = iqTitle;

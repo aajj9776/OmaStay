@@ -3,7 +3,6 @@ package com.omakase.omastay.mapper;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.entity.Service;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;

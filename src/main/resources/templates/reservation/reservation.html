@@ -1,23 +1,28 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <meta charset="utf-8" />
   </head>
   <body>
     <section
-      class="flex-1 bg-[#fff] flex flex-row items-end justify-center pt-[74px] px-[352px] pb-[86px] box-border gap-[67px] max-w-full text-left text-[13.2px] text-[#c7c2c2] font-[Roboto] mq1800:flex-wrap mq925:gap-[17px] mq925:pt-[48px] mq925:px-[88px] mq925:pb-[56px] mq925:box-border mq1350:gap-[33px] mq1350:pl-[176px] mq1350:pr-[176px] mq1350:box-border"
+      class="flex-1 bg-[#fff] flex flex-row items-start justify-center pt-[74px] px-[352px] pb-[86px] box-border gap-[67px] max-w-full text-left text-[13.2px] text-[#c7c2c2] font-[Roboto] mq1800:flex-wrap mq925:gap-[17px] mq925:pt-[48px] mq925:px-[88px] mq925:pb-[56px] mq925:box-border mq1350:gap-[33px] mq1350:pl-[176px] mq1350:pr-[176px] mq1350:box-border"
     >
-      <form
+      <div
         class="m-[0px] w-[794px] flex flex-col items-start justify-start gap-[27.5px] min-w-[794px] max-w-full mq1800:flex-1 mq1800:min-w-full"
       >
         <div
-          class="self-stretch flex flex-col items-start justify-start gap-[13px] max-w-full"
+          class="w-[340px] flex flex-col items-start justify-start pt-0 px-0 pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
         >
           <div
-            class="w-[211.8px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[10px]"
+            class="w-[211.8px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[10px] mb-[40px]"
           >
             <div
               class="flex flex-col items-start justify-start pt-[2.5px] px-[0px] pb-[0px]"
@@ -43,7 +48,7 @@
             class="w-[211.8px] flex flex-row items-start justify-start pl-[0px] pr-[0px] box-border gap-[10px]"
           ></div>
           <div
-            class="flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[7px]"
+            class="flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[7px] mb-[10px]"
           >
             <b
               class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[82.1px] whitespace-nowrap"
@@ -54,7 +59,7 @@
             class="self-stretch flex flex-col items-start justify-start gap-[15px] max-w-full"
           >
             <div
-              class="w-[339px] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border gap-[4px] max-w-full"
+              class="w-[300px] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border gap-[4px] max-w-full mt-[10px]"
             >
               <div
                 class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left inline-block min-w-[59.5px] whitespace-nowrap"
@@ -65,14 +70,15 @@
                 class="self-stretch rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid flex flex-row items-start justify-start py-[13px] px-[19px]"
               >
                 <input
-                  class="w-[41.7px] [border:none] [outline:none] font-[Roboto] text-[15px] bg-[transparent] h-[19px] relative text-[rgba(0,0,0,0.24)] text-left flex items-center p-[0px]"
+                  class="w-[300px] [border:none] [outline:none] font-[Roboto] text-[15px] bg-[transparent] h-[19px] relative text-black text-left flex items-center p-[0px]"
                   placeholder="홍길동"
                   type="text"
+                  id="reserver_name"
                 />
               </div>
             </div>
             <div
-              class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full"
+              class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
             >
               <div
                 class="w-[59.5px] relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
@@ -83,16 +89,18 @@
                 class="self-stretch flex flex-row items-start justify-start gap-[4px] mq450:flex-wrap"
               >
                 <div
-                  class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[12px] px-[19px] pb-[9px] min-w-[157px] [row-gap:20px] mq450:flex-wrap"
+                  class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[12px] px-[19px] pb-[9px] min-w-[300px] mq450:flex-wrap"
                 >
                   <div
-                    class="w-[166px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[4px] box-border"
+                    class="w-[230px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[4px] box-border"
                   >
-                    <div
-                      class="w-[114.1px] relative text-[16px] font-[Roboto] text-[rgba(0,0,0,0.24)] text-left flex items-center shrink-0 whitespace-nowrap"
-                    >
-                      xxx@xx.com
-                    </div>
+                    <input
+                      class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
+                      placeholder="xxx@xx.com"
+                      type="email"
+                      id="reserver_email"
+                    />
+
                     <div
                       class="h-[17px] w-[36px] relative overflow-hidden shrink-0 hidden"
                     ></div>
@@ -101,164 +109,193 @@
                     class="flex flex-col items-start justify-start pt-[7px] px-[0px] pb-[0px] ml-[-2px] mq450:ml-[0px]"
                   >
                     <div
+                      id="timer"
                       class="h-[9px] relative text-[12px] font-[Roboto] text-[#f5455c] text-left flex items-center shrink-0 min-w-[34px] whitespace-nowrap z-[1]"
                     >
-                      00:00
+                      03:00
                     </div>
                   </div>
                 </div>
-                <div
-                  class="w-[94px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
+                <button
+                  onclick="sendEmail()"
+                  class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
                 >
                   <div
-                    class="w-[87px] relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center shrink-0"
+                    id="emailText"
+                    class="w-full relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center shrink-0"
                   >
                     인증번호 전송
                   </div>
+                </button>
+              </div>
+              <div id="authPlace" style="display: none">
+                <div
+                  class="w-[300px] flex flex-col items-start justify-start gap-[4px] max-w-full mt-[10px]"
+                >
+                  <div
+                    class="self-stretch rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid flex flex-row items-start justify-start py-[13px] px-[19px]"
+                  >
+                    <input
+                      class="w-[300px] [border:none] [outline:none] font-[Roboto] text-[15px] bg-[transparent] h-[19px] relative text-black text-left flex items-center p-[0px]"
+                      placeholder="인증번호 입력"
+                      type="text"
+                      id="verification_code"
+                    />
+                  </div>
                 </div>
+
+                <button
+                  id="authBtn"
+                  onclick="verifyCode()"
+                  class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap mt-[10px]"
+                >
+                  <div
+                    id="verificationText"
+                    class="w-full relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center shrink-0"
+                  >
+                    인증번호 확인
+                  </div>
+                </button>
               </div>
-              <div
-                class="relative text-[11.3px] leading-[16px] font-[Roboto] text-[#999] text-left whitespace-nowrap"
+              <a
+                id="noEmail"
+                class="relative text-[11.3px] leading-[16px] font-[Roboto] text-[#292828] text-left whitespace-nowrap"
               >
-                개인 정보 보호를 위해 안심번호로 숙소에 전송됩니다.
-              </div>
+                이메일을 받지 못하셨나요?
+              </a>
             </div>
             <div class="self-stretch h-[1px] relative bg-[#f5f5f5]"></div>
             <b
-              class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[66.6px] whitespace-nowrap"
+              class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[66.6px] whitespace-nowrap mb-[10px]"
               >할인 적용</b
             >
           </div>
           <div
-            class="w-[363px] flex flex-row items-start justify-start py-[0px] px-[7px] box-border max-w-full"
+            class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
           >
             <div
-              class="flex-1 flex flex-col items-start justify-start gap-[5px] max-w-full"
+              class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
+            >
+              쿠폰
+            </div>
+            <div
+              class="self-stretch flex flex-row items-start justify-start gap-[4px]"
             >
               <div
-                class="w-[29px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center"
+                class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex items-start justify-start pt-[12px] px-[19px] pb-[9px] min-w-[300px]"
               >
-                쿠폰
+                <input
+                  class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
+                  placeholder="쿠폰"
+                  type="text"
+                  id="coupon_input"
+                />
               </div>
-              <div class="self-stretch flex flex-col items-start justify-start">
+              <button
+                id="couponButton"
+                class="open-modal w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
+              >
                 <div
-                  class="self-stretch flex flex-row items-start justify-start gap-[7px] mq925:flex-wrap"
+                  class="text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center shrink-0"
                 >
-                  <div
-                    class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[19px] pr-[0px] min-w-[164px]"
-                  >
-                    <input
-                      class="w-full [border:none] [outline:none] font-[Roboto] text-[14px] bg-[transparent] h-[33px] flex-1 relative text-[#999] text-left flex items-center min-w-[139px] p-[0px]"
-                      placeholder="0"
-                      type="text"
-                    />
-                  </div>
-                  <div
-                    class="w-[90px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start whitespace-nowrap"
-                  >
-                    <div
-                      class="h-[33px] flex-1 relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center"
-                    >
-                      쿠폰 조회
-                    </div>
-                  </div>
+                  쿠폰 조회
                 </div>
+              </button>
+
+              <div
+                class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[9999] hidden"
+                id="couponModal"
+              >
+                <!-- Modal Content -->
                 <div
-                  class="w-[147px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center z-[1]"
+                  class="bg-white rounded-lg p-5 flex flex-col"
+                  style="width: 380px; height: 500px"
                 >
-                  사용 가능 쿠폰 (3) 장
+                  <!-- Modal Header -->
+                  <div class="flex justify-between items-center border-b pb-3">
+                    <h2 class="text-lg font-semibold text-black">쿠폰 적용</h2>
+                    <button
+                      class="text-gray-500 hover:text-gray-800 close-modal"
+                    >
+                      <i class="fas fa-times"></i>
+                      <!-- 아이콘은 FontAwesome 필요 -->
+                    </button>
+                  </div>
+
+                  <!-- Coupon List -->
+                  <div
+                    class="mt-4 flex-1 overflow-y-auto"
+                    style="max-height: 300px"
+                  >
+                    <h3 class="font-semibold mb-2 text-black">일반 쿠폰</h3>
+                    <div class="border rounded-md mb-1">
+                      <!-- No Coupon Option -->
+                      <label class="flex items-center p-3 border-b text-black">
+                        <input
+                          type="radio"
+                          name="coupon"
+                          class="mr-2 text-blue-600"
+                          value="0"
+                          checked
+                        />
+                        적용안함
+                      </label>
+                    </div>
+                    <div id="modal"></div>
+                  </div>
+
+                  <!-- Apply Button -->
+                  <div class="mt-5">
+                    <button
+                      id="couponBtn"
+                      class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+                    >
+                      적용하기
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          class="w-[362px] flex flex-row items-start justify-start py-[0px] px-[7px] box-border max-w-full"
-        >
+
           <div
-            class="flex-1 flex flex-col items-start justify-start gap-[4px] max-w-full"
+            class="w-[339px] flex flex-col items-start justify-start gap-[4px] max-w-full mb-[20px]"
           >
-            <div
-              class="w-[47px] relative text-[11.3px] leading-[18px] font-[Roboto] text-[#999] text-left flex items-center"
-            >
-              상품권
+            <div th:each="c : ${coupon}">
+              <span th:text="${c.coupon.id} + '원'"></span>
             </div>
             <div
-              class="self-stretch flex flex-row items-start justify-start gap-[6px] mq925:flex-wrap"
+              class="relative text-[12.2px] leading-[16px] font-semibold font-[Roboto] text-[#333] text-left flex items-center"
+            >
+              포인트
+            </div>
+            <div
+              class="self-stretch flex flex-row items-start justify-start gap-[4px]"
             >
               <div
-                class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[19px] pr-[0px] min-w-[164px]"
+                class="flex-1 rounded-[8px] bg-[#f5f5f5] border-[#f5f5f5] border-[1px] border-solid box-border flex items-start justify-start pt-[12px] px-[19px] pb-[9px] min-w-[300px]"
               >
                 <input
-                  class="w-full [border:none] [outline:none] font-[Roboto] text-[14px] bg-[transparent] h-[33px] flex-1 relative text-[#999] text-left flex items-center min-w-[139px] p-[0px]"
-                  placeholder="0"
+                  class="w-full bg-[#f5f5f5] relative text-[16px] font-[Roboto] text-black text-left flex items-center shrink-0 whitespace-nowrap focus:outline-none focus:border-none"
+                  placeholder="포인트"
                   type="text"
+                  id="point_input"
+                  readonly
                 />
               </div>
-              <div
-                class="w-[90px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start whitespace-nowrap"
+              <button
+                class="w-[150px] rounded-[10px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[13px] pl-[3px] pr-[2px] whitespace-nowrap"
               >
                 <div
-                  class="h-[33px] flex-1 relative text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center flex items-center justify-center"
+                  class="text-[13px] leading-[19px] font-semibold font-[Roboto] text-[#333] text-center shrink-0"
                 >
                   잔액 확인
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
-        <div
-          class="self-stretch flex flex-col items-start justify-start gap-[18px] max-w-full"
-        >
-          <div
-            class="self-stretch flex flex-col items-start justify-start gap-[13px]"
-          >
-            <img
-              class="self-stretch relative max-w-full overflow-hidden max-h-full"
-              loading="lazy"
-              alt=""
-              src="/image/reservation/horizontal-divider.svg"
-            />
-
-            <b
-              class="relative text-[16.9px] leading-[21px] inline-block font-[Roboto] text-[#333] text-left min-w-[66.6px] whitespace-nowrap"
-              >결제 수단</b
-            >
-          </div>
-          <div
-            class="flex flex-row items-start justify-start gap-[13.9px] max-w-full mq925:flex-wrap"
-          >
-            <button
-              class="cursor-pointer border-[#b7d5f6] border-[1px] border-solid py-[7px] pl-[39px] pr-[38px] bg-[#f2f8ff] rounded-[8px] flex flex-row items-start justify-start"
-            >
-              <img
-                class="h-[30px] w-[66.4px] relative overflow-hidden shrink-0 object-cover"
-                alt=""
-                src="/image/reservation/kakaopng@2x.png"
-              />
-            </button>
-            <div
-              class="rounded-[8px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid flex flex-row items-start justify-start py-[16px] pl-[39px] pr-[38px]"
-            >
-              <img
-                class="h-[13.6px] w-[66.4px] relative overflow-hidden shrink-0 object-cover"
-                loading="lazy"
-                alt=""
-                src="/image/reservation/tosspaypng@2x.png"
-              />
-            </div>
-            <div
-              class="rounded-[8px] bg-[#fff] border-[#ebebeb] border-[1px] border-solid flex flex-row items-start justify-start py-[0px] pl-[32px] pr-[30px] whitespace-nowrap"
-            >
-              <div
-                class="relative text-[13.1px] leading-[46px] font-semibold font-[Roboto] text-[#333] text-center inline-block min-w-[81.1px] whitespace-nowrap"
-              >
-                신용/체크 카드
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+      </div>
       <div
         class="w-[340px] flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[22px] box-border min-w-[340px] max-w-full mq1800:flex-1 mq1350:min-w-full"
       >
@@ -306,12 +343,15 @@
                   <div
                     class="w-[138px] flex flex-row items-start justify-start py-[0px] px-[1px] box-border"
                   >
-                    <b class="flex-1 relative leading-[20px]">스탠다드?</b>
+                    <b id="room" class="flex-1 relative leading-[20px]"
+                      >스탠다드</b
+                    >
                   </div>
                   <div
                     class="self-stretch flex flex-col items-start justify-start gap-[9px]"
                   >
                     <b
+                      id="date"
                       class="self-stretch h-[40px] relative leading-[20px] flex items-center shrink-0"
                       >오늘이겠지</b
                     >
@@ -321,13 +361,16 @@
                       <div
                         class="flex-1 flex flex-col items-start justify-start gap-[15px]"
                       >
-                        <b class="self-stretch relative leading-[20px]"
+                        <b
+                          id="person"
+                          class="self-stretch relative leading-[20px]"
                           >오늘이겠지</b
                         >
                         <div
                           class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px]"
                         >
                           <b
+                            id="addInfo"
                             class="h-[37px] flex-1 relative leading-[20px] flex items-center"
                             >오늘이겠지ㅇㅁㄴㅇㄻㄴㅇ</b
                           >
@@ -350,17 +393,27 @@
                 >결제 정보</b
               >
               <div
-                class="self-stretch flex flex-row items-start justify-between gap-[20px]"
+                class="self-stretch flex flex-row items-start justify-between"
               >
                 <div
                   class="w-[57px] relative leading-[20px] flex items-center shrink-0"
                 >
                   객실 가격
                 </div>
-                <div
-                  class="relative text-[14px] leading-[20px] font-semibold text-right inline-block min-w-[15px] shrink-0"
-                >
-                  원
+
+                <div class="flex-1 flex justify-end items-center">
+                  <input
+                    type="text"
+                    id="nsale_price"
+                    class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] mq450:text-[16px] mq450:leading-[19px]"
+                    placeholder="가격 입력"
+                    value="10000"
+                  />
+                  <div
+                    class="relative text-[15px] leading-[24px] font-semibold text-right inline-block min-w-[20px] mq450:text-[16px] mq450:leading-[19px]"
+                  >
+                    원
+                  </div>
                 </div>
               </div>
               <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
@@ -368,7 +421,7 @@
                 class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[3px] pr-[0px]"
               >
                 <div
-                  class="flex-1 flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap"
+                  class="flex-1 flex flex-row items-start justify-between mq450:flex-wrap"
                 >
                   <div
                     class="flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px]"
@@ -379,51 +432,344 @@
                       총 결제 금액
                     </div>
                   </div>
-                  <b
-                    class="relative text-[20px] leading-[24px] inline-block text-[#f45858] text-right min-w-[32px] mq450:text-[16px] mq450:leading-[19px]"
-                    >0원</b
-                  >
+
+                  <div class="flex-1 flex justify-end items-center">
+                    <input
+                      type="text"
+                      id="sale_price"
+                      class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[20px] leading-[24px] text-[#f45858] mq450:text-[16px] mq450:leading-[19px]"
+                      value="50000"
+                      readonly
+                    />
+                    <b
+                      class="relative text-[20px] leading-[24px] inline-block text-[#f45858] text-right mq450:text-[16px] mq450:leading-[19px]"
+                      >원</b
+                    >
+                  </div>
                 </div>
               </div>
             </div>
             <div
               class="self-stretch flex flex-col items-start justify-start gap-[12px] text-[13.1px]"
             >
-              <div
-                class="self-stretch rounded-[8px] bg-[#f5f5f5] flex flex-row items-start justify-start py-[11px] px-[10px] gap-[10px] mq450:flex-wrap"
-              >
-                <input
-                  class="m-[0px] h-[18px] w-[18px] relative min-h-[18px]"
-                  type="checkbox"
-                />
-
-                <div
-                  class="flex-1 flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border min-w-[139px]"
-                >
-                  <b class="relative leading-[18px] inline-block min-w-[82px]"
-                    >약관 전체동의</b
-                  >
-                </div>
-                <img
-                  class="h-[18px] w-[18px] relative min-h-[18px]"
-                  alt=""
-                  src="/image/reservation/svg-2.svg"
-                />
-              </div>
-              <div
+              <button
+                onclick="requestPayment()"
                 class="self-stretch rounded-[10px] bg-[#1273e4] flex flex-row items-start justify-center py-[14.5px] px-[20px] whitespace-nowrap text-center text-[15.4px] text-[#fff]"
               >
-                <div
-                  class="relative leading-[19px] font-semibold inline-block min-w-[83.4px]"
-                >
-                  0원 결제하기
-                </div>
-              </div>
+                결제하기
+              </button>
             </div>
+            <div id="login"></div>
           </div>
         </div>
       </div>
     </section>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.tosspayments.com/v2/standard"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      let person = $("#person").val();
+      let date = $("#date").val();
+      let addInfo = $("#addInfo").val();
+      let room = $("#room").val();
+      let sale_price = $("#sale_price").val();
+      let nsale_price = $("#nsale_price").val();
+      let resEmail;
+      let resName;
+      let timerExpired = false;
+      let login = localStorage.getItem("isLogin") === "true";
+      let user = JSON.parse(localStorage.getItem("user"));
+      let couponId;
+      let couponData;
+      let totalPrice;
+      let couponCheck = false;
+
+      function userInfo() {
+        console.log("하이");
+        $.ajax({
+          url: "/reservation/coupon",
+          type: "POST",
+          data: {
+            id: user.id,
+          },
+        }).done(function (data) {
+          let coupon = $("#modal");
+          let couponList = "";
+          couponData = {};
+          let couponBtn = $("#couponBtn");
+          let couponIdx;
+
+          for (let i = 0; i < data.coupon.length; i++) {
+            console.log(data.coupon[i]);
+            couponIdx = data.coupon[i].id;
+            couponData = data.coupon[i].coupon;
+            couponList += `
+                        <div class="mb-1"> <!-- 항목 간의 간격 -->
+                          <label class="flex items-start p-3 border rounded-lg shadow-sm text-black">
+                              <input
+                                  id="coupon"
+                                  type="radio"
+                                  name="coupon"
+                                  class="mr-2 text-blue-600"
+                                  value="${couponIdx}"
+                              />
+                              <div>
+                                  <span class="block font-semibold">${
+                                    couponData.cpContent
+                                  }</span>
+                                 <span>${
+                                   couponData.cpCate === "PERCENT"
+                                     ? `${couponData.cpSale}% 할인`
+                                     : `${couponData.cpSale}원 할인`
+                                 }</span>
+                              </div>
+                          </label>
+                      </div>`;
+          }
+          coupon.html(couponList);
+
+          couponBtn.click(function () {
+            couponId = $("input[name='coupon']:checked").val();
+            console.log(couponId);
+            $("#coupon_input").val(couponData.cpContent);
+
+            $("#couponModal").addClass("hidden");
+            $("body").removeClass("overflow-hidden");
+            couponCheck = true;
+            changePrice();
+          });
+        });
+      }
+
+      function changePrice() {
+        let price = parseInt($("#sale_price").val()); // 입력된 가격을 숫자로 변환
+        let couponPrice = 0; // 초기 쿠폰 할인 금액 설정
+
+        console.log(couponData.cpCate);
+        if (couponData.cpCate === "PERCENT") {
+          couponPrice = price * (couponData.cpSale / 100); // 퍼센트 할인 계산
+        } else if (couponData.cpCate === "AMOUNT") {
+          couponPrice = parseInt(couponData.cpSale); // 정액 할인 계산
+        }
+        console.log(price);
+        console.log(couponPrice);
+
+        // 최종 결제 금액 계산
+        totalPrice = price - couponPrice;
+
+        // 최소 결제 금액이 0 미만이 되지 않도록 처리
+        if (totalPrice < 0) {
+          totalPrice = 0;
+        }
+
+        // 총 결제 금액을 readonly 필드에 업데이트
+        $("#sale_price").val(totalPrice);
+      }
+
+      $(function () {
+        // Open Modal
+        $(".open-modal").click(function () {
+          if (couponCheck) {
+            alert("이미 쿠폰을 적용하셨습니다.");
+            return;
+          }
+          userInfo();
+          $("#couponModal").removeClass("hidden");
+          $("body").addClass("overflow-hidden");
+        });
+
+        // Close Modal
+        $(".close-modal").click(function () {
+          $("#couponModal").addClass("hidden");
+          $("body").removeClass("overflow-hidden");
+        });
+
+        $("#couponModal").click(function (e) {
+          if ($(e.target).is("#couponModal")) {
+            $("#couponModal").addClass("hidden");
+            $("body").removeClass("overflow-hidden"); // 모달이 닫히면 스크롤 허용
+          }
+        });
+      });
+
+      function verifyCode() {
+        if (timerExpired) {
+          alert("인증 시간이 만료되었습니다. 다시 시도해주세요.");
+          return;
+        }
+        let code = $("#verification_code").val();
+        if (code == null && code == "") {
+          alert("인증번호를 입력해주세요.");
+          return;
+        }
+
+        $.ajax({
+          url: "/reservation/emailCheck",
+          type: "POST",
+          data: {
+            code: code,
+            email: $("#reserver_email").val(),
+          },
+        }).done(function (data) {
+          if (data == "success") {
+            alert("인증번호 확인 완료");
+            $("#authBtn").css("display", "none");
+            $("#verification_code").val("인증완료!");
+            $("#verification_code").attr("readonly", true);
+          } else {
+            alert("인증번호가 일치하지 않습니다.");
+          }
+        });
+      }
+
+      function makeOrderId() {
+        const date = new Date();
+
+        // 날짜와 시간을 기반으로 고유 번호 생성
+        const year = date.getFullYear().toString().slice(-2); // 연도 마지막 두 자리
+        const month = ("0" + (date.getMonth() + 1)).slice(-2); // 월 (두 자리)
+        const day = ("0" + date.getDate()).slice(-2); // 일 (두 자리)
+        const hour = ("0" + date.getHours()).slice(-2); // 시 (두 자리)
+        const minute = ("0" + date.getMinutes()).slice(-2); // 분 (두 자리)
+        const second = ("0" + date.getSeconds()).slice(-2); // 초 (두 자리)
+
+        // 고유성을 위해 랜덤 문자열 추가
+        const randomString = Math.random()
+          .toString(36)
+          .substring(2, 6)
+          .toUpperCase();
+
+        // 주문번호 형식: YYMMDD-HHMMSS-랜덤문자열
+        return `${year}${month}${day}-${hour}${minute}${second}-${randomString}`;
+      }
+
+      //주문번호
+      // 예시 사용
+      const orderNumber = makeOrderId();
+
+      //이메일 인증
+      function sendEmail() {
+        if (timerExpired) {
+          $("#emailText").text("인증번호 재전송");
+        }
+        let email = $("#reserver_email").val();
+        if (email == null && email == "") {
+          alert("이메일을 입력해주세요.");
+          return;
+        }
+
+        $.ajax({
+          url: "/reservation/sendEmail",
+          type: "POST",
+          data: {
+            email: email,
+          },
+        }).done(function (data) {
+          if (data == "success") {
+            startCountdown();
+            alert("인증번호가 전송되었습니다.");
+            $("#authPlace").css("display", "block");
+            $("#verification_code").prop("disabled", false); // 타이머 시작 시 입력 가능하도록
+            $("#authBtn").prop("disabled", false); // 타이머 시작 시 인증 버튼 활성화
+          }
+        });
+      }
+
+      function startCountdown() {
+        let time = 180; // 3분 = 180초
+        let timerDisplay = $("#timer");
+
+        // 1초마다 실행
+        let countdownInterval = setInterval(function () {
+          // 타이머 종료 조건
+          if (time <= 0) {
+            clearInterval(countdownInterval); // 타이머 멈추기
+            timerDisplay.text("00:00"); // 타이머 종료 시 00:00 표시
+            alert("인증 시간이 만료되었습니다.");
+            timerExpired = true;
+            $("#verification_code").val("");
+            return;
+          }
+
+          let minutes = Math.floor(time / 60);
+          let seconds = time % 60;
+
+          // 시간 포맷팅 (초가 두 자리가 아니면 앞에 0 추가)
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+
+          // 타이머 화면 업데이트
+          timerDisplay.text(minutes + ":" + seconds);
+
+          time--; // 화면 업데이트 후 시간 감소
+        }, 1000); // 1초마다 실행
+      }
+
+      // ------  SDK 초기화 ------
+      // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
+      const clientKey = "test_ck_PBal2vxj81jDG7MyAXLR35RQgOAN";
+      const customerKey = "aasdlfkjal"; //회원번호
+      const tossPayments = TossPayments(clientKey);
+      // 회원 결제
+      // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
+      const payment = tossPayments.payment({ customerKey });
+      // 비회원 결제
+      // const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
+
+      // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
+      // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
+      async function requestPayment() {
+        resEmail = $("#reserver_email").val();
+        resName = $("#reserver_name").val();
+
+        let code = $("#verification_code").val();
+
+        if (resName == null && resName == "") {
+          alert("예약자 이름을 입력해주세요");
+          return;
+        }
+        if (code != "인증완료!") {
+          alert("이메일 인증을 해주세요");
+          return;
+        }
+
+        // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
+        // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+        await payment.requestPayment({
+          method: "CARD", // 카드 결제
+          amount: {
+            currency: "KRW",
+            value: totalPrice, // 결제 금액
+          },
+          orderId: orderNumber, // 고유 주분번호
+          orderName: "한별이~^^", //방이름
+          successUrl:
+            window.location.origin +
+            "/reservation/payment_success?resName=" +
+            encodeURIComponent(resName) +
+            "&resEmail=" +
+            encodeURIComponent(resEmail) +
+            "&couponId=" +
+            encodeURIComponent(couponId), // 결제 요청이 성공하면 리다이렉트되는 URL
+          failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
+          customerEmail: resEmail, //회원 이메일
+          customerName: resName, //회원이름
+          customerMobilePhone: "01012341234", //회원전화번호
+
+          // 카드 결제에 필요한 정보
+          card: {
+            useEscrow: false,
+            flowMode: "DEFAULT", // 통합결제창 여는 옵션
+            useCardPoint: false,
+            useAppCardOnly: false,
+          },
+        });
+      }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
   </body>
 </html>

@@ -10,11 +10,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class NonMemberDTO {
-    private int id;
+    private Integer id;
     private String nonName;
     private String nonPhone;
     private String nonEmail;
     private String nonNone;
+
+
+
 
     public NonMemberDTO(NonMember nonMember) {
         this.id = nonMember.getId();
@@ -25,7 +28,7 @@ public class NonMemberDTO {
     }
 
     @QueryProjection
-    public NonMemberDTO(int id, String nonName, String nonPhone, String nonEmail, String nonNone) {
+    public NonMemberDTO(Integer id, String nonName, String nonPhone, String nonEmail, String nonNone) {
         this.id = id;
         this.nonName = nonName;
         this.nonPhone = nonPhone;

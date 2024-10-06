@@ -1,103 +1,131 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/admin}"
-      layout:fragment="admin">
-    <head>
-  </head>
-  <body>
-    <div
-      class="w-full relative rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden flex flex-row items-center justify-start py-[90px] px-[60px] box-border leading-[normal] tracking-[normal] mq900:pl-[30px] mq900:pr-[30px] mq900:box-border"
-    >
-      <main
-        class="flex-1 overflow-hidden flex flex-col items-center justify-center py-[0px] px-[65px] box-border gap-[10px] max-w-full text-left text-[24px] text-[#000] font-[Roboto] mq1275:pl-[32px] mq1275:pr-[32px] mq1275:box-border"
-      >
-        <h2
-          class="m-[0px] self-stretch h-[48px] relative text-inherit tracking-[0.46px] leading-[26px] uppercase font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[21px]"
-        >
-          공지사항 글쓰기
-        </h2>
-        <section
-          class="self-stretch h-[764px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[48px] px-[61px] box-border mq450:pt-[20px] mq450:pb-[20px] mq450:box-border mq900:pt-[31px] mq900:pb-[31px] mq900:box-border mq1275:pl-[30px] mq1275:pr-[30px] mq1275:box-border"
-        >
-          <img
-            class="self-stretch flex-1 relative max-w-full overflow-hidden max-h-full object-cover"
-            loading="lazy"
-            alt=""
-            src="/public/image-45@2x.png"
-          />
-        </section>
-        <div
-          class="overflow-hidden flex flex-row items-center justify-start py-[15px] pl-[20px] pr-[1170px] gap-[11px] mq450:pr-[20px] mq450:box-border mq900:pr-[292px] mq900:box-border mq1275:pr-[585px] mq1275:box-border mq1650:flex-wrap"
-        >
-          <button
-            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center"
-          >
-            <div class="flex flex-row items-center justify-center gap-[8px]">
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon.svg"
-              />
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
 
-              <div
-                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]"
-              >
-                등록
-              </div>
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon1.svg"
-              />
-            </div>
-          </button>
-          <button
-            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[21px] bg-[rgba(156,39,176,0.04)] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
-          >
-            <div class="flex flex-row items-center justify-center gap-[8px]">
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon.svg"
-              />
+<head>
+  <link rel="stylesheet" href="/summernote/css/style.css"/>
+  <link rel="stylesheet" href="/summernote/css/summernote-lite.css"/>
+  <style>
+    .note-editable { background-color: white !important; color: black !important; }
+  </style>
+</head>
 
-              <div
-                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[61px] whitespace-nowrap"
-              >
-                다시 입력
-              </div>
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon1.svg"
-              />
-            </div>
-          </button>
-          <button
-            class="cursor-pointer border-[rgba(156,39,176,0.5)] border-[1px] border-solid py-[6px] px-[20px] bg-[rgba(156,39,176,0.04)] w-[73px] rounded-[4px] box-border overflow-hidden shrink-0 flex flex-col items-center justify-center"
-          >
-            <div class="flex flex-row items-center justify-center gap-[8px]">
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon.svg"
-              />
+<body>
+  <div class="w-[1720px] relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] gap-[20px]">
+    <main class="flex-1 overflow-hidden flex flex-col items-center justify-center py-[0px] px-[65px] gap-[10px] max-w-full text-left text-[24px] text-[#000] font-[Roboto] mq1275:pl-[32px] mq1275:pr-[32px]">
+      <h2 class="m-[0px] self-stretch h-[48px] relative text-inherit tracking-[0.46px] leading-[26px] uppercase font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[21px]">
+        공지사항 글쓰기
+      </h2>
 
-              <div
-                class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#9c27b0] text-left inline-block min-w-[31px]"
-              >
-                목록
-              </div>
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/public/masked-icon1.svg"
-              />
-            </div>
-          </button>
-        </div>
-      </main>
-    </div>
-  </body>
+      <!-- 게시판 글쓰기 영역-->
+      <section class="text-[#6c757d] text-[16px] w-[1300px] self-stretch h-[700px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[48px] px-[61px] mq450:pt-[20px] mq450:pb-[20px] mq900:pt-[31px] mq900:pb-[31px] mq1275:pl-[30px] mq1275:pr-[30px]">
+        <form action="/admin/host_notice/write" method="post" encType="multipart/form-data">
+          <input type="hidden" name="bname" value="bbs" />
+          <table summary="게시판 글쓰기" >
+            <tbody >
+              <tr>
+                <td><input type="text" id="title" name="sTitle" data-str="제목" placeholder="제목을 입력하세요" 
+                  class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
+                  text-[#6c757d] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
+                  border-solid box-border py-[4px] px-[11px] mb-2" /></td>
+              </tr>
+              <tr>
+                <td><textarea id="content" class="bg-[#fff]" name="sContent" cols="50" data-str="내용" rows="8"
+                     style="background-color: white !important; "></textarea></td>
+              </tr>
+              <tr>
+                <td><input type="file" id="fileUpload" name="file" data-str="첨부파일" class="mt-2 text-[#6c757d]" /></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </section>
+
+      <div class="text-[15px] font-medium overflow-hidden flex flex-row items-center justify-start py-[15px] pl-[20px] pr-[1170px] gap-[11px] mq450:pr-[20px] mq900:pr-[292px] mq1275:pr-[585px] mq1650:flex-wrap">
+        <button onclick="sendData()"
+          class="w-[80px] h-[35px] bg-[#d4d8f1] rounded-[4px]">
+          등록
+        </button>
+        <button onclick="resetData()"
+          class="w-[80px] h-[35px] bg-[#d4d8f1] rounded-[4px]">
+          다시 입력
+        </button>
+        <button onclick="javascript:location.href='/admin/host_notice'"
+          class="w-[80px] h-[35px] bg-[#d4d8f1] rounded-[4px]">
+          목록
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="/summernote/js/summernote-lite.js"></script>
+  <script>
+
+    $(function () {
+      $("#content").summernote({
+        lang: "ko-KR",
+        width: 1000,
+        height: 400,
+        maxHeight: 500,
+        minHeight: 200,
+
+        callbacks: {
+          onImageUpload: function (files, editor) {
+            console.log("**");
+            for (let i = 0; i < files.length; i++)
+              sendImage(files[i], editor);
+          }
+        }
+      });
+
+      $("#content").summernote("lineHeight", 0.7);
+      
+    });
+
+    function sendImage(file, editor) {
+      let frm = new FormData();
+
+      frm.append("s_file", file);
+      $.ajax({
+        url: "/admin/saveImg",
+        type: "POST",
+        data: frm,
+        contentType: false,
+        processData: false, 
+        dataType: "json",
+      }).done(function (data) {
+        console.log(data);
+        console.log(data.url);
+        $("#content").summernote(
+          "insertImage", data.url);
+
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.error("File upload failed:", textStatus, errorThrown);
+      });
+    }
+
+    function sendData() {
+      for (var i = 0; i < document.forms[0].elements.length; i++) {
+        if (i > 1)
+          break;
+        if (document.forms[0].elements[i].value == "") {
+          alert(document.forms[0].elements[i].dataset.str + "을 입력하세요");
+          document.forms[0].elements[i].focus();
+          return;
+        }
+      }
+
+      document.forms[0].submit();
+    }
+
+    function resetData(){
+      $("#title").val("");
+      $("#content").summernote("code", "");
+      $("#fileUpload").val("");
+    }
+  </script>
+</body>
+
 </html>

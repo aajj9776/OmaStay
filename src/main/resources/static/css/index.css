@@ -18,14 +18,7 @@ input{
   position: relative;
 }
 #date-range-picker-input {
-  background-color: var(--color-whitesmoke-100); /* 동일한 배경색으로 설정 */
-  border: none; /* 테두리 제거 */
-  padding: 10px; /* 필요에 따라 패딩 조정 */
-  border-radius: 5px; /* 필요에 따라 테두리 반경 조정 */
-  bottom: -9px;
   font-size: 1rem;
-  outline: none;
-
 }
 
 #date-range-picker:focus,
@@ -312,10 +305,8 @@ input{
 .search-bar {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  align-self: stretch;
+  justify-content: center;
   flex-wrap: wrap;
-  align-items: flex-end;
   gap: 12px;
   max-width: 100%;
 }

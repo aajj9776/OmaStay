@@ -1,31 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/host}"
+      layout:decorate="~{layout/host_step}"
       layout:fragment="host">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+    <style>
+      .dt-length select {
+          font-size: 12px; 
+          padding: 5px; 
+          height: auto; 
+      }
+  
+      .dt-length label {
+          font-size: 12px; 
+          margin-left: 5px; 
+      }
+  
+      .dt-info {
+          font-size: 12px; 
+      }
+  
+      .dt-paging button {
+          font-size: 12px;
+          padding: 5px 8px; 
+      }
+
+      .dt-paging a { /* 페이지 번호 스타일 */
+          padding: 5px 8px;
+      }
+
+      .dt-info { 
+          display: none;
+      }
+
+      a {
+          text-decoration: none;
+      }
+
+  </style>
   </head>
   <body>
-    <div
-      class="w-full relative bg-[#e4e7eb] flex flex-col items-center justify-center py-[102px] px-[279px] box-border gap-[119px] leading-[normal] tracking-[normal] mq750:gap-[30px] mq750:pl-[69px] mq750:pr-[69px] mq750:box-border mq1050:gap-[59px] mq1050:pl-[139px] mq1050:pr-[139px] mq1050:box-border"
-    >
       <section
-        class="w-[1374px] h-[177px] flex flex-row items-start justify-start py-[0px] px-[10px] box-border max-w-full"
-      >
-        <header
-          class="flex-1 rounded-[30px] bg-[#fff] flex flex-col items-center justify-center max-w-full"
-        >
-          <img
-            class="w-[1119.7px] relative max-h-full object-cover max-w-full"
-            loading="lazy"
-            alt=""
-            src="/image/host/host-step-img@2x.png"
-          />
-        </header>
-      </section>
-      <section
-        class="w-[1338px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[144px] pb-[105px] box-border gap-[130px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border"
+        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[100px] pb-[105px] box-border gap-[120px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border"
       >
         <h1
           class="m-[0px] w-[300px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center mq450:text-[36px] mq450:leading-[14px] mq750:text-[48px] mq750:leading-[19px]"
@@ -36,7 +54,7 @@
           class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[18px] pb-[39.5px] box-border max-w-full"
         >
           <div
-            class="flex-1 flex flex-col items-start justify-start gap-[118.5px] max-w-full mq750:gap-[30px] mq1050:gap-[59px]"
+            class="flex-1 flex flex-col items-start justify-start max-w-full mq750:gap-[30px] mq1050:gap-[59px]"
           >
             <div
               class="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq1225:flex-wrap"
@@ -44,96 +62,26 @@
               <div
                 class="w-[524px] flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px] box-border max-w-full"
               >
-                <form
-                  class="m-[0px] self-stretch flex flex-row items-start justify-start gap-[30px] mq750:flex-wrap"
-                >
-                  <div
-                    class="w-[100px] rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-row items-start justify-start py-[6px] px-[12px] relative"
-                  >
-                    <div class="h-[1px] w-[24px] hidden z-[0]"></div>
-                    <div class="h-[24px] w-[71px] hidden z-[1]"></div>
-                    <div
-                      class="h-[24px] w-0 absolute !m-[0] top-[calc(50%_-_12px)] left-[12px]"
-                    ></div>
-                    <div
-                      class="flex-1 flex flex-row items-start justify-start relative"
-                    >
-                      <div
-                        class="flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left"
-                      >
-                        제목
-                      </div>
-                      <img
-                        class="h-full w-[24px] absolute !m-[0] top-[0px] right-[0px] bottom-[0px] max-h-full overflow-hidden shrink-0 z-[1]"
-                        alt=""
-                        src="/image/host/arrowdropdownfilled.svg"
-                      />
-                    </div>
-                    <div
-                      class="self-stretch flex-1 relative text-[16px] tracking-[0.15px] leading-[24px] font-[Roboto] text-[rgba(0,0,0,0.38)] text-left hidden z-[4]"
-                    >
-                      Placeholder
-                    </div>
-                    <div
-                      class="h-0 w-[24px] absolute !m-[0] top-[calc(50%_-_0px)] right-[12px]"
-                    ></div>
-                    <div
-                      class="hidden flex-row items-start justify-start z-[6]"
-                    >
-                      <img
-                        class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                        alt=""
-                        src="/image/host/closefilled.svg"
-                      />
-                    </div>
+              <form class="m-[0px] self-stretch flex flex-row items-start justify-start mq750:flex-wrap">
+                <!-- 검색어 입력 영역 -->
+                <div class="w-[700px] overflow-hidden flex flex-row items-center justify-center flex-wrap content-center py-[5px] px-[5px] box-border gap-[15px] max-w-full">
+                  <div id="search-input" class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+                    <select id="search-type" class="w-[120px] [border:none] [outline:none] h-[24px] justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]">
+                      <option value="all">전체</option>
+                      <option value="roomType">객실 유형</option>
+                      <option value="roomName">객실명</option>
+                    </select>
+                    <input id="search-keyword" class="w-full [border:none] [outline:none] h-[30px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]" type="text" placeholder="검색어를 입력하세요." />
                   </div>
-                  <div
-                    class="flex-1 flex flex-col items-start justify-center py-[0px] px-[10px] box-border min-w-[189px]"
-                  >
-                    <div
-                      class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]"
-                    >
-                      <input
-                        class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[148px] min-h-[24px]"
-                        placeholder="검색어를 입력하세요."
-                        type="text"
-                      />
-                    </div>
-                    <div
-                      class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border"
-                    >
-                      <div
-                        class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center"
-                      >
-                        Helper text
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    class="cursor-pointer [border:none] py-[7px] px-[21px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
-                  >
-                    <div
-                      class="flex flex-row items-start justify-start gap-[8px]"
-                    >
-                      <img
-                        class="h-[22px] w-[18px] relative hidden"
-                        alt=""
-                        src="/image/host/masked-icon.svg"
-                      />
-
-                      <div
-                        class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[31px]"
-                      >
-                        검색
-                      </div>
-                      <img
-                        class="h-[22px] w-[18px] relative hidden"
-                        alt=""
-                        src="/image/host/masked-icon1.svg"
-                      />
-                    </div>
+                </div>
+              
+                <!-- 검색 버튼 영역 -->
+                <div class="w-[300px] flex-1 box-border flex flex-row items-center justify-center py-[4px] px-[30px] gap-[15px]">
+                  <button type="button" id="search-button" class="w-[100px] h-[35px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] text-[#fff] text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto]">
+                    검색
                   </button>
-                </form>
+                </div>
+              </form>
               </div>
               <div
                 class="w-[231px] flex flex-row items-start justify-start gap-[30px]"
@@ -147,41 +95,26 @@
                     <div
                       class="flex flex-row items-start justify-start gap-[8px]"
                     >
-                      <img
-                        class="h-[22px] w-[18px] relative hidden"
-                        alt=""
-                        src="/image/host/masked-icon.svg"
-                      />
-
-                      <div
-                        class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[57px]"
+                      <a
+                        th:href="@{/host/roomreg}"
+                        class="text-decoration-[none] text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff] text-left inline-block min-w-[57px]"
                       >
                         객실추가
-                      </div>
-                      <img
-                        class="h-[22px] w-[18px] relative hidden"
-                        alt=""
-                        src="/image/host/masked-icon1.svg"
-                      />
+                       </a>
                     </div>
                   </button>
                 </div>
-                <button
+                <button id="deleteButton" 
                   class="cursor-pointer border-[#2196f3] border-[1px] border-solid py-[6px] pl-[15px] pr-[18px] bg-[#fff] flex-1 rounded-[4px] overflow-hidden flex flex-row items-start justify-start"
                 >
                   <div
                     class="flex flex-row items-start justify-start gap-[8px]"
                   >
-                    <div
+                    <div 
                       class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left inline-block min-w-[61px] whitespace-nowrap"
                     >
                       객실 삭제
                     </div>
-                    <img
-                      class="h-[22px] w-[18px] relative hidden"
-                      alt=""
-                      src="/image/host/masked-icon5.svg"
-                    />
                   </div>
                 </button>
               </div>
@@ -190,144 +123,152 @@
               class="self-stretch h-[571px] flex flex-row items-start justify-start py-[0px] px-[5px] box-border max-w-full"
             >
               <div
-                class="self-stretch flex-1 flex flex-row items-center justify-center bg-[url('/image/host/image-17@2x.png')] bg-cover bg-no-repeat bg-[top] max-w-full"
+                class="self-stretch flex-1 flex flex-row items-center justify-center max-w-full"
               >
-                <img
-                  class="w-[1010.9px] relative max-h-full object-cover hidden max-w-full"
-                  alt=""
-                  src="/image/host/image-17@2x.png"
-                />
+              <div id="table" class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
+                <table id="listTable" class="w-[1140px] text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit]  text-[16px] hover">
+                  <thead>
+                    <tr class="py-[20px] pl-[30px] pr-[634px] gap-[20px]">
+                      <th data-orderable="false"><input type="checkbox" id="selectAllCheckbox"/></th>
+                      <th>번호</th>
+                      <th>객실명</th>
+                      <th>객실 유형</th>
+                      <th>정원</th>
+                      <th>객실 소개</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-[#ffffff] pt-[100px]"></tbody>
+                </table>
+              </div>
+              <div class="dataTables_paginate paging_simple_numbers pagination-sm"></div> 
               </div>
             </div>
-          </div>
-        </div>
-        <div
-          class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[62px] pr-[0px] box-border max-w-full text-center text-[14px] text-[rgba(0,0,0,0.87)] mq750:pl-[31px] mq750:box-border"
-        >
-          <div
-            class="overflow-hidden flex flex-row items-start justify-start gap-[10px] max-w-full mq1050:flex-wrap"
-          >
-            <img
-              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-              loading="lazy"
-              alt=""
-              src="/image/host/paginationitem.svg"
-            />
-
-            <img
-              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-              loading="lazy"
-              alt=""
-              src="/image/host/paginationitem-1.svg"
-            />
-
-            <div
-              class="overflow-hidden flex flex-row items-start justify-start text-[#fff]"
-            >
-              <div
-                class="rounded-[4px] bg-[#2196f3] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-              >
-                <div
-                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                >
-                  1
-                </div>
-              </div>
-            </div>
-            <div
-              class="overflow-hidden flex flex-row items-start justify-start"
-            >
-              <div
-                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-              >
-                <div
-                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                >
-                  2
-                </div>
-              </div>
-            </div>
-            <div
-              class="overflow-hidden flex flex-row items-start justify-start"
-            >
-              <div
-                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-              >
-                <div
-                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                >
-                  3
-                </div>
-              </div>
-            </div>
-            <div
-              class="overflow-hidden flex flex-row items-start justify-start"
-            >
-              <div
-                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-              >
-                <div
-                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                >
-                  4
-                </div>
-              </div>
-            </div>
-            <div
-              class="overflow-hidden flex flex-row items-start justify-start"
-            >
-              <div
-                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-              >
-                <div
-                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                >
-                  5
-                </div>
-              </div>
-            </div>
-            <div
-              class="overflow-hidden flex flex-row items-start justify-start"
-            >
-              <div
-                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-              >
-                <div
-                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                >
-                  6
-                </div>
-              </div>
-            </div>
-            <div
-              class="overflow-hidden flex flex-row items-start justify-start"
-            >
-              <div
-                class="rounded-[4px] overflow-hidden flex flex-row items-start justify-start pt-[10px] pb-[9px] pl-[16px] pr-[15px]"
-              >
-                <div
-                  class="relative tracking-[0.17px] leading-[21px] inline-block min-w-[9px]"
-                >
-                  7
-                </div>
-              </div>
-            </div>
-            <img
-              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-              loading="lazy"
-              alt=""
-              src="/image/host/paginationitem-1.svg"
-            />
-
-            <img
-              class="h-[40px] w-[40px] relative overflow-hidden shrink-0 min-h-[40px]"
-              loading="lazy"
-              alt=""
-              src="/image/host/paginationitem-3.svg"
-            />
           </div>
         </div>
       </section>
-    </div>
+      <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js" defer></script>
+      <script>
+
+        $(document).ready(function () {
+          $('#listTable').DataTable({
+            "searching": false,
+      
+            ajax: {
+              url: '/host/roomlist/getList',
+              type: 'GET',
+              dataSrc: 'data'
+            },
+      
+            columns: [
+              {
+                data: null,
+                render: function (data, type, row) {
+                  return '<input type="checkbox" class="itemCheckbox" value="' + row.id + '">';
+                }
+              },
+              { 
+                "data": null, // 데이터 소스가 아닌 계산된 값
+                "render": function(data, type, row, meta) {
+                    return meta.row + 1; // 인덱스는 0부터 시작하므로 1을 더합니다.
+                }  
+              }, 
+              {
+                data: 'roomName',
+                render: function (data, type, row) {
+                  return '<a href="/host/roomlist/view?id=' + row.id + '">' + data + '</a>';
+                }
+              },
+              {
+                data: 'roomType',
+              },
+              {
+                data: 'roomPerson',
+              },
+              {
+                data: 'roomIntro',
+              }
+            ],
+            columnDefs: [{ width: 50, targets: 0 },
+              {width: 80, targets: 1},
+              {width: 250, targets: 2},
+              {width: 250, targets: 3},
+              {width: 80, targets: 4},
+              {width: 250, targets: 5}
+            ],
+      
+          });
+
+      
+          // 전체 선택 체크박스 이벤트 처리
+          $('#selectAllCheckbox').on('click', function () {
+            $('.itemCheckbox').prop('checked', this.checked);
+          });
+      
+          // 검색 버튼 클릭 이벤트 처리
+          $('#search-button').on('click', function () {
+            var searchType = $('#search-type').val();
+            var searchKeyword = $('#search-keyword').val().trim();
+      
+            // 검색 요청
+            $.ajax({
+              url: '/host/roomlist/search',
+              type: 'GET',
+              data: {
+                type: searchType,
+                keyword: searchKeyword,
+              },
+              success: function (data) {
+      
+                console.log(data);
+                var table = $('#listTable').DataTable();
+                table.clear();
+                table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신
+      
+              },
+              error: function (error) {
+                alert("검색 중 오류가 발생했습니다.");
+                console.error(error);
+              }
+            });
+          });
+      
+      
+          // 삭제 버튼 클릭 이벤트 처리
+          $('#deleteButton').on('click', function () {
+            var selectedIds = [];
+            $('.itemCheckbox:checked').each(function () {
+              selectedIds.push($(this).val());
+            });
+      
+            if (selectedIds.length === 0) {
+              alert("삭제할 룸을 선택하세요.");
+              return;
+            }
+      
+            if (confirm("선택한 룸을 삭제하시겠습니까?")) {
+      
+              $.ajax({
+                url: '/host/roomlist/delete', 
+                type: 'POST',
+                data: { ids: selectedIds },
+              }).done(function (response) {
+                alert("삭제가 완료되었습니다.");
+      
+                console.log(response);
+      
+                $('#listTable').DataTable().ajax.reload();
+      
+              }).fail(function (error) {
+                // 삭제 실패 시 에러 처리
+                alert("삭제 중 오류가 발생했습니다.");
+                console.error(error);
+              });
+            }
+          });
+      
+          
+        });
+      
+      </script>
   </body>
 </html>

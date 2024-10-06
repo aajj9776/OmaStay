@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class IssuedCouponDTO {
-    private int id;
-    private int mIdx;
-    private int cpIdx;
+    private Integer id;
+    private Integer mIdx;
+    private Integer cpIdx;
     private IcStatus icStatus;
     private String icCode;
     private String icNone;
+    private CouponDTO coupon;
 
     public IssuedCouponDTO(IssuedCoupon issuedCoupon) {
         this.id = issuedCoupon.getId();
@@ -23,10 +24,11 @@ public class IssuedCouponDTO {
         this.icStatus = issuedCoupon.getIcStatus();
         this.icCode = issuedCoupon.getIcCode();
         this.icNone = issuedCoupon.getIcNone();
+        this.coupon = issuedCoupon.getCoupon() != null ? new CouponDTO(issuedCoupon.getCoupon()) : null;
     }
 
     @QueryProjection
-    public IssuedCouponDTO(int id, int mIdx, int cpIdx, IcStatus icStatus, String icCode, String icNone) {
+    public IssuedCouponDTO(Integer id, Integer mIdx, Integer cpIdx, IcStatus icStatus, String icCode, String icNone) {
         this.id = id;
         this.mIdx = mIdx;
         this.cpIdx = cpIdx;

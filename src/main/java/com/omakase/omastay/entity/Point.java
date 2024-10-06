@@ -16,23 +16,23 @@ public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "p_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mem_idx", referencedColumnName = "mem_idx")
-    private Member member;
+    private Member member = new Member();
 
     @Column(name = "p_sum", nullable = false)
-    private int pSum;
+    private Integer pSum;
 
     @Column(name = "p_value", nullable = false)
-    private int pValue;
+    private Integer pValue;
 
     @Column(name = "p_date", nullable = false)
     private LocalDateTime pDate;
 
-    @Column(name = "p_none", length = 100)
-    private String pNone;
+    @Column(name = "p_content", length = 100)
+    private String pContent;
 
     //영속성 시간 자동추가
     @PrePersist

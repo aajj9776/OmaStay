@@ -30,17 +30,24 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework:spring-context-support'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework:spring-context-support'
 
     //시큐리티
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
+
 
     //p6spy
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
@@ -56,10 +63,30 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
+    //쿠키
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
     //jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
+    //소셜전용
+    implementation 'com.auth0:java-jwt:4.2.1'
+
+    // Google Cloud Platform Storage(GCP Storage)
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
+
+    //(GCP Storage) 오류 떠서 추가
+    implementation 'com.google.cloud:google-cloud-storage:2.1.0'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.1.0'
+
+    //쿠폰 코드 생성
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+
+
 }
 
 tasks.named('test') {
@@ -81,10 +108,10 @@ sourceSets {
 // 컴파일 설정(AnnotationProcessor가 생성하는 소스코드를 해당 경로로 설정)
 tasks.withType(JavaCompile) {
     options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+    options.compilerArgs << '-parameters' // -parameters 플래그 추가
 }
 
 // clean실행 시 마지막 작업으로 디렉토리(QClass) 삭제 >> 충돌 방지
 clean.doLast {
     file(querydslDir).deleteDir()
 }
-

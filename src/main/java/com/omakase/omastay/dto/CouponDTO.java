@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CouponDTO {
-    private int id;
+    private Integer id;
     private String cpContent;
-    private StartEndVo cpStartEnd;
+    private StartEndVo cpStartEnd = new StartEndVo();
     private String cpSale;
     private CpCate cpCate;
     private CpMethod cpMethod;
-    private String cpNone;
+    private String cpNone; 
 
     public CouponDTO(Coupon coupon) {
         this.id = coupon.getId();
@@ -30,7 +30,7 @@ public class CouponDTO {
     }
 
     @QueryProjection
-    public CouponDTO(int id, String cpContent, StartEndVo cpStartEnd, String cpSale, CpCate cpCate, CpMethod cpMethod, String cpNone) {
+    public CouponDTO(Integer id, String cpContent, StartEndVo cpStartEnd, String cpSale, CpCate cpCate, CpMethod cpMethod, String cpNone) {
         this.id = id;
         this.cpContent = cpContent;
         this.cpStartEnd = cpStartEnd;

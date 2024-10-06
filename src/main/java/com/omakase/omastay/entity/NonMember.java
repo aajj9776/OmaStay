@@ -16,7 +16,7 @@ public class NonMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "non_idx", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "non_name", nullable = false, length = 100, updatable = false)
     private String nonName;

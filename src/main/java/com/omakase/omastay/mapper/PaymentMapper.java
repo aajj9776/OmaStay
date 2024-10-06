@@ -14,10 +14,13 @@ public interface PaymentMapper {
 
     @Mapping(source = "issuedCoupon.id", target = "icIdx")
     @Mapping(source = "point.id", target = "PIdx")
+    @Mapping(source = "salePrice", target = "amount")
+    @Mapping(target = "orderId", ignore = true)
     PaymentDTO toPaymentDTO(Payment payment);
 
     @Mapping(source = "icIdx", target = "issuedCoupon.id")
     @Mapping(source = "PIdx", target = "point.id")
+    @Mapping(source = "amount", target = "salePrice")
     Payment toPayment(PaymentDTO paymentDTO);
 
     List<PaymentDTO> toPaymentDTOList(List<Payment> paymentList);
