@@ -84,7 +84,7 @@ jobs:
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /var/www/certbot && sudo chmod 777 /var/www/certbot"
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "ls -ld /var/www/certbot && echo 'Directory successfully created and permissions set' || echo 'Failed to create directory'"
 
-      - name: Verify directory creation and permissions on EC2
+      - name: Verify certbot directory creation and permissions on EC2
         run: |
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "if [ -d '/var/www/certbot' ]; then echo 'Directory exists and permissions are set.'; else echo 'Directory does not exist or permissions not set correctly.'; fi"
 
@@ -102,7 +102,7 @@ jobs:
       - name: Run Certbot for SSL certificates on EC2
         run: |
           echo "Running certbot"
-          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d -v /var/www/certbot:/var/www/certbot certbot/certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org"
+          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d -v /var/www/certbot:/var/www/certbot certbot/certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org --email dlflqhfl@gmail.com --non-interactive --agree-tos"
 
       - name: SSH into EC2 and run Docker Compose down
         run: |
