@@ -19,6 +19,7 @@ import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
+import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.NonMember;
 import com.omakase.omastay.entity.Payment;
@@ -35,6 +36,7 @@ import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -324,5 +326,26 @@ public class ReservationService {
         }
            return hostReservationAll;
     
+    }
+
+    //예약대기정보
+    @Transactional
+    public List<HostReservationEmailDTO> findReservationsByPending() {
+        List<HostReservationEmailDTO> hostReservationAll = new ArrayList<>();
+        List<Reservation> pendingReservations = reservationRepository.findReservationsByPending();
+        
+        for (Reservation reservation : pendingReservations) {
+            hostReservationAll.add(new HostReservationEmailDTO(reservation));
+        }
+
+        return hostReservationAll;
+    }
+
+    //예약확정,취소메일 발송을 위한 예약 정보 조회
+    @Transactional
+    public HostReservationEmailDTO getRes(Integer id) {
+         Reservation res = reservationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid reservation Id:" + id));
+        return new HostReservationEmailDTO(res);
     }
 }

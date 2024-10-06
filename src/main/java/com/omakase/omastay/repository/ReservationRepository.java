@@ -63,4 +63,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     //입실예정정보(시작일 제일 빠른 순으로 정렬)
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start >= :nowDate AND r.resStatus = 1) ORDER BY r.startEndVo.start ASC")
     List<Reservation> findReservationsByCheckIn(@Param("nowDate") LocalDateTime nowDate, @Param("roomInfo") RoomInfo roomInfo);
+
+    //예약대기정보
+    @Query("SELECT r FROM Reservation r WHERE r.resStatus = 0")
+    List<Reservation> findReservationsByPending();
+
 }

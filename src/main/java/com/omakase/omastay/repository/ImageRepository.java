@@ -17,6 +17,9 @@ public interface ImageRepository extends JpaRepository<Image, Integer>, ImageRep
     @Query("SELECT i FROM Image i WHERE i.roomInfo.id = :rIdx")
     List<Image> findByRoomInfoId(@Param("rIdx") Integer rIdx);
 
+    @Query("SELECT i FROM Image i WHERE i.hostInfo.id = :hIdx AND i.imgCate = :imgCate")
+    List<Image> findByHostInfoAndImgCate(@Param("hIdx") Integer hIdx, @Param("imgCate") ImgCate imgCate);
+
     @Query("SELECT i FROM Image i WHERE i.hostInfo.id = :hIdx AND i.imgCate = 0")
     List<Image> findByHostInfoIdAndImgCate(@Param("hIdx") Integer hIdx);
 }
