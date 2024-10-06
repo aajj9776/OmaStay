@@ -62,13 +62,13 @@ jobs:
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
-    - name: Add ubuntu user to Docker group
+    - name: Add ubuntu user to Docker group and restart Docker on EC2
       run: |
-        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo usermod -aG docker ubuntu"
-
-    - name: Restart Docker on EC2
-      run: |
-        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo systemctl restart docker"
+        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+          sudo usermod -aG docker ubuntu
+          sudo systemctl restart docker
+          exit
+        EOF
 
     - name: Verify Docker permissions on EC2
       run: |
@@ -78,18 +78,19 @@ jobs:
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker rm -f certbot || true"
 
-    - name: Create required directory on EC2
+    - name: Create required directory on EC2 and set permissions
       run: |
-        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /var/www/certbot"
+        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /var/www/certbot && sudo chmod 777 /var/www/certbot && echo 'Directory created and permissions set to 777.'"
+
+    - name: Verify directory creation and permissions on EC2
+      run: |
+        ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "if [ -d '/var/www/certbot' ]; then echo 'Directory exists and permissions are set.'; else echo 'Directory does not exist or permissions not set correctly.'; fi"
 
     - name: Run Certbot for SSL certificates on EC2
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d certbot/certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org"
 
-    - name: SSH into EC2 and run Docker Compose down
+    - name: SSH into EC2 and run Docker Compose
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && docker-compose down"
-
-    - name: SSH into EC2 and run Docker Compose up
-      run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && docker-compose up -d --build"
