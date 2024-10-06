@@ -102,7 +102,7 @@ jobs:
       - name: Run Certbot for SSL certificates on EC2
         run: |
           echo "Running certbot"
-          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d -v /var/www/certbot:/var/www/certbot certbot/certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org --email dlflqhfl@gmail.com --non-interactive --agree-tos"
+          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d -v /var/www/certbot:/var/www/certbot certbot/certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org --email dlflqhfl@gmail.com --non-interactive --agree-tos"
 
       - name: SSH into EC2 and run Docker Compose down
         run: |
