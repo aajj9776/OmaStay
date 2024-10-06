@@ -67,7 +67,6 @@ jobs:
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo usermod -aG docker ubuntu
           sudo systemctl restart docker
-          exit
         EOF
 
     - name: Verify Docker permissions on EC2
@@ -90,7 +89,10 @@ jobs:
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --rm --name certbot -v /home/ubuntu/OmaStay/nginx/ssl:/etc/letsencrypt -v /home/ubuntu/OmaStay/nginx/conf.d:/etc/nginx/conf.d certbot/certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org"
 
-    - name: SSH into EC2 and run Docker Compose
+    - name: SSH into EC2 and run Docker Compose down
       run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && docker-compose down"
+
+    - name: SSH into EC2 and run Docker Compose up
+      run: |
         ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && docker-compose up -d --build"
