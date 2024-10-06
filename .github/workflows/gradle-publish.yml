@@ -74,6 +74,13 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
 
+    - name: Set permissions for the directory
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+          sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/nginx/ssl/accounts
+          sudo chmod -R 755 /home/ubuntu/OmaStay/nginx/ssl/accounts
+        EOF
+
     - name: SSH into EC2 and run Docker Compose
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
