@@ -99,6 +99,10 @@ jobs:
           echo "Checking certbot directory inside Docker container"
           ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker run --name certbot-check -v /var/www/certbot:/var/www/certbot --rm alpine ls -ld /var/www/certbot"
 
+      - name: Deploy Nginx with Docker Compose
+        run: |
+          ssh -tt -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && docker-compose up -d nginx"
+
       - name: Run Certbot for SSL certificates on EC2
         run: |
           echo "Running certbot"
