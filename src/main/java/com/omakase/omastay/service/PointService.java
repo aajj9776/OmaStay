@@ -70,19 +70,20 @@ public class PointService {
         Point res = PointMapper.INSTANCE.toPoint(pointDTO);
         
         List<Integer> sum = pointRepository.findLatestPSumByMemIdx(pointDTO.getMemIdx());
-        System.out.println("sum : " + sum.get(0));
-        int sumPoint =  sum.get(0) - pointDTO.getPValue();
-        System.out.println(sumPoint);
+        if( sum != null && sum.size() > 0){
+            int sumPoint =  sum.get(0) - pointDTO.getPValue();
+            StringBuilder sb = new StringBuilder();
+            sb.append("-").append(pointDTO.getPValue());
+            res.setPValue(Integer.parseInt(sb.toString()));
+            res.setPDate(LocalDateTime.now());
+            res.setPSum(sumPoint);
+            res.setPContent("포인트 사용");
+            Point point = pointRepository.save(res);
+            PointDTO dto = PointMapper.INSTANCE.toPointDTO(point);
+            return dto;
+        }
+        return null;
         
-        StringBuilder sb = new StringBuilder();
-        sb.append("-").append(pointDTO.getPValue());
-        res.setPValue(Integer.parseInt(sb.toString()));
-        res.setPDate(LocalDateTime.now());
-        res.setPSum(sumPoint);
-        res.setPContent("포인트 사용");
-        Point point = pointRepository.save(res);
-        PointDTO dto = PointMapper.INSTANCE.toPointDTO(point);
-        return dto;
     }
 
     public Integer getSumPoint(int id) {

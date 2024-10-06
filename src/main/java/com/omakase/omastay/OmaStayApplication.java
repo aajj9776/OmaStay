@@ -12,6 +12,4 @@ public class OmaStayApplication {
         SpringApplication.run(OmaStayApplication.class, args);
 
     }
-
-    
 }

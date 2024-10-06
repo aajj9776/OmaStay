@@ -1,6 +1,5 @@
 package com.omakase.omastay.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -12,18 +11,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.time.LocalDateTime;
 
 import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
 import com.omakase.omastay.entity.Reservation;
+import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
+import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.service.EmailService;
 import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.NonMemberService;
 import com.omakase.omastay.service.ReservationService;
+import com.omakase.omastay.vo.StartEndVo;
 
 import jakarta.mail.MessagingException;
 
@@ -83,12 +86,16 @@ public class ReservationController {
 
     @PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation, NonMemberDTO nonMember) {
-        System.out.println("payment" + payment);
-
         System.out.println("reservation이메일 이름 들어와야함" + reservation);
+        reservation.setRoomIdx(10);
+        StartEndVo startEndVo = new StartEndVo();
+        startEndVo.setStart(LocalDateTime.now());
+        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
+        reservation.setStartEndVo(startEndVo);
 
         ReservationDTO check = reservationService.checkReservation(reservation);
-        if( check != null){
+        System.out.println("이거왜 null임?" + check);
+        if(check != null ){
             return "redirect:/reservation/error";
         }
 
@@ -101,34 +108,42 @@ public class ReservationController {
 
         //예약정보 저장
         ReservationDTO reserve = null;
+        ReservationDTO noReserver = null;
+        System.out.println("회원번호" + reservation.getMemIdx());
         if( res.getPayStatus() == PayStatus.PAY) {
-            reservation.setPayIdx(res.getId());
-
-            if( nonMember != null){
-                NonMemberDTO dt = nonMemberService.insertNonMember(nonMember);
-                reserve = reservationService.insertReservationInfo(reservation, res, dt);
+            System.out.println("왜 안됨?");
+            
+            if( reservation.getMemIdx() != null && reservation.getMemIdx() > 0){
+                reservation.setPayIdx(res.getId());
+                reserve = reservationService.insertReservationInfo(reservation, res);
+                System.out.println("회원 예약결과" + reserve);
             } else {
-                reserve = reservationService.insertReservationInfo(reservation, res, nonMember);
+                System.out.println("비회원 예약 처리");
+                System.out.println("비회원 파라미터 " + nonMember);
+                NonMemberDTO nMember = nonMemberService.insertNonMember(nonMember);
+                noReserver = reservationService.insertNonMemberReservationInfo(reservation, res, nMember);
+                System.out.println("비회원 예약결과" + noReserver);
             }
 
-            System.out.println("예약결과" + reserve);
         } else {
             return "redirect:/reservation/payment_fail";
         }
-        if( reserve != null){
-            if( reserve.getResStatus() == ResStatus.PENDING) {
-                redirectAttributes.addAttribute("orderId", reserve.getResNum());
-                redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
-                redirectAttributes.addAttribute("amount", reserve.getResPrice());
-                redirectAttributes.addAttribute("payContent", payment.getPayContent());
-                return "redirect:/reservation/payment_complete";  
-            } else {
-                return "redirect:/reservation/payment_fail";
-            }
-        } else {
-            return "redirect:/reservation/payment_fail";
-        }
-        
+        // 성공적인 예약 처리
+        if (reserve != null && reserve.getResStatus() == ResStatus.PENDING) {
+            redirectAttributes.addAttribute("orderId", reserve.getResNum());
+            redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
+            redirectAttributes.addAttribute("amount", reserve.getResPrice());
+            redirectAttributes.addAttribute("payContent", payment.getPayContent());
+            return "redirect:/reservation/payment_complete";
+        } else if (noReserver != null && noReserver.getResStatus() == ResStatus.PENDING) {
+            redirectAttributes.addAttribute("orderId", noReserver.getResNum());
+            redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
+            redirectAttributes.addAttribute("amount", noReserver.getResPrice());
+            redirectAttributes.addAttribute("payContent", payment.getPayContent());
+            return "redirect:/reservation/payment_complete";
+        } 
+
+        return "redirect:/reservation/payment_fail";
     }
 
     @GetMapping("/payment_complete")
@@ -136,8 +151,6 @@ public class ReservationController {
         return "reservation/payment_complete.html";
     }
     
-
-
     @RequestMapping("/check_detail")
     public ModelAndView check_detail() {
         ModelAndView mv = new ModelAndView();

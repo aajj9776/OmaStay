@@ -1,21 +1,22 @@
 package com.omakase.omastay.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import jakarta.persistence.LockModeType;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import java.util.List;
-
-import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.LockModeType;
 
 
 
@@ -41,12 +42,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r LEFT JOIN FETCH Sales s ON r.id = s.reservation.id WHERE r.startEndVo.end < :yesterday AND s.id IS NULL")
     List<Reservation> findExpiredReservationsNotInSale(@Param("yesterday") LocalDateTime yesterday);
 
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND ((r.startEndVo.start < :end AND r.startEndVo.end > :start))")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
-    Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    List<Reservation> checkSameRoom(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx")
-    List<Reservation> findByMemIdx(@Param("memIdx") int memIdx);
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx AND r.startEndVo.end < CURRENT_TIMESTAMP")
+    List<Reservation> findByMemIdxAndEndBefore(@Param("memIdx") int memIdx);
     
     //오늘날짜 예약 조회
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :date AND r.startEndVo.end >= :date) AND (r.resStatus = 1 OR r.resStatus = 3)")
@@ -68,4 +69,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r WHERE r.resStatus = 0")
     List<Reservation> findReservationsByPending();
 
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
+    Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+
+    //admin의 회원조회에서 회원의 최근 3개월 예약 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r JOIN r.payment p WHERE r.member.id = :memId AND p.payDate >= :time")
+    Integer get3MonthCount(@Param("memId") Integer memId, @Param("time") LocalDateTime time);
+    
+    //admin의 회원조회에서 회원의 전체 예약 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.member.id = :memId")
+    Integer getTotalCount(@Param("memId") Integer memId);
 }

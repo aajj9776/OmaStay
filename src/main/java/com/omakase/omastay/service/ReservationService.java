@@ -3,22 +3,23 @@ package com.omakase.omastay.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.time.LocalTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
+import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.NonMember;
@@ -27,8 +28,7 @@ import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
-import com.omakase.omastay.mapper.MemberMapper;
-import com.omakase.omastay.mapper.NonMemberMapper;
+import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
 import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.mapper.RoomInfoMapper;
@@ -54,7 +54,7 @@ public class ReservationService {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
 
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(12);
+        roomInfo.setId(9);
         res.setRoomInfo(roomInfo);
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
@@ -62,18 +62,18 @@ public class ReservationService {
         res.setStartEndVo(startEndVo);
 
          // 방 중복 체크 시 Pessimistic Lock 적용
-         Optional<Reservation> checkRoom = reservationRepository.findConflictingReservationWithLock(
+         List<Reservation> checkRoom = reservationRepository.checkSameRoom(
             res.getRoomInfo().getId(), 
             res.getStartEndVo().getStart(), 
             res.getStartEndVo().getEnd()
         );
 
-        if( checkRoom.isPresent() ) {
-            return ReservationMapper.INSTANCE.toReservationDTO(checkRoom.get());
+        if (checkRoom != null && checkRoom.size() > 0 ){
+            return ReservationMapper.INSTANCE.toReservationDTOList(checkRoom).get(0);
+        } else {
+            return null;
         }
 
-        // 방 중복이 없는 경우
-        return null;
     }
 
     @Transactional
@@ -109,7 +109,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO nonMember) {
+    public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
         RoomInfo roomInfo = new RoomInfo();
         roomInfo.setId(9);
@@ -119,34 +119,45 @@ public class ReservationService {
         startEndVo.setStart(LocalDateTime.now());
         startEndVo.setEnd(LocalDateTime.now().plusDays(1));
         res.setStartEndVo(startEndVo);
-        
+        res.setNonMember(null);
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
         res.setResPerson(2);
         res.setRoomInfo(roomInfo);
         res.setStartEndVo(startEndVo);
         res.setResStatus(ResStatus.PENDING);
         
-        // 회원일 경우 Member 정보가 들어오고, 비회원일 경우 NonMember 정보만 들어온다고 가정
-        if (nonMember != null && nonMember.getId() != null) {
-            NonMember non = NonMemberMapper.INSTANCE.toNonMember(nonMember);
-            // 비회원 예약이므로 NonMember 정보를 설정하고 Member는 null로 설정
-            res.setNonMember(non);  // 비회원 정보 저장
-            res.setMember(null);    // 회원 정보는 null로 설정
-            res.setResEmail(non.getNonEmail());
-            res.setResName(non.getNonName());
-        } else if (reservationDTO.getMemIdx() != null) {
-            // 회원 예약이므로 Member 정보는 유지하고 NonMember는 null로 설정
-            Member member = new Member();
-            member.setId(reservationDTO.getMemIdx());
-            res.setMember(member);
-            res.setNonMember(null);  // 비회원 정보는 null로 설정
-        } else {
-            System.out.println("암것도없음");
-            // 회원 정보도 비회원 정보도 없는 경우 기본값 설정 (optional)
-            res.setNonMember(null);
-            res.setMember(null);
-        }
+        Reservation result = reservationRepository.save(res);
+        ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
+        return dto;
+    }
 
+
+    @Transactional
+    public ReservationDTO insertNonMemberReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO noMember) {
+        Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
+        RoomInfo roomInfo = new RoomInfo();
+        roomInfo.setId(9);
+        res.setRoomInfo(roomInfo);
+
+        res.setMember(null);
+
+        NonMember nonMember = new NonMember();
+        nonMember.setId(noMember.getId());
+        res.setNonMember(nonMember);
+
+        StartEndVo startEndVo = new StartEndVo();
+        startEndVo.setStart(LocalDateTime.now());
+        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
+        res.setStartEndVo(startEndVo);
+        
+        res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
+        res.setResPerson(2);
+        res.setRoomInfo(roomInfo);
+        res.setResStatus(ResStatus.PENDING);
+        Payment payment = new Payment();
+        payment.setId(paymentDTO.getId());
+        res.setPayment(payment);
+        
         Reservation result = reservationRepository.save(res);
         ReservationDTO dto = ReservationMapper.INSTANCE.toReservationDTO(result);
         return dto;
@@ -249,6 +260,40 @@ public class ReservationService {
         reservationRepository.updateExpiredStatuses();
     }
 
+
+    //admin의 회원조회에서 회원의 최근 예약 기록을 가져옴
+    public Map<String, Object> member_reservation(Integer memId){
+
+        Map<String, Object> map = new HashMap<>();
+
+        LocalDateTime month3 = LocalDateTime.now().minusMonths(3).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        //최근 3개월 내 예약 건수를 가져옴
+        Integer monthCount = reservationRepository.get3MonthCount(memId, month3);
+        System.out.println("monthCount: "+monthCount);
+        map.put("monthCount", monthCount);
+
+        //전체 예약 건수를 가져옴
+        Integer totalCount = reservationRepository.getTotalCount(memId);
+        System.out.println("totalCount: "+totalCount);
+        map.put("totalCount", totalCount);
+
+        //최근 예약 내역 5건 가져옴
+        List<Reservation> list = reservationRepository.get5List(memId);
+
+        List<MemberCustomDTO> recentList = new ArrayList<>();
+
+        for(Reservation item : list){
+            MemberCustomDTO dto = new MemberCustomDTO();
+            dto.setReservation(ReservationMapper.INSTANCE.toReservationDTO(item));
+            dto.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(item.getRoomInfo().getHostInfo()));
+            recentList.add(dto);
+        }
+        System.out.println("list: "+recentList);
+        map.put("recentList", recentList);
+
+        return map;
+
+    }
     @Transactional
     public List<HostReservationDTO> getReservationsDay(List<RoomInfoDTO> roomInfoDTOList) {
         List<HostReservationDTO> hostReservationAll = new ArrayList<>();

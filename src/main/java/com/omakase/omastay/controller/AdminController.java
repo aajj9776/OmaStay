@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,24 +27,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.InquiryDTO;
-import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.PriceDTO;
-import com.omakase.omastay.dto.SalesDTO;
 import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
+import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.dto.custom.SalesCustomDTO;
 import com.omakase.omastay.dto.custom.Top5SalesDTO;
-import com.omakase.omastay.entity.Image;
-import com.omakase.omastay.entity.Point;
+import com.omakase.omastay.dto.custom.RecommendationCustomDTO;
+import com.omakase.omastay.entity.Calculation;
+import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
+import com.omakase.omastay.service.CalculationService;
 import com.omakase.omastay.service.CouponService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.ImageService;
@@ -57,12 +58,13 @@ import com.omakase.omastay.service.PointService;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
+import com.omakase.omastay.service.RecommendationService;
+import com.omakase.omastay.service.ReservationService;
 import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
 import com.omakase.omastay.vo.StartEndVo;
 
 import io.jsonwebtoken.io.IOException;
-import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -105,6 +107,16 @@ public class AdminController {
     SalesService salesService;
 
     @Autowired
+    CalculationService calculationService;
+
+    @Autowired
+    RecommendationService recommendationService;
+
+    @Autowired
+    ReservationService reservationService;
+
+
+    @Autowired
     private ServletContext application;
 
     @Autowired
@@ -118,12 +130,19 @@ public class AdminController {
         return "admins/login";
     }
 
+    /************************ 메인 시작 ************************/
     @RequestMapping("/main")
-    public String main() {
-        return "admins/main";
+    public ModelAndView main() {
+        ModelAndView mv = new ModelAndView();
+        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(null);
+        System.out.println("top5List : " + top5List);
+        mv.addObject("top5List", top5List);
+        mv.setViewName("admins/main");
+        return mv;
     }
+    /************************ 메인 끝 ************************/
 
-    /************************ 입점 요청 시작 ************************/
+    // 입점 요청 시작
     @RequestMapping("/request")
     public ModelAndView request() {
         ModelAndView mv = new ModelAndView();
@@ -186,23 +205,70 @@ public class AdminController {
 
 
     /************************ 입점 요청 끝 ************************/
-    @RequestMapping("/payment")
-    public String payment() {
-        return "admins/payment";
+    /************************ 정산 관리 시작 ************************/
+    @RequestMapping("/calculation")
+    public ModelAndView calculation(@RequestParam(value="period", required=false) String period) {
+        
+        ModelAndView mv = new ModelAndView();
+
+        List<CalculationCustomDTO> list = calculationService.getCalculationMonthly(period);
+        System.out.println("list : " + list);
+
+        mv.addObject("list", list);
+        mv.setViewName("admins/calculation");
+
+        return mv;
     }
 
-    @RequestMapping("/payment_detail")
-    public String payment_detail() {
-        return "admins/payment_detail";
+    @RequestMapping("/calculation/detail")
+    public ModelAndView calculation_detail(@RequestParam("cIdx") Integer cIdx) {
+        ModelAndView mv = new ModelAndView();
+
+        CalculationDTO calculation = calculationService.getCal(cIdx);
+        mv.addObject("period", calculation.getCalMonth());
+        mv.addObject("hname", calculation.getHname());
+        System.out.println("hName : " + calculation.getHname());    
+        
+        List<SalesCustomDTO> list = salesService.getMonthlySalesByHost(calculation);
+        
+        mv.addObject("list", list);
+
+        mv.setViewName("admins/calculation_detail");
+        return mv;
     }
 
+    //정산 승인
+    @RequestMapping("/calculation/approve")
+    @ResponseBody
+    public Map<Object, String> calculation_approve(@RequestParam("calIdx") Integer calIdx) {
+        Map<Object, String> map = new HashMap<>();
 
+        calculationService.approveCalculation(calIdx);
+
+        return map;
+    }
+
+    //정산 완료
+    @RequestMapping("/calculation/complete")
+    @ResponseBody
+    public Map<Object, String> calculation_complete(@RequestParam("calIdx") Integer calIdx) {
+        Map<Object, String> map = new HashMap<>();
+
+        calculationService.completeCalculation(calIdx);
+
+        return map;
+    }
+
+    /************************ 정산 관리 끝 ************************/
     /************************ 판매 실적 시작 ************************/
     @RequestMapping("/sales")
     public ModelAndView sales(@RequestParam(value="region", required=false) String region) {
         ModelAndView mv = new ModelAndView();
         
         List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
+
+        System.out.println("top5List : " + top5List);
+
         mv.addObject("top5List", top5List);
 
         List<SalesCustomDTO> list = salesService.getAllSales();
@@ -521,6 +587,7 @@ public class AdminController {
 
     /***************************** 1:1문의 끝 *****************************/
     /***************************** 회원 조회 시작 *****************************/
+    //회원 조회로 이동
     @RequestMapping("/member")
     public ModelAndView member() {
         ModelAndView mv = new ModelAndView();
@@ -531,6 +598,21 @@ public class AdminController {
         mv.setViewName("admins/member");
         
         return mv;
+    }
+
+    //회원 상세 조회
+    @RequestMapping("/member/detail")
+    @ResponseBody
+    public Map<String, Object> member_detail(@RequestParam("memId") Integer memId) {
+
+        //member 최근 예약 정보 가져오기
+        Map<String, Object> map = reservationService.member_reservation(memId);
+        
+        //member 정보 가져오기
+        MemberDTO member = ms.getMember(memId);
+        map.put("member", member);
+
+        return map;
     }
 
     /***************************** 회원 조회 끝 *****************************/
@@ -823,8 +905,24 @@ public class AdminController {
     /***************************** 포인트 끝 *****************************/
 
     @RequestMapping("/recommendation")
-    public String recommend() {
-        return "admins/recommendation";
+    public ModelAndView recommend() {
+        ModelAndView mv = new ModelAndView();
+
+        List<RecommendationCustomDTO> hotelList = recommendationService.getRecommendationByHCate(HCate.HOTEL_RESORT);
+        mv.addObject("hotelList", hotelList);
+
+        List<RecommendationCustomDTO> motelList = recommendationService.getRecommendationByHCate(HCate.MOTEL);
+        mv.addObject("motelList", motelList);
+
+        List<RecommendationCustomDTO> poolList = recommendationService.getRecommendationByHCate(HCate.POOL_VILLA);
+        mv.addObject("poolList", poolList);
+
+        List<RecommendationCustomDTO> guestList = recommendationService.getRecommendationByHCate(HCate.GUESTHOUSE_HANOK);
+        mv.addObject("guestList", guestList);
+
+        mv.setViewName("admins/recommendation");
+
+        return mv;
     }
 
 }

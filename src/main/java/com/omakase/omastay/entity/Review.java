@@ -64,7 +64,5 @@ public class Review {
     private Float revRating;
 
 
-
-
 }
 
