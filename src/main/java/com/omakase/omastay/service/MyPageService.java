@@ -33,9 +33,7 @@ public class MyPageService {
     }
 
     public ReservationDTO getReservation(Integer id) {
-        //  // Reservation을 조회하면서 Payment를 함께 가져오는 로직
         Reservation reservation = reservationRepository.findById(id).get();
-
         return ReservationMapper.INSTANCE.toReservationDTO(reservation);
 
     }
@@ -44,6 +42,11 @@ public class MyPageService {
         Payment payment = paymentRepository.findById(payIdx).get();
         return PaymentMapper.INSTANCE.toPaymentDTO(payment);
 
+    }
+
+    public List<ReservationDTO> getNewReservationInfo(Integer memIdx) {
+        List<Reservation> reservation = reservationRepository.findByMemIdx(memIdx);
+        return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
     }
 
 

@@ -112,11 +112,65 @@
                   </div>
                   <div class="self-stretch h-[3px] relative bg-[#f5f5f5]"></div>
                 </div>
-                <div
-                  class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[7px] box-border max-w-full text-[#000]"
-                >
-                  <div
+
+
+                  <div th:each="reservation : ${reseravtion}" class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[7px] box-border max-w-full text-[#000]">
+                  <div class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap w-[1100px] mb-[15px]">
+                    
+                    <div class="h-[230px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1">
+                      <img th:src="${reservation.image}" alt="호텔사진" class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"></img>
+                    </div>
+
+                    <div class="w-[calc(100%-185px)] flex flex-col items-start justify-start pt-[20px] px-[20px] pb-[0px] box-border min-w-[189px] mq450:flex-1 mt-[20px]">
+                      <!-- 예약 상태, 호텔 이름 -->
+                      <div class="self-stretch flex flex-col items-start justify-start gap-[10px]">
+                        <div class="self-stretch flex flex-col items-start justify-start gap-[3px]">
+                          <div th:switch="${reservation.reservation.resStatus}">
+                            <b th:case="'PENDING'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FFD700;">예약 대기</b>
+                            <b th:case="'CONFIRMED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #32CD32;">예약 확정</b>
+                            <b th:case="'CANCELLED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FF0000;">예약 취소</b>
+                            <b th:case="'COMPLETED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #000000;">사용 완료</b>
+                          </div>
+                          <b class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]" th:text="${reservation.hostName}"></b>
+                        </div>
+
+                        <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
+                          <b class="flex-1 relative leading-[21px]" th:text="${reservation.reservation.resNum}"></b>
+                        </div>
+
+                        <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
+                          <span class="flex-1 relative leading-[21px] text-[rgba(0,0,0,0.87)]">
+                            <span th:text="${reservation.start}"></span> ~ <span th:text="${reservation.end}"></span> (<span th:text="${reservation.date}"></span> 박)
+                          </span>
+                        </div>
+                      </div>
+
+                      <div id="cancelModalContent" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+                        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6"></div>
+                      </div>
+
+                      <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
+                        <div class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
+                          <button class="flex-1 relative font-semibold">다시예약</button>
+                        </div>
+                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                          <button class="flex-1 relative font-semibold" th:onclick="'reservationDetail(' + ${reservation.reservation.id} + ')'">예약 상세</button>
+                        </div>
+                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                          <button class="flex-1 relative font-semibold" th:onclick="'cancelDetail(' + ${reservation.reservation.id} + ')'">예약 취소</button>
+                        </div>
+                      </div>
+
+                      <div class="h-[270px] w-[743px] relative overflow-hidden shrink-0 hidden max-w-full"></div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                  <div id="noTrip"
                     class="w-[1120px] rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-row items-start justify-between py-[0px] px-[23px] max-w-full gap-[20px] lg:flex-wrap"
+                    th:classappend="${newTrip} ? 'hidden' : ''">
                   >
                     <div
                       class="w-[336px] flex flex-col items-start justify-start pt-[66px] px-[0px] pb-[0px] box-border min-w-[336px] max-w-full shrink-0 lg:flex-1 mq450:min-w-full"
@@ -184,6 +238,9 @@
                       </div>
                     </div>
                   </div>
+
+
+
                 </div>
               </div>
               <div
@@ -209,6 +266,8 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
+      let user = JSON.parse(localStorage.getItem("user"));
+      console.log(JSON.stringify(user));
       function formatDate(dateString) {
         return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
       }
@@ -256,18 +315,17 @@
         });
       }
 
-      let user = JSON.parse(localStorage.getItem("user"));
       $(function () {
-        console.log(localStorage.getItem("user"));
         let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
         let payIdx;
         let resIdx;
-        console.log("호이호이");
+        let id = user.id;
 
         // 예약 정보를 불러오는 AJAX 요청
         loadReservation();
        
       });
+
 
       function loadReservation(){
         $.ajax({
