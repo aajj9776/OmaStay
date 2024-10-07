@@ -39,7 +39,7 @@ public class MemberPointDTO {
         return pointDTOList.isEmpty() ? 0 : pointDTOList.get(pointDTOList.size() - 1).getPSum();
     }
 
-    // 포맷된 포인트 정보를 담는 내부 클래스
+    //포인트 정보를 담는 내부 클래스
     @Data
     @NoArgsConstructor
     public static class FormattedPointDTO {
@@ -52,5 +52,8 @@ public class MemberPointDTO {
             this.pContent = pContent;
             this.formattedDate = formattedDate;
         }
+    }
+    public void setTotalPointSum(int totalPointSum) {
+        this.totalPointSum = totalPointSum;
     }
 }

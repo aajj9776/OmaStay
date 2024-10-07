@@ -58,6 +58,7 @@
         <div class="flex flex-col items-center justify-start gap-[1.2px] w-full">
           <div class="flex flex-row items-center justify-start pt-0 px-3.6 pb-[13.6px]">
             <a class="text-[1.44rem] leading-[11.6px] font-bold text-darkslategray text-start inline-block min-w-[35.6px] whitespace-nowrap">포인트</a>
+            <span id="totalPoints" class="ml-4 text-lg font-semibold text-darkslategray"></span>
           </div>
 
           <div class="h-[605px] flex flex-col items-start justify-start py-2.5 px-[31px] box-border gap-1 w-full">
@@ -100,20 +101,21 @@
             body: JSON.stringify({ memberId: memberId }) // memberId를 JSON 형태로 보냄
         })
         .then(response =>{
-          console.log('리스폰e received:', response); // 응답 객체 로그 출력
+          
           return response.json(); })  // JSON 형식으로 응답 받기
         .then(data => {
           console.log('Fetched data:', data);
             // 서버에서 받은 JSON 데이터를 사용하여 DOM을 업데이트
             const pointsContainer = document.getElementById('pointsContainer');
+            const totalPointsElement = document.getElementById('totalPoints');
             pointsContainer.innerHTML = ''; // 기존 내용 초기화
 
             if (data && data.formattedPoints && data.formattedPoints.length > 0) {
+
+              totalPointsElement.textContent = `총 포인트: ${data.totalPointSum}P`;
               // 각 포인트 데이터를 HTML에 추가
               data.formattedPoints.forEach((point, index) => {
-                console.log('포인트:', point);
-                console.log('프린트 content:', point.pcontent); // 콘솔에서 pcontent 출력 확인
-    console.log('포인트 값:', point.pvalue);
+                
                 const pointHtml = `
                   <div class="w-full rounded-smi bg-whitesmoke-100 flex flex-row items-start justify-start gap-5">
                     <div class="h-[60px] w-[60px] flex-1 text-lg tracking-[0.4px] uppercase font-medium text-black text-center flex items-center justify-center">
@@ -132,6 +134,7 @@
           } else {
             console.log('No points found.');
               pointsContainer.innerHTML = '<p>포인트 내역이 없습니다.</p>'; // 포인트 데이터가 없을 경우 표시
+              totalPointsElement.textContent = '총 포인트: 0P'; // 포인트 없을 경우 0 표시
           }
         })
         .catch(error => console.error('Error fetching points:', error)); // 오류 처리

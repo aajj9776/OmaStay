@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 
 import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.MemberDTO;
@@ -245,25 +246,29 @@ public class MyPageService {
         // 회원 정보를 가져옴
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-            System.out.println("멤버 테스틑"+member);
+    
         // 포인트 데이터를 가져오는 로직
         List<Point> points = pointRepository.findPointsByMemberId(memberId);
         if (points == null) {
             points = new ArrayList<>(); // null일 경우 빈 리스트로 초기화
         }
-
-        System.out.println("포인트 테스트"+points);
+    
+        // 최신 포인트 총합 가져오기
+        List<Integer> pointSums = pointRepository.findLatestPointSumByMemberId(memberId);
+        Integer totalPointSum = pointSums.isEmpty() ? 0 : pointSums.get(0); // 첫 번째 값만 가져옴
+    
         // PointDTO 리스트로 변환
         List<PointDTO> pointDTOList = points.stream()
                 .map(PointDTO::new)
                 .collect(Collectors.toList());
-
+    
         // MemberDTO 생성 (필요한 경우 로직을 추가하여 MemberDTO 변환)
         MemberDTO memberDTO = new MemberDTO(member);
-
+    
         // MemberPointDTO 생성 (포맷된 포인트 리스트와 총합 계산)
         MemberPointDTO memberPointDTO = new MemberPointDTO(memberDTO, pointDTOList);
-
+        memberPointDTO.setTotalPointSum(totalPointSum); // 총 포인트 합계 설정
+    
         return memberPointDTO;
     }
     // mem_idx로 쿠폰을 조회하고 DTO로 변환하여 반환하는 메서드
