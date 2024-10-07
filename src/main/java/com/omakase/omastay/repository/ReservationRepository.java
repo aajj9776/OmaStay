@@ -65,6 +65,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start >= :nowDate AND r.resStatus = 1) ORDER BY r.startEndVo.start ASC")
     List<Reservation> findReservationsByCheckIn(@Param("nowDate") LocalDateTime nowDate, @Param("roomInfo") RoomInfo roomInfo);
 
+    //예약대기정보
+    @Query("SELECT r FROM Reservation r WHERE r.resStatus = 0")
+    List<Reservation> findReservationsByPending();
+  
     @Query("SELECT r FROM Reservation r JOIN r.nonMember nm WHERE r.resNum = :resNum AND nm.nonEmail = :nonEmail")
     Reservation findByResNumAndNonEmail(@Param("resNum") String resNum, @Param("nonEmail") String nonEmail);
 

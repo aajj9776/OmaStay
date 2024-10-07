@@ -1,7 +1,6 @@
 package com.omakase.omastay.mapper;
 
 import com.omakase.omastay.dto.ReservationDTO;
-import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.entity.Reservation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
