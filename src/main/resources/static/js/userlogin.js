@@ -55,8 +55,10 @@ document.addEventListener("DOMContentLoaded", function() {
         if (guestReservationLink) {
             console.log("guestReservationLink found, modifying text and href.");
             guestReservationLink.innerText = "회원 예약조회";
-            guestReservationLink.setAttribute("href", "/mypage/reservation");  // "회원 예약조회" 페이지로 이동
-            guestReservationLink.removeAttribute("onclick");  // 기존 onclick 제거
+            guestReservationLink.onclick = function(e) {
+                e.preventDefault();
+                changPage(6);  // "회원 예약조회"로 이동
+            };
         } else {
             console.log("guestReservationLink not found.");
         }

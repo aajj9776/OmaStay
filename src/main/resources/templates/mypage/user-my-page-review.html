@@ -68,55 +68,20 @@
             <div class="flex flex-row items-start justify-start py-0 px-[15px]">
               <a class="[text-decoration:none] relative leading-[29px] font-bold text-[inherit] inline-block min-w-[97px] whitespace-nowrap text-lg">내 리뷰</a>
             </div>
-            <div class="self-stretch flex flex-col items-start justify-start gap-[30px]">
-              <a
-                class="w-[400px] [border:none] [outline:none] h-[50px] flex flex-row items-start justify-start py-0 px-[15px] box-border text-3xl text-lightslategray"
-                
-              >내가 작성한 리뷰
-            </a>
-              <div class="self-stretch h-px relative border-silver-200 border-t-[1px] border-solid box-border"></div>
+            <div class="self-stretch flex items-center justify-between">
+              <a class="w-[400px] [border:none] [outline:none] h-[50px] flex items-center py-0 px-[15px] box-border text-3xl text-lightslategray">
+                내가 작성한 리뷰
+              </a>
+              <button id="deleteButton" class="px-4 py-2 bg-red-500 text-white rounded" onclick="deleteSelected()">
+                선택 삭제
+              </button>
             </div>
+              <div class="self-stretch h-px relative border-silver-200 border-t-[1px] border-solid box-border">
+              </div>
           </header>
         </div>
         <div class="flex flex-col items-start justify-start gap-8 w-full">
-
           <!--해당 구역 시작 -->
-
-          <!-- 추가된 리뷰 카드 -->
-          <!-- <div class="w-full rounded-mini bg-whitesmoke-300 flex flex-col items-start justify-start py-9 px-14 gap-4">
-            <b class="w-[500px] relative leading-[21px] text-darkgray-400">은평 씨에스에비뉴 호텔 - 디럭스 더블</b>
-            <div class="flex flex-row items-start justify-start gap-[5px]">
-              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector2.svg"/>
-              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-11.svg"/>
-              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-2.svg"/>
-              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-3.svg"/>
-              <img class="h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector2.svg"/>
-            </div>
-            <div class="flex flex-row items-start justify-start gap-6 w-full">
-              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide@2x.png"/>
-              <img class="h-[210px] w-[210px] rounded-xl object-cover" th:src="${imageUrl}" alt="리뷰 이미지"/>
-              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide-1@2x.png"/>
-              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide-2@2x.png"/>
-              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/group--slide-2@2x.png"/>
-              <img class="h-[210px] w-[210px] rounded-xl object-cover" alt="리뷰 이미지" src="/image/user/06a9e8f9a59a46798fd0232a09dc4c8d-w420-h420jpg@2x.png"/>
-            </div>
-            <div class="flex-1 flex flex-row items-end justify-start pt-0 px-0 pb-[0.1px] box-border max-w-full text-sm-9">
-              <div class="flex-1 relative leading-[22px]">
-                <p class="m-0">️객실</p>
-                <p class="m-0">
-                  -객실이 아주 넓고 쾌적했어요. 침구류도 편안했습니다. 티비 화면도 크고, 에어컨도 설정한 온도대로 잘 나와서 시원했어요. 창문도 조금 열 수 있어서 환기
-                </p>
-                <p class="m-0">
-                  하기 좋았어요. 무엇보다 광안대교를 정면으로 펼쳐지는 오션 뷰가 너무 좋았어요. 제가 투숙한 날에 비가 왔음에도 뷰가 정말 아름다웠어요.…
-                </p>
-              </div>
-            </div>
-            <div class="flex flex-row items-start justify-start text-center text-sm-1">
-              <div class="h-4 relative font-semibold flex items-center justify-center">
-                더보기
-              </div>
-              <img class="h-4 w-4" alt="" src="/image/user/svg11.svg"/>
-            </div> -->
           </div>
           <div id="reviewsContainer" class="flex flex-col items-start justify-start gap-8 w-full"></div>
         </div>
@@ -127,66 +92,104 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    user = JSON.parse(localStorage.getItem('user'));
-    console.log("로컬 스토리지에서 가져온 유저 정보:", user);
-    let memIdx = user ? user.id : null;
-
-    if (memIdx) {
-        console.log("memIdx 값:", memIdx);
-        fetch('/mypage/review', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ memIdx: memIdx })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('리뷰 데이터 (DTO):', data);
-
-            const reviewsContainer = document.getElementById('reviewsContainer');
-            data.forEach(review => {
-                console.log("리뷰 데이터:", review);
-                
-                // 리뷰 카드 HTML 생성
-                const reviewCard = `
-                    <div class="w-full rounded-mini bg-whitesmoke-300 flex flex-col items-start justify-start py-9 px-14 gap-4">
-                        <div class="flex flex-row items-start justify-start gap-[5px]">
-                          <a class="m-1">${review.revRating}/5점</a>
-                          <img class="m-1 h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-11.svg"/>
-                           <b class="w-[300px] relative leading-[21px] text-darkgray-400">
-                            ${review.hotelName} - ${review.roomName} 
-                            </b>
-                        </div>
-                        <div class="flex flex-row items-start justify-start gap-6 w-full">
-                            ${review.imageUrls.map(url => {
-                                console.log("이미지 URL:", url);  // 콘솔 로그 추가
-                                return `<img class="h-[210px] w-[210px] rounded-xl object-cover" src="${url}" alt="리뷰 이미지" />`;
-                            }).join('')}
-                        </div>
-                        <div class="flex-1 flex flex-row items-end justify-start pt-0 px-0 pb-[0.1px] box-border max-w-full text-sm-9">
-                            <div class="flex-1 relative leading-[22px]">
-                                <p class="m-0">${review.revContent}</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-row items-start justify-start text-center text-sm-1">
-                            <div class="h-4 relative font-semibold flex items-center justify-center">
-                                더보기
-                            </div>
-                        </div>
-                    </div>
-                `;
-                reviewsContainer.insertAdjacentHTML('beforeend', reviewCard);
-            });
-        })
-        .catch(error => {
-            console.error('리뷰 데이터를 가져오는 중 오류 발생:', error);
-        });
-    } else {
-        console.error('로컬스토리지에 mem_idx 정보가 없습니다.');
-    }
-});
-
-</script>
+  document.addEventListener('DOMContentLoaded', function() {
+      user = JSON.parse(localStorage.getItem('user'));
+      console.log("로컬 스토리지에서 가져온 유저 정보:", user);
+      let memIdx = user ? user.id : null;
+  
+      if (memIdx) {
+          console.log("memIdx 값:", memIdx);
+          fetch('/mypage/review', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ memIdx: memIdx })
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log('리뷰 데이터 (DTO):', data);
+  
+              const reviewsContainer = document.getElementById('reviewsContainer');
+              reviewsContainer.innerHTML = ''; // 기존 내용 초기화
+  
+              data.forEach(review => {
+                  console.log("리뷰 데이터:", review);
+                  
+                  // 리뷰 카드 HTML 생성
+                  const reviewCard = `
+                      <div class="w-full rounded-mini bg-whitesmoke-300 flex flex-col items-start justify-start py-9 px-14 gap-4">
+                          <div class="flex items-center mb-2">
+                              <!-- 체크박스 추가 -->
+                              <input type="checkbox" class="reviewCheckbox mr-3 w-6 h-6" value="${review.id}">
+                              <a class="m-1">${review.revRating}/5점</a>
+                              <img class="m-1 h-[17.3px] w-[17.3px]" alt="별점" src="/image/user/vector-11.svg"/>
+                              <b class="w-[300px] relative leading-[21px] text-darkgray-400">
+                                  ${review.hotelName} - ${review.roomName}
+                              </b>
+                          </div>
+                          <div class="flex flex-row items-start justify-start gap-6 w-full">
+                              ${review.imageUrls.map(url => {
+                                  return `<img class="h-[210px] w-[210px] rounded-xl object-cover" src="${url}" alt="리뷰 이미지" />`;
+                              }).join('')}
+                          </div>
+                          <div class="flex-1 flex flex-row items-end justify-start pt-0 px-0 pb-[0.1px] box-border max-w-full text-sm-9">
+                              <div class="flex-1 relative leading-[22px]">
+                                  <p class="m-0">${review.revContent}</p>
+                              </div>
+                          </div>
+                          <div class="flex flex-row items-start justify-start text-center text-sm-1">
+                              <div class="h-4 relative font-semibold flex items-center justify-center">
+                                  <button onclick="goToDetail(${review.id}, ${review.resPerson})" class="font-semibold">더보기</button>
+                              </div>
+                          </div>
+                      </div>
+                  `;
+                  reviewsContainer.insertAdjacentHTML('beforeend', reviewCard);
+              });
+          })
+          .catch(error => {
+              console.error('리뷰 데이터를 가져오는 중 오류 발생:', error);
+          });
+      } else {
+          console.error('로컬스토리지에 mem_idx 정보가 없습니다.');
+      }
+  });
+  
+  // 선택된 리뷰 삭제
+  function deleteSelected() {
+      const selectedReviews = Array.from(document.querySelectorAll('.reviewCheckbox:checked')).map(checkbox => checkbox.value);
+      
+      if (selectedReviews.length > 0) {
+          // 선택된 리뷰가 있으면 삭제 API 호출
+          fetch('/mypage/delete-reviews', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ reviewIds: selectedReviews })
+          })
+          .then(response => response.json())
+          .then(result => {
+              console.log('삭제 완료:', result);
+              alert('삭제되었습니다.');
+              // 삭제 후 새로고침
+              window.location.href = '/mypage/review';
+          })
+          .catch(error => {
+              console.error('리뷰 삭제 중 오류 발생:', error);
+          });
+      } else {
+          alert("삭제할 리뷰를 선택하세요.");
+      }
+  }
+  
+  // 더보기 버튼 클릭시 해당 버튼으로 이동
+  function goToDetail(hIdx, person) {
+      const start = new Date().toISOString();
+      const end = new Date(new Date().getTime() + 86400000).toISOString(); // 1일 후
+      const url = `/search/detail-host?hIdx=${hIdx}&startEndDay.start=${encodeURIComponent(start)}&startEndDay.end=${encodeURIComponent(end)}&person=${person}`;
+      window.location.href = url;
+  }
+  </script>
 </html>

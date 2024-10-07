@@ -346,7 +346,7 @@ public class MyPageService {
     // 리뷰 데이터를 가져와 DTO로 변환하는 메서드
     public List<ReviewMemberDTO> reviewMember(int memIdx) {
         List<Review> reviews = reviewRepository.findReviewsWithRoomAndHotelByMemberId(memIdx);
-    
+
         // Review 엔티티를 ReviewMemberDTO로 변환
         return reviews.stream().map(review -> {
             ReviewMemberDTO dto = new ReviewMemberDTO();
@@ -355,18 +355,15 @@ public class MyPageService {
             dto.setRevContent(review.getRevContent());
             dto.setRevDate(review.getRevDate());
             dto.setRevRating(review.getRevRating());
-    
+
             // 호텔명과 객실명 설정
             if (review.getReservation() != null && review.getReservation().getRoomInfo() != null) {
-                dto.setHotelName(review.getReservation().getRoomInfo().getHostInfo().getHname()); // HostInfo의 hname
-                dto.setRoomName(review.getReservation().getRoomInfo().getRoomName()); // RoomInfo의 roomName
+                dto.setHotelName(review.getReservation().getRoomInfo().getHostInfo().getHname());
+                dto.setRoomName(review.getReservation().getRoomInfo().getRoomName());
             }
-    
-            // 로그 추가: FileImageNameVo 값을 출력
+
+            // 이미지 URL 설정
             if (review.getRevFileImageNameVo() != null) {
-                System.out.println("rev_fname: " + review.getRevFileImageNameVo().getFName());
-                System.out.println("rev_oname: " + review.getRevFileImageNameVo().getOName());
-    
                 String fname = review.getRevFileImageNameVo().getFName();
                 if (fname != null && !fname.isEmpty()) {
                     String[] fileNames = fname.split(",");
@@ -380,9 +377,25 @@ public class MyPageService {
             } else {
                 dto.setImageUrls(Collections.emptyList());
             }
-    
+
             return dto;
         }).collect(Collectors.toList());
     }
 
+        // 리뷰 삭제 
+        public boolean deleteReviews(List<Integer> reviewIds) {
+            try {
+                for (Integer reviewId : reviewIds) {
+                    Review review = reviewRepository.findById(reviewId).orElse(null);
+                    if (review != null) {
+                        review.setRevStatus(BooleanStatus.FALSE); // 리뷰 상태를 삭제로 변경 (BooleanStatus 사용)
+                        reviewRepository.save(review);
+                    }
+                }
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
 }

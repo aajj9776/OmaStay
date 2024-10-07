@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.4.10"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./styles.css -o ../resources/static/main.css --minify",
+    "watch": "tailwindcss -i ./styles.css -o ../resources/static/main.css --watch"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  }
+}

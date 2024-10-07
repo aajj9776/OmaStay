@@ -19,8 +19,7 @@
             <ul class="dropdown-menu w-[270px] p-0">
                 <li><img class="mx-auto h-10 ml-3.5 mr-3.5 mt-2 mb-2  w-[240px] flex items-center justify-center" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)"/></img></li>
                 <li><a class="btn btn-primary mx-auto h-10 ml-3.5 mr-3.5 pb-2 pt-2 mt-2 mb-2  w-[240px] flex items-center justify-center" onclick="changPage(1)">로그인/회원가입</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/?activeSearch=domestic" onclick="changPage(2)">국내 숙소</a></li>
+                <li><a class="dropdown-item" href="/?activeSearch=domestic" onclick="changPage(2)"></a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" onclick="changPage(3)">비회원 예약조회</a></li>
                 <li><a class="dropdown-item" onclick="changPage(4)">이벤트</a></li>
@@ -30,14 +29,17 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script>
+        user = JSON.parse(localStorage.getItem('user'));
+        let memIdx = user ? user.id : null;
         function changPage(index) {
             const hrefs = [
-                "/", //몰라
+                "/mypage/member-ship", 
                 "/login",
-                "/?activeSearch=domestic",
+                "/",    //몰라
+                "/reservation/noReservation", //비회원
                 "/", //미정
                 "/", //미정
-                "/" //미정
+                "/mypage/reservation"   //회원으로 전환 changPage(6)
             ];
             location.href = hrefs[index];
         }

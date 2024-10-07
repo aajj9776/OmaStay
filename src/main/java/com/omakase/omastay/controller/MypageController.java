@@ -291,4 +291,18 @@ public class MypageController {
         return myPageService.reviewMember(memIdx);
     }
     
+    @PostMapping("/delete-reviews")
+    public Map<String, String> deleteReviews(@RequestBody Map<String, List<Integer>> requestData) {
+        List<Integer> reviewIds = requestData.get("reviewIds");
+        boolean success = myPageService.deleteReviews(reviewIds);
+        
+        Map<String, String> response = new HashMap<>();
+        if (success) {
+            response.put("message", "리뷰가 성공적으로 삭제되었습니다.");
+        } else {
+            response.put("message", "리뷰 삭제 중 오류가 발생했습니다.");
+        }
+        return response;
+    }
+    
 }
