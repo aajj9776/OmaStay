@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
@@ -36,6 +37,7 @@ import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.dto.custom.AdminMainCustomDTO;
 import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
@@ -44,9 +46,12 @@ import com.omakase.omastay.dto.custom.SalesCustomDTO;
 import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.dto.custom.RecommendationCustomDTO;
 import com.omakase.omastay.entity.Calculation;
+import com.omakase.omastay.entity.enumurate.CalStatus;
 import com.omakase.omastay.entity.enumurate.HCate;
+import com.omakase.omastay.entity.enumurate.HStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
+import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.CalculationService;
 import com.omakase.omastay.service.CouponService;
 import com.omakase.omastay.service.HostInfoService;
@@ -67,6 +72,7 @@ import com.omakase.omastay.vo.StartEndVo;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
@@ -115,6 +121,8 @@ public class AdminController {
     @Autowired
     ReservationService reservationService;
 
+    @Autowired
+    AdminMemberService adminMemberService;
 
     @Autowired
     private ServletContext application;
@@ -122,22 +130,112 @@ public class AdminController {
     @Autowired
     private HttpServletRequest request;
 
+    @Autowired
+    private HttpSession session;
+
     @Value("${upload}")
     private String storage;
 
     @RequestMapping("/login")
-    public String login() {
-        return "admins/login";
+    public ModelAndView login(@RequestParam(value="error", required=false) String error) {
+
+        ModelAndView mv = new ModelAndView();
+        if(error.equals("sessionExpired")){
+            mv.addObject("errorMessage", "로그인이 필요합니다.");
+        }
+        mv.setViewName("admins/admin_login");
+
+        return mv;
+    }
+
+    @RequestMapping("/login/validate")
+    public ModelAndView hostlogin(@RequestParam("id") String id, @RequestParam("pw") String pw) {
+        AdminMemberDTO adminMemberDTO = adminMemberService.adminlogin(id,pw);
+
+        ModelAndView mv = new ModelAndView();
+        if (adminMemberDTO != null) {
+            session.setAttribute("adminMember", adminMemberDTO); // 세션에 사용자 정보 저장
+            mv.setViewName("redirect:/admin/main");
+        } else {
+            mv.addObject("errorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            mv.setViewName("admins/admin_login");
+        }
+
+        return mv;
+    }
+
+    @RequestMapping("/logout")
+    public ModelAndView logout() {
+        session.removeAttribute("adminMember");
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("errorMessage", "로그아웃 되었습니다.");
+        mv.setViewName("admins/admin_login");
+        return mv; 
     }
 
     /************************ 메인 시작 ************************/
     @RequestMapping("/main")
     public ModelAndView main() {
         ModelAndView mv = new ModelAndView();
-        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(null);
-        System.out.println("top5List : " + top5List);
-        mv.addObject("top5List", top5List);
         mv.setViewName("admins/main");
+
+        //판매실적 top5 
+        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(null);
+        mv.addObject("top5List", top5List);
+
+        //이번달 정산 승인 대기(요청) 수
+        //이번달 정산 승인 수
+        //이번달 정산 정산완료 수
+        List<AdminMainCustomDTO> calCountList = calculationService.getCalculationCount();
+        System.out.println("calCountList: "+ calCountList);
+        //calCountList: [AdminMainCustomDTO(name=2, count=1), AdminMainCustomDTO(name=0, count=2)]
+        for(AdminMainCustomDTO dto : calCountList){
+            int index = Integer.parseInt(dto.getName()); // 문자열을 int로 변환
+            CalStatus calStatus = CalStatus.values()[index]; // index로 enum 값 얻기
+
+            switch(calStatus){
+                case REQUEST:
+                    mv.addObject("calRequestCount", dto.getCount());
+                    break;
+                case APPROVE:
+                    mv.addObject("calApproveCount", dto.getCount());
+                    break;
+                case COMPLETED:
+                    mv.addObject("calCompletedCount", dto.getCount());
+                    break;
+            }
+        }
+
+        //입점 요청 대기 수
+        //입점 완료 가맹점 수
+        List<AdminMainCustomDTO> reqCountList = hs.getrequestCount();
+        System.out.println("reqCountList: "+reqCountList);
+
+        for(AdminMainCustomDTO dto : reqCountList){
+            if(dto.getName() != null){
+                int index = Integer.parseInt(dto.getName()); // 문자열을 int로 변환
+                HStatus hStatus = HStatus.values()[index]; // index로 enum 값 얻기
+
+                switch(hStatus){
+                    case APPLY:
+                        mv.addObject("reqApplyCount", dto.getCount());
+                        break;
+                    case APPROVE:
+                        mv.addObject("reqApproveCount", dto.getCount());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        //최근 신규 회원 10건 (이메일, 가입일)
+        List<MemberDTO> memList = ms.getMemList();
+        System.out.println(memList);
+        mv.addObject("memList", memList);
+
+        
         return mv;
     }
     /************************ 메인 끝 ************************/

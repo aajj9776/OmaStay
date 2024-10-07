@@ -1,6 +1,7 @@
 package com.omakase.omastay.service;
 
 import com.omakase.omastay.dto.CalculationDTO;
+import com.omakase.omastay.dto.custom.AdminMainCustomDTO;
 import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.HostCalculationDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
@@ -158,5 +159,12 @@ public class CalculationService {
         CalculationDTO calDTO = CalculationMapper.INSTANCE.toCalculationDTO(cal);
         calDTO.setHname(cal.getHostInfo().getHname());
         return calDTO;
+    }
+
+    public List<AdminMainCustomDTO> getCalculationCount(){
+        LocalDateTime thisMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withMinute(0);
+        List<AdminMainCustomDTO> list = calculationRepository.getCalculationCount(thisMonth);
+        System.out.println(list);
+        return list;
     }
 }

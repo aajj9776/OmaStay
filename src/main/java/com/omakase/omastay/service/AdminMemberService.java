@@ -79,4 +79,15 @@ public class AdminMemberService {
         return false;
     }
 
+    //관리자 로그인
+    public AdminMemberDTO adminlogin(String id, String pw) {
+        AdminMember adminMember = adminMemberRepository.findAdminByAdId(id);
+        if (adminMember != null) {
+            if (passwordEncoder.matches(pw, adminMember.getAdminProfile().getPw())) {
+                return AdminMemberMapper.INSTANCE.toAdminMemberDTO(adminMember);
+            }
+        }
+        return null;
+    }
+
 }
