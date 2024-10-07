@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile             # Dockerfile이 있는 경로
     container_name: backend
     networks:
       - my-net1
@@ -18,9 +18,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx:latest
-    build:
-      context: ./nginx  # 여기서 경로가 수정되었습니다.
+    image: nginx:latest                  # 도커 이미지를 직접 사용
     networks:
       - my-net1
     restart: always
@@ -28,13 +26,13 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf  # 기존 경로와 동일합니다.
-      - ./nginx/certbot/conf:/etc/letsencrypt  # Certbot 설정 추가.
-      - ./nginx/certbot/www:/var/www/certbot  # Certbot 설정 추가.
-      - ./nginx/ssl:/etc/nginx/ssl  # SSL 디렉토리 경로 추가.
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+      - ./nginx/ssl:/etc/nginx/ssl
     depends_on:
       - backend
-    command: [ '/bin/sh', '-c', 'nginx -g "daemon off;" & while :; do sleep 6h & wait $${!}; nginx -s reload; done' ]  # Nginx를 주기적으로 재로드하는 명령어 추가.
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   certbot:
     image: certbot/certbot
