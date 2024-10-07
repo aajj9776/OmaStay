@@ -6,7 +6,6 @@ import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.querydsl.core.annotations.QueryProjection;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

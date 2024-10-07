@@ -68,10 +68,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     //예약대기정보
     @Query("SELECT r FROM Reservation r WHERE r.resStatus = 0")
     List<Reservation> findReservationsByPending();
+  
+    @Query("SELECT r FROM Reservation r JOIN r.nonMember nm WHERE r.resNum = :resNum AND nm.nonEmail = :nonEmail")
+    Reservation findByResNumAndNonEmail(@Param("resNum") String resNum, @Param("nonEmail") String nonEmail);
+
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx AND r.startEndVo.end > CURRENT_TIMESTAMP")
+    List<Reservation> findByMemIdx(@Param("memIdx") Integer memIdx);
 
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
     Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-
 
     //admin의 회원조회에서 회원의 최근 3개월 예약 횟수를 가져옴
     @Query("SELECT COUNT(r) FROM Reservation r JOIN r.payment p WHERE r.member.id = :memId AND p.payDate >= :time")
