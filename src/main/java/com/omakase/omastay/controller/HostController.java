@@ -1,6 +1,7 @@
 package com.omakase.omastay.controller;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -496,7 +497,7 @@ public class HostController {
 
     //호스트 pw 찾기 시 id, email 일치여부 확인 후 이메일 발송
     @RequestMapping("/idemailsend")  
-    public ResponseEntity<String> sendIdEmail(@RequestParam("id") String id, @RequestParam("email") String email) throws MessagingException { 
+    public ResponseEntity<String> sendIdEmail(@RequestParam("id") String id, @RequestParam("email") String email) throws MessagingException, java.io.IOException { 
         boolean isValid = adminMemberService.hostfindpw(id, email);
 
         if (isValid) {
@@ -902,6 +903,11 @@ public class HostController {
         
         ReviewDTO review = reviewService.getReview(Integer.parseInt(id));
         mv.addObject("review", review);
+        if(review.getRevFileImageNameVo().getFName() != null){
+            String fnames = review.getRevFileImageNameVo().getFName();
+            List<String> fname= Arrays.asList(fnames.split(","));
+            mv.addObject("fname", fname);
+        }
         
         ReviewCommentDTO reviewCommentDTO = reviewCommentService.getRevComment(review);
         mv.addObject("reviewCommentDTO", reviewCommentDTO);
@@ -982,7 +988,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
     // 호스트 예약 확정
     @ResponseBody
     @RequestMapping("/reslist/confirm")
-    public Map<String, Object> resConfirm(@RequestParam("ids") List<Integer> ids) {
+    public Map<String, Object> resConfirm(@RequestParam("ids") List<Integer> ids) throws java.io.IOException {
 
         Map<String, Object> map = new HashMap<>();
 
@@ -1008,7 +1014,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
     // 호스트 예약 취소
     @ResponseBody
     @RequestMapping("/reslist/reject")
-    public Map<String, Object> resReject(@RequestParam("ids") List<Integer> ids) {
+    public Map<String, Object> resReject(@RequestParam("ids") List<Integer> ids) throws java.io.IOException {
 
         Map<String, Object> map = new HashMap<>();
 
