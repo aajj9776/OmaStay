@@ -54,6 +54,7 @@ import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.AdminMemberService;
 import com.omakase.omastay.service.CalculationService;
 import com.omakase.omastay.service.CouponService;
+import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.ImageService;
 import com.omakase.omastay.service.InquiryService;
@@ -125,6 +126,9 @@ public class AdminController {
     AdminMemberService adminMemberService;
 
     @Autowired
+    FileUploadService fileUploadService;
+
+    @Autowired
     private ServletContext application;
 
     @Autowired
@@ -140,7 +144,7 @@ public class AdminController {
     public ModelAndView login(@RequestParam(value="error", required=false) String error) {
 
         ModelAndView mv = new ModelAndView();
-        if(error.equals("sessionExpired")){
+        if(error!=null && error.equals("sessionExpired")){
             mv.addObject("errorMessage", "로그인이 필요합니다.");
         }
         mv.setViewName("admins/admin_login");
@@ -554,7 +558,8 @@ public class AdminController {
 
             String fname = null;
             if (f != null && f.getSize() > 0) {
-                String realPath = application.getRealPath(upload);
+                //String realPath = application.getRealPath(upload);
+                String realPath = upload + "notice";
 
                 fname = f.getOriginalFilename();
                 FileImageNameVo fvo = new FileImageNameVo();
@@ -563,14 +568,17 @@ public class AdminController {
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(realPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
+                    String fileUrl = fileUploadService.uploadFile(f, "notice", fname);
+                    System.out.println("파일 업로드 URL: " + fileUrl);
 
-                    // 파일 업로드(upload폴더에 저장)
-                    File dest = new File(uploadDir, fname);
-                    f.transferTo(dest);
+                    // File uploadDir = new File(realPath);
+                    // if (!uploadDir.exists()) {
+                    //     uploadDir.mkdirs();
+                    // }
+
+                    // // 파일 업로드(upload폴더에 저장)
+                    // File dest = new File(uploadDir, fname);
+                    // f.transferTo(dest);
 
                     sDto.setFileName(fvo);
                 } catch (Exception e) {
@@ -633,22 +641,22 @@ public class AdminController {
     }
 
     // 파일 다운로드
-    @RequestMapping(value = "/fileDownload", method = RequestMethod.GET)
+    @RequestMapping(value="/fileDownload", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<InputStreamResource> fileDownload(@RequestParam("fName") String fName)
             throws FileNotFoundException, UnsupportedEncodingException {
 
-        String realPath = application.getRealPath(upload);
+        //String realPath = application.getRealPath(upload);
 
         // 전체경로를 만들어서 File객체 생성
-        String fullPath = realPath + System.getProperty("file.separator") + fName;
+        String fullPath = upload+"notice/"+ fName; 
         File file = new File(fullPath);
 
         if (!file.exists() || !file.isFile()) {
             throw new IOException("File not found");
         }
-        FileInputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis);
+        FileInputStream fis = new FileInputStream(file); 
+        BufferedInputStream bis = new BufferedInputStream(fis); 
         InputStreamResource resource = new InputStreamResource(bis);
 
         HttpHeaders headers = new HttpHeaders();

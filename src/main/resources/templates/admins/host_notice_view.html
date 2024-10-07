@@ -54,13 +54,13 @@
                             </tr>
                             <tr>
                                 <td>
+                                    <div th:if="${sDto.fileName == null}">
+                                        <span>첨부된 파일이 없습니다.</span>
+                                    </div>
                                     <div th:if="${sDto.fileName != null}">
                                         <a th:href="|javascript:down('${sDto.fileName.fName}')|">
                                             <span th:text="${sDto.fileName.fName}"></span>
                                         </a>
-                                    </div>
-                                    <div th:if="${sDto.fileName == null}">
-                                        <span>첨부된 파일이 없습니다.</span>
                                     </div>
                                 </td>
                             </tr>
