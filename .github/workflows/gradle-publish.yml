@@ -33,7 +33,7 @@ jobs:
       with:
         node-version: '14'
       
-    - name: Install tailwindcss and dependencies
+    - name: Install Node.js dependencies
       run: |
         cd src/main/frontend
         npm install
@@ -60,30 +60,29 @@ jobs:
 
     - name: Install Docker using convenience script on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
     - name: Add ubuntu user to Docker group and restart Docker on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo usermod -aG docker ubuntu
           sudo systemctl restart docker
-          exit
         EOF
 
     - name: Verify Docker permissions on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} "docker ps"
 
     - name: Set permissions for the directory
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/nginx/ssl/accounts
           sudo chmod -R 755 /home/ubuntu/OmaStay/nginx/ssl/accounts
         EOF
 
     - name: SSH into EC2 and run Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
           docker-compose down
           docker-compose up -d --build
