@@ -58,7 +58,7 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod u+x gradlew
-      
+
     - name: Build with Gradle Wrapper
       run: ./gradlew clean build --no-daemon --info
 
@@ -107,8 +107,12 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
+          # Verify Certbot directory
+          ls -la /home/ubuntu/OmaStay/nginx/certbot
           # Initial SSL certificate request
           docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org
           # Restart services to apply the certificate
           docker-compose restart nginx
+          # Check Certbot log for details
+          cat /var/log/letsencrypt/letsencrypt.log
         EOF
