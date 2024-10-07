@@ -32,7 +32,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-      
+
     - name: Install Node.js dependencies
       run: |
         cd src/main/frontend
@@ -82,14 +82,18 @@ jobs:
           sudo chmod -R 777 /home/ubuntu/OmaStay/certbot
         EOF
 
-    - name: SSH into EC2 and run Docker Compose
+    - name: SSH into EC2 and clean up Docker Compose
       run: |
         ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
-          docker-compose down
+          docker-compose down --remove-orphans
           docker-compose up -d --build
-          # Nginx와 Certbot이 준비될 시간을 줍니다.
-          sleep 30
+        EOF
+
+    - name: SSH into EC2 and run Certbot
+      run: |
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
+          cd /home/ubuntu/OmaStay
           # Initial SSL certificate request
           docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org
           # Restart services to apply the certificate
