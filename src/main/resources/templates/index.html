@@ -4,13 +4,11 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link href="/css/index.css" rel="stylesheet"/>
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
-    <link href="/css/component/swiper.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-</head>
+    <link href="/css/component/swiper.css" rel="stylesheet"/></head>
 <body>
 <div class="wrarp">
     <section class="main-content">
@@ -49,13 +47,28 @@
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-wrapper">
-                <img class="swiper-slide"
+                <img class="swiper-slide rounded-md"
                      loading="lazy"
-                     src="/image/index/group--slide--link-----@2x.png"
-                     th:each="i : ${#numbers.sequence(1, 5)}"
+                     src="/image/index/이벤트1.png"
+                />
+                <img class="swiper-slide rounded-md"
+                loading="lazy"
+                src="/image/index/이벤트2.png"
+                />
+                <img class="swiper-slide rounded-md"
+                loading="lazy"
+                src="/image/index/이벤트3.png"
+                />
+                <img class="swiper-slide rounded-md"
+                loading="lazy"
+                src="/image/index/이벤트4.png"
+                />
+                <img class="swiper-slide rounded-md"
+                loading="lazy"
+                src="/image/index/이벤트5.png"
                 />
 
-            </div>
+             </div>
             <div class="div6">
                 <div class="swiper-pagination"></div>
             </div>
@@ -68,10 +81,73 @@
 
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
-                    <img alt="" class="container-icon" loading="lazy" src="/image/index/container@2x.png"/>
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/jeju.png"/>
                     <div class="span1">
                         <div class="div8">제주도</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/seoul.png"/>
+                    <div class="span1">
+                        <div class="div8">서울</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/busan.png"/>
+                    <div class="span1">
+                        <div class="div8">부산</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/gangneung.png"/>
+                    <div class="span1">
+                        <div class="div8">강릉</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/incheon.png"/>
+                    <div class="span1">
+                        <div class="div8">인천</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/gyungju.png"/>
+                    <div class="span1">
+                        <div class="div8">경주</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/haeundae.png"/>
+                    <div class="span1">
+                        <div class="div8">해운대</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/gapyeong.png"/>
+                    <div class="span1">
+                        <div class="div8">가평</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/yeosu.png"/>
+                    <div class="span1">
+                        <div class="div8">여수</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="container-icon cursor-pointer" loading="lazy" src="/image/index/sokcho.png"/>
+                    <div class="span1">
+                        <div class="div8">속초</div>
                     </div>
                 </div>
             </div>
@@ -89,7 +165,7 @@
                     로그인 하면 엠버서더 할인가로 예약할 수 있어요.
                 </div>
                 <div class="column3-action">
-                    <button class="btn btn-primary w-[150px] h-[48px] font-bold" type="button">로그인/회원가입</button>
+                    <a href="/login"><button class="btn btn-primary w-[150px] h-[48px] font-bold" type="button">로그인/회원가입</button></a>
                     <a class="pl-4 text-center color text-primary">혜택 자세히 보기</a>
                 </div>
             </div>
@@ -107,74 +183,17 @@
             <b class="heading-21">인기 추천 숙소</b>
         </div>
         <div class="popular-stay-tabs">
-            <div class="tablist-">
-                <div class="tab-items">
-                    <div class="li">
-                        <div class="li1">전체</div>
-                    </div>
-                </div>
-                <div class="tab-items1">
-                    <div class="li2">
-                        <div class="li1">모텔</div>
-                    </div>
-                </div>
-                <button class="li4">
-                    <div class="li5">호텔·리조트</div>
-                </button>
-                <button class="li4">
-                    <div class="li5">펜션·풀빌라</div>
-                </button>
-                <button class="li8">
-                    <div class="li9">게하·한옥</div>
-                </button>
+            <div class="flex space-x-4">
+                <button id="allBtn" class="tab-btn bg-blue-500 text-white font-bold py-2 px-4 rounded-full">전체</button>
+                <button id="motelBtn" class="tab-btn bg-white text-black font-medium py-2 px-4 rounded-full border border-gray-300">모텔</button>
+                <button id="hotelBtn" class="tab-btn bg-white text-black font-medium py-2 px-4 rounded-full border border-gray-300">호텔·리조트</button>
+                <button id="pensionBtn" class="tab-btn bg-white text-black font-medium py-2 px-4 rounded-full border border-gray-300">펜션·풀빌라</button>
+                <button id="guestHouseBtn" class="tab-btn bg-white text-black font-medium py-2 px-4 rounded-full border border-gray-300">게하·한옥</button>
             </div>
         </div>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
-                    <div class="card">
-                        <div class="div23">
-                            <img
-                                    alt=""
-                                    class="ac436e31398e5cc182d7d5fdea0572-icon"
-                                    loading="lazy"
-                                    src="/image/index/32ac436e31398e5cc182d7d5fdea0572jpg@2x.png"
-                            />
-                        </div>
-                        <div class="stay-info-container">
-                            <div class="stay-details-container">
-                                <div class="div24">모텔</div>
-                                <div class="heading-3">
-                                    <b class="b">구월 호텔반월</b>
-                                </div>
-                                <div class="container">
-                                    <div class="container1">
-                                        <div class="div25">인천터미널역 도보 14분</div>
-                                    </div>
-                                </div>
-                                <div class="span-wrapper">
-                                    <div class="span7">
-                                        <div class="rating">
-                                            <img loading="lazy" src="/image/index/svg-3.svg"/>
-                                            <b class="rating-placeholder">9.5</b>
-                                        </div>
-                                        <div class="div26">9,871명 평가</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stay-price-container-parent">
-                            <div class="stay-price-container">
-                                <div class="div25">쿠폰 적용시</div>
-                            </div>
-                            <div class="span9">
-                                <b class="span10">40,000</b>
-                                <div class="span11">원</div>
-                                <div class="span12">45,000원</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
             </div>
             <!--============================================-->
             <div class="swiper-button-next"></div>
@@ -192,12 +211,44 @@
         </div>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 5)}">
+                <div class="swiper-slide">
                     <img
                             alt=""
-                            class="cc123e1c51f2b16e4bc19b5f014752-icon"
+                            class="cc123e1c51f2b16e4bc19b5f014752-icon w-[400px] h-[300px]" style="object-fit: contain; border-radius: 8px;"
                             loading="lazy"
-                            src="/image/index/cc123e1c51f2b16e4bc19b5f014752f4jpg@2x.png"
+                            src="/image/index/오마픽5.jpg"
+                    />
+                </div>
+                <div class="swiper-slide">
+                    <img
+                            alt=""
+                            class="cc123e1c51f2b16e4bc19b5f014752-icon w-[400px] h-[300px]" style="object-fit: contain; border-radius: 8px;"
+                            loading="lazy"
+                            src="/image/index/오마픽1.jpg"
+                    />
+                </div>
+                <div class="swiper-slide">
+                    <img
+                            alt=""
+                            class="cc123e1c51f2b16e4bc19b5f014752-icon w-[400px] h-[300px]" style="object-fit: contain; border-radius: 8px;"
+                            loading="lazy"
+                            src="/image/index/오마픽2.jpg"
+                    />
+                </div>
+                <div class="swiper-slide">
+                    <img
+                            alt=""
+                            class="cc123e1c51f2b16e4bc19b5f014752-icon w-[400px] h-[300px]" style="object-fit: contain; border-radius: 8px;"
+                            loading="lazy"
+                            src="/image/index/오마픽3.jpg"
+                    />
+                </div>
+                <div class="swiper-slide">
+                    <img
+                            alt=""
+                            class="cc123e1c51f2b16e4bc19b5f014752-icon w-[400px] h-[300px]" style="object-fit: contain; border-radius: 8px;"
+                            loading="lazy"
+                            src="/image/index/오마픽4.jpg"
                     />
                 </div>
             </div>
@@ -211,36 +262,48 @@
         <div class="colutamn7-child"></div>
         <b class="heading-22">국내 여행지</b>
         <div class="article">
-            <div class="a15">경기</div>
-            <div class="a15">서울</div>
-            <div class="a15">부산</div>
-            <div class="a15">제주도</div>
-            <div class="a15">강원도</div>
-            <div class="a15">전북</div>
-            <div class="a15">전남</div>
-            <div class="a15">경북</div>
-            <div class="a15">경남</div>
-            <div class="a15">충북</div>
-            <div class="a15">충남</div>
-            <div class="a15">대구</div>
-            <div class="a15">인천</div>
-            <div class="a15">광주</div>
-            <div class="a15">대전</div>
-            <div class="a15">울산</div>
-            <div class="a15">세종</div>
+            <div class="a15 cursor-pointer">경기</div>
+            <div class="a15 cursor-pointer">서울</div>
+            <div class="a15 cursor-pointer">부산</div>
+            <div class="a15 cursor-pointer">제주도</div>
+            <div class="a15 cursor-pointer">강원도</div>
+            <div class="a15 cursor-pointer">전북</div>
+            <div class="a15 cursor-pointer">전남</div>
+            <div class="a15 cursor-pointer">경북</div>
+            <div class="a15 cursor-pointer">경남</div>
+            <div class="a15 cursor-pointer">충북</div>
+            <div class="a15 cursor-pointer">충남</div>
+            <div class="a15 cursor-pointer">대구</div>
+            <div class="a15 cursor-pointer">인천</div>
+            <div class="a15 cursor-pointer">광주</div>
+            <div class="a15 cursor-pointer">대전</div>
+            <div class="a15 cursor-pointer">울산</div>
+            <div class="a15 cursor-pointer">세종</div>
         </div>
     </section>
 </div>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script crossorigin="anonymous"
-        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script type="text/javascript" src="/js/datepicker.js"></script>
-<script type="text/javascript" src="/js/countperson.js"></script>
-
 <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.tab-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                // 모든 버튼에서 활성화 클래스 제거
+                buttons.forEach(btn => {
+                    btn.classList.remove('bg-blue-500', 'text-white', 'font-bold');
+                    btn.classList.add('bg-white', 'text-black', 'font-medium', 'border', 'border-gray-300');
+                });
+
+                // 클릭된 버튼에 활성화 클래스 추가
+                this.classList.remove('bg-white', 'text-black', 'font-medium', 'border', 'border-gray-300');
+                this.classList.add('bg-blue-500', 'text-white', 'font-bold');
+            });
+        });
+    });
+
     document.addEventListener("DOMContentLoaded", function (){
         //세션스토리지의 값 searh_bar에 넣기
         let s_count = sessionStorage.getItem('count');
@@ -313,6 +376,7 @@
           },
         });
 
+        
         const swiper4 = new Swiper(".column4 .swiper-container", {
           loop: false,
           slidesPerView: 4,
@@ -348,6 +412,7 @@
         loop: true,
         slidesPerView: 2.4,
         slidesPerGroup: 1,
+        spaceBetween: 10, // 슬라이드 간의 간격 설정 (10px)
         autoplay: {
             delay: 3000,
             disableOnInteraction: false,
@@ -386,6 +451,239 @@
             prevButton.style.visibility = 'visible';
         }
     }
+
+        function createSlide(item) {
+            const recommendation = item.recommendation;
+            const hostinfo = item.hostinfo;
+            const hostPrice = item.hostPrice;
+            const id = item.hostinfo.id;
+            const image = item.image;
+            console.log(id);
+
+            let hCateKor;
+                if (hostinfo.hcate === "MOTEL") {
+                    hCateKor = "모텔";
+                } else if (hostinfo.hcate === "HOTEL_RESORT") {
+                    hCateKor = "호텔/리조트";
+                } else if (hostinfo.hcate === "POOL_VILLA") {
+                    hCateKor = "펜션/풀빌라";
+                } else if (hostinfo.hcate === "GUESTHOUSE_HANOK") {
+                    hCateKor = "게스트하우스/한옥";
+                } else {
+                    hCateKor = hostinfo.hcate;
+                }
+
+
+            const recommHostHtml = `
+                <div class="swiper-slide" data-id="${hostinfo.id}">
+                <div class="card">
+                    <div class="div23">
+                    <img alt="" class="ac436e31398e5cc182d7d5fdea0572-icon cursor-pointer" loading="lazy" src="${image}"/>
+                    </div>
+                    <div class="stay-info-container">
+                    <div class="stay-details-container">
+                        <div class="div24">${hCateKor}</div>
+                        <div class="heading-3">
+                        <b class="b">${hostinfo.hname}</b>
+                        </div>
+                        <div class="container">
+                        <div class="container1">
+                            <div class="div25">${hostinfo.directions}</div>
+                        </div>
+                        </div>
+                        <div class="span-wrapper">
+                        <div class="span7">
+                            <div class="rating">
+                            <img loading="lazy" src="/image/index/svg-3.svg"/>
+                            <b class="rating-placeholder">9.5</b>
+                            </div>
+                            <div class="div26">9,871명 평가</div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="stay-price-container-parent">
+                    <div class="stay-price-container">
+                    </div>
+                    <div class="span9">
+                        <b class="span10">${hostPrice.regularPrice}</b>
+                        <div class="span11">원</div>
+                    </div>
+                    </div>
+                </div>
+                </div>`;
+                const slide = document.createElement('div');
+                    slide.innerHTML = recommHostHtml;
+
+                    // 슬라이드에 클릭 이벤트 리스너 추가
+                    const swiperSlide = slide.querySelector('.swiper-slide'); // swiper-slide 요소 선택
+                    swiperSlide.addEventListener('click', function() {
+                            const hIdx = this.dataset.id;
+                            const today = moment().format('MM/DD'); // 오늘 날짜
+                            const tomorrow = moment().add(1, 'days').format('MM/DD'); // 내일 날짜
+                            const dateRange = `${today} ~ ${tomorrow} (1박 2일)`; // 날짜 범위
+                            const startDate = moment().toISOString(); // 오늘 날짜 (ISO 형식)
+                            const endDate = moment().add(1, 'days').toISOString(); // 내일 날짜 (ISO 형식)
+                            const people = "2"; // 인원
+
+                            // 세션 스토리지에 고정값 저장
+                            sessionStorage.setItem('keyword', hostinfo.hname);
+                            sessionStorage.setItem('date', dateRange);
+                            sessionStorage.setItem('startDate', startDate);
+                            sessionStorage.setItem('endDate', endDate);
+                            sessionStorage.setItem('people', people);
+
+                            recSearch();
+                            searchAccommodation(); 
+                            event.preventDefault();
+
+                            // detailUrl 생성 (고정값 사용)
+                            const detailUrl = `/search/detail-host?hIdx=${hIdx}&startEndDay.start=${encodeURIComponent(startDate)}&startEndDay.end=${encodeURIComponent(endDate)}&person=${encodeURIComponent(people)}`;
+                            location.href = detailUrl;
+
+                        });
+                        return swiperSlide;
+                    }
+           
+        let selectedHCate = "";
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            function getRecommHost() {
+                $.ajax({
+                    url: '/search/recomm_host',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        const recommList = response.recommList;
+                        console.log("히히 " + JSON.stringify(recommList));
+
+                            swiper4.removeAllSlides();
+
+                            recommList.forEach(item => {
+                                const hCate = item.hostinfo.hcate;
+                                console.log("살려줘라"+hCate);
+                                if (selectedHCate === "" || hCate === selectedHCate) {
+                                    const recommHostHtml = createSlide(item);
+                                    swiper4.appendSlide(recommHostHtml);
+                                }
+                            });
+
+                              
+                                 // 슬라이드 개수에 따른 Swiper 동작 제어 (3개 이하일 경우 설정)
+                                if (recommList.length <= 3) {
+                                    swiper4.params.loop = false;  // 루프 비활성화
+                                    swiper4.params.slidesPerView = recommList.length;  // 슬라이드 개수만큼 보여줌
+                                    swiper4.allowTouchMove = false;  // 스와이프 기능 비활성화
+                                    swiper4.pagination.el.style.display = 'none';  // 페이지네이션 숨김
+                                    swiper4.navigation.nextEl.style.display = 'none';  // 다음 버튼 숨김
+                                    swiper4.navigation.prevEl.style.display = 'none';  // 이전 버튼 숨김
+                                } else {
+                                    swiper4.params.loop = true;  // 루프 활성화
+                                    swiper4.params.slidesPerView = 4;  // 기본 슬라이드 뷰 설정
+                                    swiper4.allowTouchMove = true;  // 스와이프 기능 활성화
+                                    swiper4.pagination.el.style.display = 'block';  // 페이지네이션 표시
+                                    swiper4.navigation.nextEl.style.display = 'block';  // 다음 버튼 표시
+                                    swiper4.navigation.prevEl.style.display = 'block';  // 이전 버튼 표시
+                                }
+
+                            swiper4.update();
+                    
+                    },
+                    error: function (xhr, status, error) {
+                        alert('추천숙소 안 들어옴');
+                    }
+                });
+            }
+
+                    // 처음 페이지가 로드되면 호출
+                    getRecommHost();
+
+                    // 카테고리 버튼 클릭 이벤트 리스너
+                    const allBtn = document.getElementById('allBtn')
+                    const motelBtn = document.getElementById('motelBtn');
+                    const hotelBtn = document.getElementById('hotelBtn');
+                    const pensionBtn = document.getElementById('pensionBtn');
+                    const guestHouseBtn = document.getElementById('guestHouseBtn');
+
+                    allBtn.addEventListener('click',function(){
+                        selectedHCate = "";
+                        getRecommHost();
+
+                    });
+
+                    motelBtn.addEventListener('click', function () { 
+                        selectedHCate = "MOTEL"; 
+                        getRecommHost(); 
+                    });
+
+                    hotelBtn.addEventListener('click', function () { 
+                        selectedHCate = "HOTEL_RESORT"; 
+                        getRecommHost(); 
+                    });
+
+                    pensionBtn.addEventListener('click', function () { 
+                        selectedHCate = "POOL_VILLA"; 
+                        getRecommHost(); 
+                    });
+
+                    guestHouseBtn.addEventListener('click', function () { 
+                        selectedHCate = "GUESTHOUSE_HANOK"; 
+                        getRecommHost(); 
+                    });
+                });
+
+
+                const domesticTravel = document.querySelectorAll('.a15');
+
+                domesticTravel.forEach(div => {
+                    div.addEventListener('click', function() {
+                        const keyword = this.textContent;
+                        keywordInput.value = keyword;
+
+                        sessionStorage.setItem('keyword', keyword); 
+
+                        const dateRange = dateInput.value.split(' ~ ');
+                        const startDate = moment(dateRange[0], 'MM/DD');
+                        const endDate = moment(dateRange[1].split(' ')[0], 'MM/DD');
+                        const formattedStartDate = startDate.toISOString();
+                        const formattedEndDate = endDate.toISOString();
+
+                        sessionStorage.setItem('date', dateInput.value);
+                        sessionStorage.setItem(('startDate'), formattedStartDate);
+                        sessionStorage.setItem(('endDate'), formattedEndDate);
+                        sessionStorage.setItem('people', peopleInput.innerText);
+
+                        recSearch();
+                        searchAccommodation(); 
+                        event.preventDefault();
+                });
+                });
+
+                const swiper2Slides = document.querySelectorAll('.column2 .swiper-slide');
+
+                    swiper2Slides.forEach(slide => {
+                    slide.addEventListener('click', function() {
+                        const keyword= this.querySelector('.div8').textContent;
+                        sessionStorage.setItem('keyword', keyword); 
+
+                        const dateRange = dateInput.value.split(' ~ ');
+                        const startDate = moment(dateRange[0], 'MM/DD');
+                        const endDate = moment(dateRange[1].split(' ')[0], 'MM/DD');
+                        const formattedStartDate = startDate.toISOString();
+                        const formattedEndDate = endDate.toISOString();
+
+                        sessionStorage.setItem('date', dateInput.value);
+                        sessionStorage.setItem(('startDate'), formattedStartDate);
+                        sessionStorage.setItem(('endDate'), formattedEndDate);
+                        sessionStorage.setItem('people', peopleInput.innerText);
+
+                        recSearch();
+                        searchAccommodation(); 
+                        event.preventDefault();
+
+                    });
+                    });
+                                        
 
 
 </script>

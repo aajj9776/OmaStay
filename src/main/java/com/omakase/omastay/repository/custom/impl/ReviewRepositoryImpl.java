@@ -1,7 +1,10 @@
 package com.omakase.omastay.repository.custom.impl;
 
+import com.omakase.omastay.entity.Review;
+import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.repository.custom.ReviewRepositoryCustom;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
@@ -23,11 +26,41 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
         return queryFactory
                 .select(
-                        review.hostInfo.id, review.revRating.avg(), review.revRating.countDistinct()
+                        review.hostInfo.id, review.revRating.avg(), review.count()
                 )
                 .from(review)
                 .where(review.hostInfo.id.in(hostIds))
                 .groupBy(review.hostInfo.id)
                 .fetch();
     }
+
+    @Override
+    public List<Review> searchHostReview(String type, String keyword, int hIdx) {
+        return queryFactory.selectFrom(review)
+                .where(
+                    containsKeyword(type, keyword),
+                    review.hostInfo.id.eq(hIdx),
+                    review.revStatus.eq(BooleanStatus.TRUE)
+                )
+                .orderBy(review.id.desc())
+                .fetch();
+    }
+
+    private BooleanExpression containsKeyword(String type, String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return null;
+        }
+        switch (type) {
+            case "all":
+                return review.revWriter.contains(keyword)
+                        .or(review.revContent.contains(keyword));
+            case "revWriter":
+                return review.revWriter.contains(keyword);
+            case "revContent":
+                return review.revContent.contains(keyword);
+            default:
+                return null;
+        }
+    }
+
 }

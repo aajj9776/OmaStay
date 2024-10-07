@@ -5,13 +5,27 @@
       layout:fragment="host">
   <head>
     <meta charset="utf-8" />
+    <style>
+      textarea:focus {
+        outline: none;
+        /* 포커스 시 기본 아웃라인 제거 */
+        border-color: rgba(0, 0, 0, 0.23);
+        box-shadow: none;
+        /* 포커스 시 그림자 제거 */
+      }
+
+      textarea {
+      resize: none;
+      /* 창 크기 조절 핸들 제거 */
+    }
+    </style>
   </head>
   <body>
     <div
       class="w-full relative bg-[#e4e7eb] flex flex-row items-start justify-center py-[100px] pl-[21px] pr-[20px] box-border leading-[normal] tracking-[normal]"
     >
       <main
-        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start gap-[20px] max-w-full"
+        class="pt-[20px] pb-[20px] w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start gap-[20px] max-w-full"
       >
         <section
           class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] box-border max-w-full text-left text-[50px] text-[#000] font-[Roboto]"
@@ -20,12 +34,12 @@
             class="flex-1 flex flex-row items-center justify-between py-[50px] px-[94px] box-border max-w-full gap-[20px] lg:pl-[47px] lg:pr-[47px] lg:box-border mq750:flex-wrap mq750:pl-[23px] mq750:pr-[23px] mq750:box-border"
           >
             <h1
-              class="m-[0px] h-[50px] w-[233px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center shrink-0 mq1050:text-[40px] mq1050:leading-[19px] mq450:text-[30px] mq450:leading-[14px]"
+              class="mx-[55px] m-[0px] h-[50px] w-[233px] relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center shrink-0 mq1050:text-[40px] mq1050:leading-[19px] mq450:text-[30px] mq450:leading-[14px]"
             >
               리뷰 상세
             </h1>
-            <button
-              class="cursor-pointer [border:none] py-[8px] px-[22px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
+            <button type="button" onclick="location.href='/host/review'"
+              class="mr-[55px] cursor-pointer [border:none] py-[8px] px-[22px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
             >
               <div class="flex flex-row items-center justify-center gap-[8px]">
                 <b
@@ -40,7 +54,7 @@
           class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[0px] pr-[1px] box-border max-w-full text-left text-[20px] text-[#000] font-[Roboto]"
         >
           <div
-            class="w-[1000px] flex flex-col items-start justify-start gap-[10px] max-w-full"
+            class="w-[1000px] flex flex-col items-start justify-start gap-[20px] max-w-full"
           >
             <div
               class="self-stretch relative tracking-[0.46px] leading-[20px] uppercase font-medium mq450:text-[16px] mq450:leading-[16px]"
@@ -48,90 +62,59 @@
               사용자 리뷰
             </div>
             <div
-              class="self-stretch rounded-[30px] bg-[rgba(200,219,245,0.52)] overflow-hidden flex flex-col items-start justify-start py-[17px] pl-[138px] pr-[136px] box-border gap-[6px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:pl-[34px] mq750:pr-[34px] mq750:box-border"
+              class="self-stretch rounded-[30px] bg-[rgba(200,219,245,0.52)] overflow-hidden flex flex-col items-start justify-start py-[17px] pl-[138px] pr-[136px] box-border gap-[10px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:pl-[34px] mq750:pr-[34px] mq750:box-border"
             >
               <div
-                class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
+                class="w-[500px] flex flex-row gap-[10px] items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
               >
-                제목
-              </div>
-              <div
-                class="w-[666px] flex flex-row items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
-              >
-                <div
-                  class="h-[24px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border"
-                >
-                  <div class="hidden flex-row items-start justify-start">
-                    <img
-                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/image/host/starsharp-6.svg"
-                    />
-                  </div>
+                <div>
+                  작성자  : 
                 </div>
+                <div class="flex flex-col items-start justify-start gap-[2px]">
                 <div
                   class="flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
+                  th:text="${review.revWriter}"
                 >
-                  제목을 입력하세요
                 </div>
                 <div
-                  class="w-[110px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden"
-                >
-                  Placeholder
-                </div>
-                <div
-                  class="h-[24px] w-[24px] hidden flex-row items-center justify-start"
-                >
-                  <div class="hidden flex-row items-start justify-start">
-                    <img
-                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                      alt=""
-                      src="/image/host/starsharp-6.svg"
-                    />
-                  </div>
+                  class="w-[200px] h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"
+                ></div>
                 </div>
               </div>
               <div
-                class="w-[666px] h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"
-              ></div>
-              <div
-                class="w-[220px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[4px] box-border"
+                class="w-[500px] flex flex-row gap-[10px] items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
               >
-                <div
-                  class="flex-1 rounded-t-[4px] rounded-b-[0px] bg-[rgba(0,0,0,0.06)] overflow-hidden flex flex-row items-start justify-start p-[12px] relative"
-                >
-                  <div
-                    class="h-[1px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border z-[0]"
-                  >
-                    <div class="hidden flex-row items-start justify-start">
-                      <img
-                        class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                        alt=""
-                        src="/image/host/starsharp-2.svg"
-                      />
-                    </div>
-                  </div>
-                  <input
-                    class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[118px] p-[0px]"
-                    placeholder="작성자"
-                    type="text"
-                  />
-
-                  <div
-                    class="h-[1px] w-[24px] hidden flex-row items-center justify-center z-[2]"
-                  >
-                    <div class="hidden flex-row items-start justify-start">
-                      <img
-                        class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                        alt=""
-                        src="/image/host/starsharp-2.svg"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="h-[1px] w-[calc(100%_+_1px)] absolute !m-[0] right-[-1px] bottom-[-1px] left-[0px] border-[rgba(0,0,0,0.42)] border-t-[1px] border-solid box-border"
-                  ></div>
+                <div>
+                  평점  : 
                 </div>
+                <div class="flex flex-col items-start justify-start gap-[2px]">
+                <div
+                  class="flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
+                  th:text="${review.revRating}"
+                >
+                </div>
+                <div
+                  class="w-[200px] h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"
+                ></div>
+                </div>
+              </div>
+              <div class="w-[500px] flex flex-row gap-[10px] items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]">
+                첨부파일 : 
+                <div class="flex flex-col items-start justify-start gap-[2px]">
+              <div>
+                <div th:if="${review.revFileImageNameVo != null}">
+                  <a th:href="|javascript:down('${review.revFileImageNameVo.fName}')|">
+                      <span th:text="${review.revFileImageNameVo.fName}"></span>
+                  </a>
+              </div>
+              <div th:if="${review.revFileImageNameVo == null}">
+                  <span>첨부된 파일이 없습니다.</span>
+              </div>
+              </div>
+              <div
+                  class="w-[250px] h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"
+                ></div>
+            </div>
               </div>
               <div
                 class="self-stretch flex flex-row items-start justify-start flex-wrap content-start max-w-full [row-gap:20px]"
@@ -146,41 +129,10 @@
                       class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
                     >
                       <div
-                        class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
-                      >
-                        <div class="hidden flex-row items-start justify-start">
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/starsharp-2.svg"
-                          />
-                        </div>
-                      </div>
-                      <div
                         class="h-[188px] flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
+                        th:text="${review.revContent}"
                       >
-                        It is a long established fact that a reader will be
-                        distracted by the readable content of a page when
-                        looking at its layout. The point of using Lorem Ipsum is
-                        that it has a more-or-less normal distribution of
-                        letters, as opposed to using 'Content here, content
-                        here', making it look like readable English.
-                      </div>
-                      <div
-                        class="w-[98px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden"
-                      >
-                        Placeholder
-                      </div>
-                      <div
-                        class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
-                      >
-                        <div class="hidden flex-row items-start justify-start">
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/starsharp-2.svg"
-                          />
-                        </div>
+                        내용
                       </div>
                     </div>
                   </div>
@@ -193,24 +145,9 @@
                       내용
                     </div>
                   </div>
-                  <div
-                    class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-                  >
-                    <div
-                      class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                    >
-                      Helper text
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[172px] mq750:w-full mq750:h-[15px]"
-                >
-                  <div
-                    class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
-                  ></div>
                 </div>
               </div>
+              
             </div>
             <div
               class="self-stretch relative tracking-[0.46px] leading-[20px] uppercase font-medium mq450:text-[16px] mq450:leading-[16px]"
@@ -220,24 +157,6 @@
             <div
               class="self-stretch rounded-[30px] bg-[#e2ecf9] overflow-hidden flex flex-col items-start justify-start py-[32px] pl-[138px] pr-[136px] box-border gap-[38px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:gap-[19px] mq750:pl-[34px] mq750:pr-[34px] mq750:box-border mq450:pt-[21px] mq450:pb-[21px] mq450:box-border"
             >
-              <div
-                class="w-[666px] h-[48px] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[6px] box-border gap-[6px] max-w-full"
-              >
-                <div
-                  class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
-                >
-                  제목
-                </div>
-                <input
-                  class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-start justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
-                  placeholder="제목을 입력하세요"
-                  type="text"
-                />
-
-                <div
-                  class="self-stretch h-[2px] relative border-[#000] border-t-[2px] border-solid box-border"
-                ></div>
-              </div>
               <div
                 class="self-stretch flex flex-row items-start justify-start max-w-full [row-gap:20px] mq1050:flex-wrap"
               >
@@ -250,43 +169,16 @@
                     <div
                       class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
                     >
-                      <div
-                        class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
-                      >
-                        <div class="hidden flex-row items-start justify-start">
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/starsharp-2.svg"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="h-[188px] flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
-                      >
-                        It is a long established fact that a reader will be
-                        distracted by the readable content of a page when
-                        looking at its layout. The point of using Lorem Ipsum is
-                        that it has a more-or-less normal distribution of
-                        letters, as opposed to using 'Content here, content
-                        here', making it look like readable English.
-                      </div>
-                      <div
-                        class="w-[98px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden"
-                      >
-                        Placeholder
-                      </div>
-                      <div
-                        class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
-                      >
-                        <div class="hidden flex-row items-start justify-start">
-                          <img
-                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            alt=""
-                            src="/image/host/starsharp-2.svg"
-                          />
-                        </div>
-                      </div>
+                    <textarea
+                    class="revComment bg-[#e2ecf9] h-[188px] flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
+                    th:if="${reviewCommentDTO != null}"
+                    th:text="${reviewCommentDTO.rcComment}"
+                    th:attr="readonly=${reviewCommentDTO != null}"></textarea>
+          
+                    <textarea 
+                    th:if="${reviewCommentDTO == null}"
+                    class="revComment bg-[#e2ecf9] h-[188px] flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full">
+                  </textarea>
                     </div>
                   </div>
                   <div
@@ -298,22 +190,6 @@
                       내용
                     </div>
                   </div>
-                  <div
-                    class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
-                  >
-                    <div
-                      class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
-                    >
-                      Helper text
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[172px] mq1050:w-full mq1050:h-[15px]"
-                >
-                  <div
-                    class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
-                  ></div>
                 </div>
               </div>
             </div>
@@ -322,7 +198,7 @@
         <section
           class="self-stretch flex flex-row items-start justify-center flex-wrap content-start pt-[15px] px-[520px] pb-[43px] gap-[30px] lg:pl-[260px] lg:pr-[260px] lg:box-border mq750:gap-[15px] mq750:pl-[130px] mq750:pr-[130px] mq750:box-border mq450:pl-[20px] mq450:pr-[20px] mq450:box-border"
         >
-          <button
+          <button type="button" onclick="regRevComment()"
             class="cursor-pointer border-[#2196f3] border-[1px] border-solid py-[6px] px-[33px] bg-[#fff] rounded-[4px] box-border overflow-hidden flex flex-col items-center justify-center min-w-[75px]"
           >
             <div
@@ -335,44 +211,90 @@
               </div>
             </div>
           </button>
-          <button
+          <button type="button" onclick="updateRevComment()"
             class="cursor-pointer [border:none] py-[8px] px-[34px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
           >
             <div
               class="w-[32px] flex flex-row items-center justify-center gap-[8px]"
             >
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/image/host/masked-icon4.svg"
-              />
 
               <b
                 class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[31px]"
                 >수정</b
               >
-              <img
-                class="h-[22px] w-[18px] relative hidden"
-                alt=""
-                src="/image/host/masked-icon5.svg"
-              />
             </div>
           </button>
-          <button
+          <button type="button" onclick="delRevComment()"
             class="cursor-pointer border-[#2196f3] border-[1px] border-solid py-[6px] px-[33px] bg-[#fff] rounded-[4px] box-border overflow-hidden flex flex-col items-center justify-center min-w-[75px]"
           >
             <div
               class="w-[32px] flex flex-row items-center justify-center gap-[8px]"
             >
-              <div
+
+              <b
                 class="relative text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left inline-block min-w-[31px]"
+                >삭제</b
               >
-                삭제
-              </div>
             </div>
           </button>
         </section>
       </main>
+      <input type="hidden" id="revIdx" th:value="${review.id}" />
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      function regRevComment() {
+        var rcComment = $('.revComment').val();
+        var revIdx = $('#revIdx').val();
+
+        if (rcComment == '') {
+          alert('내용을 입력해주세요.');
+          return;
+        }
+        $.ajax({
+          url: '/host/regRevComment',
+          type: 'POST',
+          data: {
+            revIdx: revIdx,
+            rcComment: rcComment
+          },
+          success: function(data) {
+            if (data == 'success') {
+              alert('등록되었습니다.');
+              location.href = '/host/review';
+            } else {
+              alert('등록에 실패했습니다.');
+            }
+          }
+        });
+      }
+
+      function delRevComment() {
+        var revIdx = $('#revIdx').val();
+        
+        $.ajax({
+          url: '/host/delRevComment',
+          type: 'POST',
+          data: {
+            revIdx: revIdx,
+          },
+          success: function(data) {
+            if (data == 'success') {
+              alert('삭제되었습니다.');
+              location.href = '/host/review';
+            } else {
+              alert('삭제 실패했습니다.');
+            }
+          }
+        });
+      }
+
+      function updateRevComment() {
+        $('.revComment').removeAttr('readonly');
+      }
+    </script>
   </body>
 </html>

@@ -1,5 +1,9 @@
 package com.omakase.omastay.controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,21 +13,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.custom.MemberInfoDTO;
+import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.service.EmailService;
+import com.omakase.omastay.service.IssuedCouponService;
+import com.omakase.omastay.service.MemberService;
+import com.omakase.omastay.service.PaymentService;
 import com.omakase.omastay.service.ReservationService;
 
 import jakarta.mail.MessagingException;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 
 @Controller
@@ -34,11 +40,16 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
+    private IssuedCouponService issuedCouponService;
+
+    @Autowired
     private EmailService emailService;
 
     @GetMapping
-    public String reservation() {
-        return "reservation/reservation.html";
+    public ModelAndView reservation(MemberInfoDTO member) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("reservation/reservation");
+        return mv;
     }
 
     @GetMapping("/payment_success")
@@ -67,7 +78,6 @@ public class ReservationController {
         return ResponseEntity.notFound().build();  
     }
 
-    
 
     @PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation) {
@@ -75,34 +85,41 @@ public class ReservationController {
 
         System.out.println("reservation이메일 이름 들어와야함" + reservation);
 
+        ReservationDTO check = reservationService.checkReservation(reservation);
+        if( check != null){
+            return "redirect:/reservation/error";
+        }
+
         //결제정보 저장
         PaymentDTO res = reservationService.insertPaymentInfo(payment);
         System.out.println("결과" + res);
-        if( res.getId() == 0) {
+        if( res == null) {
             return "redirect:/reservation/payment_fail";
         }
 
         //예약정보 저장
         ReservationDTO reserve = null;
         if( res.getPayStatus() == PayStatus.PAY) {
-            
             reservation.setPayIdx(res.getId());
             reserve = reservationService.insertReservationInfo(reservation, res);
+            System.out.println("예약결과" + reserve);
+        } else {
+            return "redirect:/reservation/payment_fail";
+        }
+        if( reserve != null){
+            if( reserve.getResStatus() == ResStatus.PENDING) {
+                redirectAttributes.addAttribute("orderId", reserve.getResNum());
+                redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
+                redirectAttributes.addAttribute("amount", reserve.getResPrice());
+                redirectAttributes.addAttribute("payContent", payment.getPayContent());
+                return "redirect:/reservation/payment_complete";  
+            } else {
+                return "redirect:/reservation/payment_fail";
+            }
         } else {
             return "redirect:/reservation/payment_fail";
         }
         
-        System.out.println(reserve);
-
-        if( reserve.getResStatus() == ResStatus.COMPLETED) {
-            redirectAttributes.addAttribute("orderId", reserve.getResNum());
-            redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
-            redirectAttributes.addAttribute("amount", reserve.getResPrice());
-            redirectAttributes.addAttribute("payContent", payment.getPayContent());
-            return "redirect:/reservation/payment_complete";  
-        } else {
-            return "redirect:/reservation/payment_fail";
-        }
     }
 
     @GetMapping("/payment_complete")
@@ -153,6 +170,15 @@ public class ReservationController {
     public String getCouponModal() {
         return "reservation/modal/coupon-modal"; // .html 확장자는 생략 가능
     }
+
+   
+
+    @GetMapping("error")
+    public String error() {
+        return "reservation/error";
+    }
+    
+    
     
     
 }

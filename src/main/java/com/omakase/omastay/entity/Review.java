@@ -60,15 +60,8 @@ public class Review {
     })
     private FileImageNameVo revFileImageNameVo = new FileImageNameVo();
 
-    @Column(name = "rev_ rating")
+    @Column(name = "rev_rating")
     private Float revRating;
-
-    public Object getRevIdx() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRevIdx'");
-    }
-
-
 
 
 }

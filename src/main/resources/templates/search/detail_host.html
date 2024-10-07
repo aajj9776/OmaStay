@@ -7,7 +7,7 @@
     <meta charset="utf-8"/>
 </head>
 <body class="overflow-y-auto">
-<div
+<div 
         class="w-full bg-[#fff] lg:h-auto lg:min-h-[6445] sticky border-b-[1px]"
 >
     <header class=" top-0 left-0 w-[1200px] mx-auto flex flex-col items-start justify-start max-w-full text-left text-[15.1px] text-[#707070] font-[Inter] z-50">
@@ -17,7 +17,7 @@
             <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0"
                href="#simple-list-item-1">개요</a>
             <a class="[text-decoration:none] text-[15px] font-medium text-[inherit] inline-block min-w-[118.6px] flex-shrink-0"
-               href="#simple-list-item-2">서비스 및 부대시설</a>
+               href="#simple-list-item-2">서비스 및 부대시설</a>`
             <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0"
                href="#simple-list-item-3">객실</a>
             <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0"
@@ -28,37 +28,50 @@
     </header>
 </div>
 
-<main class="flex flex-col items-center justify-start w-full pt-[100px] lg:pt-[100px]" id="simple-list-item-1">
+<main  class="flex flex-col items-center justify-start w-full pt-[100px] lg:pt-[100px]" id="simple-list-item-1">
 
     <div class="flex flex-col lg:flex-row items-center justify-center w-full max-w-[1560px] gap-8 px-4 sm:px-6 lg:px-0">
-        <img alt=""
-             class="rounded-[12px] w-full h-auto lg:max-w-[640px] object-cover mb-8 lg:mb-0"
-             loading="lazy"
-             src="/image/detail/5f0432d6d9ff8jpg@2x.png"
-        />
-
+        <!-- 큰 이미지 (hostImages[0]) -->
+        <div class="relative w-full lg:max-w-[640px] h-[546px] mb-8 lg:mb-0 rounded-[12px]" th:if="${hostImages[0] != null}">
+            <img alt=""
+                 class="absolute inset-0 w-full h-full object-cover rounded-[12px]" 
+                 loading="lazy"
+                 th:src="@{|https://storage.googleapis.com/omastay/host/${hostImages[0].imgName.fName}|}" />
+        </div>
+    
         <div class="w-full lg:max-w-[552px] aspect-square grid grid-cols-2 gap-4">
-            <img alt=""
-                 class="h-auto w-full relative overflow-hidden shrink-0 object-cover rounded-[12px]"
-                 loading="lazy"
-                 src="/image/detail/5efe7585e0067jpg@2x.png"
-            />
-            <img alt=""
-                 class="h-auto w-full relative rounded-tr-[12px] overflow-hidden shrink-0 object-cover rounded-[12px]"
-                 loading="lazy"
-                 src="/image/detail/5efe74fc3815cjpg@2x.png"
-            />
-            <img alt=""
-                 class="h-auto w-full relative overflow-hidden shrink-0 object-cover rounded-[12px]"
-                 loading="lazy"
-                 src="/image/detail/5efe74d4c9246jpg@2x.png"
-            />
-            <div class="relative">
+            <!-- 작은 이미지 1 (hostImages[1]) -->
+            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${hostImages[1] != null}">
                 <img alt=""
-                     class="h-auto w-full relative rounded-br-[12px] overflow-hidden shrink-0 object-cover rounded-[12px]"
-                     src="/image/detail/5efe7514b5307jpg@2x.png"
-                />
-                <button class="cursor-pointer [border:none] bg-white h-[40px] min-w-[150px] shadow-[0px_2px_8px_rgba(0,_0,_0,_0.24)] rounded-full whitespace-nowrap hover:bg-[#e6e6e6] absolute bottom-4 right-4 font-bold p-0 text-[12px] flex items-center justify-center">
+                     class="absolute inset-0 w-full h-full object-cover rounded-[12px]"
+                     loading="lazy"
+                     th:src="@{|https://storage.googleapis.com/omastay/host/${hostImages[1].imgName.fName}|}" />
+            </div>
+    
+            <!-- 작은 이미지 2 (roomImages[0]) -->
+            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${hostImages[2] != null}">
+                <img alt=""
+                     class="absolute inset-0 w-full h-full object-cover rounded-tr-[12px]"
+                     loading="lazy"
+                     th:src="@{|https://storage.googleapis.com/omastay/host/${hostImages[2].imgName.fName}|}" />
+            </div>
+    
+            <!-- 작은 이미지 3 (roomImages[1]) -->
+            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${roomImages[0] != null}">
+                <img alt=""
+                     class="absolute inset-0 w-full h-full object-cover rounded-[12px]"
+                     loading="lazy"
+                     th:src="@{|https://storage.googleapis.com/omastay/room/${roomImages[0].imgName.fName}|}" />
+            </div>
+    
+            <!-- 작은 이미지 4 + 버튼 (roomImages[2]) -->
+            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${roomImages[1] != null}">
+                <img alt=""
+                     class="absolute inset-0 w-full h-full object-cover rounded-br-[12px]"
+                     loading="lazy"
+                     th:src="@{|https://storage.googleapis.com/omastay/room/${roomImages[1].imgName.fName}|}" />
+                     
+                <button id="allPhotoBtn" class="cursor-pointer [border:none] bg-white h-[40px] min-w-[150px] shadow-[0px_2px_8px_rgba(0,_0,_0,_0.24)] rounded-full whitespace-nowrap hover:bg-[#e6e6e6] absolute bottom-4 right-4 font-bold p-0 text-[12px] flex items-center justify-center">
                     <div class="flex items-center justify-start">
                         사진 모두보기 <img alt="" class="h-[16px] w-[16px] mr-2" src="/image/detail/svg.svg"/>
                     </div>
@@ -66,22 +79,28 @@
             </div>
         </div>
     </div>
-    <section
+    
+
+    <div id="allPhotomodal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] to-50%">
+        <!--사진 모두보기 모달-->
+        <div id="photoModal-body"></div>
+    </div>
+
+    <section th:each="host : ${hostInfo}"
             class="w-[1223px] flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[26.6px] max-w-full text-left text-[18px] text-[#333] font-[Inter]"
     >
         <div
                 class="flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[36.4px] box-border gap-[32px] max-w-full shrink-0 text-[32px]"
         >
-            <div
+            <div 
                     class="w-auto flex flex-col items-start justify-start gap-[9px] max-w-full"
             >
-                <h1
+                <h1 th:text="${host.hname}"
                         class="m-[0px] self-stretch h-[44px] relative text-inherit leading-[44px] font-bold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[26px] mq1050:text-[26px] mq1050:leading-[35px] mt-5"
                 >
-                    호텔 센트럴베이 광안리
                 </h1>
                 <div
-                        class="flex flex-row items-start justify-start gap-[9px] text-[16px]"
+                        class="flex flex-row items-start justify-start gap-[19px] text-[16px] mb-[-12px]"
                 >
                     <div
                             class="flex flex-col items-start justify-start pt-[2.7px] px-[0px] pb-[0px]"
@@ -96,7 +115,7 @@
                     >
                         1,228명 평가
                     </div>
-                    <button
+                    <button onclick="location.href='#review-section';"
                             class="h-[27px] w-[79px] relative font-semibold text-[#1273e4] text-center flex items-center justify-center shrink-0"
                     >
                         리뷰보기
@@ -108,19 +127,22 @@
             >
                 <img
                         alt=""
-                        class="[border:none] bg-[transparent] h-[180px] w-[486px] [outline:none] relative rounded-[12px] shrink-0 min-h-[180px] max-w-full"
+                        class="cursor-pointer [border:none] bg-[transparent] h-[200px] w-[570px] [outline:none] relative rounded-[12px] shrink-0 min-h-[180px] max-w-full"
                         cols="{24}"
                         rows="{9}"
                         src="/image/detail/review-table-1.svg"
                 />
-
-                <img
-                        alt=""
-                        class="[border:none] bg-[transparent] h-[180px] w-[486px] [outline:none] relative rounded-[12px] shrink-0 min-h-[180px] max-w-full"
-                        cols="{24}"
-                        rows="{9}"
-                        src="/image/detail/review-table-1.svg"
-                />
+                <div class="border border-gray-300 rounded-xl bg-white w-[570px] h-[200px] p-4 flex flex-col justify-between font-sans text-gray-800 transition hover:bg-gray-200 cursor-pointer">
+                    <div class="flex items-center gap-2 mt-[21px]">
+                        <img src="https://img.icons8.com/material-outlined/24/000000/marker.png" alt="Location Icon" class="w-6 h-6">
+                        <span class="text-base font-semibold w-[340px]" style="font-size: 20px" th:text="${host.addressVo.street}"></span>
+                        <a href="#map_section" class="text-blue-500 text-base hover:underline">지도보기</a>
+                    </div>
+                    <div class="flex items-center gap-2 mb-[20px]">
+                        <img src="https://img.icons8.com/ios-glyphs/16/000000/walking.png" alt="Walking Icon" class="w-5 h-5">
+                        <span class="text-base" th:text="${host.directions}"></span>
+                    </div>
+                </div>
             </div>
         </div>
         <div
@@ -135,259 +157,17 @@
                     <div class="self-stretch h-[1px] relative bg-[#ebebeb]" id="simple-list-item-3"></div>
                     <b class="self-stretch relative">서비스 및 부대시설</b>
                     <div
-                            class="flex flex-col items-start justify-start py-[1px] pl-[0px] pr-[21px] box-border gap-[20px] max-w-full text-[14.1px] text-[#707070]"
-                    >
-                        <div
-                                class="flex flex-row items-start justify-start gap-[12px] mq1050:flex-wrap"
-                        >
-                            <div
-                                    class="flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[3px] gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[26px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-parkingsvg.svg"
-                                />
-
-                                <div
-                                        class="relative font-medium inline-block min-w-[43px]"
-                                >
-                                    주차장
-                                </div>
-                            </div>
-                            <div
-                                    class="w-[95px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[6px] box-border gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[25px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-hairdryersvg.svg"
-                                />
-
-                                <div class="flex-1 relative font-medium">드라이기</div>
-                            </div>
-                            <div
-                                    class="flex flex-row items-start justify-start gap-[7px] text-[14.2px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[25px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-smoke-freesvg.svg"
-                                />
-
-                                <div
-                                        class="relative font-medium inline-block min-w-[29px]"
-                                >
-                                    금연
-                                </div>
-                            </div>
-                            <div
-                                    class="flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[4px] gap-[7px] text-[14.4px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[25px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-bbqsvg.svg"
-                                />
-
-                                <div
-                                        class="relative font-medium inline-block min-w-[30px]"
-                                >
-                                    BBQ
-                                </div>
-                            </div>
-                            <div
-                                    class="flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[9px] gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[26px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-cookingsvg.svg"
-                                />
-
-                                <div
-                                        class="relative font-medium inline-block min-w-[71px]"
-                                >
-                                    객실내취사
-                                </div>
-                            </div>
-                            <div
-                                    class="flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[7px] gap-[11px] text-[14.2px]"
-                            >
-                                <div
-                                        class="flex flex-row items-start justify-start gap-[7px]"
-                                >
-                                    <img
-                                            alt=""
-                                            class="h-[24px] w-[26px] relative overflow-hidden shrink-0"
-                                            src="/image/detail/icn-facil-bath-bubblesvg.svg"
-                                    />
-
-                                    <div
-                                            class="relative font-medium inline-block min-w-[29px]"
-                                    >
-                                        욕조
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-row items-start justify-start gap-[7px] text-[14.1px]"
-                                >
-                                    <img
-                                            alt=""
-                                            class="h-[24px] w-[27px] relative overflow-hidden shrink-0"
-                                            src="/image/detail/icn-facil-petsvg.svg"
-                                    />
-
-                                    <div
-                                            class="relative font-medium inline-block min-w-[71px]"
-                                    >
-                                        반려견동반
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                    class="w-[95px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[5px] box-border gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[26px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-hairdryersvg-1.svg"
-                                />
-
-                                <div class="flex-1 relative font-medium">드라이기</div>
-                            </div>
-                            <div
-                                    class="flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[8px] gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[25px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-kitchensvg.svg"
-                                />
-
-                                <div
-                                        class="relative font-medium inline-block min-w-[62px]"
-                                >
-                                    주방/식당
-                                </div>
-                            </div>
-                            <div
-                                    class="w-[80px] flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[3px] box-border gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[27px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-washersvg.svg"
-                                />
-
-                                <div class="flex-1 relative font-medium">세탁기</div>
-                            </div>
-                            <div
-                                    class="w-[77px] flex flex-row items-start justify-start gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[27px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-airconsvg.svg"
-                                />
-
-                                <div class="flex-1 relative font-medium">에어컨</div>
-                            </div>
-                        </div>
-                        <div
-                                class="flex flex-row items-start justify-start gap-[17.3px] max-w-full mq750:flex-wrap"
-                        >
-                            <div
-                                    class="w-[89px] flex flex-row items-start justify-start gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[25px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-wifisvg.svg"
-                                />
-
-                                <div class="flex-1 relative font-medium">와이파이</div>
-                            </div>
-                            <div
-                                    class="flex flex-row items-start justify-start gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[26px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-towelsvg.svg"
-                                />
-
-                                <div
-                                        class="relative font-medium inline-block min-w-[57px]"
-                                >
-                                    욕실용품
-                                </div>
-                            </div>
-                            <div
-                                    class="w-[75px] flex flex-row items-start justify-start gap-[7px]"
-                            >
-                                <img
-                                        alt=""
-                                        class="h-[24px] w-[25px] relative overflow-hidden shrink-0"
-                                        src="/image/detail/icn-facil-fridgesvg.svg"
-                                />
-
-                                <div class="flex-1 relative font-medium">냉장고</div>
-                            </div>
-                            <div
-                                    class="flex flex-row items-start justify-start gap-[11px] text-[14.2px]"
-                            >
-                                <div
-                                        class="flex flex-row items-start justify-start gap-[7px]"
-                                >
-                                    <img
-                                            alt=""
-                                            class="h-[24px] w-[26px] relative overflow-hidden shrink-0"
-                                            src="/image/detail/icn-facil-smoke-freesvg-1.svg"
-                                    />
-
-                                    <div
-                                            class="relative font-medium inline-block min-w-[29px]"
-                                    >
-                                        금연
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-row items-start justify-start gap-[7px] text-[14.4px]"
-                                >
-                                    <img
-                                            alt=""
-                                            class="h-[24px] w-[27px] relative overflow-hidden shrink-0"
-                                            src="/image/detail/icn-facil-tvsvg.svg"
-                                    />
-
-                                    <div
-                                            class="relative font-medium inline-block min-w-[20px]"
-                                    >
-                                        TV
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-row items-start justify-start gap-[7px] text-[14.1px]"
-                                >
-                                    <img
-                                            alt=""
-                                            class="h-[24px] w-[26px] relative overflow-hidden shrink-0"
-                                            src="/public/icn-facil-elevatorsvg.svg"
-                                    />
-
-                                    <div
-                                            class="relative font-medium inline-block min-w-[71px]"
-                                    >
-                                        엘레베이터
-                                    </div>
-                                </div>
+                    class="flex flex-wrap items-start justify-start py-[1px] pl-[0px] pr-[21px] box-border gap-[20px] max-w-full text-[14.1px] text-[#707070] max-w-[1200px]"
+                >
+                    <div th:each="facility : ${facilities}" class="flex items-center gap-2">
+                        <img th:src="@{/image/detail/{sanitizedName}.svg(sanitizedName=${#strings.replace(facility.fCate, '/', '')})}" alt="Facility Image" class="w-6 h-6">
+                        <p th:text="${facility.fCate}" class="text-base"></p>
+                    </div>
+                </div>
                             </div>
                         </div>
                     </div>
                     <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
-                </div>
-            </div>
             <div
                     class="self-stretch flex flex-col items-start justify-start gap-[33px] max-w-full"
             >
@@ -765,6 +545,21 @@ y                                                    </button>
                 <div class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
             </div>
             <div
+            class="w-[1135px] flex flex-col items-start justify-start gap-[26.6px] max-w-full text-[15px]"
+    >
+        <b
+                class="relative text-[18px] tracking-[-0.07px] inline-block min-w-[116px]"
+        >숙소 소개</b
+        >
+        <div class="self-stretch relative leading-[22px] text-[#707070]">
+            <ul class="m-[0px] font-[inherit] text-inherit pl-[20px] ml-[20px]">
+                <li th:text="${host.hostOwnerInfo.hintro}" class="mb-[0px]">
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+            <div
                     class="w-[1135px] flex flex-col items-start justify-start gap-[26.6px] max-w-full text-[15px]"
             >
                 <b
@@ -773,98 +568,33 @@ y                                                    </button>
                 >
                 <b
                         class="relative tracking-[-0.37px] inline-block text-[#49627a] min-w-[91px] ml-[20px]"
-                >부대시설 정보</b
+                >기본 정보</b
                 >
                 <div class="self-stretch relative leading-[22px] text-[#707070]">
                     <ul class="m-[0px] font-[inherit] text-inherit pl-[20px] ml-[20px]">
-                        <li class="mb-[0px]">
-                            셰프스 키친 / 2층 로툰다 / 석식 18:00~21:00
+                        <li th:text="${host.rules}"  class="mb-[0px]">
                         </li>
-                        <li class="mb-[0px]">
-                            MJ 스테이크하우스(미국식 정통 스테이크 하우스) / 1층 / 해피
-                            아워 16:30~18:00 / 일요일~수요일 17:30~22:00, 목요일~토요일
-                            16:30~23:00, 주말 및 공휴일 11:30~14:30
-                        </li>
-                        <li class="mb-[0px]">
-                            브라세리 1783(양식, 프랑스식 비스트로) / 1층 / 주중 그랩앤고
-                            07:00~6:00, 브런치 10:00~14:00, 석식 17:30~22:00 /
-                            주말&공휴일 그랩앤고 07:00~16:00, 브런치 09:00~16:00, 석식
-                            17:00~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            가든 팜 카페(샐러드 바, 양식 단품 올데이 다이닝) / 1층 /
-                            평일 조식 07:00~10:00, 중식 11:30~15:00, 석식 17:30~22:00 /
-                            주말&공휴일 조식 07:00~10:00, 중식 11:30~16:00, 석식
-                            17:00~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            홍반(중국 북부 스타일 단품 요리) / 2층 오로라 / 주중​​ 중식
-                            11:00~16:00​, 석식 17:30~21:30 / 주말&공휴일 11:00~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            미나기(일식 단품 요리) / 2층 오로라 / 평일 중식
-                            11:30~15:00​, 석식 17:30~21:30​ / 주말&공휴일 11:30~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            하이파이 치킨 앤 비어(퓨전 치킨과 맥주 펍) / 2층 오로라 /
-                            일요일~목요일 11:00~23:00, 금요일~토요일 및 공휴일
-                            11:00~00:00 / 해피 아워 운영 15:00~17:00
-                        </li>
-                        <li class="mb-[0px]">
-                            MJ23 스포츠 바 앤 그릴(미국식 스포츠 펍) / 2층 오로라 /
-                            일요일~목요일 11:00~23:00, 금요일~토요일 및 공휴일
-                            11:00~00:00 / 해피 아워 운영 22:00~요일 별 마감 시간까지
-                        </li>
-                        <li class="mb-[0px]">
-                            오로라 바 / 2층 오로라 / 일요일~목요일 12:00~00:00,
-                            금요일~토요일 및 공휴일 12:00~01:00
-                        </li>
-                        <li class="mb-[0px]">
-                            베이커스 키친(베이커리) / 2층 로툰다 / 06:30~21:00
-                        </li>
-                        <li class="mb-[0px]">
-                            호라이즌 라운지 / 1층 메인 로비 / 07:00~23:00 / Jazzy Days &
-                            Wine Nights 월&목요일 17:00 / 18:00 / 19:00, 금&공휴일 전 날
-                            18:00 / 19:00 / 20:00, 토 19:00 / 20:00 / 21:00, 일&공휴일
-                            11:30 / 12:30 / 13:30
-                        </li>
-                        <li class="mb-[0px]">
-                            스플래시 베이(실내 워터파크) / 1층 / 1부 14:00~17:30, 2부
-                            18:30~21:00 / 체크인 시 현장에서 추가 구매 가능 / 스플래시
-                            패키지 상품 구매 고객만 이용 가능
-                        </li>
-                        <li class="mb-[0px]">아레나 / 2층 로툰다 / 공연시설</li>
-                        <li class="mb-[0px]">
-                            오로라 / 2층 오로라 / 08:00~00:00 / 매시 정각 & 30분 간격:
-                            Under the Blue Land 쇼
-                        </li>
-                        <li class="mb-[0px]">
-                            로툰다 / 2층 로툰다 / 07:30~21:00 / 매시 15분, 45분 : 키네틱
-                            미디어 아트 쇼
-                        </li>
-                        <li class="mb-[0px]">
-                            비즈니스 센터 / 오션타워 1층 / 24시간 운영
-                        </li>
-                        <li class="mb-[0px]">
-                            CU편의점 / 인스파이어 몰 1층 09:00 ~ 22:00 / 로툰다 2층
-                            08:00 ~ 04:00
-                        </li>
-                        <li class="mb-[0px]">
-                            사우나 (웰니스클럽) / 호텔 투숙객 전용 시설 / 07:00 ~ 21:00
-                            (호텔 상황에 따라 변경 될 수 있음) / 건식 사우나
-                        </li>
-                        <li class="mb-[0px]">
-                            실내수영장 / 3층 / 07:00~21:00 / 호텔 투숙객 전용 시설 / 1박
-                            당 1회 2시간 이용 가능, 개별 예약 필요 / 14세 이하는 부모님
-                            동반 이용 / 수모 필수 착용 후 이용 가능
-                        </li>
-                        <li class="mb-[0px]">
-                            피트니스 센터 / 3층 / 07:00~21:00​ / 호텔 투숙객 전용 시설 /
-                            1박당 1회 & 17세 이상부터 피트니스 센터 입장 및 이용 가능
-                        </li>
-                        <li>
-                            모든 물놀이 및 사우나 시설은 과도한 문신을 한 경우 이용이
-                            제한됩니다
+                    </ul>
+                </div>
+                <b
+                class="relative tracking-[-0.37px] inline-block text-[#49627a] min-w-[91px] ml-[20px]"
+        >숙소 이용 시간</b
+        >
+        <div class="self-stretch relative leading-[22px] text-[#707070]">
+            <ul class="m-[0px] font-[inherit] text-inherit pl-[20px] ml-[20px]">
+                <li th:text="'입실:'+${host.checkin}" class="mb-[0px]">
+                </li>
+                <li th:text="'퇴실:'+${host.checkout}" class="mb-[0px]">
+                </li>
+            </ul>
+        </div>
+             <b
+                        class="relative tracking-[-0.37px] inline-block text-[#49627a] min-w-[91px] ml-[20px]"
+                >요금 상세 안내</b
+                >
+                <div class="self-stretch relative leading-[22px] text-[#707070]">
+                    <ul class="m-[0px] font-[inherit] text-inherit pl-[20px] ml-[20px]">
+                        <li th:text="${host.priceAdd}" class="mb-[0px]">
                         </li>
                     </ul>
                 </div>
@@ -873,121 +603,19 @@ y                                                    </button>
         <div
                 class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[6.4px] box-border gap-[25.6px] max-w-full shrink-0"
         >
-            <div
-                    class="w-[1135px] flex flex-col items-start justify-start gap-[26.6px] max-w-full text-[15px] text-[#49627a]"
-            >
-                <b class="relative tracking-[-0.37px] inline-block min-w-[91px] ml-[20px]"
-                >부대시설 정보</b
-                >
-                <div
-                        class="self-stretch h-[541px] relative leading-[22px] text-[#707070] inline-block shrink-0"
-                >
-                    <ul class="m-[0px] font-[inherit] text-inherit pl-[20px] ml-[20px] ">
-                        <li class="mb-[0px]">
-                            셰프스 키친 / 2층 로툰다 / 석식 18:00~21:00
-                        </li>
-                        <li class="mb-[0px]">
-                            MJ 스테이크하우스(미국식 정통 스테이크 하우스) / 1층 / 해피
-                            아워 16:30~18:00 / 일요일~수요일 17:30~22:00, 목요일~토요일
-                            16:30~23:00, 주말 및 공휴일 11:30~14:30
-                        </li>
-                        <li class="mb-[0px]">
-                            브라세리 1783(양식, 프랑스식 비스트로) / 1층 / 주중 그랩앤고
-                            07:00~6:00, 브런치 10:00~14:00, 석식 17:30~22:00 /
-                            주말&공휴일 그랩앤고 07:00~16:00, 브런치 09:00~16:00, 석식
-                            17:00~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            가든 팜 카페(샐러드 바, 양식 단품 올데이 다이닝) / 1층 /
-                            평일 조식 07:00~10:00, 중식 11:30~15:00, 석식 17:30~22:00 /
-                            주말&공휴일 조식 07:00~10:00, 중식 11:30~16:00, 석식
-                            17:00~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            홍반(중국 북부 스타일 단품 요리) / 2층 오로라 / 주중​​ 중식
-                            11:00~16:00​, 석식 17:30~21:30 / 주말&공휴일 11:00~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            미나기(일식 단품 요리) / 2층 오로라 / 평일 중식
-                            11:30~15:00​, 석식 17:30~21:30​ / 주말&공휴일 11:30~22:00
-                        </li>
-                        <li class="mb-[0px]">
-                            하이파이 치킨 앤 비어(퓨전 치킨과 맥주 펍) / 2층 오로라 /
-                            일요일~목요일 11:00~23:00, 금요일~토요일 및 공휴일
-                            11:00~00:00 / 해피 아워 운영 15:00~17:00
-                        </li>
-                        <li class="mb-[0px]">
-                            MJ23 스포츠 바 앤 그릴(미국식 스포츠 펍) / 2층 오로라 /
-                            일요일~목요일 11:00~23:00, 금요일~토요일 및 공휴일
-                            11:00~00:00 / 해피 아워 운영 22:00~요일 별 마감 시간까지
-                        </li>
-                        <li class="mb-[0px]">
-                            오로라 바 / 2층 오로라 / 일요일~목요일 12:00~00:00,
-                            금요일~토요일 및 공휴일 12:00~01:00
-                        </li>
-                        <li class="mb-[0px]">
-                            베이커스 키친(베이커리) / 2층 로툰다 / 06:30~21:00
-                        </li>
-                        <li class="mb-[0px]">
-                            호라이즌 라운지 / 1층 메인 로비 / 07:00~23:00 / Jazzy Days &
-                            Wine Nights 월&목요일 17:00 / 18:00 / 19:00, 금&공휴일 전 날
-                            18:00 / 19:00 / 20:00, 토 19:00 / 20:00 / 21:00, 일&공휴일
-                            11:30 / 12:30 / 13:30
-                        </li>
-                        <li class="mb-[0px]">
-                            스플래시 베이(실내 워터파크) / 1층 / 1부 14:00~17:30, 2부
-                            18:30~21:00 / 체크인 시 현장에서 추가 구매 가능 / 스플래시
-                            패키지 상품 구매 고객만 이용 가능
-                        </li>
-                        <li class="mb-[0px]">아레나 / 2층 로툰다 / 공연시설</li>
-                        <li class="mb-[0px]">
-                            오로라 / 2층 오로라 / 08:00~00:00 / 매시 정각 & 30분 간격:
-                            Under the Blue Land 쇼
-                        </li>
-                        <li class="mb-[0px]">
-                            로툰다 / 2층 로툰다 / 07:30~21:00 / 매시 15분, 45분 : 키네틱
-                            미디어 아트 쇼
-                        </li>
-                        <li class="mb-[0px]">
-                            비즈니스 센터 / 오션타워 1층 / 24시간 운영
-                        </li>
-                        <li class="mb-[0px]">
-                            CU편의점 / 인스파이어 몰 1층 09:00 ~ 22:00 / 로툰다 2층
-                            08:00 ~ 04:00
-                        </li>
-                        <li class="mb-[0px]">
-                            사우나 (웰니스클럽) / 호텔 투숙객 전용 시설 / 07:00 ~ 21:00
-                            (호텔 상황에 따라 변경 될 수 있음) / 건식 사우나
-                        </li>
-                        <li class="mb-[0px]">
-                            실내수영장 / 3층 / 07:00~21:00 / 호텔 투숙객 전용 시설 / 1박
-                            당 1회 2시간 이용 가능, 개별 예약 필요 / 14세 이하는 부모님
-                            동반 이용 / 수모 필수 착용 후 이용 가능
-                            
-                        </li>
-                        <li class="mb-[0px]">
-                            피트니스 센터 / 3층 / 07:00~21:00​ / 호텔 투숙객 전용 시설 /
-                            1박당 1회 & 17세 이상부터 피트니스 센터 입장 및 이용 가능
-                        </li>
-                        <li>
-                            모든 물놀이 및 사우나 시설은 과도한 문신을 한 경우 이용이
-                            제한됩니다
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        
             <div
                     class="w-[418px] flex flex-col items-start justify-start gap-[26.6px] max-w-full mt-[40px]"
             >
-                <b class="w-[143px] relative flex items-center"
+                <b id="map_section" class="w-[143px] relative flex items-center"
                 >취소 및 환불 규정</b
                 >
                 <div
                         class="self-stretch relative text-[15px] leading-[44px] text-[#707070]"
                 >
                     <ul class="m-[0px] font-[inherit] text-inherit pl-[20px] ml-[20px]">
-                        <li class="w-[425px]">
-                            객실별 취소 정책이 상이하니 객실 상세정보에서 확인해주세요.
+                        <li class="w-[500px]">
+                            객실별 취소 정책이 상이하니 '숙소 이용 정보'에서 확인해주세요.
                         </li>
                     </ul>
                 </div>
@@ -1012,16 +640,169 @@ y                                                    </button>
                             class="w-[144px] flex flex-col items-start justify-start pt-[2.5px] px-[0px] pb-[0px] box-border text-center text-[16px] text-[#5f84a1]"
                     >
                         <button class="self-stretch h-[16px] relative font-semibold flex items-center shrink-0"
-                                id="simple-list-item-4"
+                                id="detailHostBtn"
                         >
                         <span>
-                        <span>호스트 정보 보기</span>
+                        <span id="simple-list-item-4">호스트 정보 보기</span>
                         <span class="text-[18px]"> </span>
                         <span class="text-[20px]">&gt;</span>
                         </span>
                         </button>
                     </div>
                 </div>
+                <!--호스트 정보 모달--> 
+                <div id="detailHostModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] to-50%"> 
+                     <div id="hostModalContent">
+                        <div
+                        class="w-[381px] h-[562px] bg-white rounded-[13px] overflow-hidden flex flex-col items-start justify-start pt-[23px] pb-[58px] pl-[14px] pr-[9px] relative gap-[17px] text-left text-[14px] text-[#777] font-Inter shadow-md mt-0" style = "top:28px"
+                        >
+                        <header
+                        class="w-[331px] flex flex-row items-end justify-start max-w-full text-left text-[19.2px] text-[#4f4f4f] font-Inter"
+                        >
+                        <div
+                        class="w-[128px] flex flex-col items-start justify-start gap-[36px]"
+                        >
+                        <button id="hostInfoDelBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold close">&times;</button>
+                       
+                        <div
+                            class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[21px] pr-[0px]"
+                        >
+                            <div
+                            class="h-[312px] flex-1 flex flex-col items-start justify-start"
+                            >
+                            <div
+                                class="self-stretch h-[54px] relative bg-[#f7f7f7] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-r-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0"
+                            ></div>
+            
+                            <div
+                                class="self-stretch h-[54px] relative bg-[#f7f7f7] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-r-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0"
+                            ></div>
+                            <div
+                                class="self-stretch h-[54px] relative bg-[#f7f7f7] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-r-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[1]"
+                            ></div>
+                            <div
+                                class="self-stretch h-[54px] relative bg-[#f7f7f7] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-r-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[3]"
+                            ></div>
+                            <div
+                                class="self-stretch h-[54px] relative bg-[#f7f7f7] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-r-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[5]"
+                            ></div>
+                            <div
+                                class="self-stretch h-[54px] relative bg-[#f7f7f7] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-r-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[7]"
+                            ></div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="flex-1 flex flex-col items-start justify-start gap-[41px]">
+                        <a
+                            class="[text-decoration:none] relative leading-[20px] font-semibold text-[inherit] inline-block min-w-[101px] whitespace-nowrap"
+                            >판매자 정보</a
+                        >
+                        <div
+                            class="self-stretch h-[312px] flex flex-col items-start justify-start"
+                        >
+                            <div
+                            class="self-stretch h-[54px] relative bg-[#fff] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0"
+                            ></div>
+                            <div
+                            class="self-stretch h-[54px] relative bg-[#fff] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0"
+                            ></div>
+                            <div
+                            class="self-stretch h-[54px] relative bg-[#fff] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[2]"
+                            ></div>
+                            <div
+                            class="self-stretch h-[54px] relative bg-[#fff] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[4]"
+                            ></div>
+                            <div
+                            class="self-stretch h-[54px] relative bg-[#fff] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[6]"
+                            ></div>
+                            <div
+                            class="self-stretch h-[54px] relative bg-[#fff] border-[#bcbcbc] border-t-[1px] border-solid border-[#bcbcbc] border-b-[1px] border-solid box-border shrink-0 z-[8]"
+                            ></div>
+                        </div>
+                        </div>
+                    </header>
+                    <div
+                    class="w-[71px] absolute !m-[0] top-[106px] left-[51px] leading-[20px] font-semibold flex items-center z-[1]"
+                    >
+                    상호
+                    </div>
+                    <div th:text="${host.hname}"
+                    class="ml-[6px]w-[165px] absolute !m-[0] top-[106px] right-[103px] leading-[20px] font-semibold flex items-center z-[1]"
+                    >
+                    
+                    </div>
+                    <div
+                    class="w-[71px] absolute !m-[0] top-[160px] left-[51px] leading-[20px] font-semibold flex items-center z-[1]"
+                    >
+                    대표자명
+                    </div>
+                    <div th:text="${host.hostOwnerInfo.hostName}"
+                    class="w-[45px] absolute !m-[0] top-[160px] right-[159px] leading-[20px] font-semibold flex items-center z-[1]"
+                    >
+                    </div>
+                    <div
+                    class="w-[71px] absolute !m-[0] top-[214px] left-[51px] leading-[20px] font-semibold flex items-center z-[2]"
+                    >
+                    주소
+                    </div>
+                    <div th:text="${host.addressVo.detail}"
+                    class="absolute !m-[0] top-[214px] right-[116px] leading-[20px] font-semibold inline-block min-w-[83px] z-[3]"
+                    >
+                    </div>
+                    <div
+                    class="w-[71px] absolute !m-[0] top-[269px] left-[51px] leading-[20px] font-semibold flex items-center z-[4]"
+                    >
+                    전화번호
+                    </div>
+                    <div th:text="${host.hphone}"
+                    class="absolute !m-[0] top-[269px] right-[83px] leading-[20px] font-semibold inline-block min-w-[120px] z-[5]"
+                    >
+                    </div>
+                    <div 
+                    class="w-[71px] absolute !m-[0] bottom-[221px] left-[51px] leading-[20px] font-semibold flex items-center z-[6]"
+                    >
+                    이메일
+                    </div>
+                    <div th:text="${host.hostContactInfo.contactEmail}"
+                    class="absolute !m-[0] bottom-[221px] right-[62px] leading-[20px] font-semibold inline-block min-w-[120px] z-[6]"
+                    >
+                    </div>
+                    <section
+                    class="w-[341px] flex flex-row items-start justify-start py-[0px] px-[18px] box-border max-w-full text-left text-[13.2px] text-[#993030] font-[Inter] mt-[10px]"
+                    >
+                    <div
+                        class="h-[86px] flex-1 relative leading-[20px] font-semibold flex items-center"
+                    >
+                        <ul class="m-[0px] font-[inherit] text-inherit pl-[18px]">
+                        <li class="mb-[0px]">
+                            <span class="text-[#a2a2a2]">판매자 정보는</span>
+                            <span
+                            >판매자의 명시적 동의 없이 영리 목적의 마케팅·광고 등에 활용할 수
+                            없습니다.</span
+                            >
+                        </li>
+                        <li>
+                            <span class="text-[#a2a2a2]"
+                            >이를 어길 시 정보통신망법 등 관련 법령에 의거하여 과태료 부과
+                            및 민형사상 책임을 지게 될 수 있습니다.</span
+                            >
+                        </li>
+                        </ul>
+                    </div>
+                    </section>
+                    <div
+                    class="absolute !m-[0] bottom-[168px] left-[51px] leading-[20px] font-semibold inline-block min-w-[74px] z-[8]"
+                    >
+                    사업자 번호
+                    </div>
+                    <div th:text="${host.hphone}"
+                    class="absolute !m-[0] right-[101px] bottom-[168px] leading-[20px] font-semibold inline-block min-w-[103px] z-[9]"
+                    >
+                    </div>
+                    </div>
+                     </div>
+                </div>
+            <!--호스트 정보 모달 끝-->
             </div>
             <div
                     class="self-stretch h-[8.4px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[7.4px] box-border max-w-full"
@@ -1042,15 +823,10 @@ y                                                    </button>
             <div
                     class="flex-1 flex flex-col items-start justify-start gap-[28px] max-w-full"
             >
-                <div
+                <div id="hostInfoBlockBox"
                         class="w-[1177px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border max-w-full"
                 >
-                    <img
-                            alt=""
-                            class="h-[473px] flex-1 relative max-w-full overflow-hidden object-cover"
-                            loading="lazy"
-                            src="/image/detail/image-1@2x.png"
-                    />
+                <div id="map" style="width:1177px;height:400px;"></div>
                 </div>
                 <div class="self-stretch flex flex-col items-start justify-start gap-[21px] max-w-full"
                      id="simple-list-item-5"
@@ -1059,8 +835,8 @@ y                                                    </button>
                             class="w-[251px] flex flex-col items-start justify-start gap-[21px]"
                     >
                         <div class="flex flex-row items-end justify-start gap-[4px]">
-                            <b class="relative leading-[22px] whitespace-nowrap"
-                            >부산 수영구 광안동 197-2</b
+                            <b id="addressText" th:text="${host.addressVo.street}" class="relative leading-[22px] whitespace-nowrap"
+                            ></b
                             >
                             <div
                                     class="flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[3px]"
@@ -1069,32 +845,33 @@ y                                                    </button>
                             <div
                                     class="flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[1px] text-[13.1px] text-[#1273e4]"
                             >
+                            <a href="#" onclick="clip(); return false;">
                                 <button
-                                        class="relative font-semibold inline-block min-w-[53px] flex flex-row items-start justify-start"
+                                        class="relative font-semibold inline-block min-w-[78px] flex flex-row items-start justify-start"
                                 >
-                                    <img
+                                    <img 
                                             alt=""
                                             class="w-[16px] h-[16px] relative"
                                             src="/image/detail/svg-1.svg"
                                     />
                                     주소복사
                                 </button>
+                            </a>
                             </div>
                         </div>
                         <div
                                 class="h-[77px] relative text-[14.1px] leading-[22px] inline-block shrink-0"
                         >
                             <ul class="m-[0px] font-[inherit] text-inherit pl-[19px]">
-                                <li class="mb-[0px]">왕산해수욕장 차량 7분</li>
-                                <li class="mb-[0px]">을왕리해수욕장 차량 8분</li>
-                                <li class="w-[280px]">인천국제공항 제1여객터미널 차량 13분</li>
+                                <li th:text="'-'+${host.addressVo.detail}" class="mb-[0px]"></li>
+                                <li th:text="'-'+${host.directions}" class="mb-[0px]"></li>
                             </ul>
                         </div>
                     </div>
                     <div
                             class="self-stretch h-[1px] flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[0px] box-border max-w-full"
                     >
-                        <div
+                        <div id="hostInfoBlockLine"
                                 class="self-stretch flex-1 relative bg-[#ebebeb] max-w-full"
                         ></div>
                     </div>
@@ -1102,7 +879,7 @@ y                                                    </button>
                 <div
                         class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[38px] pr-[34px] box-border max-w-full text-center text-[30px]"
                 >
-                    <h2
+                    <h2 id="review-section"
                             class="m-[0px] h-[60px] flex-1 relative text-inherit font-bold font-[inherit] flex items-center justify-center max-w-full mq450:text-[18px] mq1050:text-[24px]"
                     >
                         호텔은 만족스러우셨나요?
@@ -1113,7 +890,7 @@ y                                                    </button>
             </div>
 
            <!-- 모달 -->
-            <div id="myModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999px] to-50%">
+            <div id="myModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] to-50%">
                 <!-- AJAX로 불러온 HTML을 여기에 삽입 -->
                 <div id="modal-body"></div>
             </div>
@@ -1196,7 +973,6 @@ y                                                    </button>
 
                         </div>
                
-                <div id="modalNone" class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
                 
             <div id="reviewPagination"
 
@@ -1281,50 +1057,136 @@ y                                                    </button>
         <script src="/summernote/js/summernote-ko-KR.js"></script>
         <script type="text/javascript" src="/js/datepicker.js"></script>
         <script type="text/javascript" src="/js/countperson.js"></script>
-        <script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3abcdd2fabe9959bb4b086e4ea2c82ae"></script>
+        <script th:inline="javascript">
+
             let ratingContainers;
             let currentRating;
             let isRatingInitialized = false;
+            let user = JSON.parse(localStorage.getItem('user'));
+            let scrollPosition = 0;
+            const hIdx = /*[[${hIdx}]]*/ 0;
+            console.log("호텔 번호 나와라"+hIdx);
 
+            var x = /*[[${hostInfo[0].xAxis}]]*/ '0'; 
+            var y = /*[[${hostInfo[0].yAxis}]]*/ '0';
 
+            var mapContainer = document.getElementById('map');
+            var mapOption = {
+                center: new kakao.maps.LatLng(y, x),
+                level: 3 
+            };
 
-    document.addEventListener('click', (event) => {
-        const recommDropBtns = event.target.closest('.dropdown-item');
-        if (recommDropBtns) {
-            const recommSpan = document.getElementById('recommSpan');
-            recommSpan.innerText = event.target.innerText;
-            if (event.target.innerText == "추천순") {
-                recommSpan.innerText = "추천순";
-            } else if (event.target.innerText == "최신순") {
-                recommSpan.innerText = "최신순";
-            } else if (event.target.innerText == "평점 높은 순") {
-                recommSpan.innerText = "평점 높은 순";
-            } else if (event.target.innerText == "평점 낮은 순") {
-                recommSpan.innerText = "평점 낮은 순";
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            var markerPosition = new kakao.maps.LatLng(y, x);
+
+            var marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+
+            marker.setMap(map);
+            
+            function clip() {
+                var address = document.getElementById('addressText').innerText;
+
+                var textarea = document.createElement("textarea");
+                document.body.appendChild(textarea);
+                textarea.value = address;
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+
+                alert("주소가 복사되었습니다");
             }
-        }
-    });
+         
 
+            //사진 모두보기 모달창
+            $(document).ready(function(){
+                $('#allPhotoBtn').on('click', function() {
+                    $('#allPhotoModal').show();
+                    scrollPosition = $(window).scrollTop();
+                    $('body').css({
+                            'overflow': 'hidden',         
+                            'position': 'fixed',            
+                            'top': `-${scrollPosition}px`,   
+                            'width': '100%'                 
+                        }); 
+
+                    $.ajax({
+                        url: '/detail_image', // 모달 콘텐츠를 제공하는 서버 엔드포인트
+                        method: 'GET',
+                        dataType: 'html',
+                        success: function(data) {
+                            console.log(data);
+                            $('#photoModal-body').html(data);
+
+                        },
+                        error: function(xhr, status, error) {
+                            alert('모달 콘텐츠를 가져오는 데 실패했습니다.');
+                        }
+                    });
+                });
+         });
+
+            $('#photoCloseBtn, #allPhotoModal').on('click', function(event) {
+                    if (event.target.id === 'photoCloseBtn' || event.target.id === 'allPhotoModal') {
+                        $('body').css({
+                                    'overflow': '',                   
+                                    'position': '',                   
+                                    'top': '',                      
+                                    'width': ''                       
+                                    });
+                        $(window).scrollTop(scrollPosition); 
+                        $('#allPhotoModal').hide();
+                    }
+                });
+
+            //호스트 정보 모달창
+            
+            $(document).ready(function () {
+                $('#detailHostBtn').on('click', function () {
+                    $('#detailHostModal').removeClass('hidden'); // 모달을 보여줌
+                    scrollPosition = $(window).scrollTop();
+                    $('body').css({
+                        'overflow': 'hidden',
+                        'position': 'fixed',
+                        'top': `-${scrollPosition}px`,
+                        'width': '100%'
+                    });
+                });
+
+                // 모달 닫기 버튼 클릭 시
+                $('#hostInfoDelBtn, #detailHostModal').on('click', function (event) {
+                    if (event.target.id === 'hostInfoDelBtn' || event.target.id === 'detailHostModal') {
+                        $('body').css({
+                            'overflow': '',
+                            'position': '',
+                            'top': '',
+                            'width': ''
+                        });
+                        $(window).scrollTop(scrollPosition);
+                        $('#detailHostModal').addClass('hidden'); // 모달을 숨김
+                    }
+                });
+            });
+
+    
+            //모달 띄우기, 리뷰 등록
             $(document).ready(function() {
-                let uploadedFileInfo = []; // 상위 스코프에서 선언
-                let scrollPosition = 0;
+                let uploadedFileInfo = [];
                 loadReviewList();
                 $('#reviewInsertBtn').on('click', function() {   
                     initializeRating();
-                    scrollPosition = $(window).scrollTop(); // 현재 스크롤 위치 저장
-                    $('body').addClass('modal-open'); // 스크롤 막기 위한 클래스 추가
+                    scrollPosition = $(window).scrollTop(); 
                     $('body').css({
-                        'overflow': 'hidden',           // 스크롤 막기
-                        'position': 'fixed',            // 고정
-                        'top': `-${scrollPosition}px`,   // 스크롤 위치 고정
-                        'width': '100%'                 // 페이지 너비 유지
+                        'overflow': 'hidden',         
+                        'position': 'fixed',            
+                        'top': `-${scrollPosition}px`,   
+                        'width': '100%'                 
                     }); 
                     $('#myModal').show();
-                    $("#modalBlockBox").css("display", "none");
-                    $("#search_bar").css("display", "none");
-                    $("footer").css("display", "none");
-                    $("#reviewPagination").css("display", "none");
-                    $("#modalNone").css("display","none");
+                 
                     $.ajax({
                         url: '/review_write',
                         method: 'GET',
@@ -1332,7 +1194,6 @@ y                                                    </button>
                         success: function(data) {
                             $('#modal-body').html(data);
 
-                            // Summernote 및 기타 초기화 작업
                             $('#summernote').summernote({
                                 lang: 'ko-KR',
                                 height: 300,
@@ -1393,6 +1254,8 @@ y                                                    </button>
                                 let formData = new FormData();
                                 formData.append('revContent', content);
                                 formData.append('revRating', rating);
+                                formData.append('memIdx', user.id);
+                                formData.append('hIdx',hIdx);
 
                                 uploadedFileInfo.forEach((fileInfo, index) => {
                                     formData.append('oname_' + index, fileInfo.oname); 
@@ -1408,22 +1271,15 @@ y                                                    </button>
                                     success: function(newRevIdx) {
                                         alert('리뷰가 성공적으로 등록되었습니다.');
                                         loadReviewList();
-                                        $('body').removeClass('modal-open'); // 스크롤 막기 해제
                                         $('body').css({
-                                        'overflow': '',                   // 스크롤 복구
-                                        'position': '',                   // 고정 해제
-                                        'top': '',                        // 스크롤 위치 복구
-                                        'width': ''                       // 너비 복구
+                                        'overflow': '',                   
+                                        'position': '',                   
+                                        'top': '',                        
+                                        'width': ''                       
                                     });
-                                    $(window).scrollTop(scrollPosition);  // 저장된 스크롤 위치로 복구
+                                    $(window).scrollTop(scrollPosition);  
                                     $('#myModal').hide();
-                                    $("#modalBlockBox").css("display", "flex");
-                                    $("#search_bar").css("display", "flex");
-                                    $("#reviewPagination").css("display", "flex");
-                                    $("footer").css("display", "flex");
-                                    $("#modalNone").css("display","flex");
-                                   
-                                
+                                  
                                     },
                                     error: function(xhr, status, error) {
                                         alert('리뷰 등록에 실패했습니다. 잠시 후 다시 시도해주세요.');
@@ -1431,29 +1287,19 @@ y                                                    </button>
                                 });
                             });
 
-                            // Close modal event
                             $('#closeBtn, #myModal').on('click', function(event) {
                                 if (event.target.id === 'closeBtn' || event.target.id === 'myModal') {
-                                    $('body').removeClass('modal-open'); // 스크롤 막기 해제
                                     $('body').css({
-                                        'overflow': '',                   // 스크롤 복구
-                                        'position': '',                   // 고정 해제
-                                        'top': '',                        // 스크롤 위치 복구
-                                        'width': ''                       // 너비 복구
+                                        'overflow': '',                   
+                                        'position': '',                   
+                                        'top': '',                      
+                                        'width': ''                       
                                     });
-                                    $(window).scrollTop(scrollPosition);  // 저장된 스크롤 위치로 복구
+                                    $(window).scrollTop(scrollPosition); 
                                     $('#myModal').hide();
-                                    $("#modalBlockBox").css("display", "flex");
-                                    $("#search_bar").css("display", "flex");
-                                    $("#reviewPagination").css("display", "flex");
-                                    $("footer").css("display", "flex");
                                 }
                             });
 
-                            
-
-                            // Make sure that rating is initialized
-                            
 
                         },
                         error: function(xhr, status, error) {
@@ -1463,32 +1309,124 @@ y                                                    </button>
                 });
             });
 
-            function loadReviewList() {
+
+
+            let reviewCounts = [];
+            let reservationCounts = [];
+            let sortOption = "최신순";
+
+
+            function calculateReviewCounts(reviewList) {
+                const reviewCounts = {};
+                    for (const reviewData of reviewList) {
+                        const memIdx = reviewData.review.memIdx;
+                        reviewCounts[memIdx] = (reviewCounts[memIdx] || 0) + 1;
+                    }
+                    console.log(reviewCounts);
+                    return Object.entries(reviewCounts).map(([memIdx, count]) => ({ memIdx, count }));
+                    }
+
+            function calculateResCounts(reviewList){
+                const reservationCounts ={};
+                    for(const reviewData of reviewList) {
+                        const memIdx = reviewData.reservation.memIdx;
+                        reservationCounts[memIdx] = (reservationCounts[memIdx] || 0) + 1;
+                    }
+                    console.log(reservationCounts);
+                    return Object.entries(reservationCounts).map(([memIdx, count]) => ({ memIdx, count }));
+            }
+
+
+          
+            //리뷰 리스트 불러오기
+            function loadReviewList(hIdx) {
+               
                 $.ajax({
                     url: '/review_list',  
                     method: 'GET',
+                    data: { 
+                            sort: sortOption,
+                            hIdx: hIdx 
+                        },
                     dataType: 'json',
-                    success: function(responseList) { // responseList -> response
+                    success: function(response) { // responseList -> response
                         // 기존 리뷰 목록 컨테이너 비우기
                         $('#reviewListContainer').empty(); 
-                        console.log("이게맞니"+responseList);
+                        console.log(response);
+                        reviewList = response.reviewList;
+                        reviewCounts = calculateReviewCounts(response.reviewList); // reviewCounts 계산
+                        reservationCounts = calculateResCounts(response.reviewList);
 
                         // 새로운 리뷰 목록 생성 및 추가
-                        responseList.forEach(reviewData => { // responseList -> response
-                            const reviewHtml = generateReviewHtml(reviewData.review, reviewData.member, reviewData.room);
-                            $('#reviewListContainer').append(reviewHtml);
-                        });
+                        
+                        for (const reviewData of response.reviewList) { 
+                        const reviewHtml = generateReviewHtml(reviewData, reviewCounts,reservationCounts);  // reviewCounts 계산 후에 호출
+                        $('#reviewListContainer').append(reviewHtml);
+                        }
+                                                                
                     },
                     error: function(xhr, status, error) {
                         alert('리뷰 목록을 가져오는 데 실패했습니다. 잠시 후 다시 시도해주세요.');
                     }
                 });
+            
             }
+          
+            loadReviewList(hIdx); 
 
-           function initializeRating() {
-                    if (isRatingInitialized) {
-                    return; // 이미 별점이 초기화되었으면 다시 초기화하지 않음
+          
+
+
+            //추천순,최신순,평점순 정렬기능
+            document.addEventListener('click', (event) => {
+                const recommDropBtns = event.target.closest('.dropdown-item');
+                if (recommDropBtns) {
+                    const recommSpan = document.getElementById('recommSpan');
+                    recommSpan.innerText = event.target.innerText;
+
+                    let sortOption = event.target.innerText; 
+
+                    if (sortOption === "추천순") {
+                        reviewList.sort(sortByRecommendation);
+                    } else if (sortOption === "최신순") {
+                        reviewList.sort(sortByDate);
+                    } else if (sortOption === "평점 높은 순") {
+                        reviewList.sort(sortByRatingDesc);
+                    } else if (sortOption === "평점 낮은 순") {
+                        reviewList.sort(sortByRatingAsc);
+                    }
+                    $('#reviewListContainer').empty(); 
+    
+                    for (const reviewData of reviewList) {
+                        const reviewHtml = generateReviewHtml(reviewData);
+                        $('#reviewListContainer').append(reviewHtml);
+                    }
                 }
+            });
+            
+                //추천순
+                function sortByRecommendation(a, b) {
+                    return new Date(b.review.revDate) - new Date(a.review.revDate); 
+                }
+                //최신순
+                function sortByDate(a, b) {
+                    return new Date(b.review.revDate) - new Date(a.review.revDate);
+                }
+                //평점 높은순
+                function sortByRatingDesc(a, b) {
+                    return b.review.revRating - a.review.revRating;
+                }
+                //평점 낮은순
+                function sortByRatingAsc(a, b) {
+                    return a.review.revRating - b.review.revRating;
+                }
+
+
+            //별점 초기화 기능
+            function initializeRating() {
+                        if (isRatingInitialized) {
+                        return; // 이미 별점이 초기화되었으면 다시 초기화하지 않음
+                    }
 
                 ratingContainers = document.querySelectorAll('#rating-container');
                 currentRating = 0;
@@ -1586,22 +1524,75 @@ y                                                    </button>
                     $('#reviewText').css('max-height', '60px');
                 });
 
-             
-        function generateReviewHtml(reviewDTO, memberDTO, roomInfoDTO) {
+        //리뷰 생성     
+        function generateReviewHtml(reviewData,reviewCounts,reservationCounts) {
+            const review = reviewData.review;
+            const member = reviewData.member;
+            const room = reviewData.room;
+            const grade = reviewData.grade;
+            const hostinfo = reviewData.hostinfo;
+            const reviewComment = reviewData.reviewComment; 
+            const timeDetail = calculateTime(reviewData); // reviewData 전달
+            const memIdx = reviewData.review.memIdx;
+            const reviewIdx = reviewData.reviewImage;
+            console.log("이거 이미지임"+reviewImage);
+
+            // 리뷰 개수 계산
+            let reviewCount = 0;
+                for (let i = 0; i < reviewCounts.length; i++) {
+                    if (Number(reviewCounts[i].memIdx) === memIdx) { 
+                    reviewCount = reviewCounts[i].count;
+                    break;
+                    }
+                }
+            
+            let reservationCount = 0;
+                for (let i = 0; i < reservationCounts.length; i++) {
+                    if (Number(reservationCounts[i].memIdx) === memIdx) { 
+                    reservationCount = reservationCounts[i].count;
+                    break;
+                    }
+                }
+                        
+            let commentHtml = '';
+                let reviewCommentBoxHtml = ''; // reviewCommentBox HTML 변수 추가
+                if (reviewData.reviewComment && reviewData.reviewComment.length > 0) {
+                    for (const comment of reviewData.reviewComment) {
+                        commentHtml += `<p class="text-sm text-gray-900">${comment.rcComment}</p>`; 
+                    }
+                    // 댓글이 있는 경우에만 reviewCommentBox HTML 생성
+                    reviewCommentBoxHtml = `
+                        <div id="reviewCommentBox">
+                            <div class="p-4 bg-gray-100 rounded-lg w-[890px] h-[200px]">
+                                <p class="text-sm font-bold text-gray-900">
+                                    ${hostinfo.hname}
+                                </p>
+                                ${commentHtml} 
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let gradeImagePath = '/image/detail/방랑자.png'; // 방랑자 등급 이미지
+                if (grade.gcate === '탐험가') {
+                    gradeImagePath = '/image/detail/탐험가.png'; // 탐험가 등급 이미지
+                } else if (grade.gcate === '개척자') {
+                    gradeImagePath = '/image/detail/개척자.png'; // 개척자 등급 이미지
+                } 
             return `
             <div class="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-[72px] max-w-full">
                 <div class="flex flex-row items-end justify-start gap-[4px]">
-                    <img alt="" class="h-[35.3px] w-[38px] relative rounded-[150px] object-cover" src="/image/detail/review-grade-img@2x.png" />
+                    <img alt="" class="h-[35.3px] w-[38px] relative rounded-[150px] object-cover" src="${gradeImagePath}" />
 
                     <div class="flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[2.3px]">
                         <div class="flex flex-col items-start justify-start gap-[8px]">
                             <div class="flex flex-row items-start justify-start gap-[4px]">
                                 <div class="rounded-[3px] bg-[#f5f7fa] flex flex-row items-start justify-start py-[3px] pl-[7px] pr-[3px] shrink-0">
-                                    <b class="relative inline-block min-w-[34px]">${gradeDTO.gCate}</b> 
+                                    <b class="relative inline-block min-w-[34px]">${grade.gcate}</b> 
                                 </div>
                                 <div class="rounded-[3px] bg-[#90afc4] flex flex-row items-start justify-start pt-[3px] pb-[2px] pl-[3px] pr-[0px] gap-[4px] shrink-0 text-[#1a4568]">
                                     <div class="flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px]">
-                                        <img alt="" class="w-[12px] h-[12px] relative" src="/image/detail/best-review-img.svg" />
+                                        <img alt=""ㄴ class="w-[12px] h-[12px] relative" src="/image/detail/best-review-img.svg" />
                                     </div>
                                     <b class="relative inline-block min-w-[60px]">베스트 리뷰</b> 
                                 </div>
@@ -1609,10 +1600,10 @@ y                                                    </button>
                             <div class="flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] text-[12.2px] text-[#333]">
                                 <div class="flex flex-col items-start justify-start gap-[1px]">
                                     <div class="relative font-semibold inline-block min-w-[61px]">
-                                        ${memberDTO.memName}
+                                        ${member.memName}
                                     </div>
                                     <div class="relative text-[#707070]">
-                                        리뷰 8 · 다녀온 장소 16
+                                        리뷰 ${reviewCount} · 다녀온 장소 ${reservationCount}
                                     </div>
                                 </div>
                             </div>
@@ -1624,16 +1615,16 @@ y                                                    </button>
                         <div class="flex-1 flex flex-col items-start justify-start gap-[14px] max-w-full">
                             <div class="flex flex-row items-start justify-start gap-[3px]">
                                 <img alt="" class="h-[15px] w-[15px] relative min-h-[15px]" src="/image/detail/star1.svg" />
-                                ${reviewDTO.revRating}/5
-                                <div class="relative tracking-[-0.16px] inline-block min-w-[36.6px]">몰라</div>
+                                ${review.revRating}/5
+                                <div class="relative tracking-[-0.16px] inline-block min-w-[36.6px]">${timeDetail}</div>
                             </div>
                             <div class="w-[892px] overflow-x-auto flex flex-row items-start justify-start gap-[27px] max-w-full">
-                                ${generateImageTags(reviewDTO)}
+                                ${generateImageTags(review)}
                             </div>
                             <div class="self-stretch flex flex-col items-start justify-start gap-[14px] text-[13.9px] text-[#333]">
-                                <p class="m-[0px]">${roomInfoDTO.roomName}</p>
+                                <p class="m-[0px]">${room.roomName}</p>
                                 <span id="reviewText" class="overflow-hidden transition-all duration-300 max-h-[60px]">
-                                    ${reviewDTO.revContent}
+                                    ${review.revContent}
                                 </span>
                                 <div class="flex flex-row items-start justify-start text-center text-[13.1px]">
                                     <button id="toggleButton" class="relative font-semibold inline-block min-w-[36.5px] flex items-center">
@@ -1644,45 +1635,85 @@ y                                                    </button>
                         </div>
                     </div>
                     <div class="flex flex-row items-start justify-start gap-[4px] text-[12.2px] text-[#707070]">
-                        <button id="goodBtn">
-                            <img class="h-[20px] w-[20px] relative min-h-[16px] shrink-0" alt="" src="/image/detail/svg-4.svg" />
+                        <button id="goodBtn" data-rev-idx="${review.id}">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                            <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                            </svg>
                         </button>
                         <div class="relative font-semibold shrink-0 whitespace-nowrap text-[15px]">
                             3명이 이 리뷰를 추천했어요
                         </div>
                     </div>
-                    <div id="reviewCommentBox">
-                    <div class="p-4 bg-gray-100 rounded-lg w-[890px] h-[200px]">
-                        <p class="text-sm font-bold text-gray-900">
-                            ${hostInfoDTO.hName}
-                        </p>
-                        <p class="text-sm text-gray-900">
-                        </p>
+                    ${reviewCommentBoxHtml}
                     </div>
-                    </div>
+                    <div  class="self-stretch h-[1px] relative bg-[#ebebeb] w-[1140px]"></div>
                 </div>
-                </div>
-                <div  class="self-stretch h-[1px] relative bg-[#ebebeb]"></div>
             `;
         }
 
+        document.addEventListener('click', (event) => {
+                const goodBtn = event.target.closest('#goodBtn');
+                if (goodBtn) {
+                    const revIdx = goodBtn.dataset.revIdx;
+                    console.log(revIdx);
+                    $.ajax({
+                        url: '/good_insert',
+                        method: 'POST',
+                        data: {revIdx : revIdx,
+                            memIdx : user.id
+                        },
+                        success: function(result) {
+                            const newGoodIdx = result.newGoodIdx;
+                            const goodStatus = result.goodStatus;
+                            console.log(result);
+                            const icon = goodBtn.querySelector('.bi-hand-thumbs-up-fill'); 
+                            if(goodStatus === 'TRUE') {
+                                icon.style.color = 'gold';
+                            } else {
+                                icon.style.color = 'currentColor';
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('추천안됨');
+                        }
+                    });
+                    
+                }
 
-            function generateImageTags(reviewDTO) {
-               
-                const imageUrls = []; 
+            });
 
-                let imageTags = '';
-                imageUrls.forEach(imageUrl => {
-                    imageTags += `
-                        <img alt="" class="h-[210px] w-[210px] relative rounded-[12px] overflow-hidden shrink-0 object-cover min-h-[210px]" 
-                            loading="lazy" src="${imageUrl}" />
-                    `;
-                });
-                return imageTags;
-            }
+    
 
+            function calculateTime(reviewData) {
+                const revDate = new Date(reviewData.review.revDate); // reviewData에서 revDate 가져오기
+                const currentDate = new Date();
+                const timeDifference = currentDate - revDate;
 
+                const seconds = Math.floor(timeDifference / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24   
+                );
+                const months = Math.floor(days / 30);
+                const years = Math.floor(months / 12);
 
+                if (seconds < 60) {
+                    return '방금 전';
+                } else if (minutes < 60) {
+                    return `${minutes}분 전`;
+                } else if (hours < 24) {
+                    return `${hours}시간 전`;
+                } else if (days < 30) {
+                    return `${days}일 전`;
+                } else if (months < 12) {
+                    return `${months}달 전`;
+                } else {
+                    return `${years}년 전   
+                `;
+                }
+                }
+
+                
 
 </script>
 </body>

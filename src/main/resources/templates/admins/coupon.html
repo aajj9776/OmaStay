@@ -1,1761 +1,621 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/admin}"
-      layout:fragment="admin">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, width=device-width" />
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
 
-    <link rel="stylesheet" href="./global.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=ABeeZee:wght@400&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Work Sans:wght@600&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Abel:wght@400&display=swap"
-    />
-  </head>
-  <body>
-    <div
-      class="w-full relative bg-[#fff] overflow-hidden shrink-0 flex flex-row items-start justify-start leading-[normal] tracking-[normal] [row-gap:20px] text-left text-[18px] text-[#101828] font-[Inter] mq1650:flex-wrap"
-    >
-      <section
-        class="w-[1046px] rounded-tl-[80px] rounded-tr-[0px] rounded-br-[0px] rounded-bl-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-center py-[85px] px-[15px] box-border gap-[20px] min-w-[1046px] max-w-full text-left text-[24px] text-[#000] font-[Inter] mq900:pt-[55px] mq900:pb-[55px] mq900:box-border mq1300:min-w-full mq450:pt-[36px] mq450:pb-[36px] mq450:box-border mq1650:flex-1"
-      >
-        <h2
-          class="m-[0px] self-stretch h-[40px] relative text-inherit font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px]"
-        >
-          쿠폰 관리
-        </h2>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+  <style>
+    #historyTable {
+      table-layout: fixed; /* 테이블 레이아웃을 자동으로 설정 */
+      width: 660px; /* 테이블 너비를 100%로 설정 */
+    }
+  </style>
+</head>
+
+<body>
+  <div
+    class="w-full relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000]">
+
+    <!-- 제목 영역-->
+    <label
+      class="m-[0px] self-stretch h-[40px] relative text-inherit font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px]">
+      쿠폰 관리
+    </label>
+
+    <!-- 쿠폰 버튼 영역 -->
+    <div class="flex flex-row text-[16px] justify-center items-center gap-4">
+      <button id="addButton" class="w-[100px] h-[35px] bg-[#d4d8f1] rounded-[4px] text-[16px] ml-[30px]">쿠폰 등록</button>
+      <span class="text-gray-400"> * 쿠폰 등록은 발급과 동시에 이루어집니다. 등록 후 삭제할 수 없으니 유의해주세요</span>
+    </div>
+
+    <!-- 테이블 영역-->
+
+    <div th:if="${list == null}" class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+        <p class="text-[18px] text-[#6c757d]">등록된 쿠폰이 없습니다.</p>
+    </div>
+    
+    <div th:if="${list != null}"
+      class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+
+      <!-- 테이블 데이터 영역-->
+      <div id="table" class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
+        <table id="listTable" class="w-[1200px] hover ">
+          <thead>
+            <tr class="bg-[#d4d8f1] font-medium">
+              <th>쿠폰 번호</th>
+              <th>쿠폰 내용</th>
+              <th>쿠폰 형식</th>
+              <th>발행일</th>
+              <th>종료일</th>
+              <th>할인구분</th>
+              <th>할인내용</th>
+              <th>사용 내역</th>
+            </tr>
+          </thead>
+          <tbody class="bg-[#ffffff] pt-[100px] ">
+            <tr th:each="coupon : ${list}">
+              <td th:text="${coupon.id}"></td>
+              <td th:text="${coupon.cpContent}"></td>
+              <td th:switch="${coupon.cpMethod}">
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpMethod).DESIGNATED}">지정 발행</span>
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpMethod).SINGLE_USE}">일회용 코드</span>
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpMethod).MULTI_USE}">다회용 코드</span>
+              </td>
+              <td th:text="${#temporals.format(coupon.cpStartEnd.start, 'yyyy-MM-dd HH:mm')}"></td>
+              <td th:text="${#temporals.format(coupon.cpStartEnd.end, 'yyyy-MM-dd HH:mm')}"></td>
+              <td th:switch="${coupon.cpCate}">
+                  <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PERCENT}">백분율 할인</span>
+                  <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PRICE}">금액 할인</span>
+              </td>
+              <td th:text="${coupon.cpSale}"></td>
+              <td ><button th:onclick="'showDetails(' + ${coupon.id} + ')'"><img class="w-[15px] h-[15px]" src="/image/admin/icon-more.png"/></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    
+
+    <!-- 모달 뒷 배경 -->
+    <div id="modalOverlay"
+      class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50 hidden ">
+
+      <!-- 쿠폰 등록 모달 -->
+      <!-- 쿠폰 등록 모달 -->
+      <!-- 쿠폰 등록 모달 -->
+      <!-- 쿠폰 등록 모달 -->
+      <!-- 모달 보라 테두리 영역 -->
+      <div id="addCoupon"
+        class="bg-[#d9ddf1] p-[30px_30px] max-w-[450px] min-w-[100px] box-border rounded-[12px] flex items-center justify-center relative top-[40px] m-auto"
+        style="width: auto;">
+
+        <button id="closeAddModal" class="absolute top-4 right-4 p-2 rounded-lg z-10">
+          <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
+        </button>
+
+        <!-- 모달 흰 배경 영역 -->
         <div
-          class="self-stretch rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[10px] box-border max-w-full"
-        >
-          <nav
-            class="m-[0px] self-stretch overflow-hidden flex flex-row items-center justify-start py-[5px] pl-[10px] pr-[212px] box-border gap-[15px] max-w-full whitespace-nowrap text-center text-[16px] text-[#000] font-[ABeeZee] mq900:flex-wrap mq900:pr-[53px] mq900:box-border mq1300:pr-[106px] mq1300:box-border"
-          >
-            <h3
-              class="m-[0px] w-[130px] relative text-[20px] font-light font-[Inter] flex items-center justify-center shrink-0 mq450:text-[16px]"
-            >
-              검색어
-            </h3>
-            <div
-              class="shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] text-left text-[#6c757d]"
-            >
-              <div
-                class="overflow-hidden flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[15px]"
-              >
-                <div class="relative leading-[24px] inline-block min-w-[90px]">
-                  Placeholder
-                </div>
-                <div
-                  class="h-[18px] w-[1px] relative bg-[#495057] hidden"
-                ></div>
-              </div>
-              <div
-                class="flex flex-row items-center justify-center py-[4px] px-[0px]"
-              >
-                <img
-                  class="h-[16px] w-[16px] relative"
-                  alt=""
-                  src="/public/-basetoggleup.svg"
-                />
-              </div>
-            </div>
-            <div
-              class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[260px] max-w-full"
-            >
-              <input
-                class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[226px] max-w-full"
-                placeholder="Placeholder"
-                type="text"
-              />
-
-              <div class="h-[24px] hidden flex-row items-center justify-center">
-                <img
-                  class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/public/check.svg"
-                />
-              </div>
-            </div>
-            <div class="flex flex-col items-start justify-start text-[#fff]">
-              <div
-                class="rounded-[4px] bg-[#007bff] flex flex-col items-center justify-center py-[6px] px-[11px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon1@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[32px]"
-                  >
-                    검색
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon1@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-          </nav>
-        </div>
-        <div
-          class="self-stretch rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start pt-[20px] px-[10px] pb-[143px] box-border relative gap-[10px] min-h-[764px] text-[14px] font-['Work_Sans'] mq900:pb-[93px] mq900:box-border mq450:pb-[60px] mq450:box-border"
-        >
-          <div
-            class="self-stretch overflow-hidden flex flex-col items-start justify-start pt-[10px] px-[10px] pb-[20px] gap-[10px]"
-          >
-            <div
-              class="self-stretch rounded-[10px] bg-[#e1e1e1] overflow-hidden flex flex-row items-center justify-between py-[20px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
-            <div
-              class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq900:flex-wrap"
-            >
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-              >
-                체크박스
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                제목
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[28px]"
-              >
-                내용
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                작성자
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                첨부파일
-              </div>
-              <div
-                class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-              >
-                등록일
-              </div>
-              <div
-                class="w-[56px] relative leading-[150%] font-semibold flex items-center"
-              >
-                답변상태
-              </div>
-            </div>
+          class="shadow-md rounded-lg bg-white overflow-hidden flex flex-col items-center justify-start p-0 max-w-full">
+          <!-- 제목 영역 -->
+          <div class="self-stretch flex flex-col gap-1 items-center justify-start relative w-full bg-white p-6">
+            <h2 class="text-lg font-semibold">쿠폰 등록</h2>
+            <p class="text-sm text-gray-500">등록할 쿠폰의 정보를 입력해주세요</p>
           </div>
-          <div
-            class="w-[1071px] h-[41px] !m-[0] absolute top-[703px] left-[10px] rounded-[10px] overflow-hidden shrink-0"
-          ></div>
-        </div>
-      </section>
-      <div
-        class="w-[700px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[42px] px-[30px] box-border min-w-[700px] max-w-full mq900:pt-[27px] mq900:pb-[27px] mq900:box-border mq900:min-w-full mq450:pt-[20px] mq450:pb-[20px] mq450:box-border mq1650:flex-1"
-      >
-        <div
-          class="self-stretch shadow-[0px_20px_24px_-4px_rgba(16,_24,_40,_0.1),_0px_8px_8px_-4px_rgba(16,_24,_40,_0.04)] rounded-[12px] bg-[#fff] overflow-hidden flex flex-col items-center justify-start pt-[0px] px-[0px] pb-[15px] box-border max-w-full"
-        >
-          <div
-            class="self-stretch bg-[#fff] flex flex-col items-center justify-start relative max-w-full"
-          >
-            <div
-              class="self-stretch bg-[#fff] flex flex-col items-start justify-start pt-[24px] px-[24px] pb-[0px] gap-[16px]"
-            >
-              <img
-                class="w-[48px] h-[48px] relative rounded-[10px] hidden"
-                alt=""
-                src="/public/featured-icon.svg"
-              />
 
-              <div
-                class="self-stretch flex flex-col items-start justify-start gap-[4px]"
-              >
-                <div class="self-stretch relative leading-[28px] font-semibold">
-                  쿠폰 등록
-                </div>
-                <div
-                  class="self-stretch relative text-[14px] leading-[20px] text-[#475467]"
-                >
-                  등록할 쿠폰의 정보를 입력해주세요
-                </div>
-              </div>
-            </div>
-            <div
-              class="!m-[0] absolute top-[16px] right-[16px] rounded-[8px] overflow-hidden flex flex-row items-center justify-center p-[10px] z-[1]"
-            >
-              <img
-                class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                loading="lazy"
-                alt=""
-                src="/public/xclose.svg"
-              />
-            </div>
-            <div class="self-stretch h-[20px]"></div>
-            <img
-              class="w-[400px] relative max-h-full hidden max-w-full z-[3]"
-              alt=""
-              src="/public/divider.svg"
-            />
-          </div>
-          <div
-            class="self-stretch flex flex-col items-start justify-start py-[0px] px-[24px] box-border max-w-full"
-          >
-            <form
-              class="m-[0px] self-stretch flex flex-col items-center justify-center py-[15px] px-[0px] box-border gap-[16px] max-w-full"
-            >
-              <div
-                class="self-stretch flex flex-col items-start justify-start gap-[6px] max-w-full"
-              >
-                <div
-                  class="self-stretch flex flex-col items-start justify-start gap-[6px] max-w-full"
-                >
-                  <div
-                    class="relative text-[14px] leading-[20px] font-medium font-[Inter] text-[#344154] text-left inline-block min-w-[50px]"
-                  >
-                    쿠폰명*
-                  </div>
-                  <div
-                    class="self-stretch shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-[8px] bg-[#fff] border-[#d0d5dd] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-start py-[8px] px-[13px] max-w-full"
-                  >
-                    <input
-                      class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 flex flex-row items-center justify-start font-[Inter] text-[16px] text-[#667085] min-w-[250px] max-w-full"
-                      placeholder="예: 사이트 오픈 1주년 할인 쿠폰"
-                      type="text"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="w-[320px] relative text-[14px] leading-[20px] font-[Inter] text-[#475467] text-left hidden"
-                >
-                  This is a hint text to help user.
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-row items-start justify-start max-w-full"
-              >
-                <div
-                  class="flex-1 flex flex-col items-start justify-start gap-[8px] max-w-full"
-                >
-                  <div
-                    class="relative text-[14px] leading-[20px] font-medium font-[Inter] text-[#344154] text-left inline-block min-w-[59px]"
-                  >
-                    쿠폰형식*
-                  </div>
-                  <div
-                    class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[344px] gap-[6px] mq900:flex-wrap mq900:pr-[172px] mq900:box-border mq450:pr-[20px] mq450:box-border"
-                  >
-                    <div class="flex flex-row items-center justify-start">
-                      <div
-                        class="overflow-hidden flex flex-row items-center justify-start"
-                      >
-                        <div
-                          class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-center justify-start p-[9px] box-border"
-                        >
-                          <input
-                            class="cursor-pointer m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            type="radio"
-                            name="radioGroup-1"
-                          />
-                        </div>
-                      </div>
-                      <div class="flex flex-col items-start justify-start">
-                        <div
-                          class="relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[64px] whitespace-nowrap"
-                        >
-                          지정 발행
-                        </div>
-                      </div>
-                    </div>
-                    <div class="flex flex-row items-center justify-start">
-                      <div
-                        class="overflow-hidden flex flex-row items-center justify-start"
-                      >
-                        <div
-                          class="h-[42px] w-[42px] rounded-[100px] flex flex-row items-center justify-start p-[9px] box-border"
-                        >
-                          <input
-                            class="cursor-pointer m-[0px] h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                            type="radio"
-                            name="radioGroup-1"
-                          />
-                        </div>
-                      </div>
-                      <div class="flex flex-col items-start justify-start">
-                        <div
-                          class="relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[94px] whitespace-nowrap"
-                        >
-                          쿠폰코드 생성
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="w-[320px] relative text-[14px] leading-[20px] font-[Inter] text-[#475467] text-left hidden"
-                  >
-                    This is a hint text to help user.
-                  </div>
-                </div>
-              </div>
-              <div class="self-stretch flex flex-row items-start justify-start">
-                <div
-                  class="w-[264px] flex flex-col items-start justify-start gap-[8px]"
-                >
-                  <div
-                    class="self-stretch flex flex-col items-start justify-start gap-[6px]"
-                  >
-                    <div
-                      class="relative text-[14px] leading-[20px] font-medium font-[Inter] text-[#344154] text-left inline-block min-w-[59px]"
-                    >
-                      발행대상*
-                    </div>
-                    <div
-                      class="self-stretch shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-[8px] bg-[#fff] border-[#d0d5dd] border-[1px] border-solid overflow-hidden flex flex-row items-center justify-start py-[8px] px-[13px] gap-[8px]"
-                    >
-                      <div
-                        class="flex-1 flex flex-row items-center justify-start gap-[8px]"
-                      >
-                        <div
-                          class="relative text-[16px] leading-[24px] font-medium font-[Inter] text-[#101828] text-left inline-block min-w-[48px]"
-                        >
-                          개척자
-                        </div>
-                        <div
-                          class="self-stretch w-[54px] relative text-[16px] leading-[24px] font-[Inter] text-[#475467] text-left hidden"
-                        >
-                          @olivia
-                        </div>
-                      </div>
-                      <img
-                        class="h-[20px] w-[20px] relative overflow-hidden shrink-0"
-                        alt=""
-                        src="/public/chevrondown.svg"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="w-[320px] relative text-[14px] leading-[20px] font-[Inter] text-[#475467] text-left hidden"
-                  >
-                    This is a hint text to help user.
-                  </div>
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-start gap-[6px]"
-              >
-                <div
-                  class="self-stretch flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[302px] gap-[6px] mq900:pr-[151px] mq900:box-border mq450:pr-[20px] mq450:box-border"
-                >
-                  <div
-                    class="relative text-[14px] leading-[20px] font-medium font-[Inter] text-[#344154] text-left inline-block min-w-[59px]"
-                  >
-                    할인금액*
-                  </div>
-                  <div
-                    class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[2.5px] pl-[0px] pr-[97px] gap-[9px] mq450:flex-wrap mq450:pr-[20px] mq450:box-border"
-                  >
-                    <button
-                      class="cursor-pointer border-[#d0d5dd] border-[1px] border-solid py-[6px] px-[13px] bg-[#fff] flex-1 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-[8px] box-border overflow-hidden flex flex-row items-center justify-start min-w-[96px]"
-                    >
-                      <div
-                        class="flex-1 flex flex-row items-center justify-start"
-                      >
-                        <a
-                          class="[text-decoration:none] flex-1 relative text-[16px] leading-[24px] font-[Inter] text-[#667085] text-left"
-                          >How much?</a
-                        >
-                      </div>
-                    </button>
-                    <div
-                      class="relative text-[16px] leading-[24px] font-[Inter] text-[#000] text-left inline-block min-w-[37px]"
-                    >
-                      KRW
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="w-[320px] relative text-[14px] leading-[20px] font-[Inter] text-[#475467] text-left hidden"
-                >
-                  This is a hint text to help user.
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-start gap-[6px] max-w-full"
-              >
-                <div
-                  class="relative text-[14px] leading-[20px] font-medium font-[Inter] text-[#344154] text-left inline-block min-w-[59px]"
-                >
-                  사용기간*
-                </div>
-                <div
-                  class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[0px] pr-[161px] gap-[6px] mq900:flex-wrap mq900:pr-[80px] mq900:box-border mq450:pr-[20px] mq450:box-border"
-                >
-                  <div
-                    class="flex-1 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-[8px] bg-[#fff] border-[#d0d5dd] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-start py-[6px] px-[14px] min-w-[133px]"
-                  >
-                    <input
-                      class="w-[119px] [border:none] [outline:none] bg-[transparent] h-[24px] flex flex-row items-center justify-start font-[Inter] text-[16px] text-[#667085]"
-                      placeholder="시작일"
-                      type="text"
-                    />
-                  </div>
-                  <div
-                    class="h-[46px] relative text-[16px] leading-[24px] font-[Inter] text-[#000] text-left flex items-center min-w-[11px] mq900:w-full mq900:h-[11px]"
-                  >
-                    ~
-                  </div>
-                  <div
-                    class="flex-1 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-[8px] bg-[#fff] border-[#d0d5dd] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-start py-[6px] px-[13px] min-w-[133px]"
-                  >
-                    <input
-                      class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 flex flex-row items-center justify-start font-[Inter] text-[16px] text-[#667085] min-w-[106px]"
-                      placeholder="만료일"
-                      type="text"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="self-stretch h-[333px] overflow-y-auto shrink-0 flex flex-col items-center justify-center max-w-full mq900:h-auto"
-                >
-                  <div
-                    class="w-[640px] flex flex-row items-center justify-center max-w-[109%] shrink-0 [row-gap:20px] mq900:flex-wrap"
-                  >
-                    <div
-                      class="flex-1 border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border flex flex-col items-center justify-center min-w-[320px] max-w-[320px]"
-                    >
-                      <div
-                        class="self-stretch overflow-hidden flex flex-row items-center justify-start pt-[16px] pb-[8px] pl-[24px] pr-[12px] [row-gap:20px] mq450:flex-wrap"
-                      >
-                        <div
-                          class="h-[34px] w-[34px] rounded-[100px] overflow-hidden shrink-0 flex flex-col items-center justify-center p-[5px] box-border"
-                        >
-                          <div class="flex flex-row items-start justify-start">
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/public/chevronleftfilled.svg"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          class="flex-1 relative text-[16px] tracking-[0.15px] leading-[175%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center inline-block min-w-[90px]"
-                        >
-                          December 2023
-                        </div>
-                      </div>
-                      <div
-                        class="flex flex-row items-start justify-center py-[0px] px-[28px] gap-[2px] mq450:flex-wrap"
-                      >
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            S
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            M
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            T
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            W
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            T
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            F
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            S
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="self-stretch flex flex-col items-center justify-start pt-[12px] px-[0px] pb-[26px] gap-[2px]"
-                      >
-                        <div
-                          class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[218px] pr-[28px] gap-[2px] mq450:flex-wrap mq450:pl-[20px] mq450:box-border"
-                        >
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              1
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              2
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px] gap-[2px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              3
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              4
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              5
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              6
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              7
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              8
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              9
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px] gap-[2px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              10
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              11
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              12
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              13
-                            </div>
-                          </div>
-                          <div
-                            class="rounded-[100px] bg-[rgba(33,150,243,0.12)] overflow-x-auto flex flex-row items-start justify-center gap-[2px]"
-                          >
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[#2196f3] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[#fff] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                14
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                15
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                16
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px]"
-                        >
-                          <div
-                            class="rounded-[100px] bg-[rgba(33,150,243,0.12)] overflow-x-auto flex flex-row items-start justify-center gap-[2px]"
-                          >
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                17
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                18
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                19
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                20
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                21
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                22
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                23
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px]"
-                        >
-                          <div
-                            class="rounded-[100px] bg-[rgba(33,150,243,0.12)] overflow-x-auto flex flex-row items-start justify-center gap-[2px]"
-                          >
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                24
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                25
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                26
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                27
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                28
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                29
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                30
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-start py-[0px] px-[28px]"
-                        >
-                          <div
-                            class="rounded-[100px] bg-[rgba(33,150,243,0.12)] flex flex-row items-start justify-center"
-                          >
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                31
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="flex-1 flex flex-col items-center justify-center min-w-[320px] max-w-[320px]"
-                    >
-                      <div
-                        class="self-stretch overflow-hidden flex flex-row items-center justify-start pt-[16px] pb-[8px] pl-[24px] pr-[12px] [row-gap:20px] mq450:flex-wrap"
-                      >
-                        <div
-                          class="flex-1 relative text-[16px] tracking-[0.15px] leading-[175%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center inline-block min-w-[78px]"
-                        >
-                          January 2024
-                        </div>
-                        <div
-                          class="h-[34px] w-[34px] rounded-[100px] overflow-hidden shrink-0 flex flex-col items-center justify-center p-[5px] box-border"
-                        >
-                          <div class="flex flex-row items-start justify-start">
-                            <img
-                              class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
-                              alt=""
-                              src="/public/chevronrightfilled.svg"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="flex flex-row items-start justify-center py-[0px] px-[28px] gap-[2px] mq450:flex-wrap"
-                      >
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            S
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            M
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            T
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            W
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            T
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            F
-                          </div>
-                        </div>
-                        <div
-                          class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                        >
-                          <div
-                            class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.6)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                          >
-                            S
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="self-stretch flex flex-col items-center justify-start pt-[12px] px-[0px] pb-[26px] gap-[2px]"
-                      >
-                        <div
-                          class="self-stretch flex flex-row items-start justify-end py-[0px] px-[28px]"
-                        >
-                          <div
-                            class="rounded-[100px] bg-[rgba(33,150,243,0.12)] flex flex-row items-start justify-center gap-[2px]"
-                          >
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                1
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                2
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px]"
-                        >
-                          <div
-                            class="rounded-[100px] bg-[rgba(33,150,243,0.12)] overflow-x-auto flex flex-row items-start justify-center gap-[2px]"
-                          >
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                3
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                4
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[#2196f3] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[#fff] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                5
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                6
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                7
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                8
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px] whitespace-nowrap"
-                              >
-                                9
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px] gap-[2px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="rounded-[100px] bg-[rgba(33,150,243,0.12)] overflow-x-auto flex flex-row items-start justify-center gap-[2px]"
-                          >
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                10
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                11
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                12
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                13
-                              </div>
-                            </div>
-                            <div
-                              class="h-[36px] w-[36px] rounded-[100px] bg-[#2196f3] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                            >
-                              <div
-                                class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[#fff] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                              >
-                                14
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              15
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              16
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px] gap-[2px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              17
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              18
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              19
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              20
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              21
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              22
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              23
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="flex flex-row items-start justify-center py-[0px] px-[28px] gap-[2px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              24
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              25
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              26
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              27
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              28
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              29
-                            </div>
-                          </div>
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              30
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-start py-[0px] px-[28px]"
-                        >
-                          <div
-                            class="h-[36px] w-[36px] rounded-[100px] bg-[rgba(255,255,255,0)] overflow-hidden shrink-0 flex flex-row items-center justify-center"
-                          >
-                            <div
-                              class="h-[36px] flex-1 relative text-[14px] tracking-[0.17px] leading-[143%] font-[Roboto] text-[rgba(0,0,0,0.38)] text-center flex items-center justify-center min-w-[36px] min-h-[36px]"
-                            >
-                              31
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="self-stretch hidden flex-row items-end justify-end p-[8px] gap-[8px] mq450:flex-wrap"
-                  >
-                    <div
-                      class="h-[36px] rounded-[4px] overflow-hidden flex flex-col items-center justify-center py-[6px] px-[7px] box-border"
-                    >
-                      <div
-                        class="w-[57px] flex-1 flex flex-row items-center justify-center gap-[8px]"
-                      >
-                        <img
-                          class="h-[20px] w-[16px] relative hidden"
-                          alt=""
-                          src="/public/masked-icon6.svg"
-                        />
+          <!-- 쿠폰 내용 -->
+          <div class="">
+            <form class="flex flex-col items-center gap-4 p-6 w-full">
 
-                        <div
-                          class="self-stretch flex-1 relative text-[14px] tracking-[0.4px] leading-[24px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left"
-                        >
-                          Cancel
-                        </div>
-                        <img
-                          class="h-[20px] w-[16px] relative hidden"
-                          alt=""
-                          src="/public/masked-icon7.svg"
-                        />
-                      </div>
-                    </div>
-                    <div
-                      class="h-[36px] rounded-[4px] overflow-hidden flex flex-col items-center justify-center py-[6px] px-[7px] box-border"
-                    >
-                      <div
-                        class="w-[21px] flex-1 flex flex-row items-center justify-center gap-[8px]"
-                      >
-                        <img
-                          class="h-[20px] w-[16px] relative hidden"
-                          alt=""
-                          src="/public/masked-icon6.svg"
-                        />
+              <!-- 쿠폰명 -->
+              <div class="w-full flex flex-col gap-2 items-start">
+                <label class="text-sm font-medium text-gray-700">쿠폰명*</label>
+                <input id="cpContent" name="cpContent" data-str="쿠폰명"
+                  class="w-full p-2 border rounded-lg focus:outline-none h-[40px] text-[18px]" type="text"
+                  placeholder="예: 사이트 오픈 1주년 할인 쿠폰" />
+              </div>
 
-                        <div
-                          class="self-stretch relative text-[14px] tracking-[0.4px] leading-[24px] uppercase font-medium font-[Roboto] text-[#2196f3] text-left"
-                        >
-                          Ok
-                        </div>
-                        <img
-                          class="h-[20px] w-[16px] relative hidden"
-                          alt=""
-                          src="/public/masked-icon7.svg"
-                        />
-                      </div>
+              <!-- 사용기간 -->
+              <div class="w-full flex flex-col gap-2 items-start">
+                <label class="text-sm font-medium text-gray-700">사용기간*</label>
+                <div id="date-picker"
+                  class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[11px]">
+                  <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
+                  <input readonly id="date-picker-input" data-str="사용기간"
+                    class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+                    type="text" placeholder="전체 기간" />
+                </div>
+
+                <!-- 쿠폰 형식 (지정 발행/쿠폰코드 생성)-->
+                <div class="w-full flex flex-col gap-2 items-start">
+                  <label class="text-sm font-medium text-gray-700">쿠폰형식*</label>
+                  <div class="flex gap-4">
+                    <label class="flex items-center gap-2">
+                      <input type="radio" name="couponType" value="DESIGNATED" class="h-4 w-4 cursor-pointer" checked />
+                      <span class="text-base">지정 발행</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input type="radio" name="couponType" value="DOWNLOAD" class="h-4 w-4 cursor-pointer" />
+                      <span class="text-base">쿠폰코드 생성</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 발행대상(지정 발행일 때 선택) -->
+                <div id="selectGrade" class="w-full flex flex-col gap-2 items-start">
+                  <label class="text-sm font-medium text-gray-700">발행대상*</label>
+                  <select id="selectGradeOption"
+                    class="flex items-center justify-between p-2 border rounded-lg h-[40px] w-[120px] text-[18px]">
+                    <option value="all">전체</option>
+                    <option value="방랑자">방랑자</option>
+                    <option value="탐험가">탐험가</option>
+                    <option value="개척자">개척자</option>
+                  </select>
+                </div>
+
+                <!-- 쿠폰 코드 유형(쿠폰코드 생성일 때 선택) -->
+                <div id="selectCodeType" class="w-full flex-col gap-2 items-start hidden">
+                  <label class="text-sm font-medium text-gray-700">쿠폰 코드 유형 *</label>
+                  <div class="flex flex-row gap-2">
+                    <div class="flex items-center gap-2">
+                      <input type="radio" name="codeType" value="MULTI_USE" class="h-4 w-4 cursor-pointer" checked />
+                      <span class="text-base">다회성 쿠폰 코드</span>
                     </div>
+
+                    <div class="flex items-center gap-2">
+                      <input type="radio" name="codeType" value="SINGLE_USE" class="h-4 w-4 cursor-pointer" />
+                      <span class="text-base">일회성 쿠폰 코드</span>
+                    </div>
+                  </div>
+
+                  <!-- 쿠폰 코드 유형(다회성 쿠폰 코드일 때 선택) -->
+                  <div id="MULTI_USE" class="p-[10px] text-[16px] gap-2 flex flex-col">
+                    <div class="flex flex-row gap-2">
+                      <label class="mr-2">쿠폰 코드 입력: </label>
+                      <input type="text" data-str="쿠폰 코드" id="MULTI_USEInput" class="border-[2px] w-[150px]"
+                        placeholder="예시: LUCKY777" />
+                    </div>
+                    <div class="flex flex-row gap-2 items-center">
+                      <label class="mr-2">등록 가능 횟수: </label>
+                      <input type="text" data-str="등록 가능 횟수" id="MULTI_USECount" class="border-[2px] w-[100px]"
+                        placeholder="예시: 7" />
+                      <span class="text-base">회</span>
+                    </div>
+                  </div>
+
+                  <!-- 쿠폰 코드 유형(일회성 쿠폰 코드일 때 선택) -->
+                  <div id="SINGLE_USE" class="p-[10px] text-[16px] gap-2 flex-col hidden">
+                    <label class="mr-2">* 쿠폰 코드는 자동으로 생성됩니다. </label>
+                    <div class="flex flex-row gap-2 items-center">
+                      <label class="mr-2">생성할 쿠폰 코드 개수: </label>
+                      <input type="text" data-str="생성할 쿠폰 코드 개수" id="SINGLE_USECount" class="border-[2px] w-[100px]"
+                        placeholder="예시: 7" />
+                      <span class="text-base">회</span>
+                    </div>
+                  </div>
+                </div>
+
+
+                <!-- 할인구분 -->
+                <div class="w-full flex flex-col gap-2 items-start">
+                  <label class="text-sm font-medium text-gray-700">할인구분*</label>
+                  <div class="flex gap-4">
+                    <label class="flex items-center gap-2">
+                      <input type="radio" name="saleType" value="PERCENT" class="h-4 w-4 cursor-pointer" checked />
+                      <span class="text-base">할인율</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input type="radio" name="saleType" value="PRICE" class="h-4 w-4 cursor-pointer" />
+                      <span class="text-base">할인 금액</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- 할인율 -->
+                <div id="salePercent" class="w-full flex flex-col gap-2 items-start">
+                  <label class="text-sm font-medium text-gray-700">할인율*</label>
+                  <div class="flex items-center gap-2 h-[40px] text-[18px]">
+                    <input id="salePercentInput" data-str="할인율" type="text"
+                      class="p-2 border rounded-lg w-full shadow-sm" />
+                    <span class="text-base">%</span>
+                  </div>
+                </div>
+
+                <!-- 할인금액 -->
+                <div id="salePrice" class="w-full flex flex-col gap-2 items-start" style="display: none;">
+                  <label class="text-sm font-medium text-gray-700">할인금액*</label>
+                  <div class="flex items-center gap-2 h-[40px] text-[18px]">
+                    <input id="salePriceInput" data-str="할인 금액" type="text"
+                      class="p-2 border rounded-lg w-full shadow-sm" />
+                    <span class="text-base">KRW</span>
                   </div>
                 </div>
               </div>
             </form>
           </div>
-          <div
-            class="self-stretch flex flex-col items-start justify-start pt-[32px] px-[0px] pb-[0px] box-border max-w-full"
-          >
-            <div
-              class="w-[560px] hidden flex-col items-start justify-start pt-[0px] px-[0px] pb-[24px] box-border max-w-full"
-            >
-              <img
-                class="self-stretch relative max-w-full overflow-hidden max-h-full"
-                alt=""
-                src="/public/divider1.svg"
-              />
-            </div>
-            <div
-              class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[24px] pb-[24px] gap-[12px] mq900:flex-wrap"
-            >
-              <button
-                class="cursor-pointer border-[#d0d5dd] border-[1px] border-solid py-[8px] px-[20px] bg-[#fff] flex-1 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-[8px] box-border overflow-hidden flex flex-row items-center justify-center min-w-[188px] hover:bg-[#e6e6e6] hover:border-[#b5bdc4] hover:border-[1px] hover:border-solid hover:box-border"
-              >
-                <a
-                  class="[text-decoration:none] relative text-[16px] leading-[24px] font-semibold font-[Inter] text-[#344154] text-left inline-block min-w-[54px]"
-                  >Cancel</a
-                >
-              </button>
-              <button
-                class="cursor-pointer border-[#7e56d9] border-[1px] border-solid py-[8px] px-[20px] bg-[#7e56d9] flex-1 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-[8px] box-border overflow-hidden flex flex-row items-center justify-center min-w-[188px] hover:bg-[#9970f2] hover:border-[#9970f2] hover:border-[1px] hover:border-solid hover:box-border"
-              >
-                <div
-                  class="relative text-[16px] leading-[24px] font-semibold font-[Inter] text-[#fff] text-left inline-block min-w-[63px]"
-                >
-                  Confirm
-                </div>
-              </button>
-            </div>
+
+          <!-- 모달 쿠폰 등록 버튼 -->
+          <div class=" flex gap-4 p-6">
+            <button id="addConfirm" class="w-[80px] h-[35px] bg-[#d4d8f1] rounded-[4px] text-[18px]">등록</button>
+            <button id="addCancel"
+              class="w-[80px] h-[35px] border-[2px] border-[#d4d8f1] rounded-[4px] text-[18px]">취소</button>
           </div>
         </div>
       </div>
+      
+      <!-- 쿠폰 상세보기 모달-->
+      <!-- 쿠폰 상세보기 모달-->
+      <!-- 쿠폰 상세보기 모달-->
+      <!-- 쿠폰 상세보기 모달-->
+      <!-- 쿠폰 상세보기 모달-->
+      <div id="history_modal" class="relative top-[40px] w-[720px] rounded-[12px] bg-[#fff] shrink-0 flex flex-col leading-[normal] tracking-[normal] m-auto">
+        <!-- 헤더 -->
+        <section class="bg-[#fff] flex flex-col items-end justify-center relative rounded-[12px] w-full">
+          <button id="closeHistory" class="w-auto flex flex-row items-end justify-end p-[10px]"> 
+            <img class="h-[24px] w-[24px] shrink-0" src="/image/admin/icon-cancel.png" />
+          </button>  
+          <header class="w-full bg-[#fff] flex flex-col items-start justify-center gap-[10px] text-left text-[18px] text-[#101828] mb-2">
+            <p class="px-[30px] font-semibold text-[inherit] whitespace-nowrap">쿠폰 사용 내역</p>
+            <!-- <div class="px-[40px] text-[14px] text-[#475467] whitespace-nowrap">메세지</div> -->
+          </header>
+        </section>
+
+        <!-- 본문 영역 -->
+        <section
+          class="w-full flex flex-col  justify-start px-[30px] py-[10px] text-[14px] ">
+          <!-- 발행 현황 -->
+          <div class="flex flex-row items-start justify-start gap-[10.5px] text-[12px] text-[#989898]"> 
+            <div>발행</div>
+            <div id="issueCount">N</div>
+            <div>건 /</div>
+            <div>사용</div>
+            <div id="useCount">N</div>
+            <div>건</div>
+          </div>
+
+          <!-- 테이블 영역 -->
+          <div id="historyTableSection"
+            class="w-[660px] flex flex-row items-center justify-center text-center text-[16px]"
+            >
+            <table id="historyTable" class="w-full font-medium hover">
+              <thead >
+                <tr class="bg-[#d4d8f1]">
+                  <th>쿠폰 코드</th>
+                  <th>회원 번호</th>
+                  <th>만료일</th>
+                  <th>사용일</th>
+                  <th>사용주문</th>
+                </tr>
+              </thead>
+              <tbody id="tbody" class="bg-[#ffffff] pt-[10px] mb-[50px] font-normal"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
     </div>
-  </body>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+  <script type="text/javascript" src="/js/datepicker-singledate.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $('#listTable').DataTable();
+
+      $('#historyTable').DataTable({
+        pageLength: 10,
+        lengthChange: false,
+      }).columns.adjust().draw();
+
+
+      // 쿠폰 등록 모달
+      $('#addButton').click(function () {
+        $('#modalOverlay').show();
+        $('#history_modal').css('display', 'none');
+        $('#addCoupon').css('display', 'flex');
+      });
+
+      // 쿠폰 등록 모달 닫기
+      $('#closeAddModal').click(function () {
+        $('#modalOverlay').css('display', 'none');
+      });
+
+      // 쿠폰 등록 모달 닫기
+      $('#closeHistory').click(function () {
+        $('#modalOverlay').css('display', 'none');
+      });
+
+      // 쿠폰 등록 취소
+      $('#addCancel').click(function () {
+        $('#modalOverlay').css('display', 'none');
+      });
+
+      // 모달 외부 클릭 방지
+      $('#modalOverlay').click(function (event) {
+        if (event.target === this) {
+          $(this).css('display', 'none');
+        }
+      });
+
+      // 쿠폰 상세보기 모달
+      $('#history').click(function () {
+        $('#modalOverlay').show();
+        $('#addCoupon').css('display', 'none');
+        $('#history_modal').show();
+      });
+
+      $('#reset-button').click(function () {
+        $('#date-range-picker-input').val('');
+        $('#search-keyword').val('');
+        $('#search-type').val('all');
+      }); 
+
+      // 쿠폰 형식 - 라디오 버튼 클릭 이벤트
+      $('input[name="couponType"]').change(function () {
+        if ($(this).val() === 'DESIGNATED') {
+          $('#selectCodeType').css('display', 'none');  // 쿠폰 코드 유형 숨기기
+          $('#selectGrade').css('display', 'flex');  // 발행 대상 보이기
+        } else if ($(this).val() === 'DOWNLOAD') {
+          $('#selectGrade').css('display', 'none');  // 발행 대상 숨기기
+          $('#selectCodeType').css('display', 'flex');  // 쿠폰 코드 유형 보이기
+        }
+      });
+
+      // 쿠폰 코드 유형 - 라디오 버튼 클릭 이벤트
+      $('input[name="codeType"]').change(function () {
+        if ($(this).val() === 'MULTI_USE') {
+          $('#SINGLE_USE').css('display', 'none');  // 쿠폰 코드 유형 숨기기
+          $('#MULTI_USE').css('display', 'flex');  // 발행 대상 보이기
+        } else if ($(this).val() === 'SINGLE_USE') {
+          $('#MULTI_USE').css('display', 'none');  // 발행 대상 숨기기
+          $('#SINGLE_USE').css('display', 'flex');  // 쿠폰 코드 유형 보이기
+        }
+      });
+
+      // 할인 구분 - 라디오 버튼 클릭 이벤트
+      $('input[name="saleType"]').change(function () {
+        if ($(this).val() === 'PERCENT') {
+          $('#salePrice').css('display', 'none');  // 쿠폰 코드 유형 숨기기
+          $('#salePercent').css('display', 'flex');  // 발행 대상 보이기
+        } else if ($(this).val() === 'PRICE') {
+          $('#salePercent').css('display', 'none');  // 발행 대상 숨기기
+          $('#salePrice').css('display', 'flex');  // 쿠폰 코드 유형 보이기
+        }
+      });
+
+      // 모달 내 쿠폰 등록 버튼 클릭 이벤트 
+      $('#addConfirm').click(function () {
+
+        // 폼 요소 생성
+        var form = $('<form></form>');
+        form.attr('method', 'post');
+        form.attr('action', '/admin/coupon/add'); // 서버 엔드포인트 URL로 변경
+
+        // 쿠폰명
+        var cpContent = $('#cpContent').val().trim();
+
+        // 쿠폰명 유효성 검사
+        console.log("cpContent: " + cpContent);
+        if (cpContent === '') {
+          alert($('#cpContent').data('str') + "을 입력하세요");
+          $('#cpContent').focus();
+          return;
+        }
+
+        // 쿠폰명폼 데이터 추가
+        form.append($('<input>').attr('type', 'hidden').attr('name', 'cpContent').attr('value', cpContent));
+
+
+        // 사용기간
+        var date = $('#date-picker-input').val();
+
+        // 사용기간 유효성 검사
+        var cpContent = $('#date-picker-input').val().trim();
+        console.log("date: " + date);
+        if (cpContent === '') {
+          alert($('#date-picker-input').data('str') + "을 입력하세요");
+          $('#date-picker-input').focus();
+          return;
+        }
+
+        // 사용기간 폼 데이터 추가
+        var dates = date.split(' ~ ');
+        date = dates[1];
+        form.append($('<input>').attr('type', 'hidden').attr('name', 'date').attr('value', date));
+
+
+        // 쿠폰형식
+        var couponType = $('input[name="couponType"]:checked').val();
+        console.log("couponType: " + couponType);
+
+        if (couponType === 'DESIGNATED') { //지정발행이면 
+
+          // 지정발행 폼 데이터 추가
+          form.append($('<input>').attr('type', 'hidden').attr('name', 'cpMethod').attr('value', couponType));
+
+          // 발행대상
+          var selectGrade = $('#selectGradeOption').val();
+          console.log("selectGrade: " + selectGrade);
+
+          // 발행대상 폼 데이터 추가
+          form.append($('<input>').attr('type', 'hidden').attr('name', 'selectGrade').attr('value', selectGrade)); //**따로 받아야함
+
+        } else if (couponType === 'DOWNLOAD') { //쿠폰코드생성이면
+          // 쿠폰 코드 유형
+          var codeType = $('input[name="codeType"]:checked').val();
+          console.log("codeType: " + codeType);
+
+          if (codeType === 'MULTI_USE') { //다회성 쿠폰 코드
+
+            // 다회성 쿠폰 코드 폼 데이터 추가
+            form.append($('<input>').attr('type', 'hidden').attr('name', 'cpMethod').attr('value', codeType));
+
+            // 쿠폰 코드 입력
+            var code = $('#MULTI_USEInput').val().trim();
+            console.log("code: " + code);
+
+            // 쿠폰 코드 유효성 검사
+            if (code === '') {
+              alert($('#MULTI_USEInput').data('str') + "을 입력하세요");
+              $('#MULTI_USEInput').focus();
+              return;
+            }
+
+            //쿠폰 코드 폼 데이터 추가
+            form.append($('<input>').attr('type', 'hidden').attr('name', 'code').attr('value', code)); //**따로 받아야함
+
+            // 등록 가능 횟수
+            var count = $('#MULTI_USECount').val().trim();
+            console.log("count: " + count);
+
+            // 등록 가능 횟수 유효성 검사
+            if (count === '') {
+              alert($('#MULTI_USECount').data('str') + "을 입력하세요");
+              $('#MULTI_USECount').focus();
+              return;
+            }
+
+            //등록 가능 횟수 폼 데이터 추가
+            form.append($('<input>').attr('type', 'hidden').attr('name', 'count').attr('value', count)); //**따로 받아야함
+
+          } else if (codeType === 'SINGLE_USE') { //일회성 쿠폰 코드
+
+            // 일회성 쿠폰 코드 폼 데이터 추가
+            form.append($('<input>').attr('type', 'hidden').attr('name', 'cpMethod').attr('value', codeType));
+
+            // 생성할 쿠폰 코드 개수
+            var count = $('#SINGLE_USECount').val();
+            console.log("count: " + count);
+
+            // 생성할 쿠폰 코드 개수 유효성 검사
+            if (count === '') {
+              alert($('#MULTI_USECount').data('str') + "을 입력하세요");
+              $('#MULTI_USECount').focus();
+              return;
+            }
+
+            // 생성할 쿠폰 코드 개수 폼 데이터 추가
+            form.append($('<input>').attr('type', 'hidden').attr('name', 'count').attr('value', count)); //**따로 받아야함
+
+          }
+        }
+
+        // 할인구분
+        var saleType = $('input[name="saleType"]:checked').val();
+        console.log("saleType: " + saleType);
+
+        // 할인구분 폼 데이터 추가
+        form.append($('<input>').attr('type', 'hidden').attr('name', 'cpCate').attr('value', saleType));
+
+
+        if (saleType === 'PERCENT') { //할인율
+          // 할인율
+          var salePercent = $('#salePercentInput').val().trim();
+
+
+
+          console.log("salePercent: " + salePercent);
+          form.append($('<input>').attr('type', 'hidden').attr('name', 'cpSale').attr('value', salePercent));
+
+          // 할인율 유효성 검사
+          if (salePercent === '') {
+            alert($('#salePercentInput').data('str') + "을 입력하세요");
+            $('#salePercentInput').focus();
+            return;
+          }
+
+        } else if (saleType === 'PRICE') { //할인금액
+          // 할인금액
+          var salePrice = $('#salePriceInput').val().trim();
+
+          // 할인율 유효성 검사
+          if (salePrice === '') {
+            alert($('#salePriceInput').data('str') + "을 입력하세요");
+            $('#salePriceInput').focus();
+            return;
+          }
+
+          form.append($('<input>').attr('type', 'hidden').attr('name', 'cpSale').attr('value', salePrice));
+          console.log("salePrice: " + salePrice);
+        }
+
+        // 폼을 body에 추가하고 제출
+        $('body').append(form);
+        form.submit();
+
+      });
+    });
+
+    function showDetails(id) {
+      // // 행의 ID를 가져옴
+      // var row = button.closest('tr');
+      // var id = row.getAttribute('data-id');
+      console.log("id: "+id);
+
+      // AJAX 요청을 통해 데이터를 가져옴
+      fetch(`/admin/coupon/history?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+
+          // 모달에 데이터를 채움
+          var modalContent = $('#tbody'); // jQuery 사용
+          modalContent.empty(); // 기존 내용 지우기
+
+          
+
+          // 반복문으로 데이터를 채움, 문자열 생성 후 한 번에 추가
+          if (data.list && data.list.length > 0) {
+
+            var issueCount = $('#issueCount'); // jQuery 사용
+            issueCount.empty(); // 기존 내용 지우기
+            issueCount.append(data.list.filter(item => item.issuedCouponDTO).length);
+
+            var useCount = $('#useCount'); // jQuery 사용
+            useCount.empty(); // 기존 내용 지우기
+            useCount.append(data.list.filter(item => item.issuedCouponDTO && item.issuedCouponDTO.icStatus === 'USED').length);
+          
+
+            let rowsHtml = '';
+            data.list.forEach(item => {
+                rowsHtml += `
+                    <tr>
+                        <td>${item.issuedCouponDTO.icCode != null ? item.issuedCouponDTO.icCode : '회원지정'}</td>
+                        <td>${item.issuedCouponDTO.mIdx != null ? item.issuedCouponDTO.mIdx : '미발급'}</td>
+                        <td>${item.couponDTO.cpStartEnd.end}</td>
+                        <td>${item.issuedCouponDTO.icStatus === 'USED' ?  item.payTime : '미사용'}</td>
+                        <td>${item.issuedCouponDTO.icStatus === 'USED' ?  item.paymentId : '미사용'}</td>
+                    </tr>
+                `;
+          });
+          modalContent.append(rowsHtml); 
+        } else {
+            // 데이터가 없는 경우 처리
+            modalContent.append('<tr><td colspan="5">등록된 데이터가 없습니다</td></tr>');
+        }
+
+            // 모달을 표시함 (jQuery 사용)
+            $('#modalOverlay').show();
+            $('#addCoupon').hide();
+            $('#history_modal').show();
+        })
+        .catch(error => {
+          console.error('Error fetching coupon details:', error);
+        });
+    }
+
+  </script>
+</body>
+
 </html>

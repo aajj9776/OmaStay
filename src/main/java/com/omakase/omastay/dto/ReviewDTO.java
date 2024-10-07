@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -56,5 +55,10 @@ public class ReviewDTO {
         this.revStatus = revStatus;
         this.revRating = revRating;
         this.revNone = revNone;
+    }
+
+    public void setRevFileImageNameVo(String fName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setRevFileImageNameVo'");
     }
 }

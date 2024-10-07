@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring", unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE)
 public interface MemberMapper {
     MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
 
@@ -16,12 +16,14 @@ public interface MemberMapper {
     @Mapping(source = "memberProfile.email", target = "memberProfile.email")
     @Mapping(source = "memberProfile.pw", target = "memberProfile.pw")
     @Mapping(source = "memberProfile.status", target = "memberProfile.status")
+    @Mapping(target = "reservations", ignore = true)
     MemberDTO toMemberDTO(Member member);
 
     @Mapping(source = "GIdx", target = "grade.id")
     @Mapping(source = "memberProfile.email", target = "memberProfile.email")
     @Mapping(source = "memberProfile.pw", target = "memberProfile.pw")
     @Mapping(source = "memberProfile.status", target = "memberProfile.status")
+    @Mapping(target = "reservations", ignore = true)
     Member toMember(MemberDTO memberDTO);
 
     List<MemberDTO> toMemberDTOList(List<Member> memberList);

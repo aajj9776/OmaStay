@@ -1,46 +1,41 @@
 package com.omakase.omastay.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-import org.codehaus.groovy.runtime.dgmimpl.arrays.IntegerArrayGetAtMetaMethod;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-
-import com.mysql.cj.conf.HostInfo;
-import com.omakase.omastay.dto.GradeDTO;
-import com.omakase.omastay.dto.HostInfoDTO;
-import com.omakase.omastay.dto.MemberDTO;
-import com.omakase.omastay.dto.ReviewCommentDTO;
-import com.omakase.omastay.dto.ReviewDTO;
-import com.omakase.omastay.dto.RoomInfoDTO;
-import com.omakase.omastay.entity.Review;
-import com.omakase.omastay.entity.ReviewComment;
-import com.omakase.omastay.service.ReviewCommentService;
-import com.omakase.omastay.service.ReviewService;
-import com.omakase.omastay.util.FileRenameUtil;
-
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.google.cloud.WriteChannel;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.omakase.omastay.dto.GoodDTO;
+import com.omakase.omastay.dto.GradeDTO;
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.ImageDTO;
+import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.ReviewCommentDTO;
+import com.omakase.omastay.dto.ReviewDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.entity.Review;
+import com.omakase.omastay.service.FileUploadService;
+import com.omakase.omastay.service.GoodService;
+import com.omakase.omastay.service.ReviewCommentService;
+import com.omakase.omastay.service.ReviewService;
 
 
 
@@ -51,21 +46,35 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @Autowired
+    private GoodService goodService;
+
+    @Autowired
     private ReviewCommentService reviewCommentService;
 
+    @Autowired
+    private FileUploadService fileUploadService;
 
-    @RequestMapping("/review_insert")
+    @Value("${upload}")
+    private String uploadPath;
+
+
+    @PostMapping("/review_insert")
     @ResponseBody
     public ResponseEntity<Integer> addReview(@RequestParam Map<String, String> params) { 
         System.out.println("들어는 왔니?");
         System.out.println("param"+params);
         ReviewDTO reviewDTO = new ReviewDTO();
         String revContent = params.get("revContent");
+        System.out.println("왜 잘리는거냐"+revContent);
         String revRatingStr = params.get("revRating"); 
         float revRating = Float.parseFloat(revRatingStr);
+        Integer memIdx = Integer.parseInt(params.get("memIdx"));
+        Integer hIdx = Integer.parseInt(params.get("hIdx"));
 
         reviewDTO.setRevContent(revContent);
         reviewDTO.setRevRating(revRating);
+        reviewDTO.setMemIdx(memIdx);
+        reviewDTO.setHIdx(hIdx);
 
         List<String> onames = new ArrayList<>();
         List<String> fnames = new ArrayList<>();
@@ -90,10 +99,12 @@ public class ReviewController {
 
     @RequestMapping("/review_list")
     @ResponseBody
-    public ResponseEntity<List<Map<String, Object>>> allReviewList() {
-           List<Review> reviewList = reviewService.findAllReview(); // 전체 리뷰 목록 조회
-
+    public ResponseEntity<Map<String, Object>> allReviewList(@RequestParam(value = "sort", defaultValue = "최신순") String sortOption, @RequestParam("hIdx") Integer hIdx) {
+           System.out.println("호텔번호 잘 들어오냐"+hIdx);
+            List<Review> reviewList = reviewService.findAllReview(sortOption,hIdx); 
+            List<ReviewCommentDTO> allReviewCommentList = reviewCommentService.findAllReviewComment(); 
             List<Map<String, Object>> responseList = new ArrayList<>();
+            
             for (Review review : reviewList) {
                 ReviewDTO reviewDTO = new ReviewDTO();
                 reviewDTO.setRevContent(review.getRevContent());
@@ -102,6 +113,7 @@ public class ReviewController {
                 reviewDTO.setResIdx(review.getReservation().getId()); 
                 reviewDTO.setHIdx(review.getHostInfo().getId());
                 reviewDTO.setRevDate(review.getRevDate());
+                reviewDTO.setId(review.getId());
 
                 MemberDTO memberDTO = new MemberDTO();
                 memberDTO.setMemName(review.getMember().getMemName()); 
@@ -112,8 +124,28 @@ public class ReviewController {
                 HostInfoDTO hostInfoDTO = new HostInfoDTO();
                 hostInfoDTO.setHname(review.getHostInfo().getHname());
 
+                ReservationDTO reservationDTO = new ReservationDTO();
+                reservationDTO.setMemIdx(review.getMember().getId());
+
                 GradeDTO gradeDTO = new GradeDTO();
                 gradeDTO.setGCate(review.getMember().getGrade().getGCate());
+
+                Integer revIdx = review.getId();
+                List<ReviewCommentDTO> matchedReviewCommentList = new ArrayList<>(); 
+        
+                for (ReviewCommentDTO comment : allReviewCommentList) {
+                    if (comment.getRevIdx().equals(revIdx)) { 
+                        matchedReviewCommentList.add(comment); 
+                    }
+                }
+
+                List<ReviewDTO> reviewImages = reviewService.getAllReviewImages(hIdx);
+                for(ReviewDTO reviewDtoImg : reviewImages){
+                    System.out.println("히히 이미지나오냐?"+reviewImages);
+                    String reviewImg = uploadPath + "review/" +reviewDtoImg.getRevFileImageNameVo().getFName();
+                    System.out.println("히히 이건 나오냐"+reviewImg);
+    
+                }
 
                 Map<String, Object> response = new HashMap<>();
                 response.put("review", reviewDTO);
@@ -121,12 +153,16 @@ public class ReviewController {
                 response.put("hostinfo",hostInfoDTO);
                 response.put("room", roomInfoDTO);
                 response.put("grade",gradeDTO);
-
-                responseList.add(response);
-            
-
+                response.put("reservation", reservationDTO);
+                response.put("reviewImage",reviewImages);
+                response.put("reviewComment", matchedReviewCommentList.isEmpty() ? null : matchedReviewCommentList); 
+                responseList.add(response); 
             }
-                return ResponseEntity.ok(responseList);
+        
+            Map<String, Object> response = new HashMap<>();
+            response.put("reviewList", responseList); 
+        
+            return ResponseEntity.ok(response);
         }
     
     
@@ -136,60 +172,55 @@ public class ReviewController {
         return "search/review_write";
     }
 
+     
+
     @PostMapping("/upload_image")
     @ResponseBody
-    public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
-        String realUploadDir = "C:/Final/OmaStay/src/main/resources/static/upload"; // 실제 파일 저장 경로
+    public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file) throws Exception {
         Map<String, String> map = new HashMap<>();
-        
+
         if (file.getSize() > 0) {
-            // 디렉토리 생성
-            File uploadDir = new File(realUploadDir);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-            
             // 파일명 생성
-            String oname = file.getOriginalFilename();
-            String fname = FileRenameUtil.checkSameFileName(oname, realUploadDir);
-            
-            // 파일 저장
-            file.transferTo(new File(realUploadDir, fname));
-            
-            // 파일을 제공할 URL 생성
-            map.put("url", "/upload/" + fname);
-            map.put("fname", fname);
-            map.put("oname",oname);
+            String originalFilename = file.getOriginalFilename();
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFilename;
+    
+            // 파일 업로드를 FileUploadService로 처리 (Google Cloud Storage에 저장)
+            String fileUrl = fileUploadService.uploadFile(file, "review", uniqueFileName);
+    
+            // 저장된 파일의 URL 및 파일명 정보 리턴
+            map.put("url", fileUrl);
+            map.put("fname", uniqueFileName);  // 저장된 파일 이름
+            map.put("oname", originalFilename); // 원본 파일 이름
         }
+    
         return map;
     }
 
-    @GetMapping("/upload/{filename}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable("filename") String filename) {
-        String realUploadDir = "C:/Final/OmaStay/src/main/resources/static/upload";
-        Path file = Paths.get(realUploadDir).resolve(filename);
-        Resource resource;
+    //추천 저장
+    @RequestMapping("/good_insert")
+    public  ResponseEntity<Map<String, Object>> goodInsert(GoodDTO goodDTO) {
+        System.out.println("추천 들어왔냥"+goodDTO);
 
-        try {
-            resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
-            } else {
-                throw new RuntimeException("파일을 찾을 수 없습니다.");
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("파일을 찾을 수 없습니다.", e);
-        }
+        Map<String, Object> result = goodService.addGood(goodDTO); 
+
+        return ResponseEntity.ok(result); 
     }
 
-   
+    @RequestMapping("/review_resCount")
+    public ResponseEntity<List<String>> resCounts() {
+        System.out.println("예약 수 가져오기");
+        List<Object[]> resCounts = reviewService.getResCounts();
 
-    
-
-    
+        List<String> resCountsList = new ArrayList<>();
+        for (Object[] resCount : resCounts) {
+            String resCountString = String.format("memIdx:%d 예약개수:%d", resCount[0], resCount[1]);
+            resCountsList.add(resCountString);
+        }
+        return ResponseEntity.ok(resCountsList);
+    }
 }
+    
+
+  
     
     

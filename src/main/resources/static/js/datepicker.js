@@ -1,8 +1,3 @@
-// <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-/*<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>*/
-//위에 있는거 같이 첨부해야됨
-
 $(document).ready(function () {
     var start = moment();
     var end = moment().add(1, 'days');
@@ -14,6 +9,7 @@ $(document).ready(function () {
     if (startDate && endDate) {
         start = moment(startDate);
         end = moment(endDate);
+
     }
 
     function setDateRangePicker(start, end) {
@@ -24,6 +20,10 @@ $(document).ready(function () {
 
 
         $('#date-range-picker-input').val(displayText);
+
+        // 로컬 날짜 형식으로 값을 설정하는 부분
+        $('#check-in').val(start.format('YYYY-MM-DDTHH:mm:ss'));
+        $('#check-out').val(end.format('YYYY-MM-DDTHH:mm:ss'));
     }
 
     $('#date-range-picker').daterangepicker({
@@ -37,6 +37,7 @@ $(document).ready(function () {
         },
         showDropdowns: true,
         autoApply: true,
+        linkedCalendars: false,
         minDate: moment(),
         maxDate: moment().add(6, 'months'),
         timePicker: false,
