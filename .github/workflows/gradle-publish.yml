@@ -78,6 +78,8 @@ jobs:
         ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/nginx/ssl/accounts
           sudo chmod -R 755 /home/ubuntu/OmaStay/nginx/ssl/accounts
+          sudo chmod -R 777 /home/ubuntu/OmaStay/nginx
+          sudo chmod -R 777 /home/ubuntu/OmaStay/certbot
         EOF
 
     - name: SSH into EC2 and run Docker Compose
