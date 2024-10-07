@@ -223,6 +223,12 @@ public class MemberService {
         return MemberMapper.INSTANCE.toMemberDTO(member);
 
     }
+
+    public List<MemberDTO> getMemList(){
+        List<Member> list = memberRepository.getMemList();
+
+        return MemberMapper.INSTANCE.toMemberDTOList(list);
+    }
     
 }
 
