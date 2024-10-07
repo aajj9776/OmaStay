@@ -7,6 +7,8 @@ import com.omakase.omastay.entity.IssuedCoupon;
 import com.omakase.omastay.mapper.IssuedCouponMapper;
 import com.omakase.omastay.repository.IssuedCouponRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +34,21 @@ public class IssuedCouponService {
     }
 
 
+    @Transactional
     public IssuedCouponDTO useCoupon(IssuedCouponDTO issuedCouponDTO) {
         IssuedCoupon issuedCoupon = IssuedCouponMapper.INSTANCE.toIssuedCoupon(issuedCouponDTO);
         IssuedCoupon res = issuedCouponRepository.findById(issuedCoupon.getId()).get();
         res.setIcStatus(IcStatus.USED);
         IssuedCouponDTO result = IssuedCouponMapper.INSTANCE.toIssuedCouponDTO(issuedCouponRepository.save(res));
         return result;
+    }
+
+    @Transactional
+    public IssuedCouponDTO cancelCoupon(Integer icIdx, Integer memIdx) {
+        IssuedCoupon coupon = issuedCouponRepository.findByIdAndMemIdx(icIdx, memIdx);
+        coupon.setIcStatus(IcStatus.UNUSED);
+        return IssuedCouponMapper.INSTANCE.toIssuedCouponDTO(coupon);
+
     }
 
 

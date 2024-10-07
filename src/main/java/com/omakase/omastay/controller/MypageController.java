@@ -1,5 +1,8 @@
 package com.omakase.omastay.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +26,6 @@ import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
 import com.omakase.omastay.dto.custom.ReservationWithImage;
-import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.service.MyPageService;
 import com.omakase.omastay.service.RoomInfoService;
 
@@ -68,8 +70,46 @@ public class MypageController {
     }
 
     @GetMapping("/reservation")
-    public ModelAndView reservation() {
+    public ModelAndView reservation(@RequestParam("id") Integer id) {
+        System.out.println("회원번호 " + id);
         ModelAndView mv = new ModelAndView();
+        boolean newTrip = false;
+
+        List<ReservationDTO> reservation = myPageService.getNewReservationInfo(id);
+        System.out.println("리스트사이즈" +reservation.size());
+        if( reservation != null && reservation.size() > 0){
+            newTrip = true;
+        }
+        List<ReservationWithImage> reservationsWithImages = new ArrayList<>();
+
+        for (ReservationDTO res : reservation) {
+            RoomInfoDTO room = roomInfoService.getRoomInfo(res.getRoomIdx());
+            System.out.println("호텔정보" + room.getHIdx());
+            ImageDTO image = roomInfoService.getImage(room.getHIdx());
+            System.out.println("이미지" + image);
+            String img = realPath + "host/" + image.getImgName().getFName();
+
+            HostInfoDTO host = roomInfoService.getHostInfo(room.getHIdx());
+            LocalDateTime start = res.getStartEndVo().getStart();
+            LocalDateTime end = res.getStartEndVo().getEnd();
+
+            LocalDate startDate = start.toLocalDate();
+            LocalDate endDate = end.toLocalDate();
+            
+            // 날짜 차이 계산 (며칠 차이인지 계산)
+            long totalNights = ChronoUnit.DAYS.between(startDate, endDate);
+
+            ReservationWithImage reservationWithImage = new ReservationWithImage();
+            reservationWithImage.setReservation(res);
+            reservationWithImage.setImage(img);
+            reservationWithImage.setHostName(host.getHname());
+            reservationWithImage.setStart(startDate);
+            reservationWithImage.setEnd(endDate);
+            reservationWithImage.setDate(totalNights);
+            reservationsWithImages.add(reservationWithImage);
+        }
+        mv.addObject("reservation", reservationsWithImages);
+        mv.addObject("newTrip", newTrip);
 
         mv.setViewName("mypage/user-reservation");
         return mv;
@@ -147,6 +187,24 @@ public class MypageController {
         map.put("payment", payment);
         return map;
     }
+
+
+    @GetMapping("/noCancel_content")
+    public String noCancel() {
+        return "reservation/modal/noCancel_content";
+    }
+
+
+    @PostMapping("/noCancel_content")
+    @ResponseBody
+    public Map<String, Object> noCancel(@RequestParam("id") Integer id) {
+        System.out.println("들어와야해요" + id);
+        Map<String, Object> map = new HashMap<String, Object>();
+        PaymentDTO payment = myPageService.getPayment(id);
+        map.put("payment", payment);
+        return map;
+    }
+
 
     //이거 3개는 모달창
     @RequestMapping("/room_info")

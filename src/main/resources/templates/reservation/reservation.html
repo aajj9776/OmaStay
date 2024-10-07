@@ -1083,16 +1083,18 @@
           encodeURIComponent(resName) +
           "&resEmail=" +
           encodeURIComponent(resEmail) +
-          "&couponId=" +
-          encodeURIComponent(couponId) +
           "&nsalePrice=" +
           encodeURIComponent(nsale_price) +
-          "&payCoupon=" +
-          encodeURIComponent(couponPrice) +
-          "&payPoint=" +
-          encodeURIComponent(usePoints) +
           "&payGrade=" +
           encodeURIComponent(amount);
+
+        if(couponId > 0 ){
+          url += "&couponId=" + encodeURIComponent(couponId);
+        }
+
+        if( couponPrice > 0){
+          url += "&payCoupon=" + encodeURIComponent(couponPrice) + "&payPoint=" + encodeURIComponent(usePoints);
+        }
 
         if (user != null) {
           url += "&memIdx=" + encodeURIComponent(user.id);
