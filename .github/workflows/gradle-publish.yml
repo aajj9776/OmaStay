@@ -86,6 +86,8 @@ jobs:
           cd /home/ubuntu/OmaStay
           docker-compose down
           docker-compose up -d --build
-          docker-compose run certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org
+          # Initial SSL certificate request
+          docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org
+          # Restart services to apply the certificate
           docker-compose restart nginx
         EOF
