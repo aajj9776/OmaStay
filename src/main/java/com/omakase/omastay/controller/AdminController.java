@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.CouponDTO;
@@ -74,6 +77,7 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.io.ByteArrayInputStream;
 
 @Controller
 @RequestMapping("/admin")
@@ -328,8 +332,8 @@ public class AdminController {
 
         CalculationDTO calculation = calculationService.getCal(cIdx);
         mv.addObject("period", calculation.getCalMonth());
-        mv.addObject("hname", calculation.getHname());
-        System.out.println("hName : " + calculation.getHname());    
+        // mv.addObject("hname", calculation.getHname());
+        // System.out.println("hName : " + calculation.getHname());    
         
         List<SalesCustomDTO> list = salesService.getMonthlySalesByHost(calculation);
         
@@ -610,32 +614,24 @@ public class AdminController {
 
         if (f.getSize() > 0) { 
 
-            String realPath = application.getRealPath(upload); //실행되는 tomcat 서버의 경로
+            String realPath = upload + "notice";
 
             fname = f.getOriginalFilename();
             fname = FileRenameUtil.checkSameFileName(fname, realPath);
 
-            try { 
-                File uploadDir = new File(realPath);
-
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-
-                // 전달된 파일을 저장합니다.
-                File dest = new File(uploadDir, fname);
-                f.transferTo(dest);
-                map.put("fname", fname);
-
-            } catch (IOException e) {
+            try {
+                System.out.println("fname"+fname);
+                String fileUrl = fileUploadService.uploadFile(f, "notice", fname);
+                System.out.println("파일 업로드 URL: " + fileUrl);
+                map.put("url", fileUrl);
+            } catch (Exception e) {
                 e.printStackTrace();
                 map.put("error", "File upload failed");
             }
+            
         } else {
             map.put("error", "File is empty");
         }
-
-        map.put("url", upload + System.getProperty("file.separator") + fname);
 
         return map;
     }
@@ -646,17 +642,18 @@ public class AdminController {
     public ResponseEntity<InputStreamResource> fileDownload(@RequestParam("fName") String fName)
             throws FileNotFoundException, UnsupportedEncodingException {
 
-        //String realPath = application.getRealPath(upload);
+                // 버킷 이름과 파일 이름을 추출
+        String bucketName = upload.replace("https://storage.googleapis.com/", "").replace("/", "");
+        String filePath = "notice/" + fName; // 파일 경로 설정
 
-        // 전체경로를 만들어서 File객체 생성
-        String fullPath = upload+"notice/"+ fName; 
-        File file = new File(fullPath);
+        Storage storage = StorageOptions.getDefaultInstance().getService();
+        Blob blob = storage.get(bucketName, filePath);
 
-        if (!file.exists() || !file.isFile()) {
+        if (blob == null || !blob.exists()) {
             throw new IOException("File not found");
         }
-        FileInputStream fis = new FileInputStream(file); 
-        BufferedInputStream bis = new BufferedInputStream(fis); 
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(blob.getContent());
         InputStreamResource resource = new InputStreamResource(bis);
 
         HttpHeaders headers = new HttpHeaders();
@@ -667,9 +664,36 @@ public class AdminController {
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .contentLength(file.length())
+                .contentLength(blob.getSize())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
+
+
+
+        // //String realPath = application.getRealPath(upload);
+
+        // // 전체경로를 만들어서 File객체 생성
+        // String fullPath = upload+"notice/"+ fName; 
+        // File file = new File(fullPath);
+
+        // if (!file.exists() || !file.isFile()) {
+        //     throw new IOException("File not found");
+        // }
+        // FileInputStream fis = new FileInputStream(file); 
+        // BufferedInputStream bis = new BufferedInputStream(fis); 
+        // InputStreamResource resource = new InputStreamResource(bis);
+
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.add(HttpHeaders.CONTENT_DISPOSITION,
+        //         "attachment;filename=" + new String(fName.getBytes("UTF-8"), "ISO-8859-1"));
+        // headers.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream;charset=8859_1");
+        // headers.add(HttpHeaders.CONTENT_ENCODING, "binary");
+
+        // return ResponseEntity.ok()
+        //         .headers(headers)
+        //         .contentLength(file.length())
+        //         .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        //         .body(resource);
     }
 
     /***************************** 1:1문의 시작 *****************************/
