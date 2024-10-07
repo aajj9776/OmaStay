@@ -1,14 +1,13 @@
 package com.omakase.omastay.controller;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.io.File;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
@@ -24,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +35,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
@@ -50,12 +52,11 @@ import com.omakase.omastay.dto.custom.HostCalculationDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
+import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
 import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
-import com.omakase.omastay.entity.AdminMember;
-import com.omakase.omastay.entity.Image;
-import com.omakase.omastay.entity.Sales;
+
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
@@ -66,7 +67,7 @@ import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.ImageService;
-import com.omakase.omastay.service.PaymentService;
+
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.ReservationService;
 import com.omakase.omastay.service.ReviewCommentService;
@@ -78,8 +79,8 @@ import com.omakase.omastay.util.FileRenameUtil;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import io.jsonwebtoken.io.IOException;
+import java.io.ByteArrayInputStream;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -140,12 +141,10 @@ public class HostController {
     @Autowired
     private HttpServletRequest request;
 
-    @Autowired
-    private ServletContext application;
-
     @Value("${upload}")
     private String upload;
 
+    //세션 업데이트
     @RequestMapping("/updateSession")
     public ResponseEntity<String> updateSession(HttpSession session) {
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
@@ -173,6 +172,7 @@ public class HostController {
         return "host/host_findpw";
     }
 
+    //호스트 자주묻는질문
     @RequestMapping("/faq")
     public ModelAndView hostfaq() {
         
@@ -188,6 +188,7 @@ public class HostController {
 
     }
 
+    //호스트 숙소소개
     @RequestMapping("/info")
     public ModelAndView hostinfo(){
         System.out.println("숙소소개 컨트롤러 옴");
@@ -208,7 +209,6 @@ public class HostController {
 
             HostInfoCustomDTO hostInfoCustomDTO = hostInfoService.findHostInfoByHostInfoId(hostMypageDTO.getHostInfo().getId());
             List<ImageDTO> image = imageService.getHostImages(hostMypageDTO.getHostInfo().getId());
-            System.out.println("이미지:"+image.get(0).getImgName().getFName());
             mv.addObject("image", image);
             mv.addObject("hostMypageDTO", hostMypageDTO);
             mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
@@ -221,21 +221,7 @@ public class HostController {
         return mv;
     }
 
-    @RequestMapping("/inquiry")
-    public String hostinquiry() {
-        return "host/host_inquiry";
-    }
-
-    @RequestMapping("/inquirydetail")
-    public String hostinquirydetail() {
-        return "host/host_inquirydetail";
-    }
-
-    @RequestMapping("/inquiryreg")
-    public String hostinquiryreg() {
-        return "host/host_inquiryreg";
-    }
-
+    //호스트 메인
     @RequestMapping("/main")
     public ModelAndView hostmain() {
 
@@ -296,6 +282,7 @@ public class HostController {
         return mv;
     }
 
+    //호스트 마이페이지
     @RequestMapping("/mypage")
     public ModelAndView hostmypage() {
 
@@ -329,7 +316,6 @@ public class HostController {
 
     @RequestMapping("/paymentdetail")
     public String hostpaymentdetail() {
-
         return "host/host_paymentdetail";
     }
     
@@ -358,6 +344,7 @@ public class HostController {
         return "host/host_roomlist";
     }
 
+    //호스트 객실 등록 페이지 이동
     @RequestMapping("/roomreg")
     public ModelAndView hostroomreg() {
 
@@ -389,7 +376,7 @@ public class HostController {
     }
 
 
-
+    //호스트 이용규칙 등록
     @RequestMapping("/rules")
     public ModelAndView hostrules() {
 
@@ -444,6 +431,7 @@ public class HostController {
         return "host/host_sales";
     }
 
+    //호스트 회원가입 id 중복체크
     @RequestMapping("/idcheck")
     @ResponseBody
     public int hostidcheck(@RequestParam("id") String id) {
@@ -457,6 +445,7 @@ public class HostController {
         }
     }
 
+    //호스트 회원가입, 마이페이지 이메일 발송
     @RequestMapping("/emailsend")  
     public ResponseEntity<String> sendEmailPath(@RequestParam("email") String email) throws MessagingException { 
         try {
@@ -466,7 +455,8 @@ public class HostController {
         }
         return ResponseEntity.ok("success");  
     }  
-  
+    
+    //호스트 회원가입, 마이페이지 이메일 인증번호 체크
     @RequestMapping("/emailchecknum")  
     public ResponseEntity<String> sendEmailAndCode(@RequestParam("email") String email, @RequestParam("code") String code){  
         if (emailService.verifyEmailCode(email, code)) {  
@@ -475,6 +465,7 @@ public class HostController {
         return ResponseEntity.notFound().build();  
     }
 
+    //호스트 회원가입
     @RequestMapping("/hostregist")
     public ResponseEntity<String> hostregister(@RequestParam("id") String id, @RequestParam("pw") String pw, @RequestParam("email") String email) {
         boolean result = adminMemberService.hostregist(id, pw, email);
@@ -485,6 +476,7 @@ public class HostController {
         }
     }
 
+    //호스트 로그인
     @RequestMapping("/hostlogin")
     public ModelAndView hostlogin(@RequestParam("id") String id, @RequestParam("pw") String pw) {
         AdminMemberDTO adminMemberDTO = adminMemberService.hostlogin(id,pw);
@@ -503,8 +495,9 @@ public class HostController {
         return mv;
     }
 
+    //호스트 pw 찾기 시 id, email 일치여부 확인 후 이메일 발송
     @RequestMapping("/idemailsend")  
-    public ResponseEntity<String> sendIdEmail(@RequestParam("id") String id, @RequestParam("email") String email) throws MessagingException { 
+    public ResponseEntity<String> sendIdEmail(@RequestParam("id") String id, @RequestParam("email") String email) throws MessagingException, java.io.IOException { 
         boolean isValid = adminMemberService.hostfindpw(id, email);
 
         if (isValid) {
@@ -516,6 +509,7 @@ public class HostController {
         }
     }  
 
+    //호스트 비밀번호 변경
     @RequestMapping("/changepw")
     public ResponseEntity<String> hostchangepw(@RequestParam("id") String id, @RequestParam("pw") String pw, @RequestParam("email") String email) {
         boolean result = adminMemberService.hostchagepw(id, email, pw);
@@ -526,12 +520,14 @@ public class HostController {
         }
     }
 
+    //호스트 로그아웃
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("adminMember");
+        session.invalidate();
         return "host/host_login"; 
     }
 
+    //호스트 마이페이지 등록
     @RequestMapping("/mypagereg")
     @ResponseBody
     public ResponseEntity<String> mypagereg(@RequestBody HostMypageDTO hostMypageDTO) {
@@ -552,6 +548,7 @@ public class HostController {
         return ResponseEntity.ok("success");
     }
 
+    //호스트 숙소소개 등록
     @RequestMapping("/hostinforeg")
     public ResponseEntity<String> hostinforeg(@RequestPart("hostInfoCustomDTO") HostInfoCustomDTO hostInfoCustomDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         System.out.println(hostInfoCustomDTO.getHostInfo().getYAxis());
@@ -599,6 +596,7 @@ public class HostController {
         return ResponseEntity.ok("success");
     }
 
+    //호스트 이용규칙 등록
     @RequestMapping("/rulesreg")
     public ResponseEntity<String> rulesreg(@RequestBody HostRulesDTO hostRulesDTO) {
 
@@ -612,6 +610,7 @@ public class HostController {
         return ResponseEntity.ok("success");
     }
 
+    //호스트 객실추가
     @RequestMapping("/roominforeg")
     public ResponseEntity<List<String>> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO roomRegDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
 
@@ -661,6 +660,7 @@ public class HostController {
         return ResponseEntity.ok(imageUrls);
     }
 
+    //호스트 입점요청
     @RequestMapping("/requestadmin")
     public ModelAndView requestadmin() {
 
@@ -679,7 +679,7 @@ public class HostController {
         return mv;
     }
 
-    // 룸 전체 리스트
+    // 호스트 객실 전체 리스트
     @RequestMapping("/roomlist/getList")
     @ResponseBody
     public Map<String, Object> roomlist() {
@@ -696,7 +696,7 @@ public class HostController {
         return map;
     }
 
-    // 룸 검색
+    // 호스트 객실 검색
     @RequestMapping("/roomlist/search")
     @ResponseBody
     public Map<String, Object> roomsearch(
@@ -722,7 +722,7 @@ public class HostController {
         return map;
     }
 
-    // 게시물 삭제하기
+    // 호스트 객실 삭제
     @ResponseBody
     @RequestMapping("/roomlist/delete")
     public Map<String, Object> roomdelete(@RequestParam("ids") List<Integer> ids) {
@@ -737,7 +737,7 @@ public class HostController {
         return map;
     }
 
-    // 룸 상세보기
+    // 호스트 객실 상세보기
     @RequestMapping(value = "/roomlist/view", method = RequestMethod.GET)
     public ModelAndView roomdetail(@RequestParam("id") String id) {
 
@@ -805,6 +805,7 @@ public class HostController {
         return map;
     }
 
+    //호스트 공지사항 상세보기
     @RequestMapping(value = "noticelist/view", method = RequestMethod.GET)
     public ModelAndView noticedetail(@RequestParam("id") String id) {
 
@@ -814,28 +815,30 @@ public class HostController {
         if (id != null) {
             ServiceDTO sDto = serviceService.getServices(Integer.parseInt(id));
             mv.addObject("sDto", sDto);
+            mv.addObject("storage", upload);
         }
 
         return mv;
     }
 
-    // 파일 다운로드
+    //호스트 공지사항 첨부 다운로드
     @RequestMapping(value = "/fileDownload", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<InputStreamResource> fileDownload(@RequestParam("fName") String fName)
             throws FileNotFoundException, UnsupportedEncodingException {
 
-        String realPath = application.getRealPath(upload);
+        // 버킷 이름과 파일 이름을 추출
+        String bucketName = upload.replace("https://storage.googleapis.com/", "").replace("/", "");
+        String filePath = "notice/" + fName; // 파일 경로 설정
 
-        // 전체경로를 만들어서 File객체 생성
-        String fullPath = realPath + System.getProperty("file.separator") + fName;
-        File file = new File(fullPath);
+        Storage storage = StorageOptions.getDefaultInstance().getService();
+        Blob blob = storage.get(bucketName, filePath);
 
-        if (!file.exists() || !file.isFile()) {
+        if (blob == null || !blob.exists()) {
             throw new IOException("File not found");
         }
-        FileInputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(blob.getContent());
         InputStreamResource resource = new InputStreamResource(bis);
 
         HttpHeaders headers = new HttpHeaders();
@@ -846,7 +849,7 @@ public class HostController {
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .contentLength(file.length())
+                .contentLength(blob.getSize())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
@@ -890,6 +893,7 @@ public class HostController {
         return map;
     }
 
+    //호스트 리뷰 상세보기
     @RequestMapping(value = "reviewlist/view", method = RequestMethod.GET)
     public ModelAndView reviewdetail(@RequestParam("id") String id) {
 
@@ -899,13 +903,21 @@ public class HostController {
         
         ReviewDTO review = reviewService.getReview(Integer.parseInt(id));
         mv.addObject("review", review);
+        if(review.getRevFileImageNameVo().getFName() != null){
+            String fnames = review.getRevFileImageNameVo().getFName();
+            List<String> fname= Arrays.asList(fnames.split(","));
+            mv.addObject("fname", fname);
+        }
         
         ReviewCommentDTO reviewCommentDTO = reviewCommentService.getRevComment(review);
         mv.addObject("reviewCommentDTO", reviewCommentDTO);
+
+        mv.addObject("storage", upload);
         
         return mv;
     }
 
+    //호스트 리뷰답변 등록
     @RequestMapping(value = "/regRevComment")
 public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revIdx, @RequestParam("rcComment") String rcComment) {
     
@@ -915,6 +927,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
     return ResponseEntity.ok("success");
     }
 
+    //호스트 리뷰답변 삭제
     @ResponseBody
     @RequestMapping("/delRevComment")
     public ResponseEntity<String> delRevComment(@RequestParam("revIdx") String revIdx) {
@@ -928,7 +941,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return ResponseEntity.ok("success");
     }
 
-    // 예약 전체 리스트
+    // 호스트 예약 전체 리스트
     @RequestMapping("/reslist/getList")
     @ResponseBody
     public Map<String, Object> reslist() {
@@ -947,7 +960,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return map;
     }
 
-    // 예약 검색
+    // 호스트 예약 검색
     @RequestMapping("/reslist/search")
     @ResponseBody
     public Map<String, Object> resSearch(
@@ -972,10 +985,10 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return map;
     }
 
-    // 예약 확정
+    // 호스트 예약 확정
     @ResponseBody
     @RequestMapping("/reslist/confirm")
-    public Map<String, Object> resConfirm(@RequestParam("ids") List<Integer> ids) {
+    public Map<String, Object> resConfirm(@RequestParam("ids") List<Integer> ids) throws java.io.IOException {
 
         Map<String, Object> map = new HashMap<>();
 
@@ -983,13 +996,25 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
 
         map.put("cnt", cnt);
 
+        // 확정 이메일 발송
+        if (cnt > 0) {
+            for (Integer id : ids) {
+                HostReservationEmailDTO reservationDTO = reservationService.getRes(id);
+                try {
+                    emailService.sendResConfirmEmail(reservationDTO);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         return map;
     }
 
-    // 예약 취소
+    // 호스트 예약 취소
     @ResponseBody
     @RequestMapping("/reslist/reject")
-    public Map<String, Object> resReject(@RequestParam("ids") List<Integer> ids) {
+    public Map<String, Object> resReject(@RequestParam("ids") List<Integer> ids) throws java.io.IOException {
 
         Map<String, Object> map = new HashMap<>();
 
@@ -1014,13 +1039,19 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
             PaymentController paymentController = applicationContext.getBean(PaymentController.class);
             paymentController.cancelPayment(cancelRequest);
           }
+          HostReservationEmailDTO reservationEmailDTO = reservationService.getRes(id);
+            try {
+                emailService.sendResCancelEmail(reservationEmailDTO);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
         }
 
         return map;
     }
 
-    // 예약 상세보기
+    // 호스트 예약 상세보기
     @RequestMapping(value = "/reslist/view", method = RequestMethod.GET)
     public ModelAndView resDetail(@RequestParam("id") String id) {
 
@@ -1045,7 +1076,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return mv;
     }
 
-    // 매출 전체 리스트
+    // 호스트 매출 전체 리스트
     @RequestMapping("/saleslist/getList")
     @ResponseBody
     public Map<String, Object> saleslist() {
@@ -1069,7 +1100,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return map;
     }
  
-    // 매출 검색
+    // 호스트 매출 검색
     @RequestMapping("/saleslist/search")
     @ResponseBody
     public Map<String, Object> salesSearch(
@@ -1096,7 +1127,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return map;
     }
 
-    // 정산 현재년도 전체 리스트
+    // 호스트 정산 현재년도 전체 리스트
     @RequestMapping("/paylist/getList")
     @ResponseBody
     public Map<String, Object> paylist() {
@@ -1115,7 +1146,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return map;
     }
 
-    // 정산 년도 검색 리스트
+    // 호스트 정산 년도 검색 리스트
     @RequestMapping("/paylist/search")
     @ResponseBody
     public Map<String, Object> paySearch(@RequestParam(value = "year", required = false) Integer year) {
@@ -1134,7 +1165,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return map;
     }
 
-    // 정산 요청하기
+    // 호스트 정산 요청하기
     @RequestMapping("/paylist/request")
     @ResponseBody
     public Map<String, Object> payRequest(@RequestBody List<HostCalculationDTO> items) {
@@ -1161,7 +1192,7 @@ public ResponseEntity<String> regRevComment(@RequestParam("revIdx") String revId
         return map;
     }
 
-    // 정산 상세보기
+    // 호스트 정산 상세보기
     @RequestMapping(value = "/paylist/view", method = RequestMethod.GET)
     public ModelAndView payDetail(@RequestParam("year") Integer year, @RequestParam("month") Integer month) throws Exception {
 

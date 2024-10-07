@@ -126,10 +126,11 @@
               success: function (data, status, xhr) {
                   var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
                   var link = document.createElement('a');
-                  link.href = window.URL.createObjectURL(blob);
+                  var url = window.URL.createObjectURL(blob);
+                  link.href = url;
                   link.download = fName;
                   link.click();
-                  alert("다운로드 되었습니다.");
+                  window.URL.revokeObjectURL(url);
               },
               error: function (xhr, status, error) {
                   alert("다운로드에 실패했습니다.");

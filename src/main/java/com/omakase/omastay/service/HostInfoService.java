@@ -43,10 +43,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -274,6 +276,7 @@ public class HostInfoService {
         if(hostInfo.getHStep() == HStep.ROOM) {
             if(hostInfo.getHStatus() != HStatus.APPLY && hostInfo.getHStatus() != HStatus.APPROVE) {
                 hostInfo.setHStatus(HStatus.APPLY); // hStep을 3으로 설정
+                hostInfo.setHRegTime(LocalDateTime.now());
             }
         }
 

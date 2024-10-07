@@ -220,11 +220,11 @@
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b th:if="${revDayCount != null}" th:text="${revDayCount}"
+                          <b th:if="${revWeekCount != null}" th:text="${revWeekCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b th:if="${revDayCount != null}" th:text="${revDayCount}"
+                          <b th:if="${revMonthCount != null}" th:text="${revMonthCount}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
@@ -312,7 +312,7 @@
                 } else if (hStep.trim().toUpperCase() === "INFO") {
                     $("#mypage-link img").attr("src", "/image/host/check.png");
                     $("#info-link img").attr("src", "/image/host/check.png");
-                } else if (hStep.trim().toUpperCase() === "RULES") {
+                } else if (hStep.trim().toUpperCase() === "RULE") {
                     $("#mypage-link img").attr("src", "/image/host/check.png");
                     $("#info-link img").attr("src", "/image/host/check.png");
                     $("#rules-link img").attr("src", "/image/host/check.png");
@@ -350,6 +350,18 @@
                 type: 'POST',
                 success: function (response) {
                     alert('등록 요청되었습니다.'); 
+                    $.ajax({
+                            url: '/host/updateSession',
+                            type: 'POST',
+                            success: function(sessionResponse) {
+                                if (sessionResponse === 'success') {
+                                  location.reload();
+                                }
+                            },
+                            error: function(error) {
+                                console.error('Error updating session:', error);
+                            }
+                        });
                 },
                 error: function (error) {
                     alert('등록 요청 실패하였습니다.');
