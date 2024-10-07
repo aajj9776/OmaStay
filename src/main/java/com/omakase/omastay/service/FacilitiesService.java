@@ -62,7 +62,7 @@ public class FacilitiesService {
 
     //숙소 검색 필터링
     @Transactional(readOnly = true)
-    public AccommodationResponseDTO search(FilterDTO filterDTO, Pageable pageable) {
+    public AccommodationResponseDTO search(FilterDTO filterDTO, Pageable pageable, boolean isModal) {
         // 검색어 필터링 된 룸인포 키값과 호스트인포 키값 리스트 가져오기(예약이 불가능한 객실 포함)
         List<Tuple> allHostRoomIds = searchKeyword(filterDTO);
 
@@ -241,7 +241,7 @@ public class FacilitiesService {
         //모든 결과 리스트
 
         // 최종 결과 반환
-        return paginateAccommodations(pageable, resultMap);
+        return paginateAccommodations(pageable, resultMap, isModal);
     }
 
 
@@ -256,7 +256,7 @@ public class FacilitiesService {
         return roomInfoRepository.personFiltering(filterDTO, keyword);
     }
 
-    private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap) {
+    private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap, boolean isModal) {
         List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
 
         // 기본 페이지네이션 결과 생성
@@ -269,11 +269,17 @@ public class FacilitiesService {
 
         // 첫 번째 페이지 시작 인덱스 그대로 사용
         int limitedPageEnd = start + 100; // 첫 번째 페이지 start + 100개의 항목
-
         limitedPageEnd = Math.min(limitedPageEnd, resultAccommodationsDTOList.size());
 
         if (start < resultAccommodationsDTOList.size()) {
             limitedResultList = resultAccommodationsDTOList.subList(start, limitedPageEnd);
+        }
+
+        // isModal이 true인 경우 제한된 결과만 반환
+        if (isModal) {
+            AccommodationResponseDTO modalResult = new AccommodationResponseDTO();
+            modalResult.setAccommodationsMap(limitedResultList);
+            return modalResult;
         }
 
         // Pagination 정보 설정 (기본 페이지네이션 기준)
@@ -294,10 +300,6 @@ public class FacilitiesService {
         result.setAccommodationsMap(limitedResultList); // 수정된 limitedResultList 설정
         return result;
     }
-
-
-
-
 
     public List<HostAvgPriceDTO> AvgPrice(List<Price> priceList, @NotNull StartEndVo startEndDay) {
         System.out.println("가격 리스트=" + priceList);

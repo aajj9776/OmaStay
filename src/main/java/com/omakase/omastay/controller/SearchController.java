@@ -70,7 +70,7 @@ public class SearchController {
         System.out.println("서치: "  + search);
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable);
+        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable, false);
 
         List<ResultAccommodationsDTO> resultAccommodations = accommodationResponseDTO.getAccommodations();
         List<ResultAccommodationsDTO> resultAccommodationsMap = accommodationResponseDTO.getAccommodationsMap();
@@ -115,14 +115,11 @@ public class SearchController {
         search.setStartEndDay(new StartEndVo(checkInDateTime, checkOutDateTime));
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable);
+        AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable, true);
 
-        List<ResultAccommodationsDTO> resultAccommodations = accommodationResponseDTO.getAccommodations();
         List<ResultAccommodationsDTO> resultAccommodationsMap = accommodationResponseDTO.getAccommodationsMap();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("resultAccommodations", resultAccommodations);
-        response.put("pageNation", accommodationResponseDTO.getPageNation());
         response.put("resultAccommodationsMap", resultAccommodationsMap);
         response.put("includeSearchBar", true);
 

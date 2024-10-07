@@ -23,7 +23,7 @@ public class CalculationDTO {
     private LocalDateTime calCompleteTime;
     private String calNone;
 
-    private String hname;
+    private String hName;
 
     public CalculationDTO(Calculation calculation) {
         this.id = calculation.getId();

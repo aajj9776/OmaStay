@@ -156,7 +156,7 @@ public class CalculationService {
     public CalculationDTO getCal(Integer cIdx){
         Calculation cal = calculationRepository.findOneById(cIdx);
         CalculationDTO calDTO = CalculationMapper.INSTANCE.toCalculationDTO(cal);
-        calDTO.setHname(cal.getHostInfo().getHname());
+        calDTO.setHName(cal.getHostInfo().getHname());
         return calDTO;
     }
 }

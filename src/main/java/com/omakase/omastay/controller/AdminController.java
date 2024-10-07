@@ -226,8 +226,8 @@ public class AdminController {
 
         CalculationDTO calculation = calculationService.getCal(cIdx);
         mv.addObject("period", calculation.getCalMonth());
-        mv.addObject("hname", calculation.getHname());
-        System.out.println("hName : " + calculation.getHname());    
+        mv.addObject("hname", calculation.getHName());
+        System.out.println("hName : " + calculation.getHName());
         
         List<SalesCustomDTO> list = salesService.getMonthlySalesByHost(calculation);
         
