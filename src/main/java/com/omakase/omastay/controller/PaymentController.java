@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.PaymentDTO;
+import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.custom.CancelRequestDTO;
+import com.omakase.omastay.dto.custom.PointCouponDTO;
+import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.PaymentService;
+import com.omakase.omastay.service.PointService;
 import com.omakase.omastay.service.ReservationService;
 
 @Controller
@@ -30,11 +35,17 @@ public class PaymentController {
     @Autowired
     private ReservationService reservationService;
 
+    @Autowired
+    private IssuedCouponService couponService;
+    
+    @Autowired
+    private PointService pointService;
+
 
     @PostMapping("/cancel")
     public ResponseEntity<String> cancelPayment(@RequestBody CancelRequestDTO cancelRequest) {
         String paymentKey = cancelRequest.getPaymentKey();
-        System.out.println("키"+ paymentKey);
+        System.out.println("취소요청"+ cancelRequest);
           // URL 생성 (UriComponentsBuilder 사용)
         String url = UriComponentsBuilder.fromHttpUrl("https://api.tosspayments.com/v1/payments/{paymentKey}/cancel")
                 .buildAndExpand(paymentKey)
@@ -58,6 +69,12 @@ public class PaymentController {
             PaymentDTO paymentDTO = paymentService.getPayment(cancelRequest);
             if( paymentDTO != null){
                 ReservationDTO reservationDTO = reservationService.getReservation(cancelRequest.getResIdx());
+                if( paymentDTO.getIcIdx() != null){
+                    couponService.cancelCoupon(cancelRequest.getIcIdx(), cancelRequest.getMemIdx());
+                }
+                if( paymentDTO.getPIdx() != null){
+                    PointDTO point = pointService.getCancelPoint(paymentDTO.getPIdx(), cancelRequest.getMemIdx());
+                }
             }
 
         }else{

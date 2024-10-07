@@ -1,19 +1,21 @@
 package com.omakase.omastay.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.mapper.PointMapper;
 import com.omakase.omastay.repository.MemberRepository;
 import com.omakase.omastay.repository.PointRepository;
+import com.omakase.omastay.repository.ReservationRepository;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class PointService {
@@ -24,6 +26,9 @@ public class PointService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     public List<PointDTO> getAllPoints(){
         List<Point> pList = pointRepository.findAll();
 
@@ -31,6 +36,7 @@ public class PointService {
     }
 
     
+    @Transactional
     public int addPoint(String email, PointDTO pDto){
         int cnt=0; 
 
@@ -91,6 +97,21 @@ public class PointService {
         return sum.get(0);
 
     }
+
+
+    @Transactional
+    public PointDTO getCancelPoint(Integer pIdx, Integer memIdx) {
+        Point point = pointRepository.findByIdAndMemIdx(pIdx, memIdx);
+        int value = Math.abs(point.getPValue());
+        int pSum = point.getPSum();
+        int sum = value + pSum;
+        point.setPSum(sum);
+        point.setPValue(value);
+        point.setPContent("예약취소");
+        Point save = pointRepository.save(point);
+        return PointMapper.INSTANCE.toPointDTO(save);
+    }
+
 
    
 }

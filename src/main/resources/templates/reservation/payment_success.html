@@ -74,6 +74,8 @@
       <input type="hidden" id="memIdx" name="memIdx" value="" />
       <input type="hidden" id="nonEmail" name="nonEmail" value="" />
       <input type="hidden" id="nonName" name="nonName" value="" />
+      <input type="hidden" id="icIdx" name="icIdx" value="" />
+      <input type="hidden" id="pIdx" name="pIdx" value="" />
     </form>
 
     <form action="/coupon/use" id="updateCoupon" method="post">
@@ -149,14 +151,17 @@
         }
 
         if (couponId != null) {
+          console.log("쿠폰번호나와요?" + couponId)
+          $("#icIdx").val(couponId);
           sendCoupon(); // 쿠폰 사용 처리
         }
         if (payPoint != null) {
           usePoint(); // 포인트 사용 처리
+        } else {
+          // 폼 전송
+          $("#insertPayment").submit();
         }
 
-        // 폼 전송
-        $("#insertPayment").submit();
       }
 
       function usePoint() {
@@ -167,7 +172,11 @@
             memIdx: memIdx,
             pValue: payPoint,
           },
-        }).done(function (data) {});
+        }).done(function (data) {
+            $("#pIdx").val(data.point.id);
+
+            $("#insertPayment").submit();
+        });
       }
 
       function goIndex() {
