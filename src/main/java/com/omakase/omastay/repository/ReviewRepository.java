@@ -1,12 +1,13 @@
 package com.omakase.omastay.repository;
  
 import com.omakase.omastay.entity.HostInfo;
-import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.repository.custom.ReviewRepositoryCustom;
 
 import io.lettuce.core.dynamic.annotation.Param;
+
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -37,7 +38,16 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
      @Query("SELECT r FROM Review r WHERE r.hostInfo.id = :hIdx")
     List<Review> findByReviewAndImage(@Param("hIdx") Integer hIdx);
 
+    //오늘날짜 리뷰 조회
+    @Query("SELECT r FROM Review r WHERE r.hostInfo = :hostInfo AND (r.revDate = :date AND r.revStatus = 0)")
+    List<Review> findReviewByDate(@Param("date") LocalDateTime date, @Param("hostInfo") HostInfo hostInfo);
 
+    //이번주 리뷰 조회
+    @Query("SELECT r FROM Review r WHERE r.hostInfo = :hostInfo AND ((r.revDate <= :endOfWeek AND r.revDate >= :startOfWeek) AND r.revStatus = 0)")
+    List<Review> findReviewByWeek(@Param("startOfWeek") LocalDateTime startOfWeek, @Param("endOfWeek") LocalDateTime endOfWeek, @Param("hostInfo") HostInfo hostInfo);
 
-   
+    //이번달 리뷰 조회\
+    @Query("SELECT r FROM Review r WHERE r.hostInfo = :hostInfo AND ((r.revDate <= :endOfMonth AND r.revDate >= :startOfMonth) AND r.revStatus = 0)")
+    List<Review> findReviewByMonth(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth, @Param("hostInfo") HostInfo hostInfo);
+
 }

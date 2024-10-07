@@ -61,6 +61,8 @@ spring:
         project-id: artful-mystery-436200-n4
         bucket: omastay
   thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
     enums:
       use-class-for-enum-values: true
   jackson:

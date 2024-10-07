@@ -1,5 +1,7 @@
 package com.omakase.omastay.entity.enumurate;
+import lombok.Getter;
 
+@Getter
 public enum HCate {
     /*모텔
     * 호텔/리조트
@@ -8,7 +10,7 @@ public enum HCate {
     * */
     MOTEL("모텔"),
     HOTEL_RESORT("호텔/리조트"),
-    POOL_VILLA("풀빌라"),
+    POOL_VILLA("펜션/풀빌라"),
     GUESTHOUSE_HANOK("게하/한옥");
 
     private final String description;
@@ -17,7 +19,4 @@ public enum HCate {
         this.description = description;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }

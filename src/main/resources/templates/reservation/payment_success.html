@@ -72,6 +72,8 @@
       <input type="hidden" id="payPoint" name="payPoint" value="" />
       <input type="hidden" id="payGrade" name="payGrade" value="" />
       <input type="hidden" id="memIdx" name="memIdx" value="" />
+      <input type="hidden" id="nonEmail" name="nonEmail" value="" />
+      <input type="hidden" id="nonName" name="nonName" value="" />
     </form>
 
     <form action="/coupon/use" id="updateCoupon" method="post">
@@ -100,10 +102,16 @@
       const payPoint = urlParams.get("payPoint");
       const memIdx = urlParams.get("memIdx");
 
+      let user = JSON.parse(localStorage.getItem("user"));
+
       let pay_method;
       let pay_content;
       let sale_price;
       let json = {}; // 이곳에서 json 변수를 선언
+
+      function sendNoUserData() {
+        $("#noReservation").submit();
+      }
 
       function sendData() {
         // 결제 방식
@@ -121,8 +129,13 @@
         $("#orderId").val(orderId);
         $("#paymentKey").val(paymentKey);
 
-        $("#resEmail").val(resEmail);
-        $("#resName").val(resName);
+        if (user == null) {
+          $("#nonEmail").val(resEmail);
+          $("#nonName").val(resName);
+        } else {
+          $("#resEmail").val(resEmail);
+          $("#resName").val(resName);
+        }
 
         console.log(payGrade);
         console.log(payCoupon);
@@ -131,7 +144,9 @@
         $("#payGrade").val(payGrade);
         $("#payPoint").val(payPoint);
 
-        $("#memIdx").val(memIdx);
+        if (memIdx != null) {
+          $("#memIdx").val(memIdx);
+        }
 
         if (couponId != null) {
           sendCoupon(); // 쿠폰 사용 처리
@@ -139,6 +154,7 @@
         if (payPoint != null) {
           usePoint(); // 포인트 사용 처리
         }
+
         // 폼 전송
         $("#insertPayment").submit();
       }
@@ -213,7 +229,9 @@
             id: couponId,
           },
         }).done(function (data) {
-          console.log(data);
+          if (data.result == "fail") {
+            alert("쿠폰 사용 성공");
+          }
         });
       }
     </script>

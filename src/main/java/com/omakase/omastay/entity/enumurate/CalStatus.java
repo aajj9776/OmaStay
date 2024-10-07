@@ -1,6 +1,7 @@
 package com.omakase.omastay.entity.enumurate;
 
 public enum CalStatus {
-    UNCALCULATION , //미정산
-    CALCULATION //정산
+    REQUEST, //요청
+    APPROVE, //승인
+    COMPLETED //정산완료
 }

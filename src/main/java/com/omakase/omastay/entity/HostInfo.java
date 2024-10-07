@@ -1,5 +1,7 @@
 package com.omakase.omastay.entity;
 
+import java.time.LocalDateTime;
+
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
@@ -25,7 +27,7 @@ public class HostInfo {
     @Column(name = "h_idx", nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_idx", referencedColumnName = "ad_idx")
     private AdminMember adminMember;
 
@@ -98,5 +100,8 @@ public class HostInfo {
     //대표번호
     @Column(name = "h_phone", nullable = false, length = 100)
     private String hphone;
+
+    @Column(name = "h_reg_time")
+    private LocalDateTime hRegTime;
 
 }

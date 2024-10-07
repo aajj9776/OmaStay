@@ -1,15 +1,11 @@
 package com.omakase.omastay.service;
 import com.omakase.omastay.dto.HostInfoDTO;
-import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.entity.HostInfo;
-import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
-import com.omakase.omastay.entity.enumurate.ImgCate;
 import com.omakase.omastay.mapper.HostInfoMapper;
-import com.omakase.omastay.mapper.ImageMapper;
 import com.omakase.omastay.mapper.ReviewMapper;
 import com.omakase.omastay.repository.ReviewRepository;
 import com.omakase.omastay.vo.FileImageNameVo;
@@ -17,7 +13,9 @@ import com.omakase.omastay.vo.FileImageNameVo;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +65,7 @@ public class ReviewService {
 
 
      // 호스트 전체 리뷰 가져오기
+    // 호스트 전체 리뷰 가져오기
     public List<ReviewDTO> getAllReview(HostInfoDTO hostInfoDTO) {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
@@ -84,7 +83,7 @@ public class ReviewService {
         return ReviewMapper.INSTANCE.toReviewDTOList(review);
     }
 
-    // 게시글 id 값으로 serviceDTO 가져오기
+    // 호스트 리뷰 상세보기
     public ReviewDTO getReview(int id) {
         Review review  = reviewRepository.findById(id).get();
         return ReviewMapper.INSTANCE.toReviewDTO(review);
@@ -99,9 +98,47 @@ public class ReviewService {
     return ReviewMapper.INSTANCE.toReviewDTOList(reviewImage);
     }
 
-    
 
-   
+    //호스트 오늘 리뷰 가져오기
+    public List<ReviewDTO> getReviewDay(HostInfoDTO hostInfoDTO) {
+
+        HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
+
+        LocalDateTime date = LocalDateTime.now();
+
+        List<Review> review = reviewRepository.findReviewByDate(date, hostInfo);
+
+        return ReviewMapper.INSTANCE.toReviewDTOList(review);
+    }
+
+    //호스트 이번주 리뷰 가져오기
+    public List<ReviewDTO> getReviewWeek(HostInfoDTO hostInfoDTO) {
+
+        HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        List<Review> review = reviewRepository.findReviewByWeek(startOfWeek, endOfWeek, hostInfo);
+
+        return ReviewMapper.INSTANCE.toReviewDTOList(review);
+    }
+
+    //호스트 이번달 리뷰 가져오기
+    public List<ReviewDTO> getReviewMonth(HostInfoDTO hostInfoDTO) {
+
+        HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+
+        List<Review> review = reviewRepository.findReviewByMonth(startOfMonth, endOfMonth, hostInfo);
+
+        return ReviewMapper.INSTANCE.toReviewDTOList(review);
+    }
+
+
 }
-
     

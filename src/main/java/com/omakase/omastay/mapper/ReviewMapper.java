@@ -15,7 +15,6 @@ public interface ReviewMapper {
     @Mapping(source = "member.id", target = "memIdx")
     @Mapping(source = "reservation.id", target = "resIdx")
     @Mapping(source = "hostInfo.id", target = "HIdx")
-    @Mapping(source = "revFileImageNameVo" , target = "revFileImageNameVo")
     ReviewDTO toReviewDTO(Review review);
 
     @Mapping(source = "memIdx", target = "member.id")

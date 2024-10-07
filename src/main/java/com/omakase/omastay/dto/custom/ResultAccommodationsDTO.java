@@ -15,6 +15,8 @@ public class ResultAccommodationsDTO {
     @JsonProperty("hcate")
     private HCate hCate;
 
+    private String hCateKo;
+
     @JsonProperty("hname")
     private String hName;
 
