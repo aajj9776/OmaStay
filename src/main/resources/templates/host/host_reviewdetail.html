@@ -148,11 +148,11 @@
               </div>
               <div class="w-max-full flex flex-row gap-[10px] items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]">
                 첨부파일 : 
-                <div class="flex flex-row items-start justify-start gap-[2px]">
+                <div class="flex flex-col items-start justify-start gap-[2px]">
                   <div th:each="fileName : ${fname}">
                     <div>
                         <div th:if="${fileName != null}">
-                            <div th:onclick="|showModal('@{${storage}review/${fileName}}')|">
+                            <div th:onclick="showModal([[${fileName}]])">
                                 <span th:text="${fileName}"></span>
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                             <span>첨부된 파일이 없습니다.</span>
                         </div>
                     </div>
-                    <div class="w-[250px] h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"></div>
+                    <div class="w-full h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"></div>
                 </div>
             </div>
               </div>
@@ -289,16 +289,26 @@
       </main>
       <input type="hidden" id="revIdx" th:value="${review.id}" />
       <!-- 이미지 모달창 -->
-      <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="modalImage"/>
-        <div id="caption"></div>
-      </div>  
+      <div id="imageModal" class="fixed inset-0 z-50 hidden items-center justify-between">
+        <div class="bg-white rounded-lg shadow-lg w-1/3 m-auto relative">
+            <div class="flex justify-between items-center h-6 bg-gray-300">
+                <button class="close top-0 right-0">
+                    <img class="h-6 w-6" alt="Close" src="/image/admin/icon-cancel.png" />
+                </button>
+            </div>
+            <img class="modal-content max-w-full max-h-full rounded-lg p-1" id="modalImage" />
+        </div>
+    </div> 
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/ 
+      var storage = /*[[${storage}]]*/ null; 
+      /*]]>*/
+      </script>
     <script>
       function regRevComment() {
         var rcComment = $('.revComment').val();
@@ -350,14 +360,14 @@
         $('.revComment').removeAttr('readonly');
       }
 
-      function showModal(imageName) {
+      function showModal(fileName) {
         var modal = $("#imageModal");
         var modalImg = $("#modalImage");
-        var captionText = $("#caption");
-
-        modal.css("display", "block");
-        modalImg.attr("src", imageName); // 이미지 경로 설정
-        captionText.text(imageName);
+        console.log(fileName);
+        var url = storage +"review/"+fileName;
+        console.log(url);
+        modal.css("display", "flex");
+        modalImg.attr("src", url); // 이미지 경로 설정
 
         $(".close").click(function() {
             modal.css("display", "none");
