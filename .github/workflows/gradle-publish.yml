@@ -30,7 +30,7 @@ jobs:
 
     - name: Verify directory structure on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "ls -R /home/ubuntu/OmaStay"
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} "ls -R /home/ubuntu/OmaStay"
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -64,22 +64,22 @@ jobs:
 
     - name: Install Docker using convenience script on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
     - name: Add ubuntu user to Docker group and restart Docker on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo usermod -aG docker ubuntu
           sudo systemctl restart docker
         EOF
 
     - name: Verify Docker permissions on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} "docker ps"
 
     - name: Set permissions for the directory
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
           DIR="/home/ubuntu/OmaStay/nginx"
           if [ -d "$DIR" ]; then
               sudo chmod -R 777 "$DIR"
@@ -97,7 +97,7 @@ jobs:
 
     - name: SSH into EC2 and clean up Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
           docker-compose down --remove-orphans
           docker-compose up -d --build
@@ -105,7 +105,7 @@ jobs:
 
     - name: SSH into EC2 and run Certbot
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
           # Verify Certbot directory
           ls -la /home/ubuntu/OmaStay/nginx/certbot
