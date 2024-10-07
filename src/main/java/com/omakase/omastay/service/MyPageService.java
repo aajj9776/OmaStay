@@ -3,6 +3,8 @@ package com.omakase.omastay.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.omakase.omastay.dto.PaymentDTO;
@@ -49,6 +51,16 @@ public class MyPageService {
         return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
     }
 
+    public Page<ReservationDTO> getNewReservationInfo(Integer memberId, Pageable pageable) {
+         // Page<Reservation>을 가져옴
+         Page<Reservation> reservationPage = reservationRepository.findByMemberId(memberId, pageable);
+        
+         // Page<ReservationDTO>로 변환
+         Page<ReservationDTO> reservationDTOPage = reservationPage.map(ReservationMapper.INSTANCE::toReservationDTO);
+         
+         // List<ReservationDTO>로 변환
+         return reservationDTOPage;
+    }
 
 
 }

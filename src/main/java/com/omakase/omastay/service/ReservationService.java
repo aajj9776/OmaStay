@@ -51,7 +51,7 @@ public class ReservationService {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
 
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(9);
+        roomInfo.setId(1);
         res.setRoomInfo(roomInfo);
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());

@@ -10,6 +10,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,12 +73,19 @@ public class MypageController {
     }
 
     @GetMapping("/reservation")
-    public ModelAndView reservation(@RequestParam("id") Integer id) {
+    public ModelAndView reservation(
+        @RequestParam("id") Integer id,
+        @RequestParam(value = "page", defaultValue = "5") int page, 
+        @RequestParam(value = "size", defaultValue = "3") int size) {
         System.out.println("회원번호 " + id);
         ModelAndView mv = new ModelAndView();
         boolean newTrip = false;
 
-        List<ReservationDTO> reservation = myPageService.getNewReservationInfo(id);
+        // Pageable 객체 생성
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<ReservationDTO> reservationPage = myPageService.getNewReservationInfo(id, pageable);
+        List<ReservationDTO> reservation = reservationPage.getContent();
         System.out.println("리스트사이즈" +reservation.size());
         if( reservation != null && reservation.size() > 0){
             newTrip = true;
@@ -110,6 +120,7 @@ public class MypageController {
         }
         mv.addObject("reservation", reservationsWithImages);
         mv.addObject("newTrip", newTrip);
+        mv.addObject("reservationPage", reservationPage);
 
         mv.setViewName("mypage/user-reservation");
         return mv;

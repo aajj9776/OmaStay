@@ -2,6 +2,8 @@ package com.omakase.omastay.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
@@ -46,7 +47,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Reservation> checkSameRoom(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx AND r.startEndVo.end < CURRENT_TIMESTAMP")
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx AND r.startEndVo.end < CURRENT_TIMESTAMP ORDER BY r.startEndVo.end DESC")
     List<Reservation> findByMemIdxAndEndBefore(@Param("memIdx") int memIdx);
     
     //오늘날짜 예약 조회
@@ -81,4 +82,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     //admin의 회원조회에서 회원의 전체 예약 횟수를 가져옴
     @Query("SELECT COUNT(r) FROM Reservation r WHERE r.member.id = :memId")
     Integer getTotalCount(@Param("memId") Integer memId);
+
+    @Query("SELECT r FROM Reservation r JOIN FETCH r.roomInfo ri JOIN FETCH r.member m WHERE m.id = :memberId")
+    Page<Reservation> findByMemberId(@Param("memberId") Integer memberId, Pageable pageable);
 }

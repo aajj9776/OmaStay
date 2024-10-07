@@ -114,7 +114,7 @@
                 </div>
 
 
-                  <div th:each="reservation : ${reseravtion}" class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[7px] box-border max-w-full text-[#000]">
+                  <div th:each="reservation : ${reservation}" class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[7px] box-border max-w-full text-[#000]">
                   <div class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap w-[1100px] mb-[15px]">
                     
                     <div class="h-[230px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1">
@@ -125,7 +125,7 @@
                       <!-- 예약 상태, 호텔 이름 -->
                       <div class="self-stretch flex flex-col items-start justify-start gap-[10px]">
                         <div class="self-stretch flex flex-col items-start justify-start gap-[3px]">
-                          <div th:switch="${reservation.reservation.resStatus}">
+                          <div th:switch="${reservation.reservation.resStatus.name()}">
                             <b th:case="'PENDING'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FFD700;">예약 대기</b>
                             <b th:case="'CONFIRMED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #32CD32;">예약 확정</b>
                             <b th:case="'CANCELLED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FF0000;">예약 취소</b>
@@ -150,14 +150,16 @@
                       </div>
 
                       <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
-                        <div class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
+                        <div class="w-[68px] rounded-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   [10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
                           <button class="flex-1 relative font-semibold">다시예약</button>
                         </div>
-                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
-                          <button class="flex-1 relative font-semibold" th:onclick="'reservationDetail(' + ${reservation.reservation.id} + ')'">예약 상세</button>
-                        </div>
-                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
-                          <button class="flex-1 relative font-semibold" th:onclick="'cancelDetail(' + ${reservation.reservation.id} + ')'">예약 취소</button>
+                        <div th:switch="${reservation.reservation.resStatus.name()}">
+                          <div th:if="${reservation.reservation.resStatus.name() != 'CANCELLED' }" class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                            <button class="flex-1 relative font-semibold" th:onclick="'reservationDetail(' + ${reservation.reservation.id} + ')'">예약 상세</button>
+                          </div>
+                          <div th:if="${reservation.reservation.resStatus.name() == 'CANCELLED' }" class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                            <button class="flex-1 relative font-semibold" th:onclick="'cancelDetail(' + ${reservation.reservation.id} + ')'">취소 상세</button>
+                          </div>
                         </div>
                       </div>
 
@@ -165,8 +167,6 @@
                     </div>
                   </div>
                 </div>
-
-
 
                   <div id="noTrip"
                     class="w-[1120px] rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-row items-start justify-between py-[0px] px-[23px] max-w-full gap-[20px] lg:flex-wrap"
@@ -238,8 +238,6 @@
                       </div>
                     </div>
                   </div>
-
-
 
                 </div>
               </div>
