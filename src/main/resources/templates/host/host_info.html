@@ -61,13 +61,13 @@
             class="m-[0px] h-[40px] w-[165px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000]  text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
             숙소 유형 :
           </h3>
-          <select class="w-[220px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="hCate" data-str="숙소 유형" >
+          <select class="w-[220px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select" id="hCate" data-str="숙소 유형">
             <option value="" disabled selected th:selected="${hostInfoCustomDTO == null || hostInfoCustomDTO.hostInfo == null || hostInfoCustomDTO.hostInfo.hCate == null || hostInfoCustomDTO.hostInfo.hCate == ''}">숙소 유형</option>
-            <option value="MOTEL"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'MOTEL'}">모텔</option>
-            <option value="HOTEL_RESORT"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'HOTEL_RESORT'}">호텔/리조트</option>
-            <option value="POOL_VILLA"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'POOL_VILLA'}">펜션/풀빌라</option>
-            <option value="GUESTHOUSE_HANOK"  th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'GUESTHOUSE_HANOK'}">게하/한옥</option>
-          </select>
+            <option value="MOTEL" th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'MOTEL'}">모텔</option>
+            <option value="HOTEL_RESORT" th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'HOTEL_RESORT'}">호텔/리조트</option>
+            <option value="POOL_VILLA" th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'POOL_VILLA'}">펜션/풀빌라</option>
+            <option value="GUESTHOUSE_HANOK" th:selected="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hCate == 'GUESTHOUSE_HANOK'}">게하/한옥</option>
+        </select>
         </div>
         <div
           class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border max-w-full">
@@ -314,8 +314,8 @@
                       <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                         <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
                           <div
-                            class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
-                            <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                            class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                            <img class="w-full h-full self-stretch relative overflow-hidden shrink-0"
                               loading="lazy" alt="" />
                           </div>
                         </div>
@@ -336,7 +336,7 @@
                     <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                         <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
                             <div class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
-                              <img th:src="@{${storage} + 'host/' + ${image.imgName.fName}}" class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                              <img th:src="@{${storage} + 'host/' + ${image.imgName.fName}}" class="w-full h-full self-stretch relative overflow-hidden shrink-0"
                               loading="lazy" alt="" />
                             </div>
                         </div>
@@ -354,9 +354,9 @@
             </div>
           </div>
         </div>
-        <input type="hidden" id="xaxis" value=""/> 
-        <input type="hidden" id="yaxis" value=""/>
-        <input type="hidden" id="region" value=""/>
+        <input type="hidden" id="xaxis" th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.xaxis : ''}"/> 
+        <input type="hidden" id="yaxis" th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.yaxis : ''}"/>
+        <input type="hidden" id="region" th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.region : ''}"/>
         <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple />
       </form>
     </div>

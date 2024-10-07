@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor

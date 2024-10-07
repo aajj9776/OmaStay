@@ -1,16 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/host}"
-      layout:fragment="host">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+  <style>
+    .dt-length select {
+      font-size: 12px;
+      padding: 5px;
+      height: auto;
+    }
+
+    .dt-length label {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .dt-info {
+      font-size: 12px;
+    }
+
+    .dt-paging button {
+      font-size: 12px;
+      padding: 5px 8px;
+    }
+
+    .dt-paging a {
+      /* 페이지 번호 스타일 */
+      padding: 5px 8px;
+    }
+
+    .dt-info {
+      display: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .dt-container .dt-layout-row {
+    margin: 0.2em 0 !important; 
+    }
+  </style>
   </head>
   <body>
     <div
-      class="w-full relative bg-[#e4e7eb] flex flex-row items-start justify-center py-[100px] px-[20px] box-border leading-[normal] tracking-[normal]"
+      class="w-full relative flex flex-row items-start justify-center py-[100px] px-[20px] box-border leading-[normal] tracking-[normal]"
     >
-      <main
+    <main
         class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[73px] px-[0px] pb-[0px] box-border gap-[50px] max-w-full lg:pt-[47px] lg:box-border mq750:gap-[25px] mq750:pt-[31px] mq750:box-border"
       >
         <section
@@ -22,11 +64,11 @@
             <div
               class="w-[403px] flex flex-row items-start justify-start py-[0px] px-[29px] box-border max-w-full"
             >
-              <h1
-                class="m-[0px] h-[60px] flex-1 relative text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit] flex items-center max-w-full mq450:text-[30px] mq450:leading-[14px] mq1050:text-[40px] mq1050:leading-[19px]"
+              <div
+                class="ml-[30px] w-[150px] relative text-inherit tracking-normal leading-normal font-semibold flex items-center text-4xl mq450:text-lg mq450:leading-snug mq750:text-2xl mq750:leading-relaxed"
               >
                 공지사항 상세
-              </h1>
+            </div>
             </div>
             <div
               class="self-stretch rounded-[30px] bg-[rgba(200,219,245,0.52)] overflow-hidden flex flex-col items-start justify-start py-[50px] pl-[138px] pr-[136px] box-border gap-[14px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:py-[32px] mq750:px-[34px] mq750:box-border"
@@ -87,7 +129,7 @@
         <section
           class="self-stretch flex flex-row items-start justify-center pt-[0px] px-[0px] pb-[50px]"
         >
-          <button type="button" onclick="location.href='/host/notice'"
+          <button type="button" onclick="location.href='/user/notice'"
             class="cursor-pointer [border:none] py-[12px] px-[37px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
           >
             <div class="flex flex-row items-center justify-center gap-[8px]">
@@ -100,44 +142,44 @@
         </section>
       </main>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/summernote/js/summernote-lite.js"></script>
-    <script>
-      $(function () {
-          $("#content").summernote({
-              toolbar: false, // 툴바를 제거합니다.
-              airMode: true, // 에디터를 비활성화합니다.
-          });
-
-          $("#content").summernote('disable');
-      });
-
-      function down(fName) {
-          $.ajax({
-              url: "/host/fileDownload",
-              type: "GET",
-              data: { fName: fName },
-              xhrFields: {
-                  responseType: 'blob' // 바이너리 데이터를 받기 위해 설정
-              },
-              success: function (data, status, xhr) {
-                  var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
-                  var link = document.createElement('a');
-                  var url = window.URL.createObjectURL(blob);
-                  link.href = url;
-                  link.download = fName;
-                  link.click();
-                  window.URL.revokeObjectURL(url);
-              },
-              error: function (xhr, status, error) {
-                  alert("다운로드에 실패했습니다.");
-              }
-          });
-      }
-
-  </script>
+      <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script src="/summernote/js/summernote-lite.js"></script>
+      <script>
+        $(function () {
+            $("#content").summernote({
+                toolbar: false, // 툴바를 제거합니다.
+                airMode: true, // 에디터를 비활성화합니다.
+            });
+  
+            $("#content").summernote('disable');
+        });
+  
+        function down(fName) {
+            $.ajax({
+                url: "/user/fileDownload",
+                type: "GET",
+                data: { fName: fName },
+                xhrFields: {
+                    responseType: 'blob' // 바이너리 데이터를 받기 위해 설정
+                },
+                success: function (data, status, xhr) {
+                    var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = fName;
+                    link.click();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (xhr, status, error) {
+                    alert("다운로드에 실패했습니다.");
+                }
+            });
+        }
+  
+    </script>
   </body>
 </html>

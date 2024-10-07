@@ -17,6 +17,8 @@ import com.omakase.omastay.vo.FileImageNameVo;
 import java.io.File;
 import java.io.IOException;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -25,6 +27,8 @@ import org.eclipse.angus.mail.imap.protocol.FLAGS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+
 
 @Service
 public class ReviewService {
@@ -98,7 +102,7 @@ public class ReviewService {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
 
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = LocalDate.now().atStartOfDay();
 
         List<Review> review = reviewRepository.findReviewByDate(date, hostInfo);
 
@@ -110,7 +114,7 @@ public class ReviewService {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now =LocalDate.now().atStartOfDay();
         LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
 
@@ -124,9 +128,9 @@ public class ReviewService {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDate.now().atStartOfDay();
         LocalDateTime startOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
-        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MAX);
 
         List<Review> review = reviewRepository.findReviewByMonth(startOfMonth, endOfMonth, hostInfo);
 

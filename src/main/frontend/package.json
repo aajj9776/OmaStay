@@ -15,7 +15,8 @@
     "watch": "tailwindcss -i ./styles.css -o ../resources/static/css/tailwind.css --watch"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
-    "@popperjs/core": "^2.11.8"
+    "frontend": "file:"
   }
 }
