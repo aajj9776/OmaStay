@@ -24,7 +24,7 @@ $(document).ready(function () {
         autoApply: true,
         linkedCalendars: false,
         minDate: moment().add(-36, 'months'),
-        maxDate: moment(),
+        maxDate: moment().endOf('year'),
         timePicker: false,
         singleDatePicker: false,
         startDate: start,

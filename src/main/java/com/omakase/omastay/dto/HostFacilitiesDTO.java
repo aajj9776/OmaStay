@@ -1,6 +1,5 @@
 package com.omakase.omastay.dto;
 
-import com.omakase.omastay.entity.Facilities;
 import com.omakase.omastay.entity.HostFacilities;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;

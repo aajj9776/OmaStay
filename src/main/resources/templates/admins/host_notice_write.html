@@ -79,9 +79,6 @@
           }
         }
       });
-
-      $("#content").summernote("lineHeight", 0.7);
-      
     });
 
     function sendImage(file, editor) {
@@ -98,8 +95,7 @@
       }).done(function (data) {
         console.log(data);
         console.log(data.url);
-        $("#content").summernote(
-          "insertImage", data.url);
+        $("#content").summernote("insertImage", data.url);
 
       }).fail(function (jqXHR, textStatus, errorThrown) {
         console.error("File upload failed:", textStatus, errorThrown);

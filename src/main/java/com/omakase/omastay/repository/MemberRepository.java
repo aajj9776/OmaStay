@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.repository.custom.MemberRepositoryCustom;
 
@@ -26,5 +27,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Member
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.grade WHERE m.id = :memberId")
     Member findMemberWithGrade(@Param("memberId") int memberId);
 
+    
 
 }

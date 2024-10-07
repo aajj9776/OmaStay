@@ -10,12 +10,11 @@
     <style>
       body {
     background-image: url('/image/host/host-login@3x.png');
-    background-size: cover;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
     width: 100%;
-    height: 100vh; /* 화면 높이에 맞추기 위해 */
-    background-size: 100% 100%; /* 너비를 100%로 설정하고 높이를 자동으로 조정 */
+    min-height: 100vh; /* 화면 높이에 맞추기 위해 */
     }
     </style>
   </head>
@@ -104,13 +103,13 @@
             <div class="w-[1px] h-[8px] relative"></div>
           </div>
           <div
-            class="self-stretch flex flex-row items-center justify-end py-[0px] px-[15px]"
+            class="self-stretch flex flex-row items-center justify-end py-[0px]"
           >
             <div class="flex flex-col items-start justify-start">
               <div
                 class="relative text-[16px] tracking-[0.15px] leading-[150%] font-[Roboto] text-[rgba(0,0,0,0.87)] text-left inline-block min-w-[101px] whitespace-nowrap"
               ><a th:href="@{/host/findpw}">
-                *비밀번호 찾기
+                * 비밀번호 찾기
               </a>
               </div>
             </div>
@@ -154,6 +153,11 @@
         >
       </div>
     </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
     <script th:inline="javascript">
       /*<![CDATA[*/ 
       var errorMessage = /*[[${errorMessage}]]*/ null; 
@@ -161,8 +165,10 @@
           alert(errorMessage);
       }
       /*]]>*/
+      </script>
+      <script>
       $(document).ready(function() {
-            var hStep = $("#hStep").val();
+            var hStep =  $("#hStep").val() || ''; 
 
             function updateStepImages(hStep) {
                 if (hStep.trim().toUpperCase() === "MYPAGE") {
@@ -218,10 +224,6 @@
             };
         });
   </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
+    
   </body>
 </html>

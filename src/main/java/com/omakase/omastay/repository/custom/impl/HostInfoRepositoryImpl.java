@@ -1,4 +1,6 @@
 package com.omakase.omastay.repository.custom.impl;
+import com.omakase.omastay.dto.custom.AdminMainCustomDTO;
+import com.omakase.omastay.dto.custom.QAdminMainCustomDTO;
 import com.omakase.omastay.entity.enumurate.HStatus;
 import com.omakase.omastay.repository.custom.HostInfoRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
@@ -64,4 +66,15 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
         return hostInfo.region.containsIgnoreCase(keyword);
     }
 
+    @Override
+    public List<AdminMainCustomDTO> getRequestCount(){
+
+        return queryFactory
+                .select(new QAdminMainCustomDTO(
+                        hostInfo.hStatus.stringValue(), // calStatus를 문자열로 변환
+                        hostInfo.count()))
+                .from(hostInfo)
+                .groupBy(hostInfo.hStatus) // calStatus로 그룹화
+                .fetch();
+    }
 }

@@ -18,7 +18,55 @@
       resize: none;
       /* 창 크기 조절 핸들 제거 */
     }
-    </style>
+      /* 모달 창 스타일 */
+      .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          padding-top: 60px;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgb(0,0,0);
+          background-color: rgba(0,0,0,0.9);
+      }
+
+      .modal-content {
+          margin: auto;
+          display: block;
+          width: 80%;
+          max-width: 700px;
+      }
+
+      #caption {
+          margin: auto;
+          display: block;
+          width: 80%;
+          max-width: 700px;
+          text-align: center;
+          color: #ccc;
+          padding: 10px 0;
+      }
+
+      .close {
+          position: absolute;
+          top: 15px;
+          right: 35px;
+          color: #f1f1f1;
+          font-size: 40px;
+          font-weight: bold;
+          transition: 0.3s;
+      }
+
+      .close:hover,
+      .close:focus {
+          color: #bbb;
+          text-decoration: none;
+          cursor: pointer;
+      }
+      </style>
   </head>
   <body>
     <div
@@ -98,22 +146,22 @@
                 ></div>
                 </div>
               </div>
-              <div class="w-[500px] flex flex-row gap-[10px] items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]">
+              <div class="w-max-full flex flex-row gap-[10px] items-start justify-start min-w-[24px] min-h-[24px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]">
                 첨부파일 : 
                 <div class="flex flex-col items-start justify-start gap-[2px]">
-              <div>
-                <div th:if="${review.revFileImageNameVo != null}">
-                  <a th:href="|javascript:down('${review.revFileImageNameVo.fName}')|">
-                      <span th:text="${review.revFileImageNameVo.fName}"></span>
-                  </a>
-              </div>
-              <div th:if="${review.revFileImageNameVo == null}">
-                  <span>첨부된 파일이 없습니다.</span>
-              </div>
-              </div>
-              <div
-                  class="w-[250px] h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"
-                ></div>
+                  <div th:each="fileName : ${fname}">
+                    <div>
+                        <div th:if="${fileName != null}">
+                            <div th:onclick="showModal([[${fileName}]])">
+                                <span th:text="${fileName}"></span>
+                            </div>
+                        </div>
+                        <div th:if="${fileName == null}">
+                            <span>첨부된 파일이 없습니다.</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-[2px] relative border-[#000] border-t-[2px] border-solid box-border max-w-full"></div>
+                </div>
             </div>
               </div>
               <div
@@ -240,11 +288,27 @@
         </section>
       </main>
       <input type="hidden" id="revIdx" th:value="${review.id}" />
+      <!-- 이미지 모달창 -->
+      <div id="imageModal" class="fixed inset-0 z-50 hidden items-center justify-between">
+        <div class="bg-white rounded-lg shadow-lg w-1/3 m-auto relative">
+            <div class="flex justify-between items-center h-6 bg-gray-300">
+                <button class="close top-0 right-0">
+                    <img class="h-6 w-6" alt="Close" src="/image/admin/icon-cancel.png" />
+                </button>
+            </div>
+            <img class="modal-content max-w-full max-h-full rounded-lg p-1" id="modalImage" />
+        </div>
+    </div> 
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/ 
+      var storage = /*[[${storage}]]*/ null; 
+      /*]]>*/
+      </script>
     <script>
       function regRevComment() {
         var rcComment = $('.revComment').val();
@@ -295,6 +359,20 @@
       function updateRevComment() {
         $('.revComment').removeAttr('readonly');
       }
+
+      function showModal(fileName) {
+        var modal = $("#imageModal");
+        var modalImg = $("#modalImage");
+        console.log(fileName);
+        var url = storage +"review/"+fileName;
+        console.log(url);
+        modal.css("display", "flex");
+        modalImg.attr("src", url); // 이미지 경로 설정
+
+        $(".close").click(function() {
+            modal.css("display", "none");
+        });
+    }
     </script>
   </body>
 </html>

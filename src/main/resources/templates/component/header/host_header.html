@@ -138,28 +138,28 @@
             const hStep = /*[[${session.hStep}]]*/ null;
             const hStatus = /*[[${session.hStatus}]]*/ null;
 
-            if (index == 4) {
+            if (index == 3) {
                 if (hStep === null) {
                     alert('이전 단계를 완료해주세요.');
                     return;
                 }
             }
 
-            if (index == 5) {
+            if (index == 4) {
                 if (hStep === null || hStep === 'MYPAGE') {
                     alert('이전 단계를 완료해주세요.');
                     return;
                 }
             }
 
-            if (index == 6) {
+            if (index == 5) {
                 if (hStep === null || hStep === 'MYPAGE' || hStep === 'INFO') {
                     alert('이전 단계를 완료해주세요.');
                     return;
                 }
             }
 
-            if (index >= 7 && index <= 10) {
+            if (index >= 6 && index <= 9) {
                 if (hStatus !== 'APPROVE') {
                     alert('숙소 등록 절차 완료 후 접속 가능합니다.');
                     return;
