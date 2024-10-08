@@ -168,22 +168,22 @@
                   </div>
                 </div>
 
-                <div class="flex justify-center items-center space-x-1 w-full">
+                <div class="flex justify-center items-center space-x-4 w-full">
                   <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
                       <!-- 현재 페이지가 아닌 경우 -->
                       <a th:if="${page != nowPage}" 
                          th:href="@{/mypage/reservation(page=${page - 1}, id=${id})}"
                          th:text="${page}" 
-                         class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm text-sm font-medium">
+                         class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm text-sm font-medium mx-2">
                       </a>
-                      
+                
                       <!-- 현재 페이지인 경우 -->
                       <strong th:if="${page == nowPage}" 
                               th:text="${page}" 
-                              class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg transform scale-110 text-sm font-bold mx-6">
+                              class="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg transform scale-110 text-sm font-bold mx-2">
                       </strong>
                   </th:block>
-              </div>
+                </div>
 
                   <div id="noTrip"
                     class="w-[1120px] rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-row items-start justify-between py-[0px] px-[23px] max-w-full gap-[20px] lg:flex-wrap"
@@ -272,8 +272,8 @@
                 </div>
                 <table>
                   <tbody id="reservation-table-body"></tbody>
-                  <div id="pagination" class="flex justify-center items-center space-x-1 w-full"></div>
                 </table>
+                <div id="pagination" class="flex justify-center items-center space-x-1 w-full mb-[100px]"></div>
               </div>
             </div>
           </div>
@@ -338,14 +338,18 @@
         let id = user.id;
 
         // 예약 정보를 불러오는 AJAX 요청
-        loadReservation();
+        let pageNumber = 0;
+        loadReservation(pageNumber);
        
       });
 
 
-      function loadReservation(){
+      function loadReservation(pageNumber){
+        if( pageNumber == null){
+          pageNumber = 0;
+        }
         $.ajax({
-          url: "/mypage/reservation", // 호출하고자 하는 URL
+          url: "/mypage/reservation?page=" + pageNumber, // 호출하고자 하는 URL
           method: "POST",
           contentType: "application/json; charset=utf-8",
           data: JSON.stringify({
@@ -357,7 +361,7 @@
           let name;
           let tableBody = $("#reservation-table-body"); // 테이블 바디 선택
           tableBody.empty();
-          console.log(data.reservation);
+          console.log(data);
 
           for (let i = 0; i < data.reservation.length; i++) {
             reservation = data.reservation[i];
@@ -455,13 +459,13 @@
         for (let page = data.startPage; page <= data.endPage; page++) {
             if (page !== data.nowPage) {
                 paginationHtml += `
-                    <a href="javascript:void(0);" onclick="loadReservationPage(${page - 1})"
-                       class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm text-sm font-medium">
+                   <a href="#" onclick="loadReservationPage(${page - 1}); return false;"
+                       class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm text-sm font-medium mx-2">
                         ${page}
                     </a>`;
             } else {
                 paginationHtml += `
-                    <strong class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg transform scale-110 text-sm font-bold mx-6">
+                    <strong class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg transform scale-110 text-sm font-bold mx-2">
                         ${page}
                     </strong>`;
             }
@@ -473,16 +477,16 @@
 
       // 특정 페이지를 불러오는 함수 (페이지네이션에서 사용)
       function loadReservationPage(pageNumber) {
+        console.log("현재페이지" + pageNumber);
           $.ajax({
-              url: "/mypage/reservation",
+              url: "/mypage/reservation?page=" + pageNumber,
               method: "POST",
               contentType: "application/json; charset=utf-8",
               data: JSON.stringify({
                   id: user.id,
-                  page: pageNumber
               }),
           }).done(function (data) {
-              loadReservation(); // 페이지를 업데이트
+              loadReservation(data.nowPage); // 페이지를 업데이트
           });
       }
     </script>

@@ -78,7 +78,7 @@ public class MypageController {
     @GetMapping("/reservation")
     public ModelAndView reservation(
         @RequestParam("id") Integer id,
-        @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        @PageableDefault(size = 3, page = 0, sort = "startEndVo.end", direction = Sort.Direction.DESC) Pageable pageable) {
         System.out.println("회원번호 " + id);
         ModelAndView mv = new ModelAndView();
         boolean newTrip = false;
@@ -138,12 +138,15 @@ public class MypageController {
     @ResponseBody
     public Map<String, Object> reservationProc(
         @RequestBody MemberInfoDTO memberInfo,
-        @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        @PageableDefault(size = 3, page = 0, sort = "startEndVo.end", direction = Sort.Direction.DESC) Pageable pageable) {
         System.out.println("멤버정보" + memberInfo);
+        System.out.println("페이지정보" + pageable.getPageNumber());
+        System.out.println("페이지정보null?" + pageable);
         Map<String, Object> map = new HashMap<>();
         Page<ReservationDTO> reservation = myPageService.getReservationInfo(memberInfo.getId(), pageable);
 
         int nowPage = reservation.getPageable().getPageNumber() + 1;
+
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(startPage + 4, reservation.getTotalPages());
 
@@ -164,6 +167,7 @@ public class MypageController {
             reservationWithImage.setHostName(host.getHname());
             reservationsWithImages.add(reservationWithImage);
         }
+        System.out.println("넘어갈 현재페이지" +nowPage);
         map.put("reservation", reservationsWithImages);
         map.put("nowPage", nowPage);
         map.put("startPage", startPage);

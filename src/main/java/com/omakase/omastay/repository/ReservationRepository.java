@@ -48,7 +48,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> checkSameRoom(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
     @Query("SELECT r FROM Reservation r WHERE r.member.id = :memberId AND r.startEndVo.end < CURRENT_TIMESTAMP ORDER BY r.startEndVo.end DESC")
-    Page<Reservation> findByMemIdxAndEndBefore(int memberId, Pageable pageable);
+    Page<Reservation> findByMemIdxAndEndBefore(@Param("memberId") int memberId, Pageable pageable);
     
     //오늘날짜 예약 조회
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :date AND r.startEndVo.end >= :date) AND (r.resStatus = 1 OR r.resStatus = 3)")
