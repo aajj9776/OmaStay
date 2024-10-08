@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{layout/main}"
+      layout:fragment="main"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이벤트</title>
+  <style>
+    .btn-custom {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    .btn-custom.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">이벤트</h1>
+
+  <div class="btn-group mb-6" role="group" aria-label="Event categories">
+    <button type="button" class="btn btn-custom active" data-category="all">전체</button>
+    <button type="button" class="btn btn-custom" data-category="ongoing">진행중</button>
+    <button type="button" class="btn btn-custom" data-category="past">지난 이벤트</button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Event Card 1  이걸로 반복문 돌려라 -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden" data-status="ongoing">
+      <img src="/image/index/group--slide--link-----@2x.png" alt="이벤트 이미지" class="w-full h-[154px] object-cover">
+      <div class="p-2">
+        <h3 class="text-lg font-semibold mb-2">해외 얼리버드 예약 모음집</h3>
+        <p class="text-sm text-gray-600">해외여행 얼리버드 예약모음</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="px-2 py-1 bg-green-500 text-white text-xs rounded">진행중</span>
+          <span class="text-xs text-gray-500">24.10.01 - 24.10.31 23:59</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Card 2 -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden" data-status="ongoing">
+      <img src="/image/index/group--slide--link-----@2x.png" alt="이벤트 이미지" class="w-full h-[154px] object-cover">
+      <div class="p-2">
+        <h3 class="text-lg font-semibold mb-2">인기 호텔·펜션 더블쿠폰 찬스!</h3>
+        <p class="text-sm text-gray-600">10월 더블쿠폰 찬스 이벤트</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="px-2 py-1 bg-green-500 text-white text-xs rounded">진행중</span>
+          <span class="text-xs text-gray-500">24.10.01 - 24.10.10 23:59</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Card 3 -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden" data-status="ongoing">
+      <img src="/image/index/group--slide--link-----@2x.png" alt="이벤트 이미지" class="w-full h-[154px] object-cover">
+      <div class="p-2">
+        <h3 class="text-lg font-semibold mb-2">여행부케 테스트 시작</h3>
+        <p class="text-sm text-gray-600">나의 여행 스타일을 찾아보는</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="px-2 py-1 bg-green-500 text-white text-xs rounded">진행중</span>
+          <span class="text-xs text-gray-500">24.10.02 - 24.12.31 23:59</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Card 4 -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden" data-status="ongoing">
+      <img src="/image/index/group--slide--link-----@2x.png" alt="이벤트 이미지" class="w-full h-[154px] object-cover">
+      <div class="p-2">
+        <h3 class="text-lg font-semibold mb-2">매주 최대 할인! 위클리 오픈런</h3>
+        <p class="text-sm text-gray-600">빨리 잡아야 하는 사람이 공짜!</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="px-2 py-1 bg-green-500 text-white text-xs rounded">진행중</span>
+          <span class="text-xs text-gray-500">24.06.05 - 24.12.31 23:59</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Card 5 -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden" data-status="past">
+      <img src="/image/index/group--slide--link-----@2x.png" alt="이벤트 이미지" class="w-full h-[154px] object-cover">
+      <div class="p-2">
+        <h3 class="text-lg font-semibold mb-2">베스트 호텔딜 최대 84% 특가</h3>
+        <p class="text-sm text-gray-600">단 3일! 인기 호텔 특대 할인!</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="px-2 py-1 bg-red-500 text-white text-xs rounded">종료</span>
+          <span class="text-xs text-gray-500">24.10.07 - 24.10.09 23:59</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Card 6 -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden" data-status="ongoing">
+      <img src="/image/index/group--slide--link-----@2x.png" alt="이벤트 이미지" class="w-full h-[154px] object-cover">
+      <div class="p-2">
+        <h3 class="text-lg font-semibold mb-2">부산 워케이션 호텔 여기어때</h3>
+        <p class="text-sm text-gray-600">부산 워케이션 참가자 전용 특가</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="px-2 py-1 bg-green-500 text-white text-xs rounded">진행중</span>
+          <span class="text-xs text-gray-500">24.07.18 - 25.08.31 23:59</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Card 7 -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden" data-status="ongoing">
+      <img src="/image/index/group--slide--link-----@2x.png" alt="이벤트 이미지" class="w-full h-[154px] object-cover">
+      <div class="p-2.5">
+        <h3 class="text-lg font-semibold mb-2">10월 제휴 추가 할인</h3>
+        <p class="text-sm text-gray-600">10월 결제 프로모션 모음</p>
+        <div class="mt-4 flex justify-between items-center">
+          <span class="px-2 py-1 bg-green-500 text-white text-xs rounded">진행중</span>
+          <span class="text-xs text-gray-500">24.10.01 - 24.10.31 23:59</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.btn-custom');
+    const events = document.querySelectorAll('.grid > div');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        const category = this.getAttribute('data-category');
+        events.forEach(event => {
+          if (category === 'all' || event.getAttribute('data-status') === category) {
+            event.style.display = '';
+          } else {
+            event.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

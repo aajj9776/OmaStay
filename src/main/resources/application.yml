@@ -10,13 +10,13 @@ spring:
     password: omastay18
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 50
-      minimum-idle: 5
-      idle-timeout: 600000
-      max-lifetime: 30000
+      maximum-pool-size: 100
+      minimum-idle: 10
+      idle-timeout: 600000      # 10분
+      max-lifetime: 1800000     # 30분
       connection-timeout: 30000
       validation-timeout: 5000
-      leak-detection-threshold: 30000
+      leak-detection-threshold: 1795000 # (29분 55초)
       pool-name: HikariPool
       register-mbeans: true
   jpa:

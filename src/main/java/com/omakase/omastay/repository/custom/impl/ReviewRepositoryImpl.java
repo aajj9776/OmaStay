@@ -26,7 +26,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
         return queryFactory
                 .select(
-                        review.hostInfo.id,review.revRating.avg().coalesce(0.0), review.count()
+                        review.hostInfo.id, review.revRating.avg().coalesce(0.0), review.count()
                 )
                 .from(review)
                 .where(review.hostInfo.id.in(hostIds))
