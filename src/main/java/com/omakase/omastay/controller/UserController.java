@@ -137,4 +137,19 @@ public class UserController {
 
         return mv;
     }
+
+    //이벤트
+    @RequestMapping("/event")
+    public ModelAndView userEvent() {
+
+        ModelAndView mv = new ModelAndView();
+
+        /*List<ServiceDTO> list = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
+
+        mv.addObject("list", list);*/
+
+        mv.setViewName("user/event");
+
+        return mv;
+    }
 }
