@@ -24,24 +24,6 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-    - name: Copy files to EC2
-      run: |
-        scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'
-      
-    - name: Install Node.js dependencies
-      run: |
-        cd src/main/frontend
-        npm install
-        npm install @popperjs/core@^2.11.8
-
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4.0.0
-
     - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
@@ -54,19 +36,35 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod u+x gradlew
-      
+
     - name: Build with Gradle Wrapper
       run: ./gradlew clean build --no-daemon
 
-    - name: Install Docker using convenience script on EC2
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+      
+    - name: Install Node.js dependencies
       run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
+        cd src/main/frontend
+        npm install
+        npm install @popperjs/core@^2.11.8
 
-    - name: Add ubuntu user to Docker group and restart Docker on EC2
+    - name: Copy files to EC2
+      run: |
+        scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+
+    - name: Install Docker using convenience script on EC2 (if not installed)
       run: |
         ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
-          sudo usermod -aG docker ubuntu
-          sudo systemctl restart docker
+          if ! command -v docker &> /dev/null
+          then
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sudo sh get-docker.sh
+            sudo usermod -aG docker ubuntu
+            sudo systemctl restart docker
+          fi
         EOF
 
     - name: Verify Docker permissions on EC2
