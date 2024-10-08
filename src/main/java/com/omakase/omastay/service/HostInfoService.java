@@ -6,6 +6,7 @@ import com.omakase.omastay.dto.FacilitiesDTO;
 import com.omakase.omastay.dto.HostFacilitiesDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
+import com.omakase.omastay.dto.custom.AdminMainCustomDTO;
 import com.omakase.omastay.dto.custom.HostInfoCustomDTO;
 import com.omakase.omastay.dto.custom.HostMypageDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
@@ -355,4 +356,7 @@ public class HostInfoService {
     }
 
 
+    public List<AdminMainCustomDTO> getrequestCount(){
+        return hostInfoRepository.getRequestCount();
+    }
 }

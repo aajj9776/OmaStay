@@ -1,12 +1,14 @@
 package com.omakase.omastay.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.entity.enumurate.SCate;
+import com.omakase.omastay.entity.enumurate.UserAuth;
+import com.omakase.omastay.service.ServiceService;
+import io.jsonwebtoken.io.IOException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -20,37 +22,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
-import com.omakase.omastay.dto.ServiceDTO;
-import com.omakase.omastay.entity.enumurate.SCate;
-import com.omakase.omastay.entity.enumurate.UserAuth;
-import com.omakase.omastay.service.ServiceService;
-
-import io.jsonwebtoken.io.IOException;
-import lombok.RequiredArgsConstructor;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     private ServiceService serviceService;
- 
+
     @Value("${upload}")
     private String upload;
 
     @RequestMapping("/notice")
     public String usernotice() {
-        return "user/user_notice";
+        return "user/notice";
     }
 
     // 사용자 공지사항 전체 리스트
-    @RequestMapping("/noticelist/getList")
+    @RequestMapping("/noticeList/getList")
     @ResponseBody
-    public Map<String, Object> noticelist() {
+    public Map<String, Object> noticeList() {
         Map<String, Object> map = new HashMap<>();
 
         List<ServiceDTO> list = serviceService.getAllServices(SCate.NOTICE, UserAuth.USER);
@@ -81,8 +79,8 @@ public class UserController {
     public ModelAndView noticedetail(@RequestParam("id") String id) {
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("user/user_noticedetail");
-        
+        mv.setViewName("user/noticedetail");
+
         if (id != null) {
             ServiceDTO sDto = serviceService.getServices(Integer.parseInt(id));
             mv.addObject("sDto", sDto);
@@ -127,18 +125,31 @@ public class UserController {
 
     //사용자 자주묻는질문
     @RequestMapping("/faq")
-    public ModelAndView userfaq() {
-        
+    public ModelAndView userFaq() {
+
         ModelAndView mv = new ModelAndView();
 
         List<ServiceDTO> list = serviceService.getAllServices(SCate.FAQ, UserAuth.USER);
 
         mv.addObject("list", list);
-        
-        mv.setViewName("user/user_faq");
+
+        mv.setViewName("user/faq");
 
         return mv;
-
     }
-    
+
+    //이벤트
+    @RequestMapping("/event")
+    public ModelAndView userEvent() {
+
+        ModelAndView mv = new ModelAndView();
+
+        /*List<ServiceDTO> list = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
+
+        mv.addObject("list", list);*/
+
+        mv.setViewName("user/event");
+
+        return mv;
+    }
 }

@@ -245,369 +245,34 @@
               </div>
             </div>
           </div>
-          <div
+
+          <!-- 신규 회원 테이블-->
+          <div 
             class="flex-1 overflow-hidden flex flex-col items-center justify-start p-[20px] box-border gap-[15px] min-w-[231px] max-w-full">
-            <div class="self-stretch relative font-semibold mq450:text-[16px]">
+            <label class="font-semibold">
               신규 회원
+            </label>
+
+            <div th:if="${memList == null}">
+              최근에 가입한 신규 회원이 없습니다.
             </div>
-            <div
+
+            <div th:if="${memList != null}"
               class="self-stretch h-[496px] overflow-hidden shrink-0 flex flex-col items-center justify-start py-[0px] px-[4px] box-border text-[16px] text-[#343a40]">
-              <div
-                class="self-stretch rounded-[8px] border-[#e9ecef] border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start">
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[58px]">
-                      An item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[109px]">
-                      A second item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[88px]">
-                      A third item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[99px]">
-                      A fourth item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[112px]">
-                      And a fifth one
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="self-stretch rounded-[8px] border-[#e9ecef] border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start">
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[58px]">
-                      An item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[109px]">
-                      A second item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[88px]">
-                      A third item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[99px]">
-                      A fourth item
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]">
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[16px] w-[16px] relative hidden">
-                    <div
-                      class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border">
-                    </div>
-                  </div>
-                  <div class="h-[47px] w-[133px] hidden flex-col items-start justify-start">
-                    <div class="h-[19px] relative font-semibold inline-block">
-                      Subheading
-                    </div>
-                    <div class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap">
-                      Content for list item
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-row items-start justify-start gap-[8px]">
-                    <div class="self-stretch w-[8px] relative leading-[28px] hidden">
-                      1
-                    </div>
-                    <div class="relative leading-[28px] inline-block min-w-[112px]">
-                      And a fifth one
-                    </div>
-                  </div>
-                  <div
-                    class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]">
-                    <div class="self-stretch relative font-semibold">
-                      23
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>이메일</th>
+                    <th>가입일</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="mem : ${memList}">
+                    <td th:text="${mem.memberProfile.email}"></td>
+                    <td th:text="${mem.memJoinDate}"></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -636,25 +301,28 @@
           <div class="w-1/2 h-full text-center border-[#a4a4a4] border-[1px] border-solid rounded-l-[10px]">
             승인 대기
           </div>
-          <div class="w-1/2 h-full text-center border-[#a4a4a4] border-[1px] border-solid rounded-r-[10px]">
+          <div class="w-1/2 h-full text-center border-[#a4a4a4] border-[1px] border-solid rounded-r-[10px]"
+          th:text="${calRequestCount}">
             n 건
           </div>
         </div>
         
         <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
           <div class="w-1/2 text-center">
-            승인 대기
+            승인
           </div>
-          <div class="w-1/2 text-center">
+          <div class="w-1/2 text-center"
+          th:text="${calApproveCount}">
             n 건
           </div>
         </div>
 
         <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
           <div class="w-1/2 text-center">
-            승인 대기
+            완료
           </div>
-          <div class="w-1/2 text-center">
+          <div class="w-1/2 text-center"
+          th:text="${calCompletedCount}">
             n 건
           </div>
         </div>
@@ -672,7 +340,8 @@
           <div class="w-1/2 text-center">
             입점 요청 대기
           </div>
-          <div class="w-1/2 text-center">
+          <div class="w-1/2 text-center"
+          th:text="${reqApplyCount}">
             n 건
           </div>
         </div>
@@ -681,44 +350,21 @@
           <div class="w-1/2 text-center">
             입점 완료
           </div>
-          <div class="w-1/2 text-center">
+          <div class="w-1/2 text-center"
+          th:text="${reqApproveCount}">
             n 건
           </div>
         </div>
 
       </div>
 
-      <label class="self-stretch relative text-[20px] font-semibold text-[#343c6a] mq450:text-[16px]">
-        이번달 1:1문의 현황
-      </label>
-      <div
-        class="self-stretch h-[96px] shadow-[0px_2px_2px_rgba(0,_0,_0,_0.25)] rounded-[30px] bg-[rgba(52,60,106,0.1)] shrink-0 flex flex-row items-start justify-start py-[20px] px-[79px] box-border gap-[10px]">
-        
-        <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
-          <div class="w-1/2 text-center">
-            문의 대기
-          </div>
-          <div class="w-1/2 text-center">
-            n 건
-          </div>
-        </div>
-        
-        <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
-          <div class="w-1/2 text-center">
-            문의 완료
-          </div>
-          <div class="w-1/2 text-center">
-            n 건
-          </div>
-        </div>
-
-      </div>
-      
     </div>
   </main>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
   <script th:inline="javascript">
     // 차트 데이터
     var top5List = /*[[${top5List}]]*/[];
@@ -753,6 +399,51 @@
         }
       }
     });
+
+
+    axios.post('https://accounts.google.com/o/oauth2/token',
+        {
+            "client_id": "160531611477-l7nuhmg2ucugqaov6bc710o83fu07tat.apps.googleusercontent.com",
+            "client_secret": "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",
+            "refresh_token": "1//04co7JmjiWeB9CgYIARAAGAQSNwF-L9IrFIWb6wIHYwu4bT64Ffo2l4nCDf0QyN3XeqsN3wyrcAEZ3oCVJBjyWtg652IIZHuhaSs",
+            "grant_type": "refresh_token",
+            "scope": "https://www.googleapis.com/auth/analytics https://www.googleapis.com/auth/analytics.readonly", 
+        }
+    )
+    .then((response) => {
+        const accessToken = response.data.access_token;
+        console.log(accessToken);
+
+        // 만약 정상적으로 'access_token'을 받았다면, 기본 보고서(runReport)를 호출하는 요청을 보낸다.
+        axios.post(`https://analyticsdata.googleapis.com/v1beta/properties/461681623:runReport`,
+            {
+                // runReport 요청에 필요한 'dimensions', 'metrics', 'dataRanges'를 data에 포함하여 전송한다.
+                "dimensions": [{ "name":"date" }],
+                "metrics": [{ "name":"activeUsers" }, { "name":"screenPageViews" }, { "name":"sessions" }],
+                "dateRanges": [{ "startDate":"2024-01-01", "endDate":"today" }],
+                "keepEmptyRows": true,
+            },
+            {
+                // 이전에 전달받은 'access_token'을 headers에 담는다(인증).
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+        )
+        // 정상적으로 응답을 받았다면, 콘솔창에 runReport의 결과가 나타날 것이다.
+        .then((response) => {
+            console.log('Report Result:', response.data);
+        })
+        // runReport가 정상적으로 호출되지 않았다면, [REPORT ERROR]라는 문구와 함께 콘솔창에 에러가 보일 것이다.
+        .catch((error) => {
+            console.log('[REPORT ERROR] ', error);
+        });
+    })
+    // 'access_token'을 호출하는 것에 실패했다면, [TOKEN ERROR]라는 문구와 함께 콘솔창에 에러가 보일 것이다.
+    .catch((error) => {
+        console.log('[TOKEN ERROR] ', error);
+    });
+
   </script>
 </body>
 

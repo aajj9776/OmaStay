@@ -1,6 +1,5 @@
 package com.omakase.omastay.repository;
 
-import com.omakase.omastay.dto.AdminMemberDTO;
 import com.omakase.omastay.entity.AdminMember;
 
 import com.omakase.omastay.repository.custom.AdminMemberRepositoryCustom;
@@ -13,7 +12,10 @@ public interface AdminMemberRepository extends JpaRepository<AdminMember, Intege
 
     int countByAdId(String adId);
 
-    @Query("SELECT a FROM AdminMember a WHERE a.adId = :adId And a.adAuth=0")
+    @Query("SELECT a FROM AdminMember a WHERE a.adId = :adId And a.adAuth=0 AND a.adminProfile.status=0")
     AdminMember findByAdId(@Param("adId") String adId);
+
+    @Query("SELECT a FROM AdminMember a WHERE a.adId = :adId And a.adAuth=1 AND a.adminProfile.status=0")
+    AdminMember findAdminByAdId(@Param("adId") String adId);
 
 }

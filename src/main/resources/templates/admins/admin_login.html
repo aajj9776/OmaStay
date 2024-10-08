@@ -13,20 +13,22 @@
 </head>
 <body >
 <div
-        class="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style="background-position-y: -370px; background-image:url('https://mblogthumb-phinf.pstatic.net/MjAyMzA2MjBfMjM3/MDAxNjg3MjU2Mzk5Nzkw.OonOZwYWfl_lrl0tUxV5TmhYsfoFBNhWvSuDz0WIgjMg.Fv6dzbJz0VvEid5qiEUS9-zqYqJTHy1g6MPqZL1XbDMg.JPEG.with_iridescent/KakaoTalk%EF%BC%BF20220615%EF%BC%BF155630116.jpg?type=w800')">
+        class="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style="background-position-y: -370px; background-image:url(/src/main/resources/static/image/admin/roomImg.jpg)">
   <div class="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
     <div class="text-white">
       <div class="mb-8 flex flex-col items-center">
         <img src="/image/logo/logo.png" width="200"/>
         <h1 class="mb-2 text-2xl">관리자 로그인</h1>
       </div>
-      <form action="#">
+      <form action="/admin/login/validate" method="post">
         <div class="mb-4 text-lg">
-          <input class="rounded-3xl border-none bg-teal-300 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="text" placeholder="아이디를 입력하세요" />
+          <input name="id" type="text" placeholder="아이디를 입력하세요"
+          class="rounded-3xl border-none bg-teal-300 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"  />
         </div>
 
         <div class="mb-4 text-lg">
-          <input class="rounded-3xl border-none bg-teal-300 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="Password" placeholder="비밀번호를 입력하세요" />
+          <input name="pw" type="Password" placeholder="비밀번호를 입력하세요"
+          class="rounded-3xl border-none bg-teal-300 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"  />
         </div>
         <div class="mt-8 flex justify-center text-lg text-black">
           <button type="submit" class="rounded-3xl bg-teal-300 bg-opacity-50 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-teal-900">Login</button>
@@ -37,5 +39,12 @@
 </div>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/ 
+  var errorMessage = /*[[${errorMessage}]]*/ null; 
+  if (errorMessage) {
+      alert(errorMessage);
+  }
+</script>
 </body>
 </html>
