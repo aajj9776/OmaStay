@@ -75,3 +75,13 @@ custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
 upload: https://storage.googleapis.com/omastay/
+
+#google analytics 전용 [이하운]
+oauth:
+  client:
+    id: your-client-id
+    secret: your-client-secret
+    refresh-token: your-refresh-token
+  google:
+    analytics:
+      property-id: your-ga4-property-id

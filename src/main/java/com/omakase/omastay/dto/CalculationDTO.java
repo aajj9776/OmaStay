@@ -23,8 +23,6 @@ public class CalculationDTO {
     private LocalDateTime calCompleteTime;
     private String calNone;
 
-    private String hName;
-
     public CalculationDTO(Calculation calculation) {
         this.id = calculation.getId();
         this.hIdx = calculation.getHostInfo() != null ? calculation.getHostInfo().getId() : null;

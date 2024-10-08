@@ -73,4 +73,15 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
         return hostInfo.region.containsIgnoreCase(keyword);
     }
 
+    @Override
+    public List<AdminMainCustomDTO> getRequestCount(){
+
+        return queryFactory
+                .select(new QAdminMainCustomDTO(
+                        hostInfo.hStatus.stringValue(), // calStatus를 문자열로 변환
+                        hostInfo.count()))
+                .from(hostInfo)
+                .groupBy(hostInfo.hStatus) // calStatus로 그룹화
+                .fetch();
+    }
 }
