@@ -54,10 +54,8 @@ import java.time.LocalDateTime;  // 이 부분이 java.time을 사용하는 부�
 
 import jakarta.persistence.EntityNotFoundException;
 
-
 @Service
 public class MyPageService {
-
 
     @Value("${upload}")  // yml 파일의 경로 주입
     private String uploadPath;

@@ -45,6 +45,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+
 @Service
 public class MemberService {
 
@@ -84,7 +85,7 @@ public class MemberService {
         return apiUrl;
     }
     
-    public MemberDTO handleKakaoCallbackAndSaveMember(HttpServletResponse response, HttpServletRequest request, String code) {
+    public MemberDTO handleKakaoCallbackAndSaveMember(HttpServletResponse response, HttpServletRequest request, String code, String state) {
         String tokenUrl = "https://kauth.kakao.com/oauth/token?grant_type=authorization_code"
                         + "&client_id=" + kakaoclientId
                         + "&redirect_uri=" + kakaoredirectUri
@@ -105,11 +106,12 @@ public class MemberService {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization", "Bearer " + accessToken);
             HttpEntity<String> userInfoRequest = new HttpEntity<>(headers);
+
             ResponseEntity<String> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequest, String.class);
             JsonNode userInfoNode = objectMapper.readTree(userInfoResponse.getBody());
             String email = userInfoNode.path("kakao_account").path("email").asText();
             String nickname = userInfoNode.path("properties").path("nickname").asText();
-    
+            String name = userInfoNode.has("name") ? userInfoNode.get("name").asText() : null;
             Member existingMember = memberRepository.findByEmail(email);
             MemberDTO memberDTO;
     
@@ -118,28 +120,48 @@ public class MemberService {
                     throw new IllegalArgumentException("계정이 비활성화되었습니다. 고객센터에 문의하세요.");
                 }
 
+                // 기존 회원의 토큰 갱신
                 if (refreshToken == null) {
                     refreshToken = existingMember.getRefreshToken();
                 }
-                existingMember.setAccessToken(accessToken);
-                existingMember.setRefreshToken(refreshToken);
+
+                // JWT 토큰 생성
+                Map<String, Object> claims = new HashMap<>();
+                claims.put("email", email);
+                claims.put("name", nickname);
+                claims.put("id", existingMember.getId());
+
+                String jwtAccessToken = jwtProvider.getAccesToken(claims);
+                String jwtRefreshToken = jwtProvider.getRefreshToken(claims);
+
+                // 회원 정보 업데이트
+                existingMember.setAccessToken(jwtAccessToken);
+                existingMember.setRefreshToken(jwtRefreshToken);
                 memberRepository.save(existingMember);
-    
+
+                // DTO 생성
                 memberDTO = new MemberDTO(existingMember);
+
                 // 세션 및 쿠키 설정
                 HttpSession session = request.getSession();
-                session.setAttribute("accessToken", accessToken);
-                session.setAttribute("refreshToken", refreshToken);
-        
-                Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+                session.setAttribute("accessToken", jwtAccessToken);
+                session.setAttribute("refreshToken", jwtRefreshToken);
+
+                // 쿠키로 저장
+                Cookie accessTokenCookie = new Cookie("accessToken", jwtAccessToken);
                 accessTokenCookie.setHttpOnly(false);
                 accessTokenCookie.setPath("/");
                 response.addCookie(accessTokenCookie);
-        
-                Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+
+                Cookie refreshTokenCookie = new Cookie("refreshToken", jwtRefreshToken);
                 refreshTokenCookie.setHttpOnly(false);
                 refreshTokenCookie.setPath("/");
                 response.addCookie(refreshTokenCookie);
+
+                // 로깅 추가
+                System.out.println("카카오 로그인 성공: " + memberDTO);
+                System.out.println("JWT AccessToken: " + jwtAccessToken);
+                System.out.println("JWT RefreshToken: " + jwtRefreshToken);
             } else {
                 memberDTO = new MemberDTO();
                 memberDTO.getMemberProfile().setEmail(email);
@@ -147,8 +169,8 @@ public class MemberService {
                 memberDTO.setMemName(nickname);
                 memberDTO.setMemEmailCheck(BooleanStatus.TRUE);
                 memberDTO.setMemSocial(Social.KAKAO);  // 카카오 로그인 설정
-                memberDTO.setAccessToken(accessToken);
-                memberDTO.setRefreshToken(refreshToken);
+                // memberDTO.setAccessToken(accessToken);
+                // memberDTO.setRefreshToken(refreshToken);
                 // 세션에 저장하기 전에 로그 출력
                 System.out.println("카카오 소셜 회원 정보: " + memberDTO);
     
@@ -251,25 +273,11 @@ public class MemberService {
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("email", email);
                 claims.put("name", name);
-    
-                String accessToken = jwtProvider.getAccesToken(claims);
-                String refreshToken = jwtProvider.getRefreshToken(claims);
-    
-                memberDTO.setAccessToken(accessToken);
-                memberDTO.setRefreshToken(refreshToken);
-    
+
+
                 // 세션에 저장
                 request.getSession().setAttribute("socialMember", memberDTO);
     
-                Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-                accessTokenCookie.setHttpOnly(false);
-                accessTokenCookie.setPath("/");
-                response.addCookie(accessTokenCookie);
-    
-                Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-                refreshTokenCookie.setHttpOnly(false);
-                refreshTokenCookie.setPath("/");
-                response.addCookie(refreshTokenCookie);
             }
     
             return memberDTO;
@@ -278,8 +286,6 @@ public class MemberService {
             throw new IllegalArgumentException("구글 로그인 처리 중 오류가 발생했습니다.");
         }
     }
-    
-    
     //구글 로그인 구간 종료
      
     // 네이버 로그인 구현 범위 시작
@@ -364,24 +370,9 @@ public class MemberService {
                 claims.put("email", email);
                 claims.put("name", name);
     
-                String accessToken = jwtProvider.getAccesToken(claims);
-                String refreshToken = jwtProvider.getRefreshToken(claims);
-    
-                memberDTO.setAccessToken(accessToken);
-                memberDTO.setRefreshToken(refreshToken);
-    
                 // 세션에 저장
                 request.getSession().setAttribute("socialMember", memberDTO);
     
-                Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-                accessTokenCookie.setHttpOnly(false);
-                accessTokenCookie.setPath("/");
-                response.addCookie(accessTokenCookie);
-    
-                Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-                refreshTokenCookie.setHttpOnly(false);
-                refreshTokenCookie.setPath("/");
-                response.addCookie(refreshTokenCookie);
             }
     
             return memberDTO;
@@ -390,8 +381,7 @@ public class MemberService {
             throw new IllegalArgumentException("네이버 로그인 처리 중 오류가 발생했습니다.");
         }
     }
-    
-    
+
     
     @Transactional
     public void updateTokens(Member member, String accessToken, String refreshToken) {

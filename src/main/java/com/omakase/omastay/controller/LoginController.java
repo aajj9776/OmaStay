@@ -120,6 +120,7 @@ public class LoginController {
     @GetMapping("/kakao/callback")
     public String kakaoCallback(HttpServletRequest request, HttpServletResponse response,
                                 @RequestParam(value = "code", required = false) String code,
+                                @RequestParam(value = "state", required = false) String state,
                                 @RequestParam(value = "error", required = false) String error, Model model) {
         try {
             if (error != null || code == null) {
@@ -128,7 +129,7 @@ public class LoginController {
             }
 
             // 카카오 로그인 처리 후 회원 정보를 세션에 저장
-            MemberDTO memberDTO = memberService.handleKakaoCallbackAndSaveMember(response, request, code);
+            MemberDTO memberDTO = memberService.handleKakaoCallbackAndSaveMember(response, request, code, state);
 
             // 소셜 회원 정보 로그로 출력
             System.out.println("카카오 소셜 회원 정보: " + memberDTO);
