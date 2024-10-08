@@ -169,10 +169,6 @@ public class MemberService {
                 memberDTO.setMemName(nickname);
                 memberDTO.setMemEmailCheck(BooleanStatus.TRUE);
                 memberDTO.setMemSocial(Social.KAKAO);  // 카카오 로그인 설정
-                // memberDTO.setAccessToken(accessToken);
-                // memberDTO.setRefreshToken(refreshToken);
-                // 세션에 저장하기 전에 로그 출력
-                System.out.println("카카오 소셜 회원 정보: " + memberDTO);
     
                 // 세션에 저장
                 request.getSession().setAttribute("socialMember", memberDTO);
