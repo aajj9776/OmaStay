@@ -596,6 +596,7 @@ public class HostController {
         return ResponseEntity.ok("success");
     }
 
+    
     //호스트 이용규칙 등록
     @RequestMapping("/rulesreg")
     public ResponseEntity<String> rulesreg(@RequestBody HostRulesDTO hostRulesDTO) {
