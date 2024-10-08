@@ -11,7 +11,7 @@ import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.ReviewMapper;
 import com.omakase.omastay.mapper.ServiceMapper;
 import com.omakase.omastay.repository.ReviewRepository;
-import com.omakase.omastay.util.FileRenameUtil;
+import com.omakase.omastay.util.FileRenameGcs;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import java.io.File;

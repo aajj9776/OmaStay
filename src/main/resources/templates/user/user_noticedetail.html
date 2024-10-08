@@ -9,6 +9,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="/summernote/css/summernote-lite.css" />
   <style>
     .dt-length select {
       font-size: 12px;
@@ -65,7 +66,7 @@
               class="w-[403px] flex flex-row items-start justify-start py-[0px] px-[29px] box-border max-w-full"
             >
               <div
-                class="ml-[30px] w-[150px] relative text-inherit tracking-normal leading-normal font-semibold flex items-center text-4xl mq450:text-lg mq450:leading-snug mq750:text-2xl mq750:leading-relaxed"
+                class="m-[0px] w-[300px] relative text-inherit tracking-normal leading-normal font-semibold flex items-center text-4xl mq450:text-lg mq450:leading-snug mq750:text-2xl mq750:leading-relaxed"
               >
                 공지사항 상세
             </div>
@@ -142,21 +143,8 @@
         </section>
       </main>
     </div>
-      <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-      <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-      <script src="https://cdn.tailwindcss.com"></script>
-      <script src="/summernote/js/summernote-lite.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
       <script>
-        $(function () {
-            $("#content").summernote({
-                toolbar: false, // 툴바를 제거합니다.
-                airMode: true, // 에디터를 비활성화합니다.
-            });
-  
-            $("#content").summernote('disable');
-        });
-  
         function down(fName) {
             $.ajax({
                 url: "/user/fileDownload",

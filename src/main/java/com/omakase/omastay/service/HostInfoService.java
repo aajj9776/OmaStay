@@ -201,11 +201,23 @@ public class HostInfoService {
             }
         }
 
-        List<Image> images = imageRepository.findByHostInfoId(hostInfo.getId());
+        List<Image> existingImages = imageRepository.findByHostInfoId(hostInfo.getId());
+        List<ImageDTO> newImages = hostInfoCustomDTO.getImages();
+
+        // 기존 이미지 상태 변경
+        for (Image existingImage : existingImages) {
+            boolean isImageInNewList = newImages.stream()
+                .anyMatch(newImage -> newImage.getImgName().getFName().equals(existingImage.getImgName().getFName()));
+            if (!isImageInNewList) {
+                existingImage.setImgStatus(BooleanStatus.FALSE);
+                imageRepository.save(existingImage);
+            }
+        }
+
 
         for (ImageDTO imageDTO : hostInfoCustomDTO.getImages()) {
-        boolean exists = images.stream()
-                .anyMatch(image -> image.getImgName().equals(imageDTO.getImgName()));
+        boolean exists = existingImages.stream()
+        .anyMatch(existingImage -> existingImage.getImgName().getFName().equals(imageDTO.getImgName().getFName()));
         if (!exists) {
             Image newImage = new Image();
             newImage.setRoomInfo(null);
