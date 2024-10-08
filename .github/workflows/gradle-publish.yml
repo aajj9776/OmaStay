@@ -18,7 +18,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-
+        
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.4
       with:
@@ -28,15 +28,11 @@ jobs:
       run: |
         scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
 
-    - name: Verify directory structure on EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} "ls -R /home/ubuntu/OmaStay"
-
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-
+      
     - name: Install Node.js dependencies
       run: |
         cd src/main/frontend
@@ -58,72 +54,36 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod u+x gradlew
-
+      
     - name: Build with Gradle Wrapper
-      run: ./gradlew clean build --no-daemon --info
+      run: ./gradlew clean build --no-daemon
 
     - name: Install Docker using convenience script on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
-
-    - name: Verify Docker installation
-      run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} "docker --version && sudo systemctl status docker"
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
 
     - name: Add ubuntu user to Docker group and restart Docker on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo usermod -aG docker ubuntu
           sudo systemctl restart docker
         EOF
 
     - name: Verify Docker permissions on EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} "docker ps"
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} "docker ps"
 
     - name: Set permissions for the directory
       run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
-          DIR="/home/ubuntu/OmaStay/nginx"
-          if [ -d "$DIR" ]; then
-              sudo chmod -R 777 "$DIR"
-              if [ -d "$DIR/ssl/accounts" ]; then
-                  sudo chown -R ubuntu:ubuntu "$DIR/ssl/accounts"
-                  sudo chmod -R 755 "$DIR/ssl/accounts"
-              fi
-              if [ -d "$DIR/certbot" ]; then
-                  sudo chmod -R 777 "$DIR/certbot"
-              fi
-          else
-              echo "Directory $DIR does not exist."
-          fi
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
+          sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/nginx/ssl/accounts
+          sudo chmod -R 755 /home/ubuntu/OmaStay/nginx/ssl/accounts
         EOF
 
-    - name: SSH into EC2 and clean up Docker Compose
+    - name: SSH into EC2 and run Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=100 ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
-          docker-compose down --remove-orphans
+          docker-compose down
           docker-compose up -d --build
-        EOF
-
-    - name: SSH into EC2 and run Certbot
-      run: |
-        ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=5 ubuntu@${{ secrets.HOST }} << 'EOF'
-          cd /home/ubuntu/OmaStay
-          # Verify Certbot directory
-          ls -la /home/ubuntu/OmaStay/nginx/certbot
-          # Initial SSL certificate request
-          docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d omastay.duckdns.org -d www.omastay.duckdns.org
-          # Verify Certbot certificate issuance
-          if [ -f /etc/letsencrypt/live/omastay.duckdns.org/fullchain.pem ]; then
-              echo 'Certificate issued successfully'
-          else
-              echo 'Certificate issuance failed'
-              exit 1
-          fi
-          # Restart services to apply the certificate
-          docker-compose restart nginx
-          # Check Certbot log for details
-          cat /var/log/letsencrypt/letsencrypt.log
         EOF
