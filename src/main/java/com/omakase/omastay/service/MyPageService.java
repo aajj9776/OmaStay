@@ -28,10 +28,11 @@ public class MyPageService {
     private PaymentRepository paymentRepository;
 
     @Transactional
-    public  List<ReservationDTO> getReservationInfo(int memIdx) {
+    public  Page<ReservationDTO> getReservationInfo(int memberId, Pageable pageable) {
         // Reservation을 조회하는 로직
-        List<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memIdx);
-        return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
+        Page<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memberId, pageable);
+        Page<ReservationDTO> reservationDTOPage = reservation.map(ReservationMapper.INSTANCE::toReservationDTO);
+        return reservationDTOPage;
     }
 
     public ReservationDTO getReservation(Integer id) {
@@ -54,7 +55,6 @@ public class MyPageService {
     public Page<ReservationDTO> getNewReservationInfo(Integer memberId, Pageable pageable) {
          // Page<Reservation>을 가져옴
          Page<Reservation> reservationPage = reservationRepository.findByMemberId(memberId, pageable);
-        
          // Page<ReservationDTO>로 변환
          Page<ReservationDTO> reservationDTOPage = reservationPage.map(ReservationMapper.INSTANCE::toReservationDTO);
          
