@@ -56,7 +56,7 @@
       class="flex-1 flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
     >
     <section
-    class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[100px] px-[100px] box-border gap-[80px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border">
+    class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start px-[100px] box-border gap-[80px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border">
     <div class="ml-[30px] w-[150px] relative text-inherit tracking-normal leading-normal font-semibold flex items-center text-4xl mq450:text-lg mq450:leading-snug mq750:text-2xl mq750:leading-relaxed">
       공지사항
   </div>
@@ -116,22 +116,14 @@
   </section>
 </main>
 </div>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-  crossorigin="anonymous"></script>
-<script src="https://unpkg.com/htmx.org@1.6.1"></script>
-<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js" defer></script>
 <script>
-
   $(document).ready(function () {
     $('#listTable').DataTable({
       "searching": false,
 
       ajax: {
-        url: '/user/noticelist/getList',
+        url: '/user/noticeList/getList',
         type: 'GET',
         dataSrc: 'data'
       },

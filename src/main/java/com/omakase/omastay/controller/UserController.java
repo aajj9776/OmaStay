@@ -42,13 +42,13 @@ public class UserController {
 
     @RequestMapping("/notice")
     public String usernotice() {
-        return "user/user_notice";
+        return "user/notice";
     }
 
     // 사용자 공지사항 전체 리스트
-    @RequestMapping("/noticelist/getList")
+    @RequestMapping("/noticeList/getList")
     @ResponseBody
-    public Map<String, Object> noticelist() {
+    public Map<String, Object> noticeList() {
         Map<String, Object> map = new HashMap<>();
 
         List<ServiceDTO> list = serviceService.getAllServices(SCate.NOTICE, UserAuth.USER);
@@ -79,7 +79,7 @@ public class UserController {
     public ModelAndView noticedetail(@RequestParam("id") String id) {
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("user/user_noticedetail");
+        mv.setViewName("user/noticedetail");
 
         if (id != null) {
             ServiceDTO sDto = serviceService.getServices(Integer.parseInt(id));
@@ -125,7 +125,7 @@ public class UserController {
 
     //사용자 자주묻는질문
     @RequestMapping("/faq")
-    public ModelAndView userfaq() {
+    public ModelAndView userFaq() {
 
         ModelAndView mv = new ModelAndView();
 
