@@ -101,7 +101,6 @@ searchButton.addEventListener('click', function(){
     console.log(sessionStorage.getItem('keyword'), sessionStorage.getItem('date'), sessionStorage.getItem('people'), sessionStorage.getItem('startDate'), sessionStorage.getItem('endDate'));
 
     recSearch();
-    searchAccommodation();
 });
 
 let recSearches = [];
@@ -213,6 +212,8 @@ function recSearch() {
         }
 
     }
+
+    searchAccommodation();
 }
 
 const searchAccommodation = (identifier, filterData, page = 0) => {
@@ -222,32 +223,7 @@ const searchAccommodation = (identifier, filterData, page = 0) => {
     const checkOut = document.getElementById("check-out").value;
     const person = document.getElementById("person_count").innerText;
 
-   /* // filterData가 있으면 그 데이터를 우선 사용
-    if (filterData) {
-        facilities = filterData.facilities
-        hCate = filterData.hCate
-        startPrice = filterData.startPrice
-        endPrice = filterData.endPrice
-        filter = filterData.filter
-    }
-
-    // 디버깅을 위해 현재 설정된 필터 값을 출력
-    console.log("Search Accommodation - Parameters:", { keyword, checkIn, checkOut, person, facilities, hCate, startPrice, endPrice, filter, page });*/
-
-    // 기본 URL 생성
     let url = `/search/domestic-accommodations?keyword=${keyword}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
-
-   /* // 유동적으로 파라미터 추가
-    if (facilities.length > 0) {
-        url += `&facilities=${facilities.join(',')}`;
-    }
-    if (hCate && hCate !== "all") {
-        url += `&hCate=${hCate}`;
-    }
-    if (startPrice) url += `&startPrice=${startPrice}`;
-    if (endPrice) url += `&endPrice=${endPrice}`;
-    if (filter) url += `&filter=${encodeURIComponent(filter)}`;
-    if (page) url += `&page=${page + 1}`;*/
 
     // URL로 페이지 이동
     location.href = url;

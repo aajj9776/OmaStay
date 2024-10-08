@@ -28,7 +28,7 @@
   </head>
   <body>
     <header th:insert="~{component/header/header :: header}" />
-    <div
+    <div class = "relative z-10 bg-white rounded-lg p-6"
       th:if="${includeSearchBar}"
       th:insert="~{component/search/searchbar :: searchbar}"
     ></div>
