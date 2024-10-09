@@ -14,6 +14,7 @@ public interface HostInfoRepository extends JpaRepository<HostInfo, Integer>, Ho
     HostInfo findByAdminMemberId(int adIdx);
     HostInfo findById(int id);
     
+    // 관리자 - 입점 요청 조회
     @Query("SELECT h FROM HostInfo h WHERE h.hStatus IS NOT NULL ORDER BY h.id DESC")
     List<HostInfo> hostInfos();
 

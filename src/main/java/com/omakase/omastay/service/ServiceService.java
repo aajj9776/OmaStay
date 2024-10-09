@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ServiceService {
@@ -26,7 +27,7 @@ public class ServiceService {
         return ServiceMapper.INSTANCE.toServiceDTOList(services);
     }
     
-    // 게시글 삭제하기
+    // 호스트 공지사항 게시글 삭제하기
     public int deleteService(List<Integer> ids) {
         int[] idArray = new int[ids.size()];
         for (int i = 0; i < ids.size(); i++) {
@@ -54,33 +55,46 @@ public class ServiceService {
     }
 
     // 게시글 수정
-    public void modifyServices(ServiceDTO serviceDTO) {
+    @Transactional
+    public void modifyServices(ServiceDTO serviceDTO, int key) {
         com.omakase.omastay.entity.Service service = serviceRepository.findById(serviceDTO.getId()).get();
         service.setSTitle(serviceDTO.getSTitle());
         service.setSContent(serviceDTO.getSContent());
         service.setSCate(serviceDTO.getSCate());
-        service.setFileName(serviceDTO.getFileName());
 
-        serviceRepository.save(service);
+        
+        if(key==0){ // 새 파일이 존재하는 경우
+            service.setFileName(serviceDTO.getFileName());
+            serviceRepository.modifyServices(service);
+        }else if(key==1){  // 원래 파일이 있고 새 파일이 없는 경우
+            serviceRepository.modifyServicesNoFile(service);
+        }else{ //selectedFile.length()<1 => 파일이 있었는데 삭제된 경우 
+            service.setFileName(serviceDTO.getFileName());
+            serviceRepository.modifyServicesDeleteFile(service);
+        }
+        
     }
 
     // 게시물 검색
     public List<ServiceDTO> searchService(String type, String keyword, String date, UserAuth sAuth, SCate sCate){
-        List<com.omakase.omastay.entity.Service> services;
+
+        List<com.omakase.omastay.entity.Service> services = null;
+        
+        String startDate = null;
+        String endDate = null;
+
         if(!date.isEmpty()){
             String[] date2 = date.split(" ~ ");
-            String startDate = date2[0];
-            String endDate = date2[1];
-
-            services = serviceRepository.searchServices(type, keyword, startDate, endDate, sAuth, sCate); 
-        }else{
-            services = serviceRepository.searchServices(type, keyword, null, null, sAuth, sCate);
+            startDate = date2[0];
+            endDate = date2[1];
         }
-
+        
+        services = serviceRepository.searchServices(type, keyword, startDate, endDate, sAuth, sCate); 
+        
         return ServiceMapper.INSTANCE.toServiceDTOList(services);
     }
 
-    // 호스트 공지사항 검색
+    // 호스트 공지사항 검색(선영언니꺼)
     public List<ServiceDTO> searchHostNotice(String type, String keyword, UserAuth sAuth, SCate sCate){
         List<com.omakase.omastay.entity.Service> services;
 

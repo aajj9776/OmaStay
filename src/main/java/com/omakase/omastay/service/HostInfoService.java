@@ -285,27 +285,23 @@ public class HostInfoService {
 
 
 
-    /* 관리자에서 쓰는 거 */
+    // 관리자 - 입점 요청 조회
     public List<HostInfoDTO> getAllHostInfos() {
         List<HostInfo> hostInfos = hostInfoRepository.hostInfos();
         return HostInfoMapper.INSTANCE.toHostInfoDTOList(hostInfos);
     }
 
+    // 관리자 - 입점 요청 상세 조회
     public HostRequestInfoDTO getHostRequestInfo(int id){
         HostRequestInfoDTO hostRequestInfoDTO = new HostRequestInfoDTO();
 
         HostInfo hostInfo = hostInfoRepository.findById(id);
-        System.out.println(hostInfo);
-         // adminMember 엔티티를 명시적으로 로드
-        
         hostRequestInfoDTO.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo));
 
         Account account = accountRepository.findByHostInfoId(hostInfo.getId());
-        System.out.println(account);
         hostRequestInfoDTO.setAccount(AccountMapper.INSTANCE.toAccountDTO(account));
 
         List<HostFacilitiesDTO> hostFacilities = hostFacilitiesRepository.findByHostInfoIdAndFacilities(hostInfo.getId());
-        System.out.println(hostFacilities);
 
         List<Facilities> facilities = new ArrayList<>();
 

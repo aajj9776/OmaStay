@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!-- 모달 뒷 배경 -->
+<div id="modalOverlay"
+    class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50 hidden ">
+
+    <!-- 포인트 등록 모달 -->
+    <div id="addPoint"
+        class="bg-[#d9ddf1] p-[0px_30px_30px_30px] max-w-[450px] min-w-[100px] box-border rounded-[12px] flex flex-col items-center justify-center relative top-[40px] m-auto"
+        style="width: auto; height: auto;">
+        <button id="closeModal" class="w-full flex items-end justify-end pb-1 pt-[15px]">
+            <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
+        </button>
+
+        <!--모달 내 흰색 영역 컨텐츠 -->
+        <section
+            class="m-[0px] w-[640px] p-[24px] shadow-[0px_20px_24px_-4px_rgba(16,_24,_40,_0.1),_0px_8px_8px_-4px_rgba(16,_24,_40,_0.04)] rounded-[12px] bg-[#fff] max-w-full overflow-hidden flex flex-col gap-3 items-center justify-start leading-[normal] tracking-[normal]">
+
+            <!-- 제목 영역 -->
+            <section class="self-stretch bg-[#fff] flex flex-col items-center justify-start relative max-w-full">
+                <label
+                    class="[text-decoration:none] self-stretch relative text-[18px] leading-[28px] font-semibold font-[Inter] text-[#101828] text-left">
+                    포인트 등록
+                </label>
+                <div class="self-stretch relative text-[14px] leading-[20px] font-[Inter] text-[#475467] text-left">
+                    등록할 포인트의 정보를 입력해주세요
+                </div>
+            </section>
+
+            <!-- form 영역 -->
+            <form action="/admin/point/add"
+                class="self-stretch flex flex-col items-start justify-start box-border max-w-full text-[16px] font-medium gap-[16px]">
+                <label class="text-[#344154] ">
+                    회원 이메일
+                </label>
+                <input type="text" name="email"
+                    class="w-full h-[30px] flex-1 min-w-[149px] text-[#344154] border-2 border-solid border-[#d9ddf1] rounded-[4px]"
+                    placeholder="admin" />
+                <!-- <label class="text-[#344154]">
+          이메일 구분(소셜 여부)
+        </label>
+        <div class="flex flex-row gap-3">
+          <div><input type="radio" name="social" value="NONE"/> <label>해당 없음</label></div>
+          <div><input type="radio" name="social" value="KAKAO"/> <label>카카오</label></div>
+          <div><input type="radio" name="social" value="NAVER"/> <label>네이버</label></div>
+          <div><input type="radio" name="social" value="GOOGLE"/> <label>구글</label></div>
+        </div> -->
+
+
+                <label class="text-[#344154]">
+                    포인트 내용
+                </label>
+                <input type="text" name="pContent"
+                    class="w-full h-[30px] flex-1 text-[#344154] border-2 border-solid border-[#d9ddf1] rounded-[4px]"
+                    placeholder="예: 생일 축하 포인트 지급" />
+
+                <label class="text-[#344154]">
+                    포인트 금액*
+                </label>
+                <div class="flex flex-row gap-3 items-center">
+                    <input type="text" name="pValue"
+                        class="w-full h-[30px] text-[#344154] border-2 border-solid border-[#d9ddf1] rounded-[4px]"
+                        placeholder="예: 10000*" />
+                    <span class="text-[#000]">원</span>
+                </div>
+
+                <section
+                    class="self-stretch flex flex-row items-start justify-start pt-3 box-border max-w-full text-[18px] m-auto gap-5">
+                    <button type="submit" class="w-[100px] h-[30px] bg-[#d4d8f1] rounded-[4px]"> 확인 </button>
+                </section>
+
+            </form>
+
+        </section>
+
+    </div>
+</div>

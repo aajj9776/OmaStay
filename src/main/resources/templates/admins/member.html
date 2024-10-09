@@ -15,8 +15,7 @@
     <label class="text-[24px] h-[40px] font-semibold">
       회원 조회
     </label>
-    <button id="openModal">[임시]</button>
-    
+
     <!-- 테이블 영역-->
     <div th:if="${list == null}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
@@ -37,16 +36,25 @@
               <th>연락처</th>
               <th>이름</th>
               <th>가입일</th>
+              <th>상태</th>
             </tr>
           </thead>
           <tbody class="bg-[#ffffff] pt-[100px] ">
             <tr th:each="mem : ${list}" th:data-id="${mem.id}">
               <td th:text="${mem.id}"></td>
-              <td th:text="${mem.gIdx}"></td>
+              <td th:switch="${mem.gIdx}">
+                <span th:case="1">방랑자</span>
+                <span th:case="2">탐험가</span>
+                <span th:case="3">개척자</span>
+              </td>
               <td th:text="${mem.memberProfile.email}"></td>
               <td th:text="${mem.memPhone}"></td>
               <td th:text="${mem.memName}"></td>
               <td th:text="${#temporals.format(mem.memJoinDate, 'yyyy-MM-dd HH:mm')}"></td>
+              <td th:switch="${mem.memberProfile.status.name()}">
+                <span th:case="'TRUE'">가입</span>
+                <span th:case="'FALSE'">탈퇴</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -67,58 +75,139 @@
       // 테이블 행 클릭 이벤트
       $('#listTable tbody').on('click', 'tr', function () {
         var memberId = $(this).data('id');
-        console.log("memberId: "+memberId)
+        console.log("memberId: " + memberId)
         fetchMemberDetails(memberId);
       });
-
-      $("#openModal").click(function () {
-        $("#modalOverlay").css("display", "flex");
-      });
-
     });
 
     // 회원 상세 정보 가져오기
     function fetchMemberDetails(memberId) {
 
       $.ajax({
-          url: '/admin/member/detail', // 요청할 URL (백엔드 엔드포인트)
-          data: {memId:memberId},
-          method: 'GET', // HTTP 메서드
-          success: function(data) {
-            console.log(data);
-              // 성공적으로 데이터를 받았을 때 실행될 코드
-              $("#monthCount").val(data.monthCount);
-              $("#totalCount").val(data.totalCount);
+        url: '/admin/member/detail', // 요청할 URL (백엔드 엔드포인트)
+        data: { memId: memberId },
+        method: 'GET', // HTTP 메서드
+        success: function (data) {
+          console.log(data);
 
-              var tableBody = $('#modalTable tbody');
-              tableBody.empty();  // 테이블을 비워줍니다 (기존 데이터가 있다면 제거)
+          setGradeImage(data.member.grade.gcate);
 
-              // response.data가 예약 목록이라고 가정
-              data.recentList.forEach(function (item) {
-                  var row = '<tr>' +
-                      '<td>' + item.reservation.id + '</td>' +
-                      '<td>' + item.hostInfo.hostName + '</td>' +
-                      '<td>' + item.reservation.startEndVo.start + '</td>' +
-                      '<td>' + item.reservation.startEndVo.end + '</td>' +
-                      // '<td>' + item.payment + '</td>' +
-                      '<td>' + item.reservation.resStatus + '</td>' +
-                      '</tr>';
-                  
-                  tableBody.append(row);  // tbody에 행 추가
-              });
-          },
-          error: function(xhr, status, error) {
-            console.log("Status: " + xhr.status); // HTTP 상태 코드 출력
-            console.log("Response: " + xhr.responseText); // 서버에서 반환된 응답 내용 출력
-            console.log("Error: " + error); // jQuery에서 발생한 에러 메시지 출력
-            $('#result').html('<p>오류 발생: ' + error + '</p>');
+          setRadioByGrade(data.member.grade.gcate);
+
+          $('#memberName').text(data.member.memName);
+          $('#inputName').val(data.member.memName);
+          $('#inputMail').val(data.member.memberProfile.email);
+          $('#inputContact').val(data.member.memPhone);
+
+          var join = new Date(data.member.memJoinDate);
+          var formattedJoin = join.getFullYear() + '-' +
+                String(join.getMonth() + 1).padStart(2, '0') + '-' +
+                String(join.getDate()).padStart(2, '0');
+
+          $('#inputDate').val(formattedJoin);
+          $('#inputStatus').val(getStatusString(data.member.memberProfile.status));
+
+          $('#monthCount').val(data.monthCount);
+          $('#totalCount').val(data.totalCount);
+
+          var tableBody = $('#modalTable tbody');
+          tableBody.empty();  // 테이블을 비워줍니다 (기존 데이터가 있다면 제거)
+
+          // recentList가 null이거나 빈 배열인지 확인
+          if (data.recentList.length === 0) {
+            var emptyRow = '<tr><td colspan="6" style="text-align:center;">최근 예약 내역이 없습니다</td></tr>';
+            tableBody.append(emptyRow);
+          } else {
+            // response.data가 예약 목록이라고 가정
+            data.recentList.forEach(function (item) {
+              // 날짜 포맷 변경
+              var startDate = new Date(item.reservation.startEndVo.start);
+              var endDate = new Date(item.reservation.startEndVo.end);
+              var payDate = new Date(item.payment.payDate);
+
+              var formattedStart = startDate.getFullYear() + '-' +
+                String(startDate.getMonth() + 1).padStart(2, '0') + '-' +
+                String(startDate.getDate()).padStart(2, '0');
+
+              var formattedEnd = endDate.getFullYear() + '-' +
+                String(endDate.getMonth() + 1).padStart(2, '0') + '-' +
+                String(endDate.getDate()).padStart(2, '0');
+
+              var formattedPay = payDate.getFullYear() + '-' +
+                String(payDate.getMonth() + 1).padStart(2, '0') + '-' +
+                String(payDate.getDate()).padStart(2, '0');
+
+              var row = '<tr>' +
+                '<td>' + item.reservation.id + '</td>' +
+                '<td>' + item.hostInfo.hname + '</td>' +
+                '<td>' + formattedStart + '</td>' +
+                '<td>' + formattedEnd + '</td>' +
+                '<td>' + formattedPay + '</td>' +
+                '<td>' + getStatusString(item.reservation.resStatus) + '</td>' +
+                '</tr>';
+
+              tableBody.append(row);  // tbody에 행 추가
+            });
           }
+        },
+        error: function (xhr, status, error) {
+          console.log("Status: " + xhr.status); // HTTP 상태 코드 출력
+          console.log("Response: " + xhr.responseText); // 서버에서 반환된 응답 내용 출력
+          console.log("Error: " + error); // jQuery에서 발생한 에러 메시지 출력
+          $('#result').html('<p>오류 발생: ' + error + '</p>');
+        }
       });
-      
+
       // 모달 표시
       $("#modalOverlay").css("display", "flex");
-    
     }
+
+    function getStatusString(resStatus) {
+      switch (resStatus) {
+        case 'PENDING': // 예약대기
+          return "예약대기";
+        case 'CONFIRMED': // 예약확정
+          return "예약확정";
+        case 'CANCELLED': // 예약취소
+          return "예약취소";
+        case 'COMPLETED': // 사용완료
+          return "사용완료";
+        default:
+          return "알 수 없음"; // 기본값
+      }
+    }
+
+    function setRadioByGrade(grade) {
+      // 모든 라디오 버튼의 체크 해제 및 비활성화 상태 해제
+      $('input[name="grade"]').prop('checked', false).prop('disabled', false);
+
+      // 전달받은 등급에 따라 라디오 버튼 체크 및 비활성화
+      $('input[name="grade"]').each(function () {
+        var label = $(this).next('label').text();  // 라벨 텍스트 가져오기
+        if (label === grade) {
+          $(this).prop('checked', true);  // 해당 라디오 버튼 체크
+          $(this).prop('disabled', true);  // 수정 불가하도록 비활성화
+        }
+      });
+    }
+    
+    function setGradeImage(gcate) {
+        var imageUrl = "/image/admin/default.png"; // 기본 이미지
+        if (gcate) {
+          imageUrl = "/image/admin/" + gcate + ".png";  // 전달받은 gcate 값에 맞는 이미지 경로 설정
+        }
+        $('#grade-image').attr('src', imageUrl);  // 이미지 경로 변경
+      }
+
+      function getStatusString(status) {
+    if (status === "TRUE") {
+        return "가입";
+    } else if (status === "FALSE") {
+        return "탈퇴";
+    } else {
+        return "알 수 없음";  // 기본값
+    }
+}
   </script>
 </body>
 
