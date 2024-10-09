@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout/main}"
       layout:fragment="main"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
-    <link href="/css/component/swiper.css" rel="stylesheet"/></head>
+    <link href="/css/component/swiper.css" rel="stylesheet"/>
+</head>
 <style>
     @media (min-width: 1280px) {
         .custom-padding {
@@ -15,6 +16,7 @@
             padding-right: 0;
         }
     }
+
     @media (min-width: 912px) {
         .custom-gap {
             row-gap: 20px;
@@ -30,16 +32,21 @@
             <img alt="" class="kv-pc-light9b56ca76webp-icon absolute inset-0 w-full h-full object-cover"
                  src="/image/index/03-kv-pc-light9b56ca76webp@2x.png"/>
             <div class="max-w-[1200px] mx-auto">
-            <h2 class="column0_header relative z-10 text-4xl lg:text-5xl font-bold text-white mb-8">
+                <h2 class="column0_header relative z-10 text-4xl lg:text-5xl font-bold text-white mb-8">
                 <span class="column0_header_txtwrap">
                   <p class="text-3xl m-0 pb-2">오마스테이, 당신을</p>
                   <p class="text-3xl m-0">위한 맞춤형 숙소</p>
                 </span>
-            </h2>
-            <div class="search relative z-10 bg-white rounded-lg shadow-lg p-6" th:include="~{component/search/searchbar}">
+                </h2>
+                <div class="search relative z-10 bg-white rounded-lg shadow-lg p-6">
+                    <div>
+                        <div class="text-blue-700 text-2xl sticky z-10 w-full border-b border-[#ebebeb]g pl-2 lg:px-5 gap-3 lg:gap-4 text-left font-[Inter]">
+                            국내 숙소
+                        </div>
+                        <div th:include="~{component/search/searchbar}"></div>
+                    </div>
+                </div>
             </div>
-            </div>
-        </div>
     </section>
 
     <section class="column1 container px-4 py-10 max-w-[1200px] mx-auto">
@@ -131,7 +138,7 @@
                             <div class="text-sm text-gray-500 mb-2">인천터미널역 도보 14분</div>
                             <div class="flex items-center mb-2">
                                 <div class="bg-orange-500 text-white rounded px-2 py-1 text-xs font-bold mr-2">
-                                    <img src="/image/index/svg-3.svg" class="inline-block mr-1" />
+                                    <img class="inline-block mr-1" src="/image/index/svg-3.svg"/>
                                     9.5
                                 </div>
                                 <div class="text-sm text-gray-600">9,871명 평가</div>
@@ -182,7 +189,7 @@
             <div class="text-blue-600 cursor-pointer">전북</div>
             <div class="text-blue-600 cursor-pointer">전남</div>
             <div class="text-blue-600 cursor-pointer">경북</div>
-            <div  class="text-blue-600 cursor-pointer">경남</div>
+            <div class="text-blue-600 cursor-pointer">경남</div>
             <div class="text-blue-600 cursor-pointer">충북</div>
             <div class="text-blue-600 cursor-pointer">충남</div>
             <div class="text-blue-600 cursor-pointer">대구</div>
@@ -195,10 +202,9 @@
     </section>
 </div>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
-<script src ="/js/countperson.js"></script>
+<script src="/js/countperson.js" type="text/javascript"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function (){
+    document.addEventListener("DOMContentLoaded", function () {
         //세션스토리지의 값 searh_bar에 넣기
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
@@ -208,8 +214,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const activeSearch = urlParams.get("activeSearch");
         if (activeSearch === "domestic") {
-          $("#search-accommodation").focus();
-          $("#search-accommodation").trigger("click");
+            $("#search-accommodation").focus();
+            $("#search-accommodation").trigger("click");
         }
 
 
@@ -243,63 +249,63 @@
         });
     });
 
-        const swiper2 = new Swiper(".column2 .swiper-container", {
-          loop: false,
-          slidesPerView: 6,
-          spaceBetween: 15,
-          slidesPerGroup: 6,
-          navigation: {
+    const swiper2 = new Swiper(".column2 .swiper-container", {
+        loop: false,
+        slidesPerView: 6,
+        spaceBetween: 15,
+        slidesPerGroup: 6,
+        navigation: {
             nextEl: ".column2 .swiper-button-next",
             prevEl: ".column2 .swiper-button-prev",
-          },
-          breakpoints: {
+        },
+        breakpoints: {
             1200: {
-              slidesPerView: 6,
+                slidesPerView: 6,
             },
             0: {
-              slidesPerView: 1,
+                slidesPerView: 1,
             },
-          },
-          on: {
+        },
+        on: {
             init: function () {
-              updateNavigationButtons(this);
+                updateNavigationButtons(this);
             },
             slideChange: function () {
-              updateNavigationButtons(this);
+                updateNavigationButtons(this);
             },
-          },
-        });
+        },
+    });
 
-        const swiper4 = new Swiper(".column4 .swiper-container", {
-          loop: false,
-          slidesPerView: 4,
-          spaceBetween: 15,
-          slidesPerGroup: 4,
-          navigation: {
+    const swiper4 = new Swiper(".column4 .swiper-container", {
+        loop: false,
+        slidesPerView: 4,
+        spaceBetween: 15,
+        slidesPerGroup: 4,
+        navigation: {
             nextEl: ".column4 .swiper-button-next",
             prevEl: ".column4 .swiper-button-prev",
-          },
-          pagination: {
+        },
+        pagination: {
             el: ".column4 .swiper-pagination",
             clickable: true,
-          },
-          breakpoints: {
+        },
+        breakpoints: {
             1200: {
-              slidesPerView: 4,
+                slidesPerView: 4,
             },
             0: {
-              slidesPerView: 1,
+                slidesPerView: 1,
             },
-          },
-            on: {
-                init: function () {
-                    updateNavigationButtons(this);
-                },
-                slideChange: function () {
-                    updateNavigationButtons(this);
-                },
+        },
+        on: {
+            init: function () {
+                updateNavigationButtons(this);
             },
-        });
+            slideChange: function () {
+                updateNavigationButtons(this);
+            },
+        },
+    });
 
     const swiper5 = new Swiper('.column6 .swiper-container', {
         loop: true,

@@ -212,8 +212,6 @@ function recSearch() {
         }
 
     }
-
-    searchAccommodation();
 }
 
 const searchAccommodation = (identifier, filterData, page = 0) => {
@@ -222,6 +220,11 @@ const searchAccommodation = (identifier, filterData, page = 0) => {
     const checkIn = document.getElementById("check-in").value;
     const checkOut = document.getElementById("check-out").value;
     const person = document.getElementById("person_count").innerText;
+
+    if (!keyword || keyword.trim().length === 0) {
+        alert("검색어를 입력해주세요.");
+        return;
+    }
 
     let url = `/search/domestic-accommodations?keyword=${keyword}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
 

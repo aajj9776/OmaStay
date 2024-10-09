@@ -2,41 +2,50 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Header</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    </style>
 </head>
-<body>
-<header class="header" th:fragment="header">
-    <a th:href="@{/}">
-        <img alt="" class="header_logo" src="/image/logo/logo.png"/>
+<body class="font-['Inter']">
+<header class="header sticky mx-auto max-w-[1200px] top-0 z-50 w-full bg-white border-b border-gray-200 flex items-center justify-between py-4" th:fragment="header">
+    <a th:href="@{/}" class="flex-shrink-0">
+        <img alt="Logo" class="h-14 w-auto object-cover" src="/image/logo/logo.png"/>
     </a>
-    <div class="header_container">
-        <button class="header_login_button hover:bg-gray-200" type="button">
-            <a href="/login">로그인/회원가입</a>
+    <div class="flex items-center space-x-2">
+        <button class="header_login_button px-3 py-2 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors duration-200 text-sm" type="button">
+            <a href="/login" class="text-gray-700 no-underline">로그인/회원가입</a>
         </button>
-        <div aria-expanded="true" class="header_menu dropdown hover:bg-gray-200" data-bs-toggle="dropdown" role="button">
-            <img alt="" class="svg-icon" src="/image/header/svg.svg"/>
-
-            <ul class="dropdown-menu w-[270px] p-0">
-                <li><img class="mx-auto h-10 ml-3.5 mr-3.5 mt-2 mb-2  w-[240px] flex items-center justify-center" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)" alt="후아암"/></img></li>
-                <li><a class="btn btn-primary mx-auto h-10 ml-3.5 mr-3.5 pb-2 pt-2 mt-2 mb-2  w-[240px] flex items-center justify-center" onclick="changPage(1)">로그인/회원가입</a></li>
+        <div class="header_menu relative">
+            <button class="w-10 h-10 rounded hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img alt="Menu" class="w-5 h-5" src="/image/header/svg.svg"/>
+            </button>
+            <ul class="dropdown-menu absolute right-0 mt-2 w-[270px] p-0 bg-white rounded-md shadow-lg">
+                <li><img class="mx-auto h-10 w-[240px] my-2 cursor-pointer" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)" alt="후아암"/></li>
+                <li><a class="btn btn-primary mx-auto h-10 w-[240px] my-2 flex items-center justify-center" onclick="changPage(1)">로그인/회원가입</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/?activeSearch=domestic" onclick="changPage(2)">국내 숙소</a></li>
+                <li><a class="dropdown-item py-2 px-4 hover:bg-gray-100" href="/?activeSearch=domestic" onclick="changPage(2)">국내 숙소</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" onclick="changPage(3)">비회원 예약조회</a></li>
-                <li><a class="dropdown-item" onclick="changPage(4)">이벤트</a></li>
-                <li><a class="dropdown-item" onclick="changPage(5)">고객센터</a></li>
+                <li><a class="dropdown-item py-2 px-4 hover:bg-gray-100" onclick="changPage(3)">비회원 예약조회</a></li>
+                <li><a class="dropdown-item py-2 px-4 hover:bg-gray-100" onclick="changPage(4)">이벤트</a></li>
+                <li><a class="dropdown-item py-2 px-4 hover:bg-gray-100" onclick="changPage(5)">고객센터</a></li>
             </ul>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script>
         function changPage(index) {
             const hrefs = [
-                "/", //몰라
+                "/",
                 "/login",
                 "/?activeSearch=domestic",
                 "/reservation/noReservation",
-                "/", //미정
-                "/" //미정
+                "/",
+                "/"
             ];
             location.href = hrefs[index];
         }

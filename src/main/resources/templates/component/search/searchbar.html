@@ -3,14 +3,12 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>오마스테이</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<div class="sticky top-0 z-10 w-full bg-white border-b border-[#ebebeb] pb-4 flex flex-col lg:flex-row items-center justify-center px-4 lg:px-5 gap-3 lg:gap-4 text-left text-sm text-[#333] font-[Inter]" id="search_bar"
+<div class="sticky top-0 z-10 w-full bg-white border-b border-[#ebebeb] flex flex-col lg:flex-row items-center justify-center px-4 lg:px-5 gap-3 lg:gap-4 text-left text-sm text-[#333] font-[Inter]" id="search_bar"
      th:fragment="searchbar">
     <div class="dropdown w-full lg:w-auto lg:me-3">
-        <div aria-expanded="true" class="w-full lg:w-[408px] h-12 rounded-lg bg-[#f5f5f5] overflow-hidden flex items-center p-3.5 gap-2 hover:bg-white border-2 hover:border-black" data-bs-auto-close="outside" data-bs-toggle="dropdown"
+        <div aria-expanded="true" class="w-full lg:w-[308px] h-12 rounded-lg bg-[#f5f5f5] overflow-hidden flex items-center p-3.5 gap-2 hover:bg-white border-2 hover:border-black" data-bs-auto-close="outside" data-bs-toggle="dropdown"
              id="rec_search_dropdown"
              role="button">
             <div class="h-5 w-5 relative">
@@ -60,45 +58,40 @@
         <input id="check-out" type="hidden">
     </div>
 
-    <div class="dropdown w-full lg:w-auto lg:me-3">
-        <div aria-expanded="true" aria-haspopup="true" class="w-full lg:w-[298px] h-12 rounded-lg bg-[#f5f5f5] flex items-center justify-start text-base hover:bg-white border-2 hover:border-black" data-bs-auto-close="outside"
-             data-bs-toggle="dropdown" id="second_people_dropdown"
-             role="button">
-            <img
+    <div class="dropdown  w-full lg:w-auto lg:me-3">
+        <div data-bs-toggle="dropdown" role="button" aria-expanded="true" data-bs-auto-close="outside" aria-haspopup="true" id="second_people_dropdown"
+             class="w-full lg:w-[298px] h-12 rounded-lg bg-[#f5f5f5] flex items-center justify-start text-base hover:bg-white border-2 hover:border-black">
+        <img
                     alt=""
-                    class="h-12 w-11 relative flex-shrink-0"
+                    class="h-[48px] w-[44px] relative min-h-[48px]"
                     src="/image/domestic-accommodations/search-img.svg"
             />
+
             <div
-                    class="h-12 flex-grow font-semibold flex items-center text-black"
+                    class="[text-decoration:none] h-[48px] flex-1 relative font-semibold text-[inherit] flex items-center text-black"
             >인원 <span id="person_count2"></span></div>
-        </div>
-        <div aria-labelledby="second_people_dropdown" class="dropdown-menu p-4 text-body-secondary"
-             id="second_people_dropdown_box" style="width: 100%; max-width: 297px;">
-            <div class="flex flex-row items-end justify-between">
-                <div>
-                    <p class="text-black text-lg font-semibold">
-                        인원
-                    </p>
-                    <p class="text-gray-700 text-xs">
-                        유아 및 아동도<br/>
-                        인원수에 포함해주세요.
-                    </p>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <button aria-disabled="true" class="w-9 h-9 rounded-full bg-white border-2 border-gray-400 text-gray-800 hover:bg-gray-600 hover:border-blue-800"
-                            id="decreaseBtn">
-                        -
-                    </button>
-                    <span class="text-black font-semibold text-xl" id="person_count">1</span>
-                    <button aria-disabled="true" class="w-9 h-9 rounded-full bg-white border-2 border-gray-400 text-gray-800 hover:bg-gray-600 hover:border-blue-800"
-                            id="increaseBtn">
-                        +
-                    </button>
+
+            <div id="second_people_dropdown_box" aria-labelledby="second_people_dropdown" class="dropdown-menu p-4 text-body-secondary lg:w-auto lg:me-3" style="width: 100%; min-width: 297px;">
+                <div class="flex flex-row items-end justify-between">
+                    <div>
+                        <p class="text-black text-lg font-semibold">
+                            인원
+                        </p>
+                        <p class="text-gray-700 text-xs">
+                            유아 및 아동도<br/>
+                            인원수에 포함해주세요.
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button id="decreaseBtn" aria-disabled="true" class="w-9 h-9 rounded-full bg-white border-2 border-gray-400 text-gray-800 hover:bg-gray-600 hover:border-blue-800">-</button>
+                        <span id="person_count" class="text-black font-semibold text-xl">1</span>
+                        <button id="increaseBtn" aria-disabled="true" class="w-9 h-9 rounded-full bg-white border-2 border-gray-400 text-gray-800 hover:bg-gray-600 hover:border-blue-800">+</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <button class="btn btn-primary w-full lg:w-auto h-12 text-center bg-blue-600 text-white font-semibold px-8 rounded-lg flex items-center justify-center" id="keyword_searchBtn"
             type="button">
         검색
