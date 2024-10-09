@@ -9,6 +9,8 @@ import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.ServiceService;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
+
+import org.codehaus.groovy.runtime.StringBufferWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -131,7 +133,10 @@ public class UserController {
 
         List<ServiceDTO> list = serviceService.getAllServices(SCate.FAQ, UserAuth.USER);
 
+
+
         mv.addObject("list", list);
+        
 
         mv.setViewName("user/faq");
 
@@ -144,10 +149,30 @@ public class UserController {
 
         ModelAndView mv = new ModelAndView();
 
-        /*List<ServiceDTO> list = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
+        List<ServiceDTO> list = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
+        for (ServiceDTO serviceDTO : list) {
 
-        mv.addObject("list", list);*/
+            // sTitle에서 [] 안의 날짜 분리
+            String sTitle = serviceDTO.getSTitle();
+            String dateText = "";
+            String remainingText = sTitle;
 
+            if (sTitle.contains("[") && sTitle.contains("]")) {
+                int startIndex = sTitle.indexOf("[");
+                int endIndex = sTitle.indexOf("]");
+                dateText = sTitle.substring(startIndex + 1, endIndex);
+                remainingText = sTitle.substring(0, startIndex).trim() + sTitle.substring(endIndex + 1).trim();
+            }
+            System.out.println("dateText" + dateText);
+            System.out.println("remainingText" + remainingText);
+
+            serviceDTO.setSPeriod(dateText); 
+            serviceDTO.setSTitle(remainingText);
+
+        }
+        System.out.println("리스트다옹"+list);
+        System.out.println("업로드"+upload);
+        mv.addObject("list", list);
         mv.setViewName("user/event");
 
         return mv;

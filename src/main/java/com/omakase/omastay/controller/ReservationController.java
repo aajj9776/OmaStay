@@ -34,8 +34,6 @@ import com.omakase.omastay.vo.StartEndVo;
 
 import jakarta.mail.MessagingException;
 
-
-
 @Controller
 @RequestMapping("/reservation")
 public class ReservationController {

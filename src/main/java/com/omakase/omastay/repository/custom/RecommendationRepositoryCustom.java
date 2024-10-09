@@ -4,7 +4,6 @@ import java.util.List;
 
 import java.time.LocalDate;
 
-import com.omakase.omastay.dto.RecommendationDTO;
 import com.omakase.omastay.entity.Recommendation;
 import com.omakase.omastay.entity.enumurate.HCate;
 

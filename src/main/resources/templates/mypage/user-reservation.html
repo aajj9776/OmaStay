@@ -125,7 +125,7 @@
                       <!-- 예약 상태, 호텔 이름 -->
                       <div class="self-stretch flex flex-col items-start justify-start gap-[10px]">
                         <div class="self-stretch flex flex-col items-start justify-start gap-[3px]">
-                          <div th:switch="${reservation.reservation.resStatus}">
+                          <div th:switch="${reservation.reservation.resStatus.name()}">
                             <b th:case="'PENDING'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FFD700;">예약 대기</b>
                             <b th:case="'CONFIRMED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #32CD32;">예약 확정</b>
                             <b th:case="'CANCELLED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FF0000;">예약 취소</b>
@@ -150,14 +150,16 @@
                       </div>
 
                       <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
-                        <div class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
+                        <div class="w-[68px] rounded-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   [10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
                           <button class="flex-1 relative font-semibold">다시예약</button>
                         </div>
-                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
-                          <button class="flex-1 relative font-semibold" th:onclick="'reservationDetail(' + ${reservation.reservation.id} + ')'">예약 상세</button>
-                        </div>
-                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
-                          <button class="flex-1 relative font-semibold" th:onclick="'cancelDetail(' + ${reservation.reservation.id} + ')'">예약 취소</button>
+                        <div th:switch="${reservation.reservation.resStatus.name()}">
+                          <div th:if="${reservation.reservation.resStatus.name() != 'CANCELLED' }" class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                            <button class="flex-1 relative font-semibold" th:onclick="'reservationDetail(' + ${reservation.reservation.id} + ')'">예약 상세</button>
+                          </div>
+                          <div th:if="${reservation.reservation.resStatus.name() == 'CANCELLED' }" class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                            <button class="flex-1 relative font-semibold" th:onclick="'cancelDetail(' + ${reservation.reservation.id} + ')'">취소 상세</button>
+                          </div>
                         </div>
                       </div>
 
@@ -166,7 +168,22 @@
                   </div>
                 </div>
 
-
+                <div class="flex justify-center items-center space-x-4 w-full">
+                  <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                      <!-- 현재 페이지가 아닌 경우 -->
+                      <a th:if="${page != nowPage}" 
+                         th:href="@{/mypage/reservation(page=${page - 1}, id=${id})}"
+                         th:text="${page}" 
+                         class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm text-sm font-medium mx-2">
+                      </a>
+                
+                      <!-- 현재 페이지인 경우 -->
+                      <strong th:if="${page == nowPage}" 
+                              th:text="${page}" 
+                              class="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg transform scale-110 text-sm font-bold mx-2">
+                      </strong>
+                  </th:block>
+                </div>
 
                   <div id="noTrip"
                     class="w-[1120px] rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-row items-start justify-between py-[0px] px-[23px] max-w-full gap-[20px] lg:flex-wrap"
@@ -239,8 +256,6 @@
                     </div>
                   </div>
 
-
-
                 </div>
               </div>
               <div
@@ -258,6 +273,7 @@
                 <table>
                   <tbody id="reservation-table-body"></tbody>
                 </table>
+                <div id="pagination" class="flex justify-center items-center space-x-1 w-full mb-[100px]"></div>
               </div>
             </div>
           </div>
@@ -322,14 +338,18 @@
         let id = user.id;
 
         // 예약 정보를 불러오는 AJAX 요청
-        loadReservation();
+        let pageNumber = 0;
+        loadReservation(pageNumber);
        
       });
 
 
-      function loadReservation(){
+      function loadReservation(pageNumber){
+        if( pageNumber == null){
+          pageNumber = 0;
+        }
         $.ajax({
-          url: "/mypage/reservation", // 호출하고자 하는 URL
+          url: "/mypage/reservation?page=" + pageNumber, // 호출하고자 하는 URL
           method: "POST",
           contentType: "application/json; charset=utf-8",
           data: JSON.stringify({
@@ -341,7 +361,7 @@
           let name;
           let tableBody = $("#reservation-table-body"); // 테이블 바디 선택
           tableBody.empty();
-          console.log(data.reservation);
+          console.log(data);
 
           for (let i = 0; i < data.reservation.length; i++) {
             reservation = data.reservation[i];
@@ -433,7 +453,41 @@
                           </div> `;
             tableBody.append(tableData);
           }
+
+                  // 페이지네이션 동적 생성
+        let paginationHtml = '';
+        for (let page = data.startPage; page <= data.endPage; page++) {
+            if (page !== data.nowPage) {
+                paginationHtml += `
+                   <a href="#" onclick="loadReservationPage(${page - 1}); return false;"
+                       class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 transition duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-sm text-sm font-medium mx-2">
+                        ${page}
+                    </a>`;
+            } else {
+                paginationHtml += `
+                    <strong class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg transform scale-110 text-sm font-bold mx-2">
+                        ${page}
+                    </strong>`;
+            }
+        }
+        $('#pagination').html(paginationHtml);
         });
+      }
+
+
+      // 특정 페이지를 불러오는 함수 (페이지네이션에서 사용)
+      function loadReservationPage(pageNumber) {
+        console.log("현재페이지" + pageNumber);
+          $.ajax({
+              url: "/mypage/reservation?page=" + pageNumber,
+              method: "POST",
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify({
+                  id: user.id,
+              }),
+          }).done(function (data) {
+              loadReservation(data.nowPage); // 페이지를 업데이트
+          });
       }
     </script>
   </body>
