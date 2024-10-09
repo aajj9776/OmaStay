@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -63,4 +62,14 @@ public class Payment {
     
     @Column(name = "pay_none", length = 100)
     private String payNone;
+
+    @Column(name = "pay_point")
+    private Integer payPoint;
+
+    @Column(name = "pay_coupon")
+    private Integer payCoupon;
+
+    @Column(name = "pay_grade")
+    private Integer payGrade;
+
 }

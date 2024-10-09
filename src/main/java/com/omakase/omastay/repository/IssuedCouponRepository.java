@@ -25,6 +25,9 @@ public interface IssuedCouponRepository extends JpaRepository<IssuedCoupon, Inte
     "AND ic.icStatus = UNUSED")
     List<IssuedCoupon> findValidCouponsByMemberId(@Param("memberId") int memberId);
 
+    @Query("SELECT ic FROM IssuedCoupon ic WHERE ic.id =:icIdx AND ic.member.id = :memIdx")
+    IssuedCoupon findByIdAndMemIdx(@Param("icIdx") Integer icIdx, @Param("memIdx") Integer memIdx);
+
     @Query("SELECT ic FROM IssuedCoupon ic WHERE ic.member.id = :memIdx")
     List<IssuedCoupon> findByMemIdx(@Param("memIdx") int memIdx);
 

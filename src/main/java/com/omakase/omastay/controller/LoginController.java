@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.omakase.omastay.entity.Grade;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.Social;
 import com.omakase.omastay.mapper.MemberMapper;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
@@ -27,7 +29,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.omakase.omastay.dto.MemberDTO;
+import com.omakase.omastay.dto.custom.MemberInfoDTO;
 import com.omakase.omastay.service.EmailService;
+import com.omakase.omastay.service.GradeService;
 import com.omakase.omastay.service.MemberService;
 import com.omakase.omastay.session.UserSession;
 import com.omakase.omastay.vo.AddressVo;
@@ -37,6 +41,9 @@ import com.omakase.omastay.vo.UserProfileVo;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    private GradeService gradeService;
 
     @Autowired
     private UserSession userSession;  // 세션 관리
@@ -325,7 +332,7 @@ public class LoginController {
             emailService.sendEmail(email);
             response.put("message", "인증 코드가 이메일로 전송되었습니다.");
             response.put("success", true); // 프론트엔드에서 success를 체크할 수 있도록 추가
-        } catch (MessagingException e) {
+        } catch (MessagingException | IOException e) {
             response.put("message", "인증 코드 전송 실패: " + e.getMessage());
             response.put("success", false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -504,5 +511,17 @@ public class LoginController {
         return "redirect:/";  // 메인 페이지로 리다이렉트
     }
 
+        @RequestMapping("/userInfo")
+        @ResponseBody
+        public Map<String, Object> requestMethodName(MemberInfoDTO member) {
+            System.out.println(member);
+            Map<String, Object> map = new HashMap<>();
+            MemberDTO memberDTO = memberService.getMemberInfo(member.getId());
+            System.out.println("회원등급" + memberDTO);
+            Grade grade = gradeService.getGrade(memberDTO.getGIdx());
+            System.out.println("회원등급" + grade);
+            map.put("grade", grade);
+            return map;
+        }
 }
 

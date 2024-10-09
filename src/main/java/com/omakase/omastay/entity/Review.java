@@ -62,9 +62,5 @@ public class Review {
 
     @Column(name = "rev_rating")
     private Float revRating;
-
-
-
-
 }
 

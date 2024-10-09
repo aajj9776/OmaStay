@@ -10,13 +10,13 @@ spring:
     password: omastay18
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 50
-      minimum-idle: 5
-      idle-timeout: 600000
-      max-lifetime: 1800000
+      maximum-pool-size: 100
+      minimum-idle: 10
+      idle-timeout: 600000      # 10분
+      max-lifetime: 1800000     # 30분
       connection-timeout: 30000
       validation-timeout: 5000
-      leak-detection-threshold: 2000
+      leak-detection-threshold: 1795000 # (29분 55초)
       pool-name: HikariPool
       register-mbeans: true
   jpa:
@@ -61,6 +61,8 @@ spring:
         project-id: artful-mystery-436200-n4
         bucket: omastay
   thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
     enums:
       use-class-for-enum-values: true
   jackson:
@@ -73,3 +75,13 @@ custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
 upload: https://storage.googleapis.com/omastay/
+
+#google analytics 전용 [이하운]
+oauth:
+  client:
+    id: your-client-id
+    secret: your-client-secret
+    refresh-token: your-refresh-token
+  google:
+    analytics:
+      property-id: your-ga4-property-id

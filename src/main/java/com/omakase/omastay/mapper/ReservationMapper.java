@@ -28,4 +28,5 @@ public interface ReservationMapper {
     List<ReservationDTO> toReservationDTOList(List<Reservation> reservationList);
 
     List<Reservation> toReservationList(List<ReservationDTO> reservationDTOList);
+
 }

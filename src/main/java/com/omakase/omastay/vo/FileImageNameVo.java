@@ -15,9 +15,9 @@ import lombok.Setter;
 @Setter
 public class FileImageNameVo {
 
-    @Column(name = "rev_oname", length = 500)
+    @Column(name = "iq_oname", length = 500)
     private String oName;
 
-    @Column(name = "rev_fname", length = 500)
+    @Column(name = "iq_fname", length = 500)
     private String fName;
 }

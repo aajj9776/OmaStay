@@ -62,12 +62,20 @@
     >
       <input type="hidden" id="pay_method" name="payMethod" value="" />
       <input type="hidden" id="pay_content" name="payContent" value="" />
-      <input type="hidden" id="nsale_price" name="nsale_price" value="" />
+      <input type="hidden" id="nsale_price" name="nsalePrice" value="" />
       <input type="hidden" id="sale_price" name="amount" value="" />
       <input type="hidden" id="orderId" name="resNum" value="" />
       <input type="hidden" id="resEmail" name="resEmail" value="" />
       <input type="hidden" id="resName" name="resName" value="" />
       <input type="hidden" id="paymentKey" name="paymentKey" value="" />
+      <input type="hidden" id="payCoupon" name="payCoupon" value="" />
+      <input type="hidden" id="payPoint" name="payPoint" value="" />
+      <input type="hidden" id="payGrade" name="payGrade" value="" />
+      <input type="hidden" id="memIdx" name="memIdx" value="" />
+      <input type="hidden" id="nonEmail" name="nonEmail" value="" />
+      <input type="hidden" id="nonName" name="nonName" value="" />
+      <input type="hidden" id="icIdx" name="icIdx" value="" />
+      <input type="hidden" id="pIdx" name="pIdx" value="" />
     </form>
 
     <form action="/coupon/use" id="updateCoupon" method="post">
@@ -90,12 +98,22 @@
       const resEmail = urlParams.get("resEmail");
       const resName = urlParams.get("resName");
       const couponId = urlParams.get("couponId");
+      const nsale_price = urlParams.get("nsalePrice");
+      const payCoupon = urlParams.get("payCoupon");
+      const payGrade = urlParams.get("payGrade");
+      const payPoint = urlParams.get("payPoint");
+      const memIdx = urlParams.get("memIdx");
+
+      let user = JSON.parse(localStorage.getItem("user"));
 
       let pay_method;
       let pay_content;
-      let nsale_price;
       let sale_price;
       let json = {}; // 이곳에서 json 변수를 선언
+
+      function sendNoUserData() {
+        $("#noReservation").submit();
+      }
 
       function sendData() {
         // 결제 방식
@@ -105,11 +123,7 @@
         $("#pay_content").val("방이름");
 
         // 할인 전 금액
-        if (json.discount > 0) {
-          $("#nsale_price").val(json.discount);
-        } else {
-          $("#nsale_price").val(json.totalAmount);
-        }
+        $("#nsale_price").val(nsale_price);
 
         // 할인 후 금액
         $("#sale_price").val(json.totalAmount);
@@ -117,11 +131,52 @@
         $("#orderId").val(orderId);
         $("#paymentKey").val(paymentKey);
 
-        $("#resEmail").val(resEmail);
-        $("#resName").val(resName);
+        if (user == null) {
+          $("#nonEmail").val(resEmail);
+          $("#nonName").val(resName);
+        } else {
+          $("#resEmail").val(resEmail);
+          $("#resName").val(resName);
+        }
 
-        // 폼 전송
-        $("#insertPayment").submit();
+        console.log(payGrade);
+        console.log(payCoupon);
+        console.log(payPoint);
+        $("#payCoupon").val(payCoupon);
+        $("#payGrade").val(payGrade);
+        $("#payPoint").val(payPoint);
+
+        if (memIdx != null) {
+          $("#memIdx").val(memIdx);
+        }
+
+        if (couponId != null) {
+          console.log("쿠폰번호나와요?" + couponId)
+          $("#icIdx").val(couponId);
+          sendCoupon(); // 쿠폰 사용 처리
+        }
+        if (payPoint != null) {
+          usePoint(); // 포인트 사용 처리
+        } else {
+          // 폼 전송
+          $("#insertPayment").submit();
+        }
+
+      }
+
+      function usePoint() {
+        $.ajax({
+          url: "/point/use",
+          type: "POST",
+          data: {
+            memIdx: memIdx,
+            pValue: payPoint,
+          },
+        }).done(function (data) {
+            $("#pIdx").val(data.point.id);
+
+            $("#insertPayment").submit();
+        });
       }
 
       function goIndex() {
@@ -168,10 +223,10 @@
 
         if (!response.ok) {
           // 결제 실패 비즈니스 로직을 구현하세요.
+          console.log("결제실패");
           window.location.href = `/reservation/payment_fail`;
         } else {
           sendData(); // 결제 성공 시 sendData 호출
-          sendCoupon(); // 쿠폰 사용 시 sendCoupon 호출
         }
       }
 
@@ -183,7 +238,9 @@
             id: couponId,
           },
         }).done(function (data) {
-          console.log(data);
+          if (data.result == "fail") {
+            alert("쿠폰 사용 성공");
+          }
         });
       }
     </script>

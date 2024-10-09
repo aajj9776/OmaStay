@@ -90,16 +90,16 @@
                 class="flex-1 rounded-[4px]  box-border flex flex-row items-start justify-start py-[0px] relative min-w-[197px]"
               >
               <select id="roomPerson" class="w-[303px] h-[40px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid form-select">
-                <option value="" disabled selected>객실 정원</option>
-                  <option value="2" th:selected="${room.roomPerson == 2}">2</option>
-                  <option value="3" th:selected="${room.roomPerson == 3}">3</option>
-                  <option value="4" th:selected="${room.roomPerson == 4}">4</option>
-                  <option value="5" th:selected="${room.roomPerson == 5}">5</option>
-                  <option value="6" th:selected="${room.roomPerson == 6}">6</option>
-                  <option value="7" th:selected="${room.roomPerson == 7}">7</option>
-                  <option value="8" th:selected="${room.roomPerson == 8}">8</option>
-                  <option value="9" th:selected="${room.roomPerson == 9}">9</option>
-                  <option value="10" th:selected="${room.roomPerson == 10}">10</option>
+                <option value="" disabled th:selected="${room.roomPerson == null}">객실 정원</option>
+                  <option value="2" th:selected="${room.roomPerson != null && room.roomPerson == 2}">2</option>
+                  <option value="3" th:selected="${room.roomPerson != null && room.roomPerson == 3}">3</option>
+                  <option value="4" th:selected="${room.roomPerson != null && room.roomPerson == 4}">4</option>
+                  <option value="5" th:selected="${room.roomPerson != null && room.roomPerson == 5}">5</option>
+                  <option value="6" th:selected="${room.roomPerson != null && room.roomPerson == 6}">6</option>
+                  <option value="7" th:selected="${room.roomPerson != null && room.roomPerson == 7}">7</option>
+                  <option value="8" th:selected="${room.roomPerson != null && room.roomPerson == 8}">8</option>
+                  <option value="9" th:selected="${room.roomPerson != null && room.roomPerson == 9}">9</option>
+                  <option value="10" th:selected="${room.roomPerson != null && room.roomPerson == 10}">10</option>
               </select>
               </div>
             </div>
@@ -121,7 +121,7 @@
               class="w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
               placeholder="객실 소개"
               id="roomIntro"
-              th:text="${room.roomIntro}"></textarea>
+              th:text="${room.roomIntro != null ? room.roomIntro : ''}"></textarea>
               </div>
             </div>
             <b
@@ -147,7 +147,7 @@
                   placeholder="비수기 요금"
                   type="text"
                   id="regularPrice"
-                  th:value="${priceDTO.regularPrice}"
+                  th:value="${priceDTO.regularPrice != null ? priceDTO.regularPrice : ''}"
                 />
               </div>
             </div>
@@ -175,7 +175,7 @@
                   placeholder="준성수기 요금"
                   type="text"
                   id="semiPrice"
-                  th:value="${priceDTO.semi.semiPrice}"
+                  th:value="${priceDTO.semi != null && priceDTO.semi.semiPrice != null ? priceDTO.semi.semiPrice : ''}"
                 />
               </div>
             </div>
@@ -203,7 +203,7 @@
                   placeholder="성수기 요금"
                   type="text"
                   id="peakPrice"
-                  th:value="${priceDTO.peakVo.peakPrice}"
+                  th:value="${priceDTO.peakVo != null && priceDTO.peakVo.peakPrice != null ? priceDTO.peakVo.peakPrice : ''}"
                 />
               </div>
             </div>
@@ -243,8 +243,8 @@
                         <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                           <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
                             <div
-                              class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
-                              <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                              class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                              <img class="w-full h-full self-stretch relative overflow-hidden shrink-0"
                                 loading="lazy" alt="" />
                             </div>
                           </div>
@@ -259,6 +259,24 @@
                           </div>
                         </div>
                       </div>
+                      <!-- Thymeleaf를 사용하여 이미지 리스트를 반복문으로 렌더링 -->
+                    <div th:if="${image}" th:each="image, iterStat : ${image}" class="swiper-slide">
+                      <div class="w-[240px] h-[300px] flex-1 shadow-[0px_1px_3px_rgba(0,_0,_0,_0.12),_0px_1px_1px_rgba(0,_0,_0,_0.14),_0px_2px_1px_-1px_rgba(0,_0,_0,_0.2)] rounded-[4px] bg-[#fff] flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border min-w-[175px] gap-[10px]">
+                          <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
+                              <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
+                                  <div class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                                    <img th:src="@{${storage} + 'room/' + ${image.imgName.fName}}" class="w-full h-full self-stretch relative overflow-hidden shrink-0"
+                                    loading="lazy" alt="" />
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="w-[240px] h-[50px] self-stretch flex flex-col items-center justify-center py-[0px] px-[16px]">
+                              <div class="w-[100px] h-[50px] flex flex-col relative tracking-[0.15px] leading-[160%] font-medium flex items-center mq450:text-[16px] mq450:leading-[26px] gap-[10px]">
+                                  <button type="button" class="w-full h-[30px] cursor-pointer [border:none] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto] text-[#fff]" onclick="deletehostimage(this)">삭제</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
                     </div>
                   </div>
                 </div>

@@ -1,964 +1,143 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/admin}"
-      layout:fragment="admin">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8"/>
 </head>
+
 <body>
-    <main
-        class="flex-1 rounded-[80px] bg-[#f5f6fb] overflow-hidden flex flex-row items-start justify-start p-[30px] box-border gap-[30px] max-w-[calc(100%_-_185px)] text-left text-[20px] text-[#000] font-[Inter] mq825:max-w-full mq1125:pt-[20px] mq1125:pb-[20px] mq1125:box-border mq1400:flex-wrap"
-      >
-        <div
-          class="flex-1 rounded-[50px] bg-[#eaecf8] overflow-hidden flex flex-col items-end justify-start py-[30px] px-[8px] box-border gap-[30px] max-w-full mq1125:pt-[20px] mq1125:pb-[20px] mq1125:box-border mq1400:flex-1"
-        >
-          <div
-            class="self-stretch h-[23px] relative text-[24px] font-semibold text-center flex items-center justify-center shrink-0 mq450:text-[19px]"
-          >
-            방문자 요약
+  <main
+    class="flex-1 rounded-[80px] bg-[#f5f6fb] overflow-hidden flex flex-row items-start justify-start p-[30px] box-border gap-[30px] max-w-[calc(100%_-_185px)] text-left text-[20px] text-[#000] font-[Inter] mq825:max-w-full mq1125:pt-[20px] mq1125:pb-[20px] mq1125:box-border mq1400:flex-wrap">
+    <div
+      class="flex-1 rounded-[50px] bg-[#eaecf8] overflow-hidden flex flex-col items-end justify-start py-[30px] px-[8px] box-border gap-[30px] max-w-full mq1125:pt-[20px] mq1125:pb-[20px] mq1125:box-border mq1400:flex-1">
+      <div
+        class="self-stretch h-[23px] relative text-[24px] font-semibold text-center flex items-center justify-center shrink-0 mq450:text-[19px]">
+        방문자 요약
+      </div>
+      <div
+        class="self-stretch flex flex-row items-start justify-end py-[0px] px-[38px] box-border max-w-full text-[#343c6a]">
+        <div class="flex-1 flex flex-col items-start justify-start gap-[15px] max-w-full">
+          <div class="self-stretch relative font-semibold mq450:text-[16px]">
+            방문자 수
           </div>
           <div
-            class="self-stretch flex flex-row items-start justify-end py-[0px] px-[38px] box-border max-w-full text-[#343c6a]"
-          >
-            <div
-              class="flex-1 flex flex-col items-start justify-start gap-[15px] max-w-full"
-            >
-              <div
-                class="self-stretch relative font-semibold mq450:text-[16px]"
-              >
-                방문자 수
+            class="self-stretch h-[263px] relative rounded-[25px] bg-[#fff] max-w-full text-right text-[13px] text-[#718ebf] mq825:h-auto mq825:min-h-[263]">
+            <div class="absolute top-[0px] left-[0px] rounded-[25px] bg-[#fff] w-full h-full hidden"></div>
+            <div class="absolute top-[92.3px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"></div>
+            <div class="absolute top-[122.5px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"></div>
+            <div class="absolute top-[152.7px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"></div>
+            <div class="absolute top-[183px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"></div>
+            <div class="absolute top-[213.2px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"></div>
+            <div class="absolute top-[55.5px] left-[33px] flex flex-col items-start justify-start gap-[17.1px]">
+              <div class="relative inline-block min-w-[25px] z-[1]">
+                500
               </div>
-              <div
-                class="self-stretch h-[263px] relative rounded-[25px] bg-[#fff] max-w-full text-right text-[13px] text-[#718ebf] mq825:h-auto mq825:min-h-[263]"
-              >
-                <div
-                  class="absolute top-[0px] left-[0px] rounded-[25px] bg-[#fff] w-full h-full hidden"
-                ></div>
-                <div
-                  class="absolute top-[92.3px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"
-                ></div>
-                <div
-                  class="absolute top-[122.5px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"
-                ></div>
-                <div
-                  class="absolute top-[152.7px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"
-                ></div>
-                <div
-                  class="absolute top-[183px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"
-                ></div>
-                <div
-                  class="absolute top-[213.2px] left-[69px] bg-[#f3f3f5] w-[631px] h-[0.8px] z-[1]"
-                ></div>
-                <div
-                  class="absolute top-[55.5px] left-[33px] flex flex-col items-start justify-start gap-[17.1px]"
-                >
-                  <div class="relative inline-block min-w-[25px] z-[1]">
-                    500
-                  </div>
-                  <div
-                    class="flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px]"
-                  >
-                    <div class="relative inline-block min-w-[25px] z-[1]">
-                      400
-                    </div>
-                  </div>
-                  <div
-                    class="flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px]"
-                  >
-                    <div class="relative inline-block min-w-[25px] z-[1]">
-                      300
-                    </div>
-                  </div>
-                  <div class="relative inline-block min-w-[25px] z-[1]">
-                    200
-                  </div>
-                  <div
-                    class="w-[23px] relative inline-block min-w-[23px] z-[1]"
-                  >
-                    100
-                  </div>
-                  <div
-                    class="flex flex-row items-start justify-start py-[0px] pl-[14px] pr-[3px]"
-                  >
-                    <div class="relative inline-block min-w-[9px] z-[1]">0</div>
-                  </div>
+              <div class="flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px]">
+                <div class="relative inline-block min-w-[25px] z-[1]">
+                  400
                 </div>
-                <div
-                  class="absolute top-[22.9px] left-[69px] w-[631px] flex flex-col items-end justify-start gap-[24.5px] max-w-full text-left text-[15px]"
-                >
-                  <div
-                    class="flex flex-row items-start justify-start gap-[30px]"
-                  >
-                    <div
-                      class="flex flex-row items-start justify-start gap-[10px]"
-                    >
-                      <div
-                        class="flex flex-col items-start justify-start pt-[1.6px] px-[0px] pb-[0px]"
-                      >
-                        <div
-                          class="w-[15px] h-[12.3px] relative rounded-[50%] bg-[#16dbcc] z-[1]"
-                        ></div>
-                      </div>
-                      <div
-                        class="relative leading-[14.7px] inline-block min-w-[50px] z-[1]"
-                      >
-                        Diposit
-                      </div>
-                    </div>
-                    <div
-                      class="flex flex-row items-start justify-start gap-[10px]"
-                    >
-                      <div
-                        class="flex flex-col items-start justify-start pt-[1.6px] px-[0px] pb-[0px]"
-                      >
-                        <div
-                          class="w-[15px] h-[12.3px] relative rounded-[50%] bg-[#ff82ac] z-[1]"
-                        ></div>
-                      </div>
-                      <div
-                        class="relative leading-[14.7px] inline-block min-w-[68px] z-[1]"
-                      >
-                        Withdraw
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="self-stretch flex flex-col items-end justify-start gap-[4.9px] max-w-full text-center text-[13px]"
-                  >
-                    <div
-                      class="self-stretch h-[0.8px] relative bg-[#f3f3f5] z-[1]"
-                    ></div>
-                    <div
-                      class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[25px] pr-[24px] box-border max-w-full"
-                    >
-                      <div
-                        class="flex-1 flex flex-col items-start justify-start gap-[13.9px] max-w-full"
-                      >
-                        <div
-                          class="self-stretch flex flex-row items-end justify-between gap-[20px] mq825:flex-wrap"
-                        >
-                          <div
-                            class="h-[145.4px] flex flex-row items-end justify-start gap-[12px]"
-                          >
-                            <div
-                              class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"
-                            ></div>
-                            <div
-                              class="h-[74.3px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"
-                            ></div>
-                          </div>
-                          <div
-                            class="h-[106.2px] flex flex-row items-end justify-start gap-[12px]"
-                          >
-                            <div
-                              class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"
-                            ></div>
-                            <div
-                              class="h-[40px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"
-                            ></div>
-                          </div>
-                          <div
-                            class="h-[99.6px] flex flex-row items-end justify-start gap-[12px]"
-                          >
-                            <div
-                              class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"
-                            ></div>
-                            <div
-                              class="h-[80px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"
-                            ></div>
-                          </div>
-                          <div
-                            class="h-[145.4px] flex flex-row items-end justify-start gap-[12px]"
-                          >
-                            <div
-                              class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"
-                            ></div>
-                            <div
-                              class="h-[112.7px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"
-                            ></div>
-                          </div>
-                          <div
-                            class="h-[74.3px] flex flex-row items-end justify-start gap-[12px]"
-                          >
-                            <div
-                              class="h-[46.6px] w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"
-                            ></div>
-                            <div
-                              class="self-stretch w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"
-                            ></div>
-                          </div>
-                          <div
-                            class="h-[118.5px] flex flex-row items-end justify-start gap-[12px]"
-                          >
-                            <div
-                              class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"
-                            ></div>
-                            <div
-                              class="h-[74.3px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"
-                            ></div>
-                          </div>
-                          <div
-                            class="h-[120.1px] flex flex-row items-end justify-start gap-[12px]"
-                          >
-                            <div
-                              class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"
-                            ></div>
-                            <div
-                              class="h-[102.9px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"
-                            ></div>
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[11px] pr-[13px] box-border max-w-full"
-                        >
-                          <div
-                            class="flex-1 flex flex-row items-start justify-between py-[0px] pl-[0px] pr-[2px] box-border max-w-full gap-[20px] mq825:flex-wrap"
-                          >
-                            <div
-                              class="w-[24px] flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[3px] box-border"
-                            >
-                              <div
-                                class="self-stretch relative inline-block min-w-[21px] z-[1]"
-                              >
-                                Sat
-                              </div>
-                            </div>
-                            <div
-                              class="relative inline-block min-w-[24px] z-[1]"
-                            >
-                              Sun
-                            </div>
-                            <div
-                              class="relative inline-block min-w-[28px] z-[1]"
-                            >
-                              Mon
-                            </div>
-                            <div
-                              class="relative inline-block min-w-[23px] z-[1]"
-                            >
-                              Tue
-                            </div>
-                            <div
-                              class="relative inline-block min-w-[28px] z-[1]"
-                            >
-                              Wed
-                            </div>
-                            <div
-                              class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[6px]"
-                            >
-                              <div
-                                class="relative inline-block min-w-[24px] z-[1]"
-                              >
-                                Thu
-                              </div>
-                            </div>
-                            <div
-                              class="relative inline-block min-w-[16px] z-[1] mq825:w-full mq825:h-[16px]"
-                            >
-                              Fri
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </div>
+              <div class="flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px]">
+                <div class="relative inline-block min-w-[25px] z-[1]">
+                  300
                 </div>
+              </div>
+              <div class="relative inline-block min-w-[25px] z-[1]">
+                200
+              </div>
+              <div class="w-[23px] relative inline-block min-w-[23px] z-[1]">
+                100
+              </div>
+              <div class="flex flex-row items-start justify-start py-[0px] pl-[14px] pr-[3px]">
+                <div class="relative inline-block min-w-[9px] z-[1]">0</div>
               </div>
             </div>
-          </div>
-          <div
-            class="w-[786px] flex flex-row items-start justify-end py-[0px] px-[40px] box-border max-w-full text-[#333b69]"
-          >
             <div
-              class="flex-1 flex flex-row items-start justify-start gap-[35px] max-w-full mq825:gap-[17px] mq825:flex-wrap"
-            >
-              <div
-                class="w-[315.5px] flex flex-col items-start justify-start pt-[20px] px-[0px] pb-[0px] box-border min-w-[315.5px] mq825:flex-1"
-              >
-                <div
-                  class="self-stretch flex flex-col items-start justify-start gap-[15px]"
-                >
-                  <div
-                    class="self-stretch relative font-semibold mq450:text-[16px]"
-                  >
-                    방문자 OS
+              class="absolute top-[22.9px] left-[69px] w-[631px] flex flex-col items-end justify-start gap-[24.5px] max-w-full text-left text-[15px]">
+              <div class="flex flex-row items-start justify-start gap-[30px]">
+                <div class="flex flex-row items-start justify-start gap-[10px]">
+                  <div class="flex flex-col items-start justify-start pt-[1.6px] px-[0px] pb-[0px]">
+                    <div class="w-[15px] h-[12.3px] relative rounded-[50%] bg-[#16dbcc] z-[1]"></div>
                   </div>
-                  <div
-                    class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[32px] pr-[33px] text-[15px] text-[#718ebf]"
-                  >
-                    <div
-                      class="flex-1 rounded-[25px] bg-[#fff] flex flex-col items-end justify-start pt-[21.4px] px-[35px] pb-[20px] gap-[11.3px]"
-                    >
-                      <div
-                        class="w-[250.3px] h-[221px] relative rounded-[25px] bg-[#fff] hidden"
-                      ></div>
-                      <div
-                        class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[26px] pr-[19px]"
-                      >
-                        <img
-                          class="h-[132.7px] w-[134.5px] relative z-[1]"
-                          loading="lazy"
-                          alt=""
-                          src="/public/group-346.svg"
-                        />
-                      </div>
-                      <div
-                        class="self-stretch flex flex-col items-start justify-start gap-[10px]"
-                      >
-                        <div
-                          class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="w-[68.6px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#4c78ff] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              DBL Bank
-                            </div>
-                          </div>
-                          <div
-                            class="w-[70.1px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ff82ac] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              BRC Bank
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#16dbcc] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              ABM Bank
-                            </div>
-                          </div>
-                          <div
-                            class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ffbb38] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              MCP Bank
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="relative leading-[14.7px] inline-block min-w-[50px] z-[1]">
+                    Diposit
                   </div>
-                  <div
-                    class="self-stretch relative font-semibold mq450:text-[16px]"
-                  >
-                    방문자 접속기기
+                </div>
+                <div class="flex flex-row items-start justify-start gap-[10px]">
+                  <div class="flex flex-col items-start justify-start pt-[1.6px] px-[0px] pb-[0px]">
+                    <div class="w-[15px] h-[12.3px] relative rounded-[50%] bg-[#ff82ac] z-[1]"></div>
                   </div>
-                  <div
-                    class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[32px] pr-[33px] text-[15px] text-[#718ebf]"
-                  >
-                    <div
-                      class="flex-1 rounded-[25px] bg-[#fff] flex flex-col items-end justify-start pt-[21.4px] px-[35px] pb-[20px] gap-[11.3px]"
-                    >
-                      <div
-                        class="w-[250.3px] h-[221px] relative rounded-[25px] bg-[#fff] hidden"
-                      ></div>
-                      <div
-                        class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[26px] pr-[19px]"
-                      >
-                        <img
-                          class="h-[132.7px] w-[134.5px] relative z-[1]"
-                          loading="lazy"
-                          alt=""
-                          src="/public/group-346.svg"
-                        />
-                      </div>
-                      <div
-                        class="self-stretch flex flex-col items-start justify-start gap-[10px]"
-                      >
-                        <div
-                          class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="w-[68.6px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#4c78ff] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              DBL Bank
-                            </div>
-                          </div>
-                          <div
-                            class="w-[70.1px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ff82ac] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              BRC Bank
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap"
-                        >
-                          <div
-                            class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#16dbcc] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              ABM Bank
-                            </div>
-                          </div>
-                          <div
-                            class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]"
-                          >
-                            <div
-                              class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ffbb38] z-[1]"
-                            ></div>
-                            <div
-                              class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]"
-                            >
-                              MCP Bank
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="relative leading-[14.7px] inline-block min-w-[68px] z-[1]">
+                    Withdraw
                   </div>
                 </div>
               </div>
               <div
-                class="flex-1 overflow-hidden flex flex-col items-center justify-start p-[20px] box-border gap-[15px] min-w-[231px] max-w-full"
-              >
+                class="self-stretch flex flex-col items-end justify-start gap-[4.9px] max-w-full text-center text-[13px]">
+                <div class="self-stretch h-[0.8px] relative bg-[#f3f3f5] z-[1]"></div>
                 <div
-                  class="self-stretch relative font-semibold mq450:text-[16px]"
-                >
-                  신규 회원
-                </div>
-                <div
-                  class="self-stretch h-[496px] overflow-hidden shrink-0 flex flex-col items-center justify-start py-[0px] px-[4px] box-border text-[16px] text-[#343a40]"
-                >
-                  <div
-                    class="self-stretch rounded-[8px] border-[#e9ecef] border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start"
-                  >
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
+                  class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[25px] pr-[24px] box-border max-w-full">
+                  <div class="flex-1 flex flex-col items-start justify-start gap-[13.9px] max-w-full">
+                    <div class="self-stretch flex flex-row items-end justify-between gap-[20px] mq825:flex-wrap">
+                      <div class="h-[145.4px] flex flex-row items-end justify-start gap-[12px]">
+                        <div class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"></div>
+                        <div class="h-[74.3px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"></div>
                       </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
+                      <div class="h-[106.2px] flex flex-row items-end justify-start gap-[12px]">
+                        <div class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"></div>
+                        <div class="h-[40px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"></div>
                       </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
+                      <div class="h-[99.6px] flex flex-row items-end justify-start gap-[12px]">
+                        <div class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"></div>
+                        <div class="h-[80px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"></div>
                       </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[58px]"
-                        >
-                          An item
-                        </div>
+                      <div class="h-[145.4px] flex flex-row items-end justify-start gap-[12px]">
+                        <div class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"></div>
+                        <div class="h-[112.7px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"></div>
                       </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
+                      <div class="h-[74.3px] flex flex-row items-end justify-start gap-[12px]">
+                        <div class="h-[46.6px] w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"></div>
+                        <div class="self-stretch w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"></div>
+                      </div>
+                      <div class="h-[118.5px] flex flex-row items-end justify-start gap-[12px]">
+                        <div class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"></div>
+                        <div class="h-[74.3px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"></div>
+                      </div>
+                      <div class="h-[120.1px] flex flex-row items-end justify-start gap-[12px]">
+                        <div class="self-stretch w-[15px] relative rounded-[30px] bg-[#1814f3] z-[2]"></div>
+                        <div class="h-[102.9px] w-[15px] relative rounded-[30px] bg-[#16dbcc] z-[2]"></div>
                       </div>
                     </div>
                     <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
+                      class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[11px] pr-[13px] box-border max-w-full">
                       <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
+                        class="flex-1 flex flex-row items-start justify-between py-[0px] pl-[0px] pr-[2px] box-border max-w-full gap-[20px] mq825:flex-wrap">
                         <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
+                          class="w-[24px] flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[3px] box-border">
+                          <div class="self-stretch relative inline-block min-w-[21px] z-[1]">
+                            Sat
+                          </div>
                         </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
+                        <div class="relative inline-block min-w-[24px] z-[1]">
+                          Sun
                         </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
+                        <div class="relative inline-block min-w-[28px] z-[1]">
+                          Mon
                         </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[109px]"
-                        >
-                          A second item
+                        <div class="relative inline-block min-w-[23px] z-[1]">
+                          Tue
                         </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
+                        <div class="relative inline-block min-w-[28px] z-[1]">
+                          Wed
                         </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
+                        <div class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[6px]">
+                          <div class="relative inline-block min-w-[24px] z-[1]">
+                            Thu
+                          </div>
                         </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[88px]"
-                        >
-                          A third item
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[99px]"
-                        >
-                          A fourth item
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[112px]"
-                        >
-                          And a fifth one
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="self-stretch rounded-[8px] border-[#e9ecef] border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start"
-                  >
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[58px]"
-                        >
-                          An item
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[109px]"
-                        >
-                          A second item
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[88px]"
-                        >
-                          A third item
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[99px]"
-                        >
-                          A fourth item
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="self-stretch bg-[#fff] border-[#dee2e6] border-b-[1px] border-solid flex flex-row items-center justify-start pt-[8px] px-[16px] pb-[6px] gap-[8px]"
-                    >
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[2px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div class="h-[16px] w-[16px] relative hidden">
-                        <div
-                          class="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[16px] bg-[#fff] border-[#abb5be] border-[1px] border-solid box-border"
-                        ></div>
-                      </div>
-                      <div
-                        class="h-[47px] w-[133px] hidden flex-col items-start justify-start"
-                      >
-                        <div
-                          class="h-[19px] relative font-semibold inline-block"
-                        >
-                          Subheading
-                        </div>
-                        <div
-                          class="flex-1 relative leading-[28px] text-[#6c757d] whitespace-nowrap"
-                        >
-                          Content for list item
-                        </div>
-                      </div>
-                      <div
-                        class="flex-1 flex flex-row items-start justify-start gap-[8px]"
-                      >
-                        <div
-                          class="self-stretch w-[8px] relative leading-[28px] hidden"
-                        >
-                          1
-                        </div>
-                        <div
-                          class="relative leading-[28px] inline-block min-w-[112px]"
-                        >
-                          And a fifth one
-                        </div>
-                      </div>
-                      <div
-                        class="h-[20px] rounded-[4px] bg-[#7749f8] hidden flex-row items-start justify-start py-[4px] px-[8px] box-border text-center text-[10px] text-[#fff]"
-                      >
-                        <div class="self-stretch relative font-semibold">
-                          23
+                        <div class="relative inline-block min-w-[16px] z-[1] mq825:w-full mq825:h-[16px]">
+                          Fri
                         </div>
                       </div>
                     </div>
@@ -968,265 +147,96 @@
             </div>
           </div>
         </div>
+      </div>
+      <div
+        class="w-[786px] flex flex-row items-start justify-end py-[0px] px-[40px] box-border max-w-full text-[#333b69]">
         <div
-          class="flex-[0.9702] rounded-[50px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[34.5px] box-border gap-[30px] max-w-full text-[16px] mq825:pb-[20px] mq825:box-border mq1125:pt-[20px] mq1125:pb-[22px] mq1125:box-border mq1400:flex-1"
-        >
+          class="flex-1 flex flex-row items-start justify-start gap-[35px] max-w-full mq825:gap-[17px] mq825:flex-wrap">
           <div
-            class="self-stretch flex flex-col items-start justify-start gap-[34.5px] text-center text-[24px] mq450:gap-[17px]"
-          >
-            <div
-              class="self-stretch h-[23px] relative font-semibold flex items-center justify-center shrink-0 mq450:text-[19px]"
-            >
-              가맹점 현황
-            </div>
-            <div
-              class="self-stretch relative text-[20px] font-semibold text-[#343c6a] text-left mq450:text-[16px]"
-            >
-              판매실적 TOP5 가맹점
-            </div>
-          </div>
-          <div
-            class="self-stretch h-[304px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[0px] px-[9px] box-border max-w-full font-[Poppins] mq825:h-auto"
-          >
-            <div
-              class="mt-[-12px] flex-1 flex flex-row items-start justify-start max-w-full"
-            >
+            class="w-[315.5px] flex flex-col items-start justify-start pt-[20px] px-[0px] pb-[0px] box-border min-w-[315.5px] mq825:flex-1">
+            <div class="self-stretch flex flex-col items-start justify-start gap-[15px]">
+              <div class="self-stretch relative font-semibold mq450:text-[16px]">
+                방문자 OS
+              </div>
               <div
-                class="flex-1 rounded-[4px] bg-[#fff] border-[#f1f1f1] border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start pt-[14px] px-[23px] pb-[22px] max-w-full"
-              >
+                class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[32px] pr-[33px] text-[15px] text-[#718ebf]">
                 <div
-                  class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[8px] box-border max-w-full [row-gap:20px] mq825:flex-wrap"
-                >
-                  <div
-                    class="flex-1 bg-[#fff] flex flex-row items-start justify-start min-w-[233px] max-w-full"
-                  >
-                    <div
-                      class="w-[96px] flex flex-row items-start justify-start py-[0px] px-[0px] box-border"
-                    >
-                      <div
-                        class="w-[148px] relative font-medium inline-block shrink-0"
-                      >
-                        STACKED BAR/LINE
-                      </div>
-                    </div>
+                  class="flex-1 rounded-[25px] bg-[#fff] flex flex-col items-end justify-start pt-[21.4px] px-[35px] pb-[20px] gap-[11.3px]">
+                  <div class="w-[250.3px] h-[221px] relative rounded-[25px] bg-[#fff] hidden"></div>
+                  <div class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[26px] pr-[19px]">
+                    <img class="h-[132.7px] w-[134.5px] relative z-[1]" loading="lazy" alt=""
+                      src="/public/group-346.svg" />
                   </div>
-                  <div
-                    class="flex-1 bg-[#fff] overflow-hidden flex flex-row items-start justify-start min-w-[233px] max-w-full text-right text-[12px] mq450:flex-wrap"
-                  >
-                    <div
-                      class="flex-1 flex flex-col items-start justify-start pt-[3px] px-[0px] pb-[0px] box-border min-w-[217px] max-w-full"
-                    >
-                      <div
-                        class="self-stretch flex flex-row items-start justify-end shrink-0"
-                      >
-                        <div class="flex flex-row items-start justify-start">
-                          <div
-                            class="relative font-medium inline-block min-w-[61px]"
-                          >
-                            This Week
-                          </div>
+                  <div class="self-stretch flex flex-col items-start justify-start gap-[10px]">
+                    <div class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap">
+                      <div class="w-[68.6px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#4c78ff] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          DBL Bank
+                        </div>
+                      </div>
+                      <div class="w-[70.1px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ff82ac] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          BRC Bank
                         </div>
                       </div>
                     </div>
-                    <img
-                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0 min-h-[24px]"
-                      alt=""
-                      src="/public/dropdown-icon.svg"
-                    />
+                    <div class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap">
+                      <div class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#16dbcc] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          ABM Bank
+                        </div>
+                      </div>
+                      <div class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ffbb38] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          MCP Bank
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div class="self-stretch relative font-semibold mq450:text-[16px]">
+                방문자 접속기기
+              </div>
+              <div
+                class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[32px] pr-[33px] text-[15px] text-[#718ebf]">
                 <div
-                  class="self-stretch flex flex-row items-start justify-start text-[32px] text-[#165baa]"
-                >
-                  <div
-                    class="relative tracking-[-0.04em] inline-block min-w-[126px] mq825:text-[26px] mq450:text-[19px]"
-                  >
-                    5.000,00
+                  class="flex-1 rounded-[25px] bg-[#fff] flex flex-col items-end justify-start pt-[21.4px] px-[35px] pb-[20px] gap-[11.3px]">
+                  <div class="w-[250.3px] h-[221px] relative rounded-[25px] bg-[#fff] hidden"></div>
+                  <div class="self-stretch flex flex-row items-start justify-end py-[0px] pl-[26px] pr-[19px]">
+                    <img class="h-[132.7px] w-[134.5px] relative z-[1]" loading="lazy" alt=""
+                      src="/public/group-346.svg" />
                   </div>
-                </div>
-                <div
-                  class="flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[16px] text-[#4c4c4c]"
-                >
-                  <div class="relative inline-block min-w-[78px]">
-                    50 Orders
-                  </div>
-                </div>
-                <div
-                  class="self-stretch bg-[#fff] flex flex-col items-start justify-start max-w-full text-right text-[12px] font-[Inter]"
-                >
-                  <div class="self-stretch h-[116px] relative max-w-full">
-                    <div
-                      class="absolute top-[0px] left-[0px] w-full h-full max-w-full"
-                    >
-                      <div
-                        class="absolute h-[82.76%] w-[94.69%] top-[3.45%] right-[0%] bottom-[13.79%] left-[5.31%] border-[#f1f1f1] border-[1px] border-solid box-border"
-                      ></div>
-                      <img
-                        class="absolute h-[0.86%] w-[94.69%] top-[31.03%] right-[0%] bottom-[68.1%] left-[5.31%] max-w-full overflow-hidden max-h-full z-[1]"
-                        alt=""
-                        src="/public/vector-2.svg"
-                      />
-
-                      <img
-                        class="absolute h-[0.86%] w-[94.69%] top-[58.62%] right-[0%] bottom-[40.52%] left-[5.31%] max-w-full overflow-hidden max-h-full z-[1]"
-                        alt=""
-                        src="/public/vector-2.svg"
-                      />
-
-                      <div
-                        class="absolute top-[4px] left-[150.9px] w-[452px] h-[95px]"
-                      >
-                        <img
-                          class="absolute top-[0px] left-[0px] w-0 h-[95px] object-contain z-[2]"
-                          loading="lazy"
-                          alt=""
-                          src="/public/vector-5.svg"
-                        />
-
-                        <img
-                          class="absolute top-[0px] left-[113px] w-0 h-[95px] object-contain z-[2]"
-                          loading="lazy"
-                          alt=""
-                          src="/public/vector-5.svg"
-                        />
-
-                        <img
-                          class="absolute top-[0px] left-[226px] w-0 h-[95px] object-contain z-[2]"
-                          alt=""
-                          src="/public/vector-5.svg"
-                        />
-
-                        <img
-                          class="absolute top-[0px] left-[339px] w-0 h-[95px] object-contain z-[2]"
-                          alt=""
-                          src="/public/vector-5.svg"
-                        />
-
-                        <img
-                          class="absolute top-[0px] left-[452px] w-0 h-[95px] object-contain z-[2]"
-                          alt=""
-                          src="/public/vector-5.svg"
-                        />
+                  <div class="self-stretch flex flex-col items-start justify-start gap-[10px]">
+                    <div class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap">
+                      <div class="w-[68.6px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#4c78ff] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          DBL Bank
+                        </div>
                       </div>
-                      <div
-                        class="absolute top-[0px] left-[0px] w-[24.6px] flex flex-col items-start justify-start gap-[16px]"
-                      >
-                        <div class="self-stretch relative">80</div>
-                        <div class="self-stretch relative">60</div>
-                        <div class="self-stretch relative">40</div>
-                        <div class="self-stretch relative">20</div>
-                      </div>
-                      <div
-                        class="absolute top-[103px] left-[64px] w-[621px] flex flex-col items-end justify-start py-[0px] pl-[0px] pr-[109px] box-border max-w-full text-center text-[10px]"
-                      >
-                        <div
-                          class="mr-[-109px] w-[58px] relative inline-block shrink-0"
-                        >
-                          Jun
-                        </div>
-                        <div
-                          class="w-[58px] relative inline-block shrink-0 mt-[-13px]"
-                        >
-                          Mai
-                        </div>
-                        <div
-                          class="w-[280px] flex flex-row items-start justify-center py-[0px] px-[20px] box-border mt-[-13px]"
-                        >
-                          <div class="w-[58px] relative inline-block shrink-0">
-                            Apr
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-start mt-[-13px]"
-                        >
-                          <div class="w-[58px] relative inline-block shrink-0">
-                            Jan
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[20px] pr-[240px] mt-[-13px]"
-                        >
-                          <div class="w-[58px] relative inline-block shrink-0">
-                            Feb
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[24px] pr-[20px] mt-[-13px]"
-                        >
-                          <div class="w-[58px] relative inline-block shrink-0">
-                            Mar
-                          </div>
+                      <div class="w-[70.1px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ff82ac] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          BRC Bank
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="absolute top-[47px] left-[38px] w-[678px] h-[52px] z-[3]"
-                    >
-                      <div
-                        class="absolute h-[65.38%] w-[10.07%] top-[34.62%] right-[86.81%] bottom-[0%] left-[3.11%] bg-[#165baa]"
-                      ></div>
-                      <div
-                        class="absolute h-[65.38%] w-[9.72%] top-[34.62%] right-[69.81%] bottom-[0%] left-[20.47%] bg-[#165baa]"
-                      ></div>
-                      <div
-                        class="absolute h-[26.92%] w-[9.38%] top-[73.08%] right-[53.48%] bottom-[0%] left-[37.14%] bg-[#165baa]"
-                      ></div>
-                      <div
-                        class="absolute h-[53.85%] w-[9.72%] top-[46.15%] right-[36.47%] bottom-[0%] left-[53.81%] bg-[#165baa]"
-                      ></div>
-                      <div
-                        class="absolute h-[90.38%] w-[9.72%] top-[9.62%] right-[20.15%] bottom-[0%] left-[70.13%] bg-[#165baa]"
-                      ></div>
-                      <div
-                        class="absolute h-[65.38%] w-[9.38%] top-[34.62%] right-[4.17%] bottom-[0%] left-[86.45%] bg-[#165baa]"
-                      ></div>
-                      <img
-                        class="absolute h-[76.92%] w-full top-[0%] right-[0%] bottom-[23.08%] left-[0%] max-w-full overflow-hidden max-h-full z-[1]"
-                        alt=""
-                        src="/public/current-bar-marker.svg"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="flex flex-col items-start justify-start text-left font-[Poppins]"
-                  >
-                    <div
-                      class="flex flex-row items-center justify-start pt-[24px] pb-[8px] pl-[0px] pr-[91px] gap-[8px] mq450:flex-wrap"
-                    >
-                      <div
-                        class="bg-[rgba(255,255,255,0)] overflow-hidden flex flex-row items-center justify-start py-[1px] px-[0px]"
-                      >
-                        <img
-                          class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
-                          loading="lazy"
-                          alt=""
-                          src="/public/intetity-color-circle.svg"
-                        />
-
-                        <div class="flex flex-row items-center justify-start">
-                          <div
-                            class="relative font-medium inline-block min-w-[49px]"
-                          >
-                            Content
-                          </div>
+                    <div class="self-stretch flex flex-row items-start justify-between gap-[20px] mq450:flex-wrap">
+                      <div class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#16dbcc] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          ABM Bank
                         </div>
                       </div>
-                      <div
-                        class="bg-[rgba(255,255,255,0)] overflow-hidden flex flex-row items-center justify-start py-[1px] px-[0px]"
-                      >
-                        <img
-                          class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
-                          loading="lazy"
-                          alt=""
-                          src="/public/intetity-color-circle-1.svg"
-                        />
-
-                        <div class="flex flex-row items-center justify-start">
-                          <div
-                            class="relative font-medium inline-block min-w-[49px]"
-                          >
-                            Content
-                          </div>
+                      <div class="w-[72.2px] flex flex-row items-start justify-start gap-[8.6px]">
+                        <div class="h-[10.7px] w-[10.7px] relative rounded-[50%] bg-[#ffbb38] z-[1]"></div>
+                        <div class="h-[12.8px] flex-1 relative font-medium inline-block z-[1]">
+                          MCP Bank
                         </div>
                       </div>
                     </div>
@@ -1235,240 +245,206 @@
               </div>
             </div>
           </div>
-          <div
-            class="self-stretch relative text-[20px] font-semibold text-[#343c6a] mq450:text-[16px]"
-          >
-            이번달 정산 현황
-          </div>
-          <div
-            class="self-stretch h-[96px] shadow-[0px_2px_2px_rgba(0,_0,_0,_0.25)] rounded-[30px] bg-[rgba(52,60,106,0.1)] overflow-x-auto shrink-0 flex flex-row items-start justify-start py-[20px] px-[79px] box-border gap-[10px] mq825:pl-[39px] mq825:pr-[39px] mq825:box-border"
-          >
-            <button
-              class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]"
-            >
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative text-[16px] leading-[25px] font-[Poppins] text-[#000] text-left inline-block min-w-[64px] whitespace-nowrap"
-                >
-                  승인 대기
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[2px]"
-              >
-                <div class="w-[1px] h-0 relative hidden"></div>
-                <div
-                  class="w-[1px] flex-1 relative border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border"
-                ></div>
-              </div>
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative text-[16px] leading-[25px] font-[Poppins] text-[#000] text-left inline-block min-w-[51px]"
-                >
-                  nnn 건
-                </div>
-              </div>
-            </button>
-            <button
-              class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]"
-            >
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative text-[16px] leading-[25px] font-[Poppins] text-[#000] text-left inline-block min-w-[64px] whitespace-nowrap"
-                >
-                  정산 승인
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[2px]"
-              >
-                <div class="w-[1px] h-0 relative hidden"></div>
-                <div
-                  class="w-[1px] flex-1 relative border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border"
-                ></div>
-              </div>
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative text-[16px] leading-[25px] font-[Poppins] text-[#000] text-left inline-block min-w-[51px]"
-                >
-                  nnn 건
-                </div>
-              </div>
-            </button>
-            <button
-              class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] pl-[20px] pr-[18px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]"
-            >
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative text-[16px] leading-[25px] font-[Poppins] text-[#000] text-left inline-block min-w-[64px] whitespace-nowrap"
-                >
-                  정산 완료
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[2px]"
-              >
-                <div class="w-[1px] h-0 relative hidden"></div>
-                <div
-                  class="w-[1px] flex-1 relative border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border"
-                ></div>
-              </div>
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative text-[16px] leading-[25px] font-[Poppins] text-[#000] text-left inline-block min-w-[51px]"
-                >
-                  nnn 건
-                </div>
-              </div>
-            </button>
-          </div>
-          <div
-            class="self-stretch relative text-[20px] font-semibold text-[#343c6a] mq450:text-[16px]"
-          >
-            이번달 입점 현황
-          </div>
-          <div
-            class="self-stretch shadow-[0px_2px_2px_rgba(0,_0,_0,_0.25)] rounded-[30px] bg-[rgba(52,60,106,0.1)] overflow-hidden flex flex-row items-start justify-center p-[20px] gap-[10px] font-[Poppins] mq825:flex-wrap"
-          >
-            <div
-              class="h-[56px] rounded-[10px] bg-[#fff] border-[#a4a4a4] border-[1px] border-solid box-border overflow-x-auto flex flex-row items-start justify-start py-[0px] px-[49px] gap-[21.5px] mq450:pl-[20px] mq450:pr-[20px] mq450:box-border"
-            >
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative leading-[25px] inline-block min-w-[97px] whitespace-nowrap"
-                >
-                  입점 요청 대기
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[2px]"
-              >
-                <div class="w-[1px] h-0 relative hidden"></div>
-                <div
-                  class="w-[1px] flex-1 relative border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border"
-                ></div>
-              </div>
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div class="relative leading-[25px] inline-block min-w-[51px]">
-                  nnn 건
-                </div>
-              </div>
+
+          <!-- 신규 회원 테이블-->
+          <div 
+            class="flex-1 overflow-hidden flex flex-col items-center justify-start p-[20px] box-border gap-[15px] min-w-[231px] max-w-full">
+            <label class="font-semibold">
+              신규 회원
+            </label>
+
+            <div th:if="${memList == null}">
+              최근에 가입한 신규 회원이 없습니다.
             </div>
-            <div
-              class="h-[56px] rounded-[10px] bg-[#fff] border-[#a4a4a4] border-[1px] border-solid box-border overflow-x-auto flex flex-row items-start justify-start py-[0px] px-[49px] gap-[22px] mq450:pl-[20px] mq450:pr-[20px] mq450:box-border"
-            >
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative leading-[25px] inline-block min-w-[64px] whitespace-nowrap"
-                >
-                  입점 완료
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[2px]"
-              >
-                <div class="w-[1px] h-0 relative hidden"></div>
-                <div
-                  class="w-[1px] flex-1 relative border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border"
-                ></div>
-              </div>
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative tracking-[-0.2px] inline-block min-w-[50px]"
-                >
-                  nnn 건
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="self-stretch relative text-[20px] font-semibold text-[#343c6a] mq450:text-[16px]"
-          >
-            이번달 1:1문의 현황
-          </div>
-          <div
-            class="self-stretch shadow-[0px_2px_2px_rgba(0,_0,_0,_0.25)] rounded-[30px] bg-[rgba(52,60,106,0.1)] overflow-hidden flex flex-row items-start justify-center p-[20px] gap-[10px] font-[Poppins] mq825:flex-wrap"
-          >
-            <div
-              class="h-[56px] rounded-[10px] bg-[#fff] border-[#a4a4a4] border-[1px] border-solid box-border overflow-x-auto flex flex-row items-start justify-start py-[0px] px-[49px] gap-[21.5px] mq450:pl-[20px] mq450:pr-[20px] mq450:box-border"
-            >
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative leading-[25px] inline-block min-w-[64px] whitespace-nowrap"
-                >
-                  문의 대기
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[2px]"
-              >
-                <div class="w-[1px] h-0 relative hidden"></div>
-                <div
-                  class="w-[1px] flex-1 relative border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border"
-                ></div>
-              </div>
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div class="relative leading-[25px] inline-block min-w-[51px]">
-                  nnn 건
-                </div>
-              </div>
-            </div>
-            <div
-              class="h-[56px] rounded-[10px] bg-[#fff] border-[#a4a4a4] border-[1px] border-solid box-border overflow-x-auto flex flex-row items-start justify-start py-[0px] px-[49px] gap-[22px] mq450:pl-[20px] mq450:pr-[20px] mq450:box-border"
-            >
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative leading-[25px] inline-block min-w-[64px] whitespace-nowrap"
-                >
-                  문의 완료
-                </div>
-              </div>
-              <div
-                class="self-stretch flex flex-col items-start justify-center py-[0px] pl-[0px] pr-[2px]"
-              >
-                <div class="w-[1px] h-0 relative hidden"></div>
-                <div
-                  class="w-[1px] flex-1 relative border-[rgba(0,0,0,0.12)] border-r-[1px] border-solid box-border"
-                ></div>
-              </div>
-              <div
-                class="flex flex-col items-start justify-start pt-[16px] px-[0px] pb-[0px]"
-              >
-                <div
-                  class="relative tracking-[-0.2px] inline-block min-w-[50px]"
-                >
-                  nnn 건
-                </div>
-              </div>
+
+            <div th:if="${memList != null}"
+              class="self-stretch h-[496px] overflow-hidden shrink-0 flex flex-col items-center justify-start py-[0px] px-[4px] box-border text-[16px] text-[#343a40]">
+              <table>
+                <thead>
+                  <tr>
+                    <th>이메일</th>
+                    <th>가입일</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="mem : ${memList}">
+                    <td th:text="${mem.memberProfile.email}"></td>
+                    <td th:text="${mem.memJoinDate}"></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </div>
+
+    <!-- 가맹점 현황 -->
+    <div class="rounded-[50px] bg-[#eaecf8] flex flex-col items-start justify-start p-[20px] gap-[30px] text-[16px] ">
+      <label class="w-full text-center font-semibold text-[24px]">가맹점 현황</label>
+      
+      <label class="text-[20px] font-semibold text-[#343c6a]">
+        판매실적 TOP5 가맹점
+      </label>
+      <div class="w-full h-[400px] overflow-hidden">
+        <canvas id="myChart"></canvas>
+      </div>
+
+
+      <label class="text-[20px] font-semibold text-[#343c6a]">
+        이번달 정산 현황
+      </label>
+      <div
+        class="self-stretch h-[96px] shadow-[0px_2px_2px_rgba(0,_0,_0,_0.25)] rounded-[30px] bg-[rgba(52,60,106,0.1)] shrink-0 flex flex-row items-center justify-center box-border gap-[10px]">
+        
+        <div class="w-[150px] h-[50px] bg-[#fff] self-stretch rounded-[10px] shrink-0 flex flex-row items-center justify-center">
+          <div class="w-1/2 h-full text-center border-[#a4a4a4] border-[1px] border-solid rounded-l-[10px]">
+            승인 대기
+          </div>
+          <div class="w-1/2 h-full text-center border-[#a4a4a4] border-[1px] border-solid rounded-r-[10px]"
+          th:text="${calRequestCount}">
+            n 건
+          </div>
+        </div>
+        
+        <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
+          <div class="w-1/2 text-center">
+            승인
+          </div>
+          <div class="w-1/2 text-center"
+          th:text="${calApproveCount}">
+            n 건
+          </div>
+        </div>
+
+        <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
+          <div class="w-1/2 text-center">
+            완료
+          </div>
+          <div class="w-1/2 text-center"
+          th:text="${calCompletedCount}">
+            n 건
+          </div>
+        </div>
+      </div>
+
+
+      <label class="self-stretch relative text-[20px] font-semibold text-[#343c6a] mq450:text-[16px]">
+        이번달 입점 현황
+      </label>
+      
+      <div
+        class="self-stretch h-[96px] shadow-[0px_2px_2px_rgba(0,_0,_0,_0.25)] rounded-[30px] bg-[rgba(52,60,106,0.1)] shrink-0 flex flex-row items-start justify-start py-[20px] px-[79px] box-border gap-[10px]">
+        
+        <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
+          <div class="w-1/2 text-center">
+            입점 요청 대기
+          </div>
+          <div class="w-1/2 text-center"
+          th:text="${reqApplyCount}">
+            n 건
+          </div>
+        </div>
+        
+        <div class="cursor-pointer border-[#a4a4a4] border-[1px] border-solid py-[0px] px-[19px] bg-[#fff] self-stretch rounded-[10px] overflow-x-auto shrink-0 flex flex-row items-start justify-start gap-[21.5px]">
+          <div class="w-1/2 text-center">
+            입점 완료
+          </div>
+          <div class="w-1/2 text-center"
+          th:text="${reqApproveCount}">
+            n 건
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script th:inline="javascript">
+    // 차트 데이터
+    var top5List = /*[[${top5List}]]*/[];
+    console.log(top5List);
+
+    var label = top5List.map(function (item) {
+      return item.hostName; // Assuming Top5SalesDTO has a field 'regionName'
+    });
+
+    var data = top5List.map(function (item) {
+      return item.totalSales; // Assuming Top5SalesDTO has a field 'salesAmount'
+    });
+
+    var ctx = document.getElementById('myChart');
+    var salesChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: label,
+        datasets: [{
+          label: 'Sales Amount',
+          data: data,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+
+    axios.post('https://accounts.google.com/o/oauth2/token',
+        {
+            "client_id": "160531611477-l7nuhmg2ucugqaov6bc710o83fu07tat.apps.googleusercontent.com",
+            "client_secret": "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",
+            "refresh_token": "1//04co7JmjiWeB9CgYIARAAGAQSNwF-L9IrFIWb6wIHYwu4bT64Ffo2l4nCDf0QyN3XeqsN3wyrcAEZ3oCVJBjyWtg652IIZHuhaSs",
+            "grant_type": "refresh_token",
+            "scope": "https://www.googleapis.com/auth/analytics https://www.googleapis.com/auth/analytics.readonly", 
+        }
+    )
+    .then((response) => {
+        const accessToken = response.data.access_token;
+        console.log(accessToken);
+
+        // 만약 정상적으로 'access_token'을 받았다면, 기본 보고서(runReport)를 호출하는 요청을 보낸다.
+        axios.post(`https://analyticsdata.googleapis.com/v1beta/properties/461681623:runReport`,
+            {
+                // runReport 요청에 필요한 'dimensions', 'metrics', 'dataRanges'를 data에 포함하여 전송한다.
+                "dimensions": [{ "name":"date" }],
+                "metrics": [{ "name":"activeUsers" }, { "name":"screenPageViews" }, { "name":"sessions" }],
+                "dateRanges": [{ "startDate":"2024-01-01", "endDate":"today" }],
+                "keepEmptyRows": true,
+            },
+            {
+                // 이전에 전달받은 'access_token'을 headers에 담는다(인증).
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+        )
+        // 정상적으로 응답을 받았다면, 콘솔창에 runReport의 결과가 나타날 것이다.
+        .then((response) => {
+            console.log('Report Result:', response.data);
+        })
+        // runReport가 정상적으로 호출되지 않았다면, [REPORT ERROR]라는 문구와 함께 콘솔창에 에러가 보일 것이다.
+        .catch((error) => {
+            console.log('[REPORT ERROR] ', error);
+        });
+    })
+    // 'access_token'을 호출하는 것에 실패했다면, [TOKEN ERROR]라는 문구와 함께 콘솔창에 에러가 보일 것이다.
+    .catch((error) => {
+        console.log('[TOKEN ERROR] ', error);
+    });
+
+  </script>
 </body>
+
 </html>

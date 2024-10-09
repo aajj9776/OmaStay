@@ -1,5 +1,7 @@
 package com.omakase.omastay.entity;
 
+import java.time.LocalDateTime;
+
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.vo.AddressVo;
 import com.omakase.omastay.vo.HostContactInfoVo;
@@ -25,7 +27,7 @@ public class HostInfo {
     @Column(name = "h_idx", nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_idx", referencedColumnName = "ad_idx")
     private AdminMember adminMember;
 
@@ -39,7 +41,7 @@ public class HostInfo {
 
     // 모델, 호텔/리조트, 펜션/풀빌라, 게하/한옥
     @Enumerated
-    @Column(name = "h_cate", nullable = false)
+    @Column(name = "h_cate")
     private HCate hCate;
 
     @Column(name = "x_axis", length = 100)
@@ -67,23 +69,25 @@ public class HostInfo {
     @Column(name = "checkout", length = 100)
     private String checkout;
 
-    @Column(name = "directions", length = 100)
+    @Lob
+    @Column(name = "directions")
     private String directions;
 
-    @Column(name = "rules", length = 100)
+    @Lob
+    @Column(name = "rules")
     private String rules;
 
-    @Column(name = "price_add", length = 100)
+    @Column(name = "price_add", length = 1000)
     private String priceAdd;
 
     //신청 승인 반려 해제
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "h_status", nullable = true)
+    @Column(name = "h_status")
     private HStatus hStatus;
 
     //마이페이지 숙소 이용규칙 객실
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "h_step", nullable = false)
+    @Column(name = "h_step")
     private HStep hStep;
 
     @Column(name = "h_none", length = 100)
@@ -96,5 +100,8 @@ public class HostInfo {
     //대표번호
     @Column(name = "h_phone", nullable = false, length = 100)
     private String hphone;
+
+    @Column(name = "h_reg_time")
+    private LocalDateTime hRegTime;
 
 }

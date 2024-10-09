@@ -14,9 +14,7 @@ import com.omakase.omastay.repository.GradeRepository;
 import com.omakase.omastay.repository.MemberRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.UserProfileVo;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.interfaces.DecodedJWT;
+
 import java.util.Base64;
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -169,6 +167,10 @@ public class MemberService {
                 memberDTO.setMemName(nickname);
                 memberDTO.setMemEmailCheck(BooleanStatus.TRUE);
                 memberDTO.setMemSocial(Social.KAKAO);  // 카카오 로그인 설정
+                // memberDTO.setAccessToken(accessToken);
+                // memberDTO.setRefreshToken(refreshToken);
+                // 세션에 저장하기 전에 로그 출력
+                System.out.println("카카오 소셜 회원 정보: " + memberDTO);
     
                 // 세션에 저장
                 request.getSession().setAttribute("socialMember", memberDTO);
@@ -390,15 +392,6 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email);
         return member != null;
     }
-    
-    private boolean isTokenExpired(String accessToken) {
-        try {
-            DecodedJWT jwt = JWT.decode(accessToken);
-            return jwt.getExpiresAt().before(new Date());
-        } catch (JWTDecodeException e) {
-            return true;  // 만료되었거나 디코딩에 실패한 경우
-        }
-    }
 
     //네이버 로그인 구현 범위 끝
     public boolean checkEmailDuplicate(String email) {
@@ -562,6 +555,29 @@ public class MemberService {
             throw new IllegalArgumentException("해당 이메일로 등록된 사용자가 없습니다.");
         }
         return new MemberDTO(member);
+    }
+    
+    @Transactional
+    public MemberDTO getMemberInfo(int id) {
+        Member member = memberRepository.findMemberWithGrade(id);
+        System.out.println("회원정보 조회 서비스 호출" + member);
+        MemberDTO res = MemberMapper.INSTANCE.toMemberDTO(member);
+        return res;
+    }
+
+    public MemberDTO getMember(Integer memId) {
+        Optional<Member> mem = memberRepository.findById(memId);
+        
+        Member member = mem.get();
+
+        return MemberMapper.INSTANCE.toMemberDTO(member);
+
+    }
+
+    public List<MemberDTO> getMemList(){
+        List<Member> list = memberRepository.getMemList();
+
+        return MemberMapper.INSTANCE.toMemberDTOList(list);
     }
 
 }

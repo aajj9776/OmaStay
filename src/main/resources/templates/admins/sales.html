@@ -1,1524 +1,262 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/admin}"
-      layout:fragment="admin">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-  </head>
-  <body>
-    <div
-      class="w-full relative rounded-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start py-[30px] px-[20px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]"
-    >
-      <a
-        class="[text-decoration:none] w-[150px] h-[40px] relative font-semibold text-[inherit] flex items-center justify-center shrink-0 mq450:text-[19px]"
-        >판매실적</a
-      >
-      <section
-        class="w-[1565px] flex flex-row items-start justify-center gap-[10px] max-w-full text-left text-[20px] text-[#000] font-[Roboto] mq1300:flex-wrap"
-      >
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.css" />
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+  <style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border-radius: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div
+    class="w-full relative rounded-[80px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start py-[30px] px-[20px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]">
+
+    <!-- 제목 영역 -->
+    <label
+      class="m-[0px] self-stretch h-[40px] relative text-inherit font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px]">
+      판매실적
+    </label>
+
+    <!-- 검색과 차트 영역-->
+    <section
+      class="w-[1670px] flex flex-row items-start justify-start gap-[10px] max-w-full text-left text-[20px] text-[#000] font-[Roboto] mq1300:flex-wrap">
+
+
+      <!-- 검색 영역 -->
+      <div class="gap-3 rounded-[30px] bg-[#eaecf8] flex flex-col items-start justify-center p-[20px] box-border ">
+        <form id="search-form" action="/admin/sales/search" class="flex flex-col gap-3">
+            <label class="font-semibold w-full">
+              매출 확정일 기간
+            </label>
+            <div id="date-range-picker"
+              class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[10px]">
+              <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
+              <input readonly id="date-range-picker-input" name="dateRange"
+                class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+                type="text" placeholder="전체 기간" />
+            </div>
+
+            <label class="font-semibold w-full">
+              지역
+            </label>
+            <select id="region-value" name="region" data-str="게시판 유형"
+              class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+              <option value="전체">전체</option>
+              <option value="서울">서울</option>
+              <option value="부산">부산</option>
+              <option value="인천">인천</option>
+              <option value="대구">대구</option>
+              <option value="대전">대전</option>
+              <option value="광주">광주</option>
+              <option value="울산">울산</option>
+              <option value="세종">세종</option>
+              <option value="경기">경기</option>
+              <option value="충북">충북</option>
+              <option value="충남">충남</option>
+              <option value="전북">전북</option>
+              <option value="전남">전남</option>
+              <option value="경북">경북</option>
+              <option value="경남">경남</option>
+              <option value="강원">강원</option>
+              <option value="제주도">제주도</option>
+            </select>
+        </form>
+        <!-- 버튼 -->
         <div
-          class="w-[888px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-start justify-center py-[25.5px] px-[24px] box-border gap-[15px] min-w-[888px] max-w-full mq1125:min-w-full mq1300:flex-1"
-        >
-          <h3
-            class="m-[0px] w-[800px] relative text-inherit tracking-[0.4px] leading-[166%] font-medium font-[inherit] flex items-center max-w-full mq450:text-[16px] mq450:leading-[27px]"
-          >
-            검색 필터
-          </h3>
-          <div
-            class="self-stretch overflow-hidden flex flex-row items-center justify-start flex-wrap content-center py-[8px] px-[20px] box-border gap-x-[10px] gap-y-[9.5px] min-h-[86px] text-center text-[12px] text-[#007bff] font-[ABeeZee]"
-          >
-            <div
-              class="flex flex-col items-start justify-start text-[14px] text-[#fff]"
-            >
-              <div
-                class="rounded-[4px] bg-[#007bff] flex flex-col items-center justify-center py-[3px] px-[26px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon3@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[28px]"
-                  >
-                    전체
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon3@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >서울</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[24px]"
-                  >
-                    부산
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[24px]"
-                  >
-                    인천
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >대구</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >대전</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >광주</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >울산</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >세종</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >경기</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[24px]"
-                  >
-                    충북
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[24px]"
-                  >
-                    충남
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[24px]"
-                  >
-                    전북
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[24px]"
-                  >
-                    전남
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >경북</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[24px]"
-                  >
-                    경남
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[27px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[24px]"
-                    >강원</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon4@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-[80px] flex flex-col items-start justify-start">
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[1px] px-[21px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon3@2x.png"
-                  />
-
-                  <a
-                    class="[text-decoration:none] relative leading-[24px] text-[inherit] inline-block min-w-[36px]"
-                    >제주도</a
-                  >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon3@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="w-[509px] overflow-hidden flex flex-row items-center justify-start py-[0px] px-[20px] box-border gap-[8.7px] max-w-full text-[18px] mq800:flex-wrap"
-          >
-            <div
-              class="relative tracking-[0.4px] leading-[166%] inline-block min-w-[37px] shrink-0"
-            >
-              기간
-            </div>
-            <div
-              class="flex-1 rounded-[4px] bg-[#fff] border-[#ced4da] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[130px]"
-            >
-              <input
-                class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#495057] min-w-[106px]"
-                placeholder="Placeholder"
-                type="text"
-              />
-
-              <div class="h-[24px] hidden flex-row items-center justify-center">
-                <img
-                  class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/public/check.svg"
-                />
-              </div>
-            </div>
-            <div
-              class="relative tracking-[0.4px] leading-[30px] inline-block min-w-[6px] shrink-0 mq800:w-full mq800:h-[6px]"
-            >
-              -
-            </div>
-            <div
-              class="flex-1 rounded-[4px] bg-[#fff] border-[#ced4da] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[130px]"
-            >
-              <input
-                class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#495057] min-w-[106px]"
-                placeholder="Placeholder"
-                type="text"
-              />
-
-              <div class="h-[24px] hidden flex-row items-center justify-center">
-                <img
-                  class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/public/check.svg"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            class="w-[595px] overflow-hidden flex flex-row items-center justify-start py-[6px] px-[20px] box-border gap-[15px] max-w-full text-[16px] font-[ABeeZee] mq800:flex-wrap"
-          >
-            <div
-              class="relative text-[18px] tracking-[0.4px] leading-[166%] font-[Roboto] inline-block min-w-[51px]"
-            >
-              검색어
-            </div>
-            <div
-              class="shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] text-[#6c757d]"
-            >
-              <div
-                class="overflow-hidden flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[20px]"
-              >
-                <div class="relative leading-[24px] inline-block min-w-[90px]">
-                  Placeholder
-                </div>
-                <div
-                  class="h-[18px] w-[1px] relative bg-[#495057] hidden"
-                ></div>
-              </div>
-              <div
-                class="flex flex-row items-center justify-center py-[4px] px-[0px]"
-              >
-                <img
-                  class="h-[16px] w-[16px] relative"
-                  alt=""
-                  src="/public/-basetoggleup.svg"
-                />
-              </div>
-            </div>
-            <div
-              class="flex-1 shadow-[0px_0px_0px_3.2px_rgba(0,_123,_255,_0.25)] rounded-[4px] bg-[#fff] border-[#80bdff] border-[1px] border-solid box-border overflow-hidden flex flex-row items-center justify-center py-[4px] px-[11px] min-w-[166px]"
-            >
-              <input
-                class="w-full [border:none] [outline:none] bg-[transparent] h-[24px] flex-1 overflow-hidden flex flex-row items-center justify-start font-[ABeeZee] text-[16px] text-[#6c757d] min-w-[139px]"
-                placeholder="Placeholder"
-                type="text"
-              />
-
-              <div class="h-[24px] hidden flex-row items-center justify-center">
-                <img
-                  class="h-[16px] w-[16px] relative overflow-hidden shrink-0"
-                  alt=""
-                  src="/public/check.svg"
-                />
-              </div>
-            </div>
-            <div
-              class="w-[54px] flex flex-col items-start justify-start text-center text-[#007bff]"
-            >
-              <div
-                class="self-stretch rounded-[4px] border-[#007bff] border-[1px] border-solid flex flex-col items-center justify-center py-[4px] px-[10px]"
-              >
-                <div
-                  class="flex flex-row items-center justify-center gap-[4px]"
-                >
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon3@2x.png"
-                  />
-
-                  <div
-                    class="relative leading-[24px] inline-block min-w-[32px]"
-                  >
-                    검색
-                  </div>
-                  <img
-                    class="h-[24px] w-[24px] relative overflow-hidden shrink-0 object-cover hidden min-h-[24px]"
-                    alt=""
-                    src="/public/l-icon3@2x.png"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          class="w-[300px] flex-1 box-border flex flex-row items-center justify-start py-[4px] px-[10px] gap-[10px] text-[16px]">
+          <button id="search-button" class="w-[100px] h-[30px] bg-[#d4d8f1] rounded-[4px]">검색</button>
+          <button id="reset-button"
+            class="flex flex-row items-center justify-center w-[100px] h-[30px] border-[2px] border-[#d4d8f1] rounded-[4px]">초기화</button>
         </div>
-        <div
-          class="flex-1 rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-row items-start justify-start py-[17px] px-[20px] box-border min-w-[434px] max-w-full text-[22px] text-[#111618] font-[Lato] mq800:min-w-full"
-        >
-          <div
-            class="flex-1 shadow-[0px_3px_8px_rgba(34,_34,_34,_0.24)] bg-[#fff] border-[#bbc5ca] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[22px] px-[23px] gap-[24px] max-w-full"
-          >
-            <div
-              class="self-stretch flex flex-row items-start justify-start max-w-full [row-gap:20px] mq800:flex-wrap"
-            >
-              <h3
-                class="m-[0px] flex-1 relative text-inherit font-semibold font-[inherit] inline-block min-w-[112px] max-w-full mq450:text-[18px]"
-              >
-                판매실적 TOP5
-              </h3>
-              <div
-                class="flex flex-col items-start justify-start pt-[4.5px] px-[0px] pb-[0px] text-[14px] text-[#000]"
-              >
-                <div class="flex flex-row items-start justify-start gap-[16px]">
-                  <div
-                    class="flex flex-row items-start justify-start gap-[8px]"
-                  >
-                    <div
-                      class="flex flex-col items-start justify-start pt-[1.5px] px-[0px] pb-[0px]"
-                    >
-                      <div
-                        class="w-[14px] h-[14px] relative rounded-[50%] bg-[#2e93fa]"
-                      ></div>
-                    </div>
-                    <a
-                      class="[text-decoration:none] relative text-[inherit] inline-block min-w-[38px]"
-                      >Text 1</a
-                    >
-                  </div>
-                  <div
-                    class="flex flex-row items-start justify-start gap-[8px]"
-                  >
-                    <div
-                      class="flex flex-col items-start justify-start pt-[1.5px] px-[0px] pb-[0px]"
-                    >
-                      <div
-                        class="w-[14px] h-[14px] relative rounded-[50%] bg-[#575757]"
-                      ></div>
-                    </div>
-                    <a
-                      class="[text-decoration:none] relative text-[inherit] inline-block min-w-[38px]"
-                      >Text 2</a
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="self-stretch flex flex-col items-end justify-start max-w-full text-right text-[11px]"
-            >
-              <div
-                class="self-stretch flex flex-col items-start justify-start gap-[1px] max-w-full"
-              >
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">40</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#eff7ff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">37</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#fff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">33</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#eff7ff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">30</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#fff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">26</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#eff7ff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">23</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#fff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">19</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#eff7ff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">16</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#fff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[8px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[13px]">12</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#eff7ff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[14px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[7px]">9</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#fff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-                <div
-                  class="self-stretch h-[12.3px] flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[0px] box-border gap-[14px] max-w-full"
-                >
-                  <div class="relative inline-block min-w-[7px]">5</div>
-                  <div
-                    class="self-stretch flex-1 relative bg-[#eff7ff] border-[#dde2e4] border-t-[1px] border-solid box-border max-w-[calc(100%_-_21px)]"
-                  ></div>
-                </div>
-              </div>
-              <div
-                class="w-[558px] flex flex-col items-start justify-start max-w-full text-left text-[14px]"
-              >
-                <div
-                  class="self-stretch flex flex-row items-start justify-start [row-gap:20px] mq800:flex-wrap"
-                >
-                  <div
-                    class="w-[111.6px] border-[#768b95] border-t-[2px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[10px] pr-[0px]"
-                  >
-                    <div
-                      class="h-[5px] flex-1 border-[#768b95] border-t-[2px] border-solid border-[#768b95] border-l-[2px] border-solid box-border flex flex-col items-start justify-start py-[0px] pl-[2px] pr-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[5px] relative border-[#768b95] border-t-[2px] border-solid box-border hidden"
-                      ></div>
-                    </div>
-                  </div>
-                  <div
-                    class="w-[111.6px] border-[#768b95] border-t-[2px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[10px] pr-[0px]"
-                  >
-                    <div
-                      class="h-[5px] flex-1 border-[#768b95] border-t-[2px] border-solid border-[#768b95] border-l-[2px] border-solid box-border flex flex-col items-start justify-start py-[0px] pl-[2px] pr-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[5px] relative border-[#768b95] border-t-[2px] border-solid box-border hidden"
-                      ></div>
-                    </div>
-                  </div>
-                  <div
-                    class="flex-1 flex flex-row items-start justify-start min-w-[145px]"
-                  >
-                    <div
-                      class="flex-1 border-[#768b95] border-t-[2px] border-solid flex flex-row items-start justify-start py-[0px] pl-[10px] pr-[0px]"
-                    >
-                      <div
-                        class="h-[5px] flex-1 border-[#768b95] border-t-[2px] border-solid border-[#768b95] border-l-[2px] border-solid box-border flex flex-col items-start justify-start py-[0px] pl-[2px] pr-[0px]"
-                      >
-                        <div
-                          class="self-stretch h-[5px] relative border-[#768b95] border-t-[2px] border-solid box-border hidden"
-                        ></div>
-                      </div>
-                    </div>
-                    <div
-                      class="flex-1 border-[#768b95] border-t-[2px] border-solid flex flex-row items-start justify-start py-[0px] pl-[10px] pr-[0px] z-[1]"
-                    >
-                      <div
-                        class="h-[5px] flex-1 border-[#768b95] border-t-[2px] border-solid border-[#768b95] border-l-[2px] border-solid box-border flex flex-col items-start justify-start py-[0px] pl-[2px] pr-[0px]"
-                      >
-                        <div
-                          class="self-stretch h-[5px] relative border-[#768b95] border-t-[2px] border-solid box-border hidden"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="w-[111.6px] border-[#768b95] border-t-[2px] border-solid box-border flex flex-row items-start justify-start py-[0px] pl-[10px] pr-[0px]"
-                  >
-                    <div
-                      class="h-[5px] flex-1 border-[#768b95] border-t-[2px] border-solid border-[#768b95] border-l-[2px] border-solid box-border flex flex-col items-start justify-start py-[0px] pl-[2px] pr-[0px]"
-                    >
-                      <div
-                        class="self-stretch h-[5px] relative border-[#768b95] border-t-[2px] border-solid box-border hidden"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="self-stretch flex flex-row items-start justify-start [row-gap:20px] mq800:flex-wrap"
-                >
-                  <div
-                    class="flex-1 relative inline-block min-w-[109px] max-w-[112px]"
-                  >
-                    Jan
-                  </div>
-                  <div
-                    class="flex-1 relative inline-block min-w-[109px] max-w-[112px]"
-                  >
-                    Mar
-                  </div>
-                  <div
-                    class="flex-1 relative inline-block min-w-[109px] max-w-[112px]"
-                  >
-                    Apr
-                  </div>
-                  <div
-                    class="flex-1 relative inline-block min-w-[109px] max-w-[112px]"
-                  >
-                    June
-                  </div>
-                  <div
-                    class="flex-1 relative inline-block min-w-[109px] max-w-[112px] z-[2]"
-                  >
-                    July
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
+        <div class="text-gray-400 text-[16px]"> * 판매실적은 예약종료일 다음날 매출이 확정된 뒤 등록됩니다.</div>
+      </div>
+
+
+
+      <!-- 판매실적 Top5 -->
+      <div
+        class="w-full h-[400px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start py-[17px] px-[20px] box-border ">
+
+        <div th:if="${region == null}">
+          <label class="font-semibold">
+            전체 지역 판매실적 Top5
+          </label>
         </div>
-      </section>
-      <section
-        class="w-[1565px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-start justify-start p-[20px] box-border max-w-full text-left text-[14px] text-[#000] font-['Work_Sans']"
-      >
-        <div
-          class="self-stretch overflow-hidden flex flex-col items-start justify-start pt-[10px] px-[10px] pb-[20px] gap-[10px]"
-        >
-          <div
-            class="self-stretch rounded-[10px] bg-[#e1e1e1] overflow-hidden flex flex-row items-center justify-between py-[20px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
-          <div
-            class="self-stretch rounded-[10px] bg-[#fff] overflow-hidden flex flex-row items-center justify-between py-[10px] px-[30px] gap-[20px] mq1125:flex-wrap"
-          >
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              예약 번호
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              예약자
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[56px]"
-            >
-              결제 내용
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 시작일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              예약 종료일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[42px]"
-            >
-              결제일
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 전 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[73px]"
-            >
-              할인 후 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[86px]"
-            >
-              쿠폰 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[99px]"
-            >
-              포인트 적용 금액
-            </div>
-            <div
-              class="relative leading-[150%] font-semibold inline-block min-w-[69px]"
-            >
-              매출 확정일
-            </div>
-          </div>
+
+        <div th:if="${region != null}">
+          <label class="font-semibold">
+            [[${region}] 지역 판매실적 Top5
+          </label>
         </div>
-      </section>
-    </div>
-  </body>
+
+        <canvas id="myChart"></canvas>
+      </div>
+    </section>
+
+    <section
+      class="w-[1670px] rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-center justify-start p-[20px] box-border max-w-full text-left text-[14px] ">
+
+      <table id="DataTable">
+        <thead>
+          <tr>
+            <th>매출번호</th>
+            <th>호스트번호</th>
+            <th>지역</th>
+            <th>업체명</th>
+            <th>예약번호</th>
+            <th>결제내용</th>
+            <th>예약시작일</th>
+            <th>예약종료일</th>
+            <th>결제일</th>
+            <th>할인전금액</th>
+            <th>할인후금액</th>
+            <th>쿠폰할인금액</th>
+            <th>포인트할인금액</th>
+            <th>등급할인금액</th>
+            <th>매출확정일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="data : ${list}">
+            <td th:text="${data.sales.id}"></td>
+            <td th:text="${data.hostInfo.id}"></td>
+            <td th:text="${data.hostInfo.region}"></td>
+            <td th:text="${data.hostInfo.hname}"></td>
+            <td th:text="${data.reservation.id}"></td>
+            <td th:text="${data.payment.payContent}"></td>
+            <td th:text="${#temporals.format(data.reservation.startEndVo.start, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(data.reservation.startEndVo.end, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(data.payment.payDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${data.payment.nsalePrice}"></td>
+            <td th:text="${data.payment.amount}"></td> <!--할인 후 금액-->
+            <td th:text="${data.payment.payCoupon}"></td>
+            <td th:text="${data.payment.payPoint}"></td>
+            <td th:text="${data.payment.payGrade}"></td>
+            <td th:text="${data.sales.salDate}"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tfoot>
+      </table>
+
+    </section>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script type="text/javascript" src="/js/datepicker-search.js"></script>
+  <script th:inline="javascript">
+
+
+    $(document).ready(function () {
+      $('#DataTable').DataTable({
+        initComplete: function () {
+          this.api()
+            .columns()
+            .every(function () {
+              let column = this;
+              let title = column.header().textContent;
+
+              // Create input element
+              let input = document.createElement('input');
+              input.placeholder = title;
+
+              column.footer().replaceChildren(input);
+
+                input.addEventListener('keyup', () => {
+                  if (column.search() !== this.value) {
+                    column.search(input.value).draw();
+                  }
+                });
+            });
+        }
+      });
+
+
+      // 검색 버튼 클릭 이벤트 처리
+      $('#search-button').on('click', function () {
+        $('#search-form').submit();
+      });
+
+      // 초기화 버튼 클릭 이벤트 처리
+      $('#reset-button').on('click', function () {
+        $('#date-range-picker-input').val('');
+        $('#search-keyword').val('');
+        $('#search-type').val('all');
+        $('#region-value').val('all');
+      });
+    });
+
+
+    // 차트 데이터
+    var top5List = /*[[${top5List}]]*/[];
+    console.log(top5List);
+
+    var label = top5List.map(function (item) {
+      return item.hostName; // Assuming Top5SalesDTO has a field 'regionName'
+    });
+
+    var data = top5List.map(function (item) {
+      return item.totalSales; // Assuming Top5SalesDTO has a field 'salesAmount'
+    });
+
+    var ctx = document.getElementById('myChart');
+    var salesChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: label,
+        datasets: [{
+          label: 'Sales Amount',
+          data: data,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+  </script>
+</body>
+
 </html>

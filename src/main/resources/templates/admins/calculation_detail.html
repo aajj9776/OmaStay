@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
+
+<head>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+</head>
+
+<body>
+  <div
+    class="w-[1735px] min-h-[800px] rounded-[30px] bg-[#f5f6fb] flex flex-col shrink-0 items-start justify-start p-[30px] box-border gap-[20px] text-left">
+    <!-- 상단부 -->
+    <div
+      class="rounded-[30px] bg-[#eaecf8] flex flex-row items-center justify-start flex-wrap content-center py-[10px] px-[30px] box-border gap-[30px] text-[20px] font-semibold">
+      <span>[ </span>
+      <span th:text="${hname}"></span>
+      <span> ]의</span>
+      <input th:value="${#temporals.format(period, 'yyyy-MM')}" class="w-[150px] rounded-[4px] border-violet-200 border-[1px] text-center"/>
+      <span>매출 내역</span>
+      <button class="w-[150px] rounded-[4px] bg-[#d4d8f1] text-center" onclick="window.location.href='/admin/calculation'">
+        뒤로가기
+      </button>
+    </div>
+    <main
+      class="self-stretch rounded-[30px] bg-[#eaecf8] overflow-hidden flex flex-col items-center justify-start py-[18px] px-[23px]">
+      <table id="DataTable">
+        <thead>
+          <tr class="bg-[#d4d8f1] font-medium">
+            <th>매출번호</th>
+            <th>예약번호</th>
+            <th>결제내용</th>
+            <th>예약시작일</th>
+            <th>예약종료일</th>
+            <th>결제일</th>
+            <th>할인전금액</th>
+            <th>쿠폰할인금액</th>
+            <th>포인트할인금액</th>
+            <th>등급할인금액</th>
+            <th>할인후금액</th>
+            <th>매출확정일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="data : ${list}">
+            <td th:text="${data.sales.id}"></td>
+            <td th:text="${data.reservation.id}"></td>
+            <td th:text="${data.payment.payContent}"></td>
+            <td th:text="${#temporals.format(data.reservation.startEndVo.start, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(data.reservation.startEndVo.end, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(data.payment.payDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${data.payment.nsalePrice}"></td>
+            <td th:text="${data.payment.payCoupon}"></td>
+            <td th:text="${data.payment.payPoint}"></td>
+            <td th:text="${data.payment.payGrade}"></td>
+            <td th:text="${data.payment.amount}"></td>
+            <td th:text="${data.sales.salDate}"></td>
+          </tr>
+        </tbody>
+        </table>
+    </main>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#DataTable').DataTable({
+      });
+    });
+  </script>
+</body>
+
+</html>

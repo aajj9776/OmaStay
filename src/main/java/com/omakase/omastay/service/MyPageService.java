@@ -6,22 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Collections;
-import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate; // java.time.LocalDate 사용
-import java.time.LocalDateTime; // java.time.LocalDateTime 사용
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-
-
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime; // java.time.LocalDateTime 사용
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 
-import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.PointDTO;
@@ -31,17 +24,16 @@ import com.omakase.omastay.dto.custom.MemberCouponDTO;
 import com.omakase.omastay.dto.custom.MemberPointDTO;
 import com.omakase.omastay.dto.custom.MemberReservationDTO;
 import com.omakase.omastay.dto.custom.ReviewMemberDTO;
-import com.omakase.omastay.entity.Coupon;
 import com.omakase.omastay.entity.IssuedCoupon;
 import com.omakase.omastay.entity.Member;
-import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.entity.Payment;
+import com.omakase.omastay.entity.Point;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
-import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.mapper.MemberMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
+import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.repository.CouponRepository;
 import com.omakase.omastay.repository.IssuedCouponRepository;
 import com.omakase.omastay.repository.MemberRepository;
@@ -50,9 +42,8 @@ import com.omakase.omastay.repository.PointRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.ReviewRepository;
 
-import java.time.LocalDateTime;  // 이 부분이 java.time을 사용하는 부분입니다.
-
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class MyPageService {
@@ -84,7 +75,8 @@ public class MyPageService {
     @Autowired
     private CouponRepository couponRepository;
 
-    public MemberDTO getMemberInfo(int memberId) {
+
+        public MemberDTO getMemberInfo(int memberId) {
 
         Optional<Member> res = memberRepository.findMemberWithReservations(memberId);
 
@@ -401,4 +393,31 @@ public class MyPageService {
                 return false;
             }
         }
+
+    @Transactional
+    public  List<ReservationDTO> getReservationInfo(int memIdx) {
+        // Reservation을 조회하는 로직
+        List<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memIdx);
+        return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
+    }
+
+    public ReservationDTO getReservation(Integer id) {
+        Reservation reservation = reservationRepository.findById(id).get();
+        return ReservationMapper.INSTANCE.toReservationDTO(reservation);
+
+    }
+
+    public PaymentDTO getPayment(Integer payIdx) {
+        Payment payment = paymentRepository.findById(payIdx).get();
+        return PaymentMapper.INSTANCE.toPaymentDTO(payment);
+
+    }
+
+    public List<ReservationDTO> getNewReservationInfo(Integer memIdx) {
+        List<Reservation> reservation = reservationRepository.findByMemIdx(memIdx);
+        return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
+    }
+
+
+
 }

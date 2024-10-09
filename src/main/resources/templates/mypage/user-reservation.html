@@ -19,67 +19,37 @@
       <main
         class="flex-1 bg-[#fff] flex flex-row items-start justify-center gap-[59px] max-w-full text-left text-[20px] text-[#000] font-[Roboto] mq850:gap-[29px] mq1500:flex-wrap"
       >
-        <div
-          class="h-[1084px] w-[374px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[44px] px-[38px] box-border max-w-full mq450:pt-[29px] mq450:pb-[29px] mq450:box-border"
-        >
-          <div class="flex-1 flex flex-col items-start justify-start">
-            <div
-              class="self-stretch rounded-t-[10px] rounded-b-[0px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[23px] px-[37px] pb-[14px]"
-            >
-              <div
-                class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border"
-              >
-                <div class="flex-1 relative mq450:text-[16px]">예약 내역</div>
-              </div>
+      
+      <div class="w-[370px] h-auto flex-none flex flex-col justify-start py-11 pl-[38px] pr-[34px] box-border">
+        <div class="flex-1 flex flex-col items-start justify-start">
+          <div class="self-stretch rounded-t-3xs rounded-b-none bg-white border-gray-300 border-[1px] border-solid flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5">
+            <div class="w-[97px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+              <a class="text-lg" id="reservationLink" href="#">예약 내역</a>
             </div>
-            <div
-              class="self-stretch bg-[#fff] border-[#c2c2c2] border-r-[1px] border-solid border-[#c2c2c2] border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[20px] px-[38px] pb-[21px]"
-            >
-              <div
-                class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-              >
-                <div
-                  class="h-[33px] flex-1 relative flex items-center mq450:text-[16px]"
-                >
-                  포인트
-                </div>
-              </div>
+          </div>
+          <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
+            <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+              <a class="text-lg" href="/mypage/point">포인트</a>
             </div>
-            <div
-              class="self-stretch bg-[#fff] border-[#c2c2c2] border-t-[1px] border-solid border-[#c2c2c2] border-r-[1px] border-solid border-[#c2c2c2] border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[36px] pb-[21px]"
-            >
-              <div
-                class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-              >
-                <div
-                  class="h-[33px] flex-1 relative flex items-center mq450:text-[16px]"
-                >
-                  쿠폰
-                </div>
-              </div>
+          </div>
+          <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
+            <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+              <a class="text-lg" href="/mypage/coupon">쿠폰</a>
             </div>
-            <div
-              class="self-stretch bg-[#fff] border-[#c2c2c2] border-t-[1px] border-solid border-[#c2c2c2] border-r-[1px] border-solid border-[#c2c2c2] border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]"
-            >
-              <div
-                class="w-[113px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border"
-              >
-                <div class="flex-1 relative mq450:text-[16px]">
-                  내 정보 관리
-                </div>
-              </div>
+          </div>
+          <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]">
+            <div class="w-[113px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+              <a class="text-lg" href="/mypage/info">내 정보 관리</a>
             </div>
-            <div
-              class="self-stretch rounded-t-[0px] rounded-b-[10px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]"
-            >
-              <div
-                class="w-[76px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border"
-              >
-                <div class="flex-1 relative mq450:text-[16px]">내 리뷰</div>
-              </div>
+          </div>
+          <div class="self-stretch rounded-b-3xs bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]">
+            <div class="w-[76px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+              <a class="text-lg" href="/mypage/review">내 리뷰</a>
             </div>
           </div>
         </div>
+      </div>
+
         <div
           class="h-[25px] w-[161.8px] relative overflow-hidden shrink-0 hidden"
         ></div>
@@ -112,11 +82,65 @@
                   </div>
                   <div class="self-stretch h-[3px] relative bg-[#f5f5f5]"></div>
                 </div>
-                <div
-                  class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[7px] box-border max-w-full text-[#000]"
-                >
-                  <div
+
+
+                  <div th:each="reservation : ${reservation}" class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[4px] pr-[7px] box-border max-w-full text-[#000]">
+                  <div class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap w-[1100px] mb-[15px]">
+                    
+                    <div class="h-[230px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1">
+                      <img th:src="${reservation.image}" alt="호텔사진" class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"></img>
+                    </div>
+
+                    <div class="w-[calc(100%-185px)] flex flex-col items-start justify-start pt-[20px] px-[20px] pb-[0px] box-border min-w-[189px] mq450:flex-1 mt-[20px]">
+                      <!-- 예약 상태, 호텔 이름 -->
+                      <div class="self-stretch flex flex-col items-start justify-start gap-[10px]">
+                        <div class="self-stretch flex flex-col items-start justify-start gap-[3px]">
+                          <div th:switch="${reservation.reservation.resStatus}">
+                            <b th:case="'PENDING'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FFD700;">예약 대기</b>
+                            <b th:case="'CONFIRMED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #32CD32;">예약 확정</b>
+                            <b th:case="'CANCELLED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #FF0000;">예약 취소</b>
+                            <b th:case="'COMPLETED'" class="w-[81px] relative leading-[21px] flex items-center" style="color: #000000;">사용 완료</b>
+                          </div>
+                          <b class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]" th:text="${reservation.hostName}"></b>
+                        </div>
+
+                        <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
+                          <b class="flex-1 relative leading-[21px]" th:text="${reservation.reservation.resNum}"></b>
+                        </div>
+
+                        <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
+                          <span class="flex-1 relative leading-[21px] text-[rgba(0,0,0,0.87)]">
+                            <span th:text="${reservation.start}"></span> ~ <span th:text="${reservation.end}"></span> (<span th:text="${reservation.date}"></span> 박)
+                          </span>
+                        </div>
+                      </div>
+
+                      <div id="cancelModalContent" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+                        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6"></div>
+                      </div>
+
+                      <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
+                        <div class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
+                          <button class="flex-1 relative font-semibold">다시예약</button>
+                        </div>
+                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                          <button class="flex-1 relative font-semibold" th:onclick="'reservationDetail(' + ${reservation.reservation.id} + ')'">예약 상세</button>
+                        </div>
+                        <div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                          <button class="flex-1 relative font-semibold" th:onclick="'cancelDetail(' + ${reservation.reservation.id} + ')'">예약 취소</button>
+                        </div>
+                      </div>
+
+                      <div class="h-[270px] w-[743px] relative overflow-hidden shrink-0 hidden max-w-full"></div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                  <div id="noTrip"
                     class="w-[1120px] rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden shrink-0 flex flex-row items-start justify-between py-[0px] px-[23px] max-w-full gap-[20px] lg:flex-wrap"
+                    th:classappend="${newTrip} ? 'hidden' : ''">
                   >
                     <div
                       class="w-[336px] flex flex-col items-start justify-start pt-[66px] px-[0px] pb-[0px] box-border min-w-[336px] max-w-full shrink-0 lg:flex-1 mq450:min-w-full"
@@ -184,6 +208,9 @@
                       </div>
                     </div>
                   </div>
+
+
+
                 </div>
               </div>
               <div
@@ -198,85 +225,7 @@
                     이용완료 및 이용취소
                   </h2>
                 </div>
-                <div
-                  class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
-                >
-                  <!-- 예약 리스트 반복문 시작 -->
-                  <div
-                    th:each="reservation : ${checkList}"
-                    class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap"
-                  >
-                    <div
-                      class="h-[258px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1"
-                    >
-                      <div
-                        class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"
-                      ></div>
-                    </div>
-                    <div
-                      class="w-[189px] flex flex-col items-start justify-start pt-[49px] px-[0px] pb-[0px] box-border min-w-[189px] mq450:flex-1"
-                    >
-                      <div
-                        class="self-stretch flex flex-col items-start justify-start gap-[30px]"
-                      >
-                        <div
-                          class="self-stretch flex flex-col items-start justify-start gap-[10px]"
-                        >
-                          <div
-                            class="self-stretch flex flex-col items-start justify-start gap-[3px]"
-                          >
-                            <b
-                              class="w-[81px] relative leading-[21px] flex items-center"
-                              >예약 취소</b
-                            >
-                            <b
-                              class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]"
-                              th:text="${reservation.address}"
-                              >서울시 중랑구</b
-                            >
-                          </div>
-                          <div
-                            class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]"
-                          >
-                            <b
-                              class="flex-1 relative leading-[21px]"
-                              th:text="${reservation.reservationCode}"
-                              >ADSHGHFLR</b
-                            >
-                          </div>
-                        </div>
-                        <div
-                          class="self-stretch flex flex-row items-start justify-between py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter]"
-                        >
-                          <div
-                            class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border"
-                          >
-                            <div class="flex-1 relative font-semibold">
-                              다시예약
-                            </div>
-                          </div>
-                          <div
-                            class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap"
-                          >
-                            <div class="flex-1 relative font-semibold">
-                              취소 상세
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- 예약 리스트 반복문 끝 -->
-                </div>
                 <table>
-                  <thead>
-                    <tr>
-                      <th>예약 번호</th>
-                      <th>예약자 이름</th>
-                      <th>예약 가격</th>
-                      <th>예약 상태</th>
-                    </tr>
-                  </thead>
                   <tbody id="reservation-table-body"></tbody>
                 </table>
               </div>
@@ -287,42 +236,187 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-      function updateTableWithReservations(reservation) {
-        let tableBody = $("#reservation-table-body"); // 테이블 바디 선택
-        tableBody.empty(); // 기존 내용을 비움
+      let user = JSON.parse(localStorage.getItem("user"));
+      console.log(JSON.stringify(user));
+      function formatDate(dateString) {
+        return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
+      }
 
-        // reservations 배열을 반복하며 각 데이터를 테이블에 추가
-        reservation.forEach(function (reservation) {
-          let row = `<tr>
-                 <td><a href="/mypage/reservation_check?id=${reservation.id}">${
-            reservation.resNum
-          }</a></td>
-                 <td>${reservation.resName}</td>
-                 <td>${reservation.resPrice.toLocaleString()} 원</td>
-                 <td>${reservation.resStatus}</td>
-               </tr>`;
-          tableBody.append(row); // 테이블에 행 추가
+      function totalDate(start, end) {
+        let startDate = new Date(start); // 시작 날짜
+        let endDate = new Date(end); // 끝 날짜
+        let timeDifference = endDate.getTime() - startDate.getTime(); // 시간 차이 계산
+        let dayDifference = timeDifference / (1000 * 3600 * 24); // 일 단위 차이로 변환
+        return dayDifference; // 몇 박인지 반환
+      }
+
+      function reservationDetail(id) {
+        location.href = "/mypage/reservation_check?id=" + id;
+      }
+
+      function cancelDetail(id) {
+        console.log(id);
+        $.ajax({
+          url: "/mypage/cancel_content",
+          method: "GET",
+        }).done(function (data) {
+          $("#cancelModalContent").removeClass("hidden");
+          $("#cancelModalContent").html(data);
+          $.ajax({
+            url: "/mypage/cancel_content",
+            method: "POST",
+            data: {
+              id: id,
+            },
+          }).done(function (data) {
+            console.log(data);
+            $("#paymentPrice").text(data.payment.nsalePrice);
+            $("#totalPrice").text(data.payment.amount);
+            $("#paymentMethod").text(data.payment.payMethod);
+            $("#pointPrice").text(data.payment.payPoint);
+            $("#couponPrice").text(data.payment.payCoupon);
+            $("#cancelDate").text(formatDate(data.payment.cancelDate));
+            $("#membershipDiscount").text(data.payment.payGrade);
+
+            $("#closePay").click(function () {
+              $("#cancelModalContent").addClass("hidden");
+            });
+          });
         });
       }
+
       $(function () {
-        let accessToken = Cookies.get("accessToken");
-        let member = jwt_decode(accessToken);
         let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
         let payIdx;
         let resIdx;
-
-        console.log(member);
+        let id = user.id;
 
         // 예약 정보를 불러오는 AJAX 요청
+        loadReservation();
+       
+      });
+
+
+      function loadReservation(){
         $.ajax({
           url: "/mypage/reservation", // 호출하고자 하는 URL
           method: "POST",
           contentType: "application/json; charset=utf-8",
-          data: JSON.stringify(member), // member 객체를 JSON으로 변환해서 전송
-        }).done(function (res) {
-          updateTableWithReservations(res.reservation);
+          data: JSON.stringify({
+            id: user.id, // member 객체에서 id 값만 전송
+          }), // member 객체를 JSON으로 변환해서 전송
+        }).done(function (data) {
+          let reservation;
+          let images;
+          let name;
+          let tableBody = $("#reservation-table-body"); // 테이블 바디 선택
+          tableBody.empty();
+          console.log(data.reservation);
+
+          for (let i = 0; i < data.reservation.length; i++) {
+            reservation = data.reservation[i];
+            images = reservation.image;
+            name = reservation.hostName;
+            let resStatus = reservation.reservation.resStatus;
+            let statusText = "";
+            let statusColor = "";
+
+            if (resStatus === "PENDING") {
+              statusText = "예약 대기";
+              statusColor = "#FFD700";
+            } else if (resStatus === "CONFIRMED") {
+              statusText = "예약 확정";
+              statusColor = "	#32CD32";
+            } else if (resStatus === "CANCELLED") {
+              statusText = "예약 취소";
+              statusColor = "";
+            } else if (resStatus === "COMPLETED") {
+              statusText = "사용 완료";
+              statusColor = "#000000";
+            }
+
+            console.log("Status Text: ", statusText);
+            console.log("Status Color: ", statusColor);
+
+            let startDate = formatDate(
+              reservation.reservation.startEndVo.start
+            );
+            let endDate = formatDate(reservation.reservation.startEndVo.end);
+
+            let date = totalDate(startDate, endDate);
+
+            let tableData = `
+                            <div class="self-stretch rounded-[20px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid box-border overflow-hidden flex flex-row items-start justify-start pt-[0px] px-[3px] pb-[10px] gap-[3px] max-w-full text-[13px] text-[rgba(255,0,0,0.87)] mq450:flex-wrap w-[1100px] mb-[15px]">
+                            <div class="h-[230px] w-[185px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[39px] pl-[25px] pr-[24px] box-border min-w-[185px] mq450:flex-1">
+                              <img src="${images}" alt="호텔사진" class="self-stretch flex-1 relative rounded-[10px] bg-[#999]"></img>
+                            </div>
+
+                            <div class="w-[calc(100%-185px)] flex flex-col items-start justify-start pt-[20px] px-[20px] pb-[0px] box-border min-w-[189px] mq450:flex-1 mt-[20px]">
+                              <!-- 예약 상태, 호텔 이름 -->
+                              <div class="self-stretch flex flex-col items-start justify-start gap-[10px]">
+                                <div class="self-stretch flex flex-col items-start justify-start gap-[3px]">
+                                  <b class="w-[81px] relative leading-[21px] flex items-center" style="color: ${statusColor};">${statusText}</b>
+                                  <b class="self-stretch relative text-[20px] leading-[21px] text-[rgba(0,0,0,0.87)] mq450:text-[16px] mq450:leading-[17px]">
+                                    ${name}
+                                  </b>
+                                </div>
+
+                                <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
+                                  <b class="flex-1 relative leading-[21px]">${
+                                    reservation.reservation.resNum
+                                  }</b>
+                                </div>
+
+                                <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[2px] pr-[0px] text-[12px] text-[#999]">
+                                  <span class="flex-1 relative leading-[21px] text-[rgba(0,0,0,0.87)]">
+                                    ${startDate} ~ ${endDate} (${date} 박)
+                                  </span>
+                                </div>
+                              </div>
+                              <div id="cancelModalContent" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+                              <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
+                              </div>
+                              </div>
+
+                              <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
+                                <div class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
+                                  <button class="flex-1 relative font-semibold">다시예약</button>
+                                </div>
+                                ${
+                                  resStatus !== "CANCELLED"
+                                    ? `<div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                                    <button class="flex-1 relative font-semibold" onClick="reservationDetail(${reservation.reservation.id})">예약 상세</button>
+                                  </div>`
+                                    : ""
+                                }
+                                ${
+                                  resStatus === "CANCELLED"
+                                    ? `<div class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
+                                        <button class="flex-1 relative font-semibold" onClick="cancelDetail(${reservation.reservation.id})">취소 상세</button>
+                                      </div>`
+                                    : ""
+                                }
+                              </div>
+                            </div>
+
+                            <div class="h-[270px] w-[743px] relative overflow-hidden shrink-0 hidden max-w-full"></div>
+                          </div> `;
+            tableBody.append(tableData);
+          }
         });
-      });
+      }
+      
+      document.addEventListener('DOMContentLoaded', function() {
+    member = localStorage.getItem("user");
+    user = JSON.parse(member);
+    let memIdx = user ? user.id : null;
+
+    // 예약 내역 링크 href 동적 설정
+    if (memIdx) {
+        let reservationLink = document.getElementById('reservationLink');
+        reservationLink.setAttribute('href', `/mypage/reservation?id=${memIdx}`);
+      }
+  });
     </script>
   </body>
 </html>

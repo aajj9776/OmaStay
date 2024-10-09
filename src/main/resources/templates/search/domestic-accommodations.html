@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" layout:decorate="~{layout/main}"
+      layout:fragment="main"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}"
-      layout:fragment="main">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
-    <link rel="stylesheet" href="/css/component/slider.css">
+    <link href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css" rel="stylesheet">
+    <link href="/css/component/slider.css" rel="stylesheet">
+    <style>
+        /* 슬라이더 핸들 드래그 상태에 클래스 추가 */
+        .noUi-moving .noUi-touch-area {
+            pointer-events: none; /* 터치 영역 비활성화 */
+        }
+
+        .noUi-handle {
+            pointer-events: all; /* 핸들에 대해서만 터치 이벤트 활성화 */
+            z-index: 10; /* 핸들이 가장 위에 오도록 설정 */
+        }
+    </style>
 </head>
 <body>
 <div
@@ -32,7 +43,7 @@
                                     class="flex-1 rounded-[12px] overflow-hidden flex flex-row items-start justify-start py-[66.4px] px-[80px] bg-[url('/image/domestic-accommodations/map@3x.png')] bg-cover bg-no-repeat bg-[top] mq450:pl-[20px] mq450:pr-[20px] mq450:box-border"
                             >
                                 <button class="btn btn-primary w-32 h-[42px] flex flex-row items-center justify-center font-semibold text-[13.1px]  font-[Inter] text-[#fff] text-center"
-                                        onclick="showmap()"
+                                        onclick="showMap()"
                                 >
                                     지도 보기
                                 </button>
@@ -53,14 +64,9 @@
                             <div
                                     class="self-stretch overflow-hidden flex flex-row items-start justify-start py-[0px] pl-[0px] [row-gap:20px] mq450:pr-[20px] mq450:box-border mq750:flex-wrap mq750:pr-[267px] mq750:box-border"
                             >
-                                <h3
-                                        class="m-[0px] w-max relative text-[24px] font-bold font-[inherit] flex items-center mq450:text-[19px] mq750:w-full mq750:h-[9px]"
-                                >
-                                    '
-                                    <span id="keyword_value"></span>
-                                    ' 숙소
-                                    <span th:text="${resultAccommodations.size()}"></span>
-                                    개
+                                <h3 class="m-[0px] w-max relative text-[24px] font-bold font-[inherit] flex items-center mq450:text-[19px] mq750:w-full mq750:h-[9px]">
+                                    '<span id="keyword_value"></span>' 검색 결과&nbsp;
+                                    <span th:text="${resultAccommodations.size()} + '개'"></span>
                                 </h3>
                             </div>
                         </div>
@@ -68,27 +74,30 @@
                                 class="flex flex-col items-start justify-start text-[15px]"
                         >
 
-                                <div id="dropdown-filter"
-                                        class="dropdown pr-[9px] min-w-[41.48px]"
-                                >
-                                    <button id="dropdown-filter-button"
-                                            class="btn btn-light dropdown-toggle w-[100%]"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false" value="rating">
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li value="rating"><p class="dropdown-item">평점높은순</p></li>
-                                        <li value="review"><p class="dropdown-item">리뷰많은순</p></li>
-                                        <li value="lowPrice"><p class="dropdown-item">낮은가격순</p></li>
-                                        <li value="highPrice"><p class="dropdown-item">높은가격순</p></li>
-                                    </ul>
-                                </div>
+                            <div class="dropdown pr-[9px] min-w-[41.48px]"
+                                 id="sortTypeDropdown"
+                            >
+                                <button aria-expanded="false"
+                                        class="btn btn-light dropdown-toggle w-[100%]"
+                                        data-bs-toggle="dropdown" id="dropdown-sortType-button" type="button"
+                                        value="rating">
+                                    평점높은순
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li data-value="rating"><p class="dropdown-item">평점높은순</p></li>
+                                    <li data-value="review"><p class="dropdown-item">리뷰많은순</p></li>
+                                    <li data-value="lowPrice"><p class="dropdown-item">낮은가격순</p></li>
+                                    <li data-value="highPrice"><p class="dropdown-item">높은가격순</p></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div
-                            class="self-stretch bg-[#fff] border-[#ebebeb] border-b-[1px] border-solid box-border flex flex-col items-start justify-start pt-[20px] px-[0px] pb-[19px] max-w-full cursor-pointer"
+                            class="self-stretch bg-[#fff] border-solid box-border flex flex-col items-start justify-start px-[0px] pb-[19px] max-w-full cursor-pointer"
                             id="cardWrapperContainer">
-                        <div
-                                class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap"
+                        <a class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]" id="card"
+                           th:each="accommodation : ${resultAccommodations}"
+                           th:href="@{'/search/detail-host?id=' + ${accommodation.HIdx}}"
                         >
                             <div
                                     class="h-[240px] w-[396px] flex flex-col items-start justify-center min-w-[396px] max-w-full mq750:flex-1 mq750:min-w-full"
@@ -97,11 +106,11 @@
                                         alt="GCS 이미지"
                                         class="self-stretch flex-1 relative rounded-[12px] max-w-full overflow-hidden max-h-full object-cover mq750:self-stretch mq750:w-auto"
                                         loading="lazy"
-                                        src="https://storage.googleapis.com/omastay/host/Frame 1422.jpg"
+                                        th:src="${accommodation.img_url}"
                                 />
                             </div>
-                            <div
-                                    class="flex-1 overflow-hidden flex flex-col items-start justify-between py-[0px] pl-[20px] pr-[0px] box-border min-w-[315px] min-h-[240px] max-w-full mq750:min-h-[auto]"
+                            <div class="flex-1 overflow-hidden flex flex-col items-start justify-between py-[0px] pl-[20px] pr-[0px] box-border min-w-[315px] min-h-[240px] max-w-full mq750:min-h-[auto]"
+
                             >
                                 <div
                                         class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px]"
@@ -118,8 +127,8 @@
                                                 <div
                                                         class="flex flex-row items-center justify-start"
                                                 >
-                                                    <div
-                                                            class="relative font-semibold inline-block min-w-[21px]"
+                                                    <div class="relative font-semibold inline-block min-w-[21px]"
+                                                         th:text="${accommodation.HCate.getDescription()}"
                                                     >
                                                         펜션
                                                     </div>
@@ -128,7 +137,7 @@
                                             <div
                                                     class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]"
                                             >
-                                                <b class="self-stretch relative"
+                                                <b class="self-stretch relative" th:text="${accommodation.HName}"
                                                 >강릉 라임비치 스파 펜션</b
                                                 >
                                             </div>
@@ -149,7 +158,7 @@
                                                                 class="overflow-hidden flex flex-col items-center justify-center"
                                                         >
                                                             <img
-                                                                    alt=""
+                                                                    alt="img error"
                                                                     class="w-[12px] h-[12px] relative"
                                                                     src="/image/domestic-accommodations/frame.svg"
                                                             />
@@ -159,7 +168,8 @@
                                                             class="flex flex-col items-start justify-start"
                                                     >
                                                         <b class="relative inline-block min-w-[19px]"
-                                                        >9.2</b
+                                                           th:text="${accommodation.rating}"
+                                                        >???</b
                                                         >
                                                     </div>
                                                 </div>
@@ -167,10 +177,10 @@
                                             <div
                                                     class="flex flex-col items-start justify-start text-[12.3px] text-[#707070] mq450:ml-[0px]"
                                             >
-                                                <div
-                                                        class="relative font-medium inline-block min-w-[56px]"
+                                                <div class="relative font-medium inline-block min-w-[56px]"
+                                                     th:text="${accommodation.reviewCount + '명 평가'}"
                                                 >
-                                                    54명 평가
+                                                    ???
                                                 </div>
                                             </div>
                                         </div>
@@ -182,116 +192,56 @@
                                     <div
                                             class="self-stretch flex flex-col items-end justify-start"
                                     >
-                                        <div class="flex flex-col items-start justify-start">
-                                            <div class="flex flex-col items-end justify-start">
-                                                <div
-                                                        class="relative font-medium inline-block min-w-[74px] whitespace-nowrap"
-                                                >
-                                                    다른 날짜 확인
-                                                </div>
+                                        <div class="flex flex-col items-end justify-start">
+                                            <div class="relative font-medium inline-block min-w-[74px] whitespace-nowrap"
+                                                 th:if="${accommodation.oneDayPrice == null}">
+                                                다른 날짜 확인
+                                            </div>
+                                            <div class="self-stretch flex flex-row items-end justify-start"
+                                                 th:if="${accommodation.oneDayPrice}"
+                                            >
+                                                <b class="relative inline-block min-w-[80px] text-[19.2px] font-bold text-[#333]"
+                                                   th:text="${accommodation.oneDayPrice}">
+                                                    ???
+                                                </b>
+                                                <b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div
-                            class="self-stretch flex flex-row items-start justify-center pt-[40px] px-[20px] pb-[0px] text-center text-[12px] text-[#000]"
-                    >
-                        <div class="flex flex-col items-start justify-start">
-                            <div class="flex flex-row items-center justify-center">
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[4px]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center p-[8px] box-border"
-                                    >
-                                        <img
-                                                alt=""
-                                                class="h-[16px] w-[16px] relative"
-                                                src="/image/domestic-accommodations/svg-2.svg"
-                                        />
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
-                                    >
-                                        <div
-                                                class="relative font-semibold inline-block min-w-[8px]"
-                                        >
-                                            6
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
-                                    >
-                                        <div
-                                                class="w-[8px] relative font-semibold flex items-center justify-center min-w-[8px]"
-                                        >
-                                            7
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
-                                    >
-                                        <div
-                                                class="relative font-semibold inline-block min-w-[8px]"
-                                        >
-                                            8
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center py-[8.5px] px-[12px] box-border"
-                                    >
-                                        <div
-                                                class="relative font-semibold inline-block min-w-[8px]"
-                                        >
-                                            9
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] px-[4px] text-[11.6px] text-[#fff]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] bg-[#1273e4] flex flex-row items-center justify-center p-[9px] box-border"
-                                    >
-                                        <div
-                                                class="w-[14px] relative font-semibold flex items-center justify-center min-w-[14px]"
-                                        >
-                                            10
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                        class="flex flex-col items-start justify-start py-[0px] pl-[4px] pr-[0px]"
-                                >
-                                    <div
-                                            class="w-[32px] h-[32px] rounded-[500px] flex flex-row items-center justify-center p-[8px] box-border"
-                                    >
-                                        <img
-                                                alt=""
-                                                class="h-[16px] w-[16px] relative"
-                                                src="/image/domestic-accommodations/svg-3.svg"
-                                        />
-                                    </div>
-                                </div>
+                        </a>
+                        <div
+                                class="self-stretch flex flex-row items-start justify-center pt-[40px] px-[20px] pb-[0px] text-center text-[12px] text-[#000]"
+                        >
+                            <div class="flex flex-col items-start justify-start">
+                                <ul class="pagination" th:if="${pageNation.totalElements > 0}">
+                                    <!-- Previous 페이지 링크 -->
+                                    <li class="page-item" th:classappend="${pageNation.pageNumber == 0} ? 'disabled'">
+                                        <a aria-label="Previous" class="page-link"
+                                           th:onclick="${pageNation.pageNumber > 0} ? 'performSearch(\'main\', ' + ${pageNation.pageNumber} + ')' : ''">
+                                            Previous
+                                        </a>
+                                    </li>
+
+                                    <!-- 페이지 숫자 링크들 -->
+                                    <li class="page-item"
+                                        th:classappend="${pageNum == (pageNation.pageNumber + 1)} ? 'active'"
+                                        th:each="pageNum : ${#numbers.sequence(1, pageNation.totalPages)}">
+                                        <a class="page-link" th:onclick="'performSearch(\'main\', ' + ${pageNum} + ')'"
+                                           th:text="${pageNum}">
+                                        </a>
+                                    </li>
+
+                                    <!-- 다음 페이지 링크 -->
+                                    <li class="page-item"
+                                        th:classappend="${pageNation.pageNumber == (pageNation.totalPages - 1)} ? 'disabled'">
+                                        <a aria-label="Next" class="page-link"
+                                           th:onclick="${pageNation.pageNumber < (pageNation.totalPages - 1)} ? 'performSearch(\'main\', ' + (${pageNation.pageNumber} + 2) + ')' : ''">
+                                            Next
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -300,46 +250,123 @@
         </section>
     </main>
 </div>
-<div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden"
+<div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden z-50"
      id="modal-wrap">
-    <div class="bg-white w-[90%] h-[90%]" id="modal"  th:include="~{/search/modal :: search_modal}"
-         th:with="accommodations=${resultAccommodations}"></div>
+    <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{/search/modal :: search_modal}"
+         th:with="accommodations=${resultAccommodationsMap}"></div>
 </div>
-<script
-        src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>
+<script type="text/template" id="accommodationModal-template">
+    <div id="modalCard${hidx}" class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]">
+        <img class="self-stretch w-[115px] relative max-h-full object-cover min-h-[172px] mq450:flex-1"
+             loading="lazy" alt="" src="${img_url}" />
+
+        <div class="flex-1 overflow-hidden flex flex-col items-start justify-start gap-[86px] min-w-[146px]">
+            <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[20px] pr-[0px]">
+                <div class="flex-1 flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1">
+                    <div class="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                        <div class="self-stretch flex flex-col items-start justify-start gap-[2px]">
+                            <div class="self-stretch flex flex-row items-center justify-start">
+                                <div class="flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[20px]">
+                                    <div class="relative leading-[12.67px] font-semibold inline-block min-w-[21px]">${HCate}</div>
+                                </div>
+                            </div>
+                            <div class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]">
+                                <b class="self-stretch relative">${HName}</b>
+                            </div>
+                        </div>
+                        <div class="self-stretch flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[102px] text-[11.6px] text-[#333]">
+                            <div class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[6px]">
+                                <div class="rounded-[6px] bg-[#ffad0a] flex flex-row items-center justify-center pt-[4px] pb-[3px] pl-[3px] pr-[5px]">
+                                    <div class="flex flex-col items-start justify-start pt-[0px] pb-[2px] pl-[0px] w-3 h-3">
+                                        <img class="w-full h-full relative" loading="lazy" alt="" src="/image/domestic-accommodations/frame.svg" />
+                                    </div>
+                                    <div class="flex flex-col items-start justify-start">
+                                        <b class="relative inline-block min-w-[19px]">${rating}</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start justify-start text-[12.3px] text-[#707070]">
+                                <div class="relative font-medium inline-block min-w-[56px]">${reviewCount}명 평가</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="self-stretch flex flex-col items-start justify-start pt-[8px] pb-[0px] pl-[12px] pr-[20px] text-right text-[12.2px] text-[#999]">
+                <div class="self-stretch flex flex-col items-end justify-start">
+                    <div class="flex flex-col items-start justify-start">
+                        <div class="flex flex-col items-end justify-start">
+                            <div class="relative font-medium inline-block min-w-[74px] whitespace-nowrap" th:if="${soldOut}">다른 날짜 확인</div>
+                            <div class="self-stretch flex flex-row items-end justify-start" th:unless="${soldOut}">
+                                <b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${oneDayPrice}</b>
+                                <b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
 <script th:inline="javascript">
     let hCate;
     let f_idx = [];
     let resultAccommodations;
 
+    // URL 변수
+    let sortTypeValue = null;
+    let facilitiesValue = [];
+    let hCateValue = null;
+    let startPriceValue = null;
+    let endPriceValue = null;
+    let keywordValue = null;
+
+    let sliderValues = {
+        start: 0,
+        end: 500000
+    };
+
     $(document).ready(function () {
+        resultAccommodations = /*[[${resultAccommodationsMap}]]*/ '[]';
+        pageNation = /*[[${pageNation}]]*/ '{}';
 
-        resultAccommodations = /*[[${resultAccommodations}]]*/ '[]';
+        // URL에서 필터 값을 받아오기
+        sortTypeValue = getUrlParameter('sortType');
+        facilitiesValue = getUrlParameter('facilities');
+        hCateValue = getUrlParameter('hCate');
+        startPriceValue = getUrlParameter('startPrice');
+        endPriceValue = getUrlParameter('endPrice');
+        keywordValue = getUrlParameter('keyword');
 
-        initializeSlider('main');  // 메인 슬라���더 초기화
-        initializeFilters('main'); // 초기 필터 상태 설정
+
+        console.log(sortTypeValue + " sortTypeValue");
+        console.log(facilitiesValue + " facilitiesValue");
+        console.log(hCateValue + " hCateValue");
+        console.log(startPriceValue + " startPriceValue");
+        console.log(endPriceValue + " endPriceValue");
+
+        initializeSlider('main');  // 메인 슬라이더 초기화
 
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
             $("#person_count2").val(s_count);
         }
 
-        // 초기 드롭다운 메뉴 설정
-        $("#dropdown-filter-button").text("평점높은순");
-        $("#dropdown-filter-button").val("rating");
-
         // 드롭다운 메뉴 클릭 핸들러
-        $('#dropdown-filter .dropdown-item').on('click', function () {
-            var selectedText = $(this).text();
-            var selectedValue = $(this).attr('value');
+        $('#sortTypeDropdown .dropdown-item').on('click', function () {
+            let selectedText = $(this).text();
+            let selectedValue = $(this).closest('li').data('value'); // 'data-value' 속성을 가져옴
 
-            $('#dropdown-filter-button').text(selectedText);
-            $('#dropdown-filter-button').val(selectedValue);
-            handleFilter('main'); // 필터 변경 시 상태 저장
+            $('#dropdown-sortType-button').text(selectedText);
+            $('#dropdown-sortType-button').val(selectedValue);
+
+            performSearch('main');
         });
 
         // 시설 필터 버튼 클릭 이벤트 핸들러
         const btns = document.querySelectorAll('[id^="f_idx"]');
+        console.log(btns + " btns");
         btns.forEach(btn => {
             btn.addEventListener('click', () => {
                 if (btn.classList.contains('bg-gray-300')) {
@@ -349,303 +376,700 @@
                     btn.classList.add('bg-gray-300');
                     btn.classList.add('f_idx');
                 }
-                handleFilter('main'); // 필터 변경 시 상태 저장
             });
         });
 
-        $("#keyword_value").text(sessionStorage.getItem('keyword'));
+        $("#keyword_value").text(getUrlParameter('keyword'));
+
+        setSortType(sortTypeValue);
+        setFacilities(facilitiesValue, "main");
+        setHCate(hCateValue, "main");
+
+        //card 클릭시 url 이동
+        let checkIn = sessionStorage.getItem('startDate');
+        let checkOut = sessionStorage.getItem('endDate');
+        let person = sessionStorage.getItem('people');
+        $('#card').attr('href', function (i, href) {
+            return href + '&checkIn=' + checkIn + '&checkOut=' + checkOut + '&person=' + person;
+        });
     });
+
+    // 필터 버튼 셋팅하는 함수
+    // 필터 버튼 셋팅하는 함수
+    function setSortType(sortTypeValue = null) {
+        console.log(sortTypeValue + " sortTypeValue");
+        let filterButton = $("#dropdown-sortType-button");
+
+        if (sortTypeValue) {
+            let filterText = $('#sortTypeDropdown li[data-value="' + sortTypeValue + '"] .dropdown-item').text();
+            console.log(filterText + " filterText");
+            filterButton.text(filterText);
+            filterButton.val(sortTypeValue); // 여기서 sortTypeValue를 사용합니다.
+        } else {
+            filterButton.text("평점높은순");
+            filterButton.val("rating");
+        }
+    }
+
+
+    // 시설 필터 셋팅하는 함수
+    function setFacilities(value = [], identifier = "") {
+        console.log(value + " value");
+        if (value !== null) {
+            let facilities = value.split(',');
+            facilities.forEach(facility => {
+                let btn = $('#f_idx' + facility + '-' + identifier);
+                btn.addClass('bg-gray-300');
+                btn.addClass('f_idx');
+            });
+        }
+    }
+
+    function setHCate(hCate = null, identifier = "") {
+        console.log(hCate + " hCate");
+
+        // name이 'hCate'인 모든 input 요소 중에서 id가 identifier를 포함하는 요소 선택
+        let radioButtons = document.querySelectorAll('input[name="hCate"][id*="' + identifier + '"]');
+        console.log(radioButtons.values() + " radioButtons");
+        radioButtons.forEach(function (radioButton) {
+            console.log(radioButton.value + " radioButton.value");
+            if (hCate !== null && hCate !== "") {
+                if (radioButton.value === hCate) {
+                    radioButton.checked = true;
+                }
+            } else {
+                if (radioButton.value === 'all') {
+                    radioButton.checked = true;
+                }
+            }
+        });
+    }
+
+    // 필터 값을 가져오는 함수
+    function getSortType() {
+        let filterButton = document.getElementById('dropdown-sortType-button');
+        if (filterButton) {
+            return filterButton.value;
+        } else {
+            console.error('Dropdown filter button not found');
+            return null;
+        }
+    }
+
+    // 선택된 카테고리 값을 가져오는 함수
+    function getHCate(identifier = "") {
+        const selectedHCate = document.querySelector('input[name="hCate"]:checked');
+        if (selectedHCate && selectedHCate.value === 'all') {
+            return null;
+        }
+        return selectedHCate ? selectedHCate.value : null;
+    }
+
+    // 선택된 시설 값을 가져오는 함수
+    function getSelectedFacilities(identifier = "") {
+        const selectedBtns = document.querySelectorAll('.f_idx[id*="' + identifier + '"]');
+        return Array.from(selectedBtns).map(btn => btn.value);
+    }
+
+    // URL 파라미터 값을 가져오는 함수
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        let results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    function synchronizeSliders(targetSlider) {
+        if (targetSlider && targetSlider.noUiSlider) {
+            let mainStart = document.getElementById('slider-start-main').value;
+            let mainEnd = document.getElementById('slider-end-main').value;
+            targetSlider.noUiSlider.set([mainStart, mainEnd]);
+        }
+    }
 
     // 슬라이더 초기화 함수
     function initializeSlider(identifier) {
-        var sliderElement = document.getElementById('slider-' + identifier);
-        var valueElement = document.getElementById('price-range-value-' + identifier);
-        var startInput = document.getElementById('slider-start-' + identifier);
-        var endInput = document.getElementById('slider-end-' + identifier);
+        let sliderElement = document.getElementById('slider-' + identifier);
+        let valueElement = document.getElementById('price-range-value-' + identifier);
+        let startInput = document.getElementById('slider-start-' + identifier);
+        let endInput = document.getElementById('slider-end-' + identifier);
 
+        // 필수 요소 확인
+        if (!sliderElement || !valueElement || !startInput || !endInput) {
+            console.error('One of the required elements is missing for identifier:', identifier);
+            return;
+        }
+
+        const startPrice = getUrlParameter('startPrice') ? parseInt(getUrlParameter('startPrice')) : 0;
+        const endPrice = getUrlParameter('endPrice') ? parseInt(getUrlParameter('endPrice')) : 500000;
+
+        // 공통된 슬라이더 값 객체
+        const sliderValues = {
+            start: startPrice,
+            end: endPrice
+        };
+
+        // 슬라이더 초기화
+        noUiSlider.create(sliderElement, {
+            start: [sliderValues.start, sliderValues.end],
+            connect: true,
+            range: {
+                'min': 0,
+                '20%': 100000,
+                '40%': 200000,
+                '60%': 300000,
+                '80%': 400000,
+                'max': 500000
+            },
+            margin: 100000, // 두 핸들 간 최소 간격 설정
+            snap: true // 스냅 기능 활성화
+        });
+
+        // 슬라이더 업데이트 핸들러
+        sliderElement.noUiSlider.on('update', function (values) {
+            sliderValues.start = parseInt(values[0]);
+            sliderValues.end = parseInt(values[1]);
+
+            if (sliderValues.end === 500000) {
+                valueElement.innerText = sliderValues.start + '원 - ' + '500,000원 이상';
+            } else {
+                valueElement.innerText = sliderValues.start + '원 - ' + sliderValues.end + '원 미만';
+            }
+
+            startInput.value = sliderValues.start;
+            endInput.value = sliderValues.end;
+        });
+
+        // 슬라이더 슬라이드 핸들러
+        sliderElement.noUiSlider.on('slide', function (values, handle) {
+            let start = parseInt(values[0]);
+            let end = parseInt(values[1]);
+
+            if (end - start < 30000) {
+                if (handle === 0) {
+                    sliderElement.noUiSlider.set([end - 30000, null]); // 왼쪽 핸들 값 조정
+                } else {
+                    sliderElement.noUiSlider.set([null, start + 30000]); // 오른쪽 핸들 값 조정
+                }
+            }
+        });
+
+        // 슬라이더 시작 핸들러
+        sliderElement.noUiSlider.on('start', function () {
+            sliderElement.classList.add('noUi-moving'); // 드래그 할 때 클래스 추가
+        });
+
+        // 슬라이더 종료 핸들러
+        sliderElement.noUiSlider.on('end', function () {
+            sliderElement.classList.remove('noUi-moving'); // 드래그 종료 시 클래스 제거
+        });
+
+        sliderElement.noUiSlider.on('set', function (values) {
+            sliderValues.start = parseInt(values[0]);
+            sliderValues.end = parseInt(values[1]);
+
+            performSearch(identifier);
+
+            if (identifier === 'main') {
+                let modalSlider = document.getElementById('slider-modal');
+                synchronizeSliders(modalSlider); // 모달 슬라이더 동기화
+            }
+        });
+
+        // 메인 슬라이더에서 모달 슬라이더 동기화 시 모달 슬라이더도 performSearch 호출
+        if (identifier === 'modal') {
+            sliderElement.noUiSlider.on('set', function (values) {
+                performSearch('modal');
+            });
+        }
+    }
+
+    // 모달 창 열기
+    // 모달 창 열기
+    function showMap() {
+        $("#modal-wrap").css("display", "flex");
+        $("body").css("overflow", "hidden");
+
+        loadKaKaoMap(resultAccommodations);
+
+        setFacilities(facilitiesValue, "modal");
+        setHCate(hCateValue, "modal");
+
+        document.getElementById('keyword_value_modal').innerText = "'" + keywordValue + "' 숙소 검색 결과";
+
+        // 메인 슬라이더 값 가져오기
+        let mainStart = parseInt(document.getElementById('slider-start-main').value) || 0;
+        let mainEnd = parseInt(document.getElementById('slider-end-main').value) || 500000;
+
+        // 모달 슬라이더 초기화 및 값 동기화
+        destroySlider('modal');
+        initializeSliderWithValues('modal', mainStart, mainEnd);
+    }
+
+    // 슬라이더 초기화 해제 함수
+    function destroySlider(identifier) {
+        let sliderElement = document.getElementById('slider-' + identifier);
+
+        if (sliderElement && sliderElement.noUiSlider) {
+            sliderElement.noUiSlider.destroy();
+            console.log('Slider destroyed for identifier:', identifier);
+        }
+    }
+
+    // 값으로 슬라이더 초기화 함수
+    // 값으로 슬라이더 초기화 함수
+    function initializeSliderWithValues(identifier, startValue, endValue) {
+        let sliderElement = document.getElementById('slider-' + identifier);
+        let valueElement = document.getElementById('price-range-value-' + identifier);
+        let startInput = document.getElementById('slider-start-' + identifier);
+        let endInput = document.getElementById('slider-end-' + identifier);
+
+        // 필수 요소 확인
+        if (!sliderElement || !valueElement || !startInput || !endInput) {
+            console.error('One of the required elements is missing for identifier:', identifier);
+            return;
+        }
+
+        // 반드시 슬라이더 제거 후 재초기화
         if (sliderElement.noUiSlider) {
             sliderElement.noUiSlider.destroy();
         }
 
         noUiSlider.create(sliderElement, {
-            start: [0, 500000],
+            start: [startValue, endValue],
             connect: true,
             range: {
                 'min': 0,
-                '10%': 30000,
-                '20%': 50000,
-                '30%': 100000,
-                '50%': 200000,
-                '70%': 300000,
-                '90%': 400000,
+                '20%': 100000,
+                '40%': 200000,
+                '60%': 300000,
+                '80%': 400000,
                 'max': 500000
             },
+            margin: 100000, // 두 핸들 간 최소 간격 설정
             snap: true // 스냅 기능 활성화
         });
 
-        sliderElement.noUiSlider.on('update', function (values, handle) {
-            var startValue = parseInt(values[0]);
-            var endValue = parseInt(values[1]);
+        // 슬라이더 업데이트 핸들러
+        sliderElement.noUiSlider.on('update', function (values) {
+            let start = parseInt(values[0]);
+            let end = parseInt(values[1]);
 
-            if (endValue === 500000) {
-                valueElement.innerText = startValue + '원 - ' + '500,000원 이상';
+            if (end === 500000) {
+                valueElement.innerText = start + '원 - ' + '500,000원 이상';
             } else {
-                valueElement.innerText = startValue + '원 - ' + endValue + '원 미만';
+                valueElement.innerText = start + '원 - ' + end + '원 미만';
             }
 
-            startInput.value = startValue;
-            endInput.value = endValue;
+            startInput.value = start;
+            endInput.value = end;
         });
 
-        // 초기 필터 상태 설정
-        handleFilter(identifier);
-    }
+        // 슬라이더 set 핸들러
+        sliderElement.noUiSlider.on('set', function (values) {
+            let start = parseInt(values[0]);
+            let end = parseInt(values[1]);
 
-    // 모달 창 열기
-    function showmap(resultAccommodations) {
-        copyFilter('modal');
+            // 슬라이더 값 업데이트 후 검색 실행
+            performSearch(identifier);
 
-        $("#search_bar").css("display", "none");
-        $("#main-filter").css("display", "none");
-        $("#searchbar").css("display", "none");
-        $("#modal-wrap").css("display", "flex");
-        $("body").css("overflow", "hidden");
-        $("footer").css("display", "none");
-        loadTmap();
+            // 메인 슬라이더와 동기화
+            if (identifier === 'main') {
+                synchronizeSliders(document.getElementById('slider-modal'));
+            }
 
-        initializeSlider('modal'); // 모달 슬라이더 초기화
+            if (identifier === 'modal') {
+                performSearch('modal');
+            }
+        });
     }
 
     // 모달 창 닫기
     $("#modal_close").click(function () {
-        $("#search_bar").css("display", "flex");
-        $("#main-filter").css("display", "flex");
         $("#modal-wrap").css("display", "none");
-        $("#searchbar").css("display", "flex");
         $("body").css("overflow", "auto");
-        $("footer").css("display", "flex");
 
-        copyFilter('main');
+        setSortType(sortTypeValue);
+        setFacilities(facilitiesValue, "main");
+        setHCate(hCateValue, "main");
     });
 
-    // 메인 필터를 모달 필터로 복사
-    function copyFilter(subject) {
-        const facilities = JSON.parse(sessionStorage.getItem('facilities') || '[]');
-        const selectedHCate = sessionStorage.getItem('hCate');
-        const startPrice = sessionStorage.getItem('startPrice');
-        const endPrice = sessionStorage.getItem('endPrice');
-
-        console.log(facilities, selectedHCate, startPrice, endPrice + "되냐?");
-
-        // 모달 필터 초기값 설정
-        initializeFilters(subject, facilities, selectedHCate, startPrice, endPrice);
-    }
-
-    // 필터 초기화 함수
-    function initializeFilters(identifier, facilities = null, hCate = null, startPrice = null, endPrice = null) {
-        const isMain = (identifier === 'main');
-
-        if (!facilities) {
-            facilities = isMain ? JSON.parse(sessionStorage.getItem('facilities') || '[]') : [];
-        }
-        if (!hCate) {
-            hCate = isMain ? sessionStorage.getItem('hCate') : null;
-            console.log("하이" + hCate);
-        }
-        if (!startPrice) {
-            startPrice = isMain ? sessionStorage.getItem('startPrice') : null;
-        }
-        if (!endPrice) {
-            endPrice = isMain ? sessionStorage.getItem('endPrice') : null;
-        }
-
-        const prefix = identifier === 'modal' ? '#modal ' : '';
-
-        // 시설 필터 초기화
-        const f_idxElements = document.querySelectorAll(`${prefix}button[name="f_idx"]`);
-        f_idxElements.forEach(elem => {
-            elem.classList.remove('bg-gray-300');
-        });
-
-        // 숙소 유형 필터 초기화
-        const hCateElements = document.querySelectorAll(`${prefix}input[name="hCate"]`);
-        hCateElements.forEach(elem => {
-            elem.checked = false;
-        });
-
-        // 시설 필터 설정
-        if (Array.isArray(facilities)) {
-            facilities.forEach(facility => {
-                const element = document.querySelector(`${prefix}button[name="f_idx"][value="${facility}"]`);
-                if (element) {
-                    element.classList.add('bg-gray-300');
-                }
-            });
-        }
-
-        // 카테고리 필터 설정
-        if (hCate) {
-            const hCateElement = document.querySelector(`${prefix}input[name="hCate"][value="${hCate}"]`);
-            console.log(hCateElement);
-            if (hCateElement) {
-                hCateElement.checked = true;
-            }
-        } else if (isMain) {
-            const defaultAllElement = document.querySelector(`${prefix}input[name="hCate"][value="all"]`);
-            if (defaultAllElement) {
-                defaultAllElement.checked = true;
-            }
-        }
-
-        // 가격 필터 설정
-        if (startPrice) {
-            const startPriceElement = document.querySelector(`${prefix}#slider-start-${identifier}`);
-            if (startPriceElement) {
-                startPriceElement.value = startPrice;
-            }
-        }
-
-        if (endPrice) {
-            const endPriceElement = document.querySelector(`${prefix}#slider-end-${identifier}`);
-            if (endPriceElement) {
-                endPriceElement.value = endPrice;
-            }
-        }
-    }
-
-    // 필터 상태 저장 함수
-    function handleFilter(identifier) {
-        console.log(identifier)
-        const isMain = (identifier === 'main');
-        const prefix = isMain ? '' : '#modal '; // 모달 창에서만 사용되는 접두사
-
-        const f_idxElements = document.querySelectorAll(`${prefix}.f_idx`);
-        const facilities = Array.from(f_idxElements, elem => elem.value);
-
-        const hCateElement = document.querySelector(`${prefix}input[name="hCate"]:checked`);
-        let hCate = hCateElement ? hCateElement.value : (isMain ? "all" : null);
-
-        let startPriceElement = document.getElementById(`slider-start-${identifier}`);
-        let endPriceElement = document.getElementById(`slider-end-${identifier}`);
-        let startPrice = startPriceElement ? startPriceElement.value : null;
-        let endPrice = endPriceElement ? endPriceElement.value : null;
-
+    // 검색 실행 함수
+    function debouncedPerformSearch(identifier, page = 1) {
+        // 동적으로 가져온 값을 사용
+        const facilities = getSelectedFacilities(identifier);
+        console.log(facilities);
+        let hCate = getHCate(identifier);
+        let startPrice = $('#slider-start-' + identifier).val();
+        let endPrice = $('#slider-end-' + identifier).val();
         let keyword = sessionStorage.getItem('keyword');
         let startDay = sessionStorage.getItem('startDate');
         let endDay = sessionStorage.getItem('endDate');
-        let person = sessionStorage.getItem('people');
+        const person = sessionStorage.getItem('people');
+        const sortType = getSortType(identifier)
+        console.log(facilities
+            + " facilities"
+            + hCate
+            + " hCate"
+            + startPrice
+            + " startPrice"
+            + endPrice
+            + " endPrice"
+            + keyword
+            + " keyword"
+            + startDay
+            + " startDay"
+            + endDay
+            + " endDay"
+            + person
+            + " person"
+            + sortType
+            + " sortType");
+        if (identifier === "main") {
+            console.log("page: ", page);
 
-        let filter = document.getElementById('dropdown-filter-button').value;
+            // Query String 구성
+            let queryString = '?';
 
-        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter);
-
-        // 필터 상태를 세션 스토리지에 저장 (메인 페이지에서만)
-        if (isMain) {
-            sessionStorage.setItem('facilities', JSON.stringify(facilities));
-            sessionStorage.setItem('hCate', hCate);
-            sessionStorage.setItem('startPrice', startPrice);
-            sessionStorage.setItem('endPrice', endPrice);
-        }
-
-        //iso-8601 형식으로 변환
-        if (startDay) {
-            startDay = new Date(startDay).toISOString()
-        }
-        if (endDay) {
-            endDay = new Date(endDay).toISOString()
-        }
-
-        console.log(facilities, hCate, startPrice, endPrice, keyword, startDay, endDay, filter, person + "되냐?");
-
-        $.ajax({
-            type: "post",
-            url: "/search/filtering",
-            contentType: "application/json; charset=utf-8",  // JSON 형식으로 전송
-            data: JSON.stringify({
-                facilities: facilities,
-                hCate: hCate,
-                startPrice: startPrice,
-                endPrice: endPrice,
-                person: person,
-                keyword: keyword,
-                startEndDay: {
-                    start: startDay,
-                    end: endDay
-                },
-                filter: filter
-            }),
-            success: function(data) {
-                console.log(data);
+            if (keyword) {
+                queryString += `keyword=${encodeURIComponent(keyword)}&`;
             }
-        });
-    }
+            if (startDay) {
+                queryString += `checkIn=${encodeURIComponent(startDay)}&`;
+            }
+            if (endDay) {
+                queryString += `checkOut=${encodeURIComponent(endDay)}&`;
+            }
+            if (person) {
+                queryString += `person=${encodeURIComponent(person)}&`;
+            }
+            if (hCate) {
+                queryString += `hCate=${encodeURIComponent(hCate)}&`;
+            }
+            if (facilities && facilities.length > 0) {
+                queryString += `facilities=${encodeURIComponent(facilities.join(','))}&`;
+            }
+            if (startPrice) {
+                queryString += `startPrice=${encodeURIComponent(startPrice)}&`;
+            }
+            if (endPrice) {
+                queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
+            }
+            if (sortType) {
+                queryString += `sortType=${encodeURIComponent(sortType)}&`;
+            }
+            if (page && page > 1) {
+                queryString += `page=${encodeURIComponent(page)}&`;
+            }
 
-    // 티맵 초기화
-    var markers = [];
-    var map;
+            // 끝에 붙은 &를 제거
+            if (queryString.endsWith('&')) {
+                queryString = queryString.slice(0, -1);
+            }
 
-    function initTmap() {
-        if (!map) {
-            map = new Tmapv2.Map("tmap", {
-                center: new Tmapv2.LatLng(37.56520450, 126.98702028),
-                width: "100%",
-                height: "100%",
+            console.log(queryString);
+
+            // URL 변경 및 페이지 리로드
+            window.location.href = `/search/domestic-accommodations${queryString}`;
+        }  else if (identifier === "modal") {
+            $.ajax({
+                url: "/search/domestic-accommodations",
+                type: "POST",
+                data: {
+                    facilities: facilities,
+                    hCate: hCate,
+                    startPrice: startPrice,
+                    endPrice: endPrice,
+                    keyword: keyword,
+                    checkIn: startDay,
+                    checkOut: endDay,
+                    person: person,
+                    sortType: sortType,
+                    page: page
+                }
+            }).done(function (data) {
+                console.log(data);
+
+                // Kakao Map 로드
+                loadKaKaoMap(data.resultAccommodationsMap);
+
+                // 기존 컨텐츠를 지움
+                $('#accommodationModal-container').empty();
+
+                // 데이터를 템플릿에 적용
+                data.resultAccommodationsMap.forEach(function (accommodation) {
+                    let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
+                    const template = $('#accommodationModal-template').html();
+                    const rendered = template
+                        .replace('${hidx}', accommodation.hidx)
+                        .replace('${img_url}', accommodation.img_url)
+                        .replace('${HCate}', accommodation.hcateKo) // .getDescription() 필요 없음
+                        .replace('${HName}', accommodation.hname)
+                        .replace('${rating}', accommodation.rating.toFixed(1))
+                        .replace('${reviewCount}', accommodation.reviewCount)
+                        .replace('${oneDayPrice}', priceInfo)
+
+                        // 조건부 렌더링을 위해 ${soldOut}을 체크하여 대체
+                        .replace('${soldOut}', accommodation.soldOut ? '다른 날짜 확인' : `<div class="self-stretch flex flex-row items-end justify-start"><b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${accommodation.oneDayPrice}</b><b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b></div>`);
+
+                    $('#accommodationModal-container').append(rendered);
+                });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error("Error occurred during AJAX request:", textStatus, errorThrown);
             });
         }
     }
 
-    // 티맵 로드
-    function loadTmap() {
-        if (typeof Tmapv2 === 'undefined') {
-            var script = document.createElement('script');
-            script.src = 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=NzqUDqweAh8UqE9Z07ze639x6Wlbcgya9sqhnjXH';
-            script.onload = function () {
-                initTmap();
-                addMarkersTooMuch();
-            };
-            document.body.appendChild(script);
-        } else {
-            initTmap();
-            addMarkersTooMuch();
-        }
+    // 검색 실행 함수를 지연시키는 함수
+    const performSearch = debounce(debouncedPerformSearch, 300);
+
+    //동작 지연시키기
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
     }
 
-    // 마커 추가
-    function addMarkersTooMuch() {
-        removeMarkers();
 
-        let bounds = new Tmapv2.LatLngBounds();
+    // 카카오맵 로드
+    function loadKaKaoMap(resultAccommodations) {
+        initKaKaoMap();
+        addMarkersTooMuch(resultAccommodations);
+    }
 
-        resultAccommodations.forEach(accommodation => {
-            let position = new Tmapv2.LatLng(parseFloat(accommodation.yaxis), parseFloat(accommodation.xaxis));
+    let map;
+    let markers = [];
+    let clickedMarkerId = null; // 클릭된 마커 ID 보관 변수
+
+    function initKaKaoMap() {
+        let container = document.getElementById('map');
+        let options = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780),
+            level: 7
+        };
+        map = new kakao.maps.Map(container, options);
+    }
+
+    function addMarkersTooMuch(resultAccommodations) {
+        removeMarkers(); // 이전의 마커를 제거합니다.
+
+        let bounds = new kakao.maps.LatLngBounds();
+
+        resultAccommodations.forEach((accommodation) => {
+            let position = new kakao.maps.LatLng(parseFloat(accommodation.yaxis), parseFloat(accommodation.xaxis));
             bounds.extend(position);
 
             let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
 
-            let markerElement = `
-                    <div class="relative flex justify-center items-center">
-                    <span class="balloon block max-w-xs bg-gray-800 text-white rounded p-2 text-center">
-                        ${priceInfo}
-                    </span>
-                    <div class="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-t-8 border-t-gray-800 border-r-8 border-r-transparent border-l-8 border-l-transparent"></div>
-                </div>
-                `;
+            // 커스텀 마커 HTML 문자열
+            let markerContent = `
+        <div id="marker-wrapper-${accommodation.hidx}" class="group relative flex justify-center items-center custom-marker">
+            <span id="marker-${accommodation.hidx}" class="balloon block max-w-xs bg-gray-400 group-hover:bg-gray-600 text-white rounded p-2 text-center transition-colors">
+                ${priceInfo}
+            </span>
+            <div class="custom-arrow absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-t-8 border-t-gray-400 group-hover:border-t-gray-600 border-r-8 border-r-transparent border-l-8 border-l-transparent transition-colors"></div>
+        </div>
+        `;
 
-            let marker = new Tmapv2.Marker({
+            // 커스텀 인포 윈도우 내용 생성
+            let infowindowContent = document.createElement('a');
+            infowindowContent.className = 'bg-[#fff] overflow-hidden flex flex-row items-start justify-start w-[324px] h-[173px] p-[14px] box-border rounded-[20px] shadow-lg';
+            infowindowContent.id = `infowindow-${accommodation.hidx}`;
+            infowindowContent.href = `/search/detail-host?id=${accommodation.hidx}&checkIn=${sessionStorage.getItem('startDate')}&checkOut=${sessionStorage.getItem('endDate')}&person=${sessionStorage.getItem('people')}`;
+
+            infowindowContent.innerHTML = `
+        <img class="self-stretch w-[116px] relative h-full object-cover rounded-[20px]" loading="lazy" alt="" src="${accommodation.img_url}"/>
+        <div class="flex-1 overflow-hidden flex flex-col items-start justify-start gap-[35px] h-[146px]">
+            <div class="self-stretch flex flex-row items-start justify-start pt-[5px] pl-[20px] pr-[0px]">
+                <div class="flex-1 flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1">
+                    <div class="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                        <div class="self-stretch flex flex-col items-start justify-start gap-[2px]">
+                            <div class="self-stretch flex flex-row items-center justify-start">
+                                <div class="flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[20px]">
+                                    <div class="relative leading-[12.67px] font-semibold inline-block min-w-[21px] text-[#999]">
+                                        ${accommodation.hcateKo}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]">
+                                <b class="self-stretch relative">${accommodation.hname}</b>
+                            </div>
+                        </div>
+                        <div class="self-stretch flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[102px] text-[11.6px] text-[#333]">
+                            <div class="flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[6px]">
+                                <div class="rounded-[6px] bg-[#ffad0a] flex flex-row items-center justify-center pt-[4px] pb-[3px] pl-[3px] pr-[5px]">
+                                    <div class="flex flex-col items-start justify-start pt-[0px] pb-[2px] pl-[0px] w-3 h-3">
+                                        <img class="w-full h-full relative" loading="lazy" alt="" src="/image/domestic-accommodations/frame.svg"/>
+                                    </div>
+                                    <div class="flex flex-col items-start justify-start">
+                                        <b class="relative inline-block min-w-[19px]">${accommodation.rating.toFixed(1)}</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start justify-start text-[12.3px] text-[#707070]">
+                                <div class="relative font-medium inline-block min-w-[56px]">${accommodation.reviewCount}명 평가</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="self-stretch flex flex-col items-start justify-start pt-[8px] pb-[0px] pl-[12px] pr-[20px] text-right text-black">
+                <div class="self-stretch flex flex-col items-end justify-start">
+                    <div class="flex flex-col items-start justify-start">
+                        <div class="flex flex-col items-end justify-start">
+                            <div class="relative font-medium inline-block min-w-[74px] whitespace-nowrap text-base font-bold ">
+                                ${priceInfo}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+
+
+            let marker = new kakao.maps.CustomOverlay({
                 position: position,
-                iconHTML: markerElement
+                content: markerContent,
+                yAnchor: 1.2
+            });
+
+            let infowindow = new kakao.maps.CustomOverlay({
+                position: position,
+                content: infowindowContent,
+                yAnchor: 0,
+                zIndex: 50,
+                map: null // 처음엔 보이지 않도록 설정
             });
 
             marker.setMap(map);
+
+            // setTimeout을 사용하여 DOM이 완전히 로드된 후 이벤트 리스너 추가
+            setTimeout(() => {
+                let markerElement = document.getElementById(`marker-${accommodation.hidx}`);
+                let markerWrapperElement = document.getElementById(`marker-wrapper-${accommodation.hidx}`);
+                if (markerElement) {
+                    let isMouseOver = false;  // 마우스 오버 상태 플래그
+                    let isClicked = false;    // 클릭 상태 플래그
+
+                    // 마우스 오버 이벤트 리스너 추가
+                    markerWrapperElement.addEventListener('mouseover', function () {
+                        isMouseOver = true;  // 마우스 오버 상태로 변경
+                        if (!isClicked) {    // 클릭 상태가 아닌 경우에만 인포윈도우 표시
+                            infowindow.setMap(map);
+                        }
+                    });
+
+                    // 마우스 아웃 이벤트 리스너 추가
+                    markerWrapperElement.addEventListener('mouseout', function () {
+                        isMouseOver = false;  // 마우스 오버 상태 해제
+                        if (!isClicked) {     // 클릭 상태가 아닌 경우에만 인포윈도우 숨김
+                            infowindow.setMap(null);
+                        }
+                    });
+
+                    // 클릭 이벤트 리스너 추가: 클릭된 마커에 대한 유지 및 스타일 설정은 동일하게 유지
+                    markerElement.addEventListener('click', function () {
+                        // 이전 클릭된 마커의 인포윈도우를 닫고 스타일 복구
+                        if (clickedMarkerId !== null) {
+                            let prevMarkerElement = document.getElementById(`marker-${clickedMarkerId}`);
+                            let prevMarkerWrapperElement = document.getElementById(`marker-wrapper-${clickedMarkerId}`);
+                            if (prevMarkerElement) {
+                                prevMarkerElement.classList.remove('bg-black'); // 이전 클릭된 상태 색상 제거
+                                prevMarkerWrapperElement.querySelector(".custom-arrow").classList.remove('border-t-black');
+                                prevMarkerElement.classList.add('bg-gray-400'); // 원래 색상 복구
+                            }
+                            if (prevInfoWindow) {
+                                prevInfoWindow.setMap(null);
+                            }
+                        }
+
+                        if (clickedMarkerId !== accommodation.hidx) {
+                            clickedMarkerId = accommodation.hidx;
+                            prevInfoWindow = infowindow;
+                            isClicked = true;  // 클릭 상태로 변경
+                            markerElement.classList.remove('bg-gray-400'); // 클릭될 때 원래 색상 제거
+                            markerElement.classList.add('bg-black'); // 클릭된 상태 색상 추가
+                            markerWrapperElement.querySelector(".custom-arrow").classList.add('border-t-black');
+                            infowindow.setMap(map);
+                        } else {
+                            clickedMarkerId = null;
+                            prevInfoWindow = null;
+                            isClicked = false; // 클릭 상태 해제
+                            infowindow.setMap(null);
+                        }
+                    });
+
+                    // 인포윈도우 닫기 버튼 이벤트 등록
+                    let closeBtn = infowindowContent.querySelector('.close-btn');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function () {
+                            infowindow.setMap(null);
+                            markerElement.classList.remove('bg-black'); // 클릭된 상태 색상 제거
+                            markerWrapperElement.querySelector(".custom-arrow").classList.remove('border-t-black');
+                            markerElement.classList.add('bg-gray-400'); // 원래 색상 복구
+                            clickedMarkerId = null;
+                            prevInfoWindow = null;
+                            isClicked = false; // 클릭 상태 해제
+                        });
+                    }
+                }
+            }, 100);
+
             markers.push(marker);
         });
 
-        map.fitBounds(bounds);
+        map.setBounds(bounds);
     }
 
-    // 마커 제거
+    function handleAccommodationClick(hidx) {
+        console.log(hidx);
+        if (!map) {
+            console.error("Map 객체가 초기화되지 않았습니다.");
+            return;
+        }
+
+        let marker = markers[hidx];
+        let infowindow = infowindows[hidx];
+        if (marker && infowindow) {
+            // 이전 마커 및 인포윈도우 닫기
+            if (clickedMarkerId !== null) {
+                let prevMarkerElement = document.getElementById(`marker-${clickedMarkerId}`);
+                let prevMarkerWrapperElement = document.getElementById(`marker-wrapper-${clickedMarkerId}`);
+                if (prevMarkerElement) {
+                    prevMarkerElement.classList.remove('bg-black');
+                    prevMarkerWrapperElement.querySelector(".custom-arrow").classList.remove('border-t-black');
+                    prevMarkerElement.classList.add('bg-gray-400');
+                }
+                if (prevInfoWindow) prevInfoWindow.setMap(null);
+            }
+
+            // 클릭된 마커 및 인포윈도우 열기
+            if (clickedMarkerId !== hidx) {
+                clickedMarkerId = hidx;
+                prevInfoWindow = infowindow;
+                let markerElement = document.getElementById(`marker-${hidx}`);
+                let markerWrapperElement = document.getElementById(`marker-wrapper-${hidx}`);
+                markerElement.classList.remove('bg-gray-400');
+                markerElement.classList.add('bg-black');
+                markerWrapperElement.querySelector(".custom-arrow").classList.add('border-t-black');
+                infowindow.setMap(map);
+                map.panTo(marker.getPosition());
+            } else {
+                clickedMarkerId = null;
+                prevInfoWindow = null;
+            }
+        } else {
+            console.warn(`Marker or Infowindow for hidx ${hidx}가 존재하지 않습니다.`);
+        }
+    }
+
+    // 마커를 제거하는 함수
     function removeMarkers() {
-        for (var i = 0; i < markers.length; i++) {
+        for (let i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
         markers = [];

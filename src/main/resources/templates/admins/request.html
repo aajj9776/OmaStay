@@ -3,35 +3,36 @@
   layout:decorate="~{layout/admin}" layout:fragment="admin">
 
 <head>
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+ 
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
 </head>
 
 <body>
   <div
-    class="w-full relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000]">
+    class="w-[1735px] min-h-[800px] rounded-[30px] bg-[#f5f6fb] flex flex-col shrink-0 items-start justify-start p-[30px] box-border gap-[20px] text-left">
 
     <!-- 제목 영역 -->
-    <label class="font-semibold">
+    <label class="text-[24px] h-[40px] font-semibold">
       입점요청
     </label>
 
     <!-- 테이블 영역 -->
     <div th:if="${list == null}"
-      class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+      class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
       <p class="text-[18px] text-[#6c757d]">등록된 입점 요청이 없습니다.</p>
     </div>
 
     <div th:if="${list != null}"
-      class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+      class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
 
       <!-- 테이블 데이터 영역-->
       <div id="table" class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
         <table id="listTable" class="w-[1200px] hover ">
           <thead>
             <tr class="bg-[#d4d8f1] font-medium">
-              <th>요청 번호</th>
-              <th>업체명</th>
-              <th>호스트 성함</th>
+              <th>요청번호</th>
+              <th>가맹점명</th>
+              <th>담당자명</th>
               <th>우편번호</th>
               <th>도로명주소</th>
               <th>상세주소</th>
@@ -46,7 +47,13 @@
               <td th:text="${host.addressVo.postCode}"></td>
               <td th:text="${host.addressVo.street}"></td>
               <td th:text="${host.addressVo.detail}"></td>
-              <td th:text="${host.hStatus}"></td>
+              <td th:switch="${host.hStatus.name()}">
+                <span th:case="'APPLY'">신청</span>
+                <span th:case="'APPROVE'">승인</span>
+                <span th:case="'REJECT'">거절</span>
+                <span th:case="'RELEASE'">해제</span>
+                <span th:case="*">알 수 없음</span> <!-- 기본값 -->
+              </td>
             </tr>
           </tbody>
         </table>
@@ -55,10 +62,12 @@
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('#listTable').DataTable();
+      $('#listTable').DataTable({
+          order: [] // 큰따옴표(")로 묶인 문자열 사용
+      });
 
       //행을 누르면 id 값을 가져와서 컨트롤러로 보내기 
       $('#listTable tbody').on('click', 'tr', function () {

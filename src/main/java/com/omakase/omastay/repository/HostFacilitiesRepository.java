@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface HostFacilitiesRepository extends JpaRepository<HostFacilities, Integer>, HostFacilitiesRepositoryCustom {
-
     List<HostFacilities> findByHostInfoId(int hIdx);
 
     @Query("SELECT new com.omakase.omastay.dto.HostFacilitiesDTO(hf.id, hf.facilities.id, hf.hostInfo.id, null) FROM HostFacilities hf WHERE hf.hostInfo.id = :id")

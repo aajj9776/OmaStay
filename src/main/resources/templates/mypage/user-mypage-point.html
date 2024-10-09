@@ -27,7 +27,7 @@
         <div class="flex-1 flex flex-col items-start justify-start">
           <div class="self-stretch rounded-t-3xs rounded-b-none bg-white border-gray-300 border-[1px] border-solid flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5">
             <div class="w-[97px] shrink-0 flex flex-row items-start justify-start pb-1.5">
-              <a class="text-lg" href="/mypage/reservation">예약 내역</a>
+              <a class="text-lg" id="reservationLink" href="#">예약 내역</a>
             </div>
           </div>
           <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
@@ -86,7 +86,7 @@
   <script>
     // 로컬 스토리지에서 user 객체 가져오기
     document.addEventListener("DOMContentLoaded", function () {
-    const user = JSON.parse(localStorage.getItem('user'));
+    user = JSON.parse(localStorage.getItem('user'));
 
     if (user) {
         const memberId = user.id; // mem_idx 값
@@ -141,6 +141,18 @@
     } else {
         console.error('No memberId found in localStorage'); // 사용자 정보가 없을 경우 오류 출력
     }
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    member = localStorage.getItem("user");
+    user = JSON.parse(member);
+    let memIdx = user ? user.id : null;
+
+    // 예약 내역 링크 href 동적 설정
+    if (memIdx) {
+        let reservationLink = document.getElementById('reservationLink');
+        reservationLink.setAttribute('href', `/mypage/reservation?id=${memIdx}`);
+      }
   });
 </script>
 

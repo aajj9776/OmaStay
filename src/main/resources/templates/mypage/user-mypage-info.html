@@ -57,7 +57,7 @@
       <div class="flex-1 flex flex-col items-start justify-start">
         <div class="self-stretch rounded-t-3xs rounded-b-none bg-white border-gray-300 border-[1px] border-solid flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5">
           <div class="w-[97px] shrink-0 flex flex-row items-start justify-start pb-1.5">
-            <a class="text-lg" href="/mypage/reservation">예약 내역</a>
+            <a class="text-lg" id="reservationLink" href="#">예약 내역</a>
           </div>
         </div>
         <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
@@ -323,6 +323,7 @@ function sample4_execDaumPostcode() {
 
     member = localStorage.getItem("user");
     user = JSON.parse(member);
+    let memIdx = user ? user.id : null;
     fetch('/mypage/info/userData', {
       method: 'POST',
       headers: {
@@ -371,6 +372,18 @@ function sample4_execDaumPostcode() {
         console.error('Error:', error); // 오류 처리
     });
 
+    //예약내역 경로
+    document.addEventListener('DOMContentLoaded', function() {
+      member = localStorage.getItem("user");
+      user = JSON.parse(member);
+      let memIdx = user ? user.id : null;
+
+      // 예약 내역 링크 href 동적 설정
+      if (memIdx) {
+          let reservationLink = document.getElementById('reservationLink');
+          reservationLink.setAttribute('href', `/mypage/reservation?id=${memIdx}`);
+      }
+  });
 
   //비밀번호 확인 구역
   document

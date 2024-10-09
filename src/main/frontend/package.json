@@ -1,4 +1,12 @@
 {
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "A frontend project setup with Tailwind CSS and Bootstrap.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HaunLee/OmaStay.git"
+  },
+  "license": "MIT",
   "devDependencies": {
     "tailwindcss": "^3.4.10"
   },
@@ -7,6 +15,8 @@
     "watch": "tailwindcss -i ./styles.css -o ../resources/static/css/tailwind.css --watch"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3"
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.3",
+    "frontend": "file:"
   }
 }

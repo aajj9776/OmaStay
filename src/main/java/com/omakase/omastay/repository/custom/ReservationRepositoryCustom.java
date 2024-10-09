@@ -1,9 +1,13 @@
 package com.omakase.omastay.repository.custom;
 
-import com.omakase.omastay.entity.HostInfo;
-import com.omakase.omastay.vo.StartEndVo;
+import com.omakase.omastay.entity.Reservation;
+import com.omakase.omastay.entity.RoomInfo;
 import java.util.List;
-import java.util.Set;
+
 
 public interface ReservationRepositoryCustom {
+
+    List<Reservation> searchRes(String resStatus, String startDate, String endDate, RoomInfo roomInfo);
+
+    List<Reservation> get5List(Integer memId);
 }
