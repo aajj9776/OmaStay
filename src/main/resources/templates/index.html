@@ -40,7 +40,7 @@
                 </h2>
                 <div class="search relative z-10 bg-white rounded-lg shadow-lg p-6">
                     <div>
-                        <div class="text-blue-700 text-2xl sticky z-10 w-full border-b border-[#ebebeb]g pl-2 lg:px-5 gap-3 lg:gap-4 text-left font-[Inter]">
+                        <div class="text-blue-700 text-2xl sticky z-10 w-full !pl-10 lg:px-5 gap-3 lg:gap-4 text-left font-[Inter] pb-4">
                             국내 숙소
                         </div>
                         <div th:include="~{component/search/searchbar}"></div>
@@ -86,7 +86,7 @@
         </div>
     </section>
 
-    <div class="column3 container mx-auto bg-pink-100 rounded-lg flex flex-wrap items-center justify-between max-w-[1200px]">
+    <div class="column3 container mx-auto bg-pink-100 rounded-lg flex flex-wrap items-center justify-between max-w-[1200px] pl-10">
         <div class="w-full lg:w-2/3">
             <div class="mb-4">
                 <h3 class="text-2xl font-bold mb-2">
@@ -131,15 +131,15 @@
             <div class="swiper-wrapper mb-1">
                 <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <img alt="" class="w-full h-40 object-cover" loading="lazy"
+                        <img alt="" class="w-full object-cover" loading="lazy"
                              src="/image/index/32ac436e31398e5cc182d7d5fdea0572jpg@2x.png"/>
                         <div class="p-4">
                             <div class="text-gray-600 mb-1">모텔</div>
                             <div class="font-bold text-lg mb-2">구월 호텔반월</div>
                             <div class="text-sm text-gray-500 mb-2">인천터미널역 도보 14분</div>
                             <div class="flex items-center mb-2">
-                                <div class="bg-orange-500 text-white rounded px-2 py-1 text-xs font-bold mr-2">
-                                    <img class="inline-block mr-1" src="/image/index/svg-3.svg"/>
+                                <div class="bg-orange-500 text-white rounded px-2 py-1 text-xs font-bold mr-2 text-black">
+                                    <img class="inline-block relative pb-0.5 " src="/image/index/svg-3.svg"/>
                                     9.5
                                 </div>
                                 <div class="text-sm text-gray-600">9,871명 평가</div>
@@ -203,7 +203,6 @@
     </section>
 </div>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script src="/js/countperson.js" type="text/javascript"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         //세션스토리지의 값 searh_bar에 넣기
