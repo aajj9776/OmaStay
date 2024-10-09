@@ -26,21 +26,16 @@
       <h1 class="text-3xl font-bold mb-6">이벤트</h1>
 
       <div class="btn-group mb-6" role="group" aria-label="Event categories">
-        <button type="button" class="btn btn-custom active" data-category="all">
-          전체
-        </button>
-        <button type="button" class="btn btn-custom" data-category="ongoing">
-          진행중
-        </button>
-        <button type="button" class="btn btn-custom" data-category="past">
-          지난 이벤트
-        </button>
+        <div class="btn btn-custom active" data-category="all">
+          이벤트 목록
+        </div>
       </div>
 
-      <div class="flex flex-wrap justify-center gap-6 mt-[50px] eventDetail">
+      <div class="flex flex-wrap justify-center gap-6 mt-[50px]">
         <!-- Event Card 1  이걸로 반복문 돌려라 -->
         <div th:each="event : ${list}">
-          <div class="bg-white rounded-lg shadow-md overflow-hidden w-[350px]">
+          <div class="bg-white rounded-lg shadow-md overflow-hidden w-[350px]"
+                th:onclick="'goEventDetail(' + ${event.id} + ')'">>
             <img
               th:src="@{|https://storage.googleapis.com/omastay/notice/${event.fileName.fName}|}"
               alt="이벤트 이미지"
@@ -71,34 +66,11 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      $(function () {
-        $(".eventDetail").click(function () {
-          location.href = "";
-        });
-      });
-      document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll(".btn-custom");
-        const events = document.querySelectorAll(".grid > div");
 
-        buttons.forEach((button) => {
-          button.addEventListener("click", function () {
-            buttons.forEach((btn) => btn.classList.remove("active"));
-            this.classList.add("active");
+      function goEventDetail(id){
+        location.href = "/user/eventdetail?id=" + id;
+      }
 
-            const category = this.getAttribute("data-category");
-            events.forEach((event) => {
-              if (
-                category === "all" ||
-                event.getAttribute("data-status") === category
-              ) {
-                event.style.display = "";
-              } else {
-                event.style.display = "none";
-              }
-            });
-          });
-        });
-      });
     </script>
   </body>
 </html>
