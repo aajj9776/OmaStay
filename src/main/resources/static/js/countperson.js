@@ -101,6 +101,7 @@ searchButton.addEventListener('click', function(){
     console.log(sessionStorage.getItem('keyword'), sessionStorage.getItem('date'), sessionStorage.getItem('people'), sessionStorage.getItem('startDate'), sessionStorage.getItem('endDate'));
 
     recSearch();
+    searchAccommodation();
 });
 
 let recSearches = [];
@@ -222,7 +223,6 @@ const searchAccommodation = (identifier, filterData, page = 0) => {
     const person = document.getElementById("person_count").innerText;
 
     if (!keyword || keyword.trim().length === 0) {
-        alert("검색어를 입력해주세요.");
         return;
     }
 
