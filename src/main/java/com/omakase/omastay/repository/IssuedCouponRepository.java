@@ -1,6 +1,7 @@
 package com.omakase.omastay.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,12 @@ public interface IssuedCouponRepository extends JpaRepository<IssuedCoupon, Inte
     @Query("SELECT ic FROM IssuedCoupon ic WHERE ic.id =:icIdx AND ic.member.id = :memIdx")
     IssuedCoupon findByIdAndMemIdx(@Param("icIdx") Integer icIdx, @Param("memIdx") Integer memIdx);
 
+    @Query("SELECT ic FROM IssuedCoupon ic WHERE ic.member.id = :memIdx")
+    List<IssuedCoupon> findByMemIdx(@Param("memIdx") int memIdx);
+
+    @Query("SELECT ic FROM IssuedCoupon ic WHERE ic.icCode = :icCode AND ic.member.id IS NULL")
+    Optional<IssuedCoupon> findByIcCodeAndMemIdxIsNull(@Param("icCode") String icCode);
+
+    @Query("SELECT ic FROM IssuedCoupon ic WHERE ic.icCode = :icCode AND ic.member IS NULL")
+    Optional<IssuedCoupon> findByIcCode(@Param("icCode") String icCode);
 }

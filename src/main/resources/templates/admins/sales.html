@@ -10,13 +10,13 @@
 
   <style>
     tfoot input {
-        width: 100%;
-        padding: 3px;
-        box-sizing: border-box;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        border-radius: 2px;
+      width: 100%;
+      padding: 3px;
+      box-sizing: border-box;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      border-radius: 2px;
     }
   </style>
 </head>
@@ -39,41 +39,41 @@
       <!-- 검색 영역 -->
       <div class="gap-3 rounded-[30px] bg-[#eaecf8] flex flex-col items-start justify-center p-[20px] box-border ">
         <form id="search-form" action="/admin/sales/search" class="flex flex-col gap-3">
-            <label class="font-semibold w-full">
-              매출 확정일 기간
-            </label>
-            <div id="date-range-picker"
-              class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[10px]">
-              <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
-              <input readonly id="date-range-picker-input" name="dateRange"
-                class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
-                type="text" placeholder="전체 기간" />
-            </div>
+          <label class="font-semibold w-full">
+            매출 확정일 기간
+          </label>
+          <div id="date-range-picker"
+            class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[10px]">
+            <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
+            <input readonly id="date-range-picker-input" name="dateRange"
+              class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+              type="text" placeholder="전체 기간" th:value="${date}" />
+          </div>
 
-            <label class="font-semibold w-full">
-              지역
-            </label>
-            <select id="region-value" name="region" data-str="게시판 유형"
-              class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
-              <option value="전체">전체</option>
-              <option value="서울">서울</option>
-              <option value="부산">부산</option>
-              <option value="인천">인천</option>
-              <option value="대구">대구</option>
-              <option value="대전">대전</option>
-              <option value="광주">광주</option>
-              <option value="울산">울산</option>
-              <option value="세종">세종</option>
-              <option value="경기">경기</option>
-              <option value="충북">충북</option>
-              <option value="충남">충남</option>
-              <option value="전북">전북</option>
-              <option value="전남">전남</option>
-              <option value="경북">경북</option>
-              <option value="경남">경남</option>
-              <option value="강원">강원</option>
-              <option value="제주도">제주도</option>
-            </select>
+          <label class="font-semibold w-full">
+            지역
+          </label>
+          <select id="region-value" name="region" data-str="게시판 유형"
+            class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+            <option value="전체">전체</option>
+            <option value="서울">서울</option>
+            <option value="부산">부산</option>
+            <option value="인천">인천</option>
+            <option value="대구">대구</option>
+            <option value="대전">대전</option>
+            <option value="광주">광주</option>
+            <option value="울산">울산</option>
+            <option value="세종">세종</option>
+            <option value="경기">경기</option>
+            <option value="충북">충북</option>
+            <option value="충남">충남</option>
+            <option value="전북">전북</option>
+            <option value="전남">전남</option>
+            <option value="경북">경북</option>
+            <option value="경남">경남</option>
+            <option value="강원">강원</option>
+            <option value="제주도">제주도</option>
+          </select>
         </form>
         <!-- 버튼 -->
         <div
@@ -184,6 +184,7 @@
 
     $(document).ready(function () {
       $('#DataTable').DataTable({
+        order: [],
         initComplete: function () {
           this.api()
             .columns()
@@ -197,15 +198,14 @@
 
               column.footer().replaceChildren(input);
 
-                input.addEventListener('keyup', () => {
-                  if (column.search() !== this.value) {
-                    column.search(input.value).draw();
-                  }
-                });
+              input.addEventListener('keyup', () => {
+                if (column.search() !== this.value) {
+                  column.search(input.value).draw();
+                }
+              });
             });
         }
       });
-
 
       // 검색 버튼 클릭 이벤트 처리
       $('#search-button').on('click', function () {
@@ -217,7 +217,7 @@
         $('#date-range-picker-input').val('');
         $('#search-keyword').val('');
         $('#search-type').val('all');
-        $('#region-value').val('all');
+        $('#region-value').val('전체');
       });
     });
 

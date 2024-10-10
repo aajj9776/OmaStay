@@ -1,35 +1,84 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-    <link rel="stylesheet" href="https://cdn.tailwindcss.com">
-</head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-        <!-- 타이틀 섹션 -->
-        <div class="mb-6 text-center">
-            <h1 class="text-lg font-semibold text-gray-700">비밀번호 변경</h1>
-        </div>
-
-        <!-- 비밀번호 입력 섹션 -->
-        <div class="mb-4">
-            <label for="password" class="block text-sm font-medium text-gray-700">비밀번호 <span class="text-red-500">*</span></label>
-            <input type="password" id="password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="비밀번호 입력">
-        </div>
-
-        <!-- 비밀번호 확인 섹션 -->
-        <div class="mb-4">
-            <label for="confirm-password" class="block text-sm font-medium text-gray-700">비밀번호 확인</label>
-            <input type="password" id="confirm-password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="비밀번호 확인">
-        </div>
-
-        <!-- 비밀번호 변경 버튼 -->
-        <div class="text-center">
-            <button class="w-full bg-blue-500 text-white p-2 rounded-md">비밀번호 변경</button>
-        </div>
-    </div>
-
     <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <!-- 헤더 섹션 -->
+
+    <!-- 본문(컨텐츠) 섹션, 가운데 정렬 -->
+    <main class="flex-grow flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <!-- 타이틀 섹션 -->
+            <div class="mb-6 text-center">
+                <h2 class="text-lg font-semibold text-gray-700">비밀번호 변경</h2>
+            </div>
+
+            <!-- 비밀번호 입력 섹션 -->
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">비밀번호 <span class="text-red-500">*</span></label>
+                <input type="password" id="password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="비밀번호 입력">
+            </div>
+
+            <!-- 비밀번호 확인 섹션 -->
+            <div class="mb-4">
+                <label for="confirm-password" class="block text-sm font-medium text-gray-700">비밀번호 확인</label>
+                <input type="password" id="confirm-password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="비밀번호 확인">
+            </div>
+
+            <!-- 비밀번호 변경 버튼 -->
+            <div class="text-center">
+                <button class="w-full bg-blue-500 text-white p-2 rounded-md" onclick="submitPasswordChange()">비밀번호 변경</button>
+            </div>
+        </div>
+    </main>
 </body>
+<script>
+    // 비밀번호 변경 요청 함수
+    async function submitPasswordChange() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        // 비밀번호와 확인 비밀번호 값 확인
+        console.log("Password:", password);
+        console.log("Confirm Password:", confirmPassword);
+
+        if (password !== confirmPassword) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+
+        // 서버로 보내기 전에 비밀번호 값 확인
+        console.log("Sending password change request with password:", password);
+
+        // 이메일은 세션에 저장되므로 제거하고 비밀번호만 보냄
+        fetch('/login/changePassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password: password }),  // 비밀번호만 전송
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 서버 응답 값 확인
+            console.log("Server response:", data);
+            if (data.success) {
+                alert('비밀번호가 성공적으로 변경되었습니다.');
+                window.location.href = '/login'; // 성공 시 로그인 페이지로 이동
+            } else {
+                alert('비밀번호 변경에 실패했습니다.');
+            }
+        })
+        .catch((error) => {
+            console.error('비밀번호 변경 중 오류 발생:', error);
+            alert('비밀번호 변경 중 오류가 발생했습니다.');
+        });
+    }
+</script>
 </html>

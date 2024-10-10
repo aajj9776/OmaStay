@@ -31,45 +31,49 @@
         <div th:if="${sDto != null}">
           <form action="/admin/user_notice/modify" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" th:value="${sDto.id}" />
+            <input type="hidden" id="sc" th:value="${sDto.sCate}" />
             <table summary="게시판 수정하기">
               <tbody>
                 <tr>
                   <td>
                     <div class="flex flex-row">
-                        <input type="hidden" id="sc" th:value="${sDto.sCate}" />
-                        <select id="notice-type" name="sCate" data-str="게시판 유형"
-                            class="w-[150px] h-[40px] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border py-[4px] px-[5px]">
-                            <option value="">---선택---</option>
-                            <option value="NOTICE">공지사항</option>
-                            <option value="BENEFIT">혜택</option>
-                            <option value="EVENT">이벤트</option>
-                            <option value="FAQ">자주묻는질문</option>
-                        </select>
+                      <select id="notice-type" name="sCate" data-str="게시판 유형"
+                        class="w-[150px] h-[40px] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border py-[4px] px-[5px]">
+                        <option value="">---선택---</option>
+                        <option value="NOTICE">공지사항</option>
+                        <option value="BENEFIT">혜택</option>
+                        <option value="EVENT">이벤트</option>
+                        <option value="FAQ">자주묻는질문</option>
+                      </select>
 
-                        <input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}"
-                            data-str="제목" placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
+                      <input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}" data-str="제목"
+                        placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
   text-[#000] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
-  border-solid box-border py-[4px] px-[11px] mb-2" readonly />
+  border-solid box-border py-[4px] px-[11px] mb-2" />
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><textarea th:text="${sDto.sContent}" id="content" class="bg-[#fff]" name="sContent" cols="50"
-                      data-str="내용" rows="8" style="background-color: white !important;" readonly></textarea></td>
+                      data-str="내용" rows="8" style="background-color: white !important;"></textarea></td>
                 </tr>
                 <div th:if="${sDto.fileName != null}">
                   <tr>
                     <td>
-                      <a th:href="|javascript:down('${sDto.fileName.fName}')|">
-                        <span>현재 파일: </span><span id="ff" th:text="${sDto.fileName.fName}"></span>
-                        <button id="deleteFileButton" class="ml-[20px] p-1">[삭제하기]</button>
-                      </a>
+                      <div th:if="${sDto.fileName != null and sDto.fileName.fName != null}">
+                        <a th:href="|javascript:down('${sDto.fileName.fName}')|">
+                          <span>현재 파일: </span><span id="ff" th:text="${sDto.fileName.fName}"></span>
+                          <button id="deleteFileButton" class="ml-[20px] p-1">[삭제하기]</button>
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 </div>
                 <tr>
                   <td>
-                    <input type="hidden" id="selectedFile" name="selectedFile" th.value="${sDto.fileName.fName}" />
+                    <div th:if="${sDto.fileName != null and sDto.fileName.fName != null}">
+                      <input type="hidden" id="selectedFile" name="selectedFile" th.value="${sDto.fileName.fName}" />
+                    </div>
                     <input type="file" id="fileUpload" name="file" data-str="첨부파일" class="mt-2 text-[#6c757d]" />
                     <div> * 수정 파일 선택 시 기존 파일은 삭제됩니다.</div>
                   </td>
@@ -110,6 +114,7 @@
         height: 400,
         maxHeight: 500,
         minHeight: 200,
+        lineHeight: 0.7,
 
         callbacks: {  //이미지가 에디터에 추가될 때 실행
           onImageUpload: function (files, editor) {
@@ -117,24 +122,20 @@
               sendImage(files[i], editor);//이미지를 서버로 보낸다.
           }
         }
-        
+
       });
 
-      $("#content").summernote("lineHeight", 0.7);
+      var sCateValue = $("#sc").val();
+      console.log("sCate value:", sCateValue);
 
-
-        var sCateValue = $("#sc").val();
-        console.log("sCate value:", sCateValue);
-
-
-        if (sCateValue) {
-            $('#notice-type').prop('disabled', false);
-            $('#notice-type option').each(function() {
-                if ($(this).val() === sCateValue) {
-                    $(this).prop('selected', true);
-                }
-            });
-        }
+      if (sCateValue) {
+        $('#notice-type').prop('disabled', false);
+        $('#notice-type option').each(function () {
+          if ($(this).val() === sCateValue) {
+            $(this).prop('selected', true);
+          }
+        });
+      }
 
 
       // 파일 업로드 시 파일 이름을 숨겨진 필드에 저장
@@ -179,16 +180,23 @@
     }
 
     function sendData() {
-      for (var i = 0; i < document.forms[0].elements.length; i++) {
-        if (i > 1)
-          break;//에디터에 있는 컴포넌트들에 대한 유효성검사를 피하기 위해 탈출한다.
-        if (document.forms[0].elements[i].value == "") {
-          alert(document.forms[0].elements[i].dataset.str + "을 입력하세요");
-          document.forms[0].elements[i].focus();
-          return;//수행 중단
-        }
+      var form = document.forms[0];
+
+      // 게시판 유형 (select) 검사
+      var noticeType = form.querySelector('select[name="sCate"]');
+      if (noticeType.value.trim() === "") {
+        alert(noticeType.dataset.str + "을(를) 선택하세요");
+        noticeType.focus();
+        return;
       }
 
+      // 제목 (input text) 검사
+      var title = form.querySelector('input[name="sTitle"]');
+      if (title.value.trim() === "") {
+        alert(title.dataset.str + "을(를) 입력하세요");
+        title.focus();
+        return;
+      }
       document.forms[0].submit();
     }
 
@@ -198,6 +206,7 @@
       $("#selectedFile").val("");
       $("#ff").text("");
       $("#fileUpload").val("");
+      $("#notice-type").val("");
     }
   </script>
 </body>

@@ -45,6 +45,7 @@ import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
 import com.omakase.omastay.dto.custom.MemberCustomDTO;
+import com.omakase.omastay.dto.custom.PointCustomDTO;
 import com.omakase.omastay.dto.custom.SalesCustomDTO;
 import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.dto.custom.RecommendationCustomDTO;
@@ -189,7 +190,7 @@ public class AdminController {
         mv.setViewName("admins/main");
 
         //판매실적 top5 
-        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(null);
+        List<Top5SalesDTO> top5List = salesService.getTop5SalesThisMonth();
         mv.addObject("top5List", top5List);
 
         //이번달 정산 승인 대기(요청) 수
@@ -248,24 +249,25 @@ public class AdminController {
     }
     /************************ 메인 끝 ************************/
 
-    // 입점 요청 시작
+    //*** 입점 요청 시작 ***//
+    // 관리자 - 입점 요청 조회
     @RequestMapping("/request")
     public ModelAndView request() {
         ModelAndView mv = new ModelAndView();
 
         List<HostInfoDTO> list = hs.getAllHostInfos();
-
         mv.addObject("list", list);
+
         mv.setViewName("admins/request");
         return mv;
     }
 
+    // 관리자 - 입점 요청 상세 조회
     @RequestMapping("/request/detail")
-    public ModelAndView request_detail(@RequestParam("id") String id) {
+    public ModelAndView request_detail(@RequestParam("id") Integer id) {
         ModelAndView mv = new ModelAndView();
 
-        HostRequestInfoDTO host = hs.getHostRequestInfo(Integer.parseInt(id));
-        System.out.println(host);
+        HostRequestInfoDTO host = hs.getHostRequestInfo(id);
         
         mv.addObject("host", host);
         mv.addObject("storage", storage);
@@ -309,12 +311,15 @@ public class AdminController {
         return map;
     }
 
-
     /************************ 입점 요청 끝 ************************/
-    /************************ 정산 관리 시작 ************************/
+
+    //*** 정산 관리 시작 ***//
+    //정산 리스트 가져오기
     @RequestMapping("/calculation")
     public ModelAndView calculation(@RequestParam(value="period", required=false) String period) {
-        
+
+        System.out.println("period"+period);
+
         ModelAndView mv = new ModelAndView();
 
         List<CalculationCustomDTO> list = calculationService.getCalculationMonthly(period);
@@ -322,6 +327,8 @@ public class AdminController {
 
         mv.addObject("list", list);
         mv.setViewName("admins/calculation");
+
+        mv.addObject("period", period);
 
         return mv;
     }
@@ -366,33 +373,23 @@ public class AdminController {
     }
 
     /************************ 정산 관리 끝 ************************/
-    /************************ 판매 실적 시작 ************************/
+
+    //*** 판매 실적 ***//
     @RequestMapping("/sales")
     public ModelAndView sales(@RequestParam(value="region", required=false) String region) {
+        //기본 설정: 현재 날짜 월의 1일~ 오늘
         ModelAndView mv = new ModelAndView();
+
+        //이번달 전체 지역 매출 테이블 가져오기
+        List<SalesCustomDTO> list = salesService.getAllSalesThisMonth();
+        mv.addObject("list", list);
         
-        List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
-
-        System.out.println("top5List : " + top5List);
-
+        //이번달 전체 지역 판매 실적 Top5
+        List<Top5SalesDTO> top5List = salesService.getTop5SalesThisMonth();
         mv.addObject("top5List", top5List);
 
-        List<SalesCustomDTO> list = salesService.getAllSales();
-        mv.addObject("list", list);
-
-        // if(region != null){ //지역이 있으면
-
-        //     List<Top5SalesDTO> top5List = salesService.getTop5SalesByRegion(region);
-        //     mv.addObject("top5List", top5List);
-        //     List<SalesCustomDTO> list = salesService.getAllSales();
-        //     mv.addObject("list", list);
-
-        // } else{ //지역이 없으면
-
-        //      //테이블
-        //     List<SalesCustomDTO> list = salesService.getAllSales();
-        //     mv.addObject("list", list);
-        // }
+        String date = LocalDate.now().withDayOfMonth(1).toString() + " ~ "+ LocalDate.now().toString();
+        mv.addObject("date", date);
 
         mv.setViewName("admins/sales");
 
@@ -403,12 +400,23 @@ public class AdminController {
     @RequestMapping("/sales/search")
     public ModelAndView sales_search(@RequestParam(value="dateRange", required=false) String dateRange,
                                         @RequestParam(value="region", required=false) String region) {
+        System.out.println("dateRange"+dateRange);
+        System.out.println("region"+region);
 
         ModelAndView mv = new ModelAndView();
 
+        //검색어로 매출 테이블 가져오기
         List<SalesCustomDTO> list = salesService.searchSales(dateRange, region);
-
+        System.out.println("list"+list);
         mv.addObject("list", list);
+
+        //검색어로 판매 실적 Top5
+        List<Top5SalesDTO> top5List = salesService.searchTop5Sales(dateRange, region);
+        System.out.println("top5List"+top5List);
+        mv.addObject("top5List", top5List);
+
+        if(dateRange != null)
+            mv.addObject("date", dateRange);
 
         mv.setViewName("admins/sales");
 
@@ -416,9 +424,7 @@ public class AdminController {
     }
 
 
-    /************************ 판매 실적 끝 ************************/
-
-    /****************************** 가맹점 공지사항 ******************************/
+    //*** 가맹점 공지사항 ***//
     // 가맹점 공지사항 리스트로 이동
     @RequestMapping("/host_notice")
     public String host_notice() {
@@ -438,7 +444,7 @@ public class AdminController {
         return map;
     }
 
-    // 가맹점 공지사항 검색하기
+    // 호스트 공지사항 검색하기
     @RequestMapping("/host_notice/search")
     @ResponseBody
     public Map<String, Object> host_notice_search(
@@ -455,7 +461,7 @@ public class AdminController {
         return map;
     }
 
-    // 게시물 삭제하기
+    // 호스트 공지사항 게시글 삭제하기
     @ResponseBody
     @RequestMapping("/notice/delete")
     public Map<String, Object> notice_delete(@RequestParam("ids") List<Integer> ids) {
@@ -463,7 +469,7 @@ public class AdminController {
         Map<String, Object> map = new HashMap<>();
 
         int cnt = ss.deleteService(ids);
-        System.out.println("삭제 완료 개수 : " + cnt);
+        System.out.println("호스트 공지사항 삭제 " + cnt +"건");
 
         map.put("cnt", cnt);
 
@@ -502,46 +508,40 @@ public class AdminController {
 
     // 가맹점 공지사항 수정하기로 저장
     @RequestMapping(value = "/host_notice/modify", method=RequestMethod.POST)
-    public String host_notice_modify_save(ServiceDTO modified, @RequestParam("file") MultipartFile f, @RequestParam("selectedFile") String selectedFile) {
-    
+    public String host_notice_modify_save(ServiceDTO modified, @RequestParam(value="file", required = false) MultipartFile f, @RequestParam(value = "selectedFile", required = false) String selectedFile) {
+        int key =0;
         ServiceDTO sDto = ss.getServices(modified.getId());
         
         // 해당 id에 대해 modified 객체의 값으로 수정한다.
         sDto.setSTitle(modified.getSTitle());
         sDto.setSContent(modified.getSContent());
 
-        // 파일이 수정되었을 경우
-        if(f.getSize() > 0) {
-            String realPath = upload+"host";
+        if(f.getSize() > 0) { // 새 파일이 존재하는 경우
+            String realPath = upload+"notice";
             String fname = f.getOriginalFilename();
             FileImageNameVo fvo = new FileImageNameVo();
             fvo.setOName(fname);
             fname = FileRenameUtil.checkSameFileName(fname, realPath);
             fvo.setFName(fname);
             try {
-                File uploadDir = new File(realPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                File dest = new File(uploadDir, fname);
-                f.transferTo(dest);
+                String fileUrl = fileUploadService.uploadFile(f, "notice", fname);
+                System.out.println("파일 업로드 URL: " + fileUrl);
                 sDto.setFileName(fvo);
-
-                //ss에서 업데이트 하기
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if(selectedFile.length()<1 && sDto.getFileName() != null) { //파일이 있었는데 삭제된 경우 -> fileName을 null로 바꾸고 업데이트
-            //파일이 있었는데 삭제된 경우 -> fileName을 null로 바꾸고 업데이트
+            key =0;
+
+        } else if(selectedFile != null && selectedFile.length() > 0) { // 원래 파일이 있고 새 파일이 없는 경우
+            key=1;
+
+        } else { //selectedFile.length()<1 => 파일이 있었는데 삭제된 경우 
             sDto.setFileName(null);
 
-        } else {
-            // 그냥 title이랑 content만 업데이트하는 경우
-            // 1) 파일이 원래 없었고 file name도 nulll일때
-            // 2) 파일이 계속 유지되는 경우 -> f == null fileName은 있는 경우
+            key=2;
         }
 
-        ss.modifyServices(sDto); // 업데이트: sDto에는 수정된 값이 들어있음
+        ss.modifyServices(sDto, key); // 업데이트: sDto에는 수정된 값이 들어있음
 
         return "redirect:/admin/host_notice/view?id=" + sDto.getId();
     }
@@ -575,15 +575,6 @@ public class AdminController {
                     String fileUrl = fileUploadService.uploadFile(f, "notice", fname);
                     System.out.println("파일 업로드 URL: " + fileUrl);
 
-                    // File uploadDir = new File(realPath);
-                    // if (!uploadDir.exists()) {
-                    //     uploadDir.mkdirs();
-                    // }
-
-                    // // 파일 업로드(upload폴더에 저장)
-                    // File dest = new File(uploadDir, fname);
-                    // f.transferTo(dest);
-
                     sDto.setFileName(fvo);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -601,7 +592,6 @@ public class AdminController {
 
         return mv;
     }
-    /***************************** 가맹점 공지사항 *****************************/
 
     // 이미지 첨부
     @RequestMapping(value = "/saveImg", method = RequestMethod.POST)
@@ -667,56 +657,10 @@ public class AdminController {
                 .contentLength(blob.getSize())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
-
-
-
-        // //String realPath = application.getRealPath(upload);
-
-        // // 전체경로를 만들어서 File객체 생성
-        // String fullPath = upload+"notice/"+ fName; 
-        // File file = new File(fullPath);
-
-        // if (!file.exists() || !file.isFile()) {
-        //     throw new IOException("File not found");
-        // }
-        // FileInputStream fis = new FileInputStream(file); 
-        // BufferedInputStream bis = new BufferedInputStream(fis); 
-        // InputStreamResource resource = new InputStreamResource(bis);
-
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.add(HttpHeaders.CONTENT_DISPOSITION,
-        //         "attachment;filename=" + new String(fName.getBytes("UTF-8"), "ISO-8859-1"));
-        // headers.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream;charset=8859_1");
-        // headers.add(HttpHeaders.CONTENT_ENCODING, "binary");
-
-        // return ResponseEntity.ok()
-        //         .headers(headers)
-        //         .contentLength(file.length())
-        //         .contentType(MediaType.APPLICATION_OCTET_STREAM)
-        //         .body(resource);
+        
     }
 
-    /***************************** 1:1문의 시작 *****************************/
-
-    @RequestMapping("/host_inquiry")
-    public ModelAndView host_inquiry() {
-        ModelAndView mv = new ModelAndView();
-
-        List<InquiryDTO> list = is.getAllInquiries();
-        mv.addObject("list", list);
-
-        mv.setViewName("admins/host_inquiry");
-
-        return mv;
-    }
-
-    @RequestMapping("/host_inquiry/answer")
-    public String host_inquiry_answer() {
-        return "admins/host_inquiry_answer";
-    }
-
-    /***************************** 1:1문의 끝 *****************************/
-    /***************************** 회원 조회 시작 *****************************/
+    //**** 회원 조회 ***//
     //회원 조회로 이동
     @RequestMapping("/member")
     public ModelAndView member() {
@@ -745,9 +689,8 @@ public class AdminController {
         return map;
     }
 
-    /***************************** 회원 조회 끝 *****************************/
-    /***************************** 회원 공지사항 시작 *****************************/
 
+    //*** 회원 공지사항 시작 ***//
      // 회원 공지사항 리스트로 이동
     @RequestMapping("/user_notice")
     public String user_notice() {
@@ -818,8 +761,8 @@ public class AdminController {
 
     // 회원 공지사항 수정하기로 저장
     @RequestMapping(value = "/user_notice/modify", method=RequestMethod.POST)
-    public String user_notice_modify_save(ServiceDTO modified, @RequestParam("file") MultipartFile f, @RequestParam("selectedFile") String selectedFile) {
-        System.out.println("modified.getSCate() : "+modified.getSCate());
+    public String user_notice_modify_save(ServiceDTO modified, @RequestParam(value="file", required = false) MultipartFile f, @RequestParam(value = "selectedFile", required = false) String selectedFile) {
+        int key =0;
         ServiceDTO sDto = ss.getServices(modified.getId());
         
         // 해당 id에 대해 modified 객체의 값으로 수정한다.
@@ -827,38 +770,32 @@ public class AdminController {
         sDto.setSContent(modified.getSContent());
         sDto.setSCate(modified.getSCate());
 
-        // 파일이 수정되었을 경우
-        if(f.getSize() > 0) {
-            String realPath = application.getRealPath(upload);
+        if(f.getSize() > 0) { // 새 파일이 존재하는 경우
+            String realPath = upload+"notice";
             String fname = f.getOriginalFilename();
             FileImageNameVo fvo = new FileImageNameVo();
             fvo.setOName(fname);
             fname = FileRenameUtil.checkSameFileName(fname, realPath);
             fvo.setFName(fname);
             try {
-                File uploadDir = new File(realPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                File dest = new File(uploadDir, fname);
-                f.transferTo(dest);
+                String fileUrl = fileUploadService.uploadFile(f, "notice", fname);
+                System.out.println("파일 업로드 URL: " + fileUrl);
                 sDto.setFileName(fvo);
-
-                //ss에서 업데이트 하기
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if(selectedFile.length()<1 && sDto.getFileName() != null) { //파일이 있었는데 삭제된 경우 -> fileName을 null로 바꾸고 업데이트
-            //파일이 있었는데 삭제된 경우 -> fileName을 null로 바꾸고 업데이트
+            key =0;
+
+        } else if(selectedFile != null && selectedFile.length() > 0) { // 원래 파일이 있고 새 파일이 없는 경우
+            key=1;
+
+        } else { //selectedFile.length()<1 => 파일이 있었는데 삭제된 경우 
             sDto.setFileName(null);
 
-        } else {
-            // 그냥 title이랑 content만 업데이트하는 경우
-            // 1) 파일이 원래 없었고 file name도 nulll일때
-            // 2) 파일이 계속 유지되는 경우 -> f == null fileName은 있는 경우
+            key=2;
         }
 
-        ss.modifyServices(sDto); // 업데이트: sDto에는 수정된 값이 들어있음
+        ss.modifyServices(sDto, key); // 업데이트: sDto에는 수정된 값이 들어있음
 
         return "redirect:/admin/user_notice/view?id=" + sDto.getId();
     }
@@ -873,15 +810,15 @@ public class AdminController {
     // 회원 공지사항 글쓰기로 저장
     @RequestMapping(value = "/user_notice/write", method = RequestMethod.POST)
     public ModelAndView user_notice_write_save(ServiceDTO sDto, @RequestParam("file") MultipartFile f) {
-        System.out.println("modified.getSCate() : "+sDto.getSCate());
-
+        
         // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
         String c_type = request.getContentType();
         if (c_type.startsWith("multipart")) {
 
             String fname = null;
             if (f != null && f.getSize() > 0) {
-                String realPath = application.getRealPath(upload);
+                //String realPath = application.getRealPath(upload);
+                String realPath = upload + "notice";
 
                 fname = f.getOriginalFilename();
                 FileImageNameVo fvo = new FileImageNameVo();
@@ -890,20 +827,14 @@ public class AdminController {
                 fvo.setFName(fname);
 
                 try {
-                    File uploadDir = new File(realPath);
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    // 파일 업로드(upload폴더에 저장)
-                    File dest = new File(uploadDir, fname);
-                    f.transferTo(dest);
-
+                    String fileUrl = fileUploadService.uploadFile(f, "notice", fname);
+                    System.out.println("파일 업로드 URL: " + fileUrl);
                     sDto.setFileName(fvo);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             sDto.setSAuth(UserAuth.USER);
             ss.saveService(sDto);
         }
@@ -914,9 +845,9 @@ public class AdminController {
         return mv;
     }
 
-    /***************************** 회원 공지사항 끝 *****************************/
+    
 
-    /***************************** 쿠폰 시작 *****************************/
+    //*** 쿠폰 시작 ***//
     // 쿠폰 리스트 select 후 쿠폰 관리로 이동
     @RequestMapping("/coupon")
     public ModelAndView coupon() {
@@ -1001,42 +932,56 @@ public class AdminController {
         return "admins/modals/coupon_history";
     }
 
-    /***************************** 쿠폰 끝 *****************************/
 
-    /***************************** 포인트 시작 *****************************/
+    //***  포인트 시작 ***//
+    //관리자 포인트 내역 리스트 가져오기
     @RequestMapping("/point")
-    public ModelAndView point() {
+    public ModelAndView point(@RequestParam(value = "message", required = false) String message) {
 
         ModelAndView mv = new ModelAndView();
 
-        List<PointDTO> list = ps.getAllPoints();
+        List<PointCustomDTO> list = ps.getAllPoints();
 
         mv.addObject("list", list);
         mv.setViewName("admins/point");
 
+        if(message!=null){
+            if(message.equals("email")){
+                mv.addObject("message", "이메일이 잘못 됐습니다.");
+            }else if(message.equals("success")){
+                mv.addObject("message", "포인트 등록에 성공했습니다.");
+            }
+        }
+
         return mv;
     }
 
+    //관리자 포인트 추가
     @RequestMapping("/point/add")
     public String add_point(@RequestParam("email") String email, PointDTO pDto) {
-        System.out.println("email : " + email);
-        System.out.println("pDto : " + pDto);
 
         int cnt = ps.addPoint(email, pDto);
 
         if(cnt < 1){
             System.out.println("포인트 추가 실패");
-            return "error";
+            return "redirect:/admin/point?message=email";
         }
 
-        return "redirect:/admin/point";
+        return "redirect:/admin/point?message=success";
     }
 
-    /***************************** 포인트 끝 *****************************/
-
+    
+    //*** 추천숙소 시작 ***//
     @RequestMapping("/recommendation")
     public ModelAndView recommend() {
         ModelAndView mv = new ModelAndView();
+
+        List<RecommendationCustomDTO> totalList = recommendationService.findTotal();
+        System.out.println("totalList: "+totalList);
+        mv.addObject("totalList", totalList);
+
+        if(totalList != null)
+            mv.addObject("date", totalList.get(0).getRecommendationDTO().getRecDate());
 
         List<RecommendationCustomDTO> hotelList = recommendationService.getRecommendationByHCate(HCate.HOTEL_RESORT);
         mv.addObject("hotelList", hotelList);

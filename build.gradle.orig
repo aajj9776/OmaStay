@@ -1,0 +1,144 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.omakse'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+<<<<<<< HEAD
+    implementation 'org.springframework:spring-context-support'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+=======
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+>>>>>>> e0c1df1a713a261a154e340a4653ab8db9760fec
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework:spring-context-support'
+
+<<<<<<< HEAD
+    //시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+
+=======
+     //시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+>>>>>>> e0c1df1a713a261a154e340a4653ab8db9760fec
+    //p6spy
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+    //쿼리dsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    //mapstruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+<<<<<<< HEAD
+    //쿠키
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+=======
+>>>>>>> e0c1df1a713a261a154e340a4653ab8db9760fec
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
+<<<<<<< HEAD
+    //소셜전용
+    implementation 'com.auth0:java-jwt:4.2.1'
+
+    // Google Cloud Platform Storage(GCP Storage)
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
+
+    //(GCP Storage) 오류 떠서 추가
+    implementation 'com.google.cloud:google-cloud-storage:2.1.0'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.1.0'
+
+    //쿠폰 코드 생성
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+
+
+=======
+>>>>>>> e0c1df1a713a261a154e340a4653ab8db9760fec
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+clean {
+    delete file('src/main/generated')
+}
+
+// QueryDsl 디렉토리 경로
+def querydslDir = "$buildDir/generated/querydsl"
+
+// 경로 추가 >> QueryDsl 소스 코드 컴파일 시 빌드
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+// 컴파일 설정(AnnotationProcessor가 생성하는 소스코드를 해당 경로로 설정)
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+    options.compilerArgs << '-parameters' // -parameters 플래그 추가
+}
+
+// clean실행 시 마지막 작업으로 디렉토리(QClass) 삭제 >> 충돌 방지
+clean.doLast {
+    file(querydslDir).deleteDir()
+<<<<<<< HEAD
+}
+=======
+}
+
+
+>>>>>>> e0c1df1a713a261a154e340a4653ab8db9760fec

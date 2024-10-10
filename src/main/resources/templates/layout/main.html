@@ -8,7 +8,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link href="/css/global.css" rel="stylesheet" />
-    <link href="/css/header/header.css" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=ABeeZee:wght@400&family=Roboto:wght@100;200;400;500;600;700&family=Work+Sans:wght@600&family=Lato:wght@400;600;700;900&family=Poppins:wght@400;500&family=Abel:wght@400&family=Whisper:wght@400&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;500;700&family=Oswald:wght@400;500;700&display=swap"
@@ -28,7 +27,7 @@
   </head>
   <body>
     <header th:insert="~{component/header/header :: header}" />
-    <div
+    <div class = "relative z-10 bg-white rounded-lg p-6"
       th:if="${includeSearchBar}"
       th:insert="~{component/search/searchbar :: searchbar}"
     ></div>
@@ -42,20 +41,31 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script type="text/javascript" src="/js/countperson.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+    ></script>
     <script type="text/javascript" src="/js/datepicker.js"></script>
-    <script type="text/javascript" src="/js/countperson.js"></script>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5R1K6VKYP8"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-5R1K6VKYP8"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-      gtag('config', 'G-5R1K6VKYP8');
+      gtag("config", "G-5R1K6VKYP8");
 
       window.onload = function () {
         let token = Cookies.get("accessToken");
@@ -73,9 +83,11 @@
         localStorage.setItem("isLogin", login.toString());
 
         if (token) {
+          console.log("토큰 있음1");
           try {
             let userInfo = jwt_decode(token);
             if (token != null && userInfo != null) {
+              console.log("비동기식 있음");
               $.ajax({
                 url: "/login/userInfo",
                 type: "GET",
@@ -91,8 +103,10 @@
             // JWT 토큰 만료 여부 확인
             if (userInfo.exp < Date.now() / 1000) {
               alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+
               Cookies.remove("accessToken");
-              localStorage.removeItem("isLogin");
+              localStorage.removeItem("user");
+              localStorage.removeItem("grade");
               if (confirm("로그인 페이지로 이동하시겠습니까?")) {
                 window.location.href = "/login";
               }
@@ -101,11 +115,11 @@
             console.error("토큰 디코딩 중 오류 발생:", error);
             alert("잘못된 토큰입니다. 다시 로그인해주세요.");
             Cookies.remove("accessToken");
-            localStorage.removeItem("isLogin");
+            localStorage.removeItem("user");
+            localStorage.removeItem("grade");
             window.location.href = "/login";
           }
         }
-
       };
     </script>
   </body>

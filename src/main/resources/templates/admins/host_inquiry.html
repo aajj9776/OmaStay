@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/admin}" layout:fragment="admin">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+  <link rel="stylesheet" href="./global.css" />
+</head>
+
+<body>
+  <div
+    class="w-full relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000]">
+
+    <!-- 제목 영역-->
+    <label
+      class="m-[0px] self-stretch h-[40px] relative text-inherit font-semibold font-[inherit] flex items-center shrink-0 mq450:text-[19px]">
+      1:1 문의</label>
+
+    <!-- 테이블 영역-->
+    <div th:if="${list == null}"
+      class="w-[1300px] rounded-[20px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+      <p class="text-[18px] text-[#6c757d]">등록된 1:1 문의 정보가 없습니다.</p>
+    </div>
+
+    <div th:if="${list != null}"
+      class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+
+      <!-- 테이블 데이터 영역-->
+      <div id="table" class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
+        <table id="listTable" class="w-[1200px] hover ">
+          <thead>
+            <tr class="bg-[#d4d8f1] font-medium">
+              <th>회원 번호</th>
+              <th>등급</th>
+              <th>이메일</th>
+              <th>연락처</th>
+              <th>이름</th>
+              <th>가입일</th>
+            </tr>
+          </thead>
+          <tbody class="bg-[#ffffff] pt-[100px] ">
+            <tr th:each="mem : ${list}">
+              <td th:text="${mem.id}"></td>
+              <td th:text="${mem.gIdx}"></td>
+              <td th:text="${mem.memberProfile.email}"></td>
+              <td th:text="${mem.memPhone}"></td>
+              <td th:text="${mem.memName}"></td>
+              <td th:text="${#temporals.format(mem.memJoinDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

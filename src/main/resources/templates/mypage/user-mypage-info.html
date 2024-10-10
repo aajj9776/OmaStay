@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+      layout:fragment="main">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -54,27 +57,27 @@
       <div class="flex-1 flex flex-col items-start justify-start">
         <div class="self-stretch rounded-t-3xs rounded-b-none bg-white border-gray-300 border-[1px] border-solid flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5">
           <div class="w-[97px] shrink-0 flex flex-row items-start justify-start pb-1.5">
-            <a class="text-lg" href="#">예약 내역</a>
+            <a class="text-lg" id="reservationLink" href="#">예약 내역</a>
           </div>
         </div>
-        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-5 px-[38px] pb-[21px]">
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
           <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
-            <div class="h-[33px] flex-1 flex items-center text-lg">포인트</div>
+            <a class="text-lg" href="/mypage/point">포인트</a>
           </div>
         </div>
-        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-9 pb-[21px]">
+        <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
           <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
-            <div class="h-[33px] flex-1 flex items-center text-lg">쿠폰</div>
+            <a class="text-lg" href="/mypage/coupon">쿠폰</a>
           </div>
         </div>
         <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]">
           <div class="w-[113px] shrink-0 flex flex-row items-start justify-start pb-1.5">
-            <div class="flex-1 text-lg">내 정보 관리</div>
+            <a class="text-lg" href="/mypage/info">내 정보 관리</a>
           </div>
         </div>
         <div class="self-stretch rounded-b-3xs bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]">
           <div class="w-[76px] shrink-0 flex flex-row items-start justify-start pb-1.5">
-            <div class="flex-1 text-lg">내 리뷰</div>
+            <a class="text-lg" href="/mypage/review">내 리뷰</a>
           </div>
         </div>
       </div>
@@ -98,18 +101,20 @@
               </div>
               <div class="flex flex-row items-start justify-start gap-2.5 text-xl text-black">
                 <div class="flex flex-col items-start justify-start pt-[18px] px-0 pb-0">
-                  <h2 class="m-0 relative text-inherit leading-[24px] font-semibold font-[inherit] whitespace-nowrap mq450:text-base">
-                    나의 등급 : 방랑가
+                  <h2 id="member-grade" class="m-0 relative text-inherit leading-[24px] font-semibold font-[inherit] whitespace-nowrap mq450:text-base">
+                    나의 등급 :  확인중입니다
                   </h2>
                 </div>
-                <img class="h-[59px] w-[50px] relative rounded-[50px] object-cover" loading="lazy" alt="" src="/image/user/-1@2x.png" />
+                <img id="member-status-image" class="h-[59px] w-[50px] relative rounded-[50px]
+                 object-cover" loading="lazy" src="/image/user/normal.svg" />
               </div>
             </div>
           </div>
           <div class="self-stretch h-px relative border-gray-400 border-t-[1px] border-solid box-border"></div>
         </div>
 
-        <div class="self-stretch flex flex-row flex-wrap items-start justify-between py-0 pl-0 pr-px box-border text-2xs text-black">
+        <!-- 수정하기 구역 -->
+        <div class="self-stretch flex flex-row flex-wrap items-start justify-between py-0 pl-0 pr-px box-border text-2xs text-black gap-[10px] md:gap-[24.5px]">
           <div class="adjusted-flex flex flex-col items-start justify-start pt-[3px] pb-[111px] box-border gap-[24.5px] min-w-[366px]">
             <div class="w-full flex flex-col items-start justify-start gap-2">
               <div class="relative inline-block min-w-[33px]">이메일</div>
@@ -117,19 +122,20 @@
                 <div class="self-stretch flex flex-row items-start justify-start gap-[28.5px]">
                   <div class="flex-1 flex flex-row items-start justify-start gap-2.5 min-w-[228px]">
                     <input
+                    disabled
+                      id="email"
                       class="w-full bg-gray-200 border border-gray-400 h-16 flex-1 rounded-mini flex flex-row items-start justify-start py-6 px-[15px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
-                      placeholder="dd@naver.com"
+                     
                       type="text"
                     />
-                    <button type="button"
-                      class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
-                      이메일 인증
-                    </button>
+                    
                   </div>
                   <div class="flex flex-col items-start justify-start pt-5 text-text-primary">
+                    <p>이메일 수신 여부</p>
                     <div class="flex flex-row items-center gap-2">
                       <label class="flex items-center gap-1">
                         <input
+                          id="emailReceiveYes"
                           class="form-radio h-4 w-4 border border-gray-400"
                           type="radio"
                           name="email-receive"
@@ -138,6 +144,7 @@
                       </label>
                       <label class="flex items-center gap-1">
                         <input
+                        id="emailReceiveNo"
                           class="form-radio h-4 w-4 border border-gray-400"
                           type="radio"
                           name="email-receive"
@@ -152,6 +159,7 @@
                 </div>
               </div>
               <input
+                id="phone"
                 class="w-full bg-gray-200 border border-gray-400 self-stretch h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[17px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
                 placeholder="010-9999-8888"
                 type="text"
@@ -162,29 +170,27 @@
               <div class="w-full flex flex-col items-start justify-start gap-[26px] text-sm">
                 <div class="self-stretch flex flex-row items-start justify-start gap-1.5">
                   <input
+                    id="memberpasswd"
                     class="w-full bg-gray-200 border border-gray-400 h-16 flex-1 rounded-mini flex flex-row items-start justify-start py-6 px-[17px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
                     placeholder="비밀번호 입력"
                     type="password"
                   />
                   <button type="button"
-                    class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
+                    id="checkPasswordButton"
+                    class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex text-nowrap items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
                     비밀번호 확인
                   </button>
                 </div>
                 <div class="relative text-2xs inline-block min-w-[44px]">생년월일</div>
               </div>
               <input
+                id="birth"
                 class="w-full bg-gray-200 border border-gray-400 self-stretch h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[19px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
                 placeholder="1998년 9월 10일"
                 type="text"
               />
             </div>
-            <div class="self-stretch flex flex-col items-start justify-start gap-5 shrink-0 text-lg text-cornflowerblue">
-              <button type="button"
-                class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
-                수정하기
-              </button>
-            </div>
+            
           </div>
 
           <div class="adjusted-flex flex flex-col items-start justify-start pt-[3px] pb-[111px] box-border gap-[24.5px] min-w-[366px]">
@@ -193,50 +199,297 @@
               <div class="w-full flex flex-col items-start justify-start gap-[26px] text-sm">
                 <div class="self-stretch flex flex-row items-start justify-start gap-1.5">
                   <input
+                    id="mempostcode"
+                    name="postCode"
                     class="w-full bg-gray-200 border border-gray-400 h-16 flex-1 rounded-mini flex flex-row items-start justify-start py-6 px-[23px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
                     placeholder="15151"
                     type="text"
                   />
                   <button type="button"
-                    class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
+                  onclick="sample4_execDaumPostcode()"  class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[40px] pr-[40px] bg-[#1273e4] w-[116px] flex text-nowrap items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
                     우편번호 조회
                   </button>
                 </div>
                 <div class="relative text-2xs inline-block min-w-[22px]">주소</div>
               </div>
               <input
+                id="memstreet"
+                name="street"
                 class="w-full bg-gray-200 border border-gray-400 self-stretch h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[18px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500"
                 placeholder="경기도 남양주시 어찌구 저찌구"
                 type="text"
               />
-            </div>
+              <div class="relative text-2xs inline-block min-w-[22px]">상세주소</div>
             <input
+              id="memdetail"
               class="w-full bg-gray-200 border border-gray-400 h-16 rounded-mini shrink-0 flex flex-row items-start justify-start py-6 px-[19px] box-border font-poppins font-medium text-gray-900 placeholder-gray-500 max-w-full"
               placeholder="쌍용"
               type="text"
             />
+            </div>
+            <div class="flex flex-col items-start justify-start pt-5 text-text-primary">
+            </div>
+          </div>
+          <div class="self-stretch flex flex-col items-start leading-[50px]  justify-start gap-5 shrink-0 text-lg text-cornflowerblue">
             
           </div>
         </div>
+        <button type="button"
+              disabled
+              id="replace"
+              class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] leading-[100px] flex text-nowrap items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full">
+              수정하기
+            </button>
 
-        <div class="w-[360px] flex flex-col items-start justify-start content-start max-w-full text-lg">
-          <h2
-            class="m-0 flex-1 relative text-inherit tracking-[0.4px] leading-[20px] uppercase font-medium font-[inherit] inline-block min-w-[188px] shrink-0"
+        <!-- //수정하기 범위 끝-->
+        <div class="w-[360px] h-[200px] flex flex-col items-start justify-start content-start max-w-full text-lg pt-[30px]">
+          
+        </div>
+        <h2
+            class="m-0 flex-1  h-[50px] relative text-inherit tracking-[0.4px] leading-[50px] uppercase font-medium font-[inherit] inline-block min-w-[188px] shrink-0"
           >
             더 이상 이용을 원하지 않으신가요?
           </h2>
-          <br />
-          <div class="flex flex-col items-start justify-start pt-[5px] px-0 pb-0 ml-0 text-gray-400 mq450:ml-0">
+          <div class="flex flex-col h-[50px] items-start justify-start pt-[5px] px-0 pb-0 ml-0 text-gray-400 mq450:ml-0">
             <button type="button"
-        class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex flex-row items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full"
->
-회원탈퇴
-</button>
+              id="quitMember"
+              disabled
+              class="btn btn-primary h-[48px] pt-[18px] pb-[14px] pl-[34px] pr-[33px] bg-[#1273e4] w-[116px] flex text-nowrap items-center justify-center font-semibold font-[Inter] text-[#fff] text-center rounded-full"
+            >
+              회원탈퇴
+            </button>
           </div>
-        </div>
       </div>
     </section>
   </div>
 </body>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script>
+
+//본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+function sample4_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                   extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('mempostcode').value = data.zonecode;
+                document.getElementById("memstreet").value = roadAddr;
+                
+
+                var guideTextBox = document.getElementById("guide");
+                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                if (guideTextBox) {
+                if(data.autoRoadAddress) {
+                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                    guideTextBox.style.display = 'block';
+
+                } else if(data.autoJibunAddress) {
+                    var expJibunAddr = data.autoJibunAddress;
+                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                    guideTextBox.style.display = 'block';
+                } else {
+                    guideTextBox.innerHTML = '';
+                    guideTextBox.style.display = 'none';
+                }
+                document.querySelector(".daum__address-layer").style.display = "none";
+            }
+          }
+        }).open();
+    }
+
+    member = localStorage.getItem("user");
+    user = JSON.parse(member);
+    let memIdx = user ? user.id : null;
+    fetch('/mypage/info/userData', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+          email: user.email   // 이메일을 전송
+          //userId: user.id      // 유저 ID가 있다면 추가로 전송 가능
+      }) 
+    })
+    .then(response => response.json()) // 서버 응답 처리
+    .then(data => {
+        console.log("받는 data:", data); // 받은 데이터 전체를 출력
+
+        // 받은 데이터에서 폼 요소를 채우는 작업
+        document.getElementById('email').value = data.memberDTO.memberProfile.email;
+        document.getElementById('phone').value = data.memberDTO.memPhone;
+        document.getElementById('birth').value = data.memberDTO.memBirth;
+        document.getElementById('mempostcode').value = data.memberDTO.addressVo.postCode;
+        document.getElementById('memstreet').value = data.memberDTO.addressVo.street;
+        document.getElementById('memdetail').value = data.memberDTO.addressVo.detail;
+
+        // 등급 텍스트 업데이트
+        const gradeElement = document.getElementById('member-grade');
+        if (gradeElement && data.grade) {
+            gradeElement.textContent = "나의 등급 : " + data.grade;
+        }
+
+        // 이미지 업데이트
+        const memberStatusImage = document.getElementById('member-status-image');
+        if (memberStatusImage && data.imageUrl) {
+            memberStatusImage.src = data.imageUrl;
+        }
+
+        if (data.emailReceiveStatus === "YES") {
+        document.getElementById('emailReceiveYes').checked = true;
+        } else if (data.emailReceiveStatus === "NO") {
+            document.getElementById('emailReceiveNo').checked = true;
+        } else {
+            // 기본값 설정 (예를 들어 아무것도 체크되지 않음)
+            document.getElementById('emailReceiveYes').checked = false;
+            document.getElementById('emailReceiveNo').checked = false;
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error); // 오류 처리
+    });
+
+    //예약내역 경로
+    document.addEventListener('DOMContentLoaded', function() {
+      member = localStorage.getItem("user");
+      user = JSON.parse(member);
+      let memIdx = user ? user.id : null;
+
+      // 예약 내역 링크 href 동적 설정
+      if (memIdx) {
+          let reservationLink = document.getElementById('reservationLink');
+          reservationLink.setAttribute('href', `/mypage/reservation?id=${memIdx}`);
+      }
+  });
+
+  //비밀번호 확인 구역
+  document
+    .getElementById('checkPasswordButton')
+    .addEventListener('click', function () {
+      const password = document.getElementById('memberpasswd').value; // 비밀번호 입력값
+
+      // 비밀번호 확인 요청
+      fetch('/mypage/check-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: user.email, // 로컬스토리지에서 가져온 이메일
+          password: password, // 입력한 비밀번호
+        }),
+      })
+        .then((response) => response.json()) // 서버 응답을 JSON으로 파싱
+        .then((isPasswordCorrect) => {
+          if (isPasswordCorrect) {
+            // 비밀번호가 맞을 경우 버튼 활성화
+            document.getElementById('replace').disabled = false;
+            document.getElementById('quitMember').disabled = false;
+            alert('비밀번호가 확인되었습니다. 수정 및 탈퇴 버튼이 활성화되었습니다.');
+          } else {
+            // 비밀번호가 틀릴 경우 경고 메시지
+            alert('비밀번호가 틀렸습니다. 다시 시도해주세요.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          alert('오류가 발생했습니다. 다시 시도해주세요.');
+        });
+    });
+
+    //이메일 수정 구역
+    document.getElementById('replace').addEventListener('click', function() {
+    const memberDTO = {
+        memberProfile: {
+            email: user.email  // 로컬스토리지에서 가져온 이메일
+        },
+        memPhone: document.getElementById('phone').value,
+        memName: document.getElementById('email').value,
+        memBirth: document.getElementById('birth').value,
+        addressVo: {
+            postCode: document.getElementById('mempostcode').value,
+            street: document.getElementById('memstreet').value,
+            detail: document.getElementById('memdetail').value
+        },
+        memEmailCheck: document.querySelector('input[name="email-receive"]:checked').id === 'emailReceiveYes' ? 'TRUE' : 'FALSE'
+    };
+
+    // 수정된 정보를 서버로 전송
+      fetch('/mypage/update-member-info', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(memberDTO),
+      })
+      .then(response => response.text())  // 서버 응답을 텍스트로 받음
+      .then(result => {
+          if (result === "수정되었습니다.") {
+              alert("회원 정보가 성공적으로 수정되었습니다.");
+              window.location.href = '/mypage/info';
+          } else {
+              alert("회원 정보 수정에 실패했습니다. 다시 시도해 주세요.");
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert("오류가 발생했습니다. 다시 시도해 주세요.");
+      });
+  });
+
+  document.getElementById('quitMember').addEventListener('click', function () {
+          const email = user.email;  // 로컬스토리지에서 가져온 이메일
+
+          // 회원 탈퇴 요청을 서버로 전송
+          fetch('/mypage/quit-member-info', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email: email }),
+          })
+          .then(response => response.text())  // 서버 응답을 텍스트로 받음
+          .then(result => {
+              if (result === "회원 탈퇴가 성공적으로 처리되었습니다.") {
+                  alert("회원 탈퇴가 성공적으로 처리되었습니다.");
+                  // 탈퇴 후 로컬 스토리지에서 사용자 정보 제거
+                  localStorage.removeItem('user');
+                  // 메인 페이지로 리다이렉트 또는 로그아웃 처리
+                  window.location.href = '/';
+              } else {
+                  alert("회원 탈퇴 처리에 실패했습니다. 다시 시도해 주세요.");
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert("오류가 발생했습니다. 다시 시도해 주세요.");
+          });
+      });
+//회원 탈퇴로 정보를 서버에 전송
+
+</script>
+
 </html>
