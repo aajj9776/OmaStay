@@ -273,8 +273,10 @@ public class MypageController {
     @ResponseBody
     public List<ReviewMemberDTO> reviewMember(@RequestBody Map<String, Integer> requestData) {
         int memIdx = requestData.get("memIdx");
-        // 서비스 호출 후 결과 반환
-        return myPageService.reviewMember(memIdx);
+        // 서비스 호출 후 데이터 확인
+        List<ReviewMemberDTO> reviewList = myPageService.reviewMember(memIdx);
+
+        return reviewList;
     }
     
     @PostMapping("/delete-reviews")
