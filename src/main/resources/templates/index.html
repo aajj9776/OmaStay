@@ -67,7 +67,7 @@
         <div class="flex justify-between items-center mb-6">
           <b class="text-2xl font-bold">이벤트</b>
           <div class="text-blue-600 cursor-pointer">
-            <div>더보기</div>
+            <div id="moreEvent">더보기</div>
           </div>
         </div>
         <div class="swiper-container z-0">
@@ -75,11 +75,12 @@
           <div class="swiper-button-prev"></div>
           <div class="swiper-wrapper">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" th:each="path : ${path}">
+              <div class="swiper-slide" th:each="event : ${event}">
                 <img
                   class="img"
                   loading="lazy"
-                  th:src="@{${path}}"
+                  th:src="@{${event.path}}"
+                  th:onclick="'goEventDetail(' + ${event.service.id} + ')'"
                   alt="image"
                 />
               </div>
@@ -404,6 +405,16 @@
     ></script>
     <script src="/js/countperson.js"></script>
     <script>
+      document
+        .getElementById("moreEvent")
+        .addEventListener("click", function () {
+          window.location.href = "/user/event";
+        });
+
+      function goEventDetail(id) {
+        window.location.href = "/user/eventdetail?id=" + id;
+      }
+
       var recomList = /*[[${recomList}]]*/ [];
       console.log("추천리스트:" + recomList);
       document.addEventListener("DOMContentLoaded", function () {
