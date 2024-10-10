@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.omakase.omastay.util.FileRenameGcs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -72,7 +73,6 @@ import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
-import com.omakase.omastay.util.FileRenameGcs;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import io.jsonwebtoken.io.IOException;
