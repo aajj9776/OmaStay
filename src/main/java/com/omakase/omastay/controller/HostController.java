@@ -73,6 +73,7 @@ import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
+import com.omakase.omastay.util.FileRenameGcs;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import io.jsonwebtoken.io.IOException;
@@ -523,7 +524,7 @@ public class HostController {
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "host/host_login"; 
+        return "redirect:/host/login"; 
     }
 
     //호스트 마이페이지 등록
@@ -554,6 +555,9 @@ public class HostController {
         System.out.println(hostInfoCustomDTO.getImages().size());
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
 
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+        String hName = hostInfoDTO.getHname();
+
         List<ImageDTO> existimagesDTO = hostInfoCustomDTO.getImages();
 
         for (ImageDTO image : hostInfoCustomDTO.getImages()) {
@@ -570,17 +574,19 @@ public class HostController {
                 existImages = imageService.getHostImages(hostInfoCustomDTO.getHostInfo().getId());
                 if (existImages != null) {
                     existingFileNames = existImages.stream()
-                            .map(imageDTO -> imageDTO.getImgName().getOName())
+                            .map(imageDTO -> imageDTO.getImgName().getFName())
                             .collect(Collectors.toList());
                 }
             }
 
             List<ImageDTO> newImages = new ArrayList<>();
+            List<String> newFileNames = new ArrayList<>();
 
             // 기존 이미지 추가
             if (existimagesDTO != null) {
                 for (ImageDTO imageDTO : existimagesDTO) {
                     newImages.add(imageDTO);
+                    newFileNames.add(imageDTO.getImgName().getOName());
                 }
             }
 
@@ -595,7 +601,11 @@ public class HostController {
 
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameGcs.checkSameFileName(oname, existingFileNames);
+
+                String uniqueFileName = FileRenameGcs.checkSameFileName(oname, newFileNames);
+                newFileNames.add(uniqueFileName);
+                
+                String fname = hName+"_"+FileRenameGcs.checkSameFileName(uniqueFileName, newFileNames);
                 fvo.setFName(fname);
 
                 try {
@@ -642,6 +652,7 @@ public class HostController {
 public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO roomRegDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
 
     AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+    String rName = roomRegDTO.getRoomInfo().getRoomName();
     HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
     List<ImageDTO> existimagesDTO = roomRegDTO.getImages();
 
@@ -659,17 +670,19 @@ public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO 
             existImages = imageService.getImages(roomRegDTO.getRoomInfo().getId());
             if (existImages != null) {
                 existingFileNames = existImages.stream()
-                        .map(imageDTO -> imageDTO.getImgName().getOName())
+                        .map(imageDTO -> imageDTO.getImgName().getFName())
                         .collect(Collectors.toList());
             }
         }
 
         List<ImageDTO> newImages = new ArrayList<>();
+        List<String> newFileNames = new ArrayList<>();
 
         // 기존 이미지 추가
         if (existimagesDTO != null) {
             for (ImageDTO imageDTO : existimagesDTO) {
                 newImages.add(imageDTO);
+                newFileNames.add(imageDTO.getImgName().getFName());
             }
         }
 
@@ -683,7 +696,11 @@ public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO 
                     String oname = f.getOriginalFilename(); // 실제파일명
                     FileImageNameVo fvo = new FileImageNameVo();
                     fvo.setOName(oname);
-                    String fname = FileRenameGcs.checkSameFileName(oname, existingFileNames);
+
+                    String uniqueFileName = FileRenameGcs.checkSameFileName(oname, newFileNames);
+                    newFileNames.add(uniqueFileName);
+
+                    String fname = rName+"_"+FileRenameGcs.checkSameFileName(uniqueFileName, newFileNames);
                     fvo.setFName(fname);
 
                     try {

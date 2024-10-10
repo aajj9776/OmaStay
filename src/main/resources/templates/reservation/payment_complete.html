@@ -80,6 +80,9 @@
                 <span>
                   <p class="m-[0px]" id="start"></p>
                   <p class="m-[0px]" id="end"></p>
+                  (
+                  <p class="m-[0px]" id="bak"></p>
+                  )
                 </span>
               </b>
             </div>
@@ -163,6 +166,17 @@
       const end = urlParams.get("end");
       const roomName = urlParams.get("roomName");
       let user = JSON.parse(localStorage.getItem("user"));
+
+      let bak = totalDate(formatDate(start), formatDate(end));
+      $("#bak").text(bak);
+
+      function totalDate(start, end) {
+        let startDate = new Date(start); // 시작 날짜
+        let endDate = new Date(end); // 끝 날짜
+        let timeDifference = endDate.getTime() - startDate.getTime(); // 시간 차이 계산
+        let dayDifference = timeDifference / (1000 * 3600 * 24); // 일 단위 차이로 변환
+        return dayDifference; // 몇 박인지 반환
+      }
 
       function formatDate(dateString) {
         return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)

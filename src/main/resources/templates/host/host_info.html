@@ -538,8 +538,41 @@
             };
         });
 
+    
+        function validateHostInfoCustomDTO() {
+            var isValid = true;
+            var errorMessage = "";
+
+            // 필수 필드 유효성 검사
+            if (!$('#hCate').val()) {
+                isValid = false;
+                errorMessage += "숙소 유형을 선택하세요.\n";
+            }
+            if (!$('#postcode').val()) {
+                isValid = false;
+                errorMessage += "우편번호를 입력하세요.\n";
+            }
+            if (!$('#address').val()) {
+                isValid = false;
+                errorMessage += "주소를 입력하세요.\n";
+            }
+            if (!$('#hostName').val()) {
+                isValid = false;
+                errorMessage += "호스트 이름을 입력하세요.\n";
+            }
+            // 유효성 검사 실패 시 경고 메시지 표시
+            if (!isValid) {
+                alert(errorMessage);
+            }
+
+            return isValid;
+        }    
 
     function savehostinfo() {
+            if (!validateHostInfoCustomDTO()) {
+                return;
+            }
+            
             var formData = new FormData();
             var facilities = [];
 
