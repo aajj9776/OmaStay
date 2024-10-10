@@ -10,5 +10,9 @@ public class CancelRequestDTO {
     private String cancelReason;
     private int payIdx;
     private int resIdx;
+    private Integer icIdx;
+    private Integer pIdx;
+    private Integer memIdx;
+    
     
 }

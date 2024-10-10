@@ -131,11 +131,9 @@
                       >예약확정</a
                     >
                   </div>
-                  <input
-                    class="w-full [border:none] [outline:none] bg-[rgba(2,72,252,0.76)] self-stretch h-[37px] rounded-[10px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[21px] pb-[8px] box-border font-[Roboto] font-bold text-[14px] text-[#fff] min-w-[250px]"
-                    placeholder="2024년 08월 27일 (화) 17:00 부터 체크인 가능해요~!"
-                    type="text"
-                  />
+                  <div
+                    class="w-full [border:none] [outline:none] bg-[rgba(2,72,252,0.76)] self-stretch h-[37px] rounded-[10px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[8px] px-[21px] pb-[8px] box-border font-[Roboto] font-bold text-[14px] text-[#fff] min-w-[250px]"
+                    >2024년 08월 27일 (화) 17:00 부터 체크인 가능해요~!</div>
                 </header>
                 <div
                   class="self-stretch flex flex-col items-start justify-start pt-[0px] pb-[14px] pl-[6px] pr-[0px] box-border gap-[20px] max-w-full text-[13.2px]"
@@ -403,7 +401,7 @@
                         >
                         <b
                           id="payPoint"
-                          class="w-[126px] relative text-[12px] leading-[21px] flex text-[#707070] text-right items-center shrink-0 justify-end"
+                          class="w-[126px] relative text-[12px] leading-[21px] flex text-[#707070] text-right items-center shrink-0 justify-end mr-[-4px]"
                         >
                         </b>
                       </div>
@@ -450,7 +448,7 @@
                   예약 취소
                 </h1>
                 <div
-                  class="w-[936px] h-[76px] relative max-w-[110%] shrink-0 text-[20px] text-[rgba(254,119,119,0.87)]"
+                  class="w-[936px] h-[76px] relative max-w-[110%] shrink-0 text-[20px] text-[rgba(254,119,119,0.87)] mb-[50px]"
                 >
                   <h2
                     class="m-[0px] absolute top-[0px] left-[0px] text-inherit leading-[20px] font-bold font-[inherit] flex items-center w-full h-full mq450:text-[16px] mq450:leading-[16px]"
@@ -468,6 +466,9 @@
             </div>
           </div>
         </div>
+        <div id="cancelModalContent" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+          <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6"></div>
+      </div>
       </main>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -476,6 +477,10 @@
       let start;
       let end;
       let roomRule;
+      let payIdx;
+      let icIdx;
+      let resIdx;
+      let user = JSON.parse(localStorage.getItem("user"));
 
       function formatDate(dateString) {
         return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
@@ -515,11 +520,9 @@
         console.log(id);
 
         let paymentKey; // 전역 변수로 paymentKey를 저장할 변수 선언
-        let resIdx;
-        let payIdx;
-        let payInfo;
         
-
+        
+        let payInfo;
         // 예약 정보를 불러오는 AJAX 요청
         $.ajax({
           url: "/mypage/reservation_check", // 호출하고자 하는 URL
@@ -538,7 +541,8 @@
           roomRule = res.host.rules;
           let resDate = res.reservation.startEndVo;
           let roomName = res.room.roomName;
-
+          
+          resIdx = res.reservation.id;
           let resNum = res.reservation.resNum;
           let reserverName = res.reservation.resName;
           let reserverEmail = res.reservation.resEmail;
@@ -549,6 +553,7 @@
           let coupon = res.payment.payCoupon;
           let point = res.payment.payPoint;
           let payGrade = res.payment.payGrade;
+          icIdx = res.payment.icIdx;
           let payDate = formatDate(date);
 
           start = formatDate(resDate.start);
@@ -579,29 +584,67 @@
           $("#payCoupon").text(coupon + " 원");
           $("#payPoint").text(point + " 원");
         });
-
-        // 취소 버튼 클릭 시 이벤트 처리
-        $("#cancelBtn").click(function () {
-          let chk = confirm("정말로 예약을 취소하시겠습니까?");
-          if (chk) {
-            // paymentKey 변수를 취소 요청에 사용
-            $.ajax({
-              url: "/payment/cancel", // 호출하고자 하는 URL
-              method: "POST",
-              contentType: "application/json; charset=utf-8",
-              data: JSON.stringify({
-                paymentKey: paymentKey, // res.payment.paymentKey 값을 사용
-                cancelReason: "고객 요청", // 실제 데이터 값 확인
-                resIdx: id,
-                payIdx: payIdx,
-              }),
-            }).done(function (res) {
-              alert("예약이 취소되었습니다.");
-              location.href = "/";
-            });
-          }
-        });
       });
+
+      $("#cancelBtn").click(function(){
+          $.ajax({
+              url: "/mypage/noCancel_content",
+              method: "GET",
+            }).done(function (data) {
+                $("#cancelModalContent").removeClass("hidden");
+                $("#cancelModalContent").html(data);
+                $.ajax({
+                  url: "/mypage/noCancel_content",
+                  method: "POST",
+                  data: {
+                      id: payIdx,
+                  },
+                }).done(function (data) {
+                  console.log(data);
+                  let pointId = data.payment.pidx;
+
+                  $("#paymentPrice").text(data.payment.nsalePrice);
+                  $("#totalPrice").text(data.payment.amount);
+                  $("#paymentMethod").text(data.payment.payMethod);
+                  $("#pointPrice").text(data.payment.payPoint);
+                  $("#couponPrice").text(data.payment.payCoupon);
+                  
+                  $("#cancelModalBtn").click(function () {
+                  let cancelReason = $("#cancelReason").val();
+                  if( !cancelReason){
+                      alert("취소사유를 선택해주세요")
+                      return;
+                  }
+                  let chk = confirm("정말로 예약을 취소하시겠습니까?");
+                  if (chk) {
+                    console.log(pointId)
+                    // paymentKey 변수를 취소 요청에 사용
+                    $.ajax({
+                    url: "/payment/cancel", // 호출하고자 하는 URL
+                    method: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        paymentKey: data.payment.paymentKey, // res.payment.paymentKey 값을 사용
+                        cancelReason: cancelReason, // 실제 데이터 값 확인
+                        payIdx: payIdx,
+                        resIdx :resIdx,
+                        icIdx: icIdx ? icIdx : null,
+                        pIdx: pointId ? pointId : null,
+                        memIdx: user.id,
+                    }),
+                    }).done(function (res) {
+                    alert("예약이 취소되었습니다.");
+                    location.href = "/";
+                    });
+                }
+                });
+
+                $("#closePay").click(function () {
+                    $("#cancelModalContent").addClass("hidden");
+                });
+              });
+            });
+        })
     </script>
   </body>
 </html>

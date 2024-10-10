@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="/summernote/css/summernote-lite.css" />
+  <style>
+    .dt-length select {
+      font-size: 12px;
+      padding: 5px;
+      height: auto;
+    }
+
+    .dt-length label {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .dt-info {
+      font-size: 12px;
+    }
+
+    .dt-paging button {
+      font-size: 12px;
+      padding: 5px 8px;
+    }
+
+    .dt-paging a {
+      /* 페이지 번호 스타일 */
+      padding: 5px 8px;
+    }
+
+    .dt-info {
+      display: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .dt-container .dt-layout-row {
+    margin: 0.2em 0 !important; 
+    }
+  </style>
+  </head>
+  <body>
+    <div
+      class="w-full relative flex flex-row items-start justify-center py-[100px] px-[20px] box-border leading-[normal] tracking-[normal]"
+    >
+    <main
+        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[73px] px-[0px] pb-[0px] box-border gap-[50px] max-w-full lg:pt-[47px] lg:box-border mq750:gap-[25px] mq750:pt-[31px] mq750:box-border"
+      >
+        <section
+          class="self-stretch flex flex-row items-start justify-center max-w-full text-left text-[50px] text-[#000] font-[Roboto]"
+        >
+          <div
+            class="w-[1000px] flex flex-col items-start justify-start gap-[117px] max-w-full lg:gap-[58px] mq750:gap-[29px]"
+          >
+            <div
+              class="w-[403px] flex flex-row items-start justify-start py-[0px] px-[29px] box-border max-w-full"
+            >
+              <div
+                class="m-[0px] w-[300px] relative text-inherit tracking-normal leading-normal font-semibold flex items-center text-4xl mq450:text-lg mq450:leading-snug mq750:text-2xl mq750:leading-relaxed"
+              >
+                공지사항 상세
+            </div>
+            </div>
+            <div
+              class="self-stretch rounded-[30px] bg-[rgba(200,219,245,0.52)] overflow-hidden flex flex-col items-start justify-start py-[50px] pl-[138px] pr-[136px] box-border gap-[14px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:py-[32px] mq750:px-[34px] mq750:box-border"
+            >
+              <div
+                class="w-[666px] flex flex-col items-start justify-start gap-[6px] max-w-full"
+              >
+                <input
+                  class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-start justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+                  placeholder="제목"
+                  type="text"
+                  readonly
+                  th:value="${sDto.sTitle}"
+                />
+
+                <div
+                  class="self-stretch h-[2px] relative border-[#000] border-t-[2px] border-solid box-border"
+                ></div>
+              </div>
+              <div
+                class="w-[220px] rounded-t-[4px] rounded-b-[0px] bg-[rgba(0,0,0,0.06)] overflow-hidden flex flex-row items-start justify-start p-[12px] box-border relative"
+              >
+                <input
+                  class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[118px] p-[0px]"
+                  placeholder="등록일"
+                  type="text"
+                  readonly
+                  th:value="${#temporals.format(sDto.sDate, 'yyyy-MM-dd HH:mm')}"
+                />
+                <div
+                  class="h-[1px] w-[calc(100%_+_1px)] absolute !m-[0] right-[-1px] bottom-[-1px] left-[0px] border-[rgba(0,0,0,0.42)] border-t-[1px] border-solid box-border"
+                ></div>
+              </div>
+              <div
+                class="self-stretch flex flex-row items-start justify-start max-w-full"
+              >
+                <div
+                  class="flex-1 flex flex-col items-start justify-start relative max-w-[calc(100%_-_15px)]"
+                >
+                  <div th:utext="${sDto.sContent}" id="content"
+                  class="py-[16px] h-[500px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]" name="sContent" cols="50"
+                  data-str="내용" rows="8" readonly></div>
+                </div>
+              </div>
+              <div>
+                <div th:if="${sDto.fileName != null}">
+                  <a th:href="|javascript:down('${sDto.fileName.fName}')|">
+                      <span th:text="${sDto.fileName.fName}"></span>
+                  </a>
+              </div>
+              <div th:if="${sDto.fileName == null}">
+                  <span>첨부된 파일이 없습니다.</span>
+              </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="self-stretch flex flex-row items-start justify-center pt-[0px] px-[0px] pb-[50px]"
+        >
+          <button type="button" onclick="location.href='/user/notice'"
+            class="cursor-pointer [border:none] py-[12px] px-[37px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
+          >
+            <div class="flex flex-row items-center justify-center gap-[8px]">
+              <b
+                class="relative text-[20px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[75px] whitespace-nowrap mq450:text-[16px] mq450:leading-[21px]"
+                >목록보기</b
+              >
+            </div>
+          </button>
+        </section>
+      </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+      <script>
+        function down(fName) {
+            $.ajax({
+                url: "/user/fileDownload",
+                type: "GET",
+                data: { fName: fName },
+                xhrFields: {
+                    responseType: 'blob' // 바이너리 데이터를 받기 위해 설정
+                },
+                success: function (data, status, xhr) {
+                    var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+                    var link = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = fName;
+                    link.click();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (xhr, status, error) {
+                    alert("다운로드에 실패했습니다.");
+                }
+            });
+        }
+  
+    </script>
+  </body>
+</html>

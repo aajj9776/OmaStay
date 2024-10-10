@@ -74,6 +74,10 @@
       <input type="hidden" id="memIdx" name="memIdx" value="" />
       <input type="hidden" id="nonEmail" name="nonEmail" value="" />
       <input type="hidden" id="nonName" name="nonName" value="" />
+      <input type="hidden" id="icIdx" name="icIdx" value="" />
+      <input type="hidden" id="pIdx" name="pIdx" value="" />
+      <input type="hidden" id="checkIn" name="start" value="" />
+      <input type="hidden" id="checkOut" name="end" value="" />
     </form>
 
     <form action="/coupon/use" id="updateCoupon" method="post">
@@ -101,6 +105,9 @@
       const payGrade = urlParams.get("payGrade");
       const payPoint = urlParams.get("payPoint");
       const memIdx = urlParams.get("memIdx");
+      const checkIn = urlParams.get("checkIn");
+      const checkOut = urlParams.get("checkOut");
+      const person = urlParams.get("person");
 
       let user = JSON.parse(localStorage.getItem("user"));
 
@@ -149,14 +156,16 @@
         }
 
         if (couponId != null) {
+          console.log("쿠폰번호나와요?" + couponId);
+          $("#icIdx").val(couponId);
           sendCoupon(); // 쿠폰 사용 처리
         }
         if (payPoint != null) {
           usePoint(); // 포인트 사용 처리
+        } else {
+          // 폼 전송
+          $("#insertPayment").submit();
         }
-
-        // 폼 전송
-        $("#insertPayment").submit();
       }
 
       function usePoint() {
@@ -167,7 +176,11 @@
             memIdx: memIdx,
             pValue: payPoint,
           },
-        }).done(function (data) {});
+        }).done(function (data) {
+          $("#pIdx").val(data.point.id);
+
+          $("#insertPayment").submit();
+        });
       }
 
       function goIndex() {

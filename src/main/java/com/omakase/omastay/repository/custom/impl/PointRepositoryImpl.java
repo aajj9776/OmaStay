@@ -10,5 +10,4 @@ public class PointRepositoryImpl implements PointRepositoryCustom {
     public PointRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
-
 }

@@ -402,7 +402,7 @@
             </h3>
             <ul class="space-y-3 text-sm text-gray-700">
               <li class="flex items-start">
-                <img src="/image/reservation/image1.png" class="w-5 h-5 mr-2 text-blue-500"></img>
+                <img src="/image/reservation/image1.png" class="w-5 h-5 mr-2 text-blue-500" alt="img"></img>
                 <div>
                   <span class="font-semibold">체크인/아웃:</span><br>
                   체크인: 오후 3시 이후<br>
@@ -410,14 +410,14 @@
                 </div>
               </li>
               <li class="flex items-start">
-                <img src="/image/reservation/image2.png" class="w-5 h-5 mr-2 text-blue-500"><!-- Car icon --></img>
+                <img src="/image/reservation/image2.png" class="w-5 h-5 mr-2 text-blue-500" alt="img"><!-- Car icon --></img>
                 <div>
                   <span class="font-semibold">주차:</span><br>
                   무료 주차 가능 (사전 예약 필요)
                 </div>
               </li>
               <li class="flex items-start">
-                <img src="/image/reservation/image3.png" class="w-5 h-5 mr-2 text-blue-500"><!-- Cancel icon --></img>
+                <img src="/image/reservation/image3.png" class="w-5 h-5 mr-2 text-blue-500" alt="img"><!-- Cancel icon --></img>
                 <div>
                   <span class="font-semibold">취소 정책:</span><br>
                   체크인 3일 전까지 무료 취소 가능
@@ -1083,16 +1083,18 @@
           encodeURIComponent(resName) +
           "&resEmail=" +
           encodeURIComponent(resEmail) +
-          "&couponId=" +
-          encodeURIComponent(couponId) +
           "&nsalePrice=" +
           encodeURIComponent(nsale_price) +
-          "&payCoupon=" +
-          encodeURIComponent(couponPrice) +
-          "&payPoint=" +
-          encodeURIComponent(usePoints) +
           "&payGrade=" +
           encodeURIComponent(amount);
+
+        if(couponId > 0 ){
+          url += "&couponId=" + encodeURIComponent(couponId);
+        }
+
+        if( couponPrice > 0){
+          url += "&payCoupon=" + encodeURIComponent(couponPrice) + "&payPoint=" + encodeURIComponent(usePoints);
+        }
 
         if (user != null) {
           url += "&memIdx=" + encodeURIComponent(user.id);

@@ -243,8 +243,8 @@
                         <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                           <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
                             <div
-                              class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
-                              <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                              class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                              <img class="w-full h-full self-stretch relative overflow-hidden shrink-0"
                                 loading="lazy" alt="" />
                             </div>
                           </div>
@@ -265,8 +265,8 @@
                           <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                               <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
                                   <div class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
-                                    <img th:src="@{${storage} + 'room/' + ${image.imgName.fName}}" class="w-full max-h-full self-stretch relative overflow-hidden shrink-0"
-                                    loading="lazy" alt="" />
+                                    <img th:src="@{${storage} + 'room/' + ${image.imgName.fName}}" class="w-full h-full self-stretch relative overflow-hidden shrink-0"
+                                    loading="lazy" alt="" th:data-file-name="${image.imgName.fName}" />
                                   </div>
                               </div>
                           </div>
@@ -535,6 +535,23 @@
                 images: [] 
               };
               console.log(roomPerson);
+
+              // 기존 이미지 추가
+              $('.swiper-slide img').each(function() {
+                var imgName = $(this).data('file-name');
+                console.log(imgName); // imgName 값을 출력하여 확인
+                if (imgName) {
+                    var imageDTO = {
+                        imgName: {
+                            fname: imgName
+                        }
+                    };
+                    roomRegDTO.images.push(imageDTO);
+                }
+              });
+
+          console.log("roomRegDTO.images:", roomRegDTO.images);
+
             // JSON 데이터를 FormData에 추가
            formData.append('roomRegDTO', new Blob([JSON.stringify(roomRegDTO)], { type: 'application/json; charset=utf-8' }));  
             

@@ -20,7 +20,6 @@ public class RedisService {
     }  
   
     public boolean existData(String key) {  
-        System.out.println("xistDat여기왔다."+template.hasKey(key));
         return Boolean.TRUE.equals(template.hasKey(key));  
     }  
   

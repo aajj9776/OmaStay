@@ -20,6 +20,8 @@ import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.MemberCustomDTO;
+import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
+import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.NonMember;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
@@ -34,6 +36,7 @@ import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -51,7 +54,7 @@ public class ReservationService {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
 
         RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(9);
+        roomInfo.setId(1);
         res.setRoomInfo(roomInfo);
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
@@ -77,32 +80,28 @@ public class ReservationService {
     public PaymentDTO insertPaymentInfo(PaymentDTO payment) {
         System.out.println("얍"+ payment);
 
-        // 결제 ID를 기준으로 비관적 락을 걸고 기존 결제 정보 조회
-        Payment checkPay = paymentRepository.findByPaymentKeyWithLock(payment.getPaymentKey());
-        System.out.println("checkPay"+ checkPay);
-
         // 이미 결제가 완료된 경우 중복 처리 방지
-        if (checkPay != null) {
-            throw new IllegalStateException("이미 결제가 완료된 상태입니다.");
-        } else {
-            Payment res = PaymentMapper.INSTANCE.toPayment(payment);
-            System.out.println("여기뭐가나와요?"+ res);
+        Payment res = PaymentMapper.INSTANCE.toPayment(payment);
+        System.out.println("여기뭐가나와요?"+ res);
+        if( payment.getIcIdx() == null){
             res.setIssuedCoupon(null);
-            res.setPoint(null);
-            
-            if( payment.getNsalePrice() == null ){
-                res.setNsalePrice("0");
-            }
-            
-            res.setPayStatus(PayStatus.PAY);
-            res.setPayDate(LocalDateTime.now());
-            
-            
-            Payment pay = paymentRepository.save(res);
-            
-            PaymentDTO dto = PaymentMapper.INSTANCE.toPaymentDTO(pay);
-            return dto;
         }
+        if( payment.getPIdx() == null){
+            res.setPoint(null);
+        }
+        
+        if( payment.getNsalePrice() == null ){
+            res.setNsalePrice("0");
+        }
+        
+        res.setPayStatus(PayStatus.PAY);
+        res.setPayDate(LocalDateTime.now());
+        
+        
+        Payment pay = paymentRepository.save(res);
+        
+        PaymentDTO dto = PaymentMapper.INSTANCE.toPaymentDTO(pay);
+        return dto;
     }
 
     @Transactional
@@ -258,20 +257,19 @@ public class ReservationService {
     }
 
 
-    //admin의 회원조회에서 회원의 최근 예약 기록을 가져옴
+    //admin의 회원 상세 조회에서 회원의 최근 예약 기록을 가져옴
     public Map<String, Object> member_reservation(Integer memId){
 
         Map<String, Object> map = new HashMap<>();
 
+        //3개월 날짜 범위 구하기
         LocalDateTime month3 = LocalDateTime.now().minusMonths(3).withHour(0).withMinute(0).withSecond(0).withNano(0);
-        //최근 3개월 내 예약 건수를 가져옴
+        //최근 3개월 내 예약 확정&사용완료 건수를 가져옴
         Integer monthCount = reservationRepository.get3MonthCount(memId, month3);
-        System.out.println("monthCount: "+monthCount);
         map.put("monthCount", monthCount);
 
-        //전체 예약 건수를 가져옴
+        //전체 예약 확정&사용완료 건수를 가져옴
         Integer totalCount = reservationRepository.getTotalCount(memId);
-        System.out.println("totalCount: "+totalCount);
         map.put("totalCount", totalCount);
 
         //최근 예약 내역 5건 가져옴
@@ -283,6 +281,7 @@ public class ReservationService {
             MemberCustomDTO dto = new MemberCustomDTO();
             dto.setReservation(ReservationMapper.INSTANCE.toReservationDTO(item));
             dto.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(item.getRoomInfo().getHostInfo()));
+            dto.setPayment(PaymentMapper.INSTANCE.toPaymentDTO(item.getPayment()));
             recentList.add(dto);
         }
         System.out.println("list: "+recentList);
@@ -370,4 +369,29 @@ public class ReservationService {
     
     }
 
+    //예약대기정보
+    @Transactional
+    public List<HostReservationEmailDTO> findReservationsByPending() {
+        List<HostReservationEmailDTO> hostReservationAll = new ArrayList<>();
+        List<Reservation> pendingReservations = reservationRepository.findReservationsByPending();
+        
+        for (Reservation reservation : pendingReservations) {
+            hostReservationAll.add(new HostReservationEmailDTO(reservation));
+        }
+
+        return hostReservationAll;
+    }
+
+    //예약확정,취소메일 발송을 위한 예약 정보 조회
+    @Transactional
+    public HostReservationEmailDTO getRes(Integer id) {
+         Reservation res = reservationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid reservation Id:" + id));
+        return new HostReservationEmailDTO(res);
+    }
+  
+    public ReservationDTO getNoReservation(String resNum, String nonEmail) {
+        return ReservationMapper.INSTANCE.toReservationDTO(reservationRepository.findByResNumAndNonEmail(resNum, nonEmail));
+    }
+  
 }

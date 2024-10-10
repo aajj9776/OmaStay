@@ -1,4 +1,8 @@
 package com.omakase.omastay.repository.custom.impl;
+import com.omakase.omastay.dto.custom.AdminMainCustomDTO;
+import com.omakase.omastay.dto.custom.FilterDTO;
+import com.omakase.omastay.dto.custom.QAdminMainCustomDTO;
+import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;
 import com.omakase.omastay.repository.custom.HostInfoRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
@@ -19,16 +23,23 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
     }
 
     @Override
-    public List<Integer> keywordFiltering(String keyword) {
+    public List<Integer> keywordFiltering(FilterDTO filterDTO) {
         BooleanBuilder builder = new BooleanBuilder();
 
+        String keyword = filterDTO.getKeyword();
+        HCate hCate = filterDTO.getHCate();
+
         //조건1 h_status가 1(승인)인지
-        // 조건1: h_status가 APPROVE인지 확인
         builder.and(hostInfo.hStatus.eq(HStatus.APPROVE));
 
-        // 조건2: h_name, h_post_code, h_street, region 중 하나라도 keyword가 포함되어 있는지 확인
+        //조건 2: hCate가 존재한다면 hCate가 일치하는지 확인
+        if (hCate != null) {
+            builder.and(hostInfo.hCate.eq(hCate));
+        }
+
+        // 조건3: h_name, h_post_code, h_street, region 중 하나라도 keyword가 포함되어 있는지 확인
         BooleanBuilder orBuilder = new BooleanBuilder();
-        // 조건 2-1: h_name이 keyword를 포함하는지 확인
+        // 조건 3-1: h_name이 keyword를 포함하는지 확인
         orBuilder.or(hostNameContains(keyword));
         // 조건 2-2: h_post_code가 keyword를 포함하는지 확인
         orBuilder.or(postCodeContains(keyword));
@@ -46,6 +57,18 @@ public class HostInfoRepositoryImpl implements HostInfoRepositoryCustom {
                 .join(roomInfo.hostInfo, hostInfo)  // roomInfo와 hostInfo를 일반 조인
                 .where(builder)  // 조건 설정
                 .fetch();  // 결과 fetch
+    }
+
+    @Override
+    public List<AdminMainCustomDTO> getRequestCount(){
+
+        return queryFactory
+                .select(new QAdminMainCustomDTO(
+                        hostInfo.hStatus.stringValue(), // calStatus를 문자열로 변환
+                        hostInfo.count()))
+                .from(hostInfo)
+                .groupBy(hostInfo.hStatus) // calStatus로 그룹화
+                .fetch();
     }
 
     private BooleanExpression hostNameContains(String keyword) {

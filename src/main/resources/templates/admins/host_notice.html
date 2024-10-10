@@ -9,11 +9,11 @@
 </head>
 
 <body>
-  <div
-    class="w-[1720px] relative rounded-[30px] bg-[#f5f6fb] overflow-hidden shrink-0 flex flex-col items-start justify-start pt-[30px] px-[20px] pb-[50px] box-border gap-[20px] leading-[normal] tracking-[normal] text-center text-[24px] text-[#000] font-[Inter]">
-    <label
-      class="[text-decoration:none] w-[202px] h-[40px] relative font-semibold text-[inherit] flex items-center justify-center shrink-0 mq450:text-[19px]">
-      가맹점 공지사항</label>
+  <div class="w-[1735px] min-h-[800px] rounded-[30px] bg-[#f5f6fb] flex flex-col shrink-0 items-start justify-start p-[30px] box-border gap-[20px] text-left">
+
+    <label class="text-[24px] h-[40px] font-semibold">
+      가맹점 공지사항
+    </label>
 
     <!-- 검색 영역-->
     <section
@@ -178,9 +178,6 @@
           date: dateValue
         },
         success: function (data) {
-
-          console.log(data);
-          //테이블 데이터 갱신
           var table = $('#listTable').DataTable();
           table.clear();
           table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신

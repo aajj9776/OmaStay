@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" />
+  <style>
+    .dt-length select {
+      font-size: 12px;
+      padding: 5px;
+      height: auto;
+    }
+
+    .dt-length label {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .dt-info {
+      font-size: 12px;
+    }
+
+    .dt-paging button {
+      font-size: 12px;
+      padding: 5px 8px;
+    }
+
+    .dt-paging a {
+      /* 페이지 번호 스타일 */
+      padding: 5px 8px;
+    }
+
+    .dt-info {
+      display: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .dt-container .dt-layout-row {
+    margin: 0.2em 0 !important; 
+    }
+  </style>
+  </head>
+  <body>
+    <div
+    class="w-full relative bg-[#fff] flex flex-row items-start justify-start leading-[normal] tracking-[normal]"
+  >
+    <main
+      class="flex-1 flex flex-col items-center justify-start pt-[102px] px-[20px] pb-[100px] box-border gap-[121px] max-w-full lg:gap-[60px] lg:pt-[66px] lg:pb-[65px] lg:box-border mq450:gap-[15px] mq450:pt-[28px] mq450:pb-[27px] mq450:box-border mq750:gap-[30px] mq1050:pt-[43px] mq1050:pb-[42px] mq1050:box-border"
+    >
+    <section
+    class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start px-[100px] box-border gap-[80px] max-w-full text-left text-[60px] text-[#000] font-[Roboto] mq450:gap-[16px] mq750:gap-[32px] mq750:pt-[42px] mq750:px-[36px] mq750:pb-[44px] mq750:box-border mq1225:gap-[65px] mq1225:pt-[65px] mq1225:px-[72px] mq1225:pb-[68px] mq1225:box-border">
+    <div class="ml-[30px] w-[150px] relative text-inherit tracking-normal leading-normal font-semibold flex items-center text-4xl mq450:text-lg mq450:leading-snug mq750:text-2xl mq750:leading-relaxed">
+      공지사항
+  </div>
+    <div
+      class="self-stretch flex flex-row items-start justify-start pt-[0px] px-[18px] pb-[39.5px] box-border max-w-full">
+      <div class="flex-1 flex flex-col items-start justify-start max-w-full mq750:gap-[30px] mq1050:gap-[59px]">
+        <div class="self-stretch flex flex-row items-start justify-end max-w-full gap-[20px] mq1225:flex-wrap">
+          <div
+            class="w-[550px] flex flex-col items-start justify-start pt-[1px] px-[0px] pb-[0px] box-border max-w-full">
+            <form class="m-[0px] self-stretch flex flex-row items-start justify-start mq750:flex-wrap">
+              <!-- 검색어 입력 영역 -->
+              <div
+                class="w-[550px] overflow-hidden flex flex-row items-center justify-center flex-wrap content-center py-[5px] px-[5px] box-border gap-[15px] max-w-full">
+                <div id="search-input"
+                  class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+                  <select id="search-type"
+                    class="w-[120px] [border:none] [outline:none] h-[24px] justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]">
+                    <option value="all">전체</option>
+                    <option value="sTitle">제목</option>
+                    <option value="sContent">내용</option>
+                  </select>
+                  <input id="search-keyword"
+                    class="w-full [border:none] [outline:none] h-[30px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
+                    type="text" placeholder="검색어를 입력하세요." />
+                </div>
+              </div>
+
+              <!-- 검색 버튼 영역 -->
+              <div
+                class="w-[300px] flex-1 box-border flex flex-row items-center justify-center py-[4px] px-[30px] gap-[15px]">
+                <button type="button" id="search-button"
+                  class="w-[100px] h-[40px] bg-[#2196f3] shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-[4px] text-[#fff] text-[15px] tracking-[0.46px] leading-[26px] uppercase font-medium font-[Roboto]">
+                  검색
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div
+          class="self-stretch flex flex-row items-start justify-start py-[0px] px-[5px] box-border max-w-full">
+            <div id="table" class="w-full px-[10px] pb-[10px] gap-[10px] m-auto">
+              <table id="listTable"
+                class="w-[1140px] text-inherit tracking-[0.15px] leading-[24px] font-bold font-[inherit]  text-[16px] hover">
+                <thead>
+                  <tr class="py-[20px] pl-[30px] pr-[634px] gap-[20px]">
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>등록일</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-[#ffffff] pt-[100px]"></tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.1.5/js/dataTables.js" defer></script>
+<script>
+  $(document).ready(function () {
+    $('#listTable').DataTable({
+      "searching": false,
+
+      ajax: {
+        url: '/user/noticeList/getList',
+        type: 'GET',
+        dataSrc: 'data'
+      },
+
+      columns: [
+        { "data": null, // 데이터 소스가 아닌 계산된 값
+          "render": function(data, type, row, meta) {
+              return meta.row + 1; // 인덱스는 0부터 시작하므로 1을 더합니다.
+          } 
+        }, 
+        {
+          data: 'stitle',
+          render: function (data, type, row) {
+            return '<a href="/user/noticelist/view?id=' + row.id + '">' + data + '</a>';
+          }
+        },
+        {
+          data: 'sdate',
+          render: function (data, type, row) {
+          if (data) {
+            var date = new Date(data);
+            var year = date.getFullYear();
+            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+            var day = ('0' + date.getDate()).slice(-2);
+            return year + '-' + month + '-' + day;;
+          }
+          return data;
+        }
+        }
+      ],
+      columnDefs: [
+      { width: 80, targets: 0 },
+      { width: 500, targets: 1 },
+      { width: 150, targets: 2 }
+      ],
+
+    });
+
+    // 검색 버튼 클릭 이벤트 처리
+    $('#search-button').on('click', function () {
+      var searchType = $('#search-type').val();
+      var searchKeyword = $('#search-keyword').val().trim();
+
+      // 검색 요청
+      $.ajax({
+        url: '/user/noticelist/search',
+        type: 'GET',
+        data: {
+          type: searchType,
+          keyword: searchKeyword,
+        },
+        success: function (data) {
+
+          console.log(data);
+          var table = $('#listTable').DataTable();
+          table.clear();
+          table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신
+
+        },
+        error: function (error) {
+          alert("검색 중 오류가 발생했습니다.");
+          console.error(error);
+        }
+      });
+    });
+  });
+</script>
+  </body>
+</html>

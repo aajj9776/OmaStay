@@ -3,6 +3,8 @@ package com.omakase.omastay.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.omakase.omastay.dto.PaymentDTO;
@@ -26,16 +28,15 @@ public class MyPageService {
     private PaymentRepository paymentRepository;
 
     @Transactional
-    public  List<ReservationDTO> getReservationInfo(int memIdx) {
+    public  Page<ReservationDTO> getReservationInfo(int memberId, Pageable pageable) {
         // Reservation을 조회하는 로직
-        List<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memIdx);
-        return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
+        Page<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memberId, pageable);
+        Page<ReservationDTO> reservationDTOPage = reservation.map(ReservationMapper.INSTANCE::toReservationDTO);
+        return reservationDTOPage;
     }
 
     public ReservationDTO getReservation(Integer id) {
-        //  // Reservation을 조회하면서 Payment를 함께 가져오는 로직
         Reservation reservation = reservationRepository.findById(id).get();
-
         return ReservationMapper.INSTANCE.toReservationDTO(reservation);
 
     }
@@ -46,6 +47,20 @@ public class MyPageService {
 
     }
 
+    public List<ReservationDTO> getNewReservationInfo(Integer memIdx) {
+        List<Reservation> reservation = reservationRepository.findByMemIdx(memIdx);
+        return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
+    }
+
+    public Page<ReservationDTO> getNewReservationInfo(Integer memberId, Pageable pageable) {
+         // Page<Reservation>을 가져옴
+         Page<Reservation> reservationPage = reservationRepository.findByMemberId(memberId, pageable);
+         // Page<ReservationDTO>로 변환
+         Page<ReservationDTO> reservationDTOPage = reservationPage.map(ReservationMapper.INSTANCE::toReservationDTO);
+         
+         // List<ReservationDTO>로 변환
+         return reservationDTOPage;
+    }
 
 
 }

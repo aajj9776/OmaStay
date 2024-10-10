@@ -201,7 +201,7 @@ public class MemberService {
     }
 
 
-    // 회원 정보 조회
+    // 관리자 회원 정보 조회
     public List<MemberDTO> getAllMembers(){
         List<Member> members = memberRepository.findAll();
         return MemberMapper.INSTANCE.toMemberDTOList(members);
@@ -222,6 +222,12 @@ public class MemberService {
 
         return MemberMapper.INSTANCE.toMemberDTO(member);
 
+    }
+
+    public List<MemberDTO> getMemList(){
+        List<Member> list = memberRepository.getMemList();
+
+        return MemberMapper.INSTANCE.toMemberDTOList(list);
     }
     
 }

@@ -13,6 +13,8 @@ public interface PriceRepository extends JpaRepository<Price, Integer>, PriceRep
 
     List<Price> findAllByHostInfoId(Integer id);
 
+    Price findByRoomInfoId(Integer Id);
+
     
 
 }

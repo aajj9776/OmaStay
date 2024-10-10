@@ -23,6 +23,7 @@ public class ServiceDTO {
     private LocalDateTime sDate;
     private BooleanStatus sStatus;
     private String sNone;
+    private String sPeriod;
 
     public ServiceDTO(Service service) {
         this.id = service.getId();

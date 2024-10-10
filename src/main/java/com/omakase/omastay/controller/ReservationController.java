@@ -1,38 +1,38 @@
 package com.omakase.omastay.controller;
 
-import java.util.Map;
-import java.util.HashMap;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.time.LocalDateTime;
 
+import com.omakase.omastay.dto.HostInfoDTO;
+import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.ReservationDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.MemberInfoDTO;
-import com.omakase.omastay.entity.Reservation;
-import com.omakase.omastay.entity.RoomInfo;
+import com.omakase.omastay.dto.custom.NoReserverDTO;
 import com.omakase.omastay.entity.enumurate.PayStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
-import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.service.EmailService;
-import com.omakase.omastay.service.IssuedCouponService;
+import com.omakase.omastay.service.MyPageService;
 import com.omakase.omastay.service.NonMemberService;
 import com.omakase.omastay.service.ReservationService;
+import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.vo.StartEndVo;
 
 import jakarta.mail.MessagingException;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 
 @Controller
 @RequestMapping("/reservation")
@@ -42,13 +42,19 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
-    private IssuedCouponService issuedCouponService;
-
-    @Autowired
     private NonMemberService nonMemberService;
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private RoomInfoService roomInfoService;
+
+    @Autowired
+    private MyPageService myPageService;
+
+    @Value("${upload}")
+    private String realPath;
 
     @GetMapping
     public ModelAndView reservation(MemberInfoDTO member) {
@@ -87,6 +93,8 @@ public class ReservationController {
     @PostMapping("/payment_success")
     public String payComplete(PaymentDTO payment, RedirectAttributes redirectAttributes, ReservationDTO reservation, NonMemberDTO nonMember) {
         System.out.println("reservation이메일 이름 들어와야함" + reservation);
+        System.out.println("하지만 괜찮아" + payment);
+
         reservation.setRoomIdx(10);
         StartEndVo startEndVo = new StartEndVo();
         startEndVo.setStart(LocalDateTime.now());
@@ -193,12 +201,41 @@ public class ReservationController {
     }
 
     @PostMapping("/noReservation")
-    @ResponseBody
-    public Map<String, Object> postMethodName(NonMemberDTO nonMember) {
+    public ModelAndView noReservation(NoReserverDTO nonMember) {
+        ModelAndView mv = new ModelAndView();
         System.out.println("nonMember" + nonMember);
-        Map<String, Object> map = new HashMap<>();
-        
-        return map;
+
+        ReservationDTO reserver = reservationService.getNoReservation(nonMember.getResNum(), nonMember.getNonEmail());
+        System.out.println("비회원예약 정보" + reserver);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String start = reserver.getStartEndVo().getStart().format(formatter);
+        String end = reserver.getStartEndVo().getEnd().format(formatter);
+        PaymentDTO pay = myPageService.getPayment(reserver.getPayIdx());
+        String payDate = pay.getPayDate().format(formatter);
+
+
+        NonMemberDTO member = nonMemberService.getNoMember(reserver.getNonIdx());
+        RoomInfoDTO room = roomInfoService.getRoomInfo(reserver.getRoomIdx());
+        ImageDTO img = roomInfoService.getImage(room.getHIdx());
+        String image = realPath + "host/" + img.getImgName().getFName();
+         HostInfoDTO host = roomInfoService.getHostInfo(room.getHIdx());
+        System.out.println(image);
+
+        if( reserver != null ){
+            mv.setViewName("reservation/noReservation");
+            mv.addObject("noReservation", reserver);
+            mv.addObject("start", start);
+            mv.addObject("end", end);
+            mv.addObject("room", room);
+            mv.addObject("image", image);
+            mv.addObject("pay", pay);
+            mv.addObject("payDate", payDate);
+            mv.addObject("member", member);
+            mv.addObject("host", host);
+        } 
+
+        return mv;
     }
+
 
 }
