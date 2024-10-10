@@ -14,15 +14,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.omakase.omastay.entity.enumurate.HCate;
 
 public interface RecommendationRepository extends JpaRepository<Recommendation, Integer>, RecommendationRepositoryCustom {
-    @Query("SELECT rec FROM Recommendation rec JOIN FETCH rec.hostInfo h " +
-       "ORDER BY " +
-       "CASE " +
-       "    WHEN h.hCate = 0 THEN rec.recPoint " +
-       "    WHEN h.hCate = 1 THEN rec.recPoint " +
-       "    WHEN h.hCate = 2 THEN rec.recPoint " +
-       "    WHEN h.hCate = 3 THEN rec.recPoint " +
-       "END DESC")
-    List<Recommendation> findAllWithSort();
+    @Query("SELECT rec FROM Recommendation rec JOIN FETCH rec.hostInfo h ORDER BY rec.recPoint DESC")
+    List<Recommendation> findAllRec();
 
 
     //시간을 내림차순으로 정렬해서 가장 가까운 날짜의 localdate를 가져와서 해당하는 추천 목록을 hcate와 같은 것만 가져옴

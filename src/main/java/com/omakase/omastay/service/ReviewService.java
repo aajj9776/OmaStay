@@ -17,6 +17,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,6 +141,41 @@ public class ReviewService {
         return ReviewMapper.INSTANCE.toReviewDTOList(review);
     }
 
+    public Map<Integer, Map<String, Object>> getRecomReviewCount(){
+        List<Object[]> reviewCountList = reviewRepository.findReviewCount();
+        Map<Integer, Map<String, Object>> reviewCountMap = new HashMap<>();
+        for (Object[] row : reviewCountList) {
+            Integer hostId = (Integer) row[0];
+            Long reviewCount = (Long) row[1];
+            Double totalRating = (Double) row[2];
+
+            Map<String, Object> stats = new HashMap<>();
+            stats.put("reviewCount", reviewCount);
+            stats.put("averageRating", (reviewCount > 0) ? (double) totalRating / reviewCount : 0.0); // 평균 계산 시 double로 설정
+
+            reviewCountMap.put(hostId, stats);
+        }
+        return reviewCountMap;
+    }
+
+    public String getReviewStatsByHostId(Integer hIdx) {
+        List<Object[]> reviewCountList = reviewRepository.findHostReviewCount(hIdx);
+        if (reviewCountList.isEmpty()) {
+            return "0.0, 0";
+        }
+        
+        Object[] row = reviewCountList.get(0);
+        Long reviewCount = (Long) row[1];
+        Double totalRating = (Double) row[2];
+    
+        Double averageRating = (reviewCount > 0) ? (double) totalRating / reviewCount : 0.0;
+        return String.format("%.1f, %d", averageRating, reviewCount);
+    }
+    
+    public void deleteReviewById(int revIdx) {
+        reviewRepository.updateReviewStatus(revIdx);
+    }
 
 }
+
     

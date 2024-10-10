@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -104,6 +104,8 @@ public class ReviewController {
             List<Review> reviewList = reviewService.findAllReview(sortOption,hIdx); 
             List<ReviewCommentDTO> allReviewCommentList = reviewCommentService.findAllReviewComment(); 
             List<Map<String, Object>> responseList = new ArrayList<>();
+
+            List<ReviewDTO> reviewImages = reviewService.getAllReviewImages(hIdx);
             
             for (Review review : reviewList) {
                 ReviewDTO reviewDTO = new ReviewDTO();
@@ -138,13 +140,18 @@ public class ReviewController {
                         matchedReviewCommentList.add(comment); 
                     }
                 }
-
-                List<ReviewDTO> reviewImages = reviewService.getAllReviewImages(hIdx);
-                for(ReviewDTO reviewDtoImg : reviewImages){
-                    System.out.println("히히 이미지나오냐?"+reviewImages);
-                    String reviewImg = uploadPath + "review/" +reviewDtoImg.getRevFileImageNameVo().getFName();
-                    System.out.println("히히 이건 나오냐"+reviewImg);
-    
+             
+                List<String> imagePaths = new ArrayList<>();
+                for (ReviewDTO reviewDtoImg : reviewImages) {
+                    if (reviewDtoImg.getId() == review.getId()){ // rev_idx가 같은 경우
+                        if (reviewDtoImg.getRevFileImageNameVo() != null && reviewDtoImg.getRevFileImageNameVo().getFName() != null) {
+                            String[] fileNames = reviewDtoImg.getRevFileImageNameVo().getFName().split(","); // 콤마로 파일명을 분리
+                            for (String fileName : fileNames) {
+                                String reviewImg = uploadPath + "review/" + fileName;
+                                imagePaths.add(reviewImg);  // 각 파일 경로를 리스트에 저장
+                            }
+                        }
+                    }
                 }
 
                 Map<String, Object> response = new HashMap<>();
@@ -154,7 +161,7 @@ public class ReviewController {
                 response.put("room", roomInfoDTO);
                 response.put("grade",gradeDTO);
                 response.put("reservation", reservationDTO);
-                response.put("reviewImage",reviewImages);
+                response.put("reviewImages", imagePaths); 
                 response.put("reviewComment", matchedReviewCommentList.isEmpty() ? null : matchedReviewCommentList); 
                 responseList.add(response); 
             }
@@ -217,6 +224,12 @@ public class ReviewController {
             resCountsList.add(resCountString);
         }
         return ResponseEntity.ok(resCountsList);
+    }
+
+    @PostMapping("/review_delete")
+    public ResponseEntity<?> deleteReview(@RequestParam int revIdx) {
+        reviewService.deleteReviewById(revIdx);
+        return ResponseEntity.ok().build();
     }
 }
     

@@ -5,6 +5,7 @@ import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.RecommendationDTO;
+import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.AccommodationResponseDTO;
 import com.omakase.omastay.dto.custom.FilterDTO;
 import com.omakase.omastay.dto.custom.ResultAccommodationsDTO;
@@ -15,7 +16,8 @@ import com.omakase.omastay.service.HostFacilitiesService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.RecommendationService;
-
+import com.omakase.omastay.service.ReviewService;
+import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.vo.StartEndVo;
 import jakarta.validation.Valid;
 
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,19 +36,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.text.DecimalFormat;
 
 @Controller
 @RequestMapping("/search")
@@ -63,6 +63,12 @@ public class SearchController {
     @Autowired
     private HostFacilitiesService hostFacilitiesService;
 
+    @Autowired
+    private RoomInfoService roomInfoService;
+
+    @Autowired
+    private ReviewService reviewService;
+
     private final FacilitiesService facilitiesService;
 
     public SearchController(FacilitiesService facilitiesService) {
@@ -76,16 +82,38 @@ public class SearchController {
 
     //숙소 세부사항 창
     @RequestMapping("/detail-host")
-    public String detailHost(@RequestParam("hIdx") Integer hIdx, 
-                            @RequestParam(value = "startEndDay.start", required = false) String startDate,
-                            @RequestParam(value = "startEndDay.end", required = false) String endDate,
-                            @RequestParam(value = "person", required = false) int person, Model model) {
+    public String detailHost(@RequestParam("id") Integer hIdx, 
+                         @RequestParam(value = "checkIn", required = false) 
+                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate startDate,
+                         @RequestParam(value = "checkOut", required = false) 
+                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate endDate,
+                         @RequestParam(value = "person", required = false) Integer person, Model model ) {
 
             List<HostInfo> hostInfoList = hostInfoService.getDetailHostInfo(hIdx);
             List<FacilitiesDTO> facilitiesList = facilitiesService.getDetailFacilities(hIdx);
             System.out.println("졸려" + hostInfoList);
             System.out.println("진짜졸려" + facilitiesList);
+            List<RoomInfoDTO> allRoomList = roomInfoService.getAllRoom(hIdx);
+            System.out.println("그냥 방 잘 나오냐1"+allRoomList);
 
+            List<RoomInfoDTO> availableRooms = roomInfoService.getAvailableRooms(hIdx, startDate, endDate, person);
+            System.out.println("일치하는 방 잘 나오냐"+availableRooms);
+            Map<Integer, String> roomPrices = new HashMap<>();
+
+            for (RoomInfoDTO roomDto : availableRooms) {
+                Integer roomIdx = roomDto.getId();  // 방 ID 추출
+                System.out.println("방 번호: " + roomIdx);
+                
+                // 방 번호에 맞는 평균 가격 계산
+                String averagePrice = priceService.calculateAveragePrice(hIdx, roomIdx, startDate, endDate);
+                
+                
+                // 방 번호와 계산된 가격을 Map에 저장
+                roomPrices.put(roomIdx, averagePrice);
+                System.out.println("방 번호: " + roomIdx + "의 평균 가격: " + averagePrice);
+            }
+            
+           
             List<ImageDTO> hostImages = recommendationService.getAllHostImage(hIdx);
             for(ImageDTO image : hostImages){
                 System.out.println("이미지나오냐?"+hostImages);
@@ -95,12 +123,19 @@ public class SearchController {
             }
 
             List<ImageDTO> roomImages = recommendationService.getAllRoomImage(hIdx);
+            Map<Integer, String> roomImageMap = new HashMap<>(); 
             for(ImageDTO image : roomImages){
-                System.out.println("이미지나오냐?"+roomImages);
+                Integer roomIdx = image.getRId();
                 String rommImg = realPath + "room/" +image.getImgName().getFName();
-                System.out.println("이건 나오냐"+rommImg);
+                roomImageMap.put(roomIdx, rommImg);
+                System.out.println("룸 이미지인데?"+roomImages);
+                System.out.println("얜 나오냐"+rommImg);
 
             }
+
+            String reviewStats = reviewService.getReviewStatsByHostId(hIdx);
+            System.out.println("별별"+reviewStats);
+          
         
             List<HostInfoDTO> hostInfoDTOList = new ArrayList<>();
             for (HostInfo hostInfo : hostInfoList) {
@@ -133,6 +168,12 @@ public class SearchController {
             model.addAttribute("hostImages", hostImages);
             model.addAttribute("roomImages", roomImages);
             model.addAttribute("hIdx", hIdx);
+            model.addAttribute("roomInfo",availableRooms);
+            model.addAttribute("roomPrices", roomPrices);
+            model.addAttribute("matchImages", roomImageMap);
+            model.addAttribute("allRoom", allRoomList);
+            model.addAttribute("reviewStats", reviewStats);
+            
         
             return "search/detail_host";
         }
@@ -194,57 +235,6 @@ public class SearchController {
                 setValue(facilities);
             }
         });
-    }
-
-    
-
-    @RequestMapping("/recomm_host")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> allRecommHost() {
-        System.out.println("오긴 왔니?");
-        List<Recommendation> recommList = recommendationService.getRecommHost();
-        List<PriceDTO> priceList = priceService.getHostPrice();
-        List<Map<String, Object>> responseList = new ArrayList<>();
-        
-        for (Recommendation recommendation : recommList) {
-            RecommendationDTO recommendationDTO = new RecommendationDTO();
-            recommendationDTO.setHIdx(recommendation.getId());
-            recommendationDTO.setRecPoint(recommendation.getRecPoint());
-
-            
-            HostInfoDTO hostInfoDTO = new HostInfoDTO();
-            hostInfoDTO.setId(recommendation.getHostInfo().getId());
-            hostInfoDTO.setHname(recommendation.getHostInfo().getHname());
-            hostInfoDTO.setHCate(recommendation.getHostInfo().getHCate());
-            hostInfoDTO.setDirections(recommendation.getHostInfo().getDirections());
-            
-            Integer hIdx = recommendation.getHostInfo().getId();
-            ImageDTO image = recommendationService.getImage(hIdx);
-            System.out.println("이미지나오냐?"+image);
-            String img = realPath + "host/" +image.getImgName().getFName();
-            System.out.println("경로 왜 안나와"+realPath);
-
-
-            List<PriceDTO> matchedPriceList = new ArrayList<>();
-            for (PriceDTO price : priceList) {
-                if (price.getHIdx().equals(hIdx)) { 
-                    matchedPriceList.add(price); 
-                }
-            }
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("recommendation",recommendationDTO);
-            response.put("hostinfo",hostInfoDTO);
-            response.put("image",img);
-            response.put("hostPrice", matchedPriceList.isEmpty() ? null : matchedPriceList); 
-            responseList.add(response);
-            System.out.println("왜 콘솔 안 찍히냐"+response);
-        }
-    
-        Map<String, Object> response = new HashMap<>();
-        response.put("recommList", responseList); 
-    
-        return ResponseEntity.ok(response);
     }
 
     

@@ -10,9 +10,12 @@ import io.lettuce.core.dynamic.annotation.Param;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer>, ReviewRepositoryCustom {
             @Query("SELECT r FROM Review r " +
@@ -21,7 +24,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
             "JOIN FETCH r.hostInfo h " +
             "JOIN FETCH r.reservation res " +
             "JOIN FETCH res.roomInfo room " + 
-            "WHERE h.id = :hIdx " +
+            "WHERE h.id = :hIdx AND r.revStatus = 0 " + 
             "ORDER BY " +
             "CASE WHEN :sortOption = '추천순' THEN r.revDate END DESC, " +
             "CASE WHEN :sortOption = '최신순' THEN r.revDate END DESC, " +
@@ -49,5 +52,19 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
     //이번달 리뷰 조회\
     @Query("SELECT r FROM Review r WHERE r.hostInfo = :hostInfo AND ((r.revDate <= :endOfMonth AND r.revDate >= :startOfMonth) AND r.revStatus = 0)")
     List<Review> findReviewByMonth(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth, @Param("hostInfo") HostInfo hostInfo);
+
+     @Query("SELECT r.hostInfo.id AS hostId, COUNT(r.id) AS reviewCount, SUM(r.revRating) AS totalRating FROM Review r GROUP BY r.hostInfo.id")
+    List<Object[]> findReviewCount();
+
+    @Query("SELECT r.hostInfo.id AS hostId, COUNT(r.id) AS reviewCount, SUM(r.revRating) AS totalRating FROM Review r WHERE r.hostInfo.id = :hIdx GROUP BY r.hostInfo.id")
+    List<Object[]> findHostReviewCount(@Param("hIdx") Integer hIdx);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Review r SET r.revStatus = 1 WHERE r.id = :revIdx")
+    int updateReviewStatus(@Param("revIdx") Integer revIdx);
+
+    
+
 
 }

@@ -29,6 +29,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class RoomInfoService {
 
@@ -207,4 +209,16 @@ public class RoomInfoService {
         return HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfoRepository.findById(hIdx).get());
     }
 
+    public List<RoomInfoDTO> getAvailableRooms(Integer hIdx, LocalDate startDate, LocalDate endDate, Integer person){
+            List<RoomInfo> roomInfoList = roomInfoRepository.findAvailableRooms(hIdx, startDate, endDate, person);
+            return RoomInfoMapper.INSTANCE.toRoomInfoDTOList(roomInfoList);
+    }
+
+    public List<RoomInfoDTO> getAllRoom(Integer hIdx){
+        List<RoomInfo> allRoomInfo = roomInfoRepository.findAllRommHidx(hIdx);
+        return RoomInfoMapper.INSTANCE.toRoomInfoDTOList(allRoomInfo);
+    }
+
+    
 }
+

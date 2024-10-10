@@ -57,8 +57,5 @@ public class ReviewDTO {
         this.revNone = revNone;
     }
 
-    public void setRevFileImageNameVo(String fName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setRevFileImageNameVo'");
-    }
+   
 }
