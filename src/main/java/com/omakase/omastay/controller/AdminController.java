@@ -145,6 +145,7 @@ public class AdminController {
     @Value("${upload}")
     private String storage;
 
+    //*** 로그인 ***//
     @RequestMapping("/login")
     public ModelAndView login(@RequestParam(value="error", required=false) String error) {
 
@@ -183,7 +184,7 @@ public class AdminController {
         return mv; 
     }
 
-    /************************ 메인 시작 ************************/
+    //*** 메인 시작 ***//
     @RequestMapping("/main")
     public ModelAndView main() {
         ModelAndView mv = new ModelAndView();
@@ -247,7 +248,6 @@ public class AdminController {
         
         return mv;
     }
-    /************************ 메인 끝 ************************/
 
     //*** 입점 요청 시작 ***//
     // 관리자 - 입점 요청 조회
@@ -275,6 +275,7 @@ public class AdminController {
         return mv;
     }
 
+    // 관리자 - 입점 요청 상세 조회 모달 정보 가져오기
     @ResponseBody
     @RequestMapping("/request/roomPrice")
     public Map<String, Object> request_room(@RequestParam("roomId") String roomId) {
@@ -291,6 +292,7 @@ public class AdminController {
         return map;
     }
 
+    // 관리자 - 입점 요청 승인
     @ResponseBody
     @RequestMapping("/request/approve")
     public Map<String, Object> request_approve(@RequestParam("hidx") String hidx) {
@@ -301,6 +303,7 @@ public class AdminController {
         return map;
     }
 
+    // 관리자 - 입점 요청 반려
     @ResponseBody
     @RequestMapping("/request/reject")
     public Map<String, Object> request_reject(@RequestParam("hidx") String hidx) {
@@ -311,7 +314,6 @@ public class AdminController {
         return map;
     }
 
-    /************************ 입점 요청 끝 ************************/
 
     //*** 정산 관리 시작 ***//
     //정산 리스트 가져오기
@@ -333,16 +335,16 @@ public class AdminController {
         return mv;
     }
 
+    //정산 상세보기
     @RequestMapping("/calculation/detail")
     public ModelAndView calculation_detail(@RequestParam("cIdx") Integer cIdx) {
         ModelAndView mv = new ModelAndView();
 
-        CalculationDTO calculation = calculationService.getCal(cIdx);
-        mv.addObject("period", calculation.getCalMonth());
-        // mv.addObject("hname", calculation.getHname());
-        // System.out.println("hName : " + calculation.getHname());    
+        CalculationCustomDTO calculation = calculationService.getCal(cIdx);
+        mv.addObject("period", calculation.getCalculationDTO().getCalMonth());
+        mv.addObject("hname", calculation.getHostName());
         
-        List<SalesCustomDTO> list = salesService.getMonthlySalesByHost(calculation);
+        List<SalesCustomDTO> list = salesService.getMonthlySalesByHost(calculation.getCalculationDTO());
         
         mv.addObject("list", list);
 

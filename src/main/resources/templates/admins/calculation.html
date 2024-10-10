@@ -87,8 +87,9 @@
                   <img src="/image/admin/icon-more.png" class="w-[15px]" alt="상세보기" />
                 </a>
               </td>
-              <td>
-                <button class="openModal">정산</button>
+              <td th:switch="${cal.calculationDTO.calStatus.name()}">
+                <button th:case="'REQUEST'" class="openModal">정산</button>
+                <button th:case="'APPROVE'" class="openModal">정산</button>
               </td>
             </tr>
           </tbody>
@@ -161,15 +162,19 @@
 
         if ($('#calStatus').val() === '요청') {
           $('#approve').attr('disabled', false);
+          $('#approve').css('disabled', 'flex');
           $('#complete').attr('disabled', true);
+          $('#complete').css('display', 'hidden');
         }
         if ($('#calStatus').val() === '승인') {
           $('#approve').attr('disabled', true);
+          $('#approve').css('display', 'hidden');
           $('#complete').attr('disabled', false);
+          $('#complete').css('disabled', 'flex');
         }
         if ($('#calStatus').val() === '완료') {
-          $('#approve').attr('disabled', true);
-          $('#complete').attr('disabled', true);
+          $('#approve').css('display', 'hidden');
+          $('#complete').css('display', 'hidden');
         }
         
         $('#modalOverlay').css('display', 'flex');
@@ -188,6 +193,8 @@
             // 모달 상태 변경
             $('#calStatus').val(response.calStatus);
             $('#calApprove').val(response.calApprove);
+
+            $('#modalOverlay').css('display', 'hidden');
           },
           error: function (xhr, status, error) {
             alert('정산 승인 중 오류가 발생했습니다.');
