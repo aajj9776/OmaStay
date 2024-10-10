@@ -43,7 +43,7 @@ import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.PointRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.ReviewRepository;
-import com.omakase.omastay.repository.custom.MemberReviewRepositoryCustom;
+
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -77,10 +77,6 @@ public class MyPageService {
 
     @Autowired
     private CouponRepository couponRepository;
-
-    @Autowired
-    private MemberReviewRepositoryCustom MemberReviewRepositoryCustom;
-
 
         public MemberDTO getMemberInfo(int memberId) {
 
@@ -347,7 +343,7 @@ public class MyPageService {
     // 리뷰 데이터를 가져와 DTO로 변환하는 메서드
     public List<ReviewMemberDTO> reviewMember(int memIdx) {
         // 리뷰 리스트를 가져오는 부분
-        List<Review> reviews = MemberReviewRepositoryCustom.findReviewsWithRoomAndHotelByMemberId(memIdx);
+        List<Review> reviews = reviewRepository.findReviewsWithRoomAndHotelByMemberId(memIdx);
     
         // Review 엔티티를 ReviewMemberDTO로 변환
         return reviews.stream().map(review -> {
