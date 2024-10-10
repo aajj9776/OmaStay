@@ -15,7 +15,7 @@
       rel="stylesheet"
     />
     <link href="/css/component/swiper.css" rel="stylesheet" />
-  </head>
+  
   <style>
     @media (min-width: 1280px) {
       .custom-padding {
@@ -36,30 +36,30 @@
       height: 170px;
       border-radius: 10px;
     }
-  </style>
-  <body>
-    <div class="wrap">
-      <section class="main-content max-w-full">
+</style>
+</head>
+<body>
+<div class="wrap">
+    <section class="main-content max-w-full">
         <div class="column0 py-10 lg:py-28 relative w-full">
-          <img
-            alt=""
-            class="kv-pc-light9b56ca76webp-icon absolute inset-0 w-full h-full object-cover"
-            src="/image/index/03-kv-pc-light9b56ca76webp@2x.png"
-          />
-          <div class="max-w-[1200px] mx-auto">
-            <h2
-              class="column0_header relative z-10 text-4xl lg:text-5xl font-bold text-white mb-8"
-            >
-              <span class="column0_header_txtwrap">
-                <p class="text-3xl m-0 pb-2">오마스테이, 당신을</p>
-                <p class="text-3xl m-0">위한 맞춤형 숙소</p>
-              </span>
-            </h2>
-            <div
-              class="search relative z-10 bg-white rounded-lg shadow-lg p-6"
-              th:include="~{component/search/searchbar}"
-            ></div>
-          </div>
+            <img alt="" class="kv-pc-light9b56ca76webp-icon absolute inset-0 w-full h-full object-cover"
+                 src="/image/index/03-kv-pc-light9b56ca76webp@2x.png"/>
+            <div class="max-w-[1200px] mx-auto">
+            <h2 class="column0_header relative z-10 text-4xl lg:text-5xl font-bold text-white mb-8">
+                <span class="column0_header_txtwrap">
+                  <p class="text-3xl m-0 pb-2">오마스테이, 당신을</p>
+                  <p class="text-3xl m-0">위한 맞춤형 숙소</p>
+                </span>
+                </h2>
+                <div class="search relative z-10 bg-white rounded-lg shadow-lg p-6">
+                    <div>
+                        <div class="text-blue-700 text-2xl sticky z-10 w-full !pl-10 lg:px-5 gap-3 lg:gap-4 text-left font-[Inter] pb-4">
+                            국내 숙소
+                        </div>
+                        <div th:include="~{component/search/searchbar}"></div>
+                    </div>
+                </div>
+            </div>
         </div>
       </section>
 
@@ -94,29 +94,19 @@
       <section class="column2 container px-4 py-10 max-w-[1200px] mx-auto">
         <b class="text-2xl font-bold mb-6 block">국내 인기 여행지</b>
         <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img
-                alt=""
-                class="w-full h-auto rounded-lg cursor-pointer"
-                loading="lazy"
-                src="/image/index/jeju.png"
-              />
-              <div class="div8 mt-2">
-                <div class="font-medium">제주도</div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <img
-                alt=""
-                class="w-full h-auto rounded-lg cursor-pointer"
-                loading="lazy"
-                src="/image/index/seoul.png"
-              />
-              <div class="mt-2">
-                <div class="div8 font-medium">서울</div>
-              </div>
-            </div>
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/jeju.png"/>
+                    <div class="div8 mt-2">
+                        <div class="font-medium">제주도</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/seoul.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">서울</div>
+                    </div>
+                </div>
 
             <div class="swiper-slide">
               <img
@@ -531,6 +521,7 @@
           });
         });
 
+
         // 추천숙소 카테고리 변경 로직
         function filterByCategory(category) {
           const slides = document.querySelectorAll(".column4 .swiper-slide");
@@ -609,6 +600,7 @@
         } else {
           prevButton.style.visibility = "visible";
         }
+
       }
 
       //국내 인기 여행지 클릭 시 검색 페이지 이동
@@ -644,6 +636,7 @@
         div.addEventListener("click", function () {
           const keyword = this.textContent;
           keywordInput.value = keyword;
+
 
           sessionStorage.setItem("keyword", keyword);
 

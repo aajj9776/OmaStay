@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
 </head>
 <body class="font-['Inter']">
-<header class="header sticky mx-auto max-w-[1200px] top-0 z-50 w-full bg-white border-b border-gray-200 flex items-center justify-between py-4" th:fragment="header">
+<header class="header sticky mx-auto max-w-[1200px] top-0 z-50 w-full border-b border-gray-200 flex items-center justify-between py-4" th:fragment="header">
     <a th:href="@{/}" class="flex-shrink-0">
         <img alt="Logo" class="h-14 w-auto object-cover" src="/image/logo/logo.png"/>
     </a>
@@ -16,14 +16,14 @@
             <img alt="" class="svg-icon" src="/image/header/svg.svg"/>
 
             <ul class="dropdown-menu w-[270px] p-0">
-                <li><img class="mx-auto h-10 w-[240px] my-2 cursor-pointer" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)" alt="후아암"/></li>
+                <li><img class="mx-auto h-10 w-[240px] my-2 cursor-pointer" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)"/></li>
                 <li><a class="btn btn-primary mx-auto h-10 ml-3.5 mr-3.5 pb-2 pt-2 mt-2 mb-2  w-[240px] flex items-center justify-center" onclick="changPage(1)">로그인/회원가입</a></li>
-                <li><a class="dropdown-item" href="/?activeSearch=domestic" onclick="changPage(2)"></a></li>
+                <li class="btn btn-light min-w-full py-3"><a class="px-4" href="/?activeSearch=domestic" onclick="changPage(2)">국내숙소</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li class="btn btn-light min-w-full py-3"><a class="py-2 px-4" href="reservation/noReservation" onclick="changPage(3)">비회원 예약조회</a></li>
+                <li class="btn btn-light min-w-full py-3"><a class=" px-4" href="reservation/noReservation" onclick="changPage(3)">비회원 예약조회</a></li>
                 <li class="btn btn-light min-w-full py-3"><a class="p-4" href="/user/event" onclick="changPage(4)">이벤트</a></li>
-                <li class="btn btn-light min-w-full py-3"><a class="py-2 px-4" href="/user/faq" onclick="changPage(5)">자주 묻는 질문</a></li>
-                <li class="btn btn-light min-w-full py-3"><a class="py-2 px-4" href="/user/notice" onclick="changPage(6)">공지사항</a></li>
+                <li class="btn btn-light min-w-full py-3"><a class="px-4" href="/user/faq" onclick="changPage(5)">자주묻는질문</a></li>
+                <li class="btn btn-light min-w-full py-3"><a class="px-4" href="/user/notice" onclick="changPage(6)">공지사항</a></li>
             </ul>
         </div>
     </div>
@@ -103,8 +103,9 @@
 
                 if (!isMyInfoItemExist()) {
                     const myInfoItem = document.createElement("li");
+                    myInfoItem.classList.add("btn", "btn-light", "min-w-full", "py-3");
                     const myInfoLink = document.createElement("a");
-                    myInfoLink.classList.add("dropdown-item");
+                    myInfoLink.classList.add("py-2", "px-4");
                     myInfoLink.innerText = "내 정보";
                     myInfoItem.appendChild(myInfoLink);
                     myInfoLink.setAttribute("href", "/mypage/info");
@@ -112,7 +113,7 @@
                         e.preventDefault();
                         window.location.href = "/mypage/info"; // 페이지 이동
                     });
-                    ulDropdownMenu.insertBefore(myInfoItem, ulDropdownMenu.firstChild);
+                    ulDropdownMenu.insertBefore(myInfoItem, ulDropdownMenu.lastChild);
                 };
             } else {
                 // 비로그인 상태라면, 로그인/회원가입 버튼 유지
@@ -135,10 +136,10 @@
                 const hrefs = [
                     "/mypage/member-ship",
                     "/login",
-                    "/",
+                    "/?activeSearch=domestic",
                     `/mypage/reservation?id=${memIdx}`, // 회원 예약조회로 id 추가
                     "/reservation/noReservation",
-                    "/",
+                    "/user/event",
                     `/mypage/reservation?id=${memIdx}`
                 ];
                 location.href = hrefs[index];
@@ -149,10 +150,11 @@
             const hrefs = [
                 "/mypage/member-ship",
                 "/login",
-                "/",
+                "/?activeSearch=domestic",
                 "/reservation/noReservation",
-                "/",
-                "/",
+                "/user/event",
+                "/user/faq",
+                "/user/notice",
                 "/mypage/reservation"
             ];
             location.href = hrefs[index];

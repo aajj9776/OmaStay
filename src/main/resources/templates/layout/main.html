@@ -23,7 +23,24 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
     />
+    <link rel="stylesheet" href="/css/tailwind.css"/>
     <link rel="stylesheet" type="text/css" href="/css/footer/footer.css" />
+    <style>
+      @media (min-width: 1280px) {
+        .custom-padding {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+
+      @media (min-width: 912px) {
+        .custom-gap {
+          row-gap: 20px;
+          padding-left: 40px;
+          padding-right: 40px;
+        }
+      }
+    </style>
   </head>
   <body>
     <header th:insert="~{component/header/header :: header}" />
