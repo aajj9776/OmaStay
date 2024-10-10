@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 
 import com.omakase.omastay.dto.MemberDTO;
-import com.omakase.omastay.dto.custom.QAdminMainCustomDTO;
 import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.QMember;
 import com.omakase.omastay.repository.custom.MemberRepositoryCustom;

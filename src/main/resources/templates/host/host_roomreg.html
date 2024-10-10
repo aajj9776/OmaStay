@@ -359,6 +359,7 @@
       });
 
       var swiper; // 전역 변수로 정의
+      var selectedFiles = [];
 
         $(document).ready(function () {
             swiper = new Swiper('.swiper-container', {
@@ -417,6 +418,7 @@
                 var files = event.target.files;
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
+                    selectedFiles.push(file);
                     if (file) {
                         var reader = new FileReader();
                         reader.onload = function (e) {
@@ -454,6 +456,8 @@
               var slideIndex = swiper.getSlideIndex($slide[0]); // Swiper.realIndex 사용
 
               console.log("Deleting slide at index: " + slideIndex);
+
+              selectedFiles.splice(slideIndex, 1);
 
               swiper.removeSlide(slideIndex); 
               swiper.update(); 

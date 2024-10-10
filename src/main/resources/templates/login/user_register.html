@@ -10,6 +10,8 @@
       <!-- 제목 및 설명 섹션 -->
       <div class="text-center mb-8">
         <h1 class="text-2xl font-semibold">필수 정보 입력</h1>
+        <!-- Debugging: memEmail 출력 -->
+        
         <p class="text-gray-600">가입을 위해 필수 정보를 입력해 주세요.</p>
       </div>
 
@@ -25,13 +27,35 @@
               type="email"
               placeholder="이메일을 입력하세요"
               class="flex-grow p-2 border rounded-l-lg"
+              th:value="${memEmail}"
+              oninput="emailCheck()"
             />
-            <button id="emailcheck" onclick="emailCheck()" class="bg-blue-500 text-white p-2 rounded-r-lg">
-              이메일 인증
+            <button disabled
+             id="emailcheck" onclick="emailChecking()" 
+             class="bg-blue-500 text-white p-2 rounded-r-lg">
+              이메일 인증번호 전송
             </button>
+
+
           </div>
           <div id="emailCheckResult" style="color:red;display:none;">이미 가입된 이메일입니다</div>
+      </div>
+      <div class="mb-4">
+        <div class="check">
+          <label class="block text-sm font-medium text-gray-700">인증번호 *</label>
+          <input
+          id="checkemail"
+          name="checkEmail"
+          type="text"
+          placeholder="인증번호를 입력하세요"
+          class="flex-grow p-2 border rounded-l-lg"
+        />
+        <button id="checking" onclick="verifyCode()" class="bg-blue-500 text-white p-2 rounded-r-lg">
+          인증번호 확인
+        </button>
         </div>
+        <div id="timer" style="color:red;"></div>
+      </div>
 
         <!-- 비밀번호 입력 그룹 -->
         <div class="mb-4">
@@ -62,11 +86,12 @@
          <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">이름 *</label>
           <input
-            id="inputname"
-            type="text"
-            name="memName"
-            placeholder="이름을 입력하세요"
-            class="w-full p-2 border rounded-lg"
+          id="inputname"
+          type="text"
+          name="memName"
+          placeholder="이름을 입력하세요"
+          class="w-full p-2 border rounded-lg"
+          th:value="${memName}" 
           />
         </div>
         
@@ -75,26 +100,29 @@
           <label class="block text-sm font-medium text-gray-700">생년월일 *</label>
           <div class="flex space-x-2">
             <input
-              id="inputyear"
-              name="memBirthYear"
-              type="text"
-              placeholder="년(YYYY)"
-              class="w-full p-2 border rounded-lg"
-            />
-            <input
+            id="inputyear"
+            name="memBirthYear"
+            type="text"
+            placeholder="년(YYYY)"
+            class="w-full p-2 border rounded-lg"
+            th:value="${birthYear}"
+          />
+          <input
             id="inputmonth"
             name="memBirthMonth"
-              type="text"
-              placeholder="월(MM)"
-              class="w-full p-2 border rounded-lg"
-            />
-            <input
+            type="text"
+            placeholder="월(MM)"
+            class="w-full p-2 border rounded-lg"
+            th:value="${birthMonth}"
+          />
+          <input
             id="inputday"
             name="memBirthDay"
-              type="text"
-              placeholder="일(DD)"
-              class="w-full p-2 border rounded-lg"
-            />
+            type="text"
+            placeholder="일(DD)"
+            class="w-full p-2 border rounded-lg"
+            th:value="${birthDay}"
+          />
           </div>
         </div>
 
@@ -159,12 +187,13 @@
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">휴대전화 *</label>
           <input
-            id="mem_phone"
-            name="phone"
-            type="text"
-            placeholder="‘-’ 없이 입력해주세요"
-            class="w-full p-2 border rounded-lg"
-          />
+          id="mem_phone"
+          name="phone"
+          type="text"
+          placeholder="‘-’ 없이 입력해주세요"
+          class="w-full p-2 border rounded-lg"
+          th:value="${memPhone}"
+        />
         </div>
 
         <!-- 이메일 수신 여부 선택 -->
@@ -191,12 +220,35 @@
         </button>
       </div>
     </div>
+    <input type="hidden" id="memSocial" th:value="${memSocial}" />
   </body>
 
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
+ 
+
   <script>
+  const memSocial = document.getElementById('memSocial').value || 'NONE';
+  console.log("소셜 여부 테스트: " + memSocial);
+  document.addEventListener('DOMContentLoaded', function() {
+      const memSocialValue = document.getElementById('memSocial').value;
+      const emailInput = document.getElementById('inputemail');
+      const emailCheckButton = document.getElementById('emailcheck');
+      const verifyCodeButton = document.getElementById('checking');
+      const checkingemail =document.getElementById('checkemail');
+      if (memSocialValue !== 'NONE') {
+        emailInput.disabled = true;
+        emailCheckButton.disabled = true;
+        verifyCodeButton.disabled = true;
+        checkingemail.disabled =true;
+      }
+    });
+
+   
     var isEmailVerified = false;
+    let timeLeft = 3 * 60; // 타이머 설정 (3분)
+    let timerId = null;
+
 
     function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
@@ -268,142 +320,263 @@
         }
     }
 
-      // 이메일 인증 함수
-      function emailCheck() {
-            var emailInput = document.getElementById("inputemail").value;
-            var emailCheckResult = document.getElementById("emailCheckResult");
+    // 비동기식 이메일 중복 확인
+    function emailCheck() {
+        var emailInput = document.getElementById("inputemail").value;
+        var emailCheckResult = document.getElementById("emailCheckResult");
 
-            // 이메일 형식 체크
-            if (!validateEmail(emailInput)) {
-                alert("이메일 형식이 올바르지 않습니다.");
-                return;
-            }
+        if (!validateEmail(emailInput)) {
+          emailCheckResult.textContent = "올바른 이메일 형식이 아닙니다";
+          emailCheckResult.style.color = "red";
+          emailCheckResult.style.display = "block";
 
-            // 서버에 이메일 중복 체크 요청
-            fetch('/login/checkEmail?email=' + encodeURIComponent(emailInput), {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
-                    alert("이미 가입된 이메일입니다.");
-                    emailCheckResult.style.display = "block";
-                    isEmailVerified = false;
-                } else {
-                    alert("사용 가능한 이메일입니다.");
-                    emailCheckResult.style.display = "none";
-                    isEmailVerified = true;
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert("이메일 중복 확인 중 오류가 발생했습니다.");
-            });
+          return;
         }
+        else {
+        emailCheckResult.style.display = "none"; // 올바른 형식일 경우 알림 숨김
+        }
+
+        fetch('/login/checkEmail?email=' + encodeURIComponent(emailInput), {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                emailCheckResult.textContent = "이미 가입된 이메일입니다";
+                emailCheckResult.style.color = "red";
+                emailCheckResult.style.display = "block";
+                isEmailVerified = false;
+                document.getElementById('emailcheck').disabled = true;
+      
+            } else {
+                emailCheckResult.textContent = "사용 가능한 이메일입니다";
+                emailCheckResult.style.color = "green";
+                emailCheckResult.style.display = "block";
+                document.getElementById('emailcheck').disabled = false;
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            emailCheckResult.textContent = "이메일 확인 중 오류가 발생했습니다.";
+            emailCheckResult.style.color = "red";
+            emailCheckResult.style.display = "block";
+        });
+    }
+
+
+    //인증번호 이메일전송
+    function emailChecking() {
+        const email = document.getElementById("inputemail").value;
+        const emailCheckButton = document.getElementById("emailcheck");
+
+        //중복alert방지
+        if (emailCheckButton.disabled) return;
+
+
+        if (!validateEmail(email)) {
+          alert("올바른 이메일을 입력하세요.");
+          return;
+        }
+
+
+
+        fetch('/login/sendVerificationCode', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("인증번호가 전송되었습니다.");
+            startTimer();
+          } else {
+            alert("인증번호 전송 실패");
+
+          }
+        })
+        .catch((error) => {
+          console.error("오류 발생:", error);
+          alert("이메일 전송 오류");
+
+        });
+}
+
+// 타이머 시작 함수
+function startTimer() {
+    timeLeft = 10 * 60; // 타이머 초기화
+    timerId = setInterval(updateTimer, 1000);
+}
+
+  // 타이머 업데이트 함수
+  function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById("timer").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+      if (timeLeft > 0) {
+          timeLeft--;
+      } else {
+          clearInterval(timerId);
+          alert("시간 초과. 인증번호를 다시 요청하세요.");
+      }
+  }
+
+  function verifyCode() {
+        const email = document.getElementById("inputemail").value;
+        const code = document.getElementById("checkemail").value;
+        
+        if (!code) {
+          alert("인증번호를 입력하세요.");
+          return;
+        }
+
+        fetch('/login/verifyCode', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email, code: code })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.isVerified) {
+            alert("인증 완료");
+            clearInterval(timerId); // 타이머 중지
+            document.getElementById("timer").textContent = "";
+            isEmailVerified = true; // 인증 완료 시 변수 true로 설정
+          } else {
+            alert("인증번호가 잘못되었습니다.");
+            isEmailVerified = false;
+          }
+        })
+        .catch((error) => {
+          console.error("오류 발생:", error);
+          alert("오류가 발생했습니다.");
+        });
+      }
 
         // 이메일 인증이 완료되지 않으면 가입 불가
         function registerEmail() {
-
-          var memEmail = document.getElementById("inputemail").value;
-          var memPw = document.getElementById("inputpw").value;
-          var memName = document.getElementById("inputname").value;
-          var memYear = document.getElementById("inputyear").value;
-          var memMonth = document.getElementById("inputmonth").value;
-          var memDay = document.getElementById("inputday").value;
-          var gender = document.querySelector('input[name="gender"]:checked');
-          var phone = document.getElementById("mem_phone").value;
-          var postCode = document.getElementById("mempostcode").value;
-          var street = document.getElementById("memstreet").value;
-          var detail = document.getElementById("memdetail").value;
-          var emailSubscription = document.querySelector('input[name="email_subscription"]:checked');
         
+        // 소셜 로그인 시 이메일 인증을 true로 설정
+        
+        // 소셜 로그인 시 이메일 인증을 true로 설정
+        if (memSocial && memSocial !== 'NONE') {
+            isEmailVerified = true;
+        }
+
+        // 이메일 인증이 완료되지 않으면 가입 불가
+        if (!isEmailVerified) {
+          alert("이메일 인증을 완료하세요.");
+          return;
+        }
+
+        var memEmail = document.getElementById("inputemail").value;
+        var memPw = document.getElementById("inputpw").value;
+        var memName = document.getElementById("inputname").value;
+        var memYear = document.getElementById("inputyear").value;
+        var memMonth = document.getElementById("inputmonth").value;
+        var memDay = document.getElementById("inputday").value;
+        var gender = document.querySelector('input[name="gender"]:checked');
+        var phone = document.getElementById("mem_phone").value;
+        var postCode = document.getElementById("mempostcode").value;
+        var street = document.getElementById("memstreet").value;
+        var detail = document.getElementById("memdetail").value;
+        var emailSubscription = document.querySelector('input[name="email_subscription"]:checked');
+        var memBirth = memYear + "-" + memMonth + "-" + memDay;
+
         if (!memEmail) {
-        alert("이메일을 입력해주세요.");
-        return;
+          alert("이메일을 입력해주세요.");
+          return;
         }
         if (!memPw) {
-            alert("비밀번호를 입력해주세요.");
-            return;
+          alert("비밀번호를 입력해주세요.");
+          return;
+        }
+        if (memPw != document.getElementById("checkpw").value) {
+          alert("비밀번호 확인칸을 확인해주세요");
+          return;
         }
         if (!memName) {
-            alert("이름을 입력해주세요.");
-            return;
+          alert("이름을 입력해주세요.");
+          return;
         }
         if (!memYear || !memMonth || !memDay) {
-            alert("생년월일을 모두 입력해주세요.");
-            return;
+          alert("생년월일을 모두 입력해주세요.");
+          return;
         }
         if (!gender) {
-            alert("성별을 선택해주세요.");
-            return;
+          alert("성별을 선택해주세요.");
+          return;
         }
         if (!phone) {
-            alert("휴대전화를 입력해주세요.");
-            return;
+          alert("휴대전화를 입력해주세요.");
+          return;
         }
         if (!postCode) {
-            alert("우편번호를 입력해주세요.");
-            return;
+          alert("우편번호를 입력해주세요.");
+          return;
         }
         if (!street) {
-            alert("주소를 입력해주세요.");
-            return;
+          alert("주소를 입력해주세요.");
+          return;
         }
         if (!detail) {
-            alert("상세주소를 입력해주세요.");
-            return;
+          alert("상세주소를 입력해주세요.");
+          return;
         }
         if (!emailSubscription) {
-            alert("이메일 수신 여부를 선택해주세요.");
-            return;
+          alert("이메일 수신 여부를 선택해주세요.");
+          return;
         }
 
         // FormData 객체 생성
         var formData = {
-            memEmail: memEmail,
-            memPw: memPw,
-            memName: memName,
-            memBirth: memYear + "-" + memMonth + "-" + memDay,
-            gender: gender.value,
-            phone: phone,
-            postCode: postCode,
-            street: street,
-            detail: detail,
-            emailSubscription: emailSubscription.value
+          memEmail: memEmail,
+          memPw: memPw,
+          memName: memName,
+          memYear: memYear,
+          memMonth: memMonth,
+          memDay: memDay,
+          memBirth: memBirth,
+          gender: gender.value,
+          phone: phone,
+          postCode: postCode,
+          street: street,
+          detail: detail,
+          emailSubscription: emailSubscription.value
         };
 
-        console.log(formData);  // 등록 전 데이터를 출력
+        console.log("소셜값 value: ", memSocial);
 
-        if (!isEmailVerified) {
-            alert("이메일 인증을 먼저 완료해 주세요.");
-            console.log("테스트시작")
-            return;
-        }
+        console.log(formData); // 등록 전 데이터를 출력
 
         // 서버에 데이터를 전송
         fetch('/login/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)  // 데이터를 JSON 문자열로 변환하여 전송
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)  // 데이터를 JSON 문자열로 변환하여 전송
         })
         .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Network response was not ok');
-            }
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network response was not ok');
+          }
         })
         .then(data => {
-            alert("회원가입이 완료되었습니다.");
-            window.location.href = "/login";
+          alert("회원가입이 완료되었습니다.");
+          window.location.href = "/login";
         })
         .catch((error) => {
-            console.error('Error:', error);
-            alert("회원가입 중 오류가 발생했습니다.");
+          console.error('Error:', error);
+          alert("회원가입 중 오류가 발생했습니다.");
         });
-    }
-
+      }
 </script>
 </html>
