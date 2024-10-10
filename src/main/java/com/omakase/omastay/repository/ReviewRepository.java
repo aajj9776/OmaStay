@@ -28,4 +28,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
     @Query("SELECT r FROM Review r WHERE r.hostInfo = :hostInfo AND ((r.revDate <= :endOfMonth AND r.revDate >= :startOfMonth) AND r.revStatus = 0)")
     List<Review> findReviewByMonth(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth, @Param("hostInfo") HostInfo hostInfo);
 
+    //리뷰 조회
+    @Query("SELECT r FROM Review r JOIN FETCH r.hostInfo h JOIN FETCH r.reservation res WHERE r.member.id = :memIdx AND r.revStatus = 0")
+    List<Review> findReviewsWithRoomAndHotelByMemberId(@Param("memIdx") int memIdx);
 }

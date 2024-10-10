@@ -19,7 +19,6 @@ import com.omakase.omastay.dto.PaymentDTO;
 import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.custom.CancelRequestDTO;
-import com.omakase.omastay.dto.custom.PointCouponDTO;
 import com.omakase.omastay.service.IssuedCouponService;
 import com.omakase.omastay.service.PaymentService;
 import com.omakase.omastay.service.PointService;

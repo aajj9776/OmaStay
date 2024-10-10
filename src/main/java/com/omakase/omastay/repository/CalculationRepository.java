@@ -19,6 +19,9 @@ public interface CalculationRepository extends JpaRepository<Calculation, Intege
     @Query("SELECT c FROM Calculation c JOIN FETCH c.hostInfo WHERE c.calMonth = :thisMonth ")
     List<Calculation> calculationMonthly(@Param("thisMonth") LocalDateTime thisMonth);
 
+    @Query("SELECT c FROM Calculation c JOIN FETCH c.hostInfo")
+    List<Calculation> calculationAll();
+
     @Modifying
     @Query("UPDATE Calculation c SET c.calStatus = 1, c.calConfirmTime = CURRENT_TIMESTAMP WHERE c.id = :calIdx")
     void approveCalculation(@Param("calIdx") Integer calIdx);

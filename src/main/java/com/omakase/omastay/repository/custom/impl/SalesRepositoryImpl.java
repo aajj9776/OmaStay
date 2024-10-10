@@ -45,37 +45,66 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         this.queryFactory = queryFactory;
     }
 
-    public List<Top5SalesDTO> findTop5SalesByRegion(String region){
+    //이번달 전체 지역 판매 실적 Top5
+    @Override
+    public List<Top5SalesDTO> getTop5SalesThisMonth(LocalDate firstDay, LocalDate today){
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(sales.salDate.month().eq(LocalDate.now().getMonthValue()));
         builder.and(payment.payStatus.eq(PayStatus.PAY));
         builder.and(hostInfo.hname.isNotNull());
 
-        if (region != null) {
-            builder.and(hostInfo.region.eq(region));
-        }
-
         return queryFactory
-                        .select(Projections.constructor(
-                                Top5SalesDTO.class,
-                                hostInfo.hname.as("hostName"),
-                                payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
-                            ))
-                        .from(sales)
-                        .join(sales.hostInfo, hostInfo)
-                        .join(sales.reservation, reservation)
-                        .join(reservation.roomInfo, roomInfo)
-                        .join(reservation.payment, payment)
-                        .where() // hname이 null이 아닌 조건을 추가
-                        .groupBy(hostInfo.hname) // hname으로 그룹핑
-                        .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc()) // 총 매출로 정렬
-                        .limit(5) // 상위 5개 제한
-                        .fetch();
-
+                    .select(Projections.constructor(
+                            Top5SalesDTO.class,
+                            hostInfo.hname.as("hostName"),
+                            payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
+                        ))
+                    .from(sales)
+                    .join(sales.hostInfo, hostInfo)
+                    .join(sales.reservation, reservation)
+                    .join(reservation.roomInfo, roomInfo)
+                    .join(reservation.payment, payment)
+                    .where(
+                        isAfterStartDate(firstDay.toString()),
+                        isBeforeEndDate(today.toString())
+                    ) // hname이 null이 아닌 조건을 추가
+                    .groupBy(hostInfo.id) // hname으로 그룹핑
+                    .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc()) // 총 매출로 정렬
+                    .limit(5) // 상위 5개 제한
+                    .fetch();
+    
     }
 
-    //Sales 테이블 검색
+    //관리자 판매 실적 - 판매 실적 Top5 검색
+    @Override
+    public List<Top5SalesDTO> searchTop5Sales(String startDate, String endDate, String region){
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(payment.payStatus.eq(PayStatus.PAY));
+        builder.and(hostInfo.hname.isNotNull());
+
+        return queryFactory
+                    .select(Projections.constructor(
+                            Top5SalesDTO.class,
+                            hostInfo.hname.as("hostName"),
+                            payment.nsalePrice.castToNum(Integer.class).sum().as("totalSales")
+                        ))
+                    .from(sales)
+                    .join(sales.hostInfo, hostInfo)
+                    .join(sales.reservation, reservation)
+                    .join(reservation.roomInfo, roomInfo)
+                    .join(reservation.payment, payment)
+                    .where(
+                        eqRegion(region),
+                        isAfterStartDate(startDate),
+                        isBeforeEndDate(endDate)
+                    ) 
+                    .groupBy(hostInfo.id) // hname으로 그룹핑
+                    .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc()) // 총 매출로 정렬
+                    .limit(5) // 상위 5개 제한
+                    .fetch();
+    }
+
+    //관리자 판매 실적 - 검색
     @Override
     public List<Sales> searchSales(String startDate, String endDate, String region) {
 
@@ -95,7 +124,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
 
     //region이 null이 아닌 경우 region 조건 추가
     private BooleanExpression eqRegion(String region) {
-        if (region.equals("전체")) {
+        if (region.equals("전체") || region.length()<1) {
             return null;
         }
         return sales.hostInfo.region.contains(region);

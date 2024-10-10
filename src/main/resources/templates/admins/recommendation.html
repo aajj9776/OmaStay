@@ -12,21 +12,23 @@
     class="w-[1735px] min-h-[800px] rounded-[30px] bg-[#f5f6fb] flex flex-col shrink-0 items-start justify-start p-[30px] box-border gap-[20px] text-left">
 
     <!-- 제목 영역 -->
-    <label class="text-[24px] h-[40px] font-semibold">
-      추천 숙소
-    </label>
-
+    <div class="flex flex-row gap-[15px] items-center">
+      <label class="text-[24px] h-[40px] font-semibold">
+        추천 숙소
+      </label>
+      <span>(</span><span th:text="${#temporals.format(date, 'yyyy-MM-dd')}"></span> <span>갱신)</span>
+    </div>
 
     <!-- 전체 추천 영역 -->
-    <div th:if="${list == null}"
+    <div th:if="${1 > #lists.size(totalList)}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
       <p class="text-[18px] text-[#6c757d]">등록된 추천 숙소가 없습니다.</p>
     </div>
 
     <!-- 전체 추천 영역 -->
-    <div th:if="${list != null and #lists.size(list) > 0 }"
+    <div th:if="${totalList != null and #lists.size(totalList) > 0 }"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
-      <label>전체 추천</label>
+      <label class="text-[18px] font-semibold">전체 추천</label>
 
       <!-- 테이블 데이터 영역-->
       <div id="table" class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
@@ -35,19 +37,24 @@
             <tr class="bg-[#d4d8f1] font-medium">
               <th>호스트번호</th>
               <th>업체명</th>
+              <th>숙소유형</th>
               <th>대표자명</th>
               <th>연락처</th>
               <th>도로명주소</th>
               <th>상세주소</th>
               <th>매출액수</th>
-              <th>매출건수</th>
-              <th>리뷰평점</th>
             </tr>
           </thead>
           <tbody class="bg-[#ffffff] pt-[100px] ">
-            <tr th:each="list : ${list}">
+            <tr th:each="list : ${totalList}">
               <td th:text="${list.hostInfoDTO.id}"></td>
               <td th:text="${list.hostInfoDTO.hname}"></td>
+              <td th:switch="${list.recommendationDTO.recType.name()}">
+                <span th:case="'MOTEL'">모텔</span>
+                <span th:case="'HOTEL_RESORT'">호텔/리조트</span>
+                <span th:case="'POOL_VILLA'">풀빌라</span>
+                <span th:case="'GUESTHOUSE_HANOK'">게스트하우스/한옥</span>
+              </td>
               <td th:text="${list.hostInfoDTO.hostOwnerInfo.hostName}"></td>
               <td th:text="${list.hostInfoDTO.hphone}"></td>
               <td th:text="${list.hostInfoDTO.addressVo.postCode}"></td>
@@ -61,7 +68,7 @@
 
 
     <!-- 호텔/리조트 추천 영역 -->
-    <div th:if="${hotelList == null}"
+    <div th:if="${1 > #lists.size(hotelList)}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
       <p class="text-[18px] text-[#6c757d]">등록된 호텔/리조트 추천 숙소가 없습니다.</p>
     </div>
@@ -69,7 +76,7 @@
     <!-- 호텔/리조트 추천 영역 -->
     <div th:if="${hotelList != null and #lists.size(hotelList) > 0}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
-      <label>호텔/리조트 추천</label>
+      <label class="text-[18px] font-semibold">호텔/리조트 추천</label>
 
       <!-- 테이블 데이터 영역-->
       <div class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
@@ -83,8 +90,6 @@
               <th>도로명주소</th>
               <th>상세주소</th>
               <th>매출액수</th>
-              <th>매출건수</th>
-              <th>리뷰평점</th>
             </tr>
           </thead>
           <tbody class="bg-[#ffffff] pt-[100px] ">
@@ -104,7 +109,7 @@
 
 
     <!-- 모텔 추천 영역 -->
-    <div th:if="${motelList == null}"
+    <div th:if="${1 > #lists.size(motelList)}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
       <p class="text-[18px] text-[#6c757d]">등록된 모텔 추천 숙소가 없습니다.</p>
     </div>
@@ -112,7 +117,7 @@
     <!-- 모텔 추천 영역 -->
     <div th:if="${motelList != null and #lists.size(motelList) > 0}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
-      <label>모텔 추천</label>
+      <label class="text-[18px] font-semibold">모텔 추천</label>
       
       <!-- 테이블 데이터 영역-->
       <div class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
@@ -126,8 +131,6 @@
               <th>도로명주소</th>
               <th>상세주소</th>
               <th>매출액수</th>
-              <th>매출건수</th>
-              <th>리뷰평점</th>
             </tr>
           </thead>
           <tbody class="bg-[#ffffff] pt-[100px] ">
@@ -146,7 +149,7 @@
     </div>
 
     <!-- 풀빌라 추천 영역 -->
-    <div th:if="${poolList == null}"
+    <div th:if="${1 > #lists.size(poolList)}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
       <p class="text-[18px] text-[#6c757d]">등록된 풀빌라 추천 숙소가 없습니다.</p>
     </div>
@@ -154,7 +157,7 @@
     <!-- 풀빌라 추천 영역 -->
     <div th:if="${poolList != null and #lists.size(poolList) > 0}" 
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
-      <label>풀빌라 추천</label>
+      <label class="text-[18px] font-semibold">풀빌라 추천</label>
       <!-- 테이블 데이터 영역-->
       <div class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
         
@@ -168,8 +171,6 @@
               <th>도로명주소</th>
               <th>상세주소</th>
               <th>매출액수</th>
-              <th>매출건수</th>
-              <th>리뷰평점</th>
             </tr>
           </thead>
           <tbody class="bg-[#ffffff] pt-[100px] ">
@@ -188,7 +189,7 @@
     </div>
 
     <!-- 게하/한옥 추천 영역 -->
-    <div th:if="${guestList == null}"
+    <div th:if="${1 > #lists.size(guestList)}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
       <p class="text-[18px] text-[#6c757d]">등록된 게하/한옥 추천 숙소가 없습니다.</p>
     </div>
@@ -196,7 +197,7 @@
     <!-- 게하/한옥 추천 영역 -->
     <div th:if="${guestList != null and #lists.size(guestList) > 0}"
       class="w-full rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] text-[16px] ">
-      <label>게하/한옥 추천</label>
+      <label class="text-[18px] font-semibold">게하/한옥 추천</label>
       <!-- 테이블 데이터 영역-->
       <div class="pt-[10px] px-[10px] pb-[10px] gap-[10px] m-auto">
         <table id="guestTable" class="w-[1200px] hover ">
@@ -209,8 +210,6 @@
               <th>도로명주소</th>
               <th>상세주소</th>
               <th>매출액수</th>
-              <th>매출건수</th>
-              <th>리뷰평점</th>
             </tr>
           </thead>
           <tbody class="bg-[#ffffff] pt-[100px] ">
@@ -234,11 +233,21 @@
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('#listTable').DataTable({});
-      $('#hotelTable').DataTable({});
-      $('#motelTable').DataTable({});
-      $('#poolTable').DataTable({});
-      $('#guestTable').DataTable({});
+      $('#listTable').DataTable({
+        order: []
+      });
+      $('#hotelTable').DataTable({
+        order: []
+      });
+      $('#motelTable').DataTable({
+        order: []
+      });
+      $('#poolTable').DataTable({
+        order: []
+      });
+      $('#guestTable').DataTable({
+        order: []
+      });
     });
   </script>
 

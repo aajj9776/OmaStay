@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="/css/global.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
@@ -30,6 +30,7 @@
       }
     </style>
   <body>
+    <script src="/js/userlogin.js"></script>
     <div
       class="w-full relative bg-background-paper-elevation-8 overflow-hidden flex flex-col items-start justify-start pt-2.5 px-0 pb-[110px] box-border gap-[25.8px] leading-[normal] tracking-[normal] text-center text-11xl text-black font-menu-itemdefault"
     >
@@ -44,6 +45,7 @@
         <section
           class="w-[850px] flex flex-col items-start justify-start gap-[8.8px] max-w-full text-left text-sm text-black font-menu-itemdefault"
         >
+        <!-- 수정 시작 -->
           <div
             class="w-[800px] flex flex-row items-start justify-start pt-0 px-[61px] pb-[34px] box-border max-w-full mq750:pl-[30px] mq750:pr-[30px] mq750:box-border"
           >
@@ -53,81 +55,41 @@
             <div
             class="w-[650px] flex-auto flex flex-row items-center justify-center pt-0 pb-1.5 px-5 text-center text-11xl mq450:px-5"
           >
-            <h1
+            <!-- <h1
               class="m-0 w-[650px] relative mq450:text-lg mq750:text-5xl text-center text-inherit leading-[36px] font-normal font-[inherit] whitespace-pre-wrap flex items-center justify-center"
             >
                   회원의 현재 등급
-                </h1>
+                </h1> -->
               </div>
-              <img
-                    id="member-status"
-                    class="w-auto h-[327px] mx-auto flex flex-row items-start justify-start"
-                    src="/image/user/normal.svg"
-                    alt=""
-            />
-              </textarea>
+              <div id="member-status-container" class="w-auto h-full mx-auto">
+              <img id="member-status"
+                class="w-auto h-[327px] mx-auto"
+                
+                alt="" />
+              </div>
               <div
                 class="w-[670px] flex flex-row items-start justify-start pt-0 px-[7px] pb-[3px] box-border"
               >
-                <div
-                  class=" text-center flex-1 relative tracking-[0.17px] leading-[143%] whitespace-pre-wrap shrink-0"
-                >
-                  3번 더 이용시 방랑자 등급으로 상승
-                </div>
               </div>
               <div
                 class="self-stretch flex flex-row items-start justify-end max-w-full"
               >
                 <div
-                  class="w-[500px] flex flex-col items-start justify-start gap-2 max-w-full"
+                  class="w-[600px] flex flex-col items-start justify-start gap-2 max-w-full"
                 >
-                  <div
-                    class="self-stretch rounded-mini flex flex-row items-start justify-start max-w-full"
-                  >
-                    <div
-                      class="h-5 flex-1 relative mix-blend-normal max-w-full"
-                    >
-                      <div
-                        class="absolute top-[0px] left-[45.3px] rounded-mini bg-primary-main w-[454.7px] h-5"
-                      >
-                        <div
-                          class="absolute top-[0px] left-[0px] rounded-mini bg-primary-main w-full h-full hidden mix-blend-normal"
-                        ></div>
-                        <div
-                          class="absolute top-[0px] left-[0px] rounded-mini bg-gray-700 w-full h-full mix-blend-normal z-[1]"
-                        ></div>
-                      </div>
-                      <div
-                        class="absolute top-[calc(50%_-_10px)] left-[0px] rounded-mini bg-primary-main w-[300px] h-5 overflow-hidden z-[2]"
-                      ></div>
-                    </div>
-                  </div>
-                  <div
-                    class="self-stretch flex flex-row items-start justify-center py-0 px-5"
-                  >
-                    <div
-                      class="w-[46px] relative tracking-[0.17px] leading-[143%] inline-block shrink-0"
-                    >
-                      60%
-                    </div>
-                  </div>
                 </div>
               </div>
-                <div class="flex flex-row items-center justify-center gap-[18px]"
-                  >
-                    <div
-                      class="relative tracking-[0.17px] leading-[143%] whitespace-nowrap text-center"
-                    >
-                  최근 2년간 이용한 횟수
-                </div>
-                <div
-                  class="h-5 relative tracking-[0.17px] leading-[143%] whitespace-pre-wrap inline-block min-w-[23px]"
-                >
-                  3번 더 이용시 여행가 등급으로 상승
+              <div class="flex flex-row items-center justify-center gap-[18px]">
+                <div id="grade-text" class="h-5 relative tracking-[0.17px] leading-[120%] whitespace-pre-wrap inline-block min-w-[23px]">
+                  
                 </div>
               </div>
             </div>
           </div>
+
+          
+          <!-- **여기까지가 수정할 부분-->
+
           <div
             class="self-stretch border-black border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start pt-[18px] px-0 pb-0 gap-[21.5px] max-w-full text-mini"
           >
@@ -181,24 +143,21 @@
                       </div>
                     </div>
                     <div
-                      class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[3px] px-5 pb-[29px]"
+
+                      class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[3px] px-5 pb-[25px] text-sm"
                     >
-                      <input
-                        class="w-[102px] [border:none] [outline:none] font-menu-itemdefault text-sm bg-[transparent] h-[19px] relative text-black text-left flex items-center p-0"
-                        placeholder="가입시 기본등급"
-                        type="text"
-                      />
+                    <div class="relative">가입시 기본등급</div>
                     </div>
                   </div>
                   <div
-                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[5px] px-3 pb-[163px] gap-[23px] text-sm"
+                    class="self-stretch border-silver-600 border-[1px] border-solid overflow-hidden flex flex-col items-start justify-start pt-[5px] px-3 pb-[250px] gap-[23px] text-sm"
                   >
                     <div class="relative inline-block min-w-[60px]">
                       등급 혜택
                     </div>
                     <div class="flex flex-row items-start justify-start gap-3">
                       <div
-                        class="flex flex-col items-start justify-start gap-[26px]"
+                        class="flex flex-col items-start justify-start gap-[20px]"
                       >
                         <img
                           class="w-5 h-[19px] relative"
@@ -220,7 +179,7 @@
                         class="flex flex-col items-start justify-start pt-0.5 px-0 pb-0"
                       >
                         <div
-                          class="flex flex-col items-start justify-start gap-[8.5px]"
+                          class="flex flex-col items-start justify-start gap-[15px]"
                         >
                           <div class="relative">회원 전용 프로모션 진행</div>
                           <div class="relative">
@@ -440,7 +399,7 @@
                   class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
                 >
                   <div
-                    class="flex flex-row items-center justify-center py-1.5 px-0"
+                    class="flex w-[250px] flex-row items-center justify-center py-1.5 px-0"
                   >
                     <div
                       class="relative tracking-[0.4px] leading-[24px] uppercase font-medium whitespace-nowrap"
@@ -499,7 +458,7 @@
                   class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
                 >
                   <div
-                    class="w-[178px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
+                    class="w-[260px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
                   >
                     <div
                       class="flex-1 relative tracking-[0.4px] leading-[24px] uppercase font-medium whitespace-nowrap"
@@ -558,7 +517,7 @@
                   class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
                 >
                   <div
-                    class="w-[255px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
+                    class="w-[300px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
                   >
                     <div
                       class="h-6 flex-1 relative tracking-[0.4px] leading-[24px] uppercase font-medium flex items-center justify-center"
@@ -617,7 +576,7 @@
                   class="self-stretch shadow-[0px_1px_5px_rgba(0,_0,_0,_0.12),_0px_2px_2px_rgba(0,_0,_0,_0.14),_0px_3px_1px_-2px_rgba(0,_0,_0,_0.2)] rounded-borderradius bg-lightgray-300 overflow-hidden flex flex-row items-center justify-between gap-5 mq450:flex-wrap"
                 >
                   <div
-                    class="w-[188px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
+                    class="w-[260px] flex flex-row items-center justify-center py-1.5 px-0 box-border"
                   >
                     <div
                       class="flex-1 relative tracking-[0.4px] leading-[24px] uppercase font-medium whitespace-nowrap"
@@ -674,38 +633,100 @@
               </div>
             </div>
           </div>
-          <div
-            class="self-stretch flex flex-row items-start justify-start py-0 px-1 box-border max-w-full"
-          >
-            <div
-              class="flex-1 border-black border-[1px] border-solid box-border overflow-hidden flex flex-col items-start justify-start gap-5 max-w-full"
-            >
-              <textarea
-                class="border-black border-[1px] border-solid bg-[transparent] h-40 w-auto [outline:none] self-stretch box-border overflow-hidden shrink-0 flex flex-row items-start justify-start p-3 font-menu-itemdefault font-medium text-sm text-black"
-                placeholder="유의사항"
-                rows="{8}"
-                cols="{42}"
-              >
-              </textarea>
-              <textarea
-                class="border-black border-[1px] border-solid bg-[transparent] h-40 w-auto [outline:none] self-stretch box-border overflow-hidden shrink-0 flex flex-row items-start justify-start p-3 font-menu-itemdefault font-medium text-sm text-black"
-                placeholder="쿠폰 유의사항"
-                rows="{8}"
-                cols="{42}"
-              >
-              </textarea>
-              <textarea
-                class="border-black border-[1px] border-solid bg-[transparent] h-40 w-auto [outline:none] self-stretch box-border overflow-hidden shrink-0 flex flex-row items-start justify-start p-3 font-menu-itemdefault font-medium text-sm text-black"
-                placeholder="프로모션 유의 사항"
-                rows="{8}"
-                cols="{42}"
-              >
-              </textarea>
+
+
+          <div class="self-stretch flex flex-row items-start justify-start py-0 px-1 box-border max-w-full">
+            <div class="flex-1 box-border overflow-hidden flex flex-col items-start justify-start gap-5 max-w-full">
+              <!-- 첫 번째 아코디언: 멤버쉽 등급 조정 주의사항 -->
+              <div class="w-full">
+                <button class="w-full bg-gray-100 py-2 px-4 text-left font-bold focus:outline-none" type="button" data-toggle="collapse" data-target="#accordion-1" aria-expanded="false" aria-controls="accordion-1">
+                  멤버쉽 등급 조정 주의사항
+                </button>
+                <div id="accordion-1" class="collapse show">
+                  <div class="p-4 bg-white border border-gray-300">
+                    등급 조정은 예약 완료 날짜를 기준으로 일주일~한달 안에 변경이 됩니다.
+                  </div>
+                </div>
+                <button class="w-full bg-gray-100 py-2 px-4 text-left font-bold focus:outline-none" type="button" data-toggle="collapse" data-target="#accordion-2" aria-expanded="false" aria-controls="accordion-2">
+                  호텔 예약 주의사항
+                </button>
+                <div id="accordion-2" class="collapse">
+                  <div class="p-4 bg-white border border-gray-300">
+                    만일 예약 완료 이후 중간에 취소할 경우 호텔 상황에 따라 환불 금액이 달라질 수 있습니다.
+                  </div>
+                </div>
+              </div>
+          
+              <!-- 두 번째 아코디언: 호텔 예약 주의사항 -->
+              <div class="w-full">
+                
+              </div>
             </div>
           </div>
+
         </section>
       </main>
     </div>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+
+  $(document).ready(function () {
+      $('[data-toggle="collapse"]').click(function () {
+        var target = $(this).data('target');
+        $(target).toggleClass('collapse show');
+      });
+    });    
+
+    document.addEventListener("DOMContentLoaded", function() {
+    let member = localStorage.getItem("user");
+    let user = JSON.parse(member);
+
+    const noUserSection = document.getElementById("member-status-container");
+
+    if (user) {
+        let userId = user.id;  
+
+        fetch('/mypage/member-ship', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId: userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('회원 정보:', data);
+
+            // 백엔드에서 계산한 이미지 URL
+            const memberStatusImage = document.getElementById('member-status');
+            if (memberStatusImage && data.imageUrl) {
+                memberStatusImage.src = data.imageUrl;
+            }
+            
+            // 등급 텍스트 업데이트
+            const gradeText = document.getElementById('grade-text');
+            if (gradeText && data.grade) {
+                gradeText.innerText = `현재 ${data.grade}입니다.`;
+            }
+
+        })
+        .catch(error => {
+            console.error('회원 정보 조회 중 오류 발생:', error);
+        });
+      } else {
+        // user 정보가 없을 경우 로그인 배너 표시
+        console.error('로컬 스토리지에 사용자 ID가 없거나 잘못되었습니다.');
+        noUserSection.innerHTML = `
+          <div class="w-full relative bg-white border border-gray-300 rounded-lg overflow-hidden flex flex-col items-center justify-center p-5"> 
+            <h2 class="text-2xl font-bold mb-2">회원가입시 멤버십 할인,적립을 받습니다.</h2>
+            <a href="/login" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">회원가입 / 로그인</a>
+          </div>
+        `;
+      }
+  });
+  </script>
+
 </html>

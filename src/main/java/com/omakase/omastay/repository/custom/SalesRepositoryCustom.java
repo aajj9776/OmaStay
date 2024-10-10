@@ -11,9 +11,14 @@ import com.omakase.omastay.dto.custom.HostSalesDTO;
 
 public interface SalesRepositoryCustom {
 
-    List<Top5SalesDTO> findTop5SalesByRegion(String region);
+    //관리자 판매 실적 - 이번달 전체 지역 판매 실적 Top5
+    List<Top5SalesDTO> getTop5SalesThisMonth(LocalDate firstDay, LocalDate today);
 
+    //관리자 판매 실적 - 판매 실적 테이블 검색
     List<Sales> searchSales(String startDate, String endDate, String region);
+
+    //관리자 판매 실적 - 판매 실적 Top5 검색
+    List<Top5SalesDTO> searchTop5Sales(String startDate, String endDate, String region);
    
     List<HostSalesDTO> findHostSales(Integer hidx);
 

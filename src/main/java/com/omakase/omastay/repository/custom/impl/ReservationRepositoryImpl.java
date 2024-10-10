@@ -65,13 +65,14 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
         }
     }
 
+    // 관리자의 회원 상세 조회에서 최근 예약 내역 5건 가져옴
     public List<Reservation> get5List(Integer memId) {
         return queryFactory
                 .select(reservation)
                 .from(reservation)
-                .join(reservation.roomInfo, roomInfo)
-                .join(roomInfo.hostInfo, hostInfo)
-                .join(reservation.payment, payment)
+                .join(reservation.roomInfo, roomInfo).fetchJoin()
+                .join(roomInfo.hostInfo, hostInfo).fetchJoin() 
+                .join(reservation.payment, payment).fetchJoin() 
                 .where(reservation.member.id.eq(memId))
                 .orderBy(payment.payDate.desc())
                 .limit(5) // 결과를 5건으로 제한

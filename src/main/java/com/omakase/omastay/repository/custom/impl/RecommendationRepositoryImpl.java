@@ -22,8 +22,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 public class RecommendationRepositoryImpl implements RecommendationRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
-   
-
     public RecommendationRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
@@ -80,8 +78,9 @@ public class RecommendationRepositoryImpl implements RecommendationRepositoryCus
     //             .fetch();
     // }
 
+    // 관리자 추천 숙소 - 숙소 유형에 해당하는 호스트별로 매출 상위 5개를 가져오는 쿼리
     @Override
-    public List<Recommendation> findR(HCate hCate, LocalDate startDate, LocalDate endDate) {
+    public List<Recommendation> getRecommendationsWeeklyByHCate(HCate hCate, LocalDate startDate, LocalDate endDate) {
         QHostInfo hostInfo = QHostInfo.hostInfo;
         QReservation reservation = QReservation.reservation;
         QPayment payment = QPayment.payment;
