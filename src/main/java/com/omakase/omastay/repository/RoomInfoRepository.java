@@ -4,13 +4,11 @@ import com.omakase.omastay.entity.HostInfo;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.repository.custom.RoomInfoRepositoryCustom;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import org.threeten.bp.LocalDateTime;
 
 import java.time.LocalDate;
 

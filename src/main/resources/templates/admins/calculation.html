@@ -23,60 +23,18 @@
   <div
     class="w-[1735px] min-h-[800px] rounded-[30px] bg-[#f5f6fb] flex flex-col shrink-0 items-start justify-start p-[30px] box-border gap-[20px] text-left">
 
-    <!-- 제목 영역 -->
-    <label class="text-[24px] h-[40px] font-semibold">
-      정산 관리
-    </label>
+    <div class="flex flex-row gap-[10px]">
+      <!-- 제목 영역 -->
+      <label class="text-[24px] h-[40px] font-semibold">
+        정산 관리
+      </label>
+
+      <select id="dateSelect"
+        class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[150px] flex flex-row items-center justify-center py-[4px] px-[5px]">
+      </select>
+      <button class="w-[120px] bg-[#d4d8f1] rounded-[4px]" onclick="submitPeriod()">검색</button>
+    </div>
     <p> * 요청액이 0원이면 정산요청액과 매출액이 맞지 않는 것이므로 가맹점으로 문의하시길 바랍니다. </p>
-
-    <!-- 검색 영역 -->
-    <!-- <div
-      class="w-auto flex flex-col items-start justify-start gap-[10px] rounded-[20px] bg-[#eaecf8] p-[20px] box-border">
-
-      <div class="gap-2 flex flex-row items-start justify-center box-border">
-        <label class="w-[150px] text-center font-semibold">
-          정산 등록 일시
-        </label>
-        <div id="date-range-picker"
-          class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[10px]">
-          <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
-          <input readonly id="date-range-picker-input" name="dateRange"
-            class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
-            type="text" placeholder="전체 기간" />
-        </div>
-      </div>
-
-      <div class="gap-2 flex flex-row items-start justify-center box-border">
-        <label class="w-[150px] text-center font-semibold">
-          정산 처리 상태
-        </label>
-        <select
-          class="rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[5px]">
-          <option value="전체">전체</option>
-          <option></option>
-          <option></option>
-          <option></option>
-        </select>
-      </div>
-
-      <div class="gap-2 flex flex-row items-start justify-center box-border">
-        <select class="w-[150px] text-center font-semibold">
-          <option value="전체">전체</option>
-          <option value="전체">정산번호</option>
-          <option value="전체">호스트번호</option>
-          <option value="전체">호스트명</option>
-        </select>
-        <input />
-      </div>
-
-      <div
-        class="w-[300px] flex-1 box-border flex flex-row items-center justify-start py-[4px] px-[10px] gap-[10px] text-[16px]">
-        <button id="search-button" class="w-[100px] h-[30px] bg-[#d4d8f1] rounded-[4px]">검색</button>
-        <button id="reset-button"
-          class="flex flex-row items-center justify-center w-[100px] h-[30px] border-[2px] border-[#d4d8f1] rounded-[4px]">초기화</button>
-      </div>
-
-    </div> -->
 
     <!-- 데이터 테이블 영역-->
     <div th:if="${list == null}"
@@ -149,7 +107,14 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" src="/js/admin/modal.js"></script>
-  <script>
+  <script type="text/javascript" src="/js/admin/dateSelect.js"></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/ 
+    var period = /*[[${period}]]*/ null; 
+    if (period) {
+      $('#dateSelect').val(period);
+    }
+
     $(document).ready(function () {
       $('#listTable').DataTable({
         order: [], // 큰따옴표(")로 묶인 문자열 사용
@@ -254,6 +219,13 @@
       });
     });
 
+    function submitPeriod() {
+    // select 요소에서 선택한 값을 가져옴
+    const selectedValue = document.getElementById('dateSelect').value;
+
+    // 선택한 값을 URL의 파라미터로 추가하여 페이지 이동
+    window.location.href = `/admin/calculation?period=${selectedValue}`;
+  }
   </script>
 </body>
 

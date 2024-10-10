@@ -238,8 +238,8 @@
                         <div class="w-[240px] h-[230px] self-stretch flex flex-row items-start justify-start">
                           <div class="w-full h-full flex-1 overflow-hidden flex flex-row items-start justify-start">
                             <div
-                              class="w-full max-h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
-                              <img class="max-w-full max-h-full self-stretch relative overflow-hidden shrink-0"
+                              class="w-full h-full flex-1 bg-[rgba(0,0,0,0.56)] flex flex-row items-start justify-center">
+                              <img class="w-full h-full self-stretch relative overflow-hidden shrink-0"
                                 loading="lazy" alt="" />
                             </div>
                           </div>
@@ -359,6 +359,7 @@
       });
 
       var swiper; // 전역 변수로 정의
+      var selectedFiles = [];
 
         $(document).ready(function () {
             swiper = new Swiper('.swiper-container', {
@@ -417,6 +418,7 @@
                 var files = event.target.files;
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
+                    selectedFiles.push(file);
                     if (file) {
                         var reader = new FileReader();
                         reader.onload = function (e) {
@@ -454,6 +456,8 @@
               var slideIndex = swiper.getSlideIndex($slide[0]); // Swiper.realIndex 사용
 
               console.log("Deleting slide at index: " + slideIndex);
+
+              selectedFiles.splice(slideIndex, 1);
 
               swiper.removeSlide(slideIndex); 
               swiper.update(); 

@@ -22,8 +22,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 public class RecommendationRepositoryImpl implements RecommendationRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
-   
-
     public RecommendationRepositoryImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
@@ -80,8 +78,9 @@ public class RecommendationRepositoryImpl implements RecommendationRepositoryCus
     //             .fetch();
     // }
 
+    // 관리자 추천 숙소 - 숙소 유형에 해당하는 호스트별로 매출 상위 5개를 가져오는 쿼리
     @Override
-    public List<Recommendation> findR(HCate hCate, LocalDate startDate, LocalDate endDate) {
+    public List<Recommendation> getRecommendationsWeeklyByHCate(HCate hCate, LocalDate startDate, LocalDate endDate) {
         QHostInfo hostInfo = QHostInfo.hostInfo;
         QReservation reservation = QReservation.reservation;
         QPayment payment = QPayment.payment;
@@ -112,5 +111,12 @@ public class RecommendationRepositoryImpl implements RecommendationRepositoryCus
             .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc())  // 총 매출로 정렬
             .limit(5)  // 상위 5개 제한 
             .fetch();
+    }
+
+
+    @Override
+    public List<Recommendation> findR(HCate hCate, LocalDate startDate, LocalDate endDate) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findR'");
     }   
 }

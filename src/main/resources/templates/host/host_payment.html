@@ -217,12 +217,6 @@
               {width: 180, targets: 5},
               {width: 180, targets: 6}
             ],
-            rowCallback: function(row, data) {
-                // 정산 상태가 ''(널)인 경우를 제외하고 모든 경우에 체크박스를 비활성화합니다.
-                if (data.calStatus !== '') {
-                    $(row).find('.itemCheckbox').prop('disabled', true);
-                }
-            }
           });
 
       

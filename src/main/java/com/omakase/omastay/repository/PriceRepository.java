@@ -17,6 +17,8 @@ public interface PriceRepository extends JpaRepository<Price, Integer>, PriceRep
 
     List<Price> findAll();
 
+    Price findByRoomInfoId(Integer Id);
+    
     @Query("SELECT p FROM Price p WHERE p.hostInfo.id = :hIdx AND p.roomInfo.id = :roomIdx " +
     "AND ((:checkOut >= FUNCTION('DATE', p.peakVo.peakStart) AND :checkIn <= FUNCTION('DATE', p.peakVo.peakEnd)) OR " +
     "(:checkOut >= FUNCTION('DATE', p.semi.semiStart) AND :checkIn <= FUNCTION('DATE', p.semi.semiEnd)) OR " +

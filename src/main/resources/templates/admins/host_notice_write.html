@@ -20,8 +20,7 @@
       <!-- 게시판 글쓰기 영역-->
       <section class="text-[#6c757d] text-[16px] w-[1300px] self-stretch h-[700px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[48px] px-[61px] mq450:pt-[20px] mq450:pb-[20px] mq900:pt-[31px] mq900:pb-[31px] mq1275:pl-[30px] mq1275:pr-[30px]">
         <form action="/admin/host_notice/write" method="post" encType="multipart/form-data">
-          <input type="hidden" name="bname" value="bbs" />
-          <table summary="게시판 글쓰기" >
+        <table summary="게시판 글쓰기" >
             <tbody >
               <tr>
                 <td><input type="text" id="title" name="sTitle" data-str="제목" placeholder="제목을 입력하세요" 
@@ -79,9 +78,6 @@
           }
         }
       });
-
-      $("#content").summernote("lineHeight", 0.7);
-      
     });
 
     function sendImage(file, editor) {
@@ -98,8 +94,7 @@
       }).done(function (data) {
         console.log(data);
         console.log(data.url);
-        $("#content").summernote(
-          "insertImage", data.url);
+        $("#content").summernote("insertImage", data.url);
 
       }).fail(function (jqXHR, textStatus, errorThrown) {
         console.error("File upload failed:", textStatus, errorThrown);
@@ -107,14 +102,13 @@
     }
 
     function sendData() {
-      for (var i = 0; i < document.forms[0].elements.length; i++) {
-        if (i > 1)
-          break;
-        if (document.forms[0].elements[i].value == "") {
-          alert(document.forms[0].elements[i].dataset.str + "을 입력하세요");
-          document.forms[0].elements[i].focus();
-          return;
-        }
+      var form = document.forms[0];
+      // 제목 (input text) 검사
+      var title = form.querySelector('input[name="sTitle"]');
+      if (title.value.trim() === "") {
+        alert(title.dataset.str + "을(를) 입력하세요");
+        title.focus();
+        return;
       }
 
       document.forms[0].submit();

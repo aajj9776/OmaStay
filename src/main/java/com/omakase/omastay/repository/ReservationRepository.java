@@ -2,6 +2,8 @@ package com.omakase.omastay.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
@@ -46,8 +47,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Reservation> checkSameRoom(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx AND r.startEndVo.end < CURRENT_TIMESTAMP")
-    List<Reservation> findByMemIdxAndEndBefore(@Param("memIdx") int memIdx);
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memberId AND r.startEndVo.end < CURRENT_TIMESTAMP ORDER BY r.startEndVo.end DESC")
+    Page<Reservation> findByMemIdxAndEndBefore(@Param("memberId") int memberId, Pageable pageable);
     
     //오늘날짜 예약 조회
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start <= :date AND r.startEndVo.end >= :date) AND (r.resStatus = 1 OR r.resStatus = 3)")
@@ -65,15 +66,28 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo = :roomInfo AND (r.startEndVo.start >= :nowDate AND r.resStatus = 1) ORDER BY r.startEndVo.start ASC")
     List<Reservation> findReservationsByCheckIn(@Param("nowDate") LocalDateTime nowDate, @Param("roomInfo") RoomInfo roomInfo);
 
+    //예약대기정보
+    @Query("SELECT r FROM Reservation r WHERE r.resStatus = 0")
+    List<Reservation> findReservationsByPending();
+  
+    @Query("SELECT r FROM Reservation r JOIN r.nonMember nm WHERE r.resNum = :resNum AND nm.nonEmail = :nonEmail")
+    Reservation findByResNumAndNonEmail(@Param("resNum") String resNum, @Param("nonEmail") String nonEmail);
+
+    @Query("SELECT r FROM Reservation r WHERE r.member.id = :memIdx AND r.startEndVo.end > CURRENT_TIMESTAMP")
+    List<Reservation> findByMemIdx(@Param("memIdx") Integer memIdx);
+
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
     Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-
-    //admin의 회원조회에서 회원의 최근 3개월 예약 횟수를 가져옴
-    @Query("SELECT COUNT(r) FROM Reservation r JOIN r.payment p WHERE r.member.id = :memId AND p.payDate >= :time")
+    //관리자의 회원조회에서 회원의 최근 3개월 예약 확정&사용완료 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r JOIN r.payment p WHERE r.member.id = :memId AND p.payDate >= :time AND r.resStatus IN (1, 3)")
     Integer get3MonthCount(@Param("memId") Integer memId, @Param("time") LocalDateTime time);
     
-    //admin의 회원조회에서 회원의 전체 예약 횟수를 가져옴
-    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.member.id = :memId")
+    //관리자의 회원조회에서 회원의 전체 예약 확정&사용완료 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.member.id = :memId AND r.resStatus IN (1, 3)")
     Integer getTotalCount(@Param("memId") Integer memId);
+
+    @Query("SELECT r FROM Reservation r JOIN FETCH r.roomInfo ri JOIN FETCH r.member m WHERE m.id = :memberId")
+    Page<Reservation> findByMemberId(@Param("memberId") Integer memberId, Pageable pageable);
+
 }

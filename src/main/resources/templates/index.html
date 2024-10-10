@@ -270,8 +270,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const activeSearch = urlParams.get("activeSearch");
         if (activeSearch === "domestic") {
-          $("#search-accommodation").focus();
-          $("#search-accommodation").trigger("click");
+            $("#search-accommodation").focus();
+            $("#search-accommodation").trigger("click");
         }
 
 
@@ -305,32 +305,32 @@
         });
     });
 
-        const swiper2 = new Swiper(".column2 .swiper-container", {
-          loop: false,
-          slidesPerView: 6,
-          spaceBetween: 15,
-          slidesPerGroup: 6,
-          navigation: {
+    const swiper2 = new Swiper(".column2 .swiper-container", {
+        loop: false,
+        slidesPerView: 6,
+        spaceBetween: 15,
+        slidesPerGroup: 6,
+        navigation: {
             nextEl: ".column2 .swiper-button-next",
             prevEl: ".column2 .swiper-button-prev",
-          },
-          breakpoints: {
+        },
+        breakpoints: {
             1200: {
-              slidesPerView: 6,
+                slidesPerView: 6,
             },
             0: {
-              slidesPerView: 1,
+                slidesPerView: 1,
             },
-          },
-          on: {
+        },
+        on: {
             init: function () {
-              updateNavigationButtons(this);
+                updateNavigationButtons(this);
             },
             slideChange: function () {
-              updateNavigationButtons(this);
+                updateNavigationButtons(this);
             },
-          },
-        });
+        },
+    });
 
         document.addEventListener("DOMContentLoaded", function () {
             const swiper4 = new Swiper(".column4 .swiper-container", {

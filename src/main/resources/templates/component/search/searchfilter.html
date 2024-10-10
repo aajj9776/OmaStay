@@ -2,13 +2,45 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Sidebar</title>
+    <style>
+        @media (max-width: 768px) {
+            .filter-sidebar {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+            .filter-section {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 10px;
+                padding-bottom: 10px;
+            }
+            .filter-item {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
+            .facility-buttons {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 10px;
+            }
+            .facility-button {
+                flex: 0 0 auto;
+            }
+            .price-range {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
 <div th:fragment="filterbar(identifier)">
-        <div
-                class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[20px] gap-[20px] text-[17px]"
-        >
+    <div
+            class="self-stretch flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[20px] gap-[20px] text-[17px]"
+    >
             <div
                     class="self-stretch flex flex-col items-start justify-start py-[16px] px-[0px]"
             >
@@ -244,7 +276,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max"
-                                    th:id="'f_idx3-' + ${identifier}" type="button" name="f_idx" value="4" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
+                                    th:id="'f_idx4-' + ${identifier}" type="button" name="f_idx" value="4" th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 엘리베이터
                             </button>
@@ -254,7 +286,7 @@
                                 class="w-max flex flex-col items-start justify-start pt-[0px] pb-[8px] pl-[0px] pr-[6px] box-border max-w-[294px]"
                         >
                             <button class="btn btn-secondary text-[12.2px] font-semibold font-[Inter] text-[#333] text-center py-[7px] px-[14px] bg-[#fff] rounded-[100px] flex flex-row justify-center w-max"
-                                    th:id="'f_idx4-' + ${identifier}"
+                                    th:id="'f_idx3-' + ${identifier}"
                                     type="button" name="f_idx" value="3"  th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                             >
                                 주차장

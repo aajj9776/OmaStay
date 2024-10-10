@@ -16,8 +16,6 @@ public class NonMemberService {
     @Autowired
     private NonMemberRepository nonMemberRepository;
 
-
-
     @Transactional
     public NonMemberDTO insertNonMember(NonMemberDTO nonMember){
         NonMember res = NonMemberMapper.INSTANCE.toNonMember(nonMember);
@@ -25,6 +23,12 @@ public class NonMemberService {
         NonMember result = nonMemberRepository.save(res);
         return NonMemberMapper.INSTANCE.toNonMemberDTO(result);
     }
+
+    public NonMemberDTO getNoMember(Integer nonIdx) {
+        return NonMemberMapper.INSTANCE.toNonMemberDTO(nonMemberRepository.findById(nonIdx).get());
+    }
+
+
 
 
 }

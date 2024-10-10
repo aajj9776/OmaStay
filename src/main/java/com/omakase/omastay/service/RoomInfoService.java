@@ -91,13 +91,20 @@ public class RoomInfoService {
 
         } else {
 
-            Price newPrice = new Price();
-
-            newPrice.setHostInfo(price.getHostInfo());
-            newPrice.setPeakSet(price.getPeakSet());
+            Price existPrice = priceRepository.findByRoomInfoId(roomInfo.getId());
+            Price savePrice;
+            if (existPrice != null) {
+                savePrice = existPrice;
+            } else {
+                // 새로운 Price 객체 생성
+                savePrice = new Price();
+                savePrice.setHostInfo(price.getHostInfo());
+                savePrice.setPeakSet(price.getPeakSet());
+                savePrice.setRoomInfo(roomInfo);
+            }
             
             // PeakVo 객체를 가져와서 필요한 값을 설정
-            PeakVo peakVo = Optional.ofNullable(newPrice.getPeakVo()).orElse(new PeakVo());
+            PeakVo peakVo = Optional.ofNullable(savePrice.getPeakVo()).orElse(new PeakVo());
             peakVo.setPeakStart(Optional.ofNullable(price.getPeakVo())
                                         .map(PeakVo::getPeakStart)
                                         .orElse(null));
@@ -109,10 +116,10 @@ public class RoomInfoService {
                                         .map(PeakVo::getPeakPrice)
                                         .orElse(null);
             peakVo.setPeakPrice(peakPrice);
-            newPrice.setPeakVo(peakVo);
+            savePrice.setPeakVo(peakVo);
 
             // Semi 객체를 가져와서 필요한 값을 설정
-            SemiPeakVo semi = Optional.ofNullable(newPrice.getSemi()).orElse(new SemiPeakVo());
+            SemiPeakVo semi = Optional.ofNullable(savePrice.getSemi()).orElse(new SemiPeakVo());
             semi.setSemiStart(Optional.ofNullable(price.getSemi())
                                     .map(SemiPeakVo::getSemiStart)
                                     .orElse(null));
@@ -124,22 +131,31 @@ public class RoomInfoService {
                                         .map(SemiPeakVo::getSemiPrice)
                                         .orElse(null);
             semi.setSemiPrice(semiPrice);
-            newPrice.setSemi(semi);
+            savePrice.setSemi(semi);
 
-            newPrice.setRoomInfo(roomInfo);
-            newPrice.setRegularPrice(roomRegDTO.getPrice().getRegularPrice());
-            priceRepository.save(newPrice);
+            
+            savePrice.setRegularPrice(roomRegDTO.getPrice().getRegularPrice());
+            priceRepository.save(savePrice);
         }
 
         List<Image> existingImages = imageRepository.findByRoomInfoId(roomInfo.getId());
-        if(existingImages != null) {
-            for (Image existingImage : existingImages) {
+        List<ImageDTO> newImages = roomRegDTO.getImages();
+        System.out.println("roomRegDTO.getImages()"+newImages.size());
+        // 기존 이미지 상태 변경
+        for (Image existingImage : existingImages) {
+            boolean isImageInNewList = newImages.stream()
+                .anyMatch(newImage -> newImage.getImgName().getFName().equals(existingImage.getImgName().getFName()));
+            if (!isImageInNewList) {
                 existingImage.setImgStatus(BooleanStatus.FALSE);
                 imageRepository.save(existingImage);
             }
         }
-        
+
+        // 새로운 이미지 추가
         for (ImageDTO imageDTO : roomRegDTO.getImages()) {
+            boolean isImageInExistingList = existingImages.stream()
+                .anyMatch(existingImage -> existingImage.getImgName().getFName().equals(imageDTO.getImgName().getFName()));
+            if (!isImageInExistingList) {
                 Image newImage = new Image();
                 newImage.setRoomInfo(roomInfo);
                 newImage.setHostInfo(hostInfo);
@@ -147,6 +163,7 @@ public class RoomInfoService {
                 newImage.setImgCate(ImgCate.ROOM);
                 newImage.setImgStatus(BooleanStatus.TRUE);
                 imageRepository.save(newImage);
+            }
         }
 
         if(hostInfo.getHStep() == HStep.RULE) {

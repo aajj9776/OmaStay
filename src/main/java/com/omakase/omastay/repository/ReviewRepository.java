@@ -10,7 +10,6 @@ import io.lettuce.core.dynamic.annotation.Param;
 import java.time.LocalDateTime;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -64,7 +63,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
     @Query("UPDATE Review r SET r.revStatus = 1 WHERE r.id = :revIdx")
     int updateReviewStatus(@Param("revIdx") Integer revIdx);
 
-    
-
-
+    //리뷰 조회
+    @Query("SELECT r FROM Review r JOIN FETCH r.hostInfo h JOIN FETCH r.reservation res WHERE r.member.id = :memIdx AND r.revStatus = 0")
+    List<Review> findReviewsWithRoomAndHotelByMemberId(@Param("memIdx") int memIdx);
 }
