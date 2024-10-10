@@ -113,9 +113,6 @@
       const person = urlParams.get("person");
       const roomName = urlParams.get("roomName");
 
-      console.log("시작날짜" + checkIn);
-      console.log("끝날짜" + checkOut);
-
       let user = JSON.parse(localStorage.getItem("user"));
 
       let pay_method;
@@ -132,7 +129,7 @@
         $("#pay_method").val(json.method);
 
         // 결제 내용
-        $("#pay_content").val("방이름");
+        $("#pay_content").val(roomName);
 
         // 할인 전 금액
         $("#nsale_price").val(nsale_price);
@@ -198,14 +195,6 @@
 
           $("#insertPayment").submit();
         });
-      }
-
-      function goIndex() {
-        window.location.href = "/";
-      }
-
-      function goReservationInfo() {
-        window.location.href = "/mypage/reservation_check";
       }
 
       // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
