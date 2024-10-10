@@ -4,7 +4,6 @@
       layout:decorate="~{layout/main}"
       layout:fragment="main">
 <head>
-  <meta charset="utf-8" />
   </head>
   <body class="bg-gray-100">
     <div
@@ -38,7 +37,7 @@
 
       <!-- 이메일로 시작하기 버튼 -->
       <div class="w-full max-w-md mb-6">
-        <a href="login/user">
+        <a href="/login/user">
         <button
           class="w-full flex items-center justify-center py-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
         >
@@ -56,16 +55,41 @@
 
       <!-- 호스트/관리자 로그인 -->
       <div class="flex flex-row items-center justify-between mb-8 w-full max-w-md">
-      <div class="text-gray-500md:text-xl font-semibold text-2xl hover:bg-gray-200">
-        <a href="/host/login">
-        호스트 로그인
-        </a>
-      </div>
         <div class="text-gray-500md:text-xl font-semibold text-2xl hover:bg-gray-200">
+          <a href="/host/login">
+          호스트 로그인
+          </a>
+        </div>
+        <div class="text-gray-500md:text-xl font-semibold text-2xl hover:bg-gray-200">
+          <a href="/admin/login">
           관리자 로그인
+        </a>
         </div>
       </div>
     </div>
   </body>
 
+  <script>
+    function handleSocialLogin(socialType) {
+      fetch(`/login/social/${socialType}`)
+        .then(response => {
+          if (!response.ok) throw response;
+          return response.json();
+        })
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+            window.location.href = '/login'; // 실패 시 로그인 페이지로 리다이렉션
+          } else {
+            window.location.href = '/'; // 성공 시 홈페이지로 리다이렉션
+          }
+        })
+        .catch(error => {
+          error.json().then(body => {
+            alert(body.error); // 서버에서 보낸 에러 메시지 출력
+            window.location.href = '/login'; // 실패 시 로그인 페이지로 리다이렉션
+          });
+        });
+    }
+    </script>
 </html>

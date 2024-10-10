@@ -19,67 +19,37 @@
       <main
         class="flex-1 bg-[#fff] flex flex-row items-start justify-center gap-[59px] max-w-full text-left text-[20px] text-[#000] font-[Roboto] mq850:gap-[29px] mq1500:flex-wrap"
       >
-        <div
-          class="h-[1084px] w-[374px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[44px] px-[38px] box-border max-w-full mq450:pt-[29px] mq450:pb-[29px] mq450:box-border"
-        >
-          <div class="flex-1 flex flex-col items-start justify-start">
-            <div
-              class="self-stretch rounded-t-[10px] rounded-b-[0px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[23px] px-[37px] pb-[14px]"
-            >
-              <div
-                class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border"
-              >
-                <div class="flex-1 relative mq450:text-[16px]">예약 내역</div>
-              </div>
+      
+      <div class="w-[370px] h-auto flex-none flex flex-col justify-start py-11 pl-[38px] pr-[34px] box-border">
+        <div class="flex-1 flex flex-col items-start justify-start">
+          <div class="self-stretch rounded-t-3xs rounded-b-none bg-white border-gray-300 border-[1px] border-solid flex flex-row items-start justify-start pt-[23px] px-[37px] pb-3.5">
+            <div class="w-[97px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+              <a class="text-lg" id="reservationLink" href="#">예약 내역</a>
             </div>
-            <div
-              class="self-stretch bg-[#fff] border-[#c2c2c2] border-r-[1px] border-solid border-[#c2c2c2] border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[20px] px-[38px] pb-[21px]"
-            >
-              <div
-                class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-              >
-                <div
-                  class="h-[33px] flex-1 relative flex items-center mq450:text-[16px]"
-                >
-                  포인트
-                </div>
-              </div>
+          </div>
+          <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
+            <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+              <a class="text-lg" href="/mypage/point">포인트</a>
             </div>
-            <div
-              class="self-stretch bg-[#fff] border-[#c2c2c2] border-t-[1px] border-solid border-[#c2c2c2] border-r-[1px] border-solid border-[#c2c2c2] border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[36px] pb-[21px]"
-            >
-              <div
-                class="w-[97px] overflow-hidden shrink-0 flex flex-row items-start justify-start"
-              >
-                <div
-                  class="h-[33px] flex-1 relative flex items-center mq450:text-[16px]"
-                >
-                  쿠폰
-                </div>
-              </div>
+          </div>
+          <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[38px] pb-[21px]">
+            <div class="w-[97px] shrink-0 flex flex-row items-start justify-start">
+              <a class="text-lg" href="/mypage/coupon">쿠폰</a>
             </div>
-            <div
-              class="self-stretch bg-[#fff] border-[#c2c2c2] border-t-[1px] border-solid border-[#c2c2c2] border-r-[1px] border-solid border-[#c2c2c2] border-l-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]"
-            >
-              <div
-                class="w-[113px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border"
-              >
-                <div class="flex-1 relative mq450:text-[16px]">
-                  내 정보 관리
-                </div>
-              </div>
+          </div>
+          <div class="self-stretch bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[35px] pb-[21px]">
+            <div class="w-[113px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+              <a class="text-lg" href="/mypage/info">내 정보 관리</a>
             </div>
-            <div
-              class="self-stretch rounded-t-[0px] rounded-b-[10px] bg-[#fff] border-[#c2c2c2] border-[1px] border-solid overflow-hidden flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]"
-            >
-              <div
-                class="w-[76px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[0px] px-[0px] pb-[5px] box-border"
-              >
-                <div class="flex-1 relative mq450:text-[16px]">내 리뷰</div>
-              </div>
+          </div>
+          <div class="self-stretch rounded-b-3xs bg-white border-gray-300 border-[1px] flex flex-row items-start justify-start pt-[18px] px-[33px] pb-[19px]">
+            <div class="w-[76px] shrink-0 flex flex-row items-start justify-start pb-1.5">
+              <a class="text-lg" href="/mypage/review">내 리뷰</a>
             </div>
           </div>
         </div>
+      </div>
+
         <div
           class="h-[25px] w-[161.8px] relative overflow-hidden shrink-0 hidden"
         ></div>
@@ -473,22 +443,18 @@
         $('#pagination').html(paginationHtml);
         });
       }
+      
+      document.addEventListener('DOMContentLoaded', function() {
+    member = localStorage.getItem("user");
+    user = JSON.parse(member);
+    let memIdx = user ? user.id : null;
 
-
-      // 특정 페이지를 불러오는 함수 (페이지네이션에서 사용)
-      function loadReservationPage(pageNumber) {
-        console.log("현재페이지" + pageNumber);
-          $.ajax({
-              url: "/mypage/reservation?page=" + pageNumber,
-              method: "POST",
-              contentType: "application/json; charset=utf-8",
-              data: JSON.stringify({
-                  id: user.id,
-              }),
-          }).done(function (data) {
-              loadReservation(data.nowPage); // 페이지를 업데이트
-          });
+    // 예약 내역 링크 href 동적 설정
+    if (memIdx) {
+        let reservationLink = document.getElementById('reservationLink');
+        reservationLink.setAttribute('href', `/mypage/reservation?id=${memIdx}`);
       }
+  });
     </script>
   </body>
 </html>

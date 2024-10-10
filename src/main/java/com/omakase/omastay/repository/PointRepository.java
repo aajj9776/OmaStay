@@ -33,4 +33,10 @@ public interface PointRepository extends JpaRepository<Point, Integer>, PointRep
     @Query("SELECT p FROM Point p WHERE p.member.id = :memIdx AND p.id = :pIdx")
     Point findByIdAndMemIdx(@Param("pIdx") Integer pIdx, @Param("memIdx") Integer memIdx);
 
+    @Query("SELECT p.pSum FROM Point p WHERE p.member.id = :memIdx ORDER BY p.pDate DESC")
+    List<Integer> findLatestPointSumByMemberId(@Param("memIdx") int memIdx);
+
+    @Query("SELECT p FROM Point p JOIN p.member m WHERE m.id = :memIdx ORDER BY p.pDate DESC")
+    List<Point> findPointsByMemberId(@Param("memIdx") int memIdx);
+
 }

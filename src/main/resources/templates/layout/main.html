@@ -84,9 +84,11 @@
         localStorage.setItem("isLogin", login.toString());
 
         if (token) {
+          console.log("토큰 있음1");
           try {
             let userInfo = jwt_decode(token);
             if (token != null && userInfo != null) {
+              console.log("비동기식 있음");
               $.ajax({
                 url: "/login/userInfo",
                 type: "GET",
