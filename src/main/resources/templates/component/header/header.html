@@ -49,7 +49,7 @@
             function handleLogout() {
                 // 쿠키,Storage 삭제 (로그아웃 처리)
                 document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                localStorage.clear()
+                localStorage.clear()            //로컬스토리지 전체 삭제
                 location.href = "/login/logout";  // 로그아웃 경로로 이동
             }
 
