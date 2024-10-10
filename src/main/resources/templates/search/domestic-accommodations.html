@@ -190,7 +190,7 @@
                             id="cardWrapperContainer">
                         <a class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]" id="card"
                            th:each="accommodation : ${resultAccommodations}"
-                           th:onclick="|detailHost(${accommodation.HIdx})|"
+                           th:onclick="'detailHost(' + ${accommodation.HIdx} + ')'"
                         >
                             <div
                                     class="h-[240px] w-[396px] flex flex-col items-start justify-center min-w-[396px] max-w-full mq750:flex-1 mq750:min-w-full"
@@ -357,6 +357,9 @@
         src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
 ></script>
 <script type="text/javascript" src="/js/datepicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 
 
 

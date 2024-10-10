@@ -1,4 +1,3 @@
-let count = 2;
 // 이거 시작날짜랑 끝나는 날짜 연도로 해서 세션으로 같이 넘겨주세요
 function changCount() {
     if (count < 1) count = 1;
