@@ -52,8 +52,9 @@ public class RecommendationService {
     //     }
     // }
 
-    //매주 화요일 00시에 추천 목록을 업데이트 (지난 주 일~토까지 체크인의 매출을 기준으로 추천 목록을 업데이트)
+    //추천 숙소 - 매주 화요일 00시에 추천 목록을 업데이트 (지난 주 일~토까지 체크인의 매출을 기준으로 추천 목록을 업데이트)
     @Scheduled(cron = "0 0 0 * * TUE") // 매주 화요일 00시
+    @Transactional
     public void updateRecommendation() {
         int cnt =0;
 
@@ -63,7 +64,7 @@ public class RecommendationService {
         LocalDate endDate = LocalDate.of(yesterday.getYear(), yesterday.getMonth(), yesterday.getDayOfMonth());
 
         for(HCate hCate : HCate.values()){
-            List<Recommendation> a = recommendationRepository.findR(hCate, starDate, endDate);
+            List<Recommendation> a = recommendationRepository.getRecommendationsWeeklyByHCate(hCate, starDate, endDate);
             System.out.println(a);
             for(Recommendation item : a){
                 recommendationRepository.save(item);
@@ -76,6 +77,24 @@ public class RecommendationService {
         }
     }
 
+    //관리자 추천 숙소 - 전체 추천 숙소 가져옴
+    public List<RecommendationCustomDTO> findTotal(){
+        List<Recommendation> list = recommendationRepository.findTotal();
+
+        List<RecommendationCustomDTO> value = new ArrayList<>();
+
+        for(Recommendation temp : list){
+            RecommendationCustomDTO dto = new RecommendationCustomDTO();
+            dto.setRecommendationDTO(RecommendationMapper.INSTANCE.toRecommendationDTO(temp));
+            dto.setHostInfoDTO(HostInfoMapper.INSTANCE.toHostInfoDTO(temp.getHostInfo()));
+            value.add(dto);
+        }
+
+        return value;
+
+    }
+
+    //관리자 추천 숙소 - 숙소 유형별 추천 숙소 가져옴
     public List<RecommendationCustomDTO> getRecommendationByHCate(HCate hCate){
         List<Recommendation> list = recommendationRepository.findByHCate(hCate);
 

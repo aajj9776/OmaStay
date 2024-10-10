@@ -16,7 +16,7 @@
 
 
             <div class="w-full h-[50px] flex flex-row items-center justify-center gap-3">
-                <img class="h-[50px] w-[50px] rounded-[100px] border-yellow-300 border-[2px] object-cover shrink-0"
+                <img id="grade-image" class="h-[50px] w-[50px] rounded-[100px] border-yellow-300 border-[2px] object-cover shrink-0"
                     alt="" src="/image/admin/개척자.png" />
 
 
@@ -26,7 +26,7 @@
             <label class="">
                 회원 등급
             </label>
-            <div class="flex flex-row justify-center items-center gap-2 w-full">
+            <div class="flex flex-row justify-start items-center gap-2 w-full">
                 <input type="radio" name="grade" value="1" /> <label>방랑자</label>
                 <input type="radio" name="grade" value="1" /> <label>탐험가</label>
                 <input type="radio" name="grade" value="1" /> <label>개척자</label>
@@ -35,42 +35,47 @@
             <label class="">
                 실명
             </label>
-            <input
+            <input id="inputName"
                 class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
-                placeholder="실명" type="text" />
-
-            <label class="">아이디</label>
-            <input
-                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
-                placeholder="아이디" type="text" />
-
+                placeholder="실명" type="text" readonly/>
+                
             <label class="">이메일</label>
-            <input
+            <input id="inputMail"
+            class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
+            placeholder="이메일" type="text" readonly/>
+
+            <label class="">연락처</label>
+            <input id="inputContact"
                 class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
-                placeholder="이메일" type="text" />
+                placeholder="연락처" type="text" readonly/>
 
             <div class="">가입일</div>
-            <input
+            <input id="inputDate"
                 class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
-                placeholder="가입일" type="text" />
+                placeholder="가입일" type="text" readonly/>
+            
+            <div class="">상태</div>
+            <input id="inputStatus"
+                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-center justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[187px]"
+                placeholder="상태" type="text" readonly/>
 
             <div class="">예약내역</div>
             <div class="flex flex-row w-full">
                 <div
                     class="w-1/2 py-[10px] border-solid border-[1px] border-[#a4a4a4] rounded-l-[20px] flex flex-col items-center justify-center">
                     <div>최근 3개월 내 예약 건수</div>
-                    <input id="monthCount" placeholder="n건"/>
+                    <input id="monthCount" placeholder="n건" class="w-auto" readonly/>
                 </div>
                 <div
                     class="w-1/2 py-[10px] border-solid border-[1px] border-[#a4a4a4] rounded-r-[20px] flex flex-col items-center justify-center">
                     <div>전체 예약 건수</div>
-                    <input id="totalCount" placeholder="n건"/>
+                    <input id="totalCount" placeholder="n건" class="w-auto" readonly/>
                 </div>
             </div>
 
             <div class="">최근 예약 내역</div>
             <div class="w-full">
-                <table id="modalTable" class="hover">
+                <table id="modalTable" class="hover w-full text-center text-ellipsis rounded-[4px]">
                     <thead>
                         <tr class="bg-[#d4d8f1] font-medium">
                             <th>예약 번호</th>
