@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout/main}"
       layout:fragment="main"
-      xmlns="http://www.w3.org/1999/html"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
-    <link href="/css/component/swiper.css" rel="stylesheet"/>
-</head>
+    <link href="/css/component/swiper.css" rel="stylesheet"/></head>
 <style>
-
+    @media (min-width: 1280px) {
+        .custom-padding {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+    @media (min-width: 912px) {
+        .custom-gap {
+            row-gap: 20px;
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+    }
 </style>
+</head>
 <body>
 <div class="wrap">
     <section class="main-content max-w-full">
@@ -19,7 +31,7 @@
             <img alt="" class="kv-pc-light9b56ca76webp-icon absolute inset-0 w-full h-full object-cover"
                  src="/image/index/03-kv-pc-light9b56ca76webp@2x.png"/>
             <div class="max-w-[1200px] mx-auto">
-                <h2 class="column0_header relative z-10 text-4xl lg:text-5xl font-bold text-white mb-8">
+            <h2 class="column0_header relative z-10 text-4xl lg:text-5xl font-bold text-white mb-8">
                 <span class="column0_header_txtwrap">
                   <p class="text-3xl m-0 pb-2">오마스테이, 당신을</p>
                   <p class="text-3xl m-0">위한 맞춤형 숙소</p>
@@ -61,10 +73,72 @@
         <b class="text-2xl font-bold mb-6 block">국내 인기 여행지</b>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
-                    <img alt="" class="w-full h-auto rounded-lg" loading="lazy" src="/image/index/container@2x.png"/>
-                    <div class="mt-2">
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/jeju.png"/>
+                    <div class="div8 mt-2">
                         <div class="font-medium">제주도</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/seoul.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">서울</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/busan.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">부산</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/gangneung.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">강릉</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/incheon.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">인천</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/gyungju.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">경주</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/haeundae.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">해운대</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/gapyeong.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">가평</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/yeosu.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">여수</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <img alt="" class="w-full h-auto rounded-lg cursor-pointer" loading="lazy" src="/image/index/sokcho.png"/>
+                    <div class="mt-2">
+                        <div class="div8 font-medium">속초</div>
                     </div>
                 </div>
             </div>
@@ -73,7 +147,7 @@
         </div>
     </section>
 
-    <div class="column3 container mx-auto bg-pink-100 rounded-lg flex flex-wrap items-center justify-between max-w-[1200px] pl-10">
+    <div class="column3 container mx-auto bg-pink-100 rounded-lg flex flex-wrap items-center justify-between max-w-[1200px]">
         <div class="w-full lg:w-2/3">
             <div class="mb-4">
                 <h3 class="text-2xl font-bold mb-2">
@@ -84,7 +158,7 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-4">
-                <button class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg" type="button">로그인/회원가입</button>
+                <a href="/login"><button class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg" type="button">로그인/회원가입</button></a>
                 <a class="text-blue-600 self-center">혜택 자세히 보기</a>
             </div>
         </div>
@@ -97,45 +171,43 @@
         </div>
         <div class="popular-stay-tabs mb-6 overflow-x-auto whitespace-nowrap">
             <div class="inline-flex gap-2">
-                <div class="bg-blue-600 text-white rounded-full px-4 py-2">
+                <button class="recommBtn bg-blue-600 text-white rounded-full px-4 py-2" data-category="전체">
                     <div class="text-sm font-semibold">전체</div>
-                </div>
-                <div class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                </button>
+                <button class="recommBtn bg-gray-200 text-gray-700 rounded-full px-4 py-2" data-category="MOTEL">
                     <div class="text-sm font-semibold">모텔</div>
-                </div>
-                <button class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                </button>
+                <button class="recommBtn bg-gray-200 text-gray-700 rounded-full px-4 py-2" data-category="HOTEL_RESORT">
                     <div class="text-sm font-semibold">호텔·리조트</div>
                 </button>
-                <button class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                <button class="recommBtn bg-gray-200 text-gray-700 rounded-full px-4 py-2" data-category="POOL_VILLA">
                     <div class="text-sm font-semibold">펜션·풀빌라</div>
                 </button>
-                <button class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                <button class="recommBtn bg-gray-200 text-gray-700 rounded-full px-4 py-2" data-category="GUESTHOUSE_HANOK">
                     <div class="text-sm font-semibold">게하·한옥</div>
                 </button>
             </div>
         </div>
         <div class="swiper-container max-w-[1200px]">
             <div class="swiper-wrapper mb-1">
-                <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
+                <div th:each="item : ${recomList}" class="swiper-slide cursor-pointer" th:attr="data-category=${item.hostinfo.hCate}" th:data-id="${item.hostinfo.id}">
                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <img alt="" class="w-full object-cover" loading="lazy"
-                             src="/image/index/32ac436e31398e5cc182d7d5fdea0572jpg@2x.png"/>
+                        <img alt="" class="w-full h-40 object-cover" loading="lazy"
+                        th:src="${item.image}"/>
                         <div class="p-4">
-                            <div class="text-gray-600 mb-1">모텔</div>
-                            <div class="font-bold text-lg mb-2">구월 호텔반월</div>
-                            <div class="text-sm text-gray-500 mb-2">인천터미널역 도보 14분</div>
+                            <div th:text="${item.hostinfo.hCate}" class="text-gray-600 mb-1"></div>
+                            <div th:text="${item.hostinfo.hname}" class="font-bold text-lg mb-2"></div>
+                            <div th:text="${item.hostinfo.directions}" class="text-sm text-gray-500 mb-2" style="height:60px;"></div>
                             <div class="flex items-center mb-2">
-                                <div class="bg-[#ffad0a] rounded px-2 py-1 text-xs font-bold mr-2 text-black">
-                                    <img class="inline-block relative pb-0.5 " src="/image/index/svg-3.svg"/>
-                                    9.5
+                                <div class="bg-orange-500 text-white rounded px-2 py-1 text-xs font-bold mr-2">
+                                    <img th:text="${item['averageRating']}" src="/image/index/svg-3.svg" class="inline-block mr-1" />
                                 </div>
-                                <div class="text-sm text-gray-600">9,871명 평가</div>
+                                <div th:text="${item['reviewCount']} + '명 평가'" class="text-sm text-gray-600"></div>
                             </div>
-                            <div class="text-sm text-gray-500">쿠폰 적용시</div>
                             <div class="flex items-end">
-                                <span class="text-xl font-bold">40,000</span>
-                                <span class="ml-1">원</span>
-                                <span class="ml-2 text-sm text-gray-500 line-through">45,000원</span>
+                                <div class="span9">
+                                    <b class="span10" th:text="${item.price}+'원'"></b>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,29 +241,33 @@
     <section class="column7 container max-w-[1200px] mx-auto px-4 py-10">
         <b class="text-2xl font-bold mb-6 block">국내 여행지</b>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <div class="text-blue-600 cursor-pointer">경기</div>
-            <div class="text-blue-600 cursor-pointer">서울</div>
-            <div class="text-blue-600 cursor-pointer">부산</div>
-            <div class="text-blue-600 cursor-pointer">제주도</div>
-            <div class="text-blue-600 cursor-pointer">강원도</div>
-            <div class="text-blue-600 cursor-pointer">전북</div>
-            <div class="text-blue-600 cursor-pointer">전남</div>
-            <div class="text-blue-600 cursor-pointer">경북</div>
-            <div class="text-blue-600 cursor-pointer">경남</div>
-            <div class="text-blue-600 cursor-pointer">충북</div>
-            <div class="text-blue-600 cursor-pointer">충남</div>
-            <div class="text-blue-600 cursor-pointer">대구</div>
-            <div class="text-blue-600 cursor-pointer">인천</div>
-            <div class="text-blue-600  cursor-pointer">광주</div>
-            <div class="text-blue-600 cursor-pointer">대전</div>
-            <div class="text-blue-600 cursor-pointer">울산</div>
-            <div class="text-blue-600 cursor-pointer">세종</div>
+            <div class="a15 text-blue-600 cursor-pointer">경기</div>
+            <div class="a15 text-blue-600 cursor-pointer">서울</div>
+            <div class="a15 text-blue-600 cursor-pointer">부산</div>
+            <div class="a15 text-blue-600 cursor-pointer">제주도</div>
+            <div class="a15 text-blue-600 cursor-pointer">강원도</div>
+            <div class="a15 text-blue-600 cursor-pointer">전북</div>
+            <div class="a15 text-blue-600 cursor-pointer">전남</div>
+            <div class="a15 text-blue-600 cursor-pointer">경북</div>
+            <div class="a15 text-blue-600 cursor-pointer">경남</div>
+            <div class="a15 text-blue-600 cursor-pointer">충북</div>
+            <div class="a15 text-blue-600 cursor-pointer">충남</div>
+            <div class="a15 text-blue-600 cursor-pointer">대구</div>
+            <div class="a15 text-blue-600 cursor-pointer">인천</div>
+            <div class="a15 text-blue-600 cursor-pointer">광주</div>
+            <div class="a15 text-blue-600 cursor-pointer">대전</div>
+            <div class="a15 text-blue-600 cursor-pointer">울산</div>
+            <div class="a15 text-blue-600 cursor-pointer">세종</div>
         </div>
     </section>
 </div>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+<script src ="/js/countperson.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    var recomList = /*[[${recomList}]]*/ [];
+    console.log("추천리스트:"+recomList);
+    document.addEventListener("DOMContentLoaded", function (){
         //세션스토리지의 값 searh_bar에 넣기
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
@@ -263,36 +339,88 @@
         },
     });
 
-    const swiper4 = new Swiper(".column4 .swiper-container", {
-        loop: false,
-        slidesPerView: 4,
-        spaceBetween: 15,
-        slidesPerGroup: 4,
-        navigation: {
-            nextEl: ".column4 .swiper-button-next",
-            prevEl: ".column4 .swiper-button-prev",
-        },
-        pagination: {
-            el: ".column4 .swiper-pagination",
-            clickable: true,
-        },
-        breakpoints: {
-            1200: {
+        document.addEventListener("DOMContentLoaded", function () {
+            const swiper4 = new Swiper(".column4 .swiper-container", {
+                loop: false,
                 slidesPerView: 4,
-            },
-            0: {
-                slidesPerView: 1,
-            },
-        },
-        on: {
-            init: function () {
-                updateNavigationButtons(this);
-            },
-            slideChange: function () {
-                updateNavigationButtons(this);
-            },
-        },
-    });
+                spaceBetween: 15,
+                slidesPerGroup: 4,
+                navigation: {
+                    nextEl: ".column4 .swiper-button-next",
+                    prevEl: ".column4 .swiper-button-prev",
+                },
+                pagination: {
+                    el: ".column4 .swiper-pagination",
+                    clickable: true,
+                },
+                breakpoints: {
+                    1200: {
+                        slidesPerView: 4,
+                    },
+                    0: {
+                        slidesPerView: 1,
+                    },
+                },
+            });
+
+            document.querySelectorAll('.column4 .swiper-slide').forEach(slide => {
+                slide.addEventListener('click', function () {
+                    const hIdx = this.getAttribute('data-id');  // 클릭된 요소의 hIdx 가져오기
+                    const today = moment().format('MM/DD');
+                    const tomorrow = moment().add(1, 'days').format('MM/DD');
+                    const dateRange = `${today} ~ ${tomorrow} (1박 2일)`;
+                    const startDate = moment().toISOString();
+                    const endDate = moment().add(1, 'days').toISOString();
+                    const people = "2";
+
+                    // 세션 스토리지에 고정값 저장
+                    sessionStorage.setItem('keyword', this.querySelector('.font-bold').innerText);
+                    sessionStorage.setItem('date', dateRange);
+                    sessionStorage.setItem('startDate', startDate);
+                    sessionStorage.setItem('endDate', endDate);
+                    sessionStorage.setItem('people', people);
+
+                    // detailUrl 생성 (고정값 사용)
+                    const detailUrl = `/search/detail-host?id=${hIdx}&checkIn=${sessionStorage.getItem('startDate')}&checkOut=${sessionStorage.getItem('endDate')}&person=${sessionStorage.getItem('people')}`;
+                    location.href = detailUrl;
+                });
+            });
+
+            // 추천숙소 카테고리 변경 로직
+            function filterByCategory(category) {
+                const slides = document.querySelectorAll('.column4 .swiper-slide');
+                slides.forEach(slide => {
+                    const slideCategory = slide.getAttribute('data-category');
+                    if (category === '전체' || category === "" || !category) {
+                    slide.style.display = '';
+                    } else if (slideCategory === category) {
+                        slide.style.display = '';
+                    } else {
+                        slide.style.display = 'none';
+                    }
+                });
+
+                swiper4.update();
+            }
+
+            const categoryButtons = document.querySelectorAll('.recommBtn');
+            categoryButtons.forEach(button => {
+                console.log('Button clicked:', button.getAttribute('data-category'));
+                button.addEventListener('click', function () {
+                    const category = this.getAttribute('data-category');
+                    filterByCategory(category);
+
+                    categoryButtons.forEach(btn => {
+                        btn.classList.remove('bg-blue-600', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    this.classList.add('bg-blue-600', 'text-white');
+                });
+            });
+
+            filterByCategory('전체');
+        });
 
     const swiper5 = new Swiper('.column6 .swiper-container', {
         loop: true,
@@ -337,6 +465,60 @@
             prevButton.style.visibility = 'visible';
         }
     }
+
+    //국내 인기 여행지 클릭 시 검색 페이지 이동
+    const swiper2Slides = document.querySelectorAll('.column2 .swiper-slide');
+
+    swiper2Slides.forEach(slide => {
+    slide.addEventListener('click', function() {
+        const keyword= this.querySelector('.div8').textContent;
+        keywordInput.value = keyword;
+        sessionStorage.setItem('keyword', keyword);
+
+        const dateRange = dateInput.value.split(' ~ ');
+        const startDate = moment(dateRange[0], 'MM/DD');
+        const endDate = moment(dateRange[1].split(' ')[0], 'MM/DD');
+        const formattedStartDate = startDate.toISOString();
+        const formattedEndDate = endDate.toISOString();
+
+        sessionStorage.setItem('date', dateInput.value);
+        sessionStorage.setItem(('startDate'), formattedStartDate);
+        sessionStorage.setItem(('endDate'), formattedEndDate);
+        sessionStorage.setItem('people', peopleInput.innerText);
+
+        recSearch();
+        searchAccommodation();
+        event.preventDefault();
+
+    });
+    });
+
+    //국내 여행지 검색 페이지 이동
+    const domesticTravel = document.querySelectorAll('.a15');
+
+    domesticTravel.forEach(div => {
+        div.addEventListener('click', function() {
+            const keyword = this.textContent;
+            keywordInput.value = keyword;
+
+            sessionStorage.setItem('keyword', keyword);
+
+            const dateRange = dateInput.value.split(' ~ ');
+            const startDate = moment(dateRange[0], 'MM/DD');
+            const endDate = moment(dateRange[1].split(' ')[0], 'MM/DD');
+            const formattedStartDate = startDate.toISOString();
+            const formattedEndDate = endDate.toISOString();
+
+            sessionStorage.setItem('date', dateInput.value);
+            sessionStorage.setItem(('startDate'), formattedStartDate);
+            sessionStorage.setItem(('endDate'), formattedEndDate);
+            sessionStorage.setItem('people', peopleInput.innerText);
+
+            recSearch();
+            searchAccommodation();
+            event.preventDefault();
+    });
+    });
 
 
 </script>

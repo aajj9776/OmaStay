@@ -1,19 +1,20 @@
 package com.omakase.omastay.controller;
 
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.omakase.omastay.util.FileRenameGcs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -23,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,7 +56,6 @@ import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
 import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
-import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
@@ -67,7 +66,6 @@ import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.ImageService;
-
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.ReservationService;
 import com.omakase.omastay.service.ReviewCommentService;
@@ -75,11 +73,9 @@ import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
-import com.omakase.omastay.util.FileRenameGcs;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import io.jsonwebtoken.io.IOException;
-import java.io.ByteArrayInputStream;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -212,8 +208,9 @@ public class HostController {
             mv.addObject("image", image);
             mv.addObject("hostMypageDTO", hostMypageDTO);
             mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
+            if (hostInfoCustomDTO.getHostInfo().getHCate() != null) {
             mv.addObject("hCate", hostInfoCustomDTO.getHostInfo().getHCate().name());
-            System.out.println("숙소유형"+hostInfoCustomDTO.getHostInfo().getHCate().name());
+            }
         }
         System.out.println("storage:"+upload);
         mv.addObject("storage", upload);

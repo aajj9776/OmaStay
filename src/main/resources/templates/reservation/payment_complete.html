@@ -78,9 +78,8 @@
                 class="h-[47px] relative leading-[20px] flex text-[rgba(0,0,0,0.87)] items-center"
               >
                 <span>
-                  <p class="m-[0px]">2024.08.21(수) 17:00 ~</p>
-                  <p class="m-[0px]">2024.08.22(목) 11:00</p>
-                  <p class="m-[0px]">1박</p>
+                  <p class="m-[0px]" id="start"></p>
+                  <p class="m-[0px]" id="end"></p>
                 </span>
               </b>
             </div>
@@ -160,13 +159,22 @@
       const amount = urlParams.get("amount");
       const room = urlParams.get("room");
       const payStatus = urlParams.get("payStatus");
+      const start = urlParams.get("start");
+      const end = urlParams.get("end");
+      const roomName = urlParams.get("roomName");
+      let user = JSON.parse(localStorage.getItem("user"));
+
+      function formatDate(dateString) {
+        return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
+      }
 
       $(function () {
         // 각 요소에 값 설정
         $("#orderIdPlace").text(orderId);
-        // $("#room").text(room);
-        $("#room").text("한별이 화이팅!");
+        $("#room").text(roomName);
         $("#amount").text(amount);
+        $("#start").text(formatDate(start));
+        $("#end").text(formatDate(end));
       });
 
       function goIndex() {
@@ -174,7 +182,7 @@
       }
 
       function goReservationInfo() {
-        window.location.href = "/reservation/reservation_check";
+        window.location.href = "/mypage/reservation?id=" + user.id;
       }
     </script>
   </body>

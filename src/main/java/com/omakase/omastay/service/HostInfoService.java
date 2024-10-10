@@ -351,8 +351,13 @@ public class HostInfoService {
         hostInfoRepository.rejectHost(hidx);
     }
 
+    public List<HostInfo> getDetailHostInfo(Integer hIdx){
+        return hostInfoRepository.findHostInfoAll(hIdx);
+
+    }
 
     public List<AdminMainCustomDTO> getrequestCount(){
         return hostInfoRepository.getRequestCount();
     }
+
 }

@@ -2,11 +2,14 @@ package com.omakase.omastay.mapper;
 
 import com.omakase.omastay.dto.GoodDTO;
 import com.omakase.omastay.entity.Good;
+
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+@Mapper
 public interface GoodMapper {
     GoodMapper INSTANCE = Mappers.getMapper(GoodMapper.class);
 
