@@ -174,6 +174,7 @@ public class SearchController {
             model.addAttribute("matchImages", roomImageMap);
             model.addAttribute("allRoom", allRoomList);
             model.addAttribute("reviewStats", reviewStats);
+            model.addAttribute("includeSearchBar", true);
             
         
             return "search/detail_host";

@@ -81,7 +81,7 @@
     </div>
     
 
-    <div id="allPhotomodal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] to-50%">
+    <div id="allPhotomodal" th:each="hostInfo : ${hostInfo}" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] to-50%">
         <!--사진 모두보기 모달-->
         <div id="photoModal-body">
         <div
@@ -97,9 +97,9 @@
             <div
             class="flex flex-col items-start justify-start pt-[5.5px] px-[0px] pb-[0px]"
             >
-            <a
+            <a th:text="${hostInfo.hname}"
             class="[text-decoration:none] relative leading-[22px] font-bold text-[inherit] whitespace-nowrap"
-            >은평 씨에스에비뉴 호텔</a
+            ></a
             >
         </div>
         <button id="photoCloseBtn">
