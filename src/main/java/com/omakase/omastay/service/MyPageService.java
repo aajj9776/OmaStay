@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime; // java.time.LocalDateTime 사용
 import org.springframework.beans.factory.annotation.Value;
@@ -395,10 +397,11 @@ public class MyPageService {
         }
 
     @Transactional
-    public  List<ReservationDTO> getReservationInfo(int memIdx) {
+    public  Page<ReservationDTO> getReservationInfo(int memberId, Pageable pageable) {
         // Reservation을 조회하는 로직
-        List<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memIdx);
-        return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
+        Page<Reservation> reservation = reservationRepository.findByMemIdxAndEndBefore(memberId, pageable);
+        Page<ReservationDTO> reservationDTOPage = reservation.map(ReservationMapper.INSTANCE::toReservationDTO);
+        return reservationDTOPage;
     }
 
     public ReservationDTO getReservation(Integer id) {
@@ -418,6 +421,15 @@ public class MyPageService {
         return  ReservationMapper.INSTANCE.toReservationDTOList(reservation);
     }
 
+    public Page<ReservationDTO> getNewReservationInfo(Integer memberId, Pageable pageable) {
+         // Page<Reservation>을 가져옴
+         Page<Reservation> reservationPage = reservationRepository.findByMemberId(memberId, pageable);
+         // Page<ReservationDTO>로 변환
+         Page<ReservationDTO> reservationDTOPage = reservationPage.map(ReservationMapper.INSTANCE::toReservationDTO);
+         
+         // List<ReservationDTO>로 변환
+         return reservationDTOPage;
+    }
 
 
 }

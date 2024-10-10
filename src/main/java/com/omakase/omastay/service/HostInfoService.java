@@ -202,11 +202,23 @@ public class HostInfoService {
             }
         }
 
-        List<Image> images = imageRepository.findByHostInfoId(hostInfo.getId());
+        List<Image> existingImages = imageRepository.findByHostInfoId(hostInfo.getId());
+        List<ImageDTO> newImages = hostInfoCustomDTO.getImages();
+
+        // 기존 이미지 상태 변경
+        for (Image existingImage : existingImages) {
+            boolean isImageInNewList = newImages.stream()
+                .anyMatch(newImage -> newImage.getImgName().getFName().equals(existingImage.getImgName().getFName()));
+            if (!isImageInNewList) {
+                existingImage.setImgStatus(BooleanStatus.FALSE);
+                imageRepository.save(existingImage);
+            }
+        }
+
 
         for (ImageDTO imageDTO : hostInfoCustomDTO.getImages()) {
-        boolean exists = images.stream()
-                .anyMatch(image -> image.getImgName().equals(imageDTO.getImgName()));
+        boolean exists = existingImages.stream()
+        .anyMatch(existingImage -> existingImage.getImgName().getFName().equals(imageDTO.getImgName().getFName()));
         if (!exists) {
             Image newImage = new Image();
             newImage.setRoomInfo(null);
@@ -285,27 +297,23 @@ public class HostInfoService {
 
 
 
-    /* 관리자에서 쓰는 거 */
+    // 관리자 - 입점 요청 조회
     public List<HostInfoDTO> getAllHostInfos() {
         List<HostInfo> hostInfos = hostInfoRepository.hostInfos();
         return HostInfoMapper.INSTANCE.toHostInfoDTOList(hostInfos);
     }
 
+    // 관리자 - 입점 요청 상세 조회
     public HostRequestInfoDTO getHostRequestInfo(int id){
         HostRequestInfoDTO hostRequestInfoDTO = new HostRequestInfoDTO();
 
         HostInfo hostInfo = hostInfoRepository.findById(id);
-        System.out.println(hostInfo);
-         // adminMember 엔티티를 명시적으로 로드
-        
         hostRequestInfoDTO.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo));
 
         Account account = accountRepository.findByHostInfoId(hostInfo.getId());
-        System.out.println(account);
         hostRequestInfoDTO.setAccount(AccountMapper.INSTANCE.toAccountDTO(account));
 
         List<HostFacilitiesDTO> hostFacilities = hostFacilitiesRepository.findByHostInfoIdAndFacilities(hostInfo.getId());
-        System.out.println(hostFacilities);
 
         List<Facilities> facilities = new ArrayList<>();
 

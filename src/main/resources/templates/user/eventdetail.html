@@ -47,6 +47,16 @@
     .dt-container .dt-layout-row {
     margin: 0.2em 0 !important; 
     }
+
+    #content {
+    height: 1300px;    /* 고정된 높이 설정 */
+    overflow-y: auto;  /* 세로 스크롤 가능하도록 설정 */
+  }
+
+  #content img {
+    max-width: 100%;  /* 이미지가 부모 요소 너비에 맞도록 조정 */
+    height: auto;     /* 이미지 비율 유지 */
+  }
   </style>
   </head>
   <body>
@@ -68,11 +78,11 @@
               <div
                 class="m-[0px] w-[300px] relative text-inherit tracking-normal leading-normal font-semibold flex items-center text-4xl mq450:text-lg mq450:leading-snug mq750:text-2xl mq750:leading-relaxed"
               >
-                공지사항 상세
+                이벤트 상세 내용
             </div>
             </div>
             <div
-              class="self-stretch rounded-[30px] bg-[rgba(200,219,245,0.52)] overflow-hidden flex flex-col items-start justify-start py-[50px] pl-[138px] pr-[136px] box-border gap-[14px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:py-[32px] mq750:px-[34px] mq750:box-border"
+              class="h-[1600px] self-stretch rounded-[30px] bg-[rgba(200,219,245,0.52)] overflow-hidden flex flex-col items-start justify-start py-[50px] pl-[138px] pr-[136px] box-border gap-[14px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:py-[32px] mq750:px-[34px] mq750:box-border"
             >
               <div
                 class="w-[666px] flex flex-col items-start justify-start gap-[6px] max-w-full"
@@ -82,7 +92,7 @@
                   placeholder="제목"
                   type="text"
                   readonly
-                  th:value="${sDto.sTitle}"
+                  th:value="${event.sTitle}"
                 />
 
                 <div
@@ -90,14 +100,14 @@
                 ></div>
               </div>
               <div
-                class="w-[220px] rounded-t-[4px] rounded-b-[0px] bg-[rgba(0,0,0,0.06)] overflow-hidden flex flex-row items-start justify-start p-[12px] box-border relative"
+                class="w-[220px] rounded-t-[4px] rounded-b-[0px] flex flex-row items-center justify-center p-[12px] box-border relative"
               >
                 <input
                   class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[118px] p-[0px]"
                   placeholder="등록일"
                   type="text"
                   readonly
-                  th:value="${#temporals.format(sDto.sDate, 'yyyy-MM-dd HH:mm')}"
+                  th:value="${event.sPeriod}"
                 />
                 <div
                   class="h-[1px] w-[calc(100%_+_1px)] absolute !m-[0] right-[-1px] bottom-[-1px] left-[0px] border-[rgba(0,0,0,0.42)] border-t-[1px] border-solid box-border"
@@ -109,28 +119,18 @@
                 <div
                   class="flex-1 flex flex-col items-start justify-start relative max-w-[calc(100%_-_15px)]"
                 >
-                  <div th:utext="${sDto.sContent}" id="content"
-                  class="py-[16px] h-[500px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]" name="sContent" cols="50"
-                  data-str="내용" rows="8" readonly></div>
+                <div th:utext="${event.sContent}" id="content"
+                class="py-[16px] self-stretch rounded-[4px] flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]" name="sContent" cols="50"
+                data-str="내용" rows="8" readonly></div>
                 </div>
               </div>
-              <div>
-                <div th:if="${sDto.fileName != null}">
-                  <a th:href="|javascript:down('${sDto.fileName.fName}')|">
-                      <span th:text="${sDto.fileName.fName}"></span>
-                  </a>
-              </div>
-              <div th:if="${sDto.fileName == null}">
-                  <span>첨부된 파일이 없습니다.</span>
-              </div>
-              </div>
-            </div>
+           </div>
           </div>
         </section>
         <section
           class="self-stretch flex flex-row items-start justify-center pt-[0px] px-[0px] pb-[50px]"
         >
-          <button type="button" onclick="location.href='/user/notice'"
+          <button type="button" onclick="location.href='/user/event'"
             class="cursor-pointer [border:none] py-[12px] px-[37px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
           >
             <div class="flex flex-row items-center justify-center gap-[8px]">

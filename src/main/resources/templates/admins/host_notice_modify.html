@@ -30,9 +30,9 @@
         class="text-[#6c757d] text-[16px] w-[1300px] self-stretch h-[700px] rounded-[30px] bg-[#eaecf8] overflow-hidden shrink-0 flex flex-col items-center justify-center py-[48px] px-[61px] mq450:pt-[20px] mq450:pb-[20px] mq900:pt-[31px] mq900:pb-[31px] mq1275:pl-[30px] mq1275:pr-[30px]">
         <div th:if="${sDto != null}">
           <form action="/admin/host_notice/modify" method="post" encType="multipart/form-data">
-            <input type="hidden" name="id" th:value="${sDto.id}" />
             <table summary="게시판 수정하기">
               <tbody>
+                <input type="hidden" name="id" th:value="${sDto.id}" />
                 <tr>
                   <td><input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}" data-str="제목"
                       placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
@@ -46,16 +46,20 @@
                 <div th:if="${sDto.fileName != null}">
                   <tr>
                     <td>
-                      <a th:href="|javascript:down('${sDto.fileName.fName}')|">
-                        <span>현재 파일: </span><span id="ff" th:text="${sDto.fileName.fName}"></span>
-                        <button id="deleteFileButton" class="ml-[20px] p-1">[삭제하기]</button>
-                      </a>
+                      <div th:if="${sDto.fileName != null and sDto.fileName.fName != null}">
+                        <a th:href="|javascript:down('${sDto.fileName.fName}')|">
+                          <span>현재 파일: </span><span id="ff" th:text="${sDto.fileName.fName}"></span>
+                          <button id="deleteFileButton" class="ml-[20px] p-1">[삭제하기]</button>
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 </div>
                 <tr>
                   <td>
-                    <input type="hidden" id="selectedFile" name="selectedFile" th.value="${sDto.fileName.fName}" />
+                    <div th:if="${sDto.fileName != null and sDto.fileName.fName != null}">
+                      <input type="hidden" id="selectedFile" name="selectedFile" th:value="${sDto.fileName.fName}" />
+                    </div>
                     <input type="file" id="fileUpload" name="file" data-str="첨부파일" class="mt-2 text-[#6c757d]" />
                     <div> * 수정 파일 선택 시 기존 파일은 삭제됩니다.</div>
                   </td>
@@ -105,9 +109,6 @@
         }
       });
 
-      //$("#content").summernote("lineHeight", 0.7);
-
-
       // 파일 업로드 시 파일 이름을 숨겨진 필드에 저장
       $("#fileUpload").on("change", function () {
         var fileName = this.files[0].name;
@@ -150,14 +151,13 @@
     }
 
     function sendData() {
-      for (var i = 0; i < document.forms[0].elements.length; i++) {
-        if (i > 1)
-          break;//에디터에 있는 컴포넌트들에 대한 유효성검사를 피하기 위해 탈출한다.
-        if (document.forms[0].elements[i].value == "") {
-          alert(document.forms[0].elements[i].dataset.str + "을 입력하세요");
-          document.forms[0].elements[i].focus();
-          return;//수행 중단
-        }
+      var form = document.forms[0];
+      // 제목 (input text) 검사
+      var title = form.querySelector('input[name="sTitle"]');
+      if (title.value.trim() === "") {
+        alert(title.dataset.str + "을(를) 입력하세요");
+        title.focus();
+        return;
       }
 
       document.forms[0].submit();

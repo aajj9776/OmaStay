@@ -12,12 +12,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface ImageRepository extends JpaRepository<Image, Integer>, ImageRepositoryCustom {
 
-    List<Image> findByHostInfoId(int hIdx);
+    @Query("SELECT i FROM Image i WHERE i.hostInfo.id = :hIdx AND i.imgStatus = 0")
+    List<Image> findByHostInfoId(@Param("hIdx") Integer  hIdx);
 
-    @Query("SELECT i FROM Image i WHERE i.roomInfo.id = :rIdx")
+    @Query("SELECT i FROM Image i WHERE i.roomInfo.id = :rIdx AND i.imgStatus = 0")
     List<Image> findByRoomInfoId(@Param("rIdx") Integer rIdx);
 
-    @Query("SELECT i FROM Image i WHERE i.hostInfo.id = :hIdx AND i.imgCate = 0")
+    @Query("SELECT i FROM Image i WHERE i.hostInfo.id = :hIdx AND i.imgCate = 0 AND i.imgStatus = 0")
     List<Image> findByHostInfoIdAndImgCate(@Param("hIdx") Integer hIdx);
 
     //지우지마

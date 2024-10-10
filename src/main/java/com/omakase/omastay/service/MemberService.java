@@ -542,7 +542,7 @@ public class MemberService {
         return true; // 비밀번호 변경 성공
     }
 
-    // 회원 정보 조회
+    // 관리자 회원 정보 조회
     public List<MemberDTO> getAllMembers(){
         List<Member> members = memberRepository.findAll();
         return MemberMapper.INSTANCE.toMemberDTOList(members);
