@@ -1,45 +1,59 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout/main}"
       layout:fragment="main"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <link href="/css/index.css" rel="stylesheet"/>
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
-    <link href="/css/component/swiper.css" rel="stylesheet"/></head>
-<body>
-<div class="wrarp">
-    <section class="main-content">
-        <div class="column0">
-            <img
-                    alt=""
-                    class="kv-pc-light9b56ca76webp-icon"
-                    src="/image/index/03-kv-pc-light9b56ca76webp@2x.png"
-            />
+    <link href="/css/component/swiper.css" rel="stylesheet"/>
+</head>
+<style>
+    @media (min-width: 1280px) {
+        .custom-padding {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
 
-            <h2 class="column0_header">
-            <span class="column0_header_txtwrap">
-              <p class="txt1">오마스테이, 당신을</p>
-              <p class="txt1">위한 맞춤형 숙소</p>
-            </span>
-            </h2>
-            <div class="search">
-                <div class="search_title_wrapper">
-                    <div class="search_title">국내 숙소</div>
-                </div>
-                <div class="search-area">
-                    <div class="search-bar"  th:insert="~{component/search/searchbar :: searchbar}"></div>
+    @media (min-width: 912px) {
+        .custom-gap {
+            row-gap: 20px;
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+    }
+</style>
+<body>
+<div class="wrap">
+    <section class="main-content max-w-full">
+        <div class="column0 py-10 lg:py-28 relative w-full">
+            <img alt="" class="kv-pc-light9b56ca76webp-icon absolute inset-0 w-full h-full object-cover"
+                 src="/image/index/03-kv-pc-light9b56ca76webp@2x.png"/>
+            <div class="max-w-[1200px] mx-auto">
+                <h2 class="column0_header relative z-10 text-4xl lg:text-5xl font-bold text-white mb-8">
+                <span class="column0_header_txtwrap">
+                  <p class="text-3xl m-0 pb-2">오마스테이, 당신을</p>
+                  <p class="text-3xl m-0">위한 맞춤형 숙소</p>
+                </span>
+                </h2>
+                <div class="search relative z-10 bg-white rounded-lg shadow-lg p-6">
+                    <div>
+                        <div class="text-blue-700 text-2xl sticky z-10 w-full !pl-10 lg:px-5 gap-3 lg:gap-4 text-left font-[Inter] pb-4">
+                            국내 숙소
+                        </div>
+                        <div th:include="~{component/search/searchbar}"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="column1">
-        <div class="heading-2-parent">
-            <b class="heading-2">이벤트</b>
-            <div class="view-more-button">
+    <section class="column1 container px-4 py-10 max-w-[1200px] mx-auto">
+        <div class="flex justify-between items-center mb-6">
+            <b class="text-2xl font-bold">이벤트</b>
+            <div class="text-blue-600 cursor-pointer">
                 <div>더보기</div>
             </div>
         </div>
@@ -47,29 +61,23 @@
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
             <div class="swiper-wrapper">
-                <img class="swiper-slide"
-                     loading="lazy"
-                     src="/image/index/group--slide--link-----@2x.png"
-                     th:each="i : ${#numbers.sequence(1, 5)}"
-                />
-
+                <img class="swiper-slide" loading="lazy" src="/image/index/group--slide--link-----@2x.png"
+                     th:each="i : ${#numbers.sequence(1, 5)}"/>
             </div>
-            <div class="div6">
+            <div class="flex justify-center mt-4">
                 <div class="swiper-pagination"></div>
             </div>
-
         </div>
     </section>
 
-    <section class="column2">
-        <b class="h21">국내 인기 여행지</b>
-
+    <section class="column2 container px-4 py-10 max-w-[1200px] mx-auto">
+        <b class="text-2xl font-bold mb-6 block">국내 인기 여행지</b>
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
-                    <img alt="" class="container-icon" loading="lazy" src="/image/index/container@2x.png"/>
-                    <div class="span1">
-                        <div class="div8">제주도</div>
+                    <img alt="" class="w-full h-auto rounded-lg" loading="lazy" src="/image/index/container@2x.png"/>
+                    <div class="mt-2">
+                        <div class="font-medium">제주도</div>
                     </div>
                 </div>
             </div>
@@ -77,126 +85,92 @@
             <div class="swiper-button-prev"></div>
         </div>
     </section>
-    <div class="column3">
-        <div class="column3-content">
-            <div class="event-header">
-                <h3 class="h3">
+
+    <div class="column3 container mx-auto bg-pink-100 rounded-lg flex flex-wrap items-center justify-between max-w-[1200px] pl-10">
+        <div class="w-full lg:w-2/3">
+            <div class="mb-4">
+                <h3 class="text-2xl font-bold mb-2">
                     회원가입만 해도 받는 오마스테이 엠버서더 혜택
                 </h3>
-                <div class="div19">
+                <div class="text-gray-600">
                     로그인 하면 엠버서더 할인가로 예약할 수 있어요.
                 </div>
-                <div class="column3-action">
-                    <button class="btn btn-primary w-[150px] h-[48px] font-bold" type="button">로그인/회원가입</button>
-                    <a class="pl-4 text-center color text-primary">혜택 자세히 보기</a>
-                </div>
+            </div>
+            <div class="flex flex-wrap gap-4">
+                <button class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg" type="button">로그인/회원가입</button>
+                <a class="text-blue-600 self-center">혜택 자세히 보기</a>
             </div>
         </div>
-        <img
-                alt=""
-                class="image-icon"
-                loading="lazy"
-                src="/image/index/image@2x.png"
-        />
+        <img alt="" class="w-full lg:w-1/3 mt-6 lg:mt-0 object-cover" loading="lazy" src="/image/index/image@2x.png"/>
     </div>
 
-    <section class="column4">
-        <div class="popular-stay-header">
-            <b class="heading-21">인기 추천 숙소</b>
+    <section class="column4 container px-4 py-10 max-w-[1200px] mx-auto">
+        <div class="mb-6">
+            <b class="text-2xl font-bold">인기 추천 숙소</b>
         </div>
-        <div class="popular-stay-tabs">
-            <div class="tablist-">
-                <div class="tab-items">
-                    <div class="li">
-                        <div class="li1">전체</div>
-                    </div>
+        <div class="popular-stay-tabs mb-6 overflow-x-auto whitespace-nowrap">
+            <div class="inline-flex gap-2">
+                <div class="bg-blue-600 text-white rounded-full px-4 py-2">
+                    <div class="text-sm font-semibold">전체</div>
                 </div>
-                <div class="tab-items1">
-                    <div class="li2">
-                        <div class="li1">모텔</div>
-                    </div>
+                <div class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                    <div class="text-sm font-semibold">모텔</div>
                 </div>
-                <button class="li4">
-                    <div class="li5">호텔·리조트</div>
+                <button class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                    <div class="text-sm font-semibold">호텔·리조트</div>
                 </button>
-                <button class="li4">
-                    <div class="li5">펜션·풀빌라</div>
+                <button class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                    <div class="text-sm font-semibold">펜션·풀빌라</div>
                 </button>
-                <button class="li8">
-                    <div class="li9">게하·한옥</div>
+                <button class="bg-gray-200 text-gray-700 rounded-full px-4 py-2">
+                    <div class="text-sm font-semibold">게하·한옥</div>
                 </button>
             </div>
         </div>
-        <div class="swiper-container">
-            <div class="swiper-wrapper">
+        <div class="swiper-container max-w-[1200px]">
+            <div class="swiper-wrapper mb-1">
                 <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 10)}">
-                    <div class="card">
-                        <div class="div23">
-                            <img
-                                    alt=""
-                                    class="ac436e31398e5cc182d7d5fdea0572-icon"
-                                    loading="lazy"
-                                    src="/image/index/32ac436e31398e5cc182d7d5fdea0572jpg@2x.png"
-                            />
-                        </div>
-                        <div class="stay-info-container">
-                            <div class="stay-details-container">
-                                <div class="div24">모텔</div>
-                                <div class="heading-3">
-                                    <b class="b">구월 호텔반월</b>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img alt="" class="w-full object-cover" loading="lazy"
+                             src="/image/index/32ac436e31398e5cc182d7d5fdea0572jpg@2x.png"/>
+                        <div class="p-4">
+                            <div class="text-gray-600 mb-1">모텔</div>
+                            <div class="font-bold text-lg mb-2">구월 호텔반월</div>
+                            <div class="text-sm text-gray-500 mb-2">인천터미널역 도보 14분</div>
+                            <div class="flex items-center mb-2">
+                                <div class="bg-[#ffad0a] rounded px-2 py-1 text-xs font-bold mr-2 text-black">
+                                    <img class="inline-block relative pb-0.5 " src="/image/index/svg-3.svg"/>
+                                    9.5
                                 </div>
-                                <div class="container">
-                                    <div class="container1">
-                                        <div class="div25">인천터미널역 도보 14분</div>
-                                    </div>
-                                </div>
-                                <div class="span-wrapper">
-                                    <div class="span7">
-                                        <div class="rating">
-                                            <img loading="lazy" src="/image/index/svg-3.svg"/>
-                                            <b class="rating-placeholder">9.5</b>
-                                        </div>
-                                        <div class="div26">9,871명 평가</div>
-                                    </div>
-                                </div>
+                                <div class="text-sm text-gray-600">9,871명 평가</div>
                             </div>
-                        </div>
-                        <div class="stay-price-container-parent">
-                            <div class="stay-price-container">
-                                <div class="div25">쿠폰 적용시</div>
-                            </div>
-                            <div class="span9">
-                                <b class="span10">40,000</b>
-                                <div class="span11">원</div>
-                                <div class="span12">45,000원</div>
+                            <div class="text-sm text-gray-500">쿠폰 적용시</div>
+                            <div class="flex items-end">
+                                <span class="text-xl font-bold">40,000</span>
+                                <span class="ml-1">원</span>
+                                <span class="ml-2 text-sm text-gray-500 line-through">45,000원</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--============================================-->
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
         </div>
     </section>
 
-
-    <section class="column6">
-        <div class="see-more-area-title">
-            <b class="span60">오마PICK 기획전 모음</b>
-            <div class="see-more-image-button-wrapper">
+    <section class="column6 container max-w-[1200px] mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-6">
+            <b class="text-2xl font-bold">오마PICK 기획전 모음</b>
+            <div class="text-blue-600 cursor-pointer">
                 <div>더보기</div>
             </div>
         </div>
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 <div class="swiper-slide" th:each="i : ${#numbers.sequence(1, 5)}">
-                    <img
-                            alt=""
-                            class="cc123e1c51f2b16e4bc19b5f014752-icon"
-                            loading="lazy"
-                            src="/image/index/cc123e1c51f2b16e4bc19b5f014752f4jpg@2x.png"
-                    />
+                    <img alt="" class="w-full h-auto rounded-lg" loading="lazy"
+                         src="/image/index/cc123e1c51f2b16e4bc19b5f014752f4jpg@2x.png"/>
                 </div>
             </div>
             <div class="swiper-button-next"></div>
@@ -205,34 +179,32 @@
         </div>
     </section>
 
-    <section class="column7">
-        <div class="colutamn7-child"></div>
-        <b class="heading-22">국내 여행지</b>
-        <div class="article">
-            <div class="a15">경기</div>
-            <div class="a15">서울</div>
-            <div class="a15">부산</div>
-            <div class="a15">제주도</div>
-            <div class="a15">강원도</div>
-            <div class="a15">전북</div>
-            <div class="a15">전남</div>
-            <div class="a15">경북</div>
-            <div class="a15">경남</div>
-            <div class="a15">충북</div>
-            <div class="a15">충남</div>
-            <div class="a15">대구</div>
-            <div class="a15">인천</div>
-            <div class="a15">광주</div>
-            <div class="a15">대전</div>
-            <div class="a15">울산</div>
-            <div class="a15">세종</div>
+    <section class="column7 container max-w-[1200px] mx-auto px-4 py-10">
+        <b class="text-2xl font-bold mb-6 block">국내 여행지</b>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div class="text-blue-600 cursor-pointer">경기</div>
+            <div class="text-blue-600 cursor-pointer">서울</div>
+            <div class="text-blue-600 cursor-pointer">부산</div>
+            <div class="text-blue-600 cursor-pointer">제주도</div>
+            <div class="text-blue-600 cursor-pointer">강원도</div>
+            <div class="text-blue-600 cursor-pointer">전북</div>
+            <div class="text-blue-600 cursor-pointer">전남</div>
+            <div class="text-blue-600 cursor-pointer">경북</div>
+            <div class="text-blue-600 cursor-pointer">경남</div>
+            <div class="text-blue-600 cursor-pointer">충북</div>
+            <div class="text-blue-600 cursor-pointer">충남</div>
+            <div class="text-blue-600 cursor-pointer">대구</div>
+            <div class="text-blue-600 cursor-pointer">인천</div>
+            <div class="text-blue-600  cursor-pointer">광주</div>
+            <div class="text-blue-600 cursor-pointer">대전</div>
+            <div class="text-blue-600 cursor-pointer">울산</div>
+            <div class="text-blue-600 cursor-pointer">세종</div>
         </div>
     </section>
 </div>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function (){
+    document.addEventListener("DOMContentLoaded", function () {
         //세션스토리지의 값 searh_bar에 넣기
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
@@ -242,8 +214,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const activeSearch = urlParams.get("activeSearch");
         if (activeSearch === "domestic") {
-          $("#search-accommodation").focus();
-          $("#search-accommodation").trigger("click");
+            $("#search-accommodation").focus();
+            $("#search-accommodation").trigger("click");
         }
 
 
@@ -277,67 +249,68 @@
         });
     });
 
-        const swiper2 = new Swiper(".column2 .swiper-container", {
-          loop: false,
-          slidesPerView: 6,
-          spaceBetween: 15,
-          slidesPerGroup: 6,
-          navigation: {
+    const swiper2 = new Swiper(".column2 .swiper-container", {
+        loop: false,
+        slidesPerView: 6,
+        spaceBetween: 15,
+        slidesPerGroup: 6,
+        navigation: {
             nextEl: ".column2 .swiper-button-next",
             prevEl: ".column2 .swiper-button-prev",
-          },
-          breakpoints: {
+        },
+        breakpoints: {
             1200: {
-              slidesPerView: 6,
+                slidesPerView: 6,
             },
             0: {
-              slidesPerView: 1,
+                slidesPerView: 1,
             },
-          },
-          on: {
+        },
+        on: {
             init: function () {
-              updateNavigationButtons(this);
+                updateNavigationButtons(this);
             },
             slideChange: function () {
-              updateNavigationButtons(this);
+                updateNavigationButtons(this);
             },
-          },
-        });
+        },
+    });
 
-        const swiper4 = new Swiper(".column4 .swiper-container", {
-          loop: false,
-          slidesPerView: 4,
-          spaceBetween: 15,
-          slidesPerGroup: 4,
-          navigation: {
+    const swiper4 = new Swiper(".column4 .swiper-container", {
+        loop: false,
+        slidesPerView: 4,
+        spaceBetween: 15,
+        slidesPerGroup: 4,
+        navigation: {
             nextEl: ".column4 .swiper-button-next",
             prevEl: ".column4 .swiper-button-prev",
-          },
-          pagination: {
+        },
+        pagination: {
             el: ".column4 .swiper-pagination",
             clickable: true,
-          },
-          breakpoints: {
+        },
+        breakpoints: {
             1200: {
-              slidesPerView: 4,
+                slidesPerView: 4,
             },
             0: {
-              slidesPerView: 1,
+                slidesPerView: 1,
             },
-          },
-            on: {
-                init: function () {
-                    updateNavigationButtons(this);
-                },
-                slideChange: function () {
-                    updateNavigationButtons(this);
-                },
+        },
+        on: {
+            init: function () {
+                updateNavigationButtons(this);
             },
-        });
+            slideChange: function () {
+                updateNavigationButtons(this);
+            },
+        },
+    });
 
     const swiper5 = new Swiper('.column6 .swiper-container', {
         loop: true,
         slidesPerView: 2.4,
+        spaceBetween: 15,
         slidesPerGroup: 1,
         autoplay: {
             delay: 3000,
