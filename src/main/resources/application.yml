@@ -67,10 +67,7 @@ spring:
       use-class-for-enum-values: true
   jackson:
     property-naming-strategy: LOWER_CAMEL_CASE
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: true
+
 custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
