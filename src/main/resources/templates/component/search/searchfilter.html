@@ -4,37 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filter Sidebar</title>
-    <style>
-        @media (max-width: 768px) {
-            .filter-sidebar {
-                width: 100% !important;
-                padding: 10px !important;
-            }
-            .filter-section {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                gap: 10px;
-                padding-bottom: 10px;
-            }
-            .filter-item {
-                flex: 0 0 auto;
-                white-space: nowrap;
-            }
-            .facility-buttons {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                gap: 10px;
-            }
-            .facility-button {
-                flex: 0 0 auto;
-            }
-            .price-range {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
 <div th:fragment="filterbar(identifier)">
