@@ -336,7 +336,7 @@
       crossorigin="anonymous"></script>
     <script>
       $('#id_check').click(function () {
-              var id = $('#id').val().trim();
+              var id = $('#id').val().replace(/\s+/g, '');
 
               $('#id_checkresult').text('').hide();
 
@@ -350,13 +350,20 @@
                       if (cnt == 0) {
                           $('#id_checkresult').text('사용가능').css('color', 'blue').show();
                           $('#id_check > div > div > div').text('확인완료');
-                          $('#id_check').removeAttr('id');
                           $('#id_check').removeClass('cursor-pointer');
+                          $('#id_check').addClass('checked');
                       } else {
                           $('#id_checkresult').text('사용불가').css('color', 'red').show();
                       }
                   }
               });
+          });
+
+          $('#id').on('input', function() {
+            $('#id_check').removeClass('checked');
+              $('#id_checkresult').text('');
+              $('#id_check').addClass('cursor-pointer');
+              $('#id_check > div > div > div').text('중복확인');
           });
           
       $("#email").on("keyup", function () {
@@ -367,13 +374,20 @@
       let timerId;
 
       function sendEmailAndStartTimer() {
-      const email = $('#email').val();
+      const email = $('#email').val().replace(/\s+/g, '');
       console.log(email);
 
       if (email === "") {
         alert("이메일을 입력해주세요.");
         return;
       }
+
+      // 이메일 형식 유효성 검사
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|naver\.com|daum\.net|kakao\.com|nate\.com|hanmail\.net)$/;
+            if (!emailPattern.test(email)) {
+              alert("올바른 이메일 형식 또는 사용 가능한 이메일이 아닙니다.");
+                return;
+            }
 
       $.ajax({
         type: "POST",
@@ -397,8 +411,8 @@
       }
 
       function verifyCode() {
-      const email = $('#email').val().trim();
-      const code = $('#email_check').val().trim();
+      const email = $('#email').val().replace(/\s+/g, '');
+      const code = $('#email_check').val().replace(/\s+/g, '');
       console.log(code);
 
       if (code === "") {
@@ -418,6 +432,7 @@
             sessionStorage.setItem("emailVerified", "true");
             clearTimeout(timerId);
             $('#email_check').attr('readonly', 'readonly');
+            $('#email').attr('readonly', 'readonly');
             $('#verification').removeAttr('onclick');
             $('#verification').removeClass('cursor-pointer');
             $('#verification').text('인증 완료');
@@ -458,24 +473,30 @@
       // 초기 버튼 설정
       resetVerificationButton('인증번호 전송', 'sendEmailAndStartTimer()');
 
-      $('#pw_check').keyup(function () {
-            var pw = $('#pw').val().trim();
-            var pw_check = $('#pw_check').val().trim();
-            if (pw == pw_check) {
+      function checkPasswordMatch() {
+            var pw = $('#pw').val().replace(/\s+/g, '');
+            var pw_check = $('#pw_check').val().replace(/\s+/g, '');
+            if (pw === pw_check && pw !== "") {
                 $('#pw_checkresult').text('일치').css('color', 'blue').show();
-            } else {
+            } else if (pw !== pw_check && pw_check !== "") {
                 $('#pw_checkresult').text('불일치').css('color', 'red').show();
+            } else {
+                $('#pw_checkresult').text('').hide();
             }
-        });
+        }
+
+        $('#pw, #pw_check').on('input', function() {
+                checkPasswordMatch(); // 다시 비교
+            });
 
         function regist() {
-            var id = $('#id').val().trim();
-            var id_check = $('#id_check').text().trim();
-            var pw = $('#pw').val().trim();
-            var pw_check = $('#pw_check').val().trim();
-            var pw_checkresult = $('#pw_checkresult').text().trim();
-            var email = $('#email').val().trim();
-            var email_check = $('#email_check').val().trim();
+            var id = $('#id').val().replace(/\s+/g, '');
+            var id_check = $('#id_check').text().replace(/\s+/g, '');
+            var pw = $('#pw').val().replace(/\s+/g, '');
+            var pw_check = $('#pw_check').val().replace(/\s+/g, '');
+            var pw_checkresult = $('#pw_checkresult').text().replace(/\s+/g, '');
+            var email = $('#email').val().replace(/\s+/g, '');
+            var email_check = $('#email_check').val().replace(/\s+/g, '');
             var emailVerified = sessionStorage.getItem("emailVerified");
 
             if (id == "") {
@@ -483,7 +504,7 @@
                 return;
             }
 
-            if (id_check == "사용불가") {
+            if (id_check == "사용불가" || id_check === "") {
                 alert("아이디 중복확인을 해주세요.");
                 return;
             }
@@ -498,7 +519,7 @@
                 return;
             }
 
-            if (pw_checkresult == "불일치") {
+            if (pw_checkresult == "불일치" || pw_checkresult === "") {
                 alert("비밀번호가 일치하지 않습니다.");
                 return;
             }
