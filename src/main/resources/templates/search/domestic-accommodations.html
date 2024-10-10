@@ -148,7 +148,7 @@
                             >
                                 <h3 class="m-[0px] w-max relative text-[24px] font-bold font-[inherit] flex items-center mq450:text-[19px] mq750:w-full mq750:h-[9px]">
                                     '<span id="keyword_value"></span>' 검색 결과&nbsp;
-                                    <span th:text="${resultAccommodations.size()} + '개'"></span>
+                                    <span th:text="${pageNation.getTotalElements()} + '개'"></span>
                                 </h3>
                             </div>
                         </div>
@@ -334,7 +334,7 @@
 </div>
 <div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden z-50"
      id="modal-wrap">
-    <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{/search/modal :: search_modal}"
+    <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{search/modal :: search_modal}"
          th:with="accommodations=${resultAccommodationsMap}"></div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
