@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -53,8 +52,9 @@ public class PriceService {
         priceRepository.save(price);
     }
 
+    // 관리자 - 입점 요청 상회 조회 모달 가격 가져오기
     public PriceDTO getPrice(Integer id) { 
-        Price priceDTO = priceRepository.findFirstByHostInfoId(id);
+        Price priceDTO = priceRepository.findFirstByRoomInfoId(id);
 
         return PriceMapper.INSTANCE.toPriceDTO(priceDTO);
     }
