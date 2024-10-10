@@ -1,9 +1,11 @@
 package com.omakase.omastay.service;
 
+import java.util.List;
+
+import com.omakase.omastay.entity.ReviewComment;
 import com.omakase.omastay.dto.ReviewCommentDTO;
 import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.entity.Review;
-import com.omakase.omastay.entity.ReviewComment;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.mapper.ReviewCommentMapper;
 import com.omakase.omastay.mapper.ReviewMapper;
@@ -49,5 +51,10 @@ public class ReviewCommentService {
         reviewCommentRepository.save(reviewComment);
     }
 
+    public List<ReviewCommentDTO> findAllReviewComment(){
+        List<ReviewComment> reviewComments = reviewCommentRepository.findAll();
+        return ReviewCommentMapper.INSTANCE.toReviewCommentDTOList(reviewComments);
+    }
 
+    
 }

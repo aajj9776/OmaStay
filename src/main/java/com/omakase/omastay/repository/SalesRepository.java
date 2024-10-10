@@ -30,4 +30,13 @@ public interface SalesRepository extends JpaRepository<Sales, Integer>, SalesRep
                         @Param("endDate") LocalDate endDate, 
                         @Param("hidx") Integer hidx);
 
+
+    @Query("SELECT s FROM Sales s " +
+        "JOIN FETCH s.reservation r " +
+        "JOIN FETCH s.hostInfo h " +
+        "JOIN FETCH r.payment p " +
+        "WHERE s.salDate BETWEEN :firstDay AND :today " +
+        "ORDER BY s.salDate DESC")                    
+    List<Sales> getAllSalesThisMonth(@Param("firstDay") LocalDate firstDay, @Param("today") LocalDate today);
+
 }

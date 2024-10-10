@@ -46,7 +46,7 @@
                   text-[#000] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
                   border-solid box-border py-[4px] px-[11px] mb-2" readonly /></td>
                             </tr>
-                            <tr><td><div class="mb-[10px] p-2"><span class="text-black">등록일: </span><span class="text-black" th:text="${sDto.sDate}"> </span><span> (* 등록일만 저장됩니다.) </span></div></td></tr>
+                            <tr><td><div class="mb-[10px] p-2"><span class="text-black">등록일: </span><span class="text-black" th:text="${#temporals.format(sDto.sDate, 'yyyy-MM-dd HH:mm')}"> </span><span> (* 등록일만 저장됩니다.) </span></div></td></tr>
                             <tr>
                                 <td><textarea th:text="${sDto.sContent}" id="content"
                                         class="bg-[#fff] w-[1000px] h-[500px] text-[#000]" name="sContent" cols="50"

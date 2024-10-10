@@ -8,7 +8,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link href="/css/global.css" rel="stylesheet" />
-    <link href="/css/header/header.css" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=ABeeZee:wght@400&family=Roboto:wght@100;200;400;500;600;700&family=Work+Sans:wght@600&family=Lato:wght@400;600;700;900&family=Poppins:wght@400;500&family=Abel:wght@400&family=Whisper:wght@400&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;500;700&family=Oswald:wght@400;500;700&display=swap"
@@ -28,7 +27,7 @@
   </head>
   <body>
     <header th:insert="~{component/header/header :: header}" />
-    <div
+    <div class = "relative z-10 bg-white rounded-lg p-6"
       th:if="${includeSearchBar}"
       th:insert="~{component/search/searchbar :: searchbar}"
     ></div>
@@ -42,6 +41,7 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script type="text/javascript" src="/js/countperson.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script
@@ -53,7 +53,6 @@
       src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
     ></script>
     <script type="text/javascript" src="/js/datepicker.js"></script>
-    <script type="text/javascript" src="/js/countperson.js"></script>
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -84,9 +83,11 @@
         localStorage.setItem("isLogin", login.toString());
 
         if (token) {
+          console.log("토큰 있음1");
           try {
             let userInfo = jwt_decode(token);
             if (token != null && userInfo != null) {
+              console.log("비동기식 있음");
               $.ajax({
                 url: "/login/userInfo",
                 type: "GET",

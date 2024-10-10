@@ -1,31 +1,29 @@
 package com.omakase.omastay.service;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ReviewDTO;
-import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.entity.HostInfo;
-import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.ReviewMapper;
-import com.omakase.omastay.mapper.ServiceMapper;
 import com.omakase.omastay.repository.ReviewRepository;
 import com.omakase.omastay.vo.FileImageNameVo;
 
-import java.io.File;
-import java.io.IOException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
-import org.eclipse.angus.mail.imap.protocol.FLAGS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 
 
@@ -34,44 +32,45 @@ public class ReviewService {
 
     @Autowired
     private ReviewRepository reviewRepository;
-    
-    public ReviewDTO addReview(ReviewDTO reviewDTO, List<String> onames, List<String> fnames) {
+
+    @Transactional
+    public Integer addReview(ReviewDTO reviewDTO, List<String> onames, List<String> fnames) {
         Review review = ReviewMapper.INSTANCE.toReview(reviewDTO);
-        Member member = new Member();
-        member.setId(1);
-        review.setMember(member);
 
         Reservation reservation = new Reservation();
-        reservation.setId(20);
+        reservation.setId(56);
         review.setReservation(reservation);
-
-        HostInfo hostInfo = new HostInfo();
-        hostInfo.setId(1);
-        review.setHostInfo(hostInfo);
 
         review.setRevDate(LocalDateTime.now());
         review.setRevNone(null);
         review.setRevStatus(BooleanStatus.TRUE);
-        review.setRevWriter("정한별");
-        
-        
-        ReviewDTO result = null;
-    
-        // 저장된 파일명과 원본 파일명을 DTO에 추가 (선택사항)
+        review.setRevWriter("정한별"); 
+
         FileImageNameVo vo = new FileImageNameVo();
         String allFnames = String.join(",", fnames);
         String allOnames = String.join(",", onames);
         vo.setFName(allFnames);
         vo.setOName(allOnames);
         review.setRevFileImageNameVo(vo);
-        Review dto =  reviewRepository.save(review);
 
-        ReviewDTO res = ReviewMapper.INSTANCE.toReviewDTO(dto);
+        Review savedReview = reviewRepository.save(review);
 
-        return res;
-    
+        return savedReview.getId();
     }
 
+    public Review findById(Integer revIdx) {
+        return reviewRepository.findById(revIdx)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found with id: " + revIdx)); 
+    }
+
+      public List<Review> findAllReview(String sortOption,Integer hIdx){
+        
+        return reviewRepository.findAll(sortOption,hIdx);
+   
+    }
+
+
+     // 호스트 전체 리뷰 가져오기
     // 호스트 전체 리뷰 가져오기
     public List<ReviewDTO> getAllReview(HostInfoDTO hostInfoDTO) {
 
@@ -95,6 +94,16 @@ public class ReviewService {
         Review review  = reviewRepository.findById(id).get();
         return ReviewMapper.INSTANCE.toReviewDTO(review);
     }
+
+    public List<Object[]> getResCounts(){
+        return reviewRepository.countReservationsByMemIdx();
+    }
+
+    public List<ReviewDTO> getAllReviewImages(Integer hIdx) {
+        List<Review> reviewImage = reviewRepository.findByReviewAndImage(hIdx);
+    return ReviewMapper.INSTANCE.toReviewDTOList(reviewImage);
+    }
+
 
     //호스트 오늘 리뷰 가져오기
     public List<ReviewDTO> getReviewDay(HostInfoDTO hostInfoDTO) {
@@ -136,6 +145,41 @@ public class ReviewService {
         return ReviewMapper.INSTANCE.toReviewDTOList(review);
     }
 
+    public Map<Integer, Map<String, Object>> getRecomReviewCount(){
+        List<Object[]> reviewCountList = reviewRepository.findReviewCount();
+        Map<Integer, Map<String, Object>> reviewCountMap = new HashMap<>();
+        for (Object[] row : reviewCountList) {
+            Integer hostId = (Integer) row[0];
+            Long reviewCount = (Long) row[1];
+            Double totalRating = (Double) row[2];
+
+            Map<String, Object> stats = new HashMap<>();
+            stats.put("reviewCount", reviewCount);
+            stats.put("averageRating", (reviewCount > 0) ? (double) totalRating / reviewCount : 0.0); // 평균 계산 시 double로 설정
+
+            reviewCountMap.put(hostId, stats);
+        }
+        return reviewCountMap;
+    }
+
+    public String getReviewStatsByHostId(Integer hIdx) {
+        List<Object[]> reviewCountList = reviewRepository.findHostReviewCount(hIdx);
+        if (reviewCountList.isEmpty()) {
+            return "0.0, 0";
+        }
+        
+        Object[] row = reviewCountList.get(0);
+        Long reviewCount = (Long) row[1];
+        Double totalRating = (Double) row[2];
+    
+        Double averageRating = (reviewCount > 0) ? (double) totalRating / reviewCount : 0.0;
+        return String.format("%.1f, %d", averageRating, reviewCount);
+    }
+    
+    public void deleteReviewById(int revIdx) {
+        reviewRepository.updateReviewStatus(revIdx);
+    }
 
 }
+
     

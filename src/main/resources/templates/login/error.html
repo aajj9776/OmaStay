@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>소셜 전용 로그인 오류</title>
+</head>
+<body>
+    <h1>잠시만 기다려주세요</h1>
+    <script>
+        
+        var errorMessage = /*[[${errorMessage}]]*/ '탈퇴 혹은 이미 회원가입 했습니다.';
+        alert(errorMessage);
+        // 0.5초 후에 로그인 페이지로 리다이렉트
+        setTimeout(function() {
+            window.location.href = '/login';
+        }, 500);
+    </script>
+</body>
+</html>

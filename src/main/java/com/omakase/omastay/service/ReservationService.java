@@ -229,20 +229,19 @@ public class ReservationService {
     }
 
 
-    //admin의 회원조회에서 회원의 최근 예약 기록을 가져옴
+    //admin의 회원 상세 조회에서 회원의 최근 예약 기록을 가져옴
     public Map<String, Object> member_reservation(Integer memId){
 
         Map<String, Object> map = new HashMap<>();
 
+        //3개월 날짜 범위 구하기
         LocalDateTime month3 = LocalDateTime.now().minusMonths(3).withHour(0).withMinute(0).withSecond(0).withNano(0);
-        //최근 3개월 내 예약 건수를 가져옴
+        //최근 3개월 내 예약 확정&사용완료 건수를 가져옴
         Integer monthCount = reservationRepository.get3MonthCount(memId, month3);
-        System.out.println("monthCount: "+monthCount);
         map.put("monthCount", monthCount);
 
-        //전체 예약 건수를 가져옴
+        //전체 예약 확정&사용완료 건수를 가져옴
         Integer totalCount = reservationRepository.getTotalCount(memId);
-        System.out.println("totalCount: "+totalCount);
         map.put("totalCount", totalCount);
 
         //최근 예약 내역 5건 가져옴
@@ -254,6 +253,7 @@ public class ReservationService {
             MemberCustomDTO dto = new MemberCustomDTO();
             dto.setReservation(ReservationMapper.INSTANCE.toReservationDTO(item));
             dto.setHostInfo(HostInfoMapper.INSTANCE.toHostInfoDTO(item.getRoomInfo().getHostInfo()));
+            dto.setPayment(PaymentMapper.INSTANCE.toPaymentDTO(item.getPayment()));
             recentList.add(dto);
         }
         System.out.println("list: "+recentList);

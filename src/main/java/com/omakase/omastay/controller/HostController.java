@@ -207,8 +207,9 @@ public class HostController {
             mv.addObject("image", image);
             mv.addObject("hostMypageDTO", hostMypageDTO);
             mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
+            if (hostInfoCustomDTO.getHostInfo().getHCate() != null) {
             mv.addObject("hCate", hostInfoCustomDTO.getHostInfo().getHCate().name());
-            System.out.println("숙소유형"+hostInfoCustomDTO.getHostInfo().getHCate().name());
+            }
         }
         System.out.println("storage:"+upload);
         mv.addObject("storage", upload);

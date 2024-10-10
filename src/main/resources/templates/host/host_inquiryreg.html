@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/host}"
+      layout:fragment="host">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div
+      class="w-full relative bg-[#e4e7eb] flex flex-row items-start justify-center py-[100px] px-[20px] box-border leading-[normal] tracking-[normal]"
+    >
+      <main
+        class="w-[1200px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[73px] px-[0px] pb-[0px] box-border gap-[50px] max-w-full lg:pt-[47px] lg:box-border mq750:gap-[25px] mq750:pt-[31px] mq750:box-border"
+      >
+        <section
+          class="self-stretch flex flex-row items-start justify-center max-w-full text-left text-[50px] text-[#000] font-[Roboto]"
+        >
+          <div
+            class="w-[1000px] flex flex-col items-start justify-start gap-[117px] max-w-full lg:gap-[58px] mq750:gap-[29px]"
+          >
+            <div
+              class="w-[358px] flex flex-row items-start justify-start py-[0px] px-[29px] box-border max-w-full"
+            >
+              <b
+                class="h-[60px] flex-1 relative tracking-[0.15px] leading-[24px] flex items-center mq450:text-[30px] mq450:leading-[14px] mq1050:text-[40px] mq1050:leading-[19px]"
+                >1:1 문의하기</b
+              >
+            </div>
+            <div
+              class="self-stretch rounded-[30px] bg-[rgba(200,219,245,0.52)] overflow-hidden flex flex-col items-start justify-start py-[50px] pl-[138px] pr-[136px] box-border gap-[14px] max-w-full text-[12px] text-[rgba(0,0,0,0.6)] lg:pl-[69px] lg:pr-[68px] lg:box-border mq750:py-[32px] mq750:px-[34px] mq750:box-border"
+            >
+              <div
+                class="w-[666px] flex flex-col items-start justify-start gap-[6px] max-w-full"
+              >
+                <div
+                  class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
+                >
+                  제목
+                </div>
+                <input
+                  class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[24px] flex flex-row items-start justify-start font-[Roboto] text-[16px] text-[rgba(0,0,0,0.87)] min-w-[24px] min-h-[24px]"
+                  placeholder="제목"
+                  type="text"
+                />
+
+                <div
+                  class="self-stretch h-[2px] relative border-[#000] border-t-[2px] border-solid box-border"
+                ></div>
+              </div>
+              <div
+                class="w-[220px] rounded-t-[4px] rounded-b-[0px] bg-[rgba(0,0,0,0.06)] overflow-hidden flex flex-row items-start justify-start p-[12px] box-border relative"
+              >
+                <div
+                  class="h-[1px] w-[32px] hidden flex-row items-center justify-start py-[0px] pl-[0px] pr-[8px] box-border z-[0]"
+                >
+                  <div class="hidden flex-row items-start justify-start">
+                    <img
+                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
+                      alt=""
+                      src="/image/host/starsharp-2.svg"
+                    />
+                  </div>
+                </div>
+                <input
+                  class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[118px] p-[0px]"
+                  placeholder="등록일"
+                  type="text"
+                />
+
+                <div
+                  class="h-[1px] w-[24px] hidden flex-row items-center justify-center z-[2]"
+                >
+                  <div class="hidden flex-row items-start justify-start">
+                    <img
+                      class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
+                      alt=""
+                      src="/image/host/starsharp-2.svg"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="h-[1px] w-[calc(100%_+_1px)] absolute !m-[0] right-[-1px] bottom-[-1px] left-[0px] border-[rgba(0,0,0,0.42)] border-t-[1px] border-solid box-border"
+                ></div>
+              </div>
+              <div
+                class="self-stretch flex flex-row items-start justify-start max-w-full"
+              >
+                <div
+                  class="flex-1 flex flex-col items-start justify-start relative max-w-[calc(100%_-_15px)]"
+                >
+                  <div
+                    class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
+                  >
+                    <div
+                      class="self-stretch overflow-hidden flex flex-row items-center justify-start py-[16px] px-[0px] box-border min-w-[24px] min-h-[24px] max-w-full"
+                    >
+                      <div
+                        class="h-[64px] w-[32px] hidden flex-row items-center justify-start py-[20px] pl-[0px] pr-[8px] box-border"
+                      >
+                        <div class="hidden flex-row items-start justify-start">
+                          <img
+                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
+                            alt=""
+                            src="/image/host/starsharp-2.svg"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="h-[442px] flex-1 relative tracking-[0.15px] leading-[24px] inline-block max-w-full"
+                      >
+                        It is a long established fact that a reader will be
+                        distracted by the readable content of a page when
+                        looking at its layout. The point of using Lorem Ipsum is
+                        that it has a more-or-less normal distribution of
+                        letters, as opposed to using 'Content here, content
+                        here', making it look like readable English.
+                      </div>
+                      <div
+                        class="w-[98px] relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.38)] hidden"
+                      >
+                        Placeholder
+                      </div>
+                      <div
+                        class="h-[64px] w-[24px] hidden flex-row items-center justify-start py-[20px] px-[0px] box-border"
+                      >
+                        <div class="hidden flex-row items-start justify-start">
+                          <img
+                            class="h-[24px] w-[24px] relative overflow-hidden shrink-0"
+                            alt=""
+                            src="/image/host/starsharp-2.svg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="h-[2px] !m-[0] absolute top-[0px] left-[12px] bg-[#fff] flex flex-row items-center justify-start py-[0px] px-[3px] box-border z-[1]"
+                  >
+                    <div
+                      class="relative tracking-[0.15px] leading-[12px] inline-block min-w-[25px]"
+                    >
+                      내용
+                    </div>
+                  </div>
+                  <div
+                    class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border z-[2]"
+                  >
+                    <div
+                      class="self-stretch h-[12px] relative tracking-[0.15px] leading-[12px] flex items-center"
+                    >
+                      Helper text
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="shadow-[1px_0px_0px_rgba(0,_0,_0,_0.12)_inset] bg-[#eee] flex flex-row items-start justify-start pt-[4px] px-[4px] pb-[426px] mq750:pt-[20px] mq750:pb-[277px] mq750:box-border"
+                >
+                  <div
+                    class="h-[44px] w-[7px] relative rounded-[4px] bg-[#bdbdbd]"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="self-stretch flex flex-row items-start justify-center flex-wrap content-start pt-[0px] px-[535px] pb-[50px] gap-[30px] lg:pl-[267px] lg:pr-[267px] lg:box-border mq450:pl-[20px] mq450:pr-[20px] mq450:box-border mq750:gap-[15px] mq750:pl-[133px] mq750:pr-[133px] mq750:box-border"
+        >
+          <button
+            class="cursor-pointer [border:none] py-[12px] px-[54px] bg-[#2196f3] rounded-[4px] overflow-hidden flex flex-col items-center justify-center box-border min-w-[112px]"
+          >
+            <div
+              class="self-stretch flex flex-row items-center justify-center gap-[8px]"
+            >
+
+              <b
+                class="relative text-[20px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#fff] text-left min-w-[41px] mq450:text-[16px] mq450:leading-[21px]"
+                >등록</b
+              >
+
+            </div>
+          </button>
+          <button
+            class="cursor-pointer border-[#2196f3] border-[1px] border-solid py-[10px] px-[53px] bg-[#fff] rounded-[4px] overflow-hidden flex flex-col items-center justify-center"
+          >
+            <div
+              class="w-[42px] flex flex-row items-center justify-center gap-[8px]"
+            >
+              <b
+                class="relative text-[20px] tracking-[0.46px] leading-[26px] uppercase inline-block font-[Roboto] text-[#2196f3] text-left min-w-[41px] mq450:text-[16px] mq450:leading-[21px]"
+                >취소</b
+              >
+            </div>
+          </button>
+        </section>
+      </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </body>
+</html>

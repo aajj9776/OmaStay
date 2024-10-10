@@ -83,12 +83,14 @@ public class SalesService {
         System.out.println("매출 테이블 추가");
     }
 
+    //이번달 전체 지역 매출 테이블 가져오기
+    public List<SalesCustomDTO> getAllSalesThisMonth(){
+        LocalDate firstDay = LocalDate.now().withDayOfMonth(1);
+        LocalDate today = LocalDate.now();
 
-    public List<SalesCustomDTO> getAllSales(){
         List<SalesCustomDTO> salesCustomDTOs = new ArrayList<>();
 
-        List<Sales> sales = salesRepository.findAll();
-        System.out.println(sales);
+        List<Sales> sales = salesRepository.getAllSalesThisMonth(firstDay, today);
 
         for(Sales s: sales){
             HostInfoDTO hostInfoDTO =  HostInfoMapper.INSTANCE.toHostInfoDTO(s.getHostInfo());
@@ -102,13 +104,17 @@ public class SalesService {
         return salesCustomDTOs;
     }
 
-    public List<Top5SalesDTO> getTop5SalesByRegion(String region){
+    //이번달 전체 지역 판매 실적 Top5
+    public List<Top5SalesDTO> getTop5SalesThisMonth(){
+        LocalDate firstDay = LocalDate.now().withDayOfMonth(1);
+        LocalDate today = LocalDate.now();
 
-        List<Top5SalesDTO> top5SalesDTOs = salesRepository.findTop5SalesByRegion(region);
+        List<Top5SalesDTO> top5SalesDTOs = salesRepository.getTop5SalesThisMonth(firstDay, today);
 
         return top5SalesDTOs;
     }
 
+    //전체 판매 실적 검색
     public List<SalesCustomDTO> searchSales(String dateRange, String region){
         List<SalesCustomDTO> salesCustomDTOs = new ArrayList<>();
 
@@ -136,6 +142,24 @@ public class SalesService {
 
         return salesCustomDTOs;
 
+    }
+
+    public List<Top5SalesDTO> searchTop5Sales(String dateRange, String region){
+
+        String startDate = null;
+        String endDate = null;
+
+        if(dateRange != null && dateRange.length() > 0){
+            String[] dateRangeArr = dateRange.split(" ~ ");
+            System.out.println("dateRangeArr: "+dateRangeArr[0]);
+            System.out.println("dateRangeArr: "+dateRangeArr[1]);
+            startDate = dateRangeArr[0];
+            endDate = dateRangeArr[1];
+        }
+
+        List<Top5SalesDTO> list = salesRepository.searchTop5Sales(startDate, endDate, region);
+
+        return list;
     }
     
     @Transactional(readOnly = true)

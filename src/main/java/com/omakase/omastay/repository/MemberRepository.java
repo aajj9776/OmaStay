@@ -27,6 +27,11 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Member
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.grade WHERE m.id = :memberId")
     Member findMemberWithGrade(@Param("memberId") int memberId);
 
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.reservations WHERE m.id = :memberId")
+    Optional<Member> findMemberWithReservations(@Param("memberId") int memberId);
+
+    @Query("SELECT m.grade.id FROM Member m WHERE m.id = :memberId")
+    Integer findGIdxByMemberId(@Param("memberId") Integer memberId);
     
 
 }

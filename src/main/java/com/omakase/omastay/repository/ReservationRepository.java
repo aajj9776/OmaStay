@@ -79,12 +79,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND r.startEndVo.start < :end AND r.startEndVo.end > :start")
     Optional<Reservation> findConflictingReservationWithLock(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    //admin의 회원조회에서 회원의 최근 3개월 예약 횟수를 가져옴
-    @Query("SELECT COUNT(r) FROM Reservation r JOIN r.payment p WHERE r.member.id = :memId AND p.payDate >= :time")
+    //관리자의 회원조회에서 회원의 최근 3개월 예약 확정&사용완료 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r JOIN r.payment p WHERE r.member.id = :memId AND p.payDate >= :time AND r.resStatus IN (1, 3)")
     Integer get3MonthCount(@Param("memId") Integer memId, @Param("time") LocalDateTime time);
     
-    //admin의 회원조회에서 회원의 전체 예약 횟수를 가져옴
-    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.member.id = :memId")
+    //관리자의 회원조회에서 회원의 전체 예약 확정&사용완료 횟수를 가져옴
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.member.id = :memId AND r.resStatus IN (1, 3)")
     Integer getTotalCount(@Param("memId") Integer memId);
 
     @Query("SELECT r FROM Reservation r JOIN FETCH r.roomInfo ri JOIN FETCH r.member m WHERE m.id = :memberId")
