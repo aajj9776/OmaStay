@@ -26,4 +26,6 @@ public interface HostInfoRepository extends JpaRepository<HostInfo, Integer>, Ho
     void rejectHost(@Param("hidx") int hidx);
 
 
+
+
 }
