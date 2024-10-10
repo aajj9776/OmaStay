@@ -29,4 +29,6 @@ public interface HostInfoRepository extends JpaRepository<HostInfo, Integer>, Ho
     @Query("SELECT h FROM HostInfo h WHERE h.id = :hIdx")
     List<HostInfo> findHostInfoAll(@Param("hIdx") Integer hIdx);
 
+
+
 }

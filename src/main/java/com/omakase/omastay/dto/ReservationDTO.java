@@ -1,5 +1,6 @@
 package com.omakase.omastay.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.vo.StartEndVo;
@@ -12,7 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReservationDTO {
     private Integer id;
+
+    @JsonProperty("roomidx")
     private Integer roomIdx;
+    
     private Integer memIdx;
     private Integer nonIdx;
     private Integer payIdx;
