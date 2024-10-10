@@ -2,8 +2,6 @@ package com.omakase.omastay.repository.custom.impl;
 
 import java.util.List;
 
-import com.omakase.omastay.dto.CouponDTO;
-import com.omakase.omastay.dto.IssuedCouponDTO;
 import com.omakase.omastay.dto.QCouponDTO;
 import com.omakase.omastay.dto.QIssuedCouponDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
@@ -13,7 +11,6 @@ import com.omakase.omastay.entity.QIssuedCoupon;
 import com.omakase.omastay.entity.QPayment;
 import com.omakase.omastay.entity.enumurate.IcStatus;
 import com.omakase.omastay.repository.custom.IssuedCouponRepositoryCustom;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 public class IssuedCouponRepositoryImpl implements IssuedCouponRepositoryCustom {

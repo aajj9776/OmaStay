@@ -29,14 +29,14 @@ import groovy.transform.Undefined.EXCEPTION;
 public class SalesRepositoryImpl implements SalesRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-    
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static final QSales sales = QSales.sales;
     public static final QReservation reservation = QReservation.reservation;
     public static final QRoomInfo roomInfo = QRoomInfo.roomInfo;
     public static final QPayment payment = QPayment.payment;
-    
+
     public static final QHostInfo hostInfo = QHostInfo.hostInfo;
     public static final QReview review = QReview.review;
 
@@ -232,7 +232,7 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         return queryFactory
         .select(Projections.constructor(CalculationCustomDTO.class,
             Expressions.asNumber(sales.reservation.payment.nsalePrice.castToNum(Integer.class)).sum().intValue(), // nsalePrice를 Integer로 변환 후 sum() 적용
-            Expressions.asNumber(sales.reservation.payment.salePrice.castToNum(Integer.class)).sum().intValue())) 
+            Expressions.asNumber(sales.reservation.payment.salePrice.castToNum(Integer.class)).sum().intValue()))
         .from(sales)
         .join(sales.reservation, reservation)
         .join(sales.reservation.payment, payment)
@@ -241,6 +241,6 @@ public class SalesRepositoryImpl implements SalesRepositoryCustom {
         .fetchOne(); // 결과가 하나일 경우 fetchOne() 사용
     }
 
-    
+
 
 }

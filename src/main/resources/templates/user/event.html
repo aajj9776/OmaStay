@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/main}"
+  layout:fragment="main"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이벤트</title>
+    <style>
+      .btn-custom {
+        background-color: #f0f0f0;
+        color: #333;
+      }
+      .btn-custom.active {
+        background-color: #0d6efd;
+        color: white;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold mb-6">이벤트</h1>
+
+      <div class="btn-group mb-6" role="group" aria-label="Event categories">
+        <div class="btn btn-custom active" data-category="all">
+          이벤트 목록
+        </div>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-6 mt-[50px]">
+        <!-- Event Card 1  이걸로 반복문 돌려라 -->
+        <div th:each="event : ${list}">
+          <div class="bg-white rounded-lg shadow-md overflow-hidden w-[350px]"
+                th:onclick="'goEventDetail(' + ${event.id} + ')'">>
+            <img
+              th:src="@{|https://storage.googleapis.com/omastay/notice/${event.fileName.fName}|}"
+              alt="이벤트 이미지"
+              class="w-full h-[154px] object-cover"
+            />
+            <div class="p-2">
+              <h3
+                class="text-lg font-semibold mb-2 truncate"
+                th:text="${event.sTitle}"
+              >
+                이벤트 제목
+              </h3>
+              <div class="mt-4 flex justify-between items-center">
+                <span class="px-2 py-1 bg-green-500 text-white text-xs rounded">
+                  진행중
+                </span>
+                <span class="text-xs text-gray-500" th:text="${event.sPeriod}">
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+
+      function goEventDetail(id){
+        location.href = "/user/eventdetail?id=" + id;
+      }
+
+    </script>
+  </body>
+</html>

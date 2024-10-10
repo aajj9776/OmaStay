@@ -1,6 +1,10 @@
 package com.omakase.omastay.service;
+import java.time.LocalDateTime;
+import java.util.List;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.Optional;
 import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
@@ -14,6 +18,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ServiceService {
@@ -101,6 +106,12 @@ public class ServiceService {
         services = serviceRepository.searchHostNotice(type, keyword, sAuth, sCate);
  
         return ServiceMapper.INSTANCE.toServiceDTOList(services);
+    }
+
+    public ServiceDTO getEvent(int id) {
+        Optional<com.omakase.omastay.entity.Service> serviceOpt = serviceRepository.findByIdAndSCate(id, SCate.EVENT);
+          return serviceOpt.map(ServiceMapper.INSTANCE::toServiceDTO)
+                     .orElseThrow(() -> new EntityNotFoundException("Event not found"));
     }
 
     

@@ -10,6 +10,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +33,7 @@ import com.omakase.omastay.dto.custom.MemberInfoDTO;
 import com.omakase.omastay.dto.custom.ReservationWithImage;
 import com.omakase.omastay.service.MyPageService;
 import com.omakase.omastay.service.RoomInfoService;
+
 
 
 
@@ -70,12 +76,20 @@ public class MypageController {
     }
 
     @GetMapping("/reservation")
-    public ModelAndView reservation(@RequestParam("id") Integer id) {
+    public ModelAndView reservation(
+        @RequestParam("id") Integer id,
+        @PageableDefault(size = 3, page = 0, sort = "startEndVo.end", direction = Sort.Direction.DESC) Pageable pageable) {
         System.out.println("회원번호 " + id);
         ModelAndView mv = new ModelAndView();
         boolean newTrip = false;
 
-        List<ReservationDTO> reservation = myPageService.getNewReservationInfo(id);
+        Page<ReservationDTO> reservationPage = myPageService.getNewReservationInfo(id, pageable);
+
+        int nowPage = reservationPage.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(startPage + 4, reservationPage.getTotalPages());
+
+        List<ReservationDTO> reservation = reservationPage.getContent();
         System.out.println("리스트사이즈" +reservation.size());
         if( reservation != null && reservation.size() > 0){
             newTrip = true;
@@ -110,6 +124,11 @@ public class MypageController {
         }
         mv.addObject("reservation", reservationsWithImages);
         mv.addObject("newTrip", newTrip);
+        mv.addObject("reservationPage", reservationPage);
+        mv.addObject("nowPage", nowPage);
+        mv.addObject("startPage", startPage);
+        mv.addObject("endPage", endPage);
+        mv.addObject("id", id);
 
         mv.setViewName("mypage/user-reservation");
         return mv;
@@ -117,10 +136,19 @@ public class MypageController {
 
     @PostMapping("/reservation")
     @ResponseBody
-    public Map<String, Object> reservationProc(@RequestBody MemberInfoDTO memberInfo) {
+    public Map<String, Object> reservationProc(
+        @RequestBody MemberInfoDTO memberInfo,
+        @PageableDefault(size = 3, page = 0, sort = "startEndVo.end", direction = Sort.Direction.DESC) Pageable pageable) {
         System.out.println("멤버정보" + memberInfo);
+        System.out.println("페이지정보" + pageable.getPageNumber());
+        System.out.println("페이지정보null?" + pageable);
         Map<String, Object> map = new HashMap<>();
-        List<ReservationDTO> reservation = myPageService.getReservationInfo(memberInfo.getId());
+        Page<ReservationDTO> reservation = myPageService.getReservationInfo(memberInfo.getId(), pageable);
+
+        int nowPage = reservation.getPageable().getPageNumber() + 1;
+
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(startPage + 4, reservation.getTotalPages());
 
         List<ReservationWithImage> reservationsWithImages = new ArrayList<>();
 
@@ -139,7 +167,12 @@ public class MypageController {
             reservationWithImage.setHostName(host.getHname());
             reservationsWithImages.add(reservationWithImage);
         }
+        System.out.println("넘어갈 현재페이지" +nowPage);
         map.put("reservation", reservationsWithImages);
+        map.put("nowPage", nowPage);
+        map.put("startPage", startPage);
+        map.put("endPage", endPage);
+        map.put("id", memberInfo.getId());
 
         return map;
     }

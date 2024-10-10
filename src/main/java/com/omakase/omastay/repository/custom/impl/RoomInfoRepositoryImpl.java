@@ -1,9 +1,10 @@
 package com.omakase.omastay.repository.custom.impl;
 
-import com.omakase.omastay.dto.HostInfoDTO;
-import com.omakase.omastay.entity.HostInfo;
-import com.omakase.omastay.entity.RoomInfo;
-import com.omakase.omastay.entity.Service;
+import com.omakase.omastay.dto.custom.FilterDTO;
+import com.omakase.omastay.entity.*;
+import com.omakase.omastay.entity.QHostFacilities;
+import com.omakase.omastay.entity.QHostInfo;
+import com.omakase.omastay.entity.QRoomInfo;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.repository.custom.RoomInfoRepositoryCustom;
@@ -53,33 +54,36 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
     }
 
     @Override
-    public List<Tuple> personFiltering(int person, List<Integer> roomInfos) {
+    public List<Tuple> personFiltering(FilterDTO filterDTO, List<Integer> roomInfos) {
+        QRoomInfo roomInfo = com.omakase.omastay.entity.QRoomInfo.roomInfo;
+        QHostInfo hostInfo = QHostInfo.hostInfo;
+        QHostFacilities hostFacilities = QHostFacilities.hostFacilities;
+
         BooleanBuilder builder = new BooleanBuilder();
 
-        // 1. room_status true인 것
-        builder.and(roomInfo.roomStatus.eq(BooleanStatus.TRUE));
+        Integer person = filterDTO.getPerson();
 
-        // 2. hostInfo의 id가 hostInfos에 포함되어 있는 것
-        builder.and(roomInfo.id.in(roomInfos));
-
-        // 3. room_person이 person보다 크거나 같은 것
-        builder.and(roomInfo.roomPerson.goe(person));
+        // 조건 추가
+        builder.and(roomStatusCondition(roomInfo));
+        builder.and(roomInfosCondition(roomInfo, roomInfos));
+        builder.and(personCondition(roomInfo, person));
 
         return queryFactory
                 .select(roomInfo.id, hostInfo.id)
-                .from(roomInfo).
-                join(roomInfo.hostInfo, hostInfo)
+                .from(roomInfo)
+                .join(roomInfo.hostInfo, hostInfo)
                 .where(builder).distinct()
                 .fetch();
     }
 
+
     @Override
-    public List<Tuple> findHostsByRoomIds(List<Integer> roomIdxs) {
+    public List<Tuple> findHostsByRoomIds(List<Integer> roomIds) {
         return (queryFactory
                 .select(hostInfo.id, hostInfo.hname, hostInfo.hCate, hostInfo.xAxis, hostInfo.yAxis)  // hname 변경
                 .from(roomInfo)
                 .join(hostInfo).on(roomInfo.hostInfo.id.eq(hostInfo.id))
-                .where(roomInfo.id.in(roomIdxs)).distinct()
+                .where(roomInfo.id.in(roomIds)).distinct()
                 .fetch());
     }
 
@@ -127,5 +131,17 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
             default:
                 return null;
         }
+    }
+
+    private BooleanExpression roomStatusCondition(QRoomInfo roomInfo) {
+        return roomInfo.roomStatus.eq(BooleanStatus.TRUE);
+    }
+
+    private BooleanExpression roomInfosCondition(QRoomInfo roomInfo, List<Integer> roomInfos) {
+        return roomInfo.id.in(roomInfos);
+    }
+
+    private BooleanExpression personCondition(QRoomInfo roomInfo, Integer person) {
+        return roomInfo.roomPerson.goe(person);
     }
 }

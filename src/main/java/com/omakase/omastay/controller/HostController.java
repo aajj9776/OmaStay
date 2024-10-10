@@ -56,7 +56,7 @@ import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
 import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
-
+import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
@@ -75,7 +75,7 @@ import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
-import com.omakase.omastay.util.FileRenameUtil;
+import com.omakase.omastay.util.FileRenameGcs;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import io.jsonwebtoken.io.IOException;
@@ -212,6 +212,8 @@ public class HostController {
             mv.addObject("image", image);
             mv.addObject("hostMypageDTO", hostMypageDTO);
             mv.addObject("hostInfoCustomDTO", hostInfoCustomDTO);
+            mv.addObject("hCate", hostInfoCustomDTO.getHostInfo().getHCate().name());
+            System.out.println("숙소유형"+hostInfoCustomDTO.getHostInfo().getHCate().name());
         }
         System.out.println("storage:"+upload);
         mv.addObject("storage", upload);
@@ -555,10 +557,36 @@ public class HostController {
         System.out.println(hostInfoCustomDTO.getImages().size());
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
 
+        List<ImageDTO> existimagesDTO = hostInfoCustomDTO.getImages();
+
+        for (ImageDTO image : hostInfoCustomDTO.getImages()) {
+            System.out.println("fName: " + image.getImgName().getFName());
+        }
+
         // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
         String c_type = request.getContentType();
         if (c_type.startsWith("multipart")) {
-            List<ImageDTO> imageDTOList = new ArrayList<>();
+            List<ImageDTO> existImages = new ArrayList<>();
+            List<String> existingFileNames = new ArrayList<>();
+
+            if (hostInfoCustomDTO.getHostInfo() != null && hostInfoCustomDTO.getHostInfo().getId() != null) {
+                existImages = imageService.getHostImages(hostInfoCustomDTO.getHostInfo().getId());
+                if (existImages != null) {
+                    existingFileNames = existImages.stream()
+                            .map(imageDTO -> imageDTO.getImgName().getOName())
+                            .collect(Collectors.toList());
+                }
+            }
+
+            List<ImageDTO> newImages = new ArrayList<>();
+
+            // 기존 이미지 추가
+            if (existimagesDTO != null) {
+                for (ImageDTO imageDTO : existimagesDTO) {
+                    newImages.add(imageDTO);
+                }
+            }
+
             if (images != null) {
             for (MultipartFile f : images) {
             if (f != null && f.getSize() > 0) {
@@ -567,9 +595,10 @@ public class HostController {
                 System.out.println("호스트이미지 실제 파일 경로: " + hostupload);
 
                 String oname = f.getOriginalFilename();//실제파일명
+
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, hostupload);
+                String fname = FileRenameGcs.checkSameFileName(oname, existingFileNames);
                 fvo.setFName(fname);
 
                 try {
@@ -579,7 +608,7 @@ public class HostController {
 
                    ImageDTO imageDTO = new ImageDTO();
                    imageDTO.setImgName(fvo);
-                   imageDTOList.add(imageDTO);
+                   newImages.add(imageDTO);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -588,7 +617,7 @@ public class HostController {
             } 
             }
         }
-            hostInfoCustomDTO.setImages(imageDTOList);
+            hostInfoCustomDTO.setImages(newImages);
         }
 
         hostInfoService.saveHostInfo(hostInfoCustomDTO, adminMember);
@@ -596,6 +625,7 @@ public class HostController {
         return ResponseEntity.ok("success");
     }
 
+    
     //호스트 이용규칙 등록
     @RequestMapping("/rulesreg")
     public ResponseEntity<String> rulesreg(@RequestBody HostRulesDTO hostRulesDTO) {
@@ -610,55 +640,77 @@ public class HostController {
         return ResponseEntity.ok("success");
     }
 
-    //호스트 객실추가
-    @RequestMapping("/roominforeg")
-    public ResponseEntity<List<String>> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO roomRegDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+    // 호스트 객실추가
+@RequestMapping("/roominforeg")
+public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO roomRegDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
 
-        AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
-        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+    AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+    HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+    List<ImageDTO> existimagesDTO = roomRegDTO.getImages();
 
-        List<String> imageUrls = new ArrayList<>();
+    for (ImageDTO image : roomRegDTO.getImages()) {
+        System.out.println("fName: " + image.getImgName().getFName());
+    }
 
-        // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
-        String c_type = request.getContentType();
-        if (c_type.startsWith("multipart")) {
-            List<ImageDTO> imageDTOList = new ArrayList<>();
-            if (images != null) {
-            for (MultipartFile f : images) {
-            if (f != null && f.getSize() > 0) {
-                
-                String roomupload = upload + "room";
-                System.out.println("룸이미지 실제 파일 경로: " + roomupload);
+    // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
+    String c_type = request.getContentType();
+    if (c_type.startsWith("multipart")) {
+        List<ImageDTO> existImages = new ArrayList<>();
+        List<String> existingFileNames = new ArrayList<>();
 
-                String oname = f.getOriginalFilename();//실제파일명
-                FileImageNameVo fvo = new FileImageNameVo();
-                fvo.setOName(oname);
-                String fname = FileRenameUtil.checkSameFileName(oname, roomupload);
-                fvo.setFName(fname);
-
-                try {
-                    // 실제 파일 업로드를 서비스로 위임
-                    String fileUrl = fileUploadService.uploadFile(f, "room", fname);
-                    System.out.println("파일 업로드 URL: " + fileUrl);
- 
-                    ImageDTO imageDTO = new ImageDTO();
-                    imageDTO.setImgName(fvo);
-                    imageDTOList.add(imageDTO);
- 
-                 } catch (Exception e) {
-                     e.printStackTrace();
-                 } 
-            } 
+        if (roomRegDTO.getRoomInfo() != null && roomRegDTO.getRoomInfo().getId() != null) {
+            existImages = imageService.getImages(roomRegDTO.getRoomInfo().getId());
+            if (existImages != null) {
+                existingFileNames = existImages.stream()
+                        .map(imageDTO -> imageDTO.getImgName().getOName())
+                        .collect(Collectors.toList());
             }
         }
-        roomRegDTO.setImages(imageDTOList);
+
+        List<ImageDTO> newImages = new ArrayList<>();
+
+        // 기존 이미지 추가
+        if (existimagesDTO != null) {
+            for (ImageDTO imageDTO : existimagesDTO) {
+                newImages.add(imageDTO);
+            }
         }
 
-        roomInfoService.saveRoomInfo(hostInfoDTO, roomRegDTO);
+        // 새로 업로드된 이미지 추가
+        if (images != null) {
+            for (MultipartFile f : images) {
+                if (f != null && f.getSize() > 0) {
+                    String roomupload = upload + "room";
+                    System.out.println("룸이미지 실제 파일 경로: " + roomupload);
 
-        
-        return ResponseEntity.ok(imageUrls);
+                    String oname = f.getOriginalFilename(); // 실제파일명
+                    FileImageNameVo fvo = new FileImageNameVo();
+                    fvo.setOName(oname);
+                    String fname = FileRenameGcs.checkSameFileName(oname, existingFileNames);
+                    fvo.setFName(fname);
+
+                    try {
+                        // 실제 파일 업로드를 서비스로 위임
+                        String fileUrl = fileUploadService.uploadFile(f, "room", fname);
+                        System.out.println("파일 업로드 URL: " + fileUrl);
+
+                        ImageDTO imageDTO = new ImageDTO();
+                        imageDTO.setImgName(fvo);
+                        newImages.add(imageDTO);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        roomRegDTO.setImages(newImages);
     }
+
+    roomInfoService.saveRoomInfo(hostInfoDTO, roomRegDTO);
+
+    return ResponseEntity.ok("success");
+}
 
     //호스트 입점요청
     @RequestMapping("/requestadmin")

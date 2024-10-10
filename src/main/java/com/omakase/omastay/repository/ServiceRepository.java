@@ -1,6 +1,8 @@
 package com.omakase.omastay.repository;
 
+import java.util.Optional;
 import com.omakase.omastay.entity.Service;
+import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.repository.custom.ServiceRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -31,5 +33,6 @@ public interface ServiceRepository extends JpaRepository<Service, Integer>, Serv
     @Query("UPDATE Service s SET s.sTitle = :#{#dto.sTitle}, s.sContent = :#{#dto.sContent}, s.fileName.fName = null, s.fileName.oName = null WHERE s.id = :#{#dto.id}")
     void modifyServicesDeleteFile(@Param("dto") Service dto);
 
-    
+    @Query("SELECT s FROM Service s WHERE s.id = :id AND s.sCate = :sCate")
+    Optional<Service> findByIdAndSCate(@Param("id") int id, @Param("sCate") SCate sCate);
 }
