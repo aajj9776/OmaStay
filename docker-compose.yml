@@ -12,6 +12,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.39.134:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=omastay
       - SPRING_DATASOURCE_PASSWORD=omastay18
+
     volumes:
       - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
     restart: always
