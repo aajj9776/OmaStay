@@ -49,8 +49,7 @@
             function handleLogout() {
                 // 쿠키,Storage 삭제 (로그아웃 처리)
                 document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                localStorage.removeItem("user");
-                localStorage.removeItem("islogin");
+                localStorage.clear()
                 location.href = "/login/logout";  // 로그아웃 경로로 이동
             }
 
@@ -100,6 +99,7 @@
                 function isMyInfoItemExist() {
                     return !!ulDropdownMenu.querySelector("a[href='/mypage/info']");
                 }
+
 
                 if (!isMyInfoItemExist()) {
                     const myInfoItem = document.createElement("li");
