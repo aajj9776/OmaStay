@@ -179,7 +179,7 @@
                             id="cardWrapperContainer">
                         <a class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]" id="card"
                            th:each="accommodation : ${resultAccommodations}"
-                           th:href="@{'/search/detail-host?id=' + ${accommodation.HIdx}}"
+                           th:onclick="|detailHost(${accommodation.HIdx})|"
                         >
                             <div
                                     class="h-[240px] w-[396px] flex flex-col items-start justify-center min-w-[396px] max-w-full mq750:flex-1 mq750:min-w-full"
@@ -1156,6 +1156,13 @@
             markers[i].setMap(null);
         }
         markers = [];
+    }
+
+    function detailHost(hidx) {
+        let checkIn = sessionStorage.getItem('startDate');
+        let checkOut = sessionStorage.getItem('endDate');
+        let person = sessionStorage.getItem('people');
+        window.location.href = `/search/detail-host?id=${hidx}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
     }
 </script>
 </body>
