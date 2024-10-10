@@ -10,7 +10,6 @@ import com.omakase.omastay.service.ServiceService;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
 
-import org.codehaus.groovy.runtime.StringBufferWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -177,4 +176,38 @@ public class UserController {
 
         return mv;
     }
+
+    @RequestMapping("/eventdetail")
+    public ModelAndView eventDetail(@RequestParam("id") int id){
+        ModelAndView mv = new ModelAndView();
+
+        ServiceDTO service = serviceService.getEvent(id);
+
+         // sTitle에서 [] 안의 날짜 분리
+         String sTitle = service.getSTitle();
+         String dateText = "";
+         String remainingText = sTitle;
+
+         if (sTitle.contains("[") && sTitle.contains("]")) {
+             int startIndex = sTitle.indexOf("[");
+             int endIndex = sTitle.indexOf("]");
+             dateText = sTitle.substring(startIndex + 1, endIndex);
+             remainingText = sTitle.substring(0, startIndex).trim() + sTitle.substring(endIndex + 1).trim();
+         }
+         System.out.println("dateText" + dateText);
+         System.out.println("remainingText" + remainingText);
+
+         service.setSPeriod(dateText); 
+         service.setSTitle(remainingText);
+
+
+        
+        mv.addObject("event", service);
+        mv.setViewName("user/eventdetail");
+        return mv;
+        
+    }
+
+
 }
+
