@@ -56,4 +56,6 @@ public class ReviewDTO {
         this.revRating = revRating;
         this.revNone = revNone;
     }
+
+   
 }

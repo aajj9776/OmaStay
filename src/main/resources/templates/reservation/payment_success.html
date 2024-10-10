@@ -76,8 +76,11 @@
       <input type="hidden" id="nonName" name="nonName" value="" />
       <input type="hidden" id="icIdx" name="icIdx" value="" />
       <input type="hidden" id="pIdx" name="pIdx" value="" />
-      <input type="hidden" id="checkIn" name="start" value="" />
-      <input type="hidden" id="checkOut" name="end" value="" />
+      <input type="hidden" id="checkIn" name="checkIn" value="" />
+      <input type="hidden" id="checkOut" name="checkOut" value="" />
+      <input type="hidden" id="person" name="resPerson" value="" />
+      <input type="hidden" id="roomIdx" name="roomIdx" value="" />
+      <input type="hidden" id="roomName" name="roomName" value="" />
     </form>
 
     <form action="/coupon/use" id="updateCoupon" method="post">
@@ -95,7 +98,7 @@
       const paymentKey = urlParams.get("paymentKey");
       const orderId = urlParams.get("orderId");
       const amount = urlParams.get("amount");
-      const room = urlParams.get("room");
+      const roomIdx = urlParams.get("roomIdx");
       const payStatus = urlParams.get("payStatus");
       const resEmail = urlParams.get("resEmail");
       const resName = urlParams.get("resName");
@@ -108,6 +111,10 @@
       const checkIn = urlParams.get("checkIn");
       const checkOut = urlParams.get("checkOut");
       const person = urlParams.get("person");
+      const roomName = urlParams.get("roomName");
+
+      console.log("시작날짜" + checkIn);
+      console.log("끝날짜" + checkOut);
 
       let user = JSON.parse(localStorage.getItem("user"));
 
@@ -135,6 +142,16 @@
 
         $("#orderId").val(orderId);
         $("#paymentKey").val(paymentKey);
+
+        $("#checkIn").val(checkIn);
+        $("#checkOut").val(checkOut);
+
+        $("#person").val(person);
+
+        $("#roomIdx").val(roomIdx);
+        console.log("방번호" + roomIdx);
+        $("#roomName").val(roomName);
+        console.log("방이름" + roomName);
 
         if (user == null) {
           $("#nonEmail").val(resEmail);
@@ -188,7 +205,7 @@
       }
 
       function goReservationInfo() {
-        window.location.href = "/reservation/reservation_check";
+        window.location.href = "/mypage/reservation_check";
       }
 
       // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
