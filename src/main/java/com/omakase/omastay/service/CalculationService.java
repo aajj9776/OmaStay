@@ -168,11 +168,16 @@ public class CalculationService {
         calculationRepository.completeCalculation(id);
     }
 
-    public CalculationDTO getCal(Integer cIdx){
+    public CalculationCustomDTO getCal(Integer cIdx){
         Calculation cal = calculationRepository.findOneById(cIdx);
         CalculationDTO calDTO = CalculationMapper.INSTANCE.toCalculationDTO(cal);
-        //calDTO.setHname(cal.getHostInfo().getHname());
-        return calDTO;
+        String hName = cal.getHostInfo().getHname();
+
+        CalculationCustomDTO calculationCustomDTO = new CalculationCustomDTO();
+        calculationCustomDTO.setCalculationDTO(calDTO);
+        calculationCustomDTO.setHostName(hName);
+
+        return calculationCustomDTO;
     }
 
     public List<AdminMainCustomDTO> getCalculationCount(){

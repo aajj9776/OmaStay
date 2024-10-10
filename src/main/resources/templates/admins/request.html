@@ -36,6 +36,7 @@
               <th>우편번호</th>
               <th>도로명주소</th>
               <th>상세주소</th>
+              <th>요청일</th>
               <th>상태</th>
             </tr>
           </thead>
@@ -47,6 +48,7 @@
               <td th:text="${host.addressVo.postCode}"></td>
               <td th:text="${host.addressVo.street}"></td>
               <td th:text="${host.addressVo.detail}"></td>
+              <td th:text="${#temporals.format(host.hRegTime, 'yyyy-MM-dd')}"></td>
               <td th:switch="${host.hStatus.name()}">
                 <span th:case="'APPLY'">신청</span>
                 <span th:case="'APPROVE'">승인</span>
