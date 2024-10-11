@@ -41,33 +41,37 @@ public class MemberCouponDTO {
                     formattedEndDate,         // 만료일
                     daysRemaining,            // 남은 일수
                     coupon.getIcStatus(),
-                    coupon.getIcCode()
+                    coupon.getIcCode(),
+                    coupon.getCpCate()
                 );
             })
             .collect(Collectors.toList());
     }
 
     @Data
-    @NoArgsConstructor
-    public static class FormattedCouponDTO {
-        private Integer couponId;
-        private String couponContent;
-        private String couponSale;
-        private String couponStarttime;
-        private String couponEndtime;
-        private long daysRemaining;
-        private String icStatus;
-        private String icCode;
+@NoArgsConstructor
+public static class FormattedCouponDTO {
+    private Integer couponId;
+    private String couponContent;
+    private String couponSale;
+    private String couponStarttime;
+    private String couponEndtime;
+    private long daysRemaining;
+    private String icStatus;
+    private String icCode;
+    private String cpCate; // cpCate 필드 추가
 
-        public FormattedCouponDTO(Integer couponId, String couponContent, String couponSale, String couponStarttime, String couponEndtime, long daysRemaining, String icStatus, String icCode) {
-            this.couponId = couponId;
-            this.couponContent = couponContent;
-            this.couponSale = couponSale;
-            this.couponStarttime = couponStarttime;
-            this.couponEndtime = couponEndtime;
-            this.daysRemaining = daysRemaining;
-            this.icStatus = icStatus;
-            this.icCode = icCode;
-        }
+    public FormattedCouponDTO(Integer couponId, String couponContent, String couponSale, String couponStarttime, 
+                              String couponEndtime, long daysRemaining, String icStatus, String icCode, String cpCate) {
+        this.couponId = couponId;
+        this.couponContent = couponContent;
+        this.couponSale = couponSale;
+        this.couponStarttime = couponStarttime;
+        this.couponEndtime = couponEndtime;
+        this.daysRemaining = daysRemaining;
+        this.icStatus = icStatus;
+        this.icCode = icCode;
+        this.cpCate = cpCate; // 생성자에 cpCate 필드 추가
     }
+}
 }
