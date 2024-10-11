@@ -29,7 +29,7 @@ jobs:
           set -e
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
             sudo rm -rf /home/ubuntu/OmaStay/conf/default.conf
-            mkdir -p /home/ubuntu/OmaStay/conf
+            sudo mkdir -p /home/ubuntu/OmaStay/conf
             sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/conf
             
             sudo mkdir -p /etc/nginx/ssl/accounts/omastay.duckdns.org
@@ -41,65 +41,32 @@ jobs:
           set -e
           scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay || exit 1
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-
-      - name: Install tailwindcss
-        run: |
-          cd src/main/frontend
-          npm install
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle
-
-      - name: Build with Gradle Wrapper
-        run: gradle clean build
-
-      # EC2 인스턴스에서 Docker 설치 확인
-      - name: Ensure Docker is installed on EC2
+      - name: Ensure Docker and docker-compose are installed on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+            sudo apt-get update
             if ! [ -x "$(command -v docker)" ]; then
-              sudo apt-get update
               sudo apt-get install -y docker.io
+            fi
+            if ! [ -x "$(command -v docker-compose)" ]; then
+              sudo apt-get install -y docker-compose
             fi
             sudo groupadd docker || true
             sudo usermod -aG docker ubuntu
           EOF
-      
-      # EC2 인스턴스 권한 수정 및 설치
-      - name: Ensure correct permissions and installed packages on EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-            sudo chmod +x /home/ubuntu/OmaStay/install_certbot.sh
-            sudo apt-get update
-            sudo apt-get install -y certbot
-          EOF
 
-      # Docker 그룹에 사용자 추가
       - name: Add user to Docker group
         run: sudo usermod -aG docker $USER
 
       - name: Reload Docker session
         run: sudo chmod 666 /var/run/docker.sock
 
-      - name: SSH into EC2 and run Docker Compose
+      - name: SSH into EC2, set permissions, and run Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
             set -e
             cd /home/ubuntu/OmaStay
+            sudo chmod +x install_certbot.sh
             docker-compose down
             docker-compose up -d --build
             ./install_certbot.sh
