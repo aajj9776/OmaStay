@@ -5,7 +5,7 @@ import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.repository.custom.ReviewRepositoryCustom;
 
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 
