@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 60 # Build timeout 설정 (기본값은 360 분)
 
     steps:
     - uses: actions/checkout@v4
@@ -62,7 +63,7 @@ jobs:
       run: chmod u+x gradlew
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew clean build --no-daemon
+      run: ./gradlew clean build
 
     - name: Install Docker using convenience script on EC2
       run: |
