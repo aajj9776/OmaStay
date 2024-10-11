@@ -27,9 +27,9 @@ jobs:
     - name: Copy nginx config and SSL from EC2
       run: |
         mkdir -p ./nginx/sites-enabled
-        mkdir -p ./nginx/ssl/accounts
+        mkdir -p ./nginx/ssl/accounts/omastay_duckdns_org
         scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/nginx/sites-enabled/default ./nginx/sites-enabled/default
-        scp -r -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/letsencrypt/live/omastay.duckdns.org ./nginx/ssl/accounts/omastay.duckdns.org
+        scp -r -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:~/certs/omastay_duckdns_org/* ./nginx/ssl/accounts/omastay_duckdns_org/
       continue-on-error: false
 
     - name: Set up Node.js
