@@ -61,13 +61,13 @@ jobs:
       - name: Reload Docker session
         run: sudo chmod 666 /var/run/docker.sock
 
-      - name: SSH into EC2, set permissions, and run Docker Compose
+      - name: SSH into EC2, set permissions, and check the file location
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
             set -e
             cd /home/ubuntu/OmaStay
             sudo chmod +x conf/install_certbot.sh
-            ls -l conf/install_certbot.sh  # 파일 권한 확인
+            ls -la conf/ # 파일 경로와 명명 확인
             docker-compose down
             docker-compose up -d --build
             ./conf/install_certbot.sh
