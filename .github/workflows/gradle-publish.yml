@@ -37,7 +37,7 @@ jobs:
       - name: Create SSL directory in EC2
         run: |
           set -e
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /etc/nginx/ssl/accounts/omastay.duckdns.org && sudo chown -R ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org " || exit 1
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /etc/nginx/ssl/accounts/omastay.duckdns.org && sudo chown -R ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org" || exit 1
 
       - name: Copy files to EC2
         run: |
@@ -49,11 +49,16 @@ jobs:
           set -e
           scp -o StrictHostKeyChecking=no ./conf/default.conf ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/conf/default.conf || exit 1
 
-      - name: Copy SSL certificates to EC2
+      - name: Copy SSL certificates on EC2
         run: |
-          set -e
-          scp -o StrictHostKeyChecking=no /etc/letsencrypt/live/omastay.duckdns.org-0001/fullchain.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem || exit 1
-          scp -o StrictHostKeyChecking=no /etc/letsencrypt/live/omastay.duckdns.org-0001/privkey.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem || exit 1
+          # SSH into EC2 and copy SSL certificates from /etc/letsencrypt/live to /etc/nginx/ssl/...
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+            set -e
+            sudo cp /etc/letsencrypt/live/omastay.duckdns.org-0001/fullchain.pem /etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem
+            sudo cp /etc/letsencrypt/live/omastay.duckdns.org-0001/privkey.pem /etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem
+            sudo chown ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem
+            sudo chown ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem
+          EOF
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
