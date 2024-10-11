@@ -6,16 +6,98 @@
 <head>
     <meta charset="utf-8"/>
     <link href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link href="/css/component/slider.css" rel="stylesheet">
     <style>
-        /* 슬라이더 핸들 드래그 상태에 클래스 추가 */
+        /* 기존 스타일 유지 */
         .noUi-moving .noUi-touch-area {
-            pointer-events: none; /* 터치 영역 비활성화 */
+            pointer-events: none;
         }
 
         .noUi-handle {
-            pointer-events: all; /* 핸들에 대해서만 터치 이벤트 활성화 */
-            z-index: 10; /* 핸들이 가장 위에 오도록 설정 */
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            /* General layout adjustments */
+            .flex-row {
+                flex-direction: column !important;
+            }
+            .mq1050\:hidden {
+                display: block !important;
+            }
+            .max-w-full {
+                max-width: 100% !important;
+            }
+            .px-\[20px\] {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+
+            /* Adjustments for the main filter */
+            #main-filter {
+                margin-top: 20px !important;
+            }
+
+            /* Adjustments for the card wrapper */
+            #cardWrapperContainer > a {
+                flex-direction: column !important;
+            }
+            #cardWrapperContainer > a > div {
+                width: 100% !important;
+                min-width: 100% !important;
+            }
+
+            /* Adjustments for the dropdown */
+            .dropdown {
+                width: 100% !important;
+                margin-top: 10px !important;
+            }
+
+            /* Adjustments for the pagination */
+            .pagination {
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+            }
+            .pagination li {
+                margin-bottom: 10px !important;
+            }
+
+            /* Additional mobile optimizations */
+            .mq1050\:h-auto {
+                height: auto !important;
+            }
+            .mq750\:pb-/[20px/] {
+            padding-bottom: 20px !important;
+        }
+            .mq1050\:max-w-full {
+                max-width: 100% !important;
+            }
+            .mq750\:flex-wrap {
+                flex-wrap: wrap !important;
+            }
+            .mq450\:text-/[19px/] {
+            font-size: 19px !important;
+        }
+            .mq750\:w-full {
+                width: 100% !important;
+            }
+            .mq750\:h-/[9px/] {
+            height: 9px !important;
+        }
+            .mq750\:flex-1 {
+                flex: 1 1 0% !important;
+            }
+            .mq750\:min-w-full {
+                min-width: 100% !important;
+            }
+            .mq750\:min-h-\[auto\] {
+                min-height: auto !important;
+            }
+            .mq450\:flex-1 {
+                flex: 1 1 0% !important;
+            }
         }
     </style>
 </head>
@@ -66,7 +148,7 @@
                             >
                                 <h3 class="m-[0px] w-max relative text-[24px] font-bold font-[inherit] flex items-center mq450:text-[19px] mq750:w-full mq750:h-[9px]">
                                     '<span id="keyword_value"></span>' 검색 결과&nbsp;
-                                    <span th:text="${resultAccommodations.size()} + '개'"></span>
+                                    <span th:text="${pageNation.getTotalElements()} + '개'"></span>
                                 </h3>
                             </div>
                         </div>
@@ -255,6 +337,7 @@
     <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{/search/modal :: search_modal}"
          th:with="accommodations=${resultAccommodationsMap}"></div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>
 <script type="text/template" id="accommodationModal-template">
     <div id="modalCard${hidx}" class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]">

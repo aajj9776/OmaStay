@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
 </head>
-<body>
-<header class="header" th:fragment="header">
-    <a th:href="@{/}">
-        <img alt="" class="header_logo" src="/image/logo/logo.png"/>
+<body class="font-['Inter']">
+<header class="header sticky mx-auto max-w-[1200px] top-0 z-50 w-full border-b border-gray-200 flex items-center justify-between py-4" th:fragment="header">
+    <a th:href="@{/}" class="flex-shrink-0">
+        <img alt="Logo" class="h-14 w-auto object-cover" src="/image/logo/logo.png"/>
     </a>
-    <div class="header_container">
-        <button class="header_login_button hover:bg-gray-200" type="button">
-            <a href="/login">로그인/회원가입</a>
+    <div class="flex items-center space-x-2">
+        <button class="header_login_button px-3 py-2 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors duration-200 text-sm" type="button">
+            <a href="/login" class="text-gray-700 no-underline">로그인/회원가입</a>
         </button>
         <div aria-expanded="true" class="header_menu dropdown hover:bg-gray-200" data-bs-toggle="dropdown" role="button">
             <img alt="" class="svg-icon" src="/image/header/svg.svg"/>
 
             <ul class="dropdown-menu w-[270px] p-0">
-                <li><img class="mx-auto h-10 ml-3.5 mr-3.5 mt-2 mb-2  w-[240px] flex items-center justify-center" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)"/></img></li>
+                <li><img class="mx-auto h-10 w-[240px] my-2 cursor-pointer" src="https://www.yeogi.com/_next/image?url=https%3A%2F%2Fstatic.yeogi.com%2F_next%2Fstatic%2Fmedia%2Felite_img_header_PC.ae821f21.png&w=912&q=100" onclick="changPage(0)"/></li>
                 <li><a class="btn btn-primary mx-auto h-10 ml-3.5 mr-3.5 pb-2 pt-2 mt-2 mb-2  w-[240px] flex items-center justify-center" onclick="changPage(1)">로그인/회원가입</a></li>
-                <li><a class="dropdown-item" href="/?activeSearch=domestic" onclick="changPage(2)"></a></li>
+                <li class="btn btn-light min-w-full py-3"><a class="px-4" href="/?activeSearch=domestic" onclick="changPage(2)">국내숙소</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" onclick="changPage(3)">비회원 예약조회</a></li>
-                <li><a class="dropdown-item" onclick="changPage(4)">이벤트</a></li>
-                <li><a class="dropdown-item" onclick="changPage(5)">고객센터</a></li>
+                <li class="btn btn-light min-w-full py-3"><a class=" px-4" href="reservation/noReservation" onclick="changPage(3)">비회원 예약조회</a></li>
+                <li class="btn btn-light min-w-full py-3"><a class="p-4" href="/user/event" onclick="changPage(4)">이벤트</a></li>
+                <li class="btn btn-light min-w-full py-3"><a class="px-4" href="/user/faq" onclick="changPage(5)">자주묻는질문</a></li>
+                <li class="btn btn-light min-w-full py-3"><a class="px-4" href="/user/notice" onclick="changPage(6)">공지사항</a></li>
             </ul>
         </div>
     </div>
@@ -33,7 +34,7 @@
             // 로컬스토리지에서 user 가져오기
             let user = JSON.parse(localStorage.getItem('user'));
             console.log("로컬 스토리지 'user' 값:", user);
-            
+
             // 쿠키에서 accessToken 확인
             function getCookie(name) {
                 let cookieArr = document.cookie.split(";");
@@ -45,7 +46,7 @@
                 }
                 return null;
             }
-            
+
             function handleLogout() {
                 // 쿠키,Storage 삭제 (로그아웃 처리)
                 document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -55,15 +56,15 @@
 
             const accessToken = getCookie("accessToken");
             console.log("쿠키에서 'accessToken' 값:", accessToken);
-            
+
             const loginButton = document.querySelector(".header_login_button a");
             const domesticLink = document.querySelector("a[href='/?activeSearch=domestic']");
             const loginMenuItem = document.querySelector("a[onclick='changPage(1)']");
             const guestReservationLink = document.querySelector("a[onclick='changPage(3)']");
-            const ulDropdownMenu = document.querySelector(".dropdown-menu");  
+            const ulDropdownMenu = document.querySelector(".dropdown-menu");
 
             const memIdx = user ? user.id : null; // 로컬스토리지에 id 값이 있으면 가져옴
-           
+
             if (accessToken) {
                 // 로그인 상태라면, 로그아웃 버튼으로 변경
                 loginButton.innerText = "로그아웃";
@@ -103,8 +104,9 @@
 
                 if (!isMyInfoItemExist()) {
                     const myInfoItem = document.createElement("li");
+                    myInfoItem.classList.add("btn", "btn-light", "min-w-full", "py-3");
                     const myInfoLink = document.createElement("a");
-                    myInfoLink.classList.add("dropdown-item");
+                    myInfoLink.classList.add("py-2", "px-4");
                     myInfoLink.innerText = "내 정보";
                     myInfoItem.appendChild(myInfoLink);
                     myInfoLink.setAttribute("href", "/mypage/info");
@@ -112,7 +114,7 @@
                         e.preventDefault();
                         window.location.href = "/mypage/info"; // 페이지 이동
                     });
-                    ulDropdownMenu.insertBefore(myInfoItem, ulDropdownMenu.firstChild);
+                    ulDropdownMenu.insertBefore(myInfoItem, ulDropdownMenu.lastChild);
                 };
             } else {
                 // 비로그인 상태라면, 로그인/회원가입 버튼 유지
@@ -133,12 +135,12 @@
 
             function changPageWithId(index) {
                 const hrefs = [
-                    "/mypage/member-ship", 
+                    "/mypage/member-ship",
                     "/login",
-                    "/",    
+                    "/?activeSearch=domestic",
                     `/mypage/reservation?id=${memIdx}`, // 회원 예약조회로 id 추가
-                    "/reservation/noReservation", 
-                    "/", 
+                    "/reservation/noReservation",
+                    "/user/event",
                     `/mypage/reservation?id=${memIdx}`
                 ];
                 location.href = hrefs[index];
@@ -147,12 +149,13 @@
 
         function changPage(index) {
             const hrefs = [
-                "/mypage/member-ship", 
+                "/mypage/member-ship",
                 "/login",
-                "/",    
-                "/reservation/noReservation", 
-                "/", 
-                "/", 
+                "/?activeSearch=domestic",
+                "/reservation/noReservation",
+                "/user/event",
+                "/user/faq",
+                "/user/notice",
                 "/mypage/reservation"
             ];
             location.href = hrefs[index];

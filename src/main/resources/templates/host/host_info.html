@@ -5,7 +5,6 @@
       layout:fragment="host">
 <head>
   <meta charset="utf-8" />
-  <link href="/css/index.css" rel="stylesheet" />
   <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet" />
   <link href="/css/component/host_swiper.css" rel="stylesheet" />
   <style>
@@ -48,11 +47,21 @@
                 th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hname : ''}"
                 />
             </div>
-            <div class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border">
-              <div
-                class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center">
-                Helper text
-              </div>
+          </div>
+        </div>
+        <div class="w-[493px] flex flex-row items-center justify-between gap-[20px] max-w-full mq800:flex-wrap">
+          <h3
+            class="m-[0px] h-[40px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000]  text-left flex items-center mq450:text-[20px] mq450:leading-[19px]">
+            호스트 이름 :
+          </h3>
+          <div class="w-[303px] flex flex-col items-start justify-start">
+            <div
+              class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
+              <input 
+                id="hostName"
+                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
+                placeholder="호스트 이름" type="text" data-str="호스트 이름"
+                th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hostOwnerInfo != null ? hostInfoCustomDTO.hostInfo.hostOwnerInfo.hostName : ''}" />
             </div>
           </div>
         </div>
@@ -84,6 +93,7 @@
                   data-str="주소"
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[189px] min-h-[24px]"
                   placeholder="우편번호" type="text" 
+                  readonly
                   th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.addressVo != null ? hostInfoCustomDTO.hostInfo.addressVo.postCode : ''}"/>
               </div>
             </div>
@@ -109,6 +119,7 @@
                   <input id="address" 
                     class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[250px] max-w-full p-[0px]"
                     placeholder="주소" type="text"
+                    readonly
                     th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.addressVo != null ? hostInfoCustomDTO.hostInfo.addressVo.street : ''}" />
 
                   <div class="h-full w-[24px] !m-[0] absolute top-[0px] bottom-[0px] left-[172px]"></div>
@@ -132,32 +143,16 @@
             </div>
           </div>
         </div>
-        <div class="w-[493px] flex flex-row items-center justify-between gap-[20px] max-w-full mq800:flex-wrap">
-          <h3
-            class="m-[0px] h-[40px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000]  text-left flex items-center mq450:text-[20px] mq450:leading-[19px]">
-            호스트 이름 :
-          </h3>
-          <div class="w-[303px] flex flex-col items-start justify-start">
-            <div
-              class="self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid flex flex-col items-start justify-start py-[0px] px-[11px]">
-              <input 
-                id="hostName"
-                class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[167px] min-h-[24px]"
-                placeholder="호스트 이름" type="text" data-str="호스트 이름"
-                th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hostOwnerInfo != null ? hostInfoCustomDTO.hostInfo.hostOwnerInfo.hostName : ''}" />
-            </div>
-          </div>
-        </div>
         <div class="self-stretch flex flex-row items-start justify-start flex-wrap content-start gap-[15px] max-w-full">
           <h3
             class="m-[0px] h-[40px] w-[175px] relative text-[25px] tracking-[0.15px] leading-[24px] font-bold font-[Roboto] text-[#000]  text-left flex items-center shrink-0 mq450:text-[20px] mq450:leading-[19px]">
-            호스트 소개 :
+            숙소 소개 :
           </h3>
           <div
             class="flex-1 flex flex-row items-start justify-start min-w-[325px] max-w-full [row-gap:20px] mq800:flex-wrap">
             <textarea
               class="w-full h-[130px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[10px] px-[11px] max-w-full mq1125:self-stretch mq1125:w-auto text-[15px] overflow-auto"
-              placeholder="호스트 소개" id="hIntro"
+              placeholder="숙소 소개" id="hIntro"
               th:text="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.hostOwnerInfo != null ? hostInfoCustomDTO.hostInfo.hostOwnerInfo.hintro : ''}"></textarea>
           </div>
         </div>
@@ -425,6 +420,7 @@
 
 
     var swiper; // 전역 변수로 정의
+    var selectedFiles = [];
 
         $(document).ready(function () {
             swiper = new Swiper('.swiper-container', {
@@ -483,6 +479,7 @@
                 var files = event.target.files;
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
+                    selectedFiles.push(file);
                     if (file) {
                         var reader = new FileReader();
                         reader.onload = function (e) {
@@ -521,6 +518,8 @@
 
               console.log("Deleting slide at index: " + slideIndex);
 
+              selectedFiles.splice(slideIndex, 1);
+              
               swiper.removeSlide(slideIndex); 
               swiper.update(); 
 
@@ -535,8 +534,41 @@
             };
         });
 
+    
+        function validateHostInfoCustomDTO() {
+            var isValid = true;
+            var errorMessage = "";
+
+            // 필수 필드 유효성 검사
+            if (!$('#hCate').val()) {
+                isValid = false;
+                errorMessage += "숙소 유형을 선택해주세요.\n";
+            }
+            if (!$('#postcode').val()) {
+                isValid = false;
+                errorMessage += "주소 검색해주세요.\n";
+            }
+            if (!$('#address').val()) {
+                isValid = false;
+                errorMessage += "주소 검색해주세요.\n";
+            }
+            if (!$('#hostName').val().trim()) {
+                isValid = false;
+                errorMessage += "호스트 이름을 입력해주세요.\n";
+            }
+            // 유효성 검사 실패 시 경고 메시지 표시
+            if (!isValid) {
+                alert(errorMessage);
+            }
+
+            return isValid;
+        }    
 
     function savehostinfo() {
+            if (!validateHostInfoCustomDTO()) {
+                return;
+            }
+            
             var formData = new FormData();
             var facilities = [];
 
@@ -561,7 +593,7 @@
                     region: $('#region').val(),
                     directions: $('#directions').val(),
                     hostOwnerInfo: {
-                      hostName: $('#hostName').val(),
+                      hostName: $('#hostName').val().trim(),
                       hintro: $('#hIntro').val(),
                     },  
                 },
@@ -588,11 +620,9 @@
             // JSON 데이터를 FormData에 추가
            formData.append('hostInfoCustomDTO', new Blob([JSON.stringify(hostInfoCustomDTO)], { type: 'application/json; charset=utf-8' }));  
             
-            var files = $('#fileInput')[0].files;
-            console.log(files.length);
-            for (var i = 0; i < files.length; i++) {
-                formData.append('images', files[i]);
-            }
+           for (var i = 0; i < selectedFiles.length; i++) {
+              formData.append('images', selectedFiles[i]);
+          }
 
             $.ajax({
                 url: '/host/hostinforeg', 

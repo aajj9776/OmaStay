@@ -217,9 +217,6 @@ public class HostInfoService {
 
 
         for (ImageDTO imageDTO : hostInfoCustomDTO.getImages()) {
-        boolean exists = existingImages.stream()
-        .anyMatch(existingImage -> existingImage.getImgName().getFName().equals(imageDTO.getImgName().getFName()));
-        if (!exists) {
             Image newImage = new Image();
             newImage.setRoomInfo(null);
             newImage.setHostInfo(hostInfo);
@@ -227,8 +224,7 @@ public class HostInfoService {
             newImage.setImgCate(ImgCate.HOST);
             newImage.setImgStatus(BooleanStatus.TRUE);
             imageRepository.save(newImage);
-        }
-    }
+            }
     }
 
     public HostInfoCustomDTO findHostInfoByHostInfoId(int hIdx) {
@@ -351,8 +347,13 @@ public class HostInfoService {
         hostInfoRepository.rejectHost(hidx);
     }
 
+    public List<HostInfo> getDetailHostInfo(Integer hIdx){
+        return hostInfoRepository.findHostInfoAll(hIdx);
+
+    }
 
     public List<AdminMainCustomDTO> getrequestCount(){
         return hostInfoRepository.getRequestCount();
     }
+
 }

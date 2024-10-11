@@ -367,6 +367,11 @@ public class FacilitiesService {
         return afterOrEqualStart && beforeOrEqualEnd;
     }
 
+    public List<FacilitiesDTO> getDetailFacilities(Integer hIdx){
+        List<Facilities> facilitiesList = facilitiesRepository.findFacilitiesByHostId(hIdx);
+        return FacilitiesMapper.INSTANCE.toFacilitiesDTOList(facilitiesList);
+    }
+
     private boolean isPriceFilteringRequired(FilterDTO filterDTO) {
         Integer startPrice = filterDTO.getStartPrice();
         Integer endPrice = filterDTO.getEndPrice();
