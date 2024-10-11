@@ -193,6 +193,8 @@
           placeholder="‘-’ 없이 입력해주세요"
           class="w-full p-2 border rounded-lg"
           th:value="${memPhone}"
+          pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"  
+          oninput="this.value = this.value.replace(/[^0-9-]/g, '');"
         />
         </div>
 
@@ -425,8 +427,8 @@ function startTimer() {
   }
 
   function verifyCode() {
-        const email = document.getElementById("inputemail").value;
-        const code = document.getElementById("checkemail").value;
+        const email = document.getElementById("inputemail").value.trim();
+        const code = document.getElementById("checkemail").value.trim();
         
         if (!code) {
           alert("인증번호를 입력하세요.");
@@ -447,6 +449,10 @@ function startTimer() {
             clearInterval(timerId); // 타이머 중지
             document.getElementById("timer").textContent = "";
             isEmailVerified = true; // 인증 완료 시 변수 true로 설정
+            document.getElementById("inputemail").disabled = true;
+            document.getElementById("checkemail").disabled = true;
+            document.getElementById("emailcheck").disabled = true;
+            document.getElementById("checking").disabled = true;
           } else {
             alert("인증번호가 잘못되었습니다.");
             isEmailVerified = false;
@@ -474,18 +480,18 @@ function startTimer() {
           return;
         }
 
-        var memEmail = document.getElementById("inputemail").value;
-        var memPw = document.getElementById("inputpw").value;
-        var memName = document.getElementById("inputname").value;
-        var memYear = document.getElementById("inputyear").value;
-        var memMonth = document.getElementById("inputmonth").value;
-        var memDay = document.getElementById("inputday").value;
-        var gender = document.querySelector('input[name="gender"]:checked');
-        var phone = document.getElementById("mem_phone").value;
-        var postCode = document.getElementById("mempostcode").value;
-        var street = document.getElementById("memstreet").value;
-        var detail = document.getElementById("memdetail").value;
-        var emailSubscription = document.querySelector('input[name="email_subscription"]:checked');
+        var memEmail = document.getElementById("inputemail").value.trim();
+        var memPw = document.getElementById("inputpw").value.trim();
+        var memName = document.getElementById("inputname").value.trim();
+        var memYear = document.getElementById("inputyear").value.trim();
+        var memMonth = document.getElementById("inputmonth").value.trim();
+        var memDay = document.getElementById("inputday").value.trim();
+        var gender = document.querySelector('input[name="gender"]:checked').trim();
+        var phone = document.getElementById("mem_phone").value.trim();
+        var postCode = document.getElementById("mempostcode").value.trim();
+        var street = document.getElementById("memstreet").value.trim();
+        var detail = document.getElementById("memdetail").value.trim();
+        var emailSubscription = document.querySelector('input[name="email_subscription"]:checked').trim();
         var memBirth = memYear + "-" + memMonth + "-" + memDay;
 
         if (!memEmail) {

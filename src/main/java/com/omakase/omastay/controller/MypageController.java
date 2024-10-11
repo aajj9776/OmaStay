@@ -92,13 +92,13 @@ public class MypageController {
     @ResponseBody
     public ResponseEntity<MemberReservationDTO> getMemberReservationInfo(@RequestBody Map<String, String> requestData) {
         String memberId = requestData.get("userId");
-        System.out.println("프론트엔드로부터 받은 사용자 ID: " + memberId);
+
         try {
             Integer memberIdInt = Integer.parseInt(memberId);
             // userId로 DB에서 사용자 정보 조회
             MemberReservationDTO memberInfo = myPageService.getMemberReservationInfo(memberIdInt);
             if (memberInfo == null) {
-                System.out.println("제공된 ID에 해당하는 사용자를 찾을 수 없습니다.");
+
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // 사용자 정보가 없을 경우 404 응답
             }
             // 사용자 정보 반환
@@ -115,7 +115,7 @@ public class MypageController {
         return "mypage/user-member-ship"; // Thymeleaf 템플릿 반환
     }
 
-     @GetMapping("/info")
+    @GetMapping("/info")
     public String userMyPageInfo(Model model) {
         // MemberInfoDTO로 데이터 생성
         model.addAttribute("memberInfo", new MemberInfoDTO(
@@ -133,7 +133,6 @@ public class MypageController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getUserData(@RequestBody Map<String, String> requestData) {
         String email = requestData.get("email");
-        System.out.println("메일 받기용: " + email);
         try {
             // 기존 회원 정보, 등급, 이미지 관련 데이터 가져오기
             Map<String, Object> responseData = myPageService.getMemberDataWithGradeAndImage(email);
@@ -151,7 +150,6 @@ public class MypageController {
     @ResponseBody
     public ResponseEntity<MemberDTO> getMemberInfo(@RequestBody Map<String, String> requestData) {
         String memberId = requestData.get("userId");
-        System.out.println("프론트엔드로부터 받은 사용자 ID: " + memberId);
         try {
             Integer memberIdInt = Integer.parseInt(memberId);
             MemberDTO memberInfo = myPageService.getMemberInfo(memberIdInt);
@@ -223,7 +221,6 @@ public class MypageController {
     public ResponseEntity<MemberPointDTO> getUserPoints(@RequestBody Map<String, Integer> requestData) {
         Integer memberId = requestData.get("memberId");
 
-        System.out.println("정보추가");
         MemberPointDTO memberPointDTO = myPageService.getMemberPoints(memberId);
 
         if (memberPointDTO == null) {
@@ -234,9 +231,6 @@ public class MypageController {
             memberPointDTO.setFormattedPoints(Collections.emptyList());
         }
 
-        // 로그 출력
-        System.out.println("DTO 테스트에여: " + memberPointDTO);
-
         // JSON 형식으로 응답
         return ResponseEntity.ok(memberPointDTO);
     }
@@ -245,7 +239,6 @@ public class MypageController {
     @PostMapping("/coupon")
     public ResponseEntity<MemberCouponDTO> getUserCoupons(@RequestBody Map<String, Integer> requestData) {
         Integer memberId = requestData.get("memberId");
-        System.out.println("컨트롤러 테스트1"+memberId);
         // memberId가 없을 경우 잘못된 요청 처리
         if (memberId == null) {
             return ResponseEntity.badRequest().build();
@@ -253,7 +246,6 @@ public class MypageController {
 
         // 서비스에서 쿠폰 정보를 가져옴
         MemberCouponDTO memberCouponDTO = myPageService.getCouponsForMember(memberId);
-        System.out.println("컨트롤러 테스트2"+memberCouponDTO);
         // 쿠폰 정보를 반환
         return ResponseEntity.ok(memberCouponDTO);
     }
