@@ -199,8 +199,8 @@ public class FacilitiesService {
 
             if (resultAccommodationsDTO != null) {
                 // 정확한 형식을 사용하여 값을 가져오기
-                Double avgRating = reviewTuple.get(review.revRating.avg()); // 평균 평점 가져오기
-                Long reviewCount = reviewTuple.get(review.revRating.countDistinct()); // 리뷰 수 가져오기
+                Double avgRating = reviewTuple.get(review.revRating.avg().coalesce(0.0));  // 평균 평점 가져오기
+                Long reviewCount = reviewTuple.get(review.count());
 
                 // Null pointer exception 예방을 위한 null 체크
                 if (avgRating != null) {

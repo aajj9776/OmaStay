@@ -498,7 +498,6 @@
     });
 
     // 필터 버튼 셋팅하는 함수
-    // 필터 버튼 셋팅하는 함수
     function setSortType(sortTypeValue = null) {
         console.log(sortTypeValue + " sortTypeValue");
         let filterButton = $("#dropdown-sortType-button");
@@ -1208,6 +1207,19 @@
         let checkOut = sessionStorage.getItem('endDate');
         let person = sessionStorage.getItem('people');
         window.location.href = `/search/detail-host?id=${hidx}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
+    }
+
+    function reset(){
+        //경고창
+        if(confirm("검색 조건을 초기화 하시겠 습니까?")){
+            let hCate = document.querySelector('input[name="hCate"]:checked');
+            if(hCate.value === 'all'){
+                window.location.href = "/search/domestic-accommodations";
+            }
+            if (hCate.value !== 'all') {
+                window.location.href = "/search/domestic-accommodations?hCate=" + hCate.value;
+            }
+        }
     }
 </script>
 </body>
