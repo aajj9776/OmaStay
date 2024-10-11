@@ -67,6 +67,28 @@ jobs:
       - name: Build with Gradle Wrapper
         run: gradle clean build
 
+      # EC2 인스턴스에서 Docker 설치 확인
+      - name: Ensure Docker is installed on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+            if ! [ -x "$(command -v docker)" ]; then
+              sudo apt-get update
+              sudo apt-get install -y docker.io
+            fi
+            sudo groupadd docker || true
+            sudo usermod -aG docker ubuntu
+          EOF
+      
+      # EC2 인스턴스 권한 수정 및 설치
+      - name: Ensure correct permissions and installed packages on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+            sudo chmod +x /home/ubuntu/OmaStay/install_certbot.sh
+            sudo apt-get update
+            sudo apt-get install -y certbot
+          EOF
+
+      # Docker 그룹에 사용자 추가
       - name: Add user to Docker group
         run: sudo usermod -aG docker $USER
 
