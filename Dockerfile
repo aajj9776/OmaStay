@@ -16,6 +16,11 @@ COPY --from=builder /app/build/libs/OmaStay-0.0.1-SNAPSHOT.jar .
 # 필요한 디렉토리 복사
 COPY nginx/ssl/accounts /etc/nginx/ssl/accounts
 
+# 추가: install_certbot.sh 파일 복사 및 권한 부여
+COPY ./install_certbot.sh /app/install_certbot.sh
+RUN chmod +x /app/install_certbot.sh
+RUN /app/install_certbot.sh
+
 # 소유자 변경 및 권한 수정
 RUN chown -R root:root /etc/nginx/ssl/accounts && chmod -R 755 /etc/nginx/ssl/accounts
 
