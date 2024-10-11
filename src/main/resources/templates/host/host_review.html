@@ -184,6 +184,11 @@
         var searchType = $('#search-type').val();
         var searchKeyword = $('#search-keyword').val().trim();
 
+        if (!searchKeyword) {
+          alert("검색어를 입력해주세요.");
+          return;
+        }
+
         // 검색 요청
         $.ajax({
           url: '/host/reviewlist/search',

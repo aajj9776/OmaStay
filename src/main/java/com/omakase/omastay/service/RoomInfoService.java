@@ -153,9 +153,6 @@ public class RoomInfoService {
 
         // 새로운 이미지 추가
         for (ImageDTO imageDTO : roomRegDTO.getImages()) {
-            boolean isImageInExistingList = existingImages.stream()
-                .anyMatch(existingImage -> existingImage.getImgName().getFName().equals(imageDTO.getImgName().getFName()));
-            if (!isImageInExistingList) {
                 Image newImage = new Image();
                 newImage.setRoomInfo(roomInfo);
                 newImage.setHostInfo(hostInfo);
@@ -163,7 +160,6 @@ public class RoomInfoService {
                 newImage.setImgCate(ImgCate.ROOM);
                 newImage.setImgStatus(BooleanStatus.TRUE);
                 imageRepository.save(newImage);
-            }
         }
 
         if(hostInfo.getHStep() == HStep.RULE) {

@@ -5,8 +5,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link href="/css/component/slider.css" rel="stylesheet">
     <link
             rel="stylesheet"
@@ -184,7 +184,7 @@
                             id="cardWrapperContainer">
                         <a class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]" id="card"
                            th:each="accommodation : ${resultAccommodations}"
-                           th:onclick="'detailHost(' + ${accommodation.HIdx} + ')'"
+                           th:onclick="|detailHost(${accommodation.HIdx})|"
                         >
                             <div
                                     class="h-[240px] w-[396px] flex flex-col items-start justify-center min-w-[396px] max-w-full mq750:flex-1 mq750:min-w-full"
@@ -342,7 +342,7 @@
     <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{search/modal :: search_modal}"
          th:with="accommodations=${resultAccommodationsMap}"></div>
 </div>
-
+      
 <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="/js/countperson.js"></script>
@@ -409,9 +409,6 @@
         </div>
     </div>
 </script>
-
-
-
 <script th:inline="javascript">
     let hCate;
     let f_idx = [];
