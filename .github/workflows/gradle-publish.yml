@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    timeout-minutes: 60
 
     steps:
     - uses: actions/checkout@v4
@@ -19,29 +18,25 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-
+        
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.4
       with:
         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-    - name: Copy Nginx config and SSL from EC2
+    - name: Copy files to EC2
       run: |
-        mkdir -p ./nginx/sites-enabled
-        mkdir -p ./nginx/ssl/accounts/omastay.duckdns.org
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo chmod 644 /home/ubuntu/docker/nginx/certs/live/omastay.duckdns.org-0001/privkey.pem"
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/nginx/sites-enabled/default ./nginx/sites-enabled/default
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/docker/nginx/certs/live/omastay.duckdns.org-0001/fullchain.pem ./nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/docker/nginx/certs/live/omastay.duckdns.org-0001/privkey.pem ./nginx/ssl/accounts/omastay.duckdns.org/privkey.pem
-        scp -o StrictHostKeyChecking=no ./conf/default.conf ubuntu@${{ secrets.HOST }}:/home/ubuntu/default.conf
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mv /home/ubuntu/default.conf /etc/nginx/conf.d/default.conf"
-      continue-on-error: false
+        scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+
+    - name: Copy default.conf to EC2
+      run: |
+        scp -o StrictHostKeyChecking=no ./conf/default.conf ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/conf/default.conf
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-
+      
     - name: Install tailwindcss and dependencies
       run: |
         cd src/main/frontend
@@ -63,9 +58,9 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod u+x gradlew
-
+      
     - name: Build with Gradle Wrapper
-      run: ./gradlew clean build
+      run: ./gradlew clean build --no-daemon
 
     - name: Install Docker using convenience script on EC2
       run: |
@@ -89,4 +84,12 @@ jobs:
           cd /home/ubuntu/OmaStay
           docker-compose down
           docker-compose up -d --build
+        EOF
+
+    - name: Move Nginx config inside Docker and restart Nginx
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+          docker cp /home/ubuntu/OmaStay/conf/default.conf nginx_container:/etc/nginx/conf.d/default.conf
+          docker exec nginx_container nginx -t
+          docker exec nginx_container systemctl restart nginx
         EOF
