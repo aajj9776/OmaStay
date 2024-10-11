@@ -95,7 +95,7 @@
                 class="flex-1 flex flex-row items-start justify-start gap-[59px] max-w-full mq750:gap-[29px] mq1050:flex-wrap"
               >
                 <div
-                  class="w-[535px] h-[683px] mt-[7px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[35px] pb-[32px] pl-[53px] pr-[42px] box-border gap-[16px] min-w-[535px] max-w-full mq750:py-[21px] mq750:pl-[26px] mq750:pr-[21px] mq750:box-border mq750:min-w-full mq1050:flex-1"
+                  class="w-[535px] h-[683px] mt-[7px] rounded-[30px] bg-[#fff] flex flex-col items-start justify-start pt-[50px] pb-[32px] pl-[53px] pr-[42px] box-border gap-[50px] min-w-[535px] max-w-full mq750:py-[21px] mq750:pl-[26px] mq750:pr-[21px] mq750:box-border mq750:min-w-full mq1050:flex-1"
                 >
                   <div
                     class="w-[430px] flex flex-row items-start justify-between gap-[20px] max-w-full mq450:flex-wrap"
@@ -106,7 +106,7 @@
                     >
                     <a th:href="@{/host/notice}">
                     <b
-                      class="w-[100px] relative flex text-[#000] text-right items-center shrink-0 mq450:text-[20px]"
+                      class="w-[100px] pl-[20px] relative flex text-[#000] text-right items-center shrink-0 mq450:text-[20px]"
                       >더보기</b
                     >
                   </a>
@@ -160,15 +160,15 @@
                         <div
                           class="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq450:flex-wrap"
                         >
-                          <b th:if="${resDayCount != null}" th:text="${resDayCount}"
+                          <b th:text="${resDayCount != null ? resDayCount : 0}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b th:if="${resWeekCount != null}" th:text="${resWeekCount}"
+                          <b th:text="${resWeekCount != null ? resWeekCount : 0}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b th:if="${resMonthCount != null}" th:text="${resMonthCount}"
+                          <b th:text="${resMonthCount != null ? resMonthCount : 0}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
@@ -216,15 +216,15 @@
                         <div
                           class="flex-1 flex flex-row items-start justify-between max-w-full gap-[20px] mq450:flex-wrap"
                         >
-                          <b th:if="${revDayCount != null}" th:text="${revDayCount}"
+                          <b th:text="${revDayCount != null ? revDayCount : 0}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b th:if="${revWeekCount != null}" th:text="${revWeekCount}"
+                          <b th:text="${revWeekCount != null ? revWeekCount : 0}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
-                          <b th:if="${revMonthCount != null}" th:text="${revMonthCount}"
+                          <b th:text="${revMonthCount != null ? revMonthCount : 0}"
                             class="h-[30px] w-[100px] relative flex items-center justify-center shrink-0 mq450:text-[18px] mq1050:text-[24px]"
                             >0</b
                           >
@@ -374,7 +374,11 @@
 
         $('#noticeListTable').DataTable({
         "searching": false,
-
+        "paging": false,
+        "lengthChange": false,
+        "language": {
+            "emptyTable": "No data available in table"
+        },
         ajax: {
           url: '/host/noticelist/getList',
           type: 'GET',
@@ -425,7 +429,18 @@
           ajax: {
             url: '/host/checkInList/getList',
             type: 'GET',
-            dataSrc: 'data'
+            dataSrc: function(json) {
+                // json 객체가 undefined인 경우 빈 배열 반환
+                if (!json || !json.data) {
+                    return [];
+                }
+                // 데이터가 없는 경우 빈 배열 반환
+                if (json.data.length === 0) {
+                    return [];
+                }
+                // 데이터 반환
+                return json.data;
+            }
           },
           
           columns: [

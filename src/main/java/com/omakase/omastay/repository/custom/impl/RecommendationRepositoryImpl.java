@@ -111,5 +111,12 @@ public class RecommendationRepositoryImpl implements RecommendationRepositoryCus
             .orderBy(payment.nsalePrice.castToNum(Integer.class).sum().desc())  // 총 매출로 정렬
             .limit(5)  // 상위 5개 제한 
             .fetch();
+    }
+
+
+    @Override
+    public List<Recommendation> findR(HCate hCate, LocalDate startDate, LocalDate endDate) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findR'");
     }   
 }

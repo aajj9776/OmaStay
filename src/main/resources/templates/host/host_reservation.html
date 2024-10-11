@@ -200,7 +200,9 @@
               {
                 data: null,
                 render: function (data, type, row) {
-                  return '<input type="checkbox" class="itemCheckbox" value="' + row.id + '">';
+                  // resStatus가 'PENDING'인 경우를 제외하고 체크박스를 비활성화
+                  var disabled = row.resStatus !== 'PENDING' ? 'disabled' : '';
+                  return '<input type="checkbox" class="itemCheckbox" value="' + row.id + '" ' + disabled + '>';
                 }
               },
               { 
