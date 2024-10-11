@@ -24,57 +24,35 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-      - name: Remove existing default.conf directory from EC2
+      - name: Ensure directories and permissions
         run: |
           set -e
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo rm -rf /home/ubuntu/OmaStay/conf/default.conf" || exit 1
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+            sudo rm -rf /home/ubuntu/OmaStay/conf/default.conf
+            mkdir -p /home/ubuntu/OmaStay/conf
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/conf
+            
+            sudo mkdir -p /etc/nginx/ssl/accounts/omastay.duckdns.org
+            sudo chown -R ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org
+          EOF
 
-      - name: Ensure remote directory exists and correct permissions
-        run: |
-          set -e
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "mkdir -p /home/ubuntu/OmaStay/conf && sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/conf" || exit 1
-
-      - name: Create SSL directory in EC2
-        run: |
-          set -e
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /etc/nginx/ssl/accounts/omastay.duckdns.org && sudo chown -R ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org" || exit 1
-
-      - name: Copy files to EC2
+      - name: Copy project files to EC2
         run: |
           set -e
           scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay || exit 1
-
-      - name: Copy default.conf to EC2
-        run: |
-          set -e
-          scp -o StrictHostKeyChecking=no ./conf/default.conf ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/conf/default.conf || exit 1
-
-      - name: Copy SSL certificates on EC2
-        run: |
-          # SSH into EC2 and copy SSL certificates from /etc/letsencrypt/live to /etc/nginx/ssl/...
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-            set -e
-            sudo cp /etc/letsencrypt/live/omastay.duckdns.org-0001/fullchain.pem /etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem
-            sudo cp /etc/letsencrypt/live/omastay.duckdns.org-0001/privkey.pem /etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem
-            sudo chown ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem
-            sudo chown ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem
-          EOF
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '14'
 
-      - name: frontend로 이동
+      - name: Install tailwindcss
         run: |
           cd src/main/frontend
-
-      - name: tailwindcss 설치
-        run: |
           npm install
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
       - name: Cache Gradle packages
         uses: actions/cache@v3
@@ -89,13 +67,11 @@ jobs:
       - name: Build with Gradle Wrapper
         run: gradle clean build
 
-      - name: Add user in the Docker group
-        run: |
-          sudo usermod -aG docker $USER
+      - name: Add user to Docker group
+        run: sudo usermod -aG docker $USER
 
-      - name: reload docker session
-        run: |
-          sudo chmod 666 /var/run/docker.sock
+      - name: Reload Docker session
+        run: sudo chmod 666 /var/run/docker.sock
 
       - name: SSH into EC2 and run Docker Compose
         run: |
