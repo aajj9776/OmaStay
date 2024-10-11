@@ -18,7 +18,9 @@ services:
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
     volumes:
-      - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
+        - ./conf/default.conf:/etc/nginx/conf.d/default.conf
+        - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
+        - ./install_certbot.sh:/app/install_certbot.sh
     restart: always
 
   nginx:
