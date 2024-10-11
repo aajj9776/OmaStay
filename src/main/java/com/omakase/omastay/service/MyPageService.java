@@ -44,6 +44,7 @@ import com.omakase.omastay.repository.PointRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.ReviewRepository;
 
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
@@ -76,7 +77,6 @@ public class MyPageService {
 
     @Autowired
     private CouponRepository couponRepository;
-
 
         public MemberDTO getMemberInfo(int memberId) {
 
@@ -203,6 +203,10 @@ public class MyPageService {
         member.setAddressVo(memberDTO.getAddressVo());
         member.setMemEmailCheck(memberDTO.getMemEmailCheck());
 
+        if (memberDTO.getMemberProfile().getPw() != null && !memberDTO.getMemberProfile().getPw().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(memberDTO.getMemberProfile().getPw());
+            member.getMemberProfile().setPw(encodedPassword);
+        }
         // 업데이트된 회원 정보를 저장
         memberRepository.save(member);
     }
@@ -269,9 +273,9 @@ public class MyPageService {
     public MemberCouponDTO getCouponsForMember(int memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-    
+
         List<IssuedCoupon> issuedCoupons = issuedCouponRepository.findByMemIdx(memberId);
-    
+
         // 현재 시간을 가져옴
         LocalDateTime now = LocalDateTime.now();
     
@@ -289,6 +293,7 @@ public class MyPageService {
     
                     dto.setIcStatus(issuedCoupon.getIcStatus().name());
                     dto.setIcCode(issuedCoupon.getIcCode());
+                    dto.setCpCate(issuedCoupon.getCoupon().getCpCate().name());       
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -342,8 +347,9 @@ public class MyPageService {
 
     // 리뷰 데이터를 가져와 DTO로 변환하는 메서드
     public List<ReviewMemberDTO> reviewMember(int memIdx) {
+        // 리뷰 리스트를 가져오는 부분
         List<Review> reviews = reviewRepository.findReviewsWithRoomAndHotelByMemberId(memIdx);
-
+    
         // Review 엔티티를 ReviewMemberDTO로 변환
         return reviews.stream().map(review -> {
             ReviewMemberDTO dto = new ReviewMemberDTO();
@@ -352,13 +358,18 @@ public class MyPageService {
             dto.setRevContent(review.getRevContent());
             dto.setRevDate(review.getRevDate());
             dto.setRevRating(review.getRevRating());
-
+    
             // 호텔명과 객실명 설정
             if (review.getReservation() != null && review.getReservation().getRoomInfo() != null) {
                 dto.setHotelName(review.getReservation().getRoomInfo().getHostInfo().getHname());
                 dto.setRoomName(review.getReservation().getRoomInfo().getRoomName());
-            }
-
+                
+                // hIdx 값 설정
+                dto.setHIdx(review.getReservation().getRoomInfo().getHostInfo().getId());
+                
+                dto.setResPerson(review.getReservation().getResPerson());
+            } 
+    
             // 이미지 URL 설정
             if (review.getRevFileImageNameVo() != null) {
                 String fname = review.getRevFileImageNameVo().getFName();
@@ -374,28 +385,34 @@ public class MyPageService {
             } else {
                 dto.setImageUrls(Collections.emptyList());
             }
-
+    
             return dto;
         }).collect(Collectors.toList());
     }
-
-        // 리뷰 삭제 
+    
+        // 리뷰 삭제
         public boolean deleteReviews(List<Integer> reviewIds) {
             try {
+                // 테스트 로그 추가
+                System.out.println("테스트 - 삭제할 리뷰 ID 목록: " + reviewIds);
+                
                 for (Integer reviewId : reviewIds) {
                     Review review = reviewRepository.findById(reviewId).orElse(null);
                     if (review != null) {
-                        review.setRevStatus(BooleanStatus.FALSE); // 리뷰 상태를 삭제로 변경 (BooleanStatus 사용)
+                        review.setRevStatus(BooleanStatus.FALSE); // 리뷰 상태를 삭제로 변경
                         reviewRepository.save(review);
                     }
                 }
+                // 삭제 성공 로그
+                System.out.println("테스트 - 리뷰 삭제 성공");
                 return true;
             } catch (Exception e) {
+                // 오류 로그 출력
                 e.printStackTrace();
                 return false;
             }
         }
-
+ 
     @Transactional
     public  Page<ReservationDTO> getReservationInfo(int memberId, Pageable pageable) {
         // Reservation을 조회하는 로직

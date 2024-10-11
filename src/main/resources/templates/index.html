@@ -15,28 +15,28 @@
       rel="stylesheet"
     />
     <link href="/css/component/swiper.css" rel="stylesheet" />
-  </head>
-  <style>
-    @media (min-width: 1280px) {
-      .custom-padding {
-        padding-left: 0;
-        padding-right: 0;
-      }
-    }
-    @media (min-width: 912px) {
-      .custom-gap {
-        row-gap: 20px;
-        padding-left: 40px;
-        padding-right: 40px;
-      }
-    }
 
-    .img {
-      width: 350px;
-      height: 170px;
-      border-radius: 10px;
-    }
-  </style>
+    <style>
+      @media (min-width: 1280px) {
+        .custom-padding {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+      @media (min-width: 912px) {
+        .custom-gap {
+          row-gap: 20px;
+          padding-left: 40px;
+          padding-right: 40px;
+        }
+      }
+      .img {
+        width: 350px;
+        height: 170px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
   <body>
     <div class="wrap">
       <section class="main-content max-w-full">
@@ -55,32 +55,55 @@
                 <p class="text-3xl m-0">위한 맞춤형 숙소</p>
               </span>
             </h2>
-            <div
-              class="search relative z-10 bg-white rounded-lg shadow-lg p-6"
-              th:include="~{component/search/searchbar}"
-            ></div>
+            <div class="search relative z-10 bg-white rounded-lg shadow-lg p-6">
+              <div>
+                <div
+                  class="text-blue-700 text-2xl sticky z-10 w-full !pl-10 lg:px-5 gap-3 lg:gap-4 text-left font-[Inter] pb-4"
+                >
+                  국내 숙소
+                </div>
+                <div th:include="~{component/search/searchbar}"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="column1 container px-4 py-10 max-w-[1200px] mx-auto">
         <div class="flex justify-between items-center mb-6">
+          <<<<<<< HEAD
           <b class="text-2xl font-bold">이벤트</b>
           <div class="text-blue-600 cursor-pointer">
             <div id="moreEvent">더보기</div>
           </div>
+          =======
+          <b class="text-2xl font-bold">이벤트</b>
+          <div class="text-blue-600 cursor-pointer">
+            <div>더보기</div>
+          </div>
+          >>>>>>> 2f0ad03b5a43f7a3b3519e5edcc06cd1f034693f
         </div>
         <div class="swiper-container z-0">
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
           <div class="swiper-wrapper">
+            <<<<<<< HEAD
+            <div class="swiper-slide" th:each="event : ${event}">
+              <img
+                class="img"
+                loading="lazy"
+                th:src="@{${event.path}}"
+                th:onclick="'goEventDetail(' + ${event.service.id} + ')'"
+                alt="image"
+              />
+            </div>
+            =======
             <div class="swiper-wrapper">
-              <div class="swiper-slide" th:each="event : ${event}">
+              <div class="swiper-slide" th:each="path : ${path}">
                 <img
                   class="img"
                   loading="lazy"
-                  th:src="@{${event.path}}"
-                  th:onclick="'goEventDetail(' + ${event.service.id} + ')'"
+                  th:src="@{${path}}"
                   alt="image"
                 />
               </div>
@@ -88,6 +111,7 @@
           </div>
           <div class="flex justify-center mt-4">
             <div class="swiper-pagination"></div>
+            >>>>>>> 2f0ad03b5a43f7a3b3519e5edcc06cd1f034693f
           </div>
         </div>
       </section>
@@ -324,7 +348,7 @@
                       class="bg-orange-500 text-white rounded px-2 py-1 text-xs font-bold mr-2"
                     >
                       <img
-                        th:text="${item['averageRating']}"
+                        th:text="${item['averagerating']}"
                         src="/image/index/svg-3.svg"
                         class="inline-block mr-1"
                       />
