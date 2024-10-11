@@ -51,6 +51,7 @@
                         class="m-[0px] h-[18px] w-[18px] relative rounded-[4px] border-[rgba(0,0,0,0.32)] border-[1px] border-solid box-border overflow-hidden shrink-0"
                         type="checkbox"
                         th:id="'soldout-' + ${identifier}" name="soldout" value="soldout"
+                        th:attr="onclick='performSearch(\'' + ${identifier} + '\')'"
                 />
                 <div
                         class="relative font-medium inline-block min-w-[86px] whitespace-nowrap"
