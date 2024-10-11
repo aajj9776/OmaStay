@@ -222,10 +222,9 @@ public class FacilitiesService {
 
             if (resultAccommodationsDTO != null) {
                 resultAccommodationsDTO.setOneDayPrice(numberFormat.format(priceDTO.getAvgPrice()));
+                resultAccommodationsDTO.setPrice(priceDTO.getAvgPrice());
             }
         }
-
-
 
         // 4. 이미지 이름을 세팅
         for (Tuple imageTuple : imageNames) {
@@ -258,6 +257,8 @@ public class FacilitiesService {
     private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap, boolean isModal, String sortType) {
         List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
 
+        System.out.println(resultAccommodationsDTOList);
+
         if(sortType != null) {
             switch (sortType) {
                 case "rating":
@@ -267,10 +268,10 @@ public class FacilitiesService {
                     resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getReviewCount).reversed());
                     break;
                 case "lowPrice":
-                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getOneDayPrice));
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getPrice));
                     break;
                 case "highPrice":
-                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getOneDayPrice).reversed());
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getPrice).reversed());
                     break;
             }
         }else{
