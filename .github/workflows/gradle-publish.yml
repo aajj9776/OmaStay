@@ -24,10 +24,13 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-    - name: Copy nginx config from EC2
+    - name: Copy nginx config and SSL from EC2
       run: |
         mkdir -p ./nginx/sites-enabled
+        mkdir -p ./nginx/ssl/accounts
         scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/nginx/sites-enabled/default ./nginx/sites-enabled/default
+        scp -r -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/letsencrypt/live/omastay.duckdns.org ./nginx/ssl/accounts/omastay.duckdns.org
+      continue-on-error: false
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
