@@ -12,11 +12,13 @@ COPY --from=builder /app/build/libs/OmaStay-0.0.1-SNAPSHOT.jar .
 
 COPY nginx/ssl/accounts /etc/nginx/ssl/accounts
 
-COPY ./install_certbot.sh /app/install_certbot.sh
-RUN chmod +x /app/install_certbot.sh
+COPY conf/install_certbot.sh /app/conf/install_certbot.sh
+RUN chmod +x /app/conf/install_certbot.sh
+
+RUN mkdir -p /etc/letsencrypt/live
 
 # install_certbot.sh 파일 실행
-RUN sh /app/install_certbot.sh
+RUN sh /app/conf/install_certbot.sh
 
 RUN chown -R root:root /etc/nginx/ssl/accounts && chmod -R 755 /etc/nginx/ssl/accounts
 
