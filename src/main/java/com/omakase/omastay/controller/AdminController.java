@@ -159,7 +159,7 @@ public class AdminController {
     }
 
     @RequestMapping("/login/validate")
-    public ModelAndView hostlogin(@RequestParam("id") String id, @RequestParam("pw") String pw) {
+    public ModelAndView adminLogin(@RequestParam("id") String id, @RequestParam("pw") String pw) {
         AdminMemberDTO adminMemberDTO = adminMemberService.adminlogin(id,pw);
 
         ModelAndView mv = new ModelAndView();

@@ -23,6 +23,8 @@ public class ResultAccommodationsDTO {
     @JsonProperty("oneDayPrice")
     private String oneDayPrice; //평균 가격
 
+    private Integer price;
+
     @JsonProperty("xaxis")
     private String xAxis;
 

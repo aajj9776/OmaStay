@@ -222,10 +222,9 @@ public class FacilitiesService {
 
             if (resultAccommodationsDTO != null) {
                 resultAccommodationsDTO.setOneDayPrice(numberFormat.format(priceDTO.getAvgPrice()));
+                resultAccommodationsDTO.setPrice(priceDTO.getAvgPrice());
             }
         }
-
-
 
         // 4. 이미지 이름을 세팅
         for (Tuple imageTuple : imageNames) {
@@ -240,7 +239,7 @@ public class FacilitiesService {
         //모든 결과 리스트
 
         // 최종 결과 반환
-        return paginateAccommodations(pageable, resultMap, isModal);
+        return paginateAccommodations(pageable, resultMap, isModal, filterDTO.getSortType());
     }
 
 
@@ -255,8 +254,29 @@ public class FacilitiesService {
         return roomInfoRepository.personFiltering(filterDTO, keyword);
     }
 
-    private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap, boolean isModal) {
+    private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap, boolean isModal, String sortType) {
         List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
+
+        System.out.println(resultAccommodationsDTOList);
+
+        if(sortType != null) {
+            switch (sortType) {
+                case "rating":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getRating).reversed());
+                    break;
+                case "reviewCount":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getReviewCount).reversed());
+                    break;
+                case "lowPrice":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getPrice));
+                    break;
+                case "highPrice":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getPrice).reversed());
+                    break;
+            }
+        }else{
+            resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getRating).reversed());
+        }
 
         // 기본 페이지네이션 결과 생성
         int start = (int) pageable.getOffset();

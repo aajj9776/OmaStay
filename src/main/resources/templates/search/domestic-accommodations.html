@@ -8,6 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link href="/css/component/slider.css" rel="stylesheet">
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
     <style>
         /* 기존 스타일 유지 */
         .noUi-moving .noUi-touch-area {
@@ -179,7 +184,7 @@
                             id="cardWrapperContainer">
                         <a class="self-stretch flex flex-row items-start justify-start [row-gap:20px] max-w-full mq750:flex-wrap pt-6 pb-6 border-[#ebebeb] border-b-[1px]" id="card"
                            th:each="accommodation : ${resultAccommodations}"
-                           th:href="@{'/search/detail-host?id=' + ${accommodation.HIdx}}"
+                           th:onclick="|detailHost(${accommodation.HIdx})|"
                         >
                             <div
                                     class="h-[240px] w-[396px] flex flex-col items-start justify-center min-w-[396px] max-w-full mq750:flex-1 mq750:min-w-full"
@@ -334,11 +339,23 @@
 </div>
 <div class="h-full w-full fixed top-0 left-0 items-center justify-center bg-gray-800 bg-opacity-50 hidden z-50"
      id="modal-wrap">
-    <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{/search/modal :: search_modal}"
+    <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{search/modal :: search_modal}"
          th:with="accommodations=${resultAccommodationsMap}"></div>
 </div>
+      
+<script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>
+<script type="text/javascript" src="/js/countperson.js"></script>
+<script
+        type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+></script>
+<script type="text/javascript" src="/js/datepicker.js"></script>
+
+
+
+
 <script type="text/template" id="accommodationModal-template">
     <div id="modalCard${hidx}" class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]">
         <img class="self-stretch w-[115px] relative max-h-full object-cover min-h-[172px] mq450:flex-1"
@@ -404,6 +421,7 @@
     let startPriceValue = null;
     let endPriceValue = null;
     let keywordValue = null;
+    let soldOut = false
 
     let sliderValues = {
         start: 0,
@@ -421,6 +439,7 @@
         startPriceValue = getUrlParameter('startPrice');
         endPriceValue = getUrlParameter('endPrice');
         keywordValue = getUrlParameter('keyword');
+        soldOut = getUrlParameter('soldOut');
 
 
         console.log(sortTypeValue + " sortTypeValue");
@@ -467,6 +486,7 @@
         setSortType(sortTypeValue);
         setFacilities(facilitiesValue, "main");
         setHCate(hCateValue, "main");
+        setSoldOut(soldOut, "main");
 
         //card 클릭시 url 이동
         let checkIn = sessionStorage.getItem('startDate');
@@ -491,6 +511,16 @@
         } else {
             filterButton.text("평점높은순");
             filterButton.val("rating");
+        }
+    }
+
+    function setSoldOut(soldOutValue = false, identifier = "") {
+        console.log(soldOutValue + " soldOut");
+        let soldOutButton = $('#soldout-' + identifier); // id를 구조에 맞게 변경했습니다.
+        if (soldOutValue) {
+            soldOutButton.prop('checked', true); // 버튼을 체크 상태로 만듭니다.
+        } else {
+            soldOutButton.prop('checked', false); // 버튼을 체크 해제 상태로 만듭니다 (옵션입니다).
         }
     }
 
@@ -537,6 +567,12 @@
             console.error('Dropdown filter button not found');
             return null;
         }
+    }
+
+    // 매진 숙소 체크 여부를 가져오는 함수
+    function getSoldOut(identifier = "") {
+        const soldOutButton = document.getElementById('soldout-' + identifier);
+        return soldOutButton ? soldOutButton.checked : false;
     }
 
     // 선택된 카테고리 값을 가져오는 함수
@@ -677,6 +713,7 @@
 
         setFacilities(facilitiesValue, "modal");
         setHCate(hCateValue, "modal");
+        setSoldOut(soldOut, "modal");
 
         document.getElementById('keyword_value_modal').innerText = "'" + keywordValue + "' 숙소 검색 결과";
 
@@ -783,6 +820,7 @@
         const facilities = getSelectedFacilities(identifier);
         console.log(facilities);
         let hCate = getHCate(identifier);
+        let soldOut = document.getElementById('soldout-' + identifier).checked;
         let startPrice = $('#slider-start-' + identifier).val();
         let endPrice = $('#slider-end-' + identifier).val();
         let keyword = sessionStorage.getItem('keyword');
@@ -807,7 +845,10 @@
             + person
             + " person"
             + sortType
-            + " sortType");
+            + " sortType"
+            + "soldOut"
+            + soldOut
+        );
         if (identifier === "main") {
             console.log("page: ", page);
 
@@ -841,6 +882,9 @@
             if (sortType) {
                 queryString += `sortType=${encodeURIComponent(sortType)}&`;
             }
+            if(soldOut){
+                queryString += `soldOut=${encodeURIComponent(soldOut)}&`;
+            }
             if (page && page > 1) {
                 queryString += `page=${encodeURIComponent(page)}&`;
             }
@@ -868,6 +912,7 @@
                     checkOut: endDay,
                     person: person,
                     sortType: sortType,
+                    soldOut: soldOut,
                     page: page
                 }
             }).done(function (data) {
@@ -1156,6 +1201,13 @@
             markers[i].setMap(null);
         }
         markers = [];
+    }
+
+    function detailHost(hidx) {
+        let checkIn = sessionStorage.getItem('startDate');
+        let checkOut = sessionStorage.getItem('endDate');
+        let person = sessionStorage.getItem('people');
+        window.location.href = `/search/detail-host?id=${hidx}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
     }
 </script>
 </body>
