@@ -484,6 +484,39 @@
         function saveroominforeg() {
             var formData = new FormData();
 
+            // 유효성 검사
+            var roomName = $('#roomName').val().trim();
+            var roomType = getRoomType();
+            var roomPerson = $('#roomPerson').val();
+            var regularPrice = $('#regularPrice').val().replace(/\s+/g, '');
+            var semiPeakPrice = $('#semiPeak').val().replace(/\s+/g, '');
+            var peakPrice = $('#peak').val().replace(/\s+/g, '');
+
+            if (!roomName) {
+              alert("객실 이름을 입력해주세요.");
+              return;
+            }
+            if (!roomType) {
+              alert("객실 유형을 선택해주세요.");
+              return;
+            }
+            if (!roomPerson) {
+              alert("객실 인원을 선택해주세요.");
+              return;
+            }
+            if (!regularPrice) {
+              alert("기본(비수기) 가격을 입력해주세요.");
+              return;
+            }
+            if ($('#semiPeakCheck').is(':visible') && !semiPeakPrice) {
+              alert("준성수기 가격을 입력해주세요.");
+              return;
+            }
+            if ($('#peakCheck').is(':visible') && !peakPrice) {
+              alert("성수기 가격을 입력해주세요.");
+              return;
+            }
+
             var roomRegDTO = {
                 roomInfo: {
                     id: null,

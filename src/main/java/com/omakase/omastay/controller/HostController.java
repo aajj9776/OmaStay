@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
-import com.omakase.omastay.util.FileRenameGcs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -566,26 +566,13 @@ public class HostController {
         // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
         String c_type = request.getContentType();
         if (c_type.startsWith("multipart")) {
-            List<ImageDTO> existImages = new ArrayList<>();
-            List<String> existingFileNames = new ArrayList<>();
-
-            if (hostInfoCustomDTO.getHostInfo() != null && hostInfoCustomDTO.getHostInfo().getId() != null) {
-                existImages = imageService.getHostImages(hostInfoCustomDTO.getHostInfo().getId());
-                if (existImages != null) {
-                    existingFileNames = existImages.stream()
-                            .map(imageDTO -> imageDTO.getImgName().getFName())
-                            .collect(Collectors.toList());
-                }
-            }
 
             List<ImageDTO> newImages = new ArrayList<>();
-            List<String> newFileNames = new ArrayList<>();
 
             // 기존 이미지 추가
             if (existimagesDTO != null) {
                 for (ImageDTO imageDTO : existimagesDTO) {
                     newImages.add(imageDTO);
-                    newFileNames.add(imageDTO.getImgName().getOName());
                 }
             }
 
@@ -601,10 +588,14 @@ public class HostController {
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
 
-                String uniqueFileName = FileRenameGcs.checkSameFileName(oname, newFileNames);
-                newFileNames.add(uniqueFileName);
+                // 원본 파일명에서 확장자 추출
+                String extension = "";
+                int dotIndex = oname.lastIndexOf('.');
+                if (dotIndex > 0 && dotIndex < oname.length() - 1) {
+                    extension = oname.substring(dotIndex);
+                }
                 
-                String fname = hName+"_"+FileRenameGcs.checkSameFileName(uniqueFileName, newFileNames);
+                String fname = hName+"_"+UUID.randomUUID().toString()+extension;
                 fvo.setFName(fname);
 
                 try {
@@ -655,33 +646,16 @@ public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO 
     HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
     List<ImageDTO> existimagesDTO = roomRegDTO.getImages();
 
-    for (ImageDTO image : roomRegDTO.getImages()) {
-        System.out.println("fName: " + image.getImgName().getFName());
-    }
-
     // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
     String c_type = request.getContentType();
     if (c_type.startsWith("multipart")) {
-        List<ImageDTO> existImages = new ArrayList<>();
-        List<String> existingFileNames = new ArrayList<>();
-
-        if (roomRegDTO.getRoomInfo() != null && roomRegDTO.getRoomInfo().getId() != null) {
-            existImages = imageService.getImages(roomRegDTO.getRoomInfo().getId());
-            if (existImages != null) {
-                existingFileNames = existImages.stream()
-                        .map(imageDTO -> imageDTO.getImgName().getFName())
-                        .collect(Collectors.toList());
-            }
-        }
 
         List<ImageDTO> newImages = new ArrayList<>();
-        List<String> newFileNames = new ArrayList<>();
 
         // 기존 이미지 추가
         if (existimagesDTO != null) {
             for (ImageDTO imageDTO : existimagesDTO) {
                 newImages.add(imageDTO);
-                newFileNames.add(imageDTO.getImgName().getFName());
             }
         }
 
@@ -696,10 +670,14 @@ public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO 
                     FileImageNameVo fvo = new FileImageNameVo();
                     fvo.setOName(oname);
 
-                    String uniqueFileName = FileRenameGcs.checkSameFileName(oname, newFileNames);
-                    newFileNames.add(uniqueFileName);
-
-                    String fname = rName+"_"+FileRenameGcs.checkSameFileName(uniqueFileName, newFileNames);
+                    // 원본 파일명에서 확장자 추출
+                    String extension = "";
+                    int dotIndex = oname.lastIndexOf('.');
+                    if (dotIndex > 0 && dotIndex < oname.length() - 1) {
+                        extension = oname.substring(dotIndex);
+                    }
+                    
+                    String fname = rName+"_"+UUID.randomUUID().toString()+extension;
                     fvo.setFName(fname);
 
                     try {
