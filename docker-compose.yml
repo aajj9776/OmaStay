@@ -18,7 +18,7 @@ services:
     volumes:
       - ./conf/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
-      - ./install_certbot.sh:/app/install_certbot.sh
+      - ./conf/install_certbot.sh:/app/install_certbot.sh
     command: ["/bin/sh", "-c", "sh /app/install_certbot.sh && java -jar OmaStay-0.0.1-SNAPSHOT.jar"]
     restart: always
 
