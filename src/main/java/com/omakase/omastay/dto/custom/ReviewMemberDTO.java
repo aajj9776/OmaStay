@@ -24,4 +24,6 @@ public class ReviewMemberDTO {
     private List<String> imageUrls;  // 이미지 URL 리스트 추가
     private String hotelName;        // 호텔명
     private String roomName;         // 객실명
+    private Integer hIdx;  
+    private Integer resPerson; // 예약된 인원수
 }
