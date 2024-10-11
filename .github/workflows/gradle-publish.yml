@@ -47,8 +47,8 @@ jobs:
       - name: Copy SSL certificates to EC2
         run: |
           set -e
-          scp -o StrictHostKeyChecking=no ./path/to/fullchain2.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem || exit 1
-          scp -o StrictHostKeyChecking=no ./path/to/privkey2.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem || exit 1
+          scp -o StrictHostKeyChecking=no /home/ubuntu/certs/omastay_duckdns_org/fullchain2.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem || exit 1
+          scp -o StrictHostKeyChecking=no /home/ubuntu/certs/omastay_duckdns_org/privkey2.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem || exit 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
