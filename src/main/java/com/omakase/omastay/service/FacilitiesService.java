@@ -240,7 +240,7 @@ public class FacilitiesService {
         //모든 결과 리스트
 
         // 최종 결과 반환
-        return paginateAccommodations(pageable, resultMap, isModal);
+        return paginateAccommodations(pageable, resultMap, isModal, filterDTO.getSortType());
     }
 
 
@@ -255,8 +255,27 @@ public class FacilitiesService {
         return roomInfoRepository.personFiltering(filterDTO, keyword);
     }
 
-    private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap, boolean isModal) {
+    private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap, boolean isModal, String sortType) {
         List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
+
+        if(sortType != null) {
+            switch (sortType) {
+                case "rating":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getRating).reversed());
+                    break;
+                case "reviewCount":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getReviewCount).reversed());
+                    break;
+                case "lowPrice":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getOneDayPrice));
+                    break;
+                case "highPrice":
+                    resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getOneDayPrice).reversed());
+                    break;
+            }
+        }else{
+            resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getRating).reversed());
+        }
 
         // 기본 페이지네이션 결과 생성
         int start = (int) pageable.getOffset();
