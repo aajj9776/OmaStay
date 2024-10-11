@@ -32,23 +32,23 @@ jobs:
       - name: Ensure remote directory exists and correct permissions
         run: |
           set -e
-          ssh -o StrictHostKeyChecking-no ubuntu@${{ secrets.HOST }} "mkdir -p /home/ubuntu/OmaStay/conf && sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/conf" || exit 1
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "mkdir -p /home/ubuntu/OmaStay/conf && sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/conf" || exit 1
 
       - name: Copy files to EC2
         run: |
           set -e
-          scp -r -o StrictHostKeyChecking-no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay || exit 1
+          scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay || exit 1
 
       - name: Copy default.conf to EC2
         run: |
           set -e
-          scp -o StrictHostKeyChecking-no ./conf/default.conf ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/conf/default.conf || exit 1
+          scp -o StrictHostKeyChecking=no ./conf/default.conf ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/conf/default.conf || exit 1
 
       - name: Copy SSL certificates to EC2
         run: |
           set -e
-          scp -o StrictHostKeyChecking-no /etc/letsencrypt/live/omastay.duckdns.org-0001/fullchain.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem || exit 1
-          scp -o StrictHostKeyChecking-no /etc/letsencrypt/live/omastay.duckdns.org-0001/privkey.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem || exit 1
+          scp -o StrictHostKeyChecking=no /etc/letsencrypt/live/omastay.duckdns.org-0001/fullchain.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/fullchain.pem || exit 1
+          scp -o StrictHostKeyChecking=no /etc/letsencrypt/live/omastay.duckdns.org-0001/privkey.pem ubuntu@${{ secrets.HOST }}:/etc/nginx/ssl/accounts/omastay.duckdns.org/privkey.pem || exit 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -89,7 +89,7 @@ jobs:
 
       - name: SSH into EC2 and run Docker Compose
         run: |
-          ssh -o StrictHostKeyChecking-no ubuntu@${{ secrets.HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
             set -e
             cd /home/ubuntu/OmaStay
             docker-compose down
