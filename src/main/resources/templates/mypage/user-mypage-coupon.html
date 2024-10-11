@@ -244,15 +244,21 @@
                           remainingTime = `${diffInDays}일 남음`;
                       }
 
+                      let discountText = '';
+                      if (coupon.cpCate === 'PRICE') {
+                          discountText = `${coupon.couponSale} 원 할인`;
+                      } else if (coupon.cpCate === 'PERCENT') {
+                          discountText = `${coupon.couponSale} % 할인`;
+                      }
+
+                      console.log('쿠폰 할인 텍스트:', discountText);
+                      console.log('쿠폰 cpCate:', coupon.cpCate); 
                       // 쿠폰 카드 HTML 생성 (글자 크기 동일하게 적용)
                       const couponHtml = `
                           <div class="w-[572px] rounded-xl bg-white border border-silver-100 box-border flex flex-col items-start justify-start pt-[30px] pb-[30px] pl-[35px] pr-[35px]">
                               <div class="h-[135px] flex-1 font-semibold flex items-center w-full">
                                   <span class="text-sm"> <!-- 모든 텍스트에 같은 크기 적용 -->
-                                      <p class="m-0 mb-2">
-                                          <span>${coupon.couponSale}</span> <!-- 할인 금액 -->
-                                          <span class="text-sm">원 할인</span> 
-                                      </p>
+                                      <p class="m-0 mb-2">${discountText}</p> <!-- 할인 금액/퍼센트 표시 -->
                                       <p class="m-0 mb-2">
                                           <span class="text-sm text-indianred">${remainingTime}</span> <!-- 남은 시간 -->
                                       </p>

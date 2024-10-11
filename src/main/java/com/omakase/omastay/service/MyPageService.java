@@ -203,6 +203,10 @@ public class MyPageService {
         member.setAddressVo(memberDTO.getAddressVo());
         member.setMemEmailCheck(memberDTO.getMemEmailCheck());
 
+        if (memberDTO.getMemberProfile().getPw() != null && !memberDTO.getMemberProfile().getPw().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(memberDTO.getMemberProfile().getPw());
+            member.getMemberProfile().setPw(encodedPassword);
+        }
         // 업데이트된 회원 정보를 저장
         memberRepository.save(member);
     }
@@ -269,9 +273,9 @@ public class MyPageService {
     public MemberCouponDTO getCouponsForMember(int memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-    
+
         List<IssuedCoupon> issuedCoupons = issuedCouponRepository.findByMemIdx(memberId);
-    
+
         // 현재 시간을 가져옴
         LocalDateTime now = LocalDateTime.now();
     
@@ -289,6 +293,7 @@ public class MyPageService {
     
                     dto.setIcStatus(issuedCoupon.getIcStatus().name());
                     dto.setIcCode(issuedCoupon.getIcCode());
+                    dto.setCpCate(issuedCoupon.getCoupon().getCpCate().name());       
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -407,7 +412,7 @@ public class MyPageService {
                 return false;
             }
         }
-
+ 
     @Transactional
     public  Page<ReservationDTO> getReservationInfo(int memberId, Pageable pageable) {
         // Reservation을 조회하는 로직
