@@ -77,7 +77,7 @@ spring:
 custom:
   jwt:
     secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
-    upload: https://storage.googleapis.com/omastay/
+
 
 #google analytics 전용 [이하운]
 oauth:
@@ -88,3 +88,9 @@ oauth:
   google:
     analytics:
       property-id: your-ga4-property-id
+      
+      
+      
+      
+#건들지 마시오
+upload: https://storage.googleapis.com/omastay/
