@@ -4,7 +4,6 @@ server:
     session:
       timeout: 24h
   tomcat:
-    uri-encoding: UTF-8
     threads:
       max: 50
       min-spare: 5
