@@ -6,27 +6,35 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
     - uses: actions/checkout@v4
-
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
-        distribution: 'temurin'
+        distribution: 'adopt'
         
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.4
       with:
         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
+    - name: Remove existing default.conf directory from EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "rm -rf /home/ubuntu/OmaStay/conf/default.conf"
+
     - name: Copy files to EC2
       run: |
-        scp -o StrictHostKeyChecking=no -r ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+        scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+
+    - name: Ensure remote directory exists
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "mkdir -p /home/ubuntu/OmaStay/conf"
 
     - name: Copy default.conf to EC2
       run: |
@@ -36,15 +44,17 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-      
-    - name: Install tailwindcss and dependencies
+    
+    - name: frontend로 이동
       run: |
         cd src/main/frontend
+    
+    - name: tailwindcss 설치
+      run: |
         npm install
-        npm install @popperjs/core@^2.11.8
-
+        
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4.0.0
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Cache Gradle packages
       uses: actions/cache@v3
@@ -55,28 +65,17 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle
-
-    - name: Grant execute permission for gradlew
-      run: chmod u+x gradlew
       
     - name: Build with Gradle Wrapper
-      run: ./gradlew clean build --no-daemon
-
-    - name: Install Docker using convenience script on EC2
+      run: gradle clean build
+      
+    - name: Add user in the Docker group
+      run: | 
+        sudo usermod -aG docker $USER
+        
+    - name: reload docker session
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
-
-    - name: Add ubuntu user to Docker group and restart Docker on EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          sudo usermod -aG docker ubuntu
-          sudo systemctl restart docker
-          exit
-        EOF
-
-    - name: Verify Docker permissions on EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
+        sudo chmod 666 /var/run/docker.sock
 
     - name: SSH into EC2 and run Docker Compose
       run: |
@@ -84,12 +83,4 @@ jobs:
           cd /home/ubuntu/OmaStay
           docker-compose down
           docker-compose up -d --build
-        EOF
-
-    - name: Move Nginx config inside Docker and restart Nginx
-      run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          docker cp /home/ubuntu/OmaStay/conf/default.conf nginx_container:/etc/nginx/conf.d/default.conf
-          docker exec nginx_container nginx -t
-          docker exec nginx_container systemctl restart nginx
         EOF
