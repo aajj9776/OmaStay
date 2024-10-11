@@ -29,10 +29,8 @@ jobs:
         mkdir -p ./nginx/sites-enabled
         mkdir -p ./nginx/ssl/accounts/omastay_duckdns_org
         scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/nginx/sites-enabled/default ./nginx/sites-enabled/default
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/certs/omastay_duckdns_org/cert2.pem ./nginx/ssl/accounts/omastay_duckdns_org/cert.pem
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/certs/omastay_duckdns_org/chain2.pem ./nginx/ssl/accounts/omastay_duckdns_org/chain.pem
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/certs/omastay_duckdns_org/fullchain2.pem ./nginx/ssl/accounts/omastay_duckdns_org/fullchain.pem
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/certs/omastay_duckdns_org/privkey2.pem ./nginx/ssl/accounts/omastay_duckdns_org/privkey.pem
+        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/docker/nginx/certs/live/omastay.duckdns.org-0001/fullchain.pem ./nginx/ssl/accounts/omastay_duckdns_org/fullchain.pem
+        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/home/ubuntu/docker/nginx/certs/live/omastay.duckdns.org-0001/privkey.pem ./nginx/ssl/accounts/omastay_duckdns_org/privkey.pem
       continue-on-error: false
 
     - name: Set up Node.js
