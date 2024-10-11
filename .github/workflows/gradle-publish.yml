@@ -29,10 +29,10 @@ jobs:
         mkdir -p ./nginx/sites-enabled
         mkdir -p ./nginx/ssl/accounts/omastay_duckdns_org
         scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/nginx/sites-enabled/default ./nginx/sites-enabled/default
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/letsencrypt/archive/omastay.duckdns.org/cert2.pem ./nginx/ssl/accounts/omastay_duckdns_org/cert.pem
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/letsencrypt/archive/omastay.duckdns.org/chain2.pem ./nginx/ssl/accounts/omastay_duckdns_org/chain.pem
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/letsencrypt/archive/omastay.duckdns.org/fullchain2.pem ./nginx/ssl/accounts/omastay_duckdns_org/fullchain.pem
-        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:/etc/letsencrypt/archive/omastay.duckdns.org/privkey2.pem ./nginx/ssl/accounts/omastay_duckdns_org/privkey.pem
+        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:~/certs/omastay_duckdns_org/cert2.pem ./nginx/ssl/accounts/omastay_duckdns_org/cert.pem
+        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:~/certs/omastay_duckdns_org/chain2.pem ./nginx/ssl/accounts/omastay_duckdns_org/chain.pem
+        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:~/certs/omastay_duckdns_org/fullchain2.pem ./nginx/ssl/accounts/omastay_duckdns_org/fullchain.pem
+        scp -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }}:~/certs/omastay_duckdns_org/privkey2.pem ./nginx/ssl/accounts/omastay_duckdns_org/privkey.pem
       continue-on-error: false
 
     - name: Set up Node.js
@@ -71,7 +71,7 @@ jobs:
 
     - name: Add ubuntu user to Docker group and restart Docker on EC2
       run: |
-        ssh -o StrictHostKeyChecking-no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
           sudo usermod -aG docker ubuntu
           sudo systemctl restart docker
           exit
@@ -79,11 +79,11 @@ jobs:
 
     - name: Verify Docker permissions on EC2
       run: |
-        ssh -o StrictHostKeyChecking-no ubuntu@${{ secrets.HOST }} "docker ps"
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
 
     - name: SSH into EC2 and run Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking-no ubuntu@${{ secrets.HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
           cd /home/ubuntu/OmaStay
           docker-compose down
           docker-compose up -d --build
