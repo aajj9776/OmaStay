@@ -36,11 +36,12 @@
         >
       </div>
       <div
-        class="w-[294px] flex flex-row items-start justify-start pt-[0px] pb-[16px] pl-[36px] pr-[13px] box-border text-[15px] text-[rgba(0,0,0,0.24)]"
+        class="w-[370px] flex flex-row items-center justify-center pt-[0px] pb-[16px] pl-[36px] pr-[13px] box-border text-[15px] text-[rgba(0,0,0,0.24)]"
       >
         <div class="flex-1 relative">
-          <p class="m-[0px]">고객님의 예약이 확정되었어요</p>
-          <p class="m-[0px]">아래의 예약 정보를 확인해주세요</p>
+          <p class="m-[0px]">고객님의 예약이 접수되었습니다</p>
+          <p class="m-[0px]">호스트가 예약을 확인한 후, 예약이 완료됩니다.</p>
+          <p class="m-[0px]">아래 예약 정보를 확인해주세요.</p>
         </div>
       </div>
       <div
@@ -78,11 +79,11 @@
                 class="h-[47px] relative leading-[20px] flex text-[rgba(0,0,0,0.87)] items-center"
               >
                 <span>
-                  <p class="m-[0px]" id="start"></p>
+                  <b class="m-[0px]" id="start"></b>
+                  ~ (
+                  <b class="m-[0px]" id="bak"></b>
+                  박)
                   <p class="m-[0px]" id="end"></p>
-                  (
-                  <p class="m-[0px]" id="bak"></p>
-                  )
                 </span>
               </b>
             </div>
@@ -167,15 +168,42 @@
       const roomName = urlParams.get("roomName");
       let user = JSON.parse(localStorage.getItem("user"));
 
-      let bak = totalDate(formatDate(start), formatDate(end));
-      $("#bak").text(bak);
-
       function totalDate(start, end) {
-        let startDate = new Date(start); // 시작 날짜
-        let endDate = new Date(end); // 끝 날짜
+        // 변환 전 콘솔 로그로 날짜 형식 확인
+        console.log("Raw Start:", start);
+        console.log("Raw End:", end);
+
+        // 날짜 형식을 YYYY-MM-DD로 변환 (필요시 수정)
+        let formattedStart = convertDateFormat(start);
+        let formattedEnd = convertDateFormat(end);
+
+        // 변환 후 콘솔 로그로 다시 확인
+        console.log("Formatted Start:", formattedStart);
+        console.log("Formatted End:", formattedEnd);
+
+        let startDate = new Date(formattedStart); // 시작 날짜 변환
+        let endDate = new Date(formattedEnd); // 끝 날짜 변환
+
+        // 변환된 날짜가 유효한지 확인
+        console.log("Parsed Start Date:", startDate);
+        console.log("Parsed End Date:", endDate);
+
+        if (isNaN(startDate) || isNaN(endDate)) {
+          console.error("Invalid Date detected");
+          return "Invalid Date"; // 오류 처리
+        }
+
         let timeDifference = endDate.getTime() - startDate.getTime(); // 시간 차이 계산
         let dayDifference = timeDifference / (1000 * 3600 * 24); // 일 단위 차이로 변환
         return dayDifference; // 몇 박인지 반환
+      }
+
+      function convertDateFormat(dateString) {
+        let parts = dateString.split(". "); // "24. 10. 16"을 분리
+        let year = `20${parts[0].trim()}`; // "24" => "2024"
+        let month = parts[1].trim().padStart(2, "0"); // "10" => "10", "5" => "05"
+        let day = parts[2].trim().padStart(2, "0"); // "16" => "16", "7" => "07"
+        return `${year}-${month}-${day}`; // "2024-10-16" 형식으로 반환
       }
 
       function formatDate(dateString) {
@@ -189,6 +217,14 @@
         $("#amount").text(amount);
         $("#start").text(formatDate(start));
         $("#end").text(formatDate(end));
+
+        // bak 계산 및 설정
+        let bak = totalDate(formatDate(start), formatDate(end));
+        if (bak !== "Invalid Date") {
+          $("#bak").text(parseInt(bak));
+        } else {
+          $("#bak").text("날짜 오류");
+        }
       });
 
       function goIndex() {

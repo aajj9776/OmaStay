@@ -861,6 +861,7 @@
         } else {
           $("#point_input").val(usePoints);
           $("#point_discount").val(usePoints);
+          changePrice();
         }
 
         $("#pointModal").addClass("hidden");
@@ -869,34 +870,44 @@
           $("#point_discount").val(0);
           return;
         }
-        finalPrice = totalPrice - usePoints;
-
+        changePrice();
         $("#sale_price").val(finalPrice);
       });
 
       function changePrice() {
-        // 초기 쿠폰 할인 금액 설정
+        // 객실 기본 가격
+        let nsalePriceVal = parseInt($("#nsale_price").val()) || 0;
 
-        console.log("바바" + JSON.stringify(couponData));
-        if (couponData.cpCate === "PERCENT") {
-          couponPrice = nsale_price * (couponData.cpSale / 100); // 퍼센트 할인 계산
-        } else if (couponData.cpCate === "PRICE") {
-          couponPrice = parseInt(couponData.cpSale); // 정액 할인 계산
+        
+
+        // 쿠폰 할인 금액 계산
+        let couponDiscount = 0;
+        if (couponData && couponData.cpCate === "PERCENT") {
+          couponDiscount = nsalePriceVal * (couponData.cpSale / 100);  // 퍼센트 할인
+        } else if (couponData && couponData.cpCate === "PRICE") {
+          couponDiscount = parseInt(couponData.cpSale);  // 정액 할인
         }
-        $("#coupon_discount").val(couponPrice);
+        console.log("쿠폰 할인 금액: " + couponDiscount);
 
-        // 최종 결제 금액 계산
-        finalPrice = totalPrice - couponPrice;
+        // 포인트 할인 금액 계산
+        let pointDiscount = parseInt(usePoints) || 0;
+        console.log("포인트 할인 금액: " + pointDiscount);
 
-        // 최소 결제 금액이 0 미만이 되지 않도록 처리
+
+        // 최종 결제 금액이 0 미만이면 0으로 설정
         if (finalPrice < 0) {
           finalPrice = 0;
         }
 
-        // 총 결제 금액을 readonly 필드에 업데이트
+        finalPrice = totalPrice - couponDiscount - pointDiscount;
+
+        // 쿠폰 및 포인트 할인 금액을 각 필드에 적용
+        $("#coupon_discount").val(couponDiscount);
+        $("#point_discount").val(pointDiscount);
+
+        // 총 결제 금액을 업데이트
         $("#sale_price").val(finalPrice);
       }
-
       $(function () {
         membershipSale();
         // Open Modal
@@ -946,7 +957,7 @@
           return;
         }
         let code = $("#verification_code").val();
-        if (code == null && code == "") {
+        if (code == null && code.trim() == "") {
           alert("인증번호를 입력해주세요.");
           return;
         }
@@ -964,6 +975,9 @@
             $("#authBtn").css("display", "none");
             $("#verification_code").val("인증완료!");
             $("#verification_code").attr("readonly", true);
+
+            // 타이머 멈추기
+            clearInterval(countdownInterval);
           } else {
             alert("인증번호가 일치하지 않습니다.");
           }
@@ -1019,16 +1033,19 @@
             $("#authPlace").css("display", "block");
             $("#verification_code").prop("disabled", false); // 타이머 시작 시 입력 가능하도록
             $("#authBtn").prop("disabled", false); // 타이머 시작 시 인증 버튼 활성화
+            
           }
         });
       }
+
+      let countdownInterval;
 
       function startCountdown() {
         let time = 180; // 3분 = 180초
         let timerDisplay = $("#timer");
 
         // 1초마다 실행
-        let countdownInterval = setInterval(function () {
+        countdownInterval = setInterval(function () {
           // 타이머 종료 조건
           if (time <= 0) {
             clearInterval(countdownInterval); // 타이머 멈추기
@@ -1071,17 +1088,23 @@
       // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
       // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
       async function requestPayment() {
-        resEmail = $("#reserver_email").val();
         resName = $("#reserver_name").val();
+        resEmail = $("#reserver_email").val();
+        let memberDiscount = $("#membership_discount").val();
 
         let roomName = $("#room").text();
-
         let code = $("#verification_code").val();
 
-        if (resName == null && resName == "") {
+        if (resName == null || resName.trim() === "") {  
           alert("예약자 이름을 입력해주세요");
           return;
         }
+
+        if (resEmail == null || resEmail.trim() === "") { 
+          alert("이메일을 입력해주세요");
+          return;
+        }
+
         if (code != "인증완료!") {
           alert("이메일 인증을 해주세요");
           return;
@@ -1095,9 +1118,9 @@
           "&resEmail=" +
           encodeURIComponent(resEmail) +
           "&nsalePrice=" +
-          encodeURIComponent(nsale_price) +
+          encodeURIComponent(amountParam) +
           "&payGrade=" +
-          encodeURIComponent(amountParam)  +
+          encodeURIComponent(memberDiscount)  +
           "&person=" +
           encodeURIComponent(personParam)  +
           "&checkIn=" +

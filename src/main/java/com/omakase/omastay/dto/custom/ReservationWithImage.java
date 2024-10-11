@@ -16,5 +16,6 @@ public class ReservationWithImage {
     private LocalDate start;
     private LocalDate end;
     private Long date;
+    private int hIdx;
     
 }
