@@ -34,6 +34,11 @@ jobs:
           set -e
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "mkdir -p /home/ubuntu/OmaStay/conf && sudo chown -R ubuntu:ubuntu /home/ubuntu/OmaStay/conf" || exit 1
 
+      - name: Create SSL directory in EC2
+        run: |
+          set -e
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "sudo mkdir -p /etc/nginx/ssl/accounts/omastay.duckdns.org && sudo chown -R ubuntu:ubuntu /etc/nginx/ssl/accounts/omastay.duckdns.org " || exit 1
+
       - name: Copy files to EC2
         run: |
           set -e
