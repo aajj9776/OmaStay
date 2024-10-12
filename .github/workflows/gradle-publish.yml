@@ -1,13 +1,11 @@
 name: Java CI with Gradle
 
 on:
-  pull_request:
-    types: [closed]  # PR이 병합될 때 동작
+  push:
     branches: [ "main" ]
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true  # PR이 병합된 경우에만 실행
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,7 +18,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        
+
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.4
       with:
@@ -31,11 +29,18 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
 
+    - name: Get last commit hash in EC2
+      id: ec2_commit_hash
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cd /home/ubuntu/OmaStay && git rev-parse HEAD" > ec2_commit_hash.txt
+        ec2_commit_hash=$(cat ec2_commit_hash.txt)
+        echo "::set-output name=ec2_commit_hash::$ec2_commit_hash"
+
     - name: Get list of changed files
       id: get_diff
       run: |
-        git fetch origin ${{ github.sha }}  # 변경 커밋을 가져옵니다.
-        git diff --name-only HEAD^ HEAD > changed_files.txt
+        git fetch origin ${{ github.sha }}
+        git diff --name-only ${{ steps.ec2_commit_hash.outputs.ec2_commit_hash }} HEAD > changed_files.txt
         cat changed_files.txt
 
     - name: Transfer changed files to EC2
@@ -48,7 +53,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-      
+
     - name: Install tailwindcss and dependencies
       run: |
         cd src/main/frontend
@@ -70,7 +75,7 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod u+x gradlew
-      
+
     - name: Build with Gradle Wrapper
       run: ./gradlew clean build --no-daemon
 
