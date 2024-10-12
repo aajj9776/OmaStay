@@ -9,7 +9,7 @@ services:
     ports:
       - "9090:9090"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.39.134:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.2.67:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=omastay
       - SPRING_DATASOURCE_PASSWORD=omastay18
       - SPRING_SERVLET_MULTIPART_ENABLED=true
