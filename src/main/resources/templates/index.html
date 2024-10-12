@@ -71,34 +71,15 @@
 
       <section class="column1 container px-4 py-10 max-w-[1200px] mx-auto">
         <div class="flex justify-between items-center mb-6">
-          <<<<<<< HEAD
           <b class="text-2xl font-bold">이벤트</b>
           <div class="text-blue-600 cursor-pointer">
             <div id="moreEvent">더보기</div>
           </div>
-          =======
-          <b class="text-2xl font-bold">이벤트</b>
-          <div class="text-blue-600 cursor-pointer">
-            <div>더보기</div>
-          </div>
-          >>>>>>> 2f0ad03b5a43f7a3b3519e5edcc06cd1f034693f
         </div>
         <div class="swiper-container z-0">
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
           <div class="swiper-wrapper">
-            <<<<<<< HEAD
-            <div class="swiper-slide" th:each="event : ${event}">
-              <img
-                class="img"
-                loading="lazy"
-                th:src="@{${event.path}}"
-                th:onclick="'goEventDetail(' + ${event.service.id} + ')'"
-                alt="image"
-              />
-            </div>
-            =======
-            <div class="swiper-wrapper">
               <div class="swiper-slide" th:each="path : ${path}">
                 <img
                   class="img"
@@ -111,7 +92,6 @@
           </div>
           <div class="flex justify-center mt-4">
             <div class="swiper-pagination"></div>
-            >>>>>>> 2f0ad03b5a43f7a3b3519e5edcc06cd1f034693f
           </div>
         </div>
       </section>
