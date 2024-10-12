@@ -5,6 +5,7 @@ import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.RecommendationDTO;
+import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.AccommodationResponseDTO;
 import com.omakase.omastay.dto.custom.FilterDTO;
@@ -16,6 +17,7 @@ import com.omakase.omastay.service.HostFacilitiesService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.RecommendationService;
+import com.omakase.omastay.service.ReservationService;
 import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.vo.StartEndVo;
@@ -70,6 +72,9 @@ public class SearchController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ReservationService reservationService;
+
     private final FacilitiesService facilitiesService;
 
     public SearchController(FacilitiesService facilitiesService) {
@@ -101,6 +106,9 @@ public class SearchController {
             System.out.println("일치하는 방 잘 나오냐"+availableRooms);
             Map<Integer, String> roomPrices = new HashMap<>();
 
+            List<Integer> reservationList = reservationService.getMemIdxListByHIdx(hIdx);
+            System.out.println("일치하는 멤버"+reservationList);
+            
             for (RoomInfoDTO roomDto : availableRooms) {
                 Integer roomIdx = roomDto.getId();  // 방 ID 추출
                 System.out.println("방 번호: " + roomIdx);
@@ -174,6 +182,7 @@ public class SearchController {
             model.addAttribute("matchImages", roomImageMap);
             model.addAttribute("allRoom", allRoomList);
             model.addAttribute("reviewStats", reviewStats);
+            model.addAttribute("includeSearchBar", true);
             
         
             return "search/detail_host";
