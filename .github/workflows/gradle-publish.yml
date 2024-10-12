@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
+    permissions: 
       contents: read
 
     steps:
@@ -24,9 +24,15 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-    - name: Copy files to EC2 using rsync
+    - name: Verify EC2 Host
       run: |
-        rsync -avz --exclude '.git/' ./ ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
+    - name: Copy files to EC2 using rsync
+      env:
+        RSYNC_RSH: "ssh -o StrictHostKeyChecking=no"
+      run: rsync -avz --exclude '.git/' ./ ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
