@@ -1,5 +1,4 @@
 services:
-
   backend:
     build:
       context: ./
@@ -36,6 +35,29 @@ services:
       - "443:443"
     depends_on:
       - backend
+
+  duckdns:
+    image: linuxserver/duckdns
+    container_name: duckdns
+    environment:
+      - SUBDOMAINS=omastay
+      - TOKEN=c57e3ddf-cb5d-401a-bbf4-cb3867f9c8bc
+      - LOGFILE=/config/duck.log
+    volumes:
+      - $HOME/duckdns:/config
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - /data/certbot/conf:/etc/letsencrypt
+      - /data/certbot/www:/var/www/certbot
+      - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot certonly --manual --preferred-challenges dns -d omastay.duckdns.org -d www.omastay.duckdns.org --manual-auth-hook '/config/duck.sh' --deploy-hook 'nginx -s reload'; sleep 12h & wait $${!}; done;"
+    depends_on:
+      - duckdns
+    restart: unless-stopped
 
 networks:
   my-net1:
