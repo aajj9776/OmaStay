@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 public class CancelRequestDTO {
     private String paymentKey;
     private String cancelReason;
+    private String cancelAmount;
     private int payIdx;
     private int resIdx;
     private Integer icIdx;

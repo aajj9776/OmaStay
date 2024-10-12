@@ -327,6 +327,7 @@ public class MypageController {
             reservationWithImage.setReservation(res);
             reservationWithImage.setImage(img);
             reservationWithImage.setHostName(host.getHname());
+            reservationWithImage.setHIdx(host.getId());
             reservationWithImage.setStart(startDate);
             reservationWithImage.setEnd(endDate);
             reservationWithImage.setDate(totalNights);
@@ -374,6 +375,7 @@ public class MypageController {
             ReservationWithImage reservationWithImage = new ReservationWithImage();
             reservationWithImage.setReservation(res);
             reservationWithImage.setImage(img);
+            reservationWithImage.setHIdx(room.getHIdx());
             reservationWithImage.setHostName(host.getHname());
             reservationsWithImages.add(reservationWithImage);
         }

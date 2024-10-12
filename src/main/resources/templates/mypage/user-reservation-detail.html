@@ -133,7 +133,7 @@
                   </div>
                   <div
                     class="w-full [border:none] [outline:none] bg-[rgba(2,72,252,0.76)] self-stretch h-[37px] rounded-[10px] overflow-hidden shrink-0 flex flex-row items-start justify-start pt-[8px] px-[21px] pb-[8px] box-border font-[Roboto] font-bold text-[14px] text-[#fff] min-w-[250px]"
-                    >2024년 08월 27일 (화) 17:00 부터 체크인 가능해요~!</div>
+                    ><span id="checkInDate"></span><span id="checkIn"></span> 부터 체크인 가능해요~!</div>
                 </header>
                 <div
                   class="self-stretch flex flex-col items-start justify-start pt-[0px] pb-[14px] pl-[6px] pr-[0px] box-border gap-[20px] max-w-full text-[13.2px]"
@@ -349,8 +349,9 @@
                     class="flex-1 overflow-hidden flex flex-col items-end justify-start pt-[14px] px-[0px] pb-[30px] box-border gap-[14px] min-w-[296px] max-w-full z-[2]"
                   >
                     <div
-                      class="w-[441px] flex flex-col items-end justify-start pt-[0px] px-[0px] pb-[20px] box-border gap-[11px] max-w-full"
+                      class="w-[441px] flex flex-col items-end justify-start pt-[0px] px-[0px] box-border gap-[11px] max-w-full"
                     >
+                    
                       <div
                         class="self-stretch flex flex-col items-start justify-start gap-[4px] max-w-full"
                       >
@@ -375,7 +376,29 @@
                               원</b
                             >
                           </div>
+                          <div
+                          class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] box-border max-w-full"
+                        >
+                      </div>
+                    </div>
+                    <div
+                        class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] box-border max-w-full"
+                      >
+                        <div
+                          class="flex-1 flex flex-row items-start justify-between pt-[3px] pb-[16px] pl-[10px] pr-[20px] box-border max-w-full gap-[20px] mq450:flex-wrap"
+                        >
+                          <div
+                            class="w-[166px] flex flex-col items-start justify-start pt-[2px] px-[0px] pb-[0px] box-border"
+                          >
+                            <b class="self-stretch relative leading-[20px] justify-end">멤버십 할인</b>
+                          </div>
+                          <b
+                            id="membershipDiscount"
+                            class="w-[124px] relative text-[12px] leading-[20px] flex text-[#707070] text-right items-center shrink-0 justify-end"
+                          >
+                          </b>
                         </div>
+                      </div>
                         <div
                           class="self-stretch flex flex-row items-start justify-between pt-[2px] pb-[11px] pl-[10px] pr-[19px] gap-[20px] mq450:flex-wrap"
                         >
@@ -453,7 +476,7 @@
                   <h2
                     class="m-[0px] absolute top-[0px] left-[0px] text-inherit leading-[20px] font-bold font-[inherit] flex items-center w-full h-full mq450:text-[16px] mq450:leading-[16px]"
                   >
-                    하루전에는 취소가 가능합니다
+                    취소 수수료 5%가 발생합니다
                   </h2>
                   <button
                     id="cancelBtn"
@@ -481,6 +504,28 @@
       let icIdx;
       let resIdx;
       let user = JSON.parse(localStorage.getItem("user"));
+      let img;
+      let cancelPrice;
+
+      function formatDateToKorean(dateString) {
+        // 문자열을 Date 객체로 변환
+        const date = new Date(dateString);
+
+        // 요일 배열
+        const days = ["일", "월", "화", "수", "목", "금", "토"];
+
+        // Date 객체에서 연, 월, 일, 요일 추출
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+        const day = date.getDate();
+        const dayOfWeek = days[date.getDay()]; // getDay()는 요일을 숫자로 반환 (일요일: 0 ~ 토요일: 6)
+
+        // 원하는 형식으로 문자열 반환
+        return `${year}년 ${month}월 ${day}일 (${dayOfWeek}) `;
+      }
+
+      
+      
 
       function formatDate(dateString) {
         return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
@@ -498,7 +543,7 @@
           $('#roomInfoModal').removeClass('hidden');
 
            // 닫기 버튼 클릭 시 모달 닫기 기능 추가
-           $('#closeModalButton').click(function () {
+           $('#closeModalButton, #close').click(function () {
             closeRoomModal();
             });
 
@@ -506,6 +551,7 @@
             $("#startDate").text(start);
             $("#endDate").text(end);
             $("#roomRule").text(roomRule);
+            $("#roomImg").attr("src", img);
 
         });
       }
@@ -535,12 +581,13 @@
           payIdx = res.payment.id;
           payInfo = res.payment;
 
-          let img = res.image;
+          img = res.image;
           let hName = res.host.hname;
           let hAddress = res.host.addressVo.street;
           roomRule = res.host.rules;
           let resDate = res.reservation.startEndVo;
           let roomName = res.room.roomName;
+          let checkIn = res.host.checkin;
           
           resIdx = res.reservation.id;
           let resNum = res.reservation.resNum;
@@ -558,12 +605,19 @@
 
           start = formatDate(resDate.start);
           end = formatDate(resDate.end);
+          console.log(img);
+          console.log("start" + start);
+
+          let formattedDate = formatDateToKorean(start);
+          $("#checkInDate").text(formattedDate);
+
 
           $("#img").attr("src", img);
           $("#hName").text(hName);
           $("#hAddress").text(hAddress);
           $("#resDate").text(start + " ~ " + end);
           $("#roomName").text(roomName);
+          $("#checkIn").text(checkIn);
 
           $("#resNum").text(resNum);
           $("#reserverName").text(reserverName);
@@ -572,6 +626,7 @@
           $("#payMethod").text(payMethod);
           $("#nsalePrice").text(nSale + " 원");
           $("#totalAmount").text(totalAmount + " 원");
+          $("#membershipDiscount").text(payGrade + "원");
 
           if (coupon == null) {
             coupon = 0;
@@ -583,6 +638,27 @@
 
           $("#payCoupon").text(coupon + " 원");
           $("#payPoint").text(point + " 원");
+
+          // start 날짜가 오늘 날짜보다 하루 전인지 확인하는 함수
+          function isPastOneDay(startDate) {
+            const today = new Date();
+            const start = new Date(startDate);
+            const oneDayBeforeStart = new Date(start);
+            oneDayBeforeStart.setDate(start.getDate() - 1); // start 날짜의 하루 전
+
+            // 오늘 날짜와 하루 전 날짜를 비교
+            return today >= oneDayBeforeStart;
+          }
+
+          // 날짜 비교 후 조건에 맞는지 확인하고 텍스트 및 버튼 변경
+          if (isPastOneDay(start)) {
+            // 텍스트 변경
+            $("h2").text("하루전에는 취소가 불가능합니다");
+
+            // 버튼 숨기기
+            $("#cancelBtn").hide();
+          }
+
         });
       });
 
@@ -602,9 +678,14 @@
                 }).done(function (data) {
                   console.log(data);
                   let pointId = data.payment.pidx;
+                  $("#closeNoCancelModal").click(function(){
+                    $("#cancelModalContent").addClass("hidden")
+                  });
+                  let price = data.payment.amount;
+                  cancelPrice = price * 0.95;
 
-                  $("#paymentPrice").text(data.payment.nsalePrice);
-                  $("#totalPrice").text(data.payment.amount);
+                  $("#totalPrice").text(cancelPrice);
+                  $("#paymentPrice").text(parseInt(data.payment.amount));
                   $("#paymentMethod").text(data.payment.payMethod);
                   $("#pointPrice").text(data.payment.payPoint);
                   $("#couponPrice").text(data.payment.payCoupon);
@@ -631,6 +712,7 @@
                         icIdx: icIdx ? icIdx : null,
                         pIdx: pointId ? pointId : null,
                         memIdx: user.id,
+                        cancelAmount: cancelPrice 
                     }),
                     }).done(function (res) {
                     alert("예약이 취소되었습니다.");
