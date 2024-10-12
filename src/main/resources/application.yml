@@ -56,7 +56,7 @@ spring:
   data:
     # Redis aws에 설치함 컴포즈에 만들어야됨
     redis:
-      host: 18.116.238.9
+      host: 3.35.171.211
       port: 6379
       duration: 600
   cloud:
