@@ -13,11 +13,7 @@ WORKDIR /app
 # 빌드된 JAR 파일 복사
 COPY --from=builder /app/build/libs/OmaStay-0.0.1-SNAPSHOT.jar .
 
-# 필요한 디렉토리 복사
-COPY nginx/ssl/accounts /etc/nginx/ssl/accounts
-
-# 소유자 변경 및 권한 수정
-RUN chown -R root:root /etc/nginx/ssl/accounts && chmod -R 755 /etc/nginx/ssl/accounts
+# SSL 인증서 관련 부분 제거
 
 # 포트 노출
 EXPOSE 9090
