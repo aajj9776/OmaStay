@@ -36,9 +36,9 @@
                     </b>
                     <div id="accommodationModal-container">
                         <div th:each="accommodation : ${accommodations}"
-                             th:id="'modalCard' + ${accommodation.hIdx}">
-                        >
-                            <div
+                             >
+                            <div th:id="'modalCard' + ${accommodation.hIdx}"
+                                    th:onclick="|detailHost(${accommodation.hIdx})|"
                                     class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]"
                             >
                                 <img
