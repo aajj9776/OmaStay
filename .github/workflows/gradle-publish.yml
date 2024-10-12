@@ -1,11 +1,13 @@
 name: Java CI with Gradle
 
 on:
-  push:
+  pull_request:
+    types: [closed]  # PR이 병합될 때 동작
     branches: [ "main" ]
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true  # PR이 병합된 경우에만 실행
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,11 +31,18 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
 
-    - name: Copy files to EC2 using rsync
-      env:
-        RSYNC_RSH: "ssh -o StrictHostKeyChecking=no"
+    - name: Get list of changed files
+      id: get_diff
       run: |
-        rsync -avz --delete --exclude '.git/' ./ ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+        git fetch origin ${{ github.sha }}  # 변경 커밋을 가져옵니다.
+        git diff --name-only HEAD^ HEAD > changed_files.txt
+        cat changed_files.txt
+
+    - name: Transfer changed files to EC2
+      run: |
+        while IFS= read -r file; do
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" "$file" ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/"${file}"
+        done < changed_files.txt
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
