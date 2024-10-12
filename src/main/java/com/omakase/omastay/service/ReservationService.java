@@ -366,5 +366,13 @@ public class ReservationService {
         return ReservationMapper.INSTANCE.toReservationDTO(reservationRepository.findByResNumAndNonEmail(resNum, nonEmail));
     }
 
+<<<<<<< HEAD
+    public List<Integer> getMemIdxListByHIdx(Integer hIdx) {
+        return reservationRepository.findMemIdxByHIdx(hIdx);
+    }
+
+   
+=======
   
+>>>>>>> 2f0ad03b5a43f7a3b3519e5edcc06cd1f034693f
 }
