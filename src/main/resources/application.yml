@@ -5,7 +5,7 @@ server:
       timeout: 24h
   tomcat:
     threads:
-      max: 50
+      max: 80
       min-spare: 5
 spring:
   datasource:
@@ -14,7 +14,7 @@ spring:
     password: omastay18
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 40
+      maximum-pool-size: 60
       minimum-idle: 10
       idle-timeout: 600000      # 10분
       max-lifetime: 1800000     # 30분
@@ -68,7 +68,7 @@ spring:
         bucket: omastay
   thymeleaf:
     prefix: classpath:/templates/
-    cache: false
+    cache: true
     enums:
       use-class-for-enum-values: true
   jackson:
