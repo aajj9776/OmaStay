@@ -91,4 +91,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r JOIN FETCH r.roomInfo ri JOIN FETCH r.member m WHERE m.id = :memberId")
     Page<Reservation> findByMemberId(@Param("memberId") Integer memberId, Pageable pageable);
 
+    //해당 호텔 예약자만 리뷰작성버튼 클릭 가능
+    @Query("SELECT DISTINCT r.member.id " +
+            "FROM Reservation r " +
+            "JOIN r.roomInfo ro " +
+            "JOIN ro.hostInfo h " +
+            "WHERE h.id = :hIdx AND r.member.id IS NOT NULL")
+    List<Integer> findMemIdxByHIdx(@Param("hIdx") Integer hIdx);
+
+   
 }
+
+

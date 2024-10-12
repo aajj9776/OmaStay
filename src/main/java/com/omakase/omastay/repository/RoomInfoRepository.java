@@ -32,11 +32,8 @@ public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer>, Ro
             "LEFT JOIN Reservation res ON r.id = res.roomInfo.id " +
             "AND res.resStatus NOT IN (2, 3) " +
             "AND (" +
-            "    (FUNCTION('DATE', res.startEndVo.start) <= :checkout AND FUNCTION('DATE', res.startEndVo.end) >= :checkin) " +
-            "    OR " +
-            "    (FUNCTION('DATE', res.startEndVo.start) <= :checkin AND FUNCTION('DATE', res.startEndVo.end) >= :checkin) " +
-            "    OR " +
-            "    (FUNCTION('DATE', res.startEndVo.start) <= :checkout AND FUNCTION('DATE', res.startEndVo.end) >= :checkout)" +
+            "    (FUNCTION('DATE', res.startEndVo.start) < :checkout AND FUNCTION('DATE', res.startEndVo.end) > :checkin) " +
+            "    OR (FUNCTION('DATE', res.startEndVo.start) = :checkin AND FUNCTION('DATE', res.startEndVo.end) = :checkout) " +
             ") " +
             "WHERE r.hostInfo.id = :hIdx " +
             "AND r.roomPerson >= :person " +

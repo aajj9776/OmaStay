@@ -357,7 +357,8 @@
 
 
 <script type="text/template" id="accommodationModal-template">
-    <div id="modalCard${hidx}" class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]">
+    <div id="modalCard${hidx}"
+         class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]">
         <img class="self-stretch w-[115px] relative max-h-full object-cover min-h-[172px] mq450:flex-1"
              loading="lazy" alt="" src="${img_url}" />
 
@@ -1213,11 +1214,15 @@
         //경고창
         if(confirm("검색 조건을 초기화 하시겠 습니까?")){
             let hCate = document.querySelector('input[name="hCate"]:checked');
+            let keyword = sessionStorage.getItem('keyword');
+            let checkIn = sessionStorage.getItem('startDate');
+            let checkOut = sessionStorage.getItem('endDate');
+            let person = sessionStorage.getItem('people');
             if(hCate.value === 'all'){
-                window.location.href = "/search/domestic-accommodations";
+                window.location.href = "/search/domestic-accommodations?keyword=" + keyword + "&checkIn=" + checkIn + "&checkOut=" + checkOut + "&person=" + person;
             }
             if (hCate.value !== 'all') {
-                window.location.href = "/search/domestic-accommodations?hCate=" + hCate.value;
+                window.location.href = "/search/domestic-accommodations?keyword=" + keyword + "&checkIn=" + checkIn + "&checkOut=" + checkOut + "&person=" + person + "&hCate=" + hCate.value;
             }
         }
     }

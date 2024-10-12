@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   backend:
     build:
@@ -9,28 +11,25 @@ services:
     ports:
       - "9090:9090"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.39.134:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.2.67:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=omastay
       - SPRING_DATASOURCE_PASSWORD=omastay18
       - SPRING_SERVLET_MULTIPART_ENABLED=true
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
-
     volumes:
       - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
     restart: always
-
   nginx:
     image: nginx:latest
+    container_name: nginx
     networks:
       - my-net1
     restart: always
     volumes:
       - ./conf/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
     ports:
       - "80:80"
-      - "443:443"
     depends_on:
       - backend
 

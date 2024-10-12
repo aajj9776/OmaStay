@@ -43,8 +43,9 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
     List<Review> findByHostInfoAndRevStatus(HostInfo hostInfo, BooleanStatus revStatus);
 
     @Query("SELECT r.member.id, COUNT(r) FROM Reservation r GROUP BY r.member.id")
-    List<Object[]> countReservationsByMemIdx();
+    List<Object[]> countReservationsByMemIdx(); 
 
+    //리뷰 이미지 조회
      @Query("SELECT r FROM Review r WHERE r.hostInfo.id = :hIdx")
     List<Review> findByReviewAndImage(@Param("hIdx") Integer hIdx);
 
@@ -60,12 +61,19 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, Review
     @Query("SELECT r FROM Review r WHERE r.hostInfo = :hostInfo AND ((r.revDate <= :endOfMonth AND r.revDate >= :startOfMonth) AND r.revStatus = 0)")
     List<Review> findReviewByMonth(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth, @Param("hostInfo") HostInfo hostInfo);
 
-     @Query("SELECT r.hostInfo.id AS hostId, COUNT(r.id) AS reviewCount, SUM(r.revRating) AS totalRating FROM Review r GROUP BY r.hostInfo.id")
+    @Query("SELECT r.hostInfo.id AS hostId, COUNT(r.id) AS reviewCount, SUM(r.revRating) AS totalRating " +
+            "FROM Review r " +
+            "WHERE r.revStatus = 0 " + 
+            "GROUP BY r.hostInfo.id")
     List<Object[]> findReviewCount();
 
-    @Query("SELECT r.hostInfo.id AS hostId, COUNT(r.id) AS reviewCount, SUM(r.revRating) AS totalRating FROM Review r WHERE r.hostInfo.id = :hIdx GROUP BY r.hostInfo.id")
-    List<Object[]> findHostReviewCount(@Param("hIdx") Integer hIdx);
+    @Query("SELECT r.hostInfo.id AS hostId, COUNT(r.id) AS reviewCount, SUM(r.revRating) AS totalRating " +
+            "FROM Review r " +
+            "WHERE r.hostInfo.id = :hIdx AND r.revStatus = 0 " +
+            "GROUP BY r.hostInfo.id")
+        List<Object[]> findHostReviewCount(@Param("hIdx") Integer hIdx);
 
+    //리뷰 삭제 후 상태 업데이트
     @Transactional
     @Modifying
     @Query("UPDATE Review r SET r.revStatus = 1 WHERE r.id = :revIdx")

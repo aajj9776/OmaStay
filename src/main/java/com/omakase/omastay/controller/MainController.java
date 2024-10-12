@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,8 +84,9 @@ public class MainController {
         
         for (Recommendation recommendation : recommList) {
             RecommendationDTO recommendationDTO = new RecommendationDTO();
-            recommendationDTO.setHIdx(recommendation.getId());
+            recommendationDTO.setHIdx(recommendation.getHostInfo().getId());
             recommendationDTO.setRecPoint(recommendation.getRecPoint());
+            recommendationDTO.setRecDate(recommendation.getRecDate());
 
             HostInfoDTO hostInfoDTO = new HostInfoDTO();
             hostInfoDTO.setId(recommendation.getHostInfo().getId());
@@ -104,21 +107,20 @@ public class MainController {
             String formattedAverageRating = decimalFormat.format(averageRating);
 
 
-            Integer matchedPrice = null;
             String formattedPrice = null;
 
-            for (Map<String, Object> priceData : priceList) {
-                if (priceData.get("hIdx").equals(hIdx)) {
-                    matchedPrice = (Integer) priceData.get("matchedPrice");
-                    
-                    if (matchedPrice != null) {
-                        DecimalFormat formatter = new DecimalFormat("#,###");
-                        formattedPrice = formatter.format(matchedPrice);
-                    }
-                    
-                    break;
-                }
+            Optional<Integer> lowestPriceOptional = priceList.stream()
+                .filter(priceData -> priceData.get("hIdx").equals(hIdx))
+                .map(priceData -> (Integer) priceData.get("matchedPrice"))
+                .filter(Objects::nonNull)
+                .min(Integer::compareTo);
+
+
+            if (lowestPriceOptional.isPresent()) {
+                DecimalFormat formatter = new DecimalFormat("#,###");
+                formattedPrice = formatter.format(lowestPriceOptional.get());
             }
+
 
             Map<String, Object> response = new HashMap<>();
             response.put("recommendation", recommendationDTO);
