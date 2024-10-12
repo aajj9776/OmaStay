@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: 
+    permissions:
       contents: read
 
     steps:
@@ -32,7 +32,8 @@ jobs:
     - name: Copy files to EC2 using rsync
       env:
         RSYNC_RSH: "ssh -o StrictHostKeyChecking=no"
-      run: rsync -avz --exclude '.git/' ./ ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
+      run: |
+        rsync -avz --delete --exclude '.git/' ./ ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
