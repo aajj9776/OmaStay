@@ -8,7 +8,7 @@
 </head>
 <body class="overflow-y-auto">
 <div 
-        class="w-full bg-[#fff] lg:h-auto lg:min-h-[6445] sticky border-b-[1px]"
+        class="w-full bg-[#fff] lg:h-auto lg:min-h-[6445] sticky border-b-[1px] border-t-[1px]"
 >
     <header class=" top-0 left-0 w-[1200px] mx-auto flex flex-col items-start justify-start max-w-full text-left text-[15.1px] text-[#707070] font-[Inter] z-50">
         <div class="simple-list-example-scrollspy w-full self-stretch bg-[#fff] border-[#ebebeb]  border-solid flex flex-row items-start justify-start pt-[34.5px] px-[392px] pb-[33px] gap-[52.8px] lg:pl-[23px] lg:pr-[196px] lg:box-border mq450:pl-[20px] mq450:pr-[20px] mq450:box-border mq750:gap-[26px] mq750:pl-[98px] mq750:pr-[98px] mq750:box-border whitespace-nowrap"
@@ -195,7 +195,7 @@
                 >
                 </h1>
                 <div
-                        class="flex flex-row items-start justify-start gap-[19px] text-[16px] mb-[-40px]"
+                        class="flex flex-row items-start justify-start gap-[5px] text-[16px] mb-[-40px]"
                 >
                     <div
                             class="flex flex-col items-start justify-start pt-[2.7px] px-[0px] pb-[0px]"
@@ -990,6 +990,8 @@
             let user = JSON.parse(localStorage.getItem('user'));
             let scrollPosition = 0;
             const hIdx = /*[[${hIdx}]]*/ 0;
+            const resMemIdx = /*[[${loginReservation}]]*/ [];
+            console.log("일치하는 멤버"+resMemIdx);
             console.log("호텔 번호 나와라"+hIdx);
             let isLogin = JSON.parse(localStorage.getItem('isLogin')) === true;
             var roomImages = /*[[${roomImages}]]*/ [];
@@ -998,6 +1000,17 @@
             console.log("이미지"+JSON.stringify(matchImages));
             var allRoomIdx = /*[[${allRoom}]]*/ [];
             console.log("룸 idx임"+JSON.stringify(allRoomIdx));
+            const roomInfo = /*[[${roomInfo}]]*/ [];
+            console.log("룸 info"+roomInfo);
+
+            if (roomInfo === null || roomInfo.length === 0) { 
+                        $('#noRoomMessage').removeClass('hidden');
+                        $('#roomList').hide();
+                    } else {
+                        $('#noRoomMessage').addClass('hidden');
+                        $('#roomList').show();
+                    }
+        
 
             var x = /*[[${hostInfo[0].xAxis}]]*/ '0'; 
             var y = /*[[${hostInfo[0].yAxis}]]*/ '0';
@@ -1231,10 +1244,17 @@
                 });
             });
 
+            if (!resMemIdx.includes(user.id)) {
+                console.log("유저아이디"+user.id);
+                const reviewButtonDiv = document.getElementById('reviewInsertBtn').parentNode; 
+                reviewButtonDiv.style.display = 'none'; 
+            }
+
 
     
             //모달 띄우기, 리뷰 등록
             $(document).ready(function() {
+                
                 let uploadedFileInfo = [];
                 loadReviewList(hIdx);
                 $('#reviewInsertBtn').on('click', function() { 
@@ -1246,6 +1266,7 @@
                         return;
                     }
                     initializeRating();
+                    uploadedFileInfo = [];
                     scrollPosition = $(window).scrollTop(); 
                     $('body').css({
                         'overflow': 'hidden',         
@@ -1442,7 +1463,7 @@
           
             loadReviewList(hIdx); 
 
-          
+        
 
 
             //추천순,최신순,평점순 정렬기능
@@ -1635,13 +1656,15 @@
                     }
                 }
                         
-            let commentHtml = '';
-                let reviewCommentBoxHtml = ''; // reviewCommentBox HTML 변수 추가
+                let commentHtml = '';
+                let reviewCommentBoxHtml = ''; // 리뷰 댓글이 있는 경우에만 사용되는 HTML 변수
+
+                // 댓글이 있는 경우에만 commentHtml과 reviewCommentBoxHtml을 생성
                 if (reviewData.reviewComment && reviewData.reviewComment.length > 0) {
                     for (const comment of reviewData.reviewComment) {
                         commentHtml += `<p class="text-sm text-gray-900">${comment.rcComment}</p>`; 
                     }
-                    // 댓글이 있는 경우에만 reviewCommentBox HTML 생성
+
                     reviewCommentBoxHtml = `
                         <div id="reviewCommentBox">
                             <div class="p-4 bg-gray-100 rounded-lg w-[890px] h-[200px]">
@@ -1654,84 +1677,89 @@
                     `;
                 }
 
-                let gradeImagePath = '/image/detail/방랑자.png'; // 방랑자 등급 이미지
+                // 유저 등급에 따라 이미지 경로 설정
+                let gradeImagePath = '/image/detail/방랑자.png'; // 기본: 방랑자 등급 이미지
                 if (grade.gcate === '탐험가') {
                     gradeImagePath = '/image/detail/탐험가.png'; // 탐험가 등급 이미지
                 } else if (grade.gcate === '개척자') {
                     gradeImagePath = '/image/detail/개척자.png'; // 개척자 등급 이미지
-                } 
+                }
 
-                const deleteButtonHtml = (user.id === review.memIdx) ? `
-                <button id="deleteReviewBtn" data-rev-idx="${review.id}" class="text-red-600 text-sm font-semibold ml-2">
-                    삭제
-                </button>` : '';
-            return `
-            <div class="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-[72px] max-w-full">
-                <div class="flex flex-row items-end justify-start gap-[4px]">
-                    <img alt="" class="h-[35.3px] w-[38px] relative rounded-[150px] object-cover" src="${gradeImagePath}" />
+                // 조건에 맞게 삭제 버튼을 추가
+                const deleteButtonHtml = (isLogin===true&&user.id === review.memIdx) ? `
+                    <button id="deleteReviewBtn" data-rev-idx="${review.id}" class="text-red-600 text-sm font-semibold ml-2">
+                        삭제
+                    </button>
+                ` : '';
 
-                    <div class="flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[2.3px]">
-                        <div class="flex flex-col items-start justify-start gap-[8px]">
-                            <div class="flex flex-row items-start justify-start gap-[4px]">
-                            </div>
-                              <div class="rounded-[3px] bg-[#f5f7fa] flex flex-row items-start justify-start py-[3px] pl-[7px] pr-[3px] shrink-0">
-                                    <b class="relative inline-block min-w-[34px]">${grade.gcate}</b> 
-                                </div>
-                            <div class="flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] text-[12.2px] text-[#333]">
-                                <div class="flex flex-col items-start justify-start gap-[1px]">
-                                    <div class="relative font-semibold inline-block min-w-[61px]">
-                                        ${member.memName}
+                // 메인 HTML 생성
+                return `
+                    <div class="flex-1 flex flex-row items-start justify-start flex-wrap content-start gap-[72px] max-w-full">
+                        <!-- 유저 정보 -->
+                        <div class="flex flex-row items-end justify-start gap-[12px]">
+                            <img alt="" class="h-[45px] w-[45px] relative rounded-full object-cover shadow-md" src="${gradeImagePath}" />
+                            <div class="flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[2.3px]">
+                                <div class="flex flex-col items-start justify-start gap-[8px]">
+                                    <div class="rounded-[3px] bg-[#f5f7fa] flex flex-row items-center justify-start py-[5px] pl-[10px] pr-[10px] shrink-0 text-sm">
+                                        <b class="relative inline-block min-w-[34px] text-gray-700">${grade.gcate}</b>
                                     </div>
-                                   
-                                    <div class="relative text-[#707070]">
-                                        리뷰 ${reviewCount} · 다녀온 장소 ${reservationCount}
+                                    <div class="flex flex-row items-start justify-start py-[0px] text-gray-500">
+                                        <div class="flex flex-col items-start justify-start">
+                                            <div class="relative font-semibold text-lg text-gray-800">${member.memName}</div>
+                                            <div class="relative text-sm">
+                                                리뷰 ${reviewCount} · 다녀온 장소 ${reservationCount}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="flex-1 flex flex-col items-start justify-start gap-[42px] min-w-[580px] max-w-full text-[#707070] mq750:min-w-full">
-                    <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] box-border max-w-full">
-                        <div class="flex-1 flex flex-col items-start justify-start gap-[14px] max-w-full">
-                            <div class="flex flex-row items-start justify-start gap-[3px]">
-                                <img alt="" class="h-[15px] w-[15px] relative min-h-[15px]" src="/image/detail/star1.svg" />
-                                ${review.revRating}/5
-                                <div class="relative tracking-[-0.16px] inline-block min-w-[36.6px]">${timeDetail}</div>
-                            </div>
-                            <div class="w-[892px] overflow-x-auto flex flex-row items-start justify-start gap-[27px] max-w-full">
-                                ${generateImageTags(reviewImage)}
-                            </div>
-                            <div class="self-stretch flex flex-col items-start justify-start gap-[14px] text-[13.9px] text-[#333]">
-                                <p class="m-[0px]">${room.roomName}</p>
-                                <span id="reviewText" class="overflow-hidden transition-all duration-300 max-h-[60px]">
-                                    ${review.revContent}
-                                </span>
-                                <div class="flex flex-row items-start justify-start text-center text-[13.1px]">
-                                    <button id="toggleButton" class="relative font-semibold inline-block min-w-[36.5px] flex items-center">
-                                        더보기
-                                    </button>
+
+                        <!-- 리뷰 본문 -->
+                        <div class="flex-1 flex flex-col items-start justify-start gap-[42px] min-w-[580px] max-w-full text-gray-600 mq750:min-w-full">
+                            <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[1px] pr-[0px] box-border max-w-full">
+                                <div class="flex-1 flex flex-col items-start justify-start gap-[14px] max-w-full">
+                                    <div class="flex flex-row items-center gap-[5px] text-gray-500">
+                                        <img alt="" class="h-[15px] w-[15px]" src="/image/detail/star1.svg" />
+                                        <span class="text-lg font-semibold text-gray-800">${review.revRating}/5</span>
+                                        <span class="relative text-sm text-gray-400">${timeDetail}</span>
+                                    </div>
+                                    
+                                    <!-- 이미지 리스트 -->
+                                    <div class="w-full overflow-x-auto flex flex-row items-start justify-start gap-[16px] max-w-full">
+                                        ${generateImageTags(reviewImage)}
+                                    </div>
+
+                                    <!-- 리뷰 텍스트 -->
+                                    <div class="self-stretch flex flex-col items-start justify-start gap-[14px] text-[13.9px] text-gray-800">
+                                        <p class="font-semibold text-lg">${room.roomName}</p>
+                                        <span id="reviewText" class="overflow-hidden transition-all duration-300 max-h-[60px]">
+                                            ${review.revContent}
+                                        </span>
+                                        <button id="toggleButton" class="relative font-semibold text-blue-500 text-sm">
+                                            더보기
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- 추천/삭제 버튼 -->
+                            <div class="flex flex-row items-center justify-start gap-[12px] text-sm text-gray-600">
+                                <button id="goodBtn" data-rev-idx="${review.id}" class="flex items-center gap-[6px] px-[12px] py-[8px] bg-blue-50 rounded-lg hover:bg-blue-100 transition shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill text-blue-500" viewBox="0 0 16 16">
+                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                                    </svg>
+                                    <span class="font-semibold text-blue-600">추천</span>
+                                </button>
+                                ${deleteButtonHtml}
+                            </div>
+
+                            ${reviewCommentBoxHtml}
                         </div>
+                        <div class="self-stretch h-[1px] bg-gray-300 w-full"></div>
                     </div>
-                    <div class="flex flex-row items-start justify-start gap-[4px] text-[12.2px] text-[#707070]">
-                        <button id="goodBtn" data-rev-idx="${review.id}">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
-                            <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
-                            </svg>
-                        </button>
-                        <div class="relative font-semibold shrink-0 whitespace-nowrap text-[15px]">
-                            추천
-                        </div>
-                        ${deleteButtonHtml} <!-- 삭제 버튼 추가 -->
-                    </div>
-                    ${reviewCommentBoxHtml}
-                    </div>
-                    <div  class="self-stretch h-[1px] relative bg-[#ebebeb] w-[1140px]"></div>
-                </div>
-            `;
-        }
+                `;
+                        }
 
         document.addEventListener('click', (event) => {
             const deleteReviewBtn = event.target.closest('#deleteReviewBtn');
@@ -1833,20 +1861,8 @@
                 `;
                 }
                 }
-
-                $(document).ready(function() {
-                    const roomInfo = /*[[${roomInfo}]]*/ [];
-                    
-                    if (roomInfo.length === 0) {
-                        $('#noRoomMessage').removeClass('hidden');
-                        $('#roomList').hide();
-                    } else {
-                        $('#noRoomMessage').addClass('hidden');
-                        $('#roomList').show();
-                    }
-                });
-
                 
+           
 
 </script>
 </body>

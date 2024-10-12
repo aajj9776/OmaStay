@@ -140,7 +140,7 @@
         </div>
     </section>
 
-    <div class="column3 container mx-auto bg-pink-100 rounded-lg flex flex-wrap items-center justify-between max-w-[1200px]">
+    <div id="loginServiceBox" class="column3 container mx-auto bg-pink-100 rounded-lg flex flex-wrap items-center justify-between max-w-[1200px]">
         <div class="w-full lg:w-2/3">
             <div class="mb-4">
                 <h3 class="text-2xl font-bold mb-2">
@@ -258,9 +258,12 @@
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
 <script src ="/js/countperson.js"></script>
 <script>
+    let user = JSON.parse(localStorage.getItem('user'));
+    let isLogin = JSON.parse(localStorage.getItem('isLogin')) === true;
     var recomList = /*[[${recomList}]]*/ [];
     console.log("추천리스트:"+recomList);
     document.addEventListener("DOMContentLoaded", function (){
+        loginEventBox(isLogin);
         //세션스토리지의 값 searh_bar에 넣기
         let s_count = sessionStorage.getItem('count');
         if (s_count) {
@@ -512,8 +515,17 @@
             event.preventDefault();
     });
     });
-
     
+        function loginEventBox(isLogin){
+            const loginEventBox = document.getElementById("loginServiceBox");
+
+            if (isLogin) {
+                loginEventBox.style.display = 'none';
+            } else {
+                loginEventBox.style.display = 'flex';
+            }
+
+        }
 
 
 </script>
