@@ -98,7 +98,7 @@ public class HostInfo {
     private String hname;
 
     //대표번호
-    @Column(name = "h_phone", nullable = false, length = 100)
+    @Column(name = "h_phone", length = 100)
     private String hphone;
 
     @Column(name = "h_reg_time")
