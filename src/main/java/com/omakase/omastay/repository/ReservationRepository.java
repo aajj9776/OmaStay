@@ -32,7 +32,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     @Modifying
     @Transactional
-    @Query("Update Reservation r set r.resStatus = 2 where r.id in :ids AND (r.resStatus = 0 or r.resStatus = 1)")
+    @Query("Update Reservation r set r.resStatus = 2 where r.id in :ids AND r.resStatus = 0")
     int rejectById(@Param("ids") int[] ids);
 
     @Modifying

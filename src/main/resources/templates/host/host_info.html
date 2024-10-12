@@ -5,7 +5,6 @@
       layout:fragment="host">
 <head>
   <meta charset="utf-8" />
-  <link href="/css/index.css" rel="stylesheet" />
   <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet" />
   <link href="/css/component/host_swiper.css" rel="stylesheet" />
   <style>
@@ -47,12 +46,6 @@
                 readonly
                 th:value="${hostMypageDTO != null ? hostMypageDTO.hostInfo.hname : ''}"
                 />
-            </div>
-            <div class="w-[220px] hidden flex-col items-start justify-start pt-[3px] px-[14px] pb-[0px] box-border">
-              <div
-                class="self-stretch h-[12px] relative text-[12px] tracking-[0.15px] leading-[12px] font-[Roboto] text-[rgba(0,0,0,0.6)] text-left flex items-center">
-                Helper text
-              </div>
             </div>
           </div>
         </div>
@@ -100,6 +93,7 @@
                   data-str="주소"
                   class="w-full [border:none] [outline:none] bg-[transparent] self-stretch h-[40px] overflow-hidden shrink-0 flex flex-row items-center justify-start py-[8px] px-[0px] box-border font-[Roboto] text-[16px] text-[rgba(0,0,0,0.6)] min-w-[189px] min-h-[24px]"
                   placeholder="우편번호" type="text" 
+                  readonly
                   th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.addressVo != null ? hostInfoCustomDTO.hostInfo.addressVo.postCode : ''}"/>
               </div>
             </div>
@@ -125,6 +119,7 @@
                   <input id="address" 
                     class="w-full [border:none] [outline:none] font-[Roboto] text-[16px] bg-[transparent] h-[24px] flex-1 relative tracking-[0.15px] leading-[24px] text-[rgba(0,0,0,0.6)] text-left inline-block min-w-[250px] max-w-full p-[0px]"
                     placeholder="주소" type="text"
+                    readonly
                     th:value="${hostInfoCustomDTO != null && hostInfoCustomDTO.hostInfo != null && hostInfoCustomDTO.hostInfo.addressVo != null ? hostInfoCustomDTO.hostInfo.addressVo.street : ''}" />
 
                   <div class="h-full w-[24px] !m-[0] absolute top-[0px] bottom-[0px] left-[172px]"></div>
@@ -539,8 +534,41 @@
             };
         });
 
+    
+        function validateHostInfoCustomDTO() {
+            var isValid = true;
+            var errorMessage = "";
+
+            // 필수 필드 유효성 검사
+            if (!$('#hCate').val()) {
+                isValid = false;
+                errorMessage += "숙소 유형을 선택해주세요.\n";
+            }
+            if (!$('#postcode').val()) {
+                isValid = false;
+                errorMessage += "주소 검색해주세요.\n";
+            }
+            if (!$('#address').val()) {
+                isValid = false;
+                errorMessage += "주소 검색해주세요.\n";
+            }
+            if (!$('#hostName').val().trim()) {
+                isValid = false;
+                errorMessage += "호스트 이름을 입력해주세요.\n";
+            }
+            // 유효성 검사 실패 시 경고 메시지 표시
+            if (!isValid) {
+                alert(errorMessage);
+            }
+
+            return isValid;
+        }    
 
     function savehostinfo() {
+            if (!validateHostInfoCustomDTO()) {
+                return;
+            }
+            
             var formData = new FormData();
             var facilities = [];
 
@@ -565,7 +593,7 @@
                     region: $('#region').val(),
                     directions: $('#directions').val(),
                     hostOwnerInfo: {
-                      hostName: $('#hostName').val(),
+                      hostName: $('#hostName').val().trim(),
                       hintro: $('#hIntro').val(),
                     },  
                 },

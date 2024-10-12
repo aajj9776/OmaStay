@@ -29,7 +29,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                         review.hostInfo.id, review.revRating.avg().coalesce(0.0), review.count()
                 )
                 .from(review)
-                .where(review.hostInfo.id.in(hostIds))
+                .where(review.hostInfo.id.in(hostIds)
+                        .and(review.revStatus.eq(BooleanStatus.TRUE)))
                 .groupBy(review.hostInfo.id)
                 .fetch();
     }

@@ -4,8 +4,9 @@ import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Recommendation;
 import com.omakase.omastay.repository.custom.RecommendationRepositoryCustom;
-
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

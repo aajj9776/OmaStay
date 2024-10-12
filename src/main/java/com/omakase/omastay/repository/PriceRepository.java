@@ -11,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 public interface PriceRepository extends JpaRepository<Price, Integer>, PriceRepositoryCustom {
 
+    
+    Price findFirstByRoomInfoId(Integer id);
+
     Price findFirstByHostInfoId(Integer id);
 
     List<Price> findAllByHostInfoId(Integer id);

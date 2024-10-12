@@ -24,10 +24,14 @@ import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.RecommendationDTO;
+import com.omakase.omastay.dto.ServiceDTO;
 import com.omakase.omastay.entity.Recommendation;
+import com.omakase.omastay.entity.enumurate.SCate;
+import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.RecommendationService;
 import com.omakase.omastay.service.ReviewService;
+import com.omakase.omastay.service.ServiceService;
 
 @Controller
 public class MainController {
@@ -41,6 +45,9 @@ public class MainController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ServiceService serviceService;
+
     @Value("${upload}")
     private String realPath;
 
@@ -53,6 +60,16 @@ public class MainController {
         List<Map<String, Object>> priceList = priceService.getHostPriceList();
         List<Map<String, Object>> responseList = new ArrayList<>();
         Map<Integer, Map<String, Object>> reviewCountMap = reviewService.getRecomReviewCount();
+
+        List<ServiceDTO> service = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
+        List<String> pathList = new ArrayList<>();
+
+        for (ServiceDTO serviceDTO : service) {
+            String path = realPath + "notice/" + serviceDTO.getFileName().getFName();
+            pathList.add(path); // 리스트에 경로 추가
+        }
+        
+        model.addAttribute("path", pathList); // 리스트를 모델에 추가
         
         
         for (Recommendation recommendation : recommList) {
@@ -106,6 +123,7 @@ public class MainController {
 
             System.out.println("응답 데이터: " + response);
         }
+        model.addAttribute("path");
         model.addAttribute("recomList", responseList);
         System.out.println("제발요"+responseList);
         model.addAttribute("activeSearch", activeSearch);

@@ -69,12 +69,10 @@ public class ReviewService {
       public List<Review> findAllReview(String sortOption,Integer hIdx){
         
         return reviewRepository.findAll(sortOption,hIdx);
-   
     }
 
 
      // 호스트 전체 리뷰 가져오기
-    // 호스트 전체 리뷰 가져오기
     public List<ReviewDTO> getAllReview(HostInfoDTO hostInfoDTO) {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);

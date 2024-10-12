@@ -1,7 +1,6 @@
 package com.omakase.omastay.dto.custom;
 
 import com.omakase.omastay.dto.CalculationDTO;
-import com.omakase.omastay.entity.enumurate.IcStatus;
 import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.AllArgsConstructor;

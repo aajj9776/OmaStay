@@ -198,9 +198,7 @@ public class SearchController {
                                @RequestParam(name = "size", defaultValue = "1") int size)
     {
         // Validation error 존재시 처리
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("errorView"); // 에러가 발생한 경우의 뷰 이름을 여기에 작성
-        }
+   
         // yyyy-MM-dd 형식의 문자열을 LocalDate로 파싱
         LocalDate checkInDate = LocalDate.parse(checkIn, DATE_FORMATTER);
         LocalDate checkOutDate = LocalDate.parse(checkOut, DATE_FORMATTER);
