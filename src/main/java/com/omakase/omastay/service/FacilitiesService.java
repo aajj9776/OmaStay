@@ -264,7 +264,7 @@ public class FacilitiesService {
                 case "rating":
                     resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getRating).reversed());
                     break;
-                case "reviewCount":
+                case "review":
                     resultAccommodationsDTOList.sort(Comparator.comparing(ResultAccommodationsDTO::getReviewCount).reversed());
                     break;
                 case "lowPrice":
