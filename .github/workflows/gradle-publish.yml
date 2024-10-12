@@ -24,11 +24,9 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-    - name: Compress build artifacts excluding .git
-      run: tar --exclude="./.git" -czvf build-artifacts.tar.gz .
-      
-    - name: Copy compressed build artifacts to EC2
-      run: scp -o StrictHostKeyChecking=no build-artifacts.tar.gz ubuntu@${{ secrets.HOST }}:/home/ubuntu
+    - name: Copy files to EC2 using rsync
+      run: |
+        rsync -avz --exclude '.git/' ./ ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -75,11 +73,9 @@ jobs:
     - name: Verify Docker permissions on EC2
       run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
 
-    - name: SSH into EC2, extract artifacts and run Docker Compose
+    - name: SSH into EC2 and run Docker Compose
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-          cd /home/ubuntu
-          tar -xzvf build-artifacts.tar.gz -C /home/ubuntu/OmaStay
           cd /home/ubuntu/OmaStay
           docker-compose down
           docker-compose up -d --build
