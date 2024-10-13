@@ -1,7 +1,5 @@
 package com.omakase.omastay.repository;
 
-import com.omakase.omastay.dto.ImageDTO;
-import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.Recommendation;
 import com.omakase.omastay.repository.custom.RecommendationRepositoryCustom;
 import org.springframework.data.repository.query.Param;
@@ -10,8 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+
 import com.omakase.omastay.entity.enumurate.HCate;
 
 public interface RecommendationRepository extends JpaRepository<Recommendation, Integer>, RecommendationRepositoryCustom {

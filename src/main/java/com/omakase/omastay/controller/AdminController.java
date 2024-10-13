@@ -439,7 +439,7 @@ public class AdminController {
     public Map<String, Object> host_notice_list() {
         Map<String, Object> map = new HashMap<>();
 
-        List<ServiceDTO> list = ss.getAllServices(SCate.NOTICE, UserAuth.HOST);
+        List<ServiceDTO> list = ss.getAllServices(null, UserAuth.HOST);
 
         map.put("data", list);
 
@@ -517,6 +517,7 @@ public class AdminController {
         // 해당 id에 대해 modified 객체의 값으로 수정한다.
         sDto.setSTitle(modified.getSTitle());
         sDto.setSContent(modified.getSContent());
+        sDto.setSCate(modified.getSCate());
 
         if(f.getSize() > 0) { // 새 파일이 존재하는 경우
             String realPath = upload+"notice";
@@ -583,7 +584,6 @@ public class AdminController {
                 }
             }
 
-            sDto.setSCate(SCate.NOTICE);
             sDto.setSAuth(UserAuth.HOST);
 
             ss.saveService(sDto);
@@ -982,7 +982,7 @@ public class AdminController {
         System.out.println("totalList: "+totalList);
         mv.addObject("totalList", totalList);
 
-        if(totalList != null)
+        if(!totalList.isEmpty())
             mv.addObject("date", totalList.get(0).getRecommendationDTO().getRecDate());
 
         List<RecommendationCustomDTO> hotelList = recommendationService.getRecommendationByHCate(HCate.HOTEL_RESORT);

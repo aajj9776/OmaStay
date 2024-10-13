@@ -16,7 +16,9 @@
       <label class="text-[24px] h-[40px] font-semibold">
         추천 숙소
       </label>
+      <div th:if="${date != null}">
       <span>(</span><span th:text="${#temporals.format(date, 'yyyy-MM-dd')}"></span> <span>갱신)</span>
+    </div>
     </div>
 
     <!-- 전체 추천 영역 -->
