@@ -24,6 +24,10 @@
             z-index: 10;
         }
 
+        .custom-width {
+            width: calc(100% - 10px);
+        }
+
         @media (max-width: 768px) {
             /* General layout adjustments */
             .flex-row {
@@ -221,13 +225,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div
-                                                    class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]"
-                                            >
-                                                <b class="self-stretch relative" th:text="${accommodation.HName}"
-                                                >강릉 라임비치 스파 펜션</b
-                                                >
-                                            </div>
+                                             <div
+                                                            class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]"
+                                                    >
+                                                        <b class="self-stretch relative break-words whitespace-normal"
+                                                           th:text="${accommodation.HName}"
+                                                        >강릉 라임비치 스파 펜션</b>
+                                                    </div>
                                         </div>
                                         <div
                                                 class="self-stretch flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[361px] [row-gap:20px] text-[11.6px] text-[#333] mq450:pr-[180px] mq450:box-border mq750:flex-wrap"
@@ -291,7 +295,6 @@
                                                    th:text="${accommodation.oneDayPrice}">
                                                     ???
                                                 </b>
-                                                <b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b>
                                             </div>
                                         </div>
                                     </div>
@@ -345,7 +348,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>
+<!--<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>-->
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e6512d4f8ef5c12826f550b76af5e074" type="text/javascript"></script>
 <script type="text/javascript" src="/js/countperson.js"></script>
 <script
         type="text/javascript"
@@ -359,9 +363,9 @@
         <img class="self-stretch w-[115px] relative max-h-full object-cover min-h-[172px] mq450:flex-1"
              loading="lazy" alt="" src="${img_url}" />
 
-        <div class="flex-1 overflow-hidden flex flex-col items-start justify-start gap-[86px] min-w-[146px]">
+        <div class="flex-1 overflow-hidden flex flex-col items-start justify-start gap-[86px]">
             <div class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[20px] pr-[0px]">
-                <div class="flex-1 flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1">
+                <div class="flex-1 flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1 max-w-full">
                     <div class="self-stretch flex flex-col items-start justify-start gap-[4px]">
                         <div class="self-stretch flex flex-col items-start justify-start gap-[2px]">
                             <div class="self-stretch flex flex-row items-center justify-start">
@@ -370,7 +374,7 @@
                                 </div>
                             </div>
                             <div class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]">
-                                <b class="self-stretch relative">${HName}</b>
+                                <b class="self-stretch relative break-words whitespace-normal">${HName}</b>
                             </div>
                         </div>
                         <div class="self-stretch flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[102px] text-[11.6px] text-[#333]">
@@ -490,9 +494,6 @@
         let checkIn = sessionStorage.getItem('startDate');
         let checkOut = sessionStorage.getItem('endDate');
         let person = sessionStorage.getItem('people');
-        $('#card').attr('href', function (i, href) {
-            return href + '&checkIn=' + checkIn + '&checkOut=' + checkOut + '&person=' + person;
-        });
     });
 
     // 필터 버튼 셋팅하는 함수
@@ -523,15 +524,24 @@
 
 
     // 시설 필터 셋팅하는 함수
-    function setFacilities(value = [], identifier = "") {
+    function setFacilities(value = [], identifier = "", reset = false) {
         console.log(value + " value");
         if (value !== null) {
-            let facilities = value.split(',');
-            facilities.forEach(facility => {
-                let btn = $('#f_idx' + facility + '-' + identifier);
-                btn.addClass('bg-gray-300');
-                btn.addClass('f_idx');
-            });
+            if (reset) {
+                // 모든 시설 버튼을 초기화
+                let btns = document.querySelectorAll('.f_idx[id*="' + identifier + '"]');
+                btns.forEach(btn => {
+                    btn.classList.remove('bg-gray-300');
+                    btn.classList.remove('f_idx');
+                });
+            }else {
+                let facilities = value.split(',');
+                facilities.forEach(facility => {
+                    let btn = $('#f_idx' + facility + '-' + identifier);
+                    btn.addClass('bg-gray-300');
+                    btn.addClass('f_idx');
+                });
+            }
         }
     }
 
@@ -701,7 +711,6 @@
     }
 
     // 모달 창 열기
-    // 모달 창 열기
     function showMap() {
         $("#modal-wrap").css("display", "flex");
         $("body").css("overflow", "hidden");
@@ -733,7 +742,6 @@
         }
     }
 
-    // 값으로 슬라이더 초기화 함수
     // 값으로 슬라이더 초기화 함수
     function initializeSliderWithValues(identifier, startValue, endValue) {
         let sliderElement = document.getElementById('slider-' + identifier);
@@ -811,70 +819,11 @@
         setHCate(hCateValue, "main");
     });
 
-    function performSearchRequest(url, data, callback) {
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: data
-        }).done(callback).fail(function (jqXHR, textStatus, errorThrown) {
-            console.error("Error occurred during AJAX request:", textStatus, errorThrown);
-        });
-    }
-
-
-    function renderAccommodations(data) {
-        loadKaKaoMap(data.resultAccommodationsMap);
-        $('#accommodationModal-container').empty();
-        data.resultAccommodationsMap.forEach(function (accommodation) {
-            let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
-            const template = $('#accommodationModal-template').html();
-            const rendered = template
-                .replace('${hidx}', accommodation.hidx)
-                .replace('${img_url}', accommodation.img_url)
-                .replace('${HCate}', accommodation.hcateKo)
-                .replace('${HName}', accommodation.hname)
-                .replace('${rating}', accommodation.rating.toFixed(1))
-                .replace('${reviewCount}', accommodation.reviewCount)
-                .replace('${oneDayPrice}', priceInfo)
-                .replace('${soldOut}', accommodation.soldOut ? '다른 날짜 확인' : `<div class="self-stretch flex flex-row items-end justify-start"><b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${accommodation.oneDayPrice}</b><b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b></div>`);
-            $('#accommodationModal-container').append(rendered);
-        });
-    }
-
-    //검색 hCate뺴고 초기화 하는 함수
-    function reset(identifier) {
-        // 경고창
-        if (confirm("검색 조건을 초기화 하시겠습니까?")) {
-            let hCate = document.querySelector('input[name="hCate"]:checked');
-            let keyword = sessionStorage.getItem('keyword');
-            let checkIn = sessionStorage.getItem('startDate');
-            let checkOut = sessionStorage.getItem('endDate');
-            let person = sessionStorage.getItem('people');
-
-            if (identifier === 'main') {
-                let url = "/search/domestic-accommodations?keyword=" + keyword + "&checkIn=" + checkIn + "&checkOut=" + checkOut + "&person=" + person;
-                if (hCate.value !== 'all') {
-                    url += "&hCate=" + hCate.value;
-                }
-                window.location.href = url;
-            } else if (identifier === 'modal') {
-                let data = {
-                    keyword: keyword,
-                    checkIn: checkIn,
-                    checkOut: checkOut,
-                    person: person
-                };
-                if (hCate.value !== 'all') {
-                    data.hCate = hCate.value;
-                }
-                performSearchRequest("/search/domestic-accommodations", data, renderAccommodations);
-            }
-        }
-    }
-
-    //검색 함수
+    // 검색 실행 함수
     function debouncedPerformSearch(identifier, page = 1) {
+        // 동적으로 가져온 값을 사용
         const facilities = getSelectedFacilities(identifier);
+        console.log(facilities);
         let hCate = getHCate(identifier);
         let soldOut = document.getElementById('soldout-' + identifier).checked;
         let startPrice = $('#slider-start-' + identifier).val();
@@ -883,38 +832,124 @@
         let startDay = sessionStorage.getItem('startDate');
         let endDay = sessionStorage.getItem('endDate');
         const person = sessionStorage.getItem('people');
-        const sortType = getSortType(identifier);
-
+        const sortType = getSortType(identifier)
+        console.log(facilities
+            + " facilities"
+            + hCate
+            + " hCate"
+            + startPrice
+            + " startPrice"
+            + endPrice
+            + " endPrice"
+            + keyword
+            + " keyword"
+            + startDay
+            + " startDay"
+            + endDay
+            + " endDay"
+            + person
+            + " person"
+            + sortType
+            + " sortType"
+            + "soldOut"
+            + soldOut
+        );
         if (identifier === "main") {
+            console.log("page: ", page);
+
+            // Query String 구성
             let queryString = '?';
-            if (keyword) queryString += `keyword=${encodeURIComponent(keyword)}&`;
-            if (startDay) queryString += `checkIn=${encodeURIComponent(startDay)}&`;
-            if (endDay) queryString += `checkOut=${encodeURIComponent(endDay)}&`;
-            if (person) queryString += `person=${encodeURIComponent(person)}&`;
-            if (hCate) queryString += `hCate=${encodeURIComponent(hCate)}&`;
-            if (facilities && facilities.length > 0) queryString += `facilities=${encodeURIComponent(facilities.join(','))}&`;
-            if (startPrice) queryString += `startPrice=${encodeURIComponent(startPrice)}&`;
-            if (endPrice) queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
-            if (sortType) queryString += `sortType=${encodeURIComponent(sortType)}&`;
-            if (soldOut) queryString += `soldOut=${encodeURIComponent(soldOut)}&`;
-            if (page && page > 1) queryString += `page=${encodeURIComponent(page)}&`;
-            if (queryString.endsWith('&')) queryString = queryString.slice(0, -1);
+
+            if (keyword) {
+                queryString += `keyword=${encodeURIComponent(keyword)}&`;
+            }
+            if (startDay) {
+                queryString += `checkIn=${encodeURIComponent(startDay)}&`;
+            }
+            if (endDay) {
+                queryString += `checkOut=${encodeURIComponent(endDay)}&`;
+            }
+            if (person) {
+                queryString += `person=${encodeURIComponent(person)}&`;
+            }
+            if (hCate) {
+                queryString += `hCate=${encodeURIComponent(hCate)}&`;
+            }
+            if (facilities && facilities.length > 0) {
+                queryString += `facilities=${encodeURIComponent(facilities.join(','))}&`;
+            }
+            if (startPrice) {
+                queryString += `startPrice=${encodeURIComponent(startPrice)}&`;
+            }
+            if (endPrice) {
+                queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
+            }
+            if (sortType) {
+                queryString += `sortType=${encodeURIComponent(sortType)}&`;
+            }
+            if(soldOut){
+                queryString += `soldOut=${encodeURIComponent(soldOut)}&`;
+            }
+            if (page && page > 1) {
+                queryString += `page=${encodeURIComponent(page)}&`;
+            }
+
+            // 끝에 붙은 &를 제거
+            if (queryString.endsWith('&')) {
+                queryString = queryString.slice(0, -1);
+            }
+
+            console.log(queryString);
+
+            // URL 변경 및 페이지 리로드
             window.location.href = `/search/domestic-accommodations${queryString}`;
-        } else if (identifier === "modal") {
-            let data = {
-                facilities: facilities,
-                hCate: hCate,
-                startPrice: startPrice,
-                endPrice: endPrice,
-                keyword: keyword,
-                checkIn: startDay,
-                checkOut: endDay,
-                person: person,
-                sortType: sortType,
-                soldOut: soldOut,
-                page: page
-            };
-            performSearchRequest("/search/domestic-accommodations", data, renderAccommodations);
+        }  else if (identifier === "modal") {
+            $.ajax({
+                url: "/search/domestic-accommodations",
+                type: "POST",
+                data: {
+                    facilities: facilities,
+                    hCate: hCate,
+                    startPrice: startPrice,
+                    endPrice: endPrice,
+                    keyword: keyword,
+                    checkIn: startDay,
+                    checkOut: endDay,
+                    person: person,
+                    sortType: sortType,
+                    soldOut: soldOut,
+                    page: page
+                }
+            }).done(function (data) {
+                console.log(data);
+
+                // Kakao Map 로드
+                loadKaKaoMap(data.resultAccommodationsMap);
+
+                // 기존 컨텐츠를 지움
+                $('#accommodationModal-container').empty();
+
+                // 데이터를 템플릿에 적용
+                data.resultAccommodationsMap.forEach(function (accommodation) {
+                    let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
+                    const template = $('#accommodationModal-template').html();
+                    const rendered = template
+                        .replace('${hidx}', accommodation.hidx)
+                        .replace('${img_url}', accommodation.img_url)
+                        .replace('${HCate}', accommodation.hcateKo) // .getDescription() 필요 없음
+                        .replace('${HName}', accommodation.hname)
+                        .replace('${rating}', accommodation.rating.toFixed(1))
+                        .replace('${reviewCount}', accommodation.reviewCount)
+                        .replace('${oneDayPrice}', priceInfo)
+
+                        // 조건부 렌더링을 위해 ${soldOut}을 체크하여 대체
+                        .replace('${soldOut}', accommodation.soldOut ? '다른 날짜 확인' : `<div class="self-stretch flex flex-row items-end justify-start"><b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${accommodation.oneDayPrice}</b><b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b></div>`);
+
+                    $('#accommodationModal-container').append(rendered);
+                });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error("Error occurred during AJAX request:", textStatus, errorThrown);
+            });
         }
     }
 
@@ -930,6 +965,25 @@
             timeout = setTimeout(() => func.apply(context, args), wait);
         };
     }
+
+    //리셋 버튼
+    function reset(identifier) {
+        if (identifier === 'main') {
+            if (confirm('필터를 초기화 하시겠습니까?')) {
+                setSortType(null);
+                setFacilities([], identifier);
+                setSoldOut(false, identifier);
+                initializeSlider(identifier);
+                performSearch(identifier);
+            }
+        } else if (identifier === 'modal') {
+            setFacilities([], identifier);
+            setSoldOut(false, identifier);
+            initializeSlider(identifier);
+            performSearch(identifier);
+        }
+    }
+
 
     function detailHost(hidx) {
         let checkIn = sessionStorage.getItem('startDate');
@@ -967,7 +1021,7 @@
             let position = new kakao.maps.LatLng(parseFloat(accommodation.yaxis), parseFloat(accommodation.xaxis));
             bounds.extend(position);
 
-            let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
+            let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}` : '다른 날짜 확인';
 
             // 커스텀 마커 HTML 문자열
             let markerContent = `
@@ -987,10 +1041,10 @@
 
             infowindowContent.innerHTML = `
         <img class="self-stretch w-[116px] relative h-full object-cover rounded-[20px]" loading="lazy" alt="" src="${accommodation.img_url}"/>
-        <div class="flex-1 overflow-hidden flex flex-col items-start justify-start gap-[35px] h-[146px]">
+        <div class="flex-1 overflow-hidden flex flex-col justify-between h-[146px]">
             <div class="self-stretch flex flex-row items-start justify-start pt-[5px] pl-[20px] pr-[0px]">
-                <div class="flex-1 flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1">
-                    <div class="self-stretch flex flex-col items-start justify-start gap-[4px]">
+                <div class="flex-1 flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1 max-w-full">
+                    <div class="self-stretch flex flex-col items-start justify-start gap-[4px] w-full">
                         <div class="self-stretch flex flex-col items-start justify-start gap-[2px]">
                             <div class="self-stretch flex flex-row items-center justify-start">
                                 <div class="flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[20px]">
@@ -1000,7 +1054,7 @@
                                 </div>
                             </div>
                             <div class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]">
-                                <b class="self-stretch relative">${accommodation.hname}</b>
+                                <b class="self-stretch relative break-words whitespace-normal">${accommodation.hname}</b>
                             </div>
                         </div>
                         <div class="self-stretch flex flex-row items-center justify-start py-[0px] pl-[0px] pr-[102px] text-[11.6px] text-[#333]">
@@ -1021,7 +1075,7 @@
                     </div>
                 </div>
             </div>
-            <div class="self-stretch flex flex-col items-start justify-start pt-[8px] pb-[0px] pl-[12px] pr-[20px] text-right text-black">
+            <div class="self-stretch flex flex-col pl-[12px] pr-[20px] text-right text-black relative bottom-[0px]">
                 <div class="self-stretch flex flex-col items-end justify-start">
                     <div class="flex flex-col items-start justify-start">
                         <div class="flex flex-col items-end justify-start">
