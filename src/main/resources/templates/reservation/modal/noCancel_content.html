@@ -4,104 +4,132 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <div id="cancelModalContent" class="w-[516px] max-w-full bg-white rounded-[13px] overflow-hidden">
-        <div class="pt-[19px] pb-2 px-4">
-          <div class="flex justify-between items-center">
-            <h2 class="text-[18px] font-bold text-center flex-grow">취소내용 확인</h2>
-            <svg class="w-[30px] h-[30px] cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </div>
-          <div class="bg-[rgba(2,72,252,0.76)] text-white text-[14px] font-bold p-2 rounded-[10px] mt-2">
-            취소 진행 전 반드시 취소 수수료의 총 환불액을 확인하세요
-          </div>
+    <div
+      id="cancelModalContent"
+      class="w-[516px] max-w-full bg-white rounded-[13px] overflow-hidden"
+    >
+      <div class="pt-[19px] pb-2 px-4">
+        <div class="flex justify-between items-center">
+          <h2 class="text-[18px] font-bold text-center flex-grow">
+            취소내용 확인
+          </h2>
+          <svg
+            id="closeNoCancelModal"
+            class="w-[30px] h-[30px] cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
         </div>
-      
-        <div class="px-4">
-          <div class="text-[18px] font-bold mb-4">
-            <p>지금 예약취소 시</p>
-            <p>취소 수수료 0원이 발생합니다</p>
-          </div>
-      
-          <div class="mb-4">
-            <label for="cancelReason" class="block text-sm font-medium text-gray-700 mb-1">취소 사유 선택</label>
-            <select 
-              id="cancelReason" 
-              class="w-full bg-white border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-              >
-              <option value="" selected disabled>취소 사유를 선택해주세요</option>
-              <option value="일정 변경">일정 변경</option>
-              <option value="개인 사정">개인 사정</option>
-              <option value="더 좋은 옵션 발견">더 좋은 옵션 발견</option>
-              <option value="날씨 문제">날씨 문제</option>
-              <option value="재정적 이유">재정적 이유</option>
-              <option value="기타">기타</option>
-            </select>
-          </div>
-      
-          <div class="bg-[#2196f3] text-white p-4 rounded-lg">
-            <h3 class="text-[16px] font-bold">환불 예정 정보</h3>
-            <div class="space-y-2">
-              <div class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2">
-                <span class="font-bold">결제 금액</span>
-                <div class="flex items-center">
-                  <span id="paymentPrice" class="font-bold"></span>
-                  <span class="ml-2">원</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2">
-                <span class="font-bold">포인트</span>
-                <div class="flex items-center">
-                  <span id="pointPrice" class="font-bold"></span>
-                  <span class="ml-2">원</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2">
-                <span class="font-bold">쿠폰</span>
-                <div class="flex items-center">
-                  <span id="couponPrice" class="font-bold"></span>
-                  <span class="ml-2">원</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2">
-                <span class="font-bold">멤버십 할인</span>
-                <div class="flex items-center">
-                  <span id="membershipDiscount" class="font-bold"></span>
-                  <span class="ml-2">원</span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2">
-                <span class="font-bold">취소 날짜</span>
-                <div class="flex items-center">
-                  <span id="cancelDate" class="font-bold"></span>
-                </div>
-              </div>
-              <div class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2">
-                <span class="font-bold">결제 방식</span>
-                <div class="flex items-center">
-                  <span id="paymentMethod" class="font-bold"></span>
-                </div>
-              </div>
-            </div>
-            <div class="mt-4 bg-[rgba(33,150,243,0.76)] p-2 rounded-md flex justify-between items-center">
-              <span class="font-bold">최종 환불 금액</span>
+        <div
+          class="bg-[rgba(2,72,252,0.76)] text-white text-[14px] font-bold p-2 rounded-[10px] mt-2"
+        >
+          취소 진행 전 반드시 취소 수수료의 총 환불액을 확인하세요
+        </div>
+      </div>
+
+      <div class="px-4">
+        <div class="text-[18px] font-bold mb-4">
+          <p>지금 예약취소 시</p>
+          <p>취소 수수료 5% 가 발생합니다</p>
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="cancelReason"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >취소 사유 선택</label
+          >
+          <select
+            id="cancelReason"
+            class="w-full bg-white border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="" selected disabled>취소 사유를 선택해주세요</option>
+            <option value="일정 변경">일정 변경</option>
+            <option value="개인 사정">개인 사정</option>
+            <option value="더 좋은 옵션 발견">더 좋은 옵션 발견</option>
+            <option value="날씨 문제">날씨 문제</option>
+            <option value="재정적 이유">재정적 이유</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+
+        <div class="bg-[#2196f3] text-white p-4 rounded-lg">
+          <h3 class="text-[16px] font-bold">환불 예정 정보</h3>
+          <div class="space-y-2">
+            <div
+              class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2"
+            >
+              <span class="font-bold">결제 금액</span>
               <div class="flex items-center">
-                <span id="totalPrice" class="font-bold"></span>
+                <span id="paymentPrice" class="font-bold"></span>
                 <span class="ml-2">원</span>
               </div>
             </div>
+            <div
+              class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2"
+            >
+              <span class="font-bold">포인트</span>
+              <div class="flex items-center">
+                <span id="pointPrice" class="font-bold"></span>
+                <span class="ml-2">원</span>
+              </div>
+            </div>
+            <div
+              class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2"
+            >
+              <span class="font-bold">쿠폰</span>
+              <div class="flex items-center">
+                <span id="couponPrice" class="font-bold"></span>
+                <span class="ml-2">원</span>
+              </div>
+            </div>
+            <div
+              class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2"
+            >
+              <span class="font-bold">멤버십 할인</span>
+              <div class="flex items-center">
+                <span id="membershipDiscount" class="font-bold"></span>
+                <span class="ml-2">원</span>
+              </div>
+            </div>
+            <div
+              class="flex justify-between items-center bg-[rgba(33,150,243,0.76)] p-2"
+            >
+              <span class="font-bold">결제 방식</span>
+              <div class="flex items-center">
+                <span id="paymentMethod" class="font-bold"></span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mt-4 bg-[rgba(33,150,243,0.76)] p-2 rounded-md flex justify-between items-center"
+          >
+            <span class="font-bold">최종 환불 금액</span>
+            <div class="flex items-center">
+              <span id="totalPrice" class="font-bold"></span>
+              <span class="ml-2">원</span>
+            </div>
           </div>
         </div>
-      
-        <div class="flex justify-center mt-4 pb-6">
-          <button 
-            id="cancelModalBtn"
-            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full max-w-xs"
-          >
-            예약 취소하기
-          </button>
-        </div>
       </div>
+
+      <div class="flex justify-center mt-4 pb-6">
+        <button
+          id="cancelModalBtn"
+          class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full max-w-xs"
+        >
+          예약 취소하기
+        </button>
+      </div>
+    </div>
     <script src="https://cdn.tailwindcss.com"></script>
   </body>
 </html>
