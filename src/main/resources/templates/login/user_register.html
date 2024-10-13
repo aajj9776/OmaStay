@@ -338,9 +338,13 @@
         emailCheckResult.style.display = "none"; // 올바른 형식일 경우 알림 숨김
         }
 
-        fetch('/login/checkEmail?email=' + encodeURIComponent(emailInput), {
-            method: 'POST'
-        })
+        fetch('/login/checkEmail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',  // JSON 형식으로 전송
+        },
+        body: JSON.stringify({ email: emailInput })  // request body에 데이터 포함
+    })
         .then(response => response.json())
         .then(data => {
             if (data.exists) {
