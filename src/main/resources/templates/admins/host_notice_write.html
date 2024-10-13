@@ -23,10 +23,20 @@
         <table summary="게시판 글쓰기" >
             <tbody >
               <tr>
-                <td><input type="text" id="title" name="sTitle" data-str="제목" placeholder="제목을 입력하세요" 
-                  class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
-                  text-[#6c757d] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
-                  border-solid box-border py-[4px] px-[11px] mb-2" /></td>
+                <td>
+                  <div class="flex flex-row">
+                    <select id="notice-type" name="sCate" data-str="게시판 유형"
+                      class="w-[150px] h-[40px] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border py-[4px] px-[5px]">
+                      <option value="">---선택---</option>
+                      <option value="NOTICE">공지사항</option>
+                      <option value="FAQ">자주묻는질문</option>
+                    </select>
+                    <input type="text" id="title" name="sTitle" data-str="제목" placeholder="제목을 입력하세요" 
+                    class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
+                    text-[#6c757d] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
+                    border-solid box-border py-[4px] px-[11px] mb-2" />
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td><textarea id="content" class="bg-[#fff]" name="sContent" cols="50" data-str="내용" rows="8"
@@ -103,6 +113,15 @@
 
     function sendData() {
       var form = document.forms[0];
+
+      // 게시판 유형 (select) 검사
+      var noticeType = form.querySelector('select[name="sCate"]');
+      if (noticeType.value.trim() === "") {
+        alert(noticeType.dataset.str + "을(를) 선택하세요");
+        noticeType.focus();
+        return;
+      }
+
       // 제목 (input text) 검사
       var title = form.querySelector('input[name="sTitle"]');
       if (title.value.trim() === "") {
@@ -118,6 +137,7 @@
       $("#title").val("");
       $("#content").summernote("code", "");
       $("#fileUpload").val("");
+      $("#notice-type").val("");
     }
   </script>
 </body>
