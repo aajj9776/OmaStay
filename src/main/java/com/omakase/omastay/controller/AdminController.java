@@ -760,10 +760,11 @@ public class AdminController {
 
         return mv;
     }
-
+ 
     // 회원 공지사항 수정하기로 저장
     @RequestMapping(value = "/user_notice/modify", method=RequestMethod.POST)
     public String user_notice_modify_save(ServiceDTO modified, @RequestParam(value="file", required = false) MultipartFile f, @RequestParam(value = "selectedFile", required = false) String selectedFile) {
+        
         int key =0;
         ServiceDTO sDto = ss.getServices(modified.getId());
         
