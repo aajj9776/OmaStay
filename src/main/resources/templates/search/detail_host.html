@@ -990,8 +990,6 @@
             let user = JSON.parse(localStorage.getItem('user'));
             let scrollPosition = 0;
             const hIdx = /*[[${hIdx}]]*/ 0;
-            const resMemIdx = /*[[${loginReservation}]]*/ [];
-            console.log("일치하는 멤버"+resMemIdx);
             console.log("호텔 번호 나와라"+hIdx);
             let isLogin = JSON.parse(localStorage.getItem('isLogin')) === true;
             var roomImages = /*[[${roomImages}]]*/ [];
@@ -1002,6 +1000,8 @@
             console.log("룸 idx임"+JSON.stringify(allRoomIdx));
             const roomInfo = /*[[${roomInfo}]]*/ [];
             console.log("룸 info"+roomInfo);
+            var totalPrices = /*[[${totalPrices}]]*/ {};
+            console.log(totalPrices);
 
             if (roomInfo === null || roomInfo.length === 0) { 
                         $('#noRoomMessage').removeClass('hidden');
@@ -1329,17 +1329,6 @@
                     $(window).scrollTop(scrollPosition);
                     $(modalId).addClass('hidden');
                 });
-            });
-
-            $(document).ready(function () { 
-                const reviewButtonDiv = document.getElementById('reviewInsertBtn').parentNode;
-
-                if (!isLogin || !resMemIdx.includes(user.id)) {
-                    reviewButtonDiv.style.display = 'none'; // 버튼 숨기기
-                } else {
-                    reviewButtonDiv.style.display = 'block'; // 버튼 보이기
-                }
-                
             });
 
     
@@ -1916,7 +1905,8 @@
 
             function reservationBtnClick(buttonElement){
                 const room = buttonElement.getAttribute('data-room');
-                const price = buttonElement.getAttribute('data-price');
+                const price = totalPrices[room]; // room (roomIdx)로 totalPrices 객체에서 총 가격 가져옴
+                console.log('객실 총액:', price);
 
                 const checkInDate = new Date(sessionStorage.getItem('startDate'));
                 const checkOutDate = new Date(sessionStorage.getItem('endDate'));
