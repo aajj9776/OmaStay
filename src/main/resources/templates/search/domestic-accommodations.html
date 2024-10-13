@@ -295,6 +295,7 @@
                                                    th:text="${accommodation.oneDayPrice}">
                                                     ???
                                                 </b>
+                                                <b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b>
                                             </div>
                                         </div>
                                     </div>
@@ -348,8 +349,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<!--<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>-->
-<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e6512d4f8ef5c12826f550b76af5e074" type="text/javascript"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>
 <script type="text/javascript" src="/js/countperson.js"></script>
 <script
         type="text/javascript"
@@ -742,6 +742,40 @@
         }
     }
 
+    function resetSlider(identifier) {
+        let sliderElement = document.getElementById('slider-' + identifier);
+
+        if (!sliderElement || !sliderElement.noUiSlider) {
+            console.error('Slider element does not exist or not initialized for identifier:', identifier);
+            return;
+        }
+
+        // 초기화 시 사용한 값으로 슬라이더를 설정
+        const startPrice = 0;
+        const endPrice = 500000;
+
+        sliderElement.noUiSlider.set([startPrice, endPrice]);
+
+        // 필요한 경우 추가 동작 수행
+        updatePriceRangeValue(identifier, startPrice, endPrice);
+    }
+
+    function updatePriceRangeValue(identifier, startPrice, endPrice) {
+        let valueElement = document.getElementById('price-range-value-' + identifier);
+
+        if (endPrice === 500000) {
+            valueElement.innerText = startPrice + '원 - ' + '500,000원 이상';
+        } else {
+            valueElement.innerText = startPrice + '원 - ' + endPrice + '원 미만';
+        }
+
+        let startInput = document.getElementById('slider-start-' + identifier);
+        let endInput = document.getElementById('slider-end-' + identifier);
+
+        startInput.value = startPrice;
+        endInput.value = endPrice;
+    }
+
     // 값으로 슬라이더 초기화 함수
     function initializeSliderWithValues(identifier, startValue, endValue) {
         let sliderElement = document.getElementById('slider-' + identifier);
@@ -931,7 +965,7 @@
 
                 // 데이터를 템플릿에 적용
                 data.resultAccommodationsMap.forEach(function (accommodation) {
-                    let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
+                    let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}` : '다른 날짜 확인';
                     const template = $('#accommodationModal-template').html();
                     const rendered = template
                         .replace('${hidx}', accommodation.hidx)
@@ -943,7 +977,9 @@
                         .replace('${oneDayPrice}', priceInfo)
 
                         // 조건부 렌더링을 위해 ${soldOut}을 체크하여 대체
-                        .replace('${soldOut}', accommodation.soldOut ? '다른 날짜 확인' : `<div class="self-stretch flex flex-row items-end justify-start"><b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${accommodation.oneDayPrice}</b><b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b></div>`);
+                        .replace('${soldOut}', accommodation.soldOut ? '다른 날짜 확인' : `<div class="self-stretch flex flex-row items-end justify-start">
+<b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${accommodation.oneDayPrice}</b>
+<b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b></div>`);
 
                     $('#accommodationModal-container').append(rendered);
                 });
@@ -971,15 +1007,15 @@
         if (identifier === 'main') {
             if (confirm('필터를 초기화 하시겠습니까?')) {
                 setSortType(null);
-                setFacilities([], identifier);
+                setFacilities([], identifier, true);
                 setSoldOut(false, identifier);
-                initializeSlider(identifier);
+                resetSlider(identifier);
                 performSearch(identifier);
             }
         } else if (identifier === 'modal') {
-            setFacilities([], identifier);
+            setFacilities([], identifier, true);
             setSoldOut(false, identifier);
-            initializeSlider(identifier);
+            resetSlider(identifier);
             performSearch(identifier);
         }
     }
@@ -1182,48 +1218,6 @@
         });
 
         map.setBounds(bounds);
-    }
-
-    function handleAccommodationClick(hidx) {
-        console.log(hidx);
-        if (!map) {
-            console.error("Map 객체가 초기화되지 않았습니다.");
-            return;
-        }
-
-        let marker = markers[hidx];
-        let infowindow = infowindows[hidx];
-        if (marker && infowindow) {
-            // 이전 마커 및 인포윈도우 닫기
-            if (clickedMarkerId !== null) {
-                let prevMarkerElement = document.getElementById(`marker-${clickedMarkerId}`);
-                let prevMarkerWrapperElement = document.getElementById(`marker-wrapper-${clickedMarkerId}`);
-                if (prevMarkerElement) {
-                    prevMarkerElement.classList.remove('bg-black');
-                    prevMarkerWrapperElement.querySelector(".custom-arrow").classList.remove('border-t-black');
-                    prevMarkerElement.classList.add('bg-gray-400');
-                }
-                if (prevInfoWindow) prevInfoWindow.setMap(null);
-            }
-
-            // 클릭된 마커 및 인포윈도우 열기
-            if (clickedMarkerId !== hidx) {
-                clickedMarkerId = hidx;
-                prevInfoWindow = infowindow;
-                let markerElement = document.getElementById(`marker-${hidx}`);
-                let markerWrapperElement = document.getElementById(`marker-wrapper-${hidx}`);
-                markerElement.classList.remove('bg-gray-400');
-                markerElement.classList.add('bg-black');
-                markerWrapperElement.querySelector(".custom-arrow").classList.add('border-t-black');
-                infowindow.setMap(map);
-                map.panTo(marker.getPosition());
-            } else {
-                clickedMarkerId = null;
-                prevInfoWindow = null;
-            }
-        } else {
-            console.warn(`Marker or Infowindow for hidx ${hidx}가 존재하지 않습니다.`);
-        }
     }
 
     // 마커를 제거하는 함수
