@@ -438,36 +438,36 @@ public class LoginController {
     }
 
 
-    //유저 로그인 
+    //유저 로그인 구역
     @PostMapping("/user")
     public String login(MemberDTO memberDTO, HttpServletResponse response, HttpServletRequest request, Model model) {
-
-        System.out.println("Email: " + memberDTO.getMemberProfile().getEmail());
-    try {
-        
-        MemberDTO responseDTO = memberService.loginAndGenerateToken(memberDTO);
-        
-        httpSession.setAttribute("accessToken", responseDTO.getAccessToken());  //세션 저장소에 일단 저장
-        // 토큰을 쿠키에 저장
-        Cookie accessTokenCookie = new Cookie("accessToken", responseDTO.getAccessToken());
-        accessTokenCookie.setHttpOnly(false);
-        accessTokenCookie.setPath("/");
-        response.addCookie(accessTokenCookie);
-
-        httpSession.setAttribute("refreshToken", responseDTO.getRefreshToken());
-        Cookie refreshTokenCookie =new Cookie("refreshToken", responseDTO.getRefreshToken());
-        refreshTokenCookie.setHttpOnly(false);
-        refreshTokenCookie.setPath("/");
-        response.addCookie(refreshTokenCookie);
-
-        // 로그인 성공 시 메인 페이지로 리다이렉트
-        return "redirect:/";  // 메인 페이지로 리다이렉트
+        try {
+            // 이메일과 비밀번호로 로그인 및 토큰 생성
+            MemberDTO responseDTO = memberService.loginAndGenerateToken(memberDTO);
+    
+            // 세션에 토큰 저장
+            httpSession.setAttribute("accessToken", responseDTO.getAccessToken());
+            Cookie accessTokenCookie = new Cookie("accessToken", responseDTO.getAccessToken());
+            accessTokenCookie.setHttpOnly(false);
+            accessTokenCookie.setPath("/");
+            response.addCookie(accessTokenCookie);
+    
+            httpSession.setAttribute("refreshToken", responseDTO.getRefreshToken());
+            Cookie refreshTokenCookie = new Cookie("refreshToken", responseDTO.getRefreshToken());
+            refreshTokenCookie.setHttpOnly(false);
+            refreshTokenCookie.setPath("/");
+            response.addCookie(refreshTokenCookie);
+    
+            // 로그인 성공 시 메인 페이지로 리다이렉트
+            return "redirect:/";
+    
         } catch (IOException e) {
-        // 로그인 실패 시 에러 메시지를 모델에 추가하여 뷰에 전달
-        model.addAttribute("errorMessage", "이메일 또는 비밀번호가 잘못되었습니다.");
-        return "login/user_login";  // 로그인 페이지로 다시 이동
-        }  
+            // 예외 발생 시 에러 메시지를 모델에 추가하여 뷰에 전달
+            model.addAttribute("errorMessage", e.getMessage());  // 예외 메시지를 전달
+            return "login/user_login";  // 로그인 페이지로 다시 이동
+        }
     }
+    
 
     //로그아웃시 토큰 삭제
 
