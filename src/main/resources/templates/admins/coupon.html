@@ -302,8 +302,6 @@
           // 할인율
           var salePercent = $('#salePercentInput').val().trim();
 
-
-
           console.log("salePercent: " + salePercent);
           form.append($('<input>').attr('type', 'hidden').attr('name', 'cpSale').attr('value', salePercent));
 
@@ -337,37 +335,44 @@
 
       // 범위 검사 함수
       function validateInput(inputElement, min, max) {
-            const value = parseInt($(inputElement).val(), 10);
+        const value = $(inputElement).val();
 
-            if (isNaN(value) || value < min || value > max) {
-                alert(min + '에서 ' + max + ' 사이의 숫자를 입력하세요.');
-                $(inputElement).val(''); // 입력 값을 지움
-                $(inputElement).focus();  // 포커스 설정
-            }
+        // 숫자인지 확인하고, 숫자일 경우만 범위 검사 진행
+        if (!/^\d+$/.test(value)) {
+          alert('숫자만 입력 가능합니다.');
+          $(inputElement).val(''); // 입력 값을 지움
+          $(inputElement).focus();  // 포커스 설정
+        } else {
+          const numericValue = parseInt(value, 10);
+          if (numericValue < min || numericValue > max) {
+            alert(min + '에서 ' + max + ' 사이의 숫자를 입력하세요.');
+            $(inputElement).val(''); // 입력 값을 지움
+            $(inputElement).focus();  // 포커스 설정
+          }
         }
+      }
 
-        //유효성 검사 (1~100000)
-        $('#pValue').on('input', function() {
-            validateInput(this, 1, 100000);
-        });
+      //유효성 검사 (1~10000)
+      $('#MULTI_USECount').on('input', function () {
+        validateInput(this, 1, 10000);
+      });
 
-        // SINGLE_USECount 유효성 검사 (1~10000)
-        $('#SINGLE_USECount').on('input', function() {
-            validateInput(this, 1, 10000);
-        });
+      // SINGLE_USECount 유효성 검사 (1~10000)
+      $('#SINGLE_USECount').on('input', function () {
+        validateInput(this, 1, 10000);
+      });
 
-        // salePercentInput 유효성 검사 (1~100)
-        $('#salePercentInput').on('input', function() {
-            validateInput(this, 1, 100);
-        });
+      // salePercentInput 유효성 검사 (1~100)
+      $('#salePercentInput').on('input', function () {
+        validateInput(this, 1, 100);
+      });
 
-        // salePriceInput 유효성 검사 (1~100000)
-        $('#salePriceInput').on('input', function() {
-            validateInput(this, 1, 100000);
-        });
+      // salePriceInput 유효성 검사 (1~100000)
+      $('#salePriceInput').on('input', function () {
+        validateInput(this, 1, 100000);
+      });
 
     });
-
 
     //사용내역 띄우기
     function showDetails(id) {
