@@ -125,14 +125,14 @@ public class ReservationController {
         ReservationDTO check = reservationService.checkReservation(reservation);
         System.out.println("이거왜 null임?" + check);
         if(check != null ){
-            return "redirect:/reservation/error";
+            return "redirect:reservation/error";
         }
 
         //결제정보 저장
         PaymentDTO res = reservationService.insertPaymentInfo(payment);
         System.out.println("결과" + res);
         if( res == null) {
-            return "redirect:/reservation/payment_fail";
+            return "redirect:reservation/payment_fail";
         }
 
         //예약정보 저장
@@ -155,7 +155,7 @@ public class ReservationController {
             }
 
         } else {
-            return "redirect:/reservation/payment_fail";
+            return "redirect:reservation/payment_fail";
         }
         // 성공적인 예약 처리
         if (reserve != null && reserve.getResStatus() == ResStatus.PENDING) {
@@ -166,7 +166,7 @@ public class ReservationController {
             redirectAttributes.addAttribute("start", start);
             redirectAttributes.addAttribute("end", end);
             redirectAttributes.addAttribute("roomName", roomName);
-            return "redirect:/reservation/payment_complete";
+            return "redirect:reservation/payment_complete";
         } else if (noReserver != null && noReserver.getResStatus() == ResStatus.PENDING) {
             redirectAttributes.addAttribute("orderId", noReserver.getResNum());
             redirectAttributes.addAttribute("payStatus", payment.getPayStatus());
@@ -175,10 +175,10 @@ public class ReservationController {
             redirectAttributes.addAttribute("start", start);
             redirectAttributes.addAttribute("end", end);
             redirectAttributes.addAttribute("roomName", roomName);
-            return "redirect:/reservation/payment_complete";
+            return "redirect:reservation/payment_complete";
         } 
 
-        return "redirect:/reservation/payment_fail";
+        return "redirect:reservation/payment_fail";
     }
 
     @GetMapping("/payment_complete")
