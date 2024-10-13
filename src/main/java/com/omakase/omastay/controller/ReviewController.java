@@ -37,6 +37,7 @@ import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.GoodService;
+import com.omakase.omastay.service.MemberService;
 import com.omakase.omastay.service.ReservationService;
 import com.omakase.omastay.service.ReviewCommentService;
 import com.omakase.omastay.service.ReviewService;
@@ -61,6 +62,9 @@ public class ReviewController {
     @Autowired
     private ReservationService reservationService;
 
+    @Autowired
+    private MemberService memberService;
+
     @Value("${upload}")
     private String uploadPath;
 
@@ -73,6 +77,7 @@ public class ReviewController {
         
         Integer memIdx = Integer.parseInt(params.get("memIdx"));
         Integer hIdx = Integer.parseInt(params.get("hIdx"));
+        MemberDTO memberDTO = memberService.getMember(memIdx);
     
         try {
             // 사용자의 예약 내역에서 최근 예약 건을 가져옴
@@ -94,6 +99,8 @@ public class ReviewController {
             reviewDTO.setRevRating(revRating);
             reviewDTO.setMemIdx(memIdx);
             reviewDTO.setHIdx(hIdx);
+            reviewDTO.setResIdx(reservationDTO.getId());
+            reviewDTO.setRevWriter(memberDTO.getMemName());
     
             // 파일 이름들 리스트 생성
             List<String> onames = new ArrayList<>();
@@ -250,6 +257,12 @@ public class ReviewController {
             resCountsList.add(resCountString);
         }
         return ResponseEntity.ok(resCountsList);
+    }
+    
+    @PostMapping("/review_delete")
+    public ResponseEntity<?> deleteReview(@RequestParam int revIdx) {
+        reviewService.deleteReviewById(revIdx);
+        return ResponseEntity.ok().build();
     }
 
 }
