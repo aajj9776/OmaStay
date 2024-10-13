@@ -399,10 +399,6 @@
                 // 커서를 상세주소 필드로 이동한다.
                 $('#detailaddress').focus();
 
-                console.log(data.zonecode);    
-                console.log(addr);    
-                console.log(sido); 
-
                 //주소 좌표로 변환해서 저장
                 var geocoder = new kakao.maps.services.Geocoder();
                     geocoder.addressSearch(addr, function(result, status) {
@@ -410,8 +406,7 @@
                             var coords = result[0]; 
                             $('#xaxis').val(coords.x);
                             $('#yaxis').val(coords.y);
-                            console.log(coords.x);    
-                            console.log(coords.y);  
+
                         }
                     });
             }
@@ -516,15 +511,10 @@
               var $slide = $(button).closest('.swiper-slide');
               var slideIndex = swiper.getSlideIndex($slide[0]); // Swiper.realIndex 사용
 
-              console.log("Deleting slide at index: " + slideIndex);
-
               selectedFiles.splice(slideIndex, 1);
               
               swiper.removeSlide(slideIndex); 
               swiper.update(); 
-
-              console.log("Slide removed. Total slides: " + swiper.slides.length);
-              console.log(swiper.slides); // Swiper 업데이트 확인
 
               updateNavigationButtons(swiper);
 
@@ -600,12 +590,12 @@
                 facilities: facilities,
                 images: [] 
               };
-              console.log($('#hCate').val());
+
 
               // 기존 이미지 추가
               $('.swiper-slide img').each(function() {
                 var imgName = $(this).data('file-name');
-                console.log(imgName); // imgName 값을 출력하여 확인
+
                 if (imgName) {
                     var imageDTO = {
                         imgName: {

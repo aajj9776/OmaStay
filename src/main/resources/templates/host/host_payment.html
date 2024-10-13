@@ -233,8 +233,7 @@
           // 검색 버튼 클릭 이벤트 처리
           $('#search-button').on('click', function () {
             var year = $('#year').val();
-            console.log(year);
-      
+
             // 검색 요청
             $.ajax({
               url: '/host/paylist/search',
@@ -244,7 +243,6 @@
               },
               success: function (data) {
       
-                console.log(data);
                 var table = $('#listTable').DataTable();
                 table.clear();
                 table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신
@@ -300,8 +298,6 @@
                 data: JSON.stringify(selectedItems),
               }).done(function (response) {
                 alert(response.cnt+"건 정산 요청되었습니다.");
-      
-                console.log(response);
       
                 $('#listTable').DataTable().ajax.reload();
       

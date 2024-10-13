@@ -188,7 +188,7 @@
         function yearSetting() {
                 let select = $('#year');
                 var nowYear = new Date().getFullYear();
-                console.log(selectedYear);
+
                 select.empty(); // 기존 옵션 제거
                 for (var i = nowYear - 3; i <= nowYear; i++) {
                   if (i == selectedYear) {
@@ -203,7 +203,7 @@
             try {
                 var parsedList = JSON.parse(list);
             } catch (e) {
-                console.error("JSON 파싱 오류:", e);
+
                 var parsedList = [];
             }
 
