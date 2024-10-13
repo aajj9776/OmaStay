@@ -370,4 +370,6 @@ public class ReservationService {
         return reservationRepository.findMemIdxByHIdx(hIdx);
     }
 
+   
+  
 }

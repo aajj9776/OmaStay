@@ -378,10 +378,10 @@
                                                 <div
                                                         class="flex flex-row items-start justify-end py-[0px] px-[5px]"
                                                 >
-                                                    <button
+                                                    <button   th:attr="data-room=${room.id}, data-price=${roomPrices[room.id]}" onclick="reservationBtnClick(this)"
                                                             class="cursor-pointer [border:none] py-[9px] px-[10px] bg-[#1273e4] rounded-[8px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-[#3899ff]"
                                                     >
-                                                            <div id="reservationBtn" th:attr="data-room=${room.id}, data-price=${roomPrices[room.id]}"
+                                                            <div 
                                                                     class="relative text-[12px] font-semibold font-[Inter] text-[#fff] text-center inline-block min-w-[52px]"
                                                             >
                                                                 객실 예약
@@ -1823,13 +1823,11 @@
 
             });
 
-            $(document).ready(function() {
-                    $(document).on('click', '#reservationBtn', function() {
-                        const room = this.getAttribute('data-room');
-                        const price = this.getAttribute('data-price');
-                        window.location.href = `/reservation?room=${room}&checkIn=${sessionStorage.getItem('startDate')}&checkOut=${sessionStorage.getItem('endDate')}&person=${sessionStorage.getItem('people')}&amount=${price}`;
-                    });
-                });
+            function reservationBtnClick(buttonElement){
+                const room = buttonElement.getAttribute('data-room');
+                const price = buttonElement.getAttribute('data-price');
+                window.location.href = `/reservation?room=${room}&checkIn=${sessionStorage.getItem('startDate')}&checkOut=${sessionStorage.getItem('endDate')}&person=${sessionStorage.getItem('people')}&amount=${price}`;
+            }
 
     
 
