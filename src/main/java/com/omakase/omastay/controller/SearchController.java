@@ -214,7 +214,9 @@ public class SearchController {
         // StartEndVo 객체 생성 후 FilterDTO에 설정
         search.setStartEndDay(new StartEndVo(checkInDateTime, checkOutDateTime));
 
-        System.out.println("서치: "  + search);
+        if(Objects.equals(search.getKeyword(), "제주도")){
+            search.setKeyword("제주");
+        }
 
         Pageable pageable = PageRequest.of(page - 1, size);
         AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable, false);

@@ -116,7 +116,6 @@ public class PointService {
 
     }
 
-
     @Transactional
     public PointDTO getCancelPoint(Integer pIdx, Integer memIdx) {
         Point point = pointRepository.findByIdAndMemIdx(pIdx, memIdx);
