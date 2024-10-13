@@ -7,6 +7,7 @@ server:
     threads:
       max: 80
       min-spare: 5
+    max-swallow-size: 20971520  # 20MB
 spring:
   datasource:
     url: jdbc:mysql://3.35.171.211:3306/omastay
