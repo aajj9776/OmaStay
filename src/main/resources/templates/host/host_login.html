@@ -134,7 +134,7 @@
               </div>
             </div>
           </button>
-          <button
+          <button type="button"
             class="cursor-pointer [border:none] py-[7px] px-[41px] bg-[#fff] rounded-[4px] flex flex-col items-center justify-center"
           >
             <div class="flex flex-row items-center justify-center gap-[8px]">
@@ -203,8 +203,6 @@
                 registerButton.css("background-color", "#2196f3");
                 registerButton.find(".text-white").css("color", "#ffffff").text("업체 정보 등록");
             }
-
-            console.log("hStep 값:", hStep);
 
             window.requestadmin = function() {
                 if (hStep.trim().toUpperCase() === "ROOM") {

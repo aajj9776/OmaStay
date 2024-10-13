@@ -363,9 +363,9 @@
       function showModal(fileName) {
         var modal = $("#imageModal");
         var modalImg = $("#modalImage");
-        console.log(fileName);
+
         var url = storage +"review/"+fileName;
-        console.log(url);
+
         modal.css("display", "flex");
         modalImg.attr("src", url); // 이미지 경로 설정
 
