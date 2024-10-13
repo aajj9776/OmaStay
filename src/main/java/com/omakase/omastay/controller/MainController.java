@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +24,15 @@ import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.RecommendationDTO;
+import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.dto.custom.EventPathDTO;
 import com.omakase.omastay.entity.Recommendation;
+import com.omakase.omastay.entity.enumurate.SCate;
+import com.omakase.omastay.entity.enumurate.UserAuth;
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.RecommendationService;
 import com.omakase.omastay.service.ReviewService;
+import com.omakase.omastay.service.ServiceService;
 
 @Controller
 public class MainController {
@@ -39,6 +46,9 @@ public class MainController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ServiceService serviceService;
+
     @Value("${upload}")
     private String realPath;
 
@@ -51,12 +61,32 @@ public class MainController {
         List<Map<String, Object>> priceList = priceService.getHostPriceList();
         List<Map<String, Object>> responseList = new ArrayList<>();
         Map<Integer, Map<String, Object>> reviewCountMap = reviewService.getRecomReviewCount();
+
+        List<ServiceDTO> serviceList = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
+        List<EventPathDTO> eventPathDTOList = new ArrayList<>(); // 여러 개의 EventPathDTO를 저장할 리스트
+        
+        for (ServiceDTO serviceDTO : serviceList) {
+            EventPathDTO ep = new EventPathDTO();
+            
+            // 파일 경로 생성
+            String path = realPath + "notice/" + serviceDTO.getFileName().getFName();
+            
+            // 각각의 ServiceDTO와 경로를 EventPathDTO에 설정
+            ep.setPath(path);
+            ep.setService(serviceDTO);
+            
+            // 리스트에 추가
+            eventPathDTOList.add(ep);
+        }
+        
+        model.addAttribute("event", eventPathDTOList); // 여러 개의 EventPathDTO를 모델에 추가
         
         
         for (Recommendation recommendation : recommList) {
             RecommendationDTO recommendationDTO = new RecommendationDTO();
-            recommendationDTO.setHIdx(recommendation.getId());
+            recommendationDTO.setHIdx(recommendation.getHostInfo().getId());
             recommendationDTO.setRecPoint(recommendation.getRecPoint());
+            recommendationDTO.setRecDate(recommendation.getRecDate());
 
             HostInfoDTO hostInfoDTO = new HostInfoDTO();
             hostInfoDTO.setId(recommendation.getHostInfo().getId());
@@ -77,21 +107,20 @@ public class MainController {
             String formattedAverageRating = decimalFormat.format(averageRating);
 
 
-            Integer matchedPrice = null;
             String formattedPrice = null;
 
-            for (Map<String, Object> priceData : priceList) {
-                if (priceData.get("hIdx").equals(hIdx)) {
-                    matchedPrice = (Integer) priceData.get("matchedPrice");
-                    
-                    if (matchedPrice != null) {
-                        DecimalFormat formatter = new DecimalFormat("#,###");
-                        formattedPrice = formatter.format(matchedPrice);
-                    }
-                    
-                    break;
-                }
+            Optional<Integer> lowestPriceOptional = priceList.stream()
+                .filter(priceData -> priceData.get("hIdx").equals(hIdx))
+                .map(priceData -> (Integer) priceData.get("matchedPrice"))
+                .filter(Objects::nonNull)
+                .min(Integer::compareTo);
+
+
+            if (lowestPriceOptional.isPresent()) {
+                DecimalFormat formatter = new DecimalFormat("#,###");
+                formattedPrice = formatter.format(lowestPriceOptional.get());
             }
+
 
             Map<String, Object> response = new HashMap<>();
             response.put("recommendation", recommendationDTO);
@@ -104,6 +133,7 @@ public class MainController {
 
             System.out.println("응답 데이터: " + response);
         }
+        model.addAttribute("path");
         model.addAttribute("recomList", responseList);
         System.out.println("제발요"+responseList);
         model.addAttribute("activeSearch", activeSearch);

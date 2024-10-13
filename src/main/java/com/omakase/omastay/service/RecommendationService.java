@@ -36,7 +36,7 @@ public class RecommendationService {
 
 
     public List<Recommendation> getRecommHost(){
-        return recommendationRepository.findAllRec();
+        return recommendationRepository.findTotal();
     }
 
     public ImageDTO getImage(Integer hIdx) {

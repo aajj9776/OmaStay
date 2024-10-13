@@ -21,7 +21,6 @@ import com.omakase.omastay.dto.RoomInfoDTO;
 import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
-import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.NonMember;
 import com.omakase.omastay.entity.Payment;
 import com.omakase.omastay.entity.Reservation;
@@ -36,7 +35,6 @@ import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.vo.StartEndVo;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -50,22 +48,16 @@ public class ReservationService {
 
     @Transactional
     public ReservationDTO checkReservation(ReservationDTO reservation) {
+        System.out.println("그대의 방은 왜 null?"+reservation);
 
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservation);
-
-        RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(1);
-        res.setRoomInfo(roomInfo);
-        StartEndVo startEndVo = new StartEndVo();
-        startEndVo.setStart(LocalDateTime.now());
-        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
-        res.setStartEndVo(startEndVo);
 
          // 방 중복 체크 시 Pessimistic Lock 적용
          List<Reservation> checkRoom = reservationRepository.checkSameRoom(
             res.getRoomInfo().getId(), 
             res.getStartEndVo().getStart(), 
-            res.getStartEndVo().getEnd()
+            res.getStartEndVo().getEnd(),
+            ResStatus.CONFIRMED
         );
 
         if (checkRoom != null && checkRoom.size() > 0 ){
@@ -107,19 +99,9 @@ public class ReservationService {
     @Transactional
     public ReservationDTO insertReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO) {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
-        RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(9);
-        res.setRoomInfo(roomInfo);
-        
-        StartEndVo startEndVo = new StartEndVo();
-        startEndVo.setStart(LocalDateTime.now());
-        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
-        res.setStartEndVo(startEndVo);
         res.setNonMember(null);
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
         res.setResPerson(2);
-        res.setRoomInfo(roomInfo);
-        res.setStartEndVo(startEndVo);
         res.setResStatus(ResStatus.PENDING);
         
         Reservation result = reservationRepository.save(res);
@@ -131,24 +113,15 @@ public class ReservationService {
     @Transactional
     public ReservationDTO insertNonMemberReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO noMember) {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
-        RoomInfo roomInfo = new RoomInfo();
-        roomInfo.setId(9);
-        res.setRoomInfo(roomInfo);
-
         res.setMember(null);
 
         NonMember nonMember = new NonMember();
         nonMember.setId(noMember.getId());
         res.setNonMember(nonMember);
 
-        StartEndVo startEndVo = new StartEndVo();
-        startEndVo.setStart(LocalDateTime.now());
-        startEndVo.setEnd(LocalDateTime.now().plusDays(1));
-        res.setStartEndVo(startEndVo);
         
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
         res.setResPerson(2);
-        res.setRoomInfo(roomInfo);
         res.setResStatus(ResStatus.PENDING);
         Payment payment = new Payment();
         payment.setId(paymentDTO.getId());
@@ -393,5 +366,9 @@ public class ReservationService {
     public ReservationDTO getNoReservation(String resNum, String nonEmail) {
         return ReservationMapper.INSTANCE.toReservationDTO(reservationRepository.findByResNumAndNonEmail(resNum, nonEmail));
     }
-  
+
+    public List<Integer> getMemIdxListByHIdx(Integer hIdx) {
+        return reservationRepository.findMemIdxByHIdx(hIdx);
+    }
+
 }

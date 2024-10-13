@@ -1,18 +1,19 @@
 package com.omakase.omastay.controller;
 
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,7 +56,6 @@ import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
 import com.omakase.omastay.dto.custom.HostRulesDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
 import com.omakase.omastay.dto.custom.RoomRegDTO;
-import com.omakase.omastay.entity.Image;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
@@ -67,7 +66,6 @@ import com.omakase.omastay.service.FacilitiesService;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.HostInfoService;
 import com.omakase.omastay.service.ImageService;
-
 import com.omakase.omastay.service.PriceService;
 import com.omakase.omastay.service.ReservationService;
 import com.omakase.omastay.service.ReviewCommentService;
@@ -75,11 +73,9 @@ import com.omakase.omastay.service.ReviewService;
 import com.omakase.omastay.service.RoomInfoService;
 import com.omakase.omastay.service.SalesService;
 import com.omakase.omastay.service.ServiceService;
-import com.omakase.omastay.util.FileRenameGcs;
 import com.omakase.omastay.vo.FileImageNameVo;
 
 import io.jsonwebtoken.io.IOException;
-import java.io.ByteArrayInputStream;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -527,7 +523,7 @@ public class HostController {
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "host/host_login"; 
+        return "redirect:/host/login"; 
     }
 
     //호스트 마이페이지 등록
@@ -558,6 +554,9 @@ public class HostController {
         System.out.println(hostInfoCustomDTO.getImages().size());
         AdminMemberDTO adminMember = (AdminMemberDTO)session.getAttribute("adminMember");
 
+        HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
+        String hName = hostInfoDTO.getHname();
+
         List<ImageDTO> existimagesDTO = hostInfoCustomDTO.getImages();
 
         for (ImageDTO image : hostInfoCustomDTO.getImages()) {
@@ -567,17 +566,6 @@ public class HostController {
         // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
         String c_type = request.getContentType();
         if (c_type.startsWith("multipart")) {
-            List<ImageDTO> existImages = new ArrayList<>();
-            List<String> existingFileNames = new ArrayList<>();
-
-            if (hostInfoCustomDTO.getHostInfo() != null && hostInfoCustomDTO.getHostInfo().getId() != null) {
-                existImages = imageService.getHostImages(hostInfoCustomDTO.getHostInfo().getId());
-                if (existImages != null) {
-                    existingFileNames = existImages.stream()
-                            .map(imageDTO -> imageDTO.getImgName().getOName())
-                            .collect(Collectors.toList());
-                }
-            }
 
             List<ImageDTO> newImages = new ArrayList<>();
 
@@ -599,7 +587,15 @@ public class HostController {
 
                 FileImageNameVo fvo = new FileImageNameVo();
                 fvo.setOName(oname);
-                String fname = FileRenameGcs.checkSameFileName(oname, existingFileNames);
+
+                // 원본 파일명에서 확장자 추출
+                String extension = "";
+                int dotIndex = oname.lastIndexOf('.');
+                if (dotIndex > 0 && dotIndex < oname.length() - 1) {
+                    extension = oname.substring(dotIndex);
+                }
+                
+                String fname = hName+"_"+UUID.randomUUID().toString()+extension;
                 fvo.setFName(fname);
 
                 try {
@@ -646,27 +642,13 @@ public class HostController {
 public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO roomRegDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) {
 
     AdminMemberDTO adminMember = (AdminMemberDTO) session.getAttribute("adminMember");
+    String rName = roomRegDTO.getRoomInfo().getRoomName();
     HostInfoDTO hostInfoDTO = hostInfoService.findHostInfoDTO(adminMember);
     List<ImageDTO> existimagesDTO = roomRegDTO.getImages();
-
-    for (ImageDTO image : roomRegDTO.getImages()) {
-        System.out.println("fName: " + image.getImgName().getFName());
-    }
 
     // 폼양식에서 첨부파일이 전달될 때 enctype이 지정된다.
     String c_type = request.getContentType();
     if (c_type.startsWith("multipart")) {
-        List<ImageDTO> existImages = new ArrayList<>();
-        List<String> existingFileNames = new ArrayList<>();
-
-        if (roomRegDTO.getRoomInfo() != null && roomRegDTO.getRoomInfo().getId() != null) {
-            existImages = imageService.getImages(roomRegDTO.getRoomInfo().getId());
-            if (existImages != null) {
-                existingFileNames = existImages.stream()
-                        .map(imageDTO -> imageDTO.getImgName().getOName())
-                        .collect(Collectors.toList());
-            }
-        }
 
         List<ImageDTO> newImages = new ArrayList<>();
 
@@ -687,7 +669,15 @@ public ResponseEntity<String> roominforeg(@RequestPart("roomRegDTO") RoomRegDTO 
                     String oname = f.getOriginalFilename(); // 실제파일명
                     FileImageNameVo fvo = new FileImageNameVo();
                     fvo.setOName(oname);
-                    String fname = FileRenameGcs.checkSameFileName(oname, existingFileNames);
+
+                    // 원본 파일명에서 확장자 추출
+                    String extension = "";
+                    int dotIndex = oname.lastIndexOf('.');
+                    if (dotIndex > 0 && dotIndex < oname.length() - 1) {
+                        extension = oname.substring(dotIndex);
+                    }
+                    
+                    String fname = rName+"_"+UUID.randomUUID().toString()+extension;
                     fvo.setFName(fname);
 
                     try {

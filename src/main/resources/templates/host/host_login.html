@@ -37,7 +37,7 @@
         >
           HostHouse
         </h1>
-        <form action="/host/hostlogin" method="post"
+        <form action="/host/hostlogin" method="post" id="loginForm"
           class="m-[0px] self-stretch rounded-[50px] bg-[rgba(255,255,255,0.6)] flex flex-col items-center justify-center py-[40px] px-[75px] gap-[5px] mq450:py-[26px] mq450:px-[20px] mq450:box-border"
         >
           <h1
@@ -222,6 +222,11 @@
                     alert("등록 단계를 모두 진행해 주세요.");
                 }
             };
+
+            $('#loginForm').on('submit', function(event) {
+                $('#id').val($('#id').val().replace(/\s+/g, ''));
+                $('#pw').val($('#pw').val().replace(/\s+/g, ''));
+            });
         });
   </script>
     

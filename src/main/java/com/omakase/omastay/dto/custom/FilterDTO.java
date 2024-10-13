@@ -1,6 +1,4 @@
 package com.omakase.omastay.dto.custom;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.vo.StartEndVo;
 import jakarta.validation.constraints.NotNull;

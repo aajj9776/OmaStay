@@ -13,9 +13,9 @@ import lombok.Setter;
 @Setter
 @Embeddable
 public class HostContactInfoVo {
-    @Column(name = "contact_name", nullable = false, length = 100)
+    @Column(name = "contact_name", length = 100)
     private String contactName;
 
-    @Column(name = "contact_email", nullable = false, length = 100)
+    @Column(name = "contact_email", length = 100)
     private String contactEmail;
 }

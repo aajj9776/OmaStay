@@ -14,7 +14,7 @@
   </head>
   <body>
     <div
-      class="w-full relative overflow-y-auto flex flex-row items-start justify-center leading-[normal] tracking-[normal]"
+      class="w-full relative flex flex-row items-start justify-center leading-[normal] tracking-[normal]"
     >
       <main
         class="flex-1 bg-[#fff] flex flex-row items-start justify-center gap-[59px] max-w-full text-left text-[20px] text-[#000] font-[Roboto] mq850:gap-[29px] mq1500:flex-wrap"
@@ -121,7 +121,8 @@
 
                       <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
                         <div class="w-[68px] rounded-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   [10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
-                          <button class="flex-1 relative font-semibold">다시예약</button>
+                          <button class="flex-1 relative font-semibold" 
+                                  th:onclick="'againReservation(' + ${reservation.hIdx} + ')'">다시예약</button>
                         </div>
                         <div th:switch="${reservation.reservation.resStatus.name()}">
                           <div th:if="${reservation.reservation.resStatus.name() != 'CANCELLED' }" class="w-[71px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border whitespace-nowrap">
@@ -313,6 +314,10 @@
        
       });
 
+      function againReservation(hIdx){
+        location.href = "/search/detail-host?id=" + hIdx;
+      }
+
 
       function loadReservation(pageNumber){
         if( pageNumber == null){
@@ -400,7 +405,7 @@
 
                               <div class="self-stretch flex flex-row items-start py-[0px] pl-[0px] pr-[19px] gap-[20px] text-center text-[12px] text-[rgba(0,0,0,0.87)] font-[Inter] mt-[30px]">
                                 <div class="w-[68px] rounded-[10px] bg-[#f5f6fb] flex flex-row items-start justify-start p-[9px] box-border">
-                                  <button class="flex-1 relative font-semibold">다시예약</button>
+                                  <button onClick="againReservation(${reservation.hidx})" class="flex-1 relative font-semibold">다시예약</button>
                                 </div>
                                 ${
                                   resStatus !== "CANCELLED"

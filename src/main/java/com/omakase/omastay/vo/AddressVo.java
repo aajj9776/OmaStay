@@ -13,10 +13,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AddressVo {
-    @Column(name = "h_post_code", nullable = false, length = 200)
+    @Column(name = "h_post_code",  length = 200)
     private String postCode;
 
-    @Column(name = "h_street", nullable = false, length = 200)
+    @Column(name = "h_street",  length = 200)
     private String street;
 
     @Column(name = "h_detail", length = 200)

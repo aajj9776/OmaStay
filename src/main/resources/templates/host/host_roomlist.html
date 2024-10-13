@@ -186,12 +186,16 @@
               },
               {
                 data: 'roomIntro',
+                render: function(data, type, row) {
+                    var truncatedData = data.length > 30 ? data.substring(0, 30) + '...' : data;
+                    return truncatedData;
+                }
               }
             ],
             columnDefs: [{ width: 50, targets: 0 },
               {width: 80, targets: 1},
               {width: 250, targets: 2},
-              {width: 250, targets: 3},
+              {width: 200, targets: 3},
               {width: 80, targets: 4},
               {width: 250, targets: 5}
             ],

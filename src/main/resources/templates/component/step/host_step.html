@@ -43,7 +43,6 @@
             <div class="self-stretch h-[25px] text-center text-black text-xl font-semibold font-['Inter']">객실 관리</div>
           </div>
         </div>
-        <input type="hidden" id="hStep" th:value="${session.hStep}" />
         </section>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -51,20 +50,22 @@
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script th:inline="javascript">
+      const hStep = /*[[${session.hStep}]]*/ null;
+    </script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        var hStep = document.getElementById('hStep').value;
-
         function checkStep(element) {
+          console.log("hStep:"+hStep);
           var targetUrl = element.getAttribute('hx-get');
 
-          if (targetUrl === '/host/info' && (hStep === 'null')) {
+          if (targetUrl === '/host/info' && (!hStep || hStep === 'null')) {
             alert('이전 단계를 완료해주세요.');
             return false; // HTMX 요청 취소
-          } else if (targetUrl === '/host/rules' && (hStep === 'null' || hStep === 'MYPAGE')) {
+          } else if (targetUrl === '/host/rules' && (!hStep || hStep === 'null' || hStep === 'MYPAGE')) {
             alert('이전 단계를 완료해주세요.');
             return false; // HTMX 요청 취소
-          } else if (targetUrl === '/host/roomlist' && (hStep === 'null' || hStep === 'MYPAGE' || hStep === 'INFO')) {
+          } else if (targetUrl === '/host/roomlist' && (!hStep || hStep === 'null' || hStep === 'MYPAGE' || hStep === 'INFO')) {
             alert('이전 단계를 완료해주세요.');
             return false; // HTMX 요청 취소
           }
@@ -92,7 +93,6 @@
         document.body.addEventListener('htmx:afterSwap', function() {
           setTimeout(addEventListeners, 0); // 약간의 지연 후 addEventListeners 실행
         });
-        
       });
 
     </script>

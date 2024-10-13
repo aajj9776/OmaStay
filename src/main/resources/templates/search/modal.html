@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="initial-scale=1, width=device-width" name="viewport"/>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 <div class="w-[90%] h-[90%] relative rounded-[25px] bg-[#fff] overflow-hidden flex flex-col items-end justify-start gap-[2px] leading-[normal] tracking-[normal]"
@@ -37,9 +36,9 @@
                     </b>
                     <div id="accommodationModal-container">
                         <div th:each="accommodation : ${accommodations}"
-                             th:id="'modalCard' + ${accommodation.hIdx}">
-                        >
-                            <div
+                             >
+                            <div th:id="'modalCard' + ${accommodation.hIdx}"
+                                    th:onclick="|detailHost(${accommodation.hIdx})|"
                                     class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]"
                             >
                                 <img

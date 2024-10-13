@@ -62,15 +62,15 @@ public class MemberService {
     //구글 로그인
     private final String googleclientId = "590469886146-me4vl0oobgapgs954olc073nj4d771hk.apps.googleusercontent.com" ;  //구글 클라이언트 ID
     private final String googleclientSecret = "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";    //구글 클라이언트 시크릿
-    private final String googleredirectUri= "http://localhost:9090/login/google/callback";  //구글 콜백 URL
+    private final String googleredirectUri= "http://omastay.duckdns.org/login/google/callback";  //구글 콜백 URL
 
     private final String clientId = "GJiDqqCVffs4XRqv94HT";  // 네이버 클라이언트 ID
     private final String clientSecret = "LvLkyp2ryM";  // 네이버 클라이언트 시크릿
-    private final String redirectUri = "http://localhost:9090/login/naver/callback";  // 네이버 콜백 URL
+    private final String redirectUri = "http://omastay.duckdns.org/login/naver/callback";  // 네이버 콜백 URL
 
     private final String kakaoclientId ="b37b15fa5576e0a1fcdde58b551288f2";
     private final String kakaoclientSecret ="fPofDsf9V7MwD2ue5gO7ZcWiEvR0D5fv";
-    private final String kakaoredirectUri ="http://localhost:9090/login/kakao/callback";
+    private final String kakaoredirectUri ="http://omastay.duckdns.org/login/kakao/callback";
 
     //카카오 로그인 시작
     public String getKakaoLoginUrl() throws UnsupportedEncodingException{

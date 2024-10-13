@@ -101,7 +101,7 @@ public class PriceService {
             // 숙박 총 일수 계산 (체크인과 체크아웃 간의 차이)
             long totalDays = ChronoUnit.DAYS.between(checkIn, checkOut);
             if (totalDays == 0) {
-                totalDays = 1;  // 같은 날 체크인/체크아웃하는 경우 최소 1박 처리
+                totalDays = 1;  
             }
 
             double totalPrice = 0;  // 총 가격
@@ -113,8 +113,8 @@ public class PriceService {
     
            // 1. 성수기(peak)가 존재하는 경우
                 if (price.getPeakVo() != null) {
-                    LocalDate peakStartDate = price.getPeakVo().getPeakStart().toLocalDate();  // LocalDateTime → LocalDate 변환
-                    LocalDate peakEndDate = price.getPeakVo().getPeakEnd().toLocalDate();      // LocalDateTime → LocalDate 변환
+                    LocalDate peakStartDate = price.getPeakVo().getPeakStart().toLocalDate();
+                    LocalDate peakEndDate = price.getPeakVo().getPeakEnd().toLocalDate();  
                     peakDays = getDaysInRange(checkIn, checkOut, peakStartDate, peakEndDate);
                     System.out.println("성수기 시작일: " + peakStartDate);
                     System.out.println("성수기 종료일: " + peakEndDate);
@@ -125,8 +125,8 @@ public class PriceService {
 
                 // 2. 준성수기(semi)가 존재하는 경우
                 if (price.getSemi() != null) {
-                    LocalDate semiStartDate = price.getSemi().getSemiStart().toLocalDate();  // LocalDateTime → LocalDate 변환
-                    LocalDate semiEndDate = price.getSemi().getSemiEnd().toLocalDate();      // LocalDateTime → LocalDate 변환
+                    LocalDate semiStartDate = price.getSemi().getSemiStart().toLocalDate(); 
+                    LocalDate semiEndDate = price.getSemi().getSemiEnd().toLocalDate();    
                     semiDays = getDaysInRange(checkIn, checkOut, semiStartDate, semiEndDate);
                 
                 } else {
@@ -138,9 +138,9 @@ public class PriceService {
             regularDays = totalDays - peakDays - semiDays;
     
             // 각 기간의 가격 계산
-            double peakPrice = peakDays * (price.getPeakVo() != null ? price.getPeakVo().getPeakPrice() : 0);  // peak가 없으면 0
-            double semiPrice = semiDays * (price.getSemi() != null ? price.getSemi().getSemiPrice() : 0);  // semi가 없으면 0
-            double regularPrice = regularDays * price.getRegularPrice();  // 비성수기 가격
+            double peakPrice = peakDays * (price.getPeakVo() != null ? price.getPeakVo().getPeakPrice() : 0);  
+            double semiPrice = semiDays * (price.getSemi() != null ? price.getSemi().getSemiPrice() : 0); 
+            double regularPrice = regularDays * price.getRegularPrice();  
     
             // 총 가격 계산
             totalPrice += peakPrice + semiPrice + regularPrice;
@@ -153,9 +153,8 @@ public class PriceService {
 
         double averagePrice = totalPrice / totalDays;
 
-        // 정수로 변환 후 콤마 형식으로 포맷팅
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");  // 3자리마다 콤마
-        return decimalFormat.format(averagePrice);  // 포맷 적용된 값 반환
+        DecimalFormat decimalFormat = new DecimalFormat("#,###"); 
+        return decimalFormat.format(averagePrice);
     }
     
 
@@ -171,7 +170,7 @@ public class PriceService {
                 return 0;
             }
         
-            return ChronoUnit.DAYS.between(effectiveStart, effectiveEnd);  // 양 끝 포함 계산
+            return ChronoUnit.DAYS.between(effectiveStart, effectiveEnd); 
         }
 
     

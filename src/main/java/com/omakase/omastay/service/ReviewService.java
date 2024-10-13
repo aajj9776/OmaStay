@@ -2,6 +2,7 @@ package com.omakase.omastay.service;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.entity.HostInfo;
+import com.omakase.omastay.entity.Member;
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.entity.enumurate.BooleanStatus;
@@ -36,6 +37,8 @@ public class ReviewService {
     @Transactional
     public Integer addReview(ReviewDTO reviewDTO, List<String> onames, List<String> fnames) {
         Review review = ReviewMapper.INSTANCE.toReview(reviewDTO);
+        Member member =  new Member();
+        String memName = member.getMemName();
 
         Reservation reservation = new Reservation();
         reservation.setId(56);
@@ -66,12 +69,10 @@ public class ReviewService {
       public List<Review> findAllReview(String sortOption,Integer hIdx){
         
         return reviewRepository.findAll(sortOption,hIdx);
-   
     }
 
 
      // 호스트 전체 리뷰 가져오기
-    // 호스트 전체 리뷰 가져오기
     public List<ReviewDTO> getAllReview(HostInfoDTO hostInfoDTO) {
 
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
@@ -145,36 +146,46 @@ public class ReviewService {
         return ReviewMapper.INSTANCE.toReviewDTOList(review);
     }
 
+    //메인 페이지 리뷰 개수 & 평균
     public Map<Integer, Map<String, Object>> getRecomReviewCount(){
         List<Object[]> reviewCountList = reviewRepository.findReviewCount();
+
         Map<Integer, Map<String, Object>> reviewCountMap = new HashMap<>();
+
         for (Object[] row : reviewCountList) {
             Integer hostId = (Integer) row[0];
-            Long reviewCount = (Long) row[1];
-            Double totalRating = (Double) row[2];
+            
+            Long reviewCount = ((Number) row[1]).longValue(); 
+            Double totalRating = ((Number) row[2]).doubleValue();
+
+            Double averageRating = (reviewCount > 0) ? totalRating / reviewCount : 0.0;
 
             Map<String, Object> stats = new HashMap<>();
             stats.put("reviewCount", reviewCount);
-            stats.put("averageRating", (reviewCount > 0) ? (double) totalRating / reviewCount : 0.0); // 평균 계산 시 double로 설정
+            stats.put("averageRating", averageRating); 
 
             reviewCountMap.put(hostId, stats);
         }
+
         return reviewCountMap;
     }
 
+    //상세 페이지 리뷰 개수 & 평균
     public String getReviewStatsByHostId(Integer hIdx) {
         List<Object[]> reviewCountList = reviewRepository.findHostReviewCount(hIdx);
-        if (reviewCountList.isEmpty()) {
-            return "0.0, 0";
+            if (reviewCountList.isEmpty()) {
+                return "0.0, 0"; 
+            }
+            
+            Object[] row = reviewCountList.get(0);
+
+            Long reviewCount = ((Number) row[1]).longValue(); 
+            Double totalRating = ((Number) row[2]).doubleValue(); 
+            
+            Double averageRating = (reviewCount > 0) ? totalRating / reviewCount : 0.0;
+
+            return String.format("%.1f, %d", averageRating, reviewCount);
         }
-        
-        Object[] row = reviewCountList.get(0);
-        Long reviewCount = (Long) row[1];
-        Double totalRating = (Double) row[2];
-    
-        Double averageRating = (reviewCount > 0) ? (double) totalRating / reviewCount : 0.0;
-        return String.format("%.1f, %d", averageRating, reviewCount);
-    }
     
     public void deleteReviewById(int revIdx) {
         reviewRepository.updateReviewStatus(revIdx);

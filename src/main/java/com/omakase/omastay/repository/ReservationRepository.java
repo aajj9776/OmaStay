@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.RoomInfo;
+import com.omakase.omastay.entity.enumurate.ResStatus;
 import com.omakase.omastay.repository.custom.ReservationRepositoryCustom;
 
 import jakarta.persistence.LockModeType;
@@ -32,7 +33,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     @Modifying
     @Transactional
-    @Query("Update Reservation r set r.resStatus = 2 where r.id in :ids AND (r.resStatus = 0 or r.resStatus = 1)")
+    @Query("Update Reservation r set r.resStatus = 2 where r.id in :ids AND r.resStatus = 0")
     int rejectById(@Param("ids") int[] ids);
 
     @Modifying
@@ -43,9 +44,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r LEFT JOIN FETCH Sales s ON r.id = s.reservation.id WHERE r.startEndVo.end < :yesterday AND s.id IS NULL")
     List<Reservation> findExpiredReservationsNotInSale(@Param("yesterday") LocalDateTime yesterday);
 
-    @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND ((r.startEndVo.start < :end AND r.startEndVo.end > :start))")
+    @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND ((r.startEndVo.start < :end AND r.startEndVo.end > :start)) AND r.resStatus = :status")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    List<Reservation> checkSameRoom(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    List<Reservation> checkSameRoom(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end,  @Param("status") ResStatus status);
 
     @Query("SELECT r FROM Reservation r WHERE r.member.id = :memberId AND r.startEndVo.end < CURRENT_TIMESTAMP ORDER BY r.startEndVo.end DESC")
     Page<Reservation> findByMemIdxAndEndBefore(@Param("memberId") int memberId, Pageable pageable);
@@ -90,4 +91,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r JOIN FETCH r.roomInfo ri JOIN FETCH r.member m WHERE m.id = :memberId")
     Page<Reservation> findByMemberId(@Param("memberId") Integer memberId, Pageable pageable);
 
+    //해당 호텔 예약자만 리뷰작성버튼 클릭 가능
+    @Query("SELECT DISTINCT r.member.id " +
+            "FROM Reservation r " +
+            "JOIN r.roomInfo ro " +
+            "JOIN ro.hostInfo h " +
+            "WHERE h.id = :hIdx AND r.member.id IS NOT NULL")
+    List<Integer> findMemIdxByHIdx(@Param("hIdx") Integer hIdx);
+
+   
 }
+
+
