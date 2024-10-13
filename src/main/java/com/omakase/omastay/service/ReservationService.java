@@ -112,10 +112,13 @@ public class ReservationService {
     public ReservationDTO insertNonMemberReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO noMember) {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
         res.setMember(null);
-
+        System.out.println("비회원정보" + noMember);
+        
         NonMember nonMember = new NonMember();
         nonMember.setId(noMember.getId());
         res.setNonMember(nonMember);
+        res.setResName(noMember.getNonName());
+        res.setResEmail(noMember.getNonEmail());
 
         
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
