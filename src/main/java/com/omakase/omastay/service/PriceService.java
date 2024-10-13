@@ -97,43 +97,34 @@ public class PriceService {
 
     public String calculateAveragePrice(Integer id, Integer roomIdx, LocalDate checkIn, LocalDate checkOut) {
         List<Price> prices = priceRepository.findPricesForRoom(id, roomIdx, checkIn, checkOut);
-
-            // 숙박 총 일수 계산 (체크인과 체크아웃 간의 차이)
-            long totalDays = ChronoUnit.DAYS.between(checkIn, checkOut);
-            if (totalDays == 0) {
-                totalDays = 1;  
-            }
-
-            double totalPrice = 0;  // 총 가격
-
+    
+        // 숙박 총 일수 계산 (체크인과 체크아웃 간의 차이)
+        long totalDays = ChronoUnit.DAYS.between(checkIn, checkOut);
+        if (totalDays == 0) {
+            totalDays = 1;  
+        }
+    
+        double totalPrice = 0;  // 총 가격
+    
         for (Price price : prices) {
             long peakDays = 0;
             long semiDays = 0;
             long regularDays = 0;
     
-           // 1. 성수기(peak)가 존재하는 경우
-                if (price.getPeakVo() != null) {
-                    LocalDate peakStartDate = price.getPeakVo().getPeakStart().toLocalDate();
-                    LocalDate peakEndDate = price.getPeakVo().getPeakEnd().toLocalDate();  
-                    peakDays = getDaysInRange(checkIn, checkOut, peakStartDate, peakEndDate);
-                    System.out.println("성수기 시작일: " + peakStartDate);
-                    System.out.println("성수기 종료일: " + peakEndDate);
-                } else {
-                    // peak가 없으면 그 일수는 비성수기로 처리
-                    peakDays = 0;
-                }
-
-                // 2. 준성수기(semi)가 존재하는 경우
-                if (price.getSemi() != null) {
-                    LocalDate semiStartDate = price.getSemi().getSemiStart().toLocalDate(); 
-                    LocalDate semiEndDate = price.getSemi().getSemiEnd().toLocalDate();    
-                    semiDays = getDaysInRange(checkIn, checkOut, semiStartDate, semiEndDate);
-                
-                } else {
-                    // semi가 없으면 그 일수는 비성수기로 처리
-                    semiDays = 0;
-                }
-                    
+            // 1. 성수기(peak)가 존재하는 경우
+            if (price.getPeakVo() != null) {
+                LocalDate peakStartDate = price.getPeakVo().getPeakStart().toLocalDate();
+                LocalDate peakEndDate = price.getPeakVo().getPeakEnd().toLocalDate();  
+                peakDays = getDaysInRange(checkIn, checkOut, peakStartDate, peakEndDate);
+            }
+    
+            // 2. 준성수기(semi)가 존재하는 경우
+            if (price.getSemi() != null) {
+                LocalDate semiStartDate = price.getSemi().getSemiStart().toLocalDate(); 
+                LocalDate semiEndDate = price.getSemi().getSemiEnd().toLocalDate();    
+                semiDays = getDaysInRange(checkIn, checkOut, semiStartDate, semiEndDate);
+            }
+    
             // 3. 비성수기(regularDays) 계산: 전체 일수에서 성수기와 준성수기 일수를 제외한 나머지
             regularDays = totalDays - peakDays - semiDays;
     
@@ -144,37 +135,31 @@ public class PriceService {
     
             // 총 가격 계산
             totalPrice += peakPrice + semiPrice + regularPrice;
-
-
-            System.out.println("성수기 일수: " + peakDays);
-            System.out.println("성수기 가격: " + peakPrice);
-            System.out.println("왜저래"+ totalPrice +"/"+ peakPrice +"/"+ semiPrice +"/"+ regularPrice);
         }
-
+    
         double averagePrice = totalPrice / totalDays;
-
+    
+        long finalPrice = (long) Math.floor(averagePrice); 
+    
         DecimalFormat decimalFormat = new DecimalFormat("#,###"); 
-        return decimalFormat.format(averagePrice);
+        return decimalFormat.format(finalPrice);
     }
     
 
-        private long getDaysInRange(LocalDate checkIn, LocalDate checkOut, LocalDate rangeStart, LocalDate rangeEnd) {
-            if (rangeStart == null || rangeEnd == null) {
-                return 0; 
-            }
-        
-            LocalDate effectiveStart = (rangeStart.isBefore(checkIn)) ? checkIn : rangeStart;
-            LocalDate effectiveEnd = (rangeEnd.isAfter(checkOut)) ? checkOut : rangeEnd;
-        
-            if (effectiveStart.isAfter(effectiveEnd)) {
-                return 0;
-            }
-        
-            return ChronoUnit.DAYS.between(effectiveStart, effectiveEnd); 
+    private long getDaysInRange(LocalDate checkIn, LocalDate checkOut, LocalDate rangeStart, LocalDate rangeEnd) {
+        if (rangeStart == null || rangeEnd == null) {
+            return 0; 
         }
-
     
+        long daysInRange = 0;
+    
+        for (LocalDate date = checkIn; !date.isAfter(checkOut.minusDays(1)); date = date.plusDays(1)) {
+            if (!date.isBefore(rangeStart) && !date.isAfter(rangeEnd)) {
+                daysInRange++;
+            }
+        }
+    
+        return daysInRange;
     }
-
-
+}
     

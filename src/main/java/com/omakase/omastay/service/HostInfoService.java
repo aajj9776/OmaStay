@@ -31,7 +31,6 @@ import com.omakase.omastay.mapper.ImageMapper;
 import com.omakase.omastay.mapper.PriceMapper;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.AccountRepository;
-import com.omakase.omastay.repository.AdminMemberRepository;
 import com.omakase.omastay.repository.FacilitiesRepository;
 import com.omakase.omastay.repository.HostFacilitiesRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
@@ -48,7 +47,6 @@ import java.time.LocalDateTime;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,9 +72,6 @@ public class HostInfoService {
     private RoomInfoRepository roomInfoRepository;
 
     @Autowired
-    private AdminMemberRepository adminMemberRepository;
-
-    @Autowired
     private PriceRepository priceRepository;
 
     public HostInfoDTO findHostInfoDTO(AdminMemberDTO adminMemberDTO) {
@@ -87,9 +82,6 @@ public class HostInfoService {
 
     @Transactional
     public void saveHostMypage(HostMypageDTO hostMypageDTO, AdminMemberDTO adminMemberDTO) {
-        System.out.println(hostMypageDTO);
-
-        System.out.println(adminMemberDTO);
         
         AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
         
@@ -117,14 +109,12 @@ public class HostInfoService {
     }
 
     public HostMypageDTO findHostMypageByAdminMember(AdminMemberDTO adminMember) {
-        System.out.println("마이페이지 서비스 왔다");
+
         HostInfo hostInfo = hostInfoRepository.findByAdminMemberId(adminMember.getId());
-        System.out.println(hostInfo);
+
         Account account = null;
         if (hostInfo != null) {
             account = accountRepository.findByHostInfoId(hostInfo.getId());
-            System.out.println(account);
-            System.out.println(account.getHostInfo());
         }
 
         AccountDTO accountDTO = null;
@@ -133,12 +123,6 @@ public class HostInfoService {
         if (account != null) {
             try {
                 accountDTO = AccountMapper.INSTANCE.toAccountDTO(account);
-                System.out.println(accountDTO);
-                if (account.getHostInfo() != null) {
-                    System.out.println(account.getHostInfo());
-                } else {
-                    System.out.println("HostInfo is null for the given account");
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -147,7 +131,6 @@ public class HostInfoService {
         if (hostInfo != null) {
             try {
                 hostInfoDTO = HostInfoMapper.INSTANCE.toHostInfoDTO(hostInfo);
-                System.out.println(hostInfoDTO);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -158,8 +141,6 @@ public class HostInfoService {
 
     @Transactional 
     public void saveHostInfo(HostInfoCustomDTO hostInfoCustomDTO, AdminMemberDTO adminMemberDTO) {
-        System.out.println(hostInfoCustomDTO.getHostInfo().getAddressVo().getStreet());
-        System.out.println(adminMemberDTO);
         
         AdminMember adminMember = AdminMemberMapper.INSTANCE.toAdminMember(adminMemberDTO);
         
@@ -216,15 +197,19 @@ public class HostInfoService {
         }
 
 
-        for (ImageDTO imageDTO : hostInfoCustomDTO.getImages()) {
-            Image newImage = new Image();
-            newImage.setRoomInfo(null);
-            newImage.setHostInfo(hostInfo);
-            newImage.setImgName(imageDTO.getImgName());
-            newImage.setImgCate(ImgCate.HOST);
-            newImage.setImgStatus(BooleanStatus.TRUE);
-            imageRepository.save(newImage);
+        for (ImageDTO imageDTO : newImages) {
+            boolean isExistingImage = existingImages.stream()
+                .anyMatch(existingImage -> existingImage.getImgName().getFName().equals(imageDTO.getImgName().getFName()));
+            if (!isExistingImage) {
+                Image newImage = new Image();
+                newImage.setRoomInfo(null);
+                newImage.setHostInfo(hostInfo);
+                newImage.setImgName(imageDTO.getImgName());
+                newImage.setImgCate(ImgCate.HOST);
+                newImage.setImgStatus(BooleanStatus.TRUE);
+                imageRepository.save(newImage);
             }
+        }
     }
 
     public HostInfoCustomDTO findHostInfoByHostInfoId(int hIdx) {
@@ -317,11 +302,9 @@ public class HostInfoService {
             Facilities facility = facilitiesRepository.findById2(hf.getFIdx());
             facilities.add(facility);
         }
-        System.out.println(facilities);
         hostRequestInfoDTO.setFacilities(FacilitiesMapper.INSTANCE.toFacilitiesDTOList(facilities));
 
         List<RoomInfo> roomInfos = roomInfoRepository.findByHostInfo(hostInfo);
-        System.out.println(roomInfos);
         hostRequestInfoDTO.setRoomInfo(RoomInfoMapper.INSTANCE.toRoomInfoDTOList(roomInfos)); 
         
         Price price = priceRepository.findFirstByHostInfoId(hostInfo.getId());
@@ -329,7 +312,6 @@ public class HostInfoService {
         hostRequestInfoDTO.setPrice(PriceMapper.INSTANCE.toPriceDTO(price));
 
         List<Image> images = imageRepository.findByHostInfoId(hostInfo.getId());
-        System.out.println(images);
         hostRequestInfoDTO.setImages(ImageMapper.INSTANCE.toImageDTOList(images));
 
         Hibernate.initialize(hostRequestInfoDTO.getHostInfo().getAdIdx());

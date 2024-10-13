@@ -199,7 +199,6 @@
           },
           success: function (data) {
 
-            console.log(data);
             var table = $('#listTable').DataTable();
             table.clear();
             table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신

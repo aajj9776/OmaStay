@@ -446,7 +446,7 @@
                 $("#cancelModalContent").html(data);
 
                 $.ajax({
-                    url: "/mypage/noCancel_content",
+                    url: "mypage/noCancel_content",
                     method: "POST",
                     data: {
                         id: pay.id,
@@ -470,7 +470,7 @@
                         if (chk) {
                             // paymentKey 변수를 취소 요청에 사용
                             $.ajax({
-                            url: "/payment/cancel", // 호출하고자 하는 URL
+                            url: "payment/cancel", // 호출하고자 하는 URL
                             method: "POST",
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify({

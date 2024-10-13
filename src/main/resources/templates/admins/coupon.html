@@ -11,8 +11,10 @@
 
   <style>
     #historyTable {
-      table-layout: fixed; /* 테이블 레이아웃을 자동으로 설정 */
-      width: 660px; /* 테이블 너비를 100%로 설정 */
+      table-layout: fixed;
+      /* 테이블 레이아웃을 자동으로 설정 */
+      width: 660px;
+      /* 테이블 너비를 100%로 설정 */
     }
   </style>
 </head>
@@ -35,10 +37,11 @@
 
     <!-- 테이블 영역-->
 
-    <div th:if="${list == null}" class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
-        <p class="text-[18px] text-[#6c757d]">등록된 쿠폰이 없습니다.</p>
+    <div th:if="${list == null}"
+      class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
+      <p class="text-[18px] text-[#6c757d]">등록된 쿠폰이 없습니다.</p>
     </div>
-    
+
     <div th:if="${list != null}"
       class="w-[1300px] rounded-[30px] bg-[#eaecf8] oflex flex-col items-start justify-start p-[20px] box-border gap-[10px] max-w-full text-left text-[16px] text-[#000]">
 
@@ -69,240 +72,29 @@
               <td th:text="${#temporals.format(coupon.cpStartEnd.start, 'yyyy-MM-dd HH:mm')}"></td>
               <td th:text="${#temporals.format(coupon.cpStartEnd.end, 'yyyy-MM-dd HH:mm')}"></td>
               <td th:switch="${coupon.cpCate}">
-                  <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PERCENT}">백분율 할인</span>
-                  <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PRICE}">금액 할인</span>
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PERCENT}">백분율 할인</span>
+                <span th:case="${T(com.omakase.omastay.entity.enumurate.CpCate).PRICE}">금액 할인</span>
               </td>
               <td th:text="${coupon.cpSale}"></td>
-              <td ><button th:onclick="'showDetails(' + ${coupon.id} + ')'"><img class="w-[15px] h-[15px]" src="/image/admin/icon-more.png"/></button></td>
+              <td><button th:onclick="'showDetails(' + ${coupon.id} + ')'"><img class="w-[15px] h-[15px]"
+                    src="/image/admin/icon-more.png" /></button></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
+    <!--쿠폰 등록 모달-->
+    <div th:replace="admins/modals/add_coupon"></div>
 
-    
+    <!-- 쿠폰 사용내역 모달-->
+    <div th:replace="admins/modals/coupon_history"></div>
 
-    <!-- 모달 뒷 배경 -->
-    <div id="modalOverlay"
-      class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 justify-center items-center z-50 hidden ">
-
-      <!-- 쿠폰 등록 모달 -->
-      <!-- 쿠폰 등록 모달 -->
-      <!-- 쿠폰 등록 모달 -->
-      <!-- 쿠폰 등록 모달 -->
-      <!-- 모달 보라 테두리 영역 -->
-      <div id="addCoupon"
-        class="bg-[#d9ddf1] p-[30px_30px] max-w-[450px] min-w-[100px] box-border rounded-[12px] flex items-center justify-center relative top-[40px] m-auto"
-        style="width: auto;">
-
-        <button id="closeAddModal" class="absolute top-4 right-4 p-2 rounded-lg z-10">
-          <img class="h-6 w-6" alt="" src="/image/admin/icon-cancel.png" />
-        </button>
-
-        <!-- 모달 흰 배경 영역 -->
-        <div
-          class="shadow-md rounded-lg bg-white overflow-hidden flex flex-col items-center justify-start p-0 max-w-full">
-          <!-- 제목 영역 -->
-          <div class="self-stretch flex flex-col gap-1 items-center justify-start relative w-full bg-white p-6">
-            <h2 class="text-lg font-semibold">쿠폰 등록</h2>
-            <p class="text-sm text-gray-500">등록할 쿠폰의 정보를 입력해주세요</p>
-          </div>
-
-          <!-- 쿠폰 내용 -->
-          <div class="">
-            <form class="flex flex-col items-center gap-4 p-6 w-full">
-
-              <!-- 쿠폰명 -->
-              <div class="w-full flex flex-col gap-2 items-start">
-                <label class="text-sm font-medium text-gray-700">쿠폰명*</label>
-                <input id="cpContent" name="cpContent" data-str="쿠폰명"
-                  class="w-full p-2 border rounded-lg focus:outline-none h-[40px] text-[18px]" type="text"
-                  placeholder="예: 사이트 오픈 1주년 할인 쿠폰" />
-              </div>
-
-              <!-- 사용기간 -->
-              <div class="w-full flex flex-col gap-2 items-start">
-                <label class="text-sm font-medium text-gray-700">사용기간*</label>
-                <div id="date-picker"
-                  class="flex-1 rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border w-[300px] flex flex-row items-center justify-center py-[4px] px-[11px]">
-                  <img class="h-[16px] w-[16px]" src="/image/admin/icon-calendar.png" />
-                  <input readonly id="date-picker-input" data-str="사용기간"
-                    class="w-full [border:none] [outline:none] h-[24px] flex-1 flex flex-row items-center justify-start text-[16px] text-[#6c757d] min-w-[94px] px-[11px]"
-                    type="text" placeholder="전체 기간" />
-                </div>
-
-                <!-- 쿠폰 형식 (지정 발행/쿠폰코드 생성)-->
-                <div class="w-full flex flex-col gap-2 items-start">
-                  <label class="text-sm font-medium text-gray-700">쿠폰형식*</label>
-                  <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="couponType" value="DESIGNATED" class="h-4 w-4 cursor-pointer" checked />
-                      <span class="text-base">지정 발행</span>
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="couponType" value="DOWNLOAD" class="h-4 w-4 cursor-pointer" />
-                      <span class="text-base">쿠폰코드 생성</span>
-                    </label>
-                  </div>
-                </div>
-
-                <!-- 발행대상(지정 발행일 때 선택) -->
-                <div id="selectGrade" class="w-full flex flex-col gap-2 items-start">
-                  <label class="text-sm font-medium text-gray-700">발행대상*</label>
-                  <select id="selectGradeOption"
-                    class="flex items-center justify-between p-2 border rounded-lg h-[40px] w-[120px] text-[18px]">
-                    <option value="all">전체</option>
-                    <option value="방랑자">방랑자</option>
-                    <option value="탐험가">탐험가</option>
-                    <option value="개척자">개척자</option>
-                  </select>
-                </div>
-
-                <!-- 쿠폰 코드 유형(쿠폰코드 생성일 때 선택) -->
-                <div id="selectCodeType" class="w-full flex-col gap-2 items-start hidden">
-                  <label class="text-sm font-medium text-gray-700">쿠폰 코드 유형 *</label>
-                  <div class="flex flex-row gap-2">
-                    <div class="flex items-center gap-2">
-                      <input type="radio" name="codeType" value="MULTI_USE" class="h-4 w-4 cursor-pointer" checked />
-                      <span class="text-base">다회성 쿠폰 코드</span>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                      <input type="radio" name="codeType" value="SINGLE_USE" class="h-4 w-4 cursor-pointer" />
-                      <span class="text-base">일회성 쿠폰 코드</span>
-                    </div>
-                  </div>
-
-                  <!-- 쿠폰 코드 유형(다회성 쿠폰 코드일 때 선택) -->
-                  <div id="MULTI_USE" class="p-[10px] text-[16px] gap-2 flex flex-col">
-                    <div class="flex flex-row gap-2">
-                      <label class="mr-2">쿠폰 코드 입력: </label>
-                      <input type="text" data-str="쿠폰 코드" id="MULTI_USEInput" class="border-[2px] w-[150px]"
-                        placeholder="예시: LUCKY777" />
-                    </div>
-                    <div class="flex flex-row gap-2 items-center">
-                      <label class="mr-2">등록 가능 횟수: </label>
-                      <input type="text" data-str="등록 가능 횟수" id="MULTI_USECount" class="border-[2px] w-[100px]"
-                        placeholder="예시: 7" />
-                      <span class="text-base">회</span>
-                    </div>
-                  </div>
-
-                  <!-- 쿠폰 코드 유형(일회성 쿠폰 코드일 때 선택) -->
-                  <div id="SINGLE_USE" class="p-[10px] text-[16px] gap-2 flex-col hidden">
-                    <label class="mr-2">* 쿠폰 코드는 자동으로 생성됩니다. </label>
-                    <div class="flex flex-row gap-2 items-center">
-                      <label class="mr-2">생성할 쿠폰 코드 개수: </label>
-                      <input type="text" data-str="생성할 쿠폰 코드 개수" id="SINGLE_USECount" class="border-[2px] w-[100px]"
-                        placeholder="예시: 7" />
-                      <span class="text-base">회</span>
-                    </div>
-                  </div>
-                </div>
-
-
-                <!-- 할인구분 -->
-                <div class="w-full flex flex-col gap-2 items-start">
-                  <label class="text-sm font-medium text-gray-700">할인구분*</label>
-                  <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="saleType" value="PERCENT" class="h-4 w-4 cursor-pointer" checked />
-                      <span class="text-base">할인율</span>
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="saleType" value="PRICE" class="h-4 w-4 cursor-pointer" />
-                      <span class="text-base">할인 금액</span>
-                    </label>
-                  </div>
-                </div>
-
-                <!-- 할인율 -->
-                <div id="salePercent" class="w-full flex flex-col gap-2 items-start">
-                  <label class="text-sm font-medium text-gray-700">할인율*</label>
-                  <div class="flex items-center gap-2 h-[40px] text-[18px]">
-                    <input id="salePercentInput" data-str="할인율" type="text"
-                      class="p-2 border rounded-lg w-full shadow-sm" />
-                    <span class="text-base">%</span>
-                  </div>
-                </div>
-
-                <!-- 할인금액 -->
-                <div id="salePrice" class="w-full flex flex-col gap-2 items-start" style="display: none;">
-                  <label class="text-sm font-medium text-gray-700">할인금액*</label>
-                  <div class="flex items-center gap-2 h-[40px] text-[18px]">
-                    <input id="salePriceInput" data-str="할인 금액" type="text"
-                      class="p-2 border rounded-lg w-full shadow-sm" />
-                    <span class="text-base">KRW</span>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-
-          <!-- 모달 쿠폰 등록 버튼 -->
-          <div class=" flex gap-4 p-6">
-            <button id="addConfirm" class="w-[80px] h-[35px] bg-[#d4d8f1] rounded-[4px] text-[18px]">등록</button>
-            <button id="addCancel"
-              class="w-[80px] h-[35px] border-[2px] border-[#d4d8f1] rounded-[4px] text-[18px]">취소</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- 쿠폰 상세보기 모달-->
-      <!-- 쿠폰 상세보기 모달-->
-      <!-- 쿠폰 상세보기 모달-->
-      <!-- 쿠폰 상세보기 모달-->
-      <!-- 쿠폰 상세보기 모달-->
-      <div id="history_modal" class="relative top-[40px] w-[720px] rounded-[12px] bg-[#fff] shrink-0 flex flex-col leading-[normal] tracking-[normal] m-auto">
-        <!-- 헤더 -->
-        <section class="bg-[#fff] flex flex-col items-end justify-center relative rounded-[12px] w-full">
-          <button id="closeHistory" class="w-auto flex flex-row items-end justify-end p-[10px]"> 
-            <img class="h-[24px] w-[24px] shrink-0" src="/image/admin/icon-cancel.png" />
-          </button>  
-          <header class="w-full bg-[#fff] flex flex-col items-start justify-center gap-[10px] text-left text-[18px] text-[#101828] mb-2">
-            <p class="px-[30px] font-semibold text-[inherit] whitespace-nowrap">쿠폰 사용 내역</p>
-          </header>
-        </section>
-
-        <!-- 본문 영역 -->
-        <section
-          class="w-full flex flex-col  justify-start px-[30px] py-[10px] text-[14px] ">
-          <!-- 발행 현황 -->
-          <div class="flex flex-row items-start justify-start gap-[10.5px] text-[12px] text-[#989898]"> 
-            <div>발행</div>
-            <div id="issueCount">N</div>
-            <div>건 /</div>
-            <div>사용</div>
-            <div id="useCount">N</div>
-            <div>건</div>
-          </div>
-
-          <!-- 테이블 영역 -->
-          <div id="historyTableSection"
-            class="w-[660px] flex flex-row items-center justify-center text-center text-[16px]"
-            >
-            <table id="historyTable" class="w-full font-medium hover">
-              <thead >
-                <tr class="bg-[#d4d8f1]">
-                  <th>쿠폰 코드</th>
-                  <th>회원 번호</th>
-                  <th>만료일</th>
-                  <th>사용일</th>
-                  <th>사용주문</th>
-                </tr>
-              </thead>
-              <tbody id="tbody" class="bg-[#ffffff] pt-[10px] mb-[50px] font-normal"></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-
-    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+  <script type="text/javascript" src="/js/admin/modal.js"></script>
   <script type="text/javascript" src="/js/datepicker-singledate.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -321,18 +113,12 @@
       // 쿠폰 등록 모달
       $('#addButton').click(function () {
         $('#modalOverlay').show();
-        $('#history_modal').css('display', 'none');
         $('#addCoupon').css('display', 'flex');
       });
 
       // 쿠폰 등록 모달 닫기
-      $('#closeAddModal').click(function () {
-        $('#modalOverlay').css('display', 'none');
-      });
-
-      // 쿠폰 등록 모달 닫기
       $('#closeHistory').click(function () {
-        $('#modalOverlay').css('display', 'none');
+        $('#modalOverlay2').css('display', 'none');
       });
 
       // 쿠폰 등록 취소
@@ -341,7 +127,7 @@
       });
 
       // 모달 외부 클릭 방지
-      $('#modalOverlay').click(function (event) {
+      $('#modalOverlay2').click(function (event) {
         if (event.target === this) {
           $(this).css('display', 'none');
         }
@@ -349,16 +135,9 @@
 
       // 쿠폰 상세보기 모달
       $('#history').click(function () {
-        $('#modalOverlay').show();
-        $('#addCoupon').css('display', 'none');
+        $('#modalOverlay2').show();
         $('#history_modal').show();
       });
-
-      $('#reset-button').click(function () {
-        $('#date-range-picker-input').val('');
-        $('#search-keyword').val('');
-        $('#search-type').val('all');
-      }); 
 
       // 쿠폰 형식 - 라디오 버튼 클릭 이벤트
       $('input[name="couponType"]').change(function () {
@@ -392,6 +171,7 @@
           $('#salePrice').css('display', 'flex');  // 쿠폰 코드 유형 보이기
         }
       });
+
 
       // 모달 내 쿠폰 등록 버튼 클릭 이벤트 
       $('#addConfirm').click(function () {
@@ -522,8 +302,6 @@
           // 할인율
           var salePercent = $('#salePercentInput').val().trim();
 
-
-
           console.log("salePercent: " + salePercent);
           form.append($('<input>').attr('type', 'hidden').attr('name', 'cpSale').attr('value', salePercent));
 
@@ -554,13 +332,52 @@
         form.submit();
 
       });
+
+      // 범위 검사 함수
+      function validateInput(inputElement, min, max) {
+        const value = $(inputElement).val();
+
+        // 숫자인지 확인하고, 숫자일 경우만 범위 검사 진행
+        if (!/^\d+$/.test(value)) {
+          alert('숫자만 입력 가능합니다.');
+          $(inputElement).val(''); // 입력 값을 지움
+          $(inputElement).focus();  // 포커스 설정
+        } else {
+          const numericValue = parseInt(value, 10);
+          if (numericValue < min || numericValue > max) {
+            alert(min + '에서 ' + max + ' 사이의 숫자를 입력하세요.');
+            $(inputElement).val(''); // 입력 값을 지움
+            $(inputElement).focus();  // 포커스 설정
+          }
+        }
+      }
+
+      //유효성 검사 (1~10000)
+      $('#MULTI_USECount').on('input', function () {
+        validateInput(this, 1, 10000);
+      });
+
+      // SINGLE_USECount 유효성 검사 (1~10000)
+      $('#SINGLE_USECount').on('input', function () {
+        validateInput(this, 1, 10000);
+      });
+
+      // salePercentInput 유효성 검사 (1~100)
+      $('#salePercentInput').on('input', function () {
+        validateInput(this, 1, 100);
+      });
+
+      // salePriceInput 유효성 검사 (1~100000)
+      $('#salePriceInput').on('input', function () {
+        validateInput(this, 1, 100000);
+      });
+
     });
 
+    //사용내역 띄우기
     function showDetails(id) {
       // // 행의 ID를 가져옴
-      // var row = button.closest('tr');
-      // var id = row.getAttribute('data-id');
-      console.log("id: "+id);
+      console.log("id: " + id);
 
       // AJAX 요청을 통해 데이터를 가져옴
       fetch(`/admin/coupon/history?id=${id}`)
@@ -572,8 +389,6 @@
           var modalContent = $('#tbody'); // jQuery 사용
           modalContent.empty(); // 기존 내용 지우기
 
-          
-
           // 반복문으로 데이터를 채움, 문자열 생성 후 한 번에 추가
           if (data.list && data.list.length > 0) {
 
@@ -584,35 +399,39 @@
             var useCount = $('#useCount'); // jQuery 사용
             useCount.empty(); // 기존 내용 지우기
             useCount.append(data.list.filter(item => item.issuedCouponDTO && item.issuedCouponDTO.icStatus === 'USED').length);
-          
 
             let rowsHtml = '';
             data.list.forEach(item => {
-                rowsHtml += `
+
+              const startDate = new Date(item.couponDTO.cpStartEnd.start).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+              const endDate = new Date(item.couponDTO.cpStartEnd.end).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+              rowsHtml += `
                     <tr>
                         <td>${item.issuedCouponDTO.icCode != null ? item.issuedCouponDTO.icCode : '회원지정'}</td>
-                        <td>${item.issuedCouponDTO.mIdx != null ? item.issuedCouponDTO.mIdx : '미발급'}</td>
-                        <td>${item.couponDTO.cpStartEnd.end}</td>
-                        <td>${item.issuedCouponDTO.icStatus === 'USED' ?  item.payTime : '미사용'}</td>
-                        <td>${item.issuedCouponDTO.icStatus === 'USED' ?  item.paymentId : '미사용'}</td>
+                        <td>${item.issuedCouponDTO.midx != null ? item.issuedCouponDTO.midx : '미발급'}</td>
+                        <td>${startDate}</td> 
+                        <td>${endDate}</td>
+                        <td>${item.issuedCouponDTO.icStatus === 'USED' ? item.payTime : '미사용'}</td>
+                        <td>${item.issuedCouponDTO.icStatus === 'USED' ? item.paymentId : '미사용'}</td>
                     </tr>
                 `;
-          });
-          modalContent.append(rowsHtml); 
-        } else {
+            });
+            modalContent.append(rowsHtml);
+          } else {
             // 데이터가 없는 경우 처리
             modalContent.append('<tr><td colspan="5">등록된 데이터가 없습니다</td></tr>');
-        }
+          }
 
-            // 모달을 표시함 (jQuery 사용)
-            $('#modalOverlay').show();
-            $('#addCoupon').hide();
-            $('#history_modal').show();
+          // 모달을 표시함 
+          $('#modalOverlay2').show();
+          $('#history_modal').show();
         })
         .catch(error => {
           console.error('Error fetching coupon details:', error);
         });
     }
+
 
   </script>
 </body>

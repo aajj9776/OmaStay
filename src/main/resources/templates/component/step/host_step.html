@@ -56,7 +56,7 @@
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         function checkStep(element) {
-          console.log("hStep:"+hStep);
+
           var targetUrl = element.getAttribute('hx-get');
 
           if (targetUrl === '/host/info' && (!hStep || hStep === 'null')) {
@@ -73,14 +73,13 @@
         }
 
         function addEventListeners() {
-          console.log("addEventListeners 함수 실행됨");
           document.body.removeEventListener('htmx:beforeRequest', handleBeforeRequest); // 중복 등록 방지
           document.body.addEventListener('htmx:beforeRequest', handleBeforeRequest);
         }
 
         function handleBeforeRequest(event) {
           var element = event.detail.elt;
-          console.log("요청 요소:", element);
+
           if (!checkStep(element)) {
             event.preventDefault();
           }

@@ -225,6 +225,7 @@
                       이미지 추가</b>
                   </div>
                 </button>
+                <div class="font-[Roboto] text-[16px]">※ 이미지는 10MB까지만 첨부 가능합니다.</div>
                 <div class="roomimage">
                   <div class="swiper-container w-[520px] overflow-hidden">
                       <!-- 네비게이션 버튼 -->
@@ -344,10 +345,6 @@
             const semiPeak = $('#semiPeak').val(); 
             const peak = $('#peak').val(); 
 
-
-            console.log("semiPeak:", semiPeak);
-            console.log("peak:", peak);
-
             if (semiPeak) {
                 $('#semiPeakCheck').removeClass('hidden');
             }
@@ -454,15 +451,10 @@
               var $slide = $(button).closest('.swiper-slide');
               var slideIndex = swiper.getSlideIndex($slide[0]); // Swiper.realIndex 사용
 
-              console.log("Deleting slide at index: " + slideIndex);
-
               selectedFiles.splice(slideIndex, 1);
 
               swiper.removeSlide(slideIndex); 
               swiper.update(); 
-
-              console.log("Slide removed. Total slides: " + swiper.slides.length);
-              console.log(swiper.slides); // Swiper 업데이트 확인
 
               updateNavigationButtons(swiper);
 
@@ -536,12 +528,12 @@
                 },  
                 images: [] 
               };
-              console.log(roomPerson);
+
             // JSON 데이터를 FormData에 추가
            formData.append('roomRegDTO', new Blob([JSON.stringify(roomRegDTO)], { type: 'application/json; charset=utf-8' }));  
             
             var files = $('#fileInput')[0].files;
-            console.log(files.length);
+
             for (var i = 0; i < files.length; i++) {
                 formData.append('images', files[i]);
             }
@@ -568,7 +560,7 @@
                         });
                 },
                 error: function (error) {
-                    alert('저장 실패하였습니다.');
+                    alert('※ 이미지는 10MB까지만 첨부 가능합니다.');
                 }
             });
         }  
