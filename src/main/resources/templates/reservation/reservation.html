@@ -734,7 +734,7 @@
 
       function userInfo() {
         $.ajax({
-          url: "/coupon",
+          url: "coupon",
           type: "POST",
           data: {
             id: user.id,
@@ -808,7 +808,7 @@
       $("#openPointModal").click(function () {
         $("#pointModal").removeClass("hidden");
         $.ajax({
-          url: "/point",
+          url: "point",
           type: "POST",
           data: {
             id: user.id,
@@ -963,7 +963,7 @@
         }
 
         $.ajax({
-          url: "/reservation/emailCheck",
+          url: "reservation/emailCheck",
           type: "POST",
           data: {
             code: code,
@@ -1021,7 +1021,7 @@
         }
 
         $.ajax({
-          url: "/reservation/sendEmail",
+          url: "reservation/sendEmail",
           type: "POST",
           data: {
             email: email,

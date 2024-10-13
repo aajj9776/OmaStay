@@ -55,8 +55,7 @@ public class ReservationService {
          List<Reservation> checkRoom = reservationRepository.checkSameRoom(
             res.getRoomInfo().getId(), 
             res.getStartEndVo().getStart(), 
-            res.getStartEndVo().getEnd(),
-            ResStatus.CONFIRMED
+            res.getStartEndVo().getEnd()
         );
 
         if (checkRoom != null && checkRoom.size() > 0 ){

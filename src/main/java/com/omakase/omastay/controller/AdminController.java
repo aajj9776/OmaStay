@@ -760,10 +760,11 @@ public class AdminController {
 
         return mv;
     }
-
+ 
     // 회원 공지사항 수정하기로 저장
     @RequestMapping(value = "/user_notice/modify", method=RequestMethod.POST)
     public String user_notice_modify_save(ServiceDTO modified, @RequestParam(value="file", required = false) MultipartFile f, @RequestParam(value = "selectedFile", required = false) String selectedFile) {
+        
         int key =0;
         ServiceDTO sDto = ss.getServices(modified.getId());
         
@@ -864,16 +865,14 @@ public class AdminController {
     // 쿠폰 발급 내역 리스트 가져오기
     @RequestMapping("/coupon/history")
     @ResponseBody
-    public Map<String, Object> coupon_history(@RequestParam("id") String id){
+    public Map<String, Object> coupon_history(@RequestParam("id") Integer id){
         Map<String, Object> map = new HashMap<>();
 
-        int idx = Integer.parseInt(id);
+        List<CouponHistoryDTO> list = ics.getIssuedCouponsById(id);
 
-        List<CouponHistoryDTO> list = ics.getIssuedCouponsById(idx);
-
-        for(CouponHistoryDTO item : list){
-            System.out.println("item : " + item);
-        }
+        // for(CouponHistoryDTO item : list){
+        //     System.out.println("item : " + item);
+        // }
 
         map.put("list", list);
 
@@ -900,12 +899,12 @@ public class AdminController {
                                 
         cDto.setCpStartEnd(tempDate);
 
-        System.out.println("cDto : " + cDto);
-        System.out.println("cDto : " + cDto.getCpStartEnd().getEnd());
-        System.out.println("selectGrade : " + selectGrade);
-        System.out.println("code : " + code);
-        System.out.println("count : " + count);
-        System.out.println("date : " + date);
+        // System.out.println("cDto : " + cDto);
+        // System.out.println("cDto : " + cDto.getCpStartEnd().getEnd());
+        // System.out.println("selectGrade : " + selectGrade);
+        // System.out.println("code : " + code);
+        // System.out.println("count : " + count);
+        // System.out.println("date : " + date);
 
         int cnt;
         switch(cDto.getCpMethod()){

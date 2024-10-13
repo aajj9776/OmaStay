@@ -184,7 +184,7 @@
 
       function usePoint() {
         $.ajax({
-          url: "/point/use",
+          url: "point/use",
           type: "POST",
           data: {
             memIdx: memIdx,
@@ -234,7 +234,7 @@
         if (!response.ok) {
           // 결제 실패 비즈니스 로직을 구현하세요.
           console.log("결제실패");
-          window.location.href = `/reservation/payment_fail`;
+          window.location.href = `reservation/payment_fail`;
         } else {
           sendData(); // 결제 성공 시 sendData 호출
         }
@@ -242,7 +242,7 @@
 
       function sendCoupon() {
         $.ajax({
-          url: "/coupon/use",
+          url: "coupon/use",
           type: "POST",
           data: {
             id: couponId,

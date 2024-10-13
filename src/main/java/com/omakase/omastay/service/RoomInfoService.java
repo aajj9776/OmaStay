@@ -140,7 +140,7 @@ public class RoomInfoService {
 
         List<Image> existingImages = imageRepository.findByRoomInfoId(roomInfo.getId());
         List<ImageDTO> newImages = roomRegDTO.getImages();
-        System.out.println("roomRegDTO.getImages()"+newImages.size());
+
         // 기존 이미지 상태 변경
         for (Image existingImage : existingImages) {
             boolean isImageInNewList = newImages.stream()
@@ -183,13 +183,9 @@ public class RoomInfoService {
     //  검색
     public List<RoomInfoDTO> searchRoom(String type, String keyword, HostInfoDTO hostInfoDTO){
 
-        System.out.println("룸인포서비스 서치룸 왔다.");
-
         HostInfo hostInfo = HostInfoMapper.INSTANCE.toHostInfo(hostInfoDTO);
 
         List<RoomInfo> roomlist = roomInfoRepository.searchRoom(type, keyword, hostInfo);
-
-        System.out.println("컨트롤러리스트:"+roomlist);
 
         return RoomInfoMapper.INSTANCE.toRoomInfoDTOList(roomlist);
     }
@@ -216,9 +212,9 @@ public class RoomInfoService {
     }
 
     public ImageDTO getImage(Integer hIdx) {
-        System.out.println(ImgCate.HOST);
+
         Image image = imageRepository.findByHostInfoAndImgCate(hIdx, ImgCate.HOST).get(0);
-        System.out.println("서비스 이미지" + image);
+
         return ImageMapper.INSTANCE.toImageDTO(image);
     }
 
