@@ -72,7 +72,7 @@
                 <tr>
                   <td>
                     <div th:if="${sDto.fileName != null and sDto.fileName.fName != null}">
-                      <input type="hidden" id="selectedFile" name="selectedFile" th.value="${sDto.fileName.fName}" />
+                      <input type="hidden" id="selectedFile" name="selectedFile" th:value="${sDto.fileName.fName}" />
                     </div>
                     <input type="file" id="fileUpload" name="file" data-str="첨부파일" class="mt-2 text-[#6c757d]" />
                     <div> * 수정 파일 선택 시 기존 파일은 삭제됩니다.</div>
