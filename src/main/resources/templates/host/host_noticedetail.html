@@ -5,6 +5,8 @@
       layout:fragment="host">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="/summernote/css/style.css" />
+    <link rel="stylesheet" href="/summernote/css/summernote-lite.css" />
   </head>
   <body>
     <div
@@ -66,9 +68,9 @@
                 <div
                   class="flex-1 flex flex-col items-start justify-start relative max-w-[calc(100%_-_15px)]"
                 >
-                  <div th:utext="${sDto.sContent}" id="content"
-                  class="py-[16px] h-[500px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start py-[0px] px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]" name="sContent" cols="50"
-                  data-str="내용" rows="8" readonly></div>
+                <textarea th:utext="${sDto.sContent}" id="content"
+                class=" w-[1000px] h-[500px] text-[#000] py-[16px] self-stretch rounded-[4px] border-[rgba(0,0,0,0.23)] border-[1px] border-solid box-border flex flex-col items-start justify-start px-[11px] max-w-full text-[16px] text-[rgba(0,0,0,0.87)]"
+                name="sContent" cols="50" data-str="내용" rows="8"></textarea>
                 </div>
               </div>
               <div>
@@ -100,11 +102,17 @@
         </section>
       </main>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/summernote/js/summernote-lite.js"></script>
     <script>
+      $(document).ready(function () {
+        $("#content").summernote({
+          toolbar: false, // 툴바를 제거합니다.
+          airMode: true, // 에디터를 비활성화합니다.
+        });
+
+        $("#content").summernote('disable');
+      });
+
       function down(fName) {
           $.ajax({
               url: "/host/fileDownload",
