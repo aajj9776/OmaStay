@@ -80,6 +80,7 @@
               class="bg-[#d4d8f1] py-[20px] pl-[30px] pr-[634px] gap-[20px] ">
               <th data-orderable="false"><input type="checkbox" id="selectAllCheckbox"/></th>
               <th>번호</th>
+              <th>유형</th>
               <th>제목</th>
               <th>등록일</th>
             </tr>
@@ -126,6 +127,18 @@
           }
         },
         { data: 'id' }, // ID 칼럼 추가
+        { data: 'scate',
+          render: function(data, type, row) {
+            switch (data) {
+              case 'NOTICE':
+                return '공지사항';
+              case 'FAQ':
+                return '자주묻는질문';
+              default:
+                return data;
+            }
+          }
+        }, 
         {
           data: 'stitle',
           render: function (data, type, row) {
@@ -149,10 +162,12 @@
           }
         }
       ],
-      columnDefs: [{ width: 80, targets: 0 },
-        {width: 80, targets: 1},
-        {width: 700, targets: 2},
-        {width: 300, targets: 3}
+      columnDefs: [
+        {width: 50, targets: 0 },
+        {width: 70, targets: 1},
+        {width: 160, targets: 2},
+        {width: 600, targets: 3},
+        {width: 300, targets: 4}
       ],
 
     });

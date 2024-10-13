@@ -25,6 +25,7 @@ import com.omakase.omastay.dto.ImageDTO;
 import com.omakase.omastay.dto.PriceDTO;
 import com.omakase.omastay.dto.RecommendationDTO;
 import com.omakase.omastay.dto.ServiceDTO;
+import com.omakase.omastay.dto.custom.EventPathDTO;
 import com.omakase.omastay.entity.Recommendation;
 import com.omakase.omastay.entity.enumurate.SCate;
 import com.omakase.omastay.entity.enumurate.UserAuth;
@@ -61,15 +62,24 @@ public class MainController {
         List<Map<String, Object>> responseList = new ArrayList<>();
         Map<Integer, Map<String, Object>> reviewCountMap = reviewService.getRecomReviewCount();
 
-        List<ServiceDTO> service = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
-        List<String> pathList = new ArrayList<>();
-
-        for (ServiceDTO serviceDTO : service) {
+        List<ServiceDTO> serviceList = serviceService.getAllServices(SCate.EVENT, UserAuth.USER);
+        List<EventPathDTO> eventPathDTOList = new ArrayList<>(); // 여러 개의 EventPathDTO를 저장할 리스트
+        
+        for (ServiceDTO serviceDTO : serviceList) {
+            EventPathDTO ep = new EventPathDTO();
+            
+            // 파일 경로 생성
             String path = realPath + "notice/" + serviceDTO.getFileName().getFName();
-            pathList.add(path); // 리스트에 경로 추가
+            
+            // 각각의 ServiceDTO와 경로를 EventPathDTO에 설정
+            ep.setPath(path);
+            ep.setService(serviceDTO);
+            
+            // 리스트에 추가
+            eventPathDTOList.add(ep);
         }
         
-        model.addAttribute("path", pathList); // 리스트를 모델에 추가
+        model.addAttribute("event", eventPathDTOList); // 여러 개의 EventPathDTO를 모델에 추가
         
         
         for (Recommendation recommendation : recommList) {
