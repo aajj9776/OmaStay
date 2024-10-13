@@ -267,20 +267,21 @@ public class MyPageService {
     
         return memberPointDTO;
     }
-    // mem_idx로 쿠폰을 조회하고 DTO로 변환하여 반환하는 메서드
 
+    // mem_idx로 쿠폰을 조회하고 DTO로 변환하여 반환하는 메서드
     @Transactional
     public MemberCouponDTO getCouponsForMember(int memberId) {
+        // 멤버 정보를 조회
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-
-        List<IssuedCoupon> issuedCoupons = issuedCouponRepository.findByMemIdx(memberId);
-
+    
+        // 유효한 쿠폰들(미사용, 만료되지 않은 쿠폰) 조회
+        List<IssuedCoupon> issuedCoupons = issuedCouponRepository.findValidUnusedCouponsByMemIdx(memberId);
+    
         // 현재 시간을 가져옴
         LocalDateTime now = LocalDateTime.now();
     
         List<CouponIssuedCouponDTO> couponDTOList = issuedCoupons.stream()
-                .filter(issuedCoupon -> issuedCoupon.getCoupon().getCpStartEnd().getEnd().isAfter(now)) // 만료일이 현재 시간보다 이후인 경우만 포함
                 .map(issuedCoupon -> {
                     CouponIssuedCouponDTO dto = new CouponIssuedCouponDTO();
                     dto.setCouponId(issuedCoupon.getCoupon().getId());
@@ -293,14 +294,17 @@ public class MyPageService {
     
                     dto.setIcStatus(issuedCoupon.getIcStatus().name());
                     dto.setIcCode(issuedCoupon.getIcCode());
-                    dto.setCpCate(issuedCoupon.getCoupon().getCpCate().name());       
+                    dto.setCpCate(issuedCoupon.getCoupon().getCpCate().name());
+    
                     return dto;
                 })
                 .collect(Collectors.toList());
     
         MemberDTO memberDTO = new MemberDTO(member);
+    
         return new MemberCouponDTO(memberDTO, couponDTOList);
     }
+    
     // 쿠폰 등록
     @Transactional
     public String registerCoupon(String icCode, int memberId) {
