@@ -190,7 +190,7 @@
             <div 
                     class="w-auto flex flex-col items-start justify-start gap-[9px] max-w-full"
             >
-                <h1 id="#simple-list-item-2" th:text="${host.hname}"
+                <h1 id="simple-list-item-2" th:text="${host.hname}"
                         class="m-[0px] self-stretch h-[44px] relative text-inherit leading-[44px] font-bold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[26px] mq1050:text-[26px] mq1050:leading-[35px] mt-5"
                 >
                 </h1>
@@ -1002,6 +1002,8 @@
             console.log("룸 info"+roomInfo);
             var totalPrices = /*[[${totalPrices}]]*/ {};
             console.log(totalPrices);
+            let oname;
+            let fname;
 
             if (roomInfo === null || roomInfo.length === 0) { 
                         $('#noRoomMessage').removeClass('hidden');
@@ -1334,7 +1336,7 @@
     
             //모달 띄우기, 리뷰 등록
             $(document).ready(function() {
-                
+               
                 let uploadedFileInfo = [];
                 loadReviewList(hIdx);
                 $('#reviewInsertBtn').on('click', function() { 
@@ -1346,7 +1348,7 @@
                         return;
                     }
                     initializeRating();
-                    uploadedFileInfo = [];
+                    uploadedFileInfo=[];
                     scrollPosition = $(window).scrollTop(); 
                     $('body').css({
                         'overflow': 'hidden',         
@@ -1399,6 +1401,7 @@
                                     const imageUrl = data.url;
                                     const imgTag = '<img src="' + imageUrl + '" alt="Image">';
                                     $('.note-editable').append(imgTag);
+                                    console.log("데이터"+JSON.stringify(data));
                                     
                                     uploadedFileInfo.push({
                                         oname: data.oname,
@@ -1430,6 +1433,7 @@
                                     formData.append('oname_' + index, fileInfo.oname); 
                                     formData.append('fname_' + index, fileInfo.fname);
                                 });
+                                console.log("이야"+JSON.stringify(formData));
 
                                 $.ajax({
                                     url: '/review_insert',
@@ -1437,8 +1441,16 @@
                                     data: formData,
                                     contentType: false,
                                     processData: false,
-                                    success: function(newRevIdx) {
-                                        alert('리뷰가 성공적으로 등록되었습니다.');
+                                    success: function(data) {
+                                        console.log("응답"+data);
+                                        if(data === 1){
+                                            alert('리뷰가 성공적으로 등록되었습니다.');
+                                        }else if(data === 0){
+                                            alert('호텔 예약 내역이 없는 회원입니다.');
+                                        }else{
+                                            alert('리뷰 작성 중 오류가 발생했습니다.')
+                                        }
+                                        
                                         loadReviewList(hIdx);
                                         $('body').css({
                                         'overflow': '',                   

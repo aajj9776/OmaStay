@@ -61,9 +61,10 @@ public class PointCouponController {
         Map<String, Object> map = new HashMap<>();
 
         List<PointDTO> point = pointService.getPoint(id);
+        Integer sum = pointService.getSumPoint(id);
         if(point != null && point.size() > 0){
-            Integer sum = pointService.getSumPoint(id);
             System.out.println("포인트 내역" + point);
+            System.out.println("최종값" + sum);
             map.put("point", point);
             map.put("sum", sum);
         } else {
