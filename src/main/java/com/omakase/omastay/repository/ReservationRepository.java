@@ -93,12 +93,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     Page<Reservation> findByMemberId(@Param("memberId") Integer memberId, Pageable pageable);
 
     //해당 호텔 예약자만 리뷰작성 가능
-    @Query(value = "SELECT * FROM Reservation r " +
-       "JOIN RoomInfo ro ON r.room_info_id = ro.id " +
-       "JOIN HostInfo h ON ro.host_info_id = h.id " +
-       "WHERE r.member_id = :memIdx AND h.id = :hIdx AND r.res_status = 3 " +
-       "ORDER BY r.res_end DESC " +
-       "LIMIT 1", nativeQuery = true)
+    @Query("SELECT DISTINCT r FROM Reservation r JOIN r.roomInfo ro JOIN ro.hostInfo h " +
+            "WHERE r.member.id = :memIdx AND h.id = :hIdx AND r.resStatus = 3 " +
+            "ORDER BY r.startEndVo.end DESC")
     ReservationDTO findMemIdxByHIdx(@Param("hIdx") Integer hIdx, @Param("memIdx") Integer memIdx);
 
    

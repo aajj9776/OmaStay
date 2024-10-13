@@ -37,17 +37,10 @@ public class ReviewService {
     @Transactional
     public Integer addReview(ReviewDTO reviewDTO, List<String> onames, List<String> fnames) {
         Review review = ReviewMapper.INSTANCE.toReview(reviewDTO);
-        Member member =  new Member();
-        String memName = member.getMemName();
-
-        Reservation reservation = new Reservation();
-        reservation.setId(56);
-        review.setReservation(reservation);
 
         review.setRevDate(LocalDateTime.now());
         review.setRevNone(null);
         review.setRevStatus(BooleanStatus.TRUE);
-        review.setRevWriter("정한별"); 
 
         FileImageNameVo vo = new FileImageNameVo();
         String allFnames = String.join(",", fnames);
