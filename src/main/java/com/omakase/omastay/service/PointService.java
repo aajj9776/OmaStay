@@ -93,21 +93,31 @@ public class PointService {
     public PointDTO savePoint(PointDTO pointDTO) {
         Point res = PointMapper.INSTANCE.toPoint(pointDTO);
         
+        // 가장 최근 포인트 합계를 조회
         List<Integer> sum = pointRepository.findLatestPSumByMemIdx(pointDTO.getMemIdx());
-        if( sum != null && sum.size() > 0){
-            int sumPoint =  sum.get(0) - pointDTO.getPValue();
-            StringBuilder sb = new StringBuilder();
-            sb.append("-").append(pointDTO.getPValue());
-            res.setPValue(Integer.parseInt(sb.toString()));
+        if (sum != null && sum.size() > 0) {
+            int currentSum = sum.get(0);  // 현재 포인트 합계
+            
+            // 포인트 값이 양수인지 음수인지 상관없이 절대값으로 사용
+            int usePoint = Math.abs(pointDTO.getPValue());  
+            
+            // pValue가 양수라면 차감, 음수라면 더하지 않도록 처리
+            if (pointDTO.getPValue() > 0) {
+                res.setPValue(-usePoint);  // 음수로 기록
+            } else {
+                res.setPValue(pointDTO.getPValue());  // 이미 음수라면 그대로 기록
+            }
+
+            int sumPoint = currentSum - usePoint;  // 포인트 사용 후 남은 포인트 계산
             res.setPDate(LocalDateTime.now());
             res.setPSum(sumPoint);
             res.setPContent("포인트 사용");
+
             Point point = pointRepository.save(res);
             PointDTO dto = PointMapper.INSTANCE.toPointDTO(point);
             return dto;
         }
         return null;
-        
     }
 
     public Integer getSumPoint(int id) {
