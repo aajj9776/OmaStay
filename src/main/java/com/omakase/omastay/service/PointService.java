@@ -63,13 +63,15 @@ public class PointService {
         pDto.setMemIdx(member.getId()); // 속성 이름이 mIdx인지 확인
         Integer memIdx = pDto.getMemIdx();
         Pageable pageable = PageRequest.of(0, 1);
-        Integer sum = pointRepository.getSumPoint(memIdx, pageable).get(0);
-
-        if(sum==null){ // 처음 포인트를 발급한다면
-            pDto.setPSum(pDto.getPValue());
-        }else{ //아니라면 잔여 포인트 + 추가할 포인트 값
+        
+        List<Integer> pp = pointRepository.getSumPoint(memIdx, pageable);
+        if(!pp.isEmpty()){
+            Integer sum = pp.get(0);
             pDto.setPSum(pDto.getPValue()+sum);
+        }else{
+            pDto.setPSum(pDto.getPValue());
         }
+
         pDto.setPDate(LocalDateTime.now());
         
         //저장하기

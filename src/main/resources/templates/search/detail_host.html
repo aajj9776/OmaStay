@@ -17,7 +17,7 @@
             <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0"
                href="#simple-list-item-1">개요</a>
             <a class="[text-decoration:none] text-[15px] font-medium text-[inherit] inline-block min-w-[118.6px] flex-shrink-0"
-               href="#simple-list-item-2">서비스 및 부대시설</a>`
+               href="#simple-list-item-2">서비스 및 부대시설</a>
             <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0"
                href="#simple-list-item-3">객실</a>
             <a class="[text-decoration:none] font-medium text-[inherit] inline-block min-w-[31px] flex-shrink-0"
@@ -184,13 +184,13 @@
     <section th:each="host : ${hostInfo}"
             class="w-[1223px] flex flex-col items-start justify-start py-[0px] pl-[0px] pr-[20px] box-border gap-[26.6px] max-w-full text-left text-[18px] text-[#333] font-[Inter]"
     >
-        <div
+        <div 
                 class="flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[36.4px] box-border gap-[32px] max-w-full shrink-0 text-[32px]"
         >
             <div 
                     class="w-auto flex flex-col items-start justify-start gap-[9px] max-w-full"
             >
-                <h1 th:text="${host.hname}"
+                <h1 id="#simple-list-item-2" th:text="${host.hname}"
                         class="m-[0px] self-stretch h-[44px] relative text-inherit leading-[44px] font-bold font-[inherit] flex items-center shrink-0 mq450:text-[19px] mq450:leading-[26px] mq1050:text-[26px] mq1050:leading-[35px] mt-5"
                 >
                 </h1>
@@ -671,7 +671,7 @@
                     >
                     주소
                     </div>
-                    <div th:text="${host.addressVo.detail}"
+                    <div th:text="${host.addressVo.street}"
                     class="absolute !m-[0] top-[214px] right-[116px] leading-[20px] font-semibold inline-block min-w-[83px] z-[3]"
                     >
                     </div>
@@ -789,7 +789,7 @@
                                 class="h-[77px] relative text-[14.1px] leading-[22px] inline-block shrink-0"
                         >
                             <ul class="m-[0px] font-[inherit] text-inherit pl-[19px]">
-                                <li th:text="'-'+${host.addressVo.detail}" class="mb-[0px]"></li>
+                                <li th:if="${host.addressVo.detail != null and !#strings.isEmpty(host.addressVo.detail)}" th:text="'-'+${host.addressVo.detail}" class="mb-[0px]"></li>
                                 <li th:text="'-'+${host.directions}" class="mb-[0px]"></li>
                             </ul>
                         </div>
@@ -1043,16 +1043,40 @@
 
                 alert("주소가 복사되었습니다");
             }
-         
+            
+            //사진 모두보기 모달 생성(초기화)
             $(document).ready(function () {
                 $('#allPhotoBtn').on('click', function () {
-                $('#allPhotomodal').removeClass('hidden'); // 사진 모달을 보여줌
-                scrollPosition = $(window).scrollTop(); // 현재 스크롤 위치 저장
-                $('body').css({
-                    'overflow': 'hidden', // 배경 스크롤 방지
-                    'position': 'fixed',
-                    'top': `-${scrollPosition}px`,
-                    'width': '100%'
+                    // 모달을 열 때 숙소 화면에 고정 및 초기화
+                    $('#roomImageBox').addClass('hidden'); 
+                    $('#hostImageBox').removeClass('hidden'); 
+
+                    // 숙소, 객실 버튼 상태 초기화
+                    $('#roomImgBtn').removeClass('text-blue-600 border-b-2 border-blue-600');
+                    $('#hostImgBtn').addClass('text-blue-600 border-b-2 border-blue-600');
+
+                    $('#roomImgBtn').addClass('text-gray-500');
+                    $('#hostImgBtn').removeClass('text-gray-500');
+
+                    const roomButtons = document.querySelectorAll('#allhotelRoomBtn');
+                    roomButtons.forEach(button => {
+                        const detailBtn = button.querySelector('#detailRoomBtn');
+                        if (detailBtn) {
+                            detailBtn.classList.remove('bg-blue-600', 'text-white');
+                            detailBtn.classList.add('bg-white', 'text-gray-700', 'hover:bg-[#e6e6e6]');
+                        }
+                    });
+
+                    $('#roomNameBox').hide(); 
+
+                    $('#allPhotomodal').removeClass('hidden'); 
+
+                    scrollPosition = $(window).scrollTop(); 
+                    $('body').css({
+                        'overflow': 'hidden', 
+                        'position': 'fixed',
+                        'top': `-${scrollPosition}px`,
+                        'width': '100%'
                     });
                 });
 
@@ -1060,67 +1084,66 @@
                 $('#photoCloseBtn, #allPhotomodal').on('click', function (event) {
                     if (event.target.id === 'photoCloseBtn' || event.target.id === 'allPhotomodal') {
                         $('body').css({
-                            'overflow': '', // 원래 상태로 되돌림
+                            'overflow': '',
                             'position': '',
                             'top': '',
                             'width': ''
                         });
-                        $(window).scrollTop(scrollPosition); // 스크롤 위치 복원
-                        $('#allPhotomodal').addClass('hidden'); // 모달을 숨김
+                        $(window).scrollTop(scrollPosition);
+                        $('#allPhotomodal').addClass('hidden'); 
                     }
                 });
             });
 
+
             document.addEventListener('DOMContentLoaded', function() {
-                // 객실 이미지 슬라이드
-                let currentRoomIndex = 0;
-                function updateRoomImage() {
-                    console.log("ㄹ" + JSON.stringify(roomImages));
-                    if (roomImages && roomImages.length > 0) {
-                        const currentImage = roomImages[currentRoomIndex];
+                // 숙소 이미지 전환 기능
+                let currentHostIndex = 0;
+                let activeButton = null;
+
+                function updateHostImage() {
+                    if (hostImages && hostImages.length > 0) {
+                        const currentImage = hostImages[currentHostIndex];
                         if (currentImage.imgName && currentImage.imgName.fname) {
-                            const imageUrl = `https://storage.googleapis.com/omastay/room/${currentImage.imgName.fname}`;
-                            console.log("으악" + imageUrl);
-                            $('#roomSlideImage').attr('src', imageUrl);
-                            console.log(`Updated to image: ${imageUrl}`);
+                            const imageUrl = `https://storage.googleapis.com/omastay/host/${currentImage.imgName.fname}`;
+                            $('#hostSlideImage').attr('src', imageUrl);
                         } else {
                             console.log("Image at current index is missing imgName or fname.");
                         }
                     } else {
-                        console.log("roomImages is not available yet.");
+                        console.log("hostImages is not available yet.");
                     }
                 }
 
-                $('#prevRoomImageBtn').on('click', function () {
-                    currentRoomIndex = (currentRoomIndex === 0) ? roomImages.length - 1 : currentRoomIndex - 1;
-                    updateRoomImage();
+                $('#prevHostImageBtn').on('click', function () {
+                    currentHostIndex = (currentHostIndex === 0) ? hostImages.length - 1 : currentHostIndex - 1;
+                    updateHostImage();
                 });
 
-                $('#nextRoomImageBtn').on('click', function () {
-                    currentRoomIndex = (currentRoomIndex === roomImages.length - 1) ? 0 : currentRoomIndex + 1;
-                    updateRoomImage();
+                $('#nextHostImageBtn').on('click', function () {
+                    currentHostIndex = (currentHostIndex === hostImages.length - 1) ? 0 : currentHostIndex + 1;
+                    updateHostImage();
                 });
 
-                updateRoomImage();
+                updateHostImage();
 
-                const roomSlideImage = document.getElementById('roomSlideImage');
+                const hostSlideImage = document.getElementById('hostSlideImage');
 
                 // 모든 객실 버튼 선택
-                const roomButtons = document.querySelectorAll('#allhotelRoomBtn');
-                let activeButton = null;
+                const hostButtons = document.querySelectorAll('#allhotelRoomBtn');
 
                 // 각 객실 버튼에 클릭 이벤트 추가
-                roomButtons.forEach((button, index) => {
-                    button.addEventListener('click', function() {
+                hostButtons.forEach((button, index) => {
+                    button.addEventListener('click', function () {
                         // 기존 활성화된 버튼이 있으면 원상복구
                         if (activeButton) {
-                            const previousDetailBtn = activeButton.querySelector('#detailRoomBtn');
+                            const previousDetailBtn = activeButton.querySelector('#detailHostBtn');
                             previousDetailBtn.classList.remove('bg-blue-600', 'text-white');
                             previousDetailBtn.classList.add('bg-white', 'text-gray-700', 'hover:bg-[#e6e6e6]');
                         }
 
-                        // 현재 클릭한 버튼의 detailRoomBtn을 활성화 스타일로 변경
-                        const detailBtn = button.querySelector('#detailRoomBtn');
+                        // 현재 클릭한 버튼의 detailHostBtn을 활성화 스타일로 변경
+                        const detailBtn = button.querySelector('#detailHostBtn');
                         detailBtn.classList.add('bg-blue-600', 'text-white');
                         detailBtn.classList.remove('bg-white', 'text-gray-700');
 
@@ -1128,21 +1151,84 @@
                         activeButton = button;
 
                         // 버튼 클릭 로직 (이미지 변경 등)
-                        const room = allRoomIdx[index]; // 클릭된 버튼의 인덱스를 통해 room 객체 가져오기
-                        console.log('Room ID:', room.id); // 클릭된 객실의 ID 출력
+                        const host = allHostIdx[index]; // 클릭된 버튼의 인덱스를 통해 host 객체 가져오기
+                        console.log('Host ID:', host.id); // 클릭된 숙소의 ID 출력
 
-                        // matchedImage에서 해당 room.id에 맞는 이미지 URL 가져오기
-                        if (matchImages && matchImages[room.id]) {
-                            const imageUrl = `${matchImages[room.id]}`;
+                        // matchedImage에서 해당 host.id에 맞는 이미지 URL 가져오기
+                        if (matchImages && matchImages[host.id]) {
+                            const imageUrl = `${matchImages[host.id]}`;
                             console.log('Image URL:', imageUrl);
 
                             // 이미지 업데이트
-                            document.getElementById('roomSlideImage').src = imageUrl;
+                            document.getElementById('hostSlideImage').src = imageUrl;
                         } else {
-                            console.log(`No image found for room id: ${room.id}`);
+                            console.log(`No image found for host id: ${host.id}`);
                         }
                     });
                 });
+
+                let currentRoomIndex = 0;
+                
+                   // 객실 이미지 업데이트 함수
+                function updateRoomImage(filteredImages) {
+                    if (filteredImages && filteredImages.length > 0) {
+                        const currentImage = filteredImages[currentRoomIndex];
+                        if (currentImage.imgName && currentImage.imgName.fname) {
+                            const imageUrl = `https://storage.googleapis.com/omastay/room/${currentImage.imgName.fname}`;
+                            $('#roomSlideImage').attr('src', imageUrl);
+                        } else {
+                            console.log("Image at current index is missing imgName or fname.");
+                        }
+                    } else {
+                        console.log("No images available for this room.");
+                    }
+                }
+
+            // 객실 버튼 클릭 시 이벤트
+            const roomButtons = document.querySelectorAll('#allhotelRoomBtn');
+            roomButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    // 기존 활성화된 버튼 스타일 리셋
+                    if (activeButton) {
+                        const previousDetailBtn = activeButton.querySelector('#detailRoomBtn');
+                        previousDetailBtn.classList.remove('bg-blue-600', 'text-white');
+                        previousDetailBtn.classList.add('bg-white', 'text-gray-700', 'hover:bg-[#e6e6e6]');
+                    }
+
+                    const detailBtn = button.querySelector('#detailRoomBtn');
+                    detailBtn.classList.add('bg-blue-600', 'text-white');
+                    detailBtn.classList.remove('bg-white', 'text-gray-700');
+
+                    // 현재 클릭된 버튼 설정
+                    activeButton = button;
+
+                    // 클릭된 객실의 room 객체 가져오기
+                    const room = allRoomIdx[index]; // 클릭된 객실의 room 객체
+                    console.log('Room ID:', room.id); // 클릭된 객실의 ID 출력
+
+                    // roomImages 배열에서 해당 room.id에 맞는 이미지 필터링
+                    const filteredImages = roomImages.filter(img => img.rid === room.id);
+                    console.log('Filtered Images:', filteredImages);
+
+                    // 초기화하고 첫 번째 이미지 보여주기
+                    currentRoomIndex = 0;
+                    updateRoomImage(filteredImages);
+
+                    // 이전, 다음 버튼으로 객실 이미지 전환
+                    $('#prevRoomImageBtn').off('click').on('click', function () {
+                        currentRoomIndex = (currentRoomIndex === 0) ? filteredImages.length - 1 : currentRoomIndex - 1;
+                        updateRoomImage(filteredImages);
+                    });
+
+                    $('#nextRoomImageBtn').off('click').on('click', function () {
+                        currentRoomIndex = (currentRoomIndex === filteredImages.length - 1) ? 0 : currentRoomIndex + 1;
+                        updateRoomImage(filteredImages);
+                    });
+                });
+            });
+
+            // 기본적으로 첫 번째 객실 이미지 업데이트 (필요시 제거)
+            updateRoomImage([]);
 
                 // 숙소/객실 버튼 설정 로직 (기존 코드에서 업데이트)
                 const roomNameBox = document.getElementById('roomNameBox');
@@ -1168,6 +1254,7 @@
                     hostImgBtn.classList.add('text-gray-500');
                     roomImgBtn.classList.remove('text-gray-500');
                 });
+
 
                 // 호스트 이미지 보기 버튼 클릭
                 $('#hostImgBtn').on('click', function () {
@@ -1244,12 +1331,16 @@
                 });
             });
 
-            if (!resMemIdx.includes(user.id)) {
-                console.log("유저아이디"+user.id);
-                const reviewButtonDiv = document.getElementById('reviewInsertBtn').parentNode; 
-                reviewButtonDiv.style.display = 'none'; 
-            }
+            $(document).ready(function () { 
+                const reviewButtonDiv = document.getElementById('reviewInsertBtn').parentNode;
 
+                if (!isLogin || !resMemIdx.includes(user.id)) {
+                    reviewButtonDiv.style.display = 'none'; // 버튼 숨기기
+                } else {
+                    reviewButtonDiv.style.display = 'block'; // 버튼 보이기
+                }
+                
+            });
 
     
             //모달 띄우기, 리뷰 등록
@@ -1815,7 +1906,7 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            alert('추천안됨');
+                            alert('추천안됨');                                                                                                                 
                         }
                     });
                     
@@ -1826,7 +1917,15 @@
             function reservationBtnClick(buttonElement){
                 const room = buttonElement.getAttribute('data-room');
                 const price = buttonElement.getAttribute('data-price');
-                window.location.href = `/reservation?room=${room}&checkIn=${sessionStorage.getItem('startDate')}&checkOut=${sessionStorage.getItem('endDate')}&person=${sessionStorage.getItem('people')}&amount=${price}`;
+
+                const checkInDate = new Date(sessionStorage.getItem('startDate'));
+                const checkOutDate = new Date(sessionStorage.getItem('endDate'));
+
+                // ISO 8601 형식으로 변환
+                const formattedCheckIn = checkInDate.toISOString();  
+                const formattedCheckOut = checkOutDate.toISOString();
+                window.location.href = `/reservation?room=${encodeURIComponent(room)}&checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&person=${encodeURIComponent(sessionStorage.getItem('people'))}&amount=${price}`;
+
             }
 
     
