@@ -37,8 +37,9 @@ $(document).ready(function () {
         },
         showDropdowns: true,
         autoApply: true,
-        minDate: moment(),
-        maxDate: moment().add(6, 'months'),
+        /* 실제 실행시 이거 각주 제거 */
+        /*minDate: moment(),
+        maxDate: moment().add(6, 'months'),*/
         timePicker: false,
         singleDatePicker: false,
         startDate: start,

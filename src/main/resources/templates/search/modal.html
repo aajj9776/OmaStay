@@ -36,9 +36,9 @@
                     </b>
                     <div id="accommodationModal-container">
                         <div th:each="accommodation : ${accommodations}"
-                             th:id="'modalCard' + ${accommodation.hIdx}">
-                        >
-                            <div
+                             >
+                            <div th:id="'modalCard' + ${accommodation.hIdx}"
+                                    th:onclick="|detailHost(${accommodation.hIdx})|"
                                     class="self-stretch bg-[#fff] overflow-hidden flex flex-row items-start justify-start py-[20px] px-[0px] [row-gap:20px] mq450:flex-wrap border-b-2 border-[#ebebeb]"
                             >
                                 <img
@@ -79,7 +79,7 @@
                                                     <div
                                                             class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]"
                                                     >
-                                                        <b class="self-stretch relative"
+                                                        <b class="self-stretch relative w-auto break-words whitespace-nowrap"
                                                            th:text="${accommodation.HName}"
                                                         >강릉 라임비치 스파 펜션</b
                                                         >
@@ -136,14 +136,14 @@
                                         >
                                             <div class="flex flex-col items-start justify-start">
                                                 <div class="flex flex-col items-end justify-start">
-                                                    <div th:if="${accommodation.oneDayPrice == null}">
+                                                    <div th:if="${accommodation.soldOut}">
                                                         class="relative font-medium inline-block min-w-[74px]
                                                         whitespace-nowrap"
                                                         >
                                                         다른 날짜 확인
                                                     </div>
                                                     <div class="self-stretch flex flex-row items-end justify-start"
-                                                         th:if="${accommodation.oneDayPrice}"
+                                                         th:if="!${accommodation.soldOut}"
                                                     >
                                                         <b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]"
                                                            th:text="${accommodation.oneDayPrice}">

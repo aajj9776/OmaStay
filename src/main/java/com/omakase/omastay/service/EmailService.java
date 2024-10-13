@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +18,6 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import com.omakase.omastay.dto.custom.HostReservationEmailDTO;
 
 import java.util.Random;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -73,7 +71,6 @@ public class EmailService {
     // 메일 반환
     private MimeMessage createEmailForm(String email) throws MessagingException, IOException {
         String authCode = createdCode();
-        System.out.println("인증번호:"+authCode);
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
@@ -101,7 +98,7 @@ public class EmailService {
     // 코드 검증
     public Boolean verifyEmailCode(String email, String code) {
         String codeFoundByEmail = redisService.getData(email);
-        System.out.println(codeFoundByEmail);
+
         if (codeFoundByEmail == null) {
             return false;
         }
@@ -114,7 +111,7 @@ public class EmailService {
         
         // 이미 메일을 보냈는지 확인
         if (redisService.existData(reservationKey)) {
-            System.out.println("이미 메일을 보냈습니다: " + reservation.getId());
+            
             return;
         }
 

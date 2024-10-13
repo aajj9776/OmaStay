@@ -227,19 +227,16 @@ $(document).ready(function() {
                         dateValue: dateValue
                     },
                     success: function(data) {
-                        console.log(data);
                         table.clear();
                         table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신
                     },
                     error: function(error) {
                         alert("검색 중 오류가 발생했습니다.");
-                        console.error(error);
                     }
                 });
             });
 
             function roomTypeSetting(roomTypes) {
-                console.log("roomTypes:" + roomTypes);
                 
                 // <select> 요소에 옵션 추가
                 let select = $('#roomType');

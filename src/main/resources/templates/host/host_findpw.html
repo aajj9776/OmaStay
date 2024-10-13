@@ -371,7 +371,6 @@
     function verifyCode() {
       const email = $('#email').val().replace(/\s+/g, '');
       const code = $('#email_check').val().replace(/\s+/g, '');
-      console.log(code);
 
       if (code === "") {
         alert("인증번호를 입력해주세요.");
@@ -384,7 +383,7 @@
         data: { code: code, email: email },
         success: function(data) {
           data = data.trim();
-          console.log(data);
+
           if (data === "success") {
             alert("인증번호가 일치합니다.");
             sessionStorage.setItem("emailVerified", "true");

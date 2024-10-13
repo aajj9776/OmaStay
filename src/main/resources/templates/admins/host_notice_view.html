@@ -41,12 +41,30 @@
                     <table summary="게시판 상세보기">
                         <tbody>
                             <tr>
-                                <td><input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}" data-str="제목"
-                                        placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
+                                <td>
+                                    <div class="flex flex-row">
+                                        <input type="hidden" id="sc" th:value="${sDto.sCate}" />
+                                        <select id="notice-type" disabled
+                                            class="w-[150px] h-[40px] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] border-solid box-border py-[4px] px-[5px]">
+                                            <option value="">---선택---</option>
+                                            <option value="NOTICE">공지사항</option>
+                                            <option value="FAQ">자주묻는질문</option>
+                                        </select>
+                                        <input type="text" id="title" name="sTitle" th:value="${sDto.sTitle}"
+                                            data-str="제목" placeholder="제목을 입력하세요" class="w-full h-[40px] flex-1 flex flex-row items-center justify-start text-[16px] 
                   text-[#000] rounded-[4px] bg-[#fff] border-[#d4d8f1] border-[2px] 
-                  border-solid box-border py-[4px] px-[11px] mb-2" readonly /></td>
+                  border-solid box-border py-[4px] px-[11px] mb-2" readonly />
+                                    </div>
+                                </td>
                             </tr>
-                            <tr><td><div class="mb-[10px] p-2"><span class="text-black">등록일: </span><span class="text-black" th:text="${#temporals.format(sDto.sDate, 'yyyy-MM-dd HH:mm')}"> </span><span> (* 등록일만 저장됩니다.) </span></div></td></tr>
+                            <tr>
+                                <td>
+                                    <div class="mb-[10px] p-2"><span class="text-black">등록일: </span><span
+                                            class="text-black"
+                                            th:text="${#temporals.format(sDto.sDate, 'yyyy-MM-dd HH:mm')}">
+                                        </span><span> (* 등록일만 저장됩니다.) </span></div>
+                                </td>
+                            </tr>
                             <tr>
                                 <td><textarea th:text="${sDto.sContent}" id="content"
                                         class="bg-[#fff] w-[1000px] h-[500px] text-[#000]" name="sContent" cols="50"
@@ -95,6 +113,18 @@
             });
 
             $("#content").summernote('disable');
+
+            var sCateValue = $("#sc").val();
+            console.log("sCate value:", sCateValue);
+
+            if (sCateValue) {
+                $('#notice-type').prop('disabled', false);
+                $('#notice-type option').each(function () {
+                    if ($(this).val() === sCateValue) {
+                        $(this).prop('selected', true);
+                    }
+                });
+            }
         });
 
         function down(fName) {
