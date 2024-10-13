@@ -289,38 +289,29 @@ public class LoginController {
 
     @PostMapping("/checkEmail")
     public ResponseEntity<Map<String, Object>> checkSessionEmail(
-        HttpSession session, 
-        @RequestBody Map<String, String> requestData) {
-        
-        // 1. 세션에서 이메일 가져오기
-        String email = (String) session.getAttribute("email");
-        
-        // 2. 세션에 이메일이 없을 경우 요청 데이터에서 이메일 가져오기
-        if (email == null && requestData.containsKey("email")) {
-            email = requestData.get("email");
-        }
-        System.out.println("tt1"+email);
-        // 3. 만약 이메일이 여전히 null이라면, 응답으로 이메일 없음 처리
-        if (email == null || email.isEmpty()) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("exists", false);
-            response.put("message", "이메일을 찾을 수 없습니다.");
-            System.out.println("xtx");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            
-        }
-        
-        // 4. 이메일이 존재할 경우, DB에서 중복 여부 확인
-        boolean exists = memberService.checkEmailDuplicate(email);
+    @RequestBody Map<String, String> requestData) {
+    
+    // 1. 요청 데이터에서 이메일 가져오기
+    String email = requestData.get("email");
 
-        session.setAttribute("email", email);
-        // 5. 응답 처리
+    // 2. 이메일 유효성 확인 (email이 비어있거나 null이면 오류 처리)
+    if (email == null || email.isEmpty()) {
         Map<String, Object> response = new HashMap<>();
-        response.put("exists", exists);
-        response.put("email", email);
-        
-        return ResponseEntity.ok(response);
+        response.put("exists", false);
+        response.put("message", "이메일을 찾을 수 없습니다.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+    // 3. 이메일이 존재할 경우, DB에서 중복 여부 확인
+    boolean exists = memberService.checkEmailDuplicate(email);
+
+    // 4. 응답 처리
+    Map<String, Object> response = new HashMap<>();
+    response.put("exists", exists); // 중복이면 true, 중복이 아니면 false
+    response.put("email", email);
+
+    return ResponseEntity.ok(response);
+}
 
 
     @PostMapping("/sendVerificationCode")
