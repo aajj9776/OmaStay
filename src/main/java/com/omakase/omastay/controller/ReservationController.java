@@ -249,7 +249,6 @@ public class ReservationController {
         System.out.println(image);
 
         if( reserver != null ){
-            mv.setViewName("reservation/noReservation");
             mv.addObject("noReservation", reserver);
             mv.addObject("start", start);
             mv.addObject("end", end);
@@ -259,6 +258,7 @@ public class ReservationController {
             mv.addObject("payDate", payDate);
             mv.addObject("member", member);
             mv.addObject("host", host);
+            mv.setViewName("reservation/noReservation");
         } 
 
         return mv;
