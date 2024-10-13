@@ -257,6 +257,13 @@ public class FacilitiesService {
     private AccommodationResponseDTO paginateAccommodations(Pageable pageable, Map<Integer, ResultAccommodationsDTO> resultMap, boolean isModal, String sortType) {
         List<ResultAccommodationsDTO> resultAccommodationsDTOList = new ArrayList<>(resultMap.values());
 
+        //price가 null인 숙소 soldOut 트루로 변경
+        for (ResultAccommodationsDTO resultAccommodationsDTO : resultAccommodationsDTOList) {
+            if (resultAccommodationsDTO.getPrice() == null) {
+                resultAccommodationsDTO.setSoldOut(true);
+            }
+        }
+
         System.out.println(resultAccommodationsDTOList);
 
         if(sortType != null) {

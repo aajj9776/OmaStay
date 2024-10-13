@@ -281,11 +281,11 @@
                                     >
                                         <div class="flex flex-col items-end justify-start">
                                             <div class="relative font-medium inline-block min-w-[74px] whitespace-nowrap"
-                                                 th:if="${accommodation.oneDayPrice == null}">
+                                                 th:if="${accommodation.soldOut}">
                                                 다른 날짜 확인
                                             </div>
                                             <div class="self-stretch flex flex-row items-end justify-start"
-                                                 th:if="${accommodation.oneDayPrice}"
+                                                 th:if="!${accommodation.soldOut}"
                                             >
                                                 <b class="relative inline-block min-w-[80px] text-[19.2px] font-bold text-[#333]"
                                                    th:text="${accommodation.oneDayPrice}">
@@ -342,7 +342,7 @@
     <div class="bg-white w-[90%] h-[90%]" id="modal" th:include="~{search/modal :: search_modal}"
          th:with="accommodations=${resultAccommodationsMap}"></div>
 </div>
-      
+
 <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dd30de44c81fc848e5a3aa06bcdd212" type="text/javascript"></script>
@@ -352,9 +352,6 @@
         src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
 ></script>
 <script type="text/javascript" src="/js/datepicker.js"></script>
-
-
-
 
 <script type="text/template" id="accommodationModal-template">
     <div id="modalCard${hidx}"
@@ -814,11 +811,70 @@
         setHCate(hCateValue, "main");
     });
 
-    // 검색 실행 함수
+    function performSearchRequest(url, data, callback) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data
+        }).done(callback).fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Error occurred during AJAX request:", textStatus, errorThrown);
+        });
+    }
+
+
+    function renderAccommodations(data) {
+        loadKaKaoMap(data.resultAccommodationsMap);
+        $('#accommodationModal-container').empty();
+        data.resultAccommodationsMap.forEach(function (accommodation) {
+            let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
+            const template = $('#accommodationModal-template').html();
+            const rendered = template
+                .replace('${hidx}', accommodation.hidx)
+                .replace('${img_url}', accommodation.img_url)
+                .replace('${HCate}', accommodation.hcateKo)
+                .replace('${HName}', accommodation.hname)
+                .replace('${rating}', accommodation.rating.toFixed(1))
+                .replace('${reviewCount}', accommodation.reviewCount)
+                .replace('${oneDayPrice}', priceInfo)
+                .replace('${soldOut}', accommodation.soldOut ? '다른 날짜 확인' : `<div class="self-stretch flex flex-row items-end justify-start"><b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${accommodation.oneDayPrice}</b><b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b></div>`);
+            $('#accommodationModal-container').append(rendered);
+        });
+    }
+
+    //검색 hCate뺴고 초기화 하는 함수
+    function reset(identifier) {
+        // 경고창
+        if (confirm("검색 조건을 초기화 하시겠습니까?")) {
+            let hCate = document.querySelector('input[name="hCate"]:checked');
+            let keyword = sessionStorage.getItem('keyword');
+            let checkIn = sessionStorage.getItem('startDate');
+            let checkOut = sessionStorage.getItem('endDate');
+            let person = sessionStorage.getItem('people');
+
+            if (identifier === 'main') {
+                let url = "/search/domestic-accommodations?keyword=" + keyword + "&checkIn=" + checkIn + "&checkOut=" + checkOut + "&person=" + person;
+                if (hCate.value !== 'all') {
+                    url += "&hCate=" + hCate.value;
+                }
+                window.location.href = url;
+            } else if (identifier === 'modal') {
+                let data = {
+                    keyword: keyword,
+                    checkIn: checkIn,
+                    checkOut: checkOut,
+                    person: person
+                };
+                if (hCate.value !== 'all') {
+                    data.hCate = hCate.value;
+                }
+                performSearchRequest("/search/domestic-accommodations", data, renderAccommodations);
+            }
+        }
+    }
+
+    //검색 함수
     function debouncedPerformSearch(identifier, page = 1) {
-        // 동적으로 가져온 값을 사용
         const facilities = getSelectedFacilities(identifier);
-        console.log(facilities);
         let hCate = getHCate(identifier);
         let soldOut = document.getElementById('soldout-' + identifier).checked;
         let startPrice = $('#slider-start-' + identifier).val();
@@ -827,124 +883,38 @@
         let startDay = sessionStorage.getItem('startDate');
         let endDay = sessionStorage.getItem('endDate');
         const person = sessionStorage.getItem('people');
-        const sortType = getSortType(identifier)
-        console.log(facilities
-            + " facilities"
-            + hCate
-            + " hCate"
-            + startPrice
-            + " startPrice"
-            + endPrice
-            + " endPrice"
-            + keyword
-            + " keyword"
-            + startDay
-            + " startDay"
-            + endDay
-            + " endDay"
-            + person
-            + " person"
-            + sortType
-            + " sortType"
-            + "soldOut"
-            + soldOut
-        );
+        const sortType = getSortType(identifier);
+
         if (identifier === "main") {
-            console.log("page: ", page);
-
-            // Query String 구성
             let queryString = '?';
-
-            if (keyword) {
-                queryString += `keyword=${encodeURIComponent(keyword)}&`;
-            }
-            if (startDay) {
-                queryString += `checkIn=${encodeURIComponent(startDay)}&`;
-            }
-            if (endDay) {
-                queryString += `checkOut=${encodeURIComponent(endDay)}&`;
-            }
-            if (person) {
-                queryString += `person=${encodeURIComponent(person)}&`;
-            }
-            if (hCate) {
-                queryString += `hCate=${encodeURIComponent(hCate)}&`;
-            }
-            if (facilities && facilities.length > 0) {
-                queryString += `facilities=${encodeURIComponent(facilities.join(','))}&`;
-            }
-            if (startPrice) {
-                queryString += `startPrice=${encodeURIComponent(startPrice)}&`;
-            }
-            if (endPrice) {
-                queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
-            }
-            if (sortType) {
-                queryString += `sortType=${encodeURIComponent(sortType)}&`;
-            }
-            if(soldOut){
-                queryString += `soldOut=${encodeURIComponent(soldOut)}&`;
-            }
-            if (page && page > 1) {
-                queryString += `page=${encodeURIComponent(page)}&`;
-            }
-
-            // 끝에 붙은 &를 제거
-            if (queryString.endsWith('&')) {
-                queryString = queryString.slice(0, -1);
-            }
-
-            console.log(queryString);
-
-            // URL 변경 및 페이지 리로드
+            if (keyword) queryString += `keyword=${encodeURIComponent(keyword)}&`;
+            if (startDay) queryString += `checkIn=${encodeURIComponent(startDay)}&`;
+            if (endDay) queryString += `checkOut=${encodeURIComponent(endDay)}&`;
+            if (person) queryString += `person=${encodeURIComponent(person)}&`;
+            if (hCate) queryString += `hCate=${encodeURIComponent(hCate)}&`;
+            if (facilities && facilities.length > 0) queryString += `facilities=${encodeURIComponent(facilities.join(','))}&`;
+            if (startPrice) queryString += `startPrice=${encodeURIComponent(startPrice)}&`;
+            if (endPrice) queryString += `endPrice=${encodeURIComponent(endPrice)}&`;
+            if (sortType) queryString += `sortType=${encodeURIComponent(sortType)}&`;
+            if (soldOut) queryString += `soldOut=${encodeURIComponent(soldOut)}&`;
+            if (page && page > 1) queryString += `page=${encodeURIComponent(page)}&`;
+            if (queryString.endsWith('&')) queryString = queryString.slice(0, -1);
             window.location.href = `/search/domestic-accommodations${queryString}`;
-        }  else if (identifier === "modal") {
-            $.ajax({
-                url: "/search/domestic-accommodations",
-                type: "POST",
-                data: {
-                    facilities: facilities,
-                    hCate: hCate,
-                    startPrice: startPrice,
-                    endPrice: endPrice,
-                    keyword: keyword,
-                    checkIn: startDay,
-                    checkOut: endDay,
-                    person: person,
-                    sortType: sortType,
-                    soldOut: soldOut,
-                    page: page
-                }
-            }).done(function (data) {
-                console.log(data);
-
-                // Kakao Map 로드
-                loadKaKaoMap(data.resultAccommodationsMap);
-
-                // 기존 컨텐츠를 지움
-                $('#accommodationModal-container').empty();
-
-                // 데이터를 템플릿에 적용
-                data.resultAccommodationsMap.forEach(function (accommodation) {
-                    let priceInfo = accommodation.oneDayPrice ? `${accommodation.oneDayPrice}원` : '다른 날짜 확인';
-                    const template = $('#accommodationModal-template').html();
-                    const rendered = template
-                        .replace('${hidx}', accommodation.hidx)
-                        .replace('${img_url}', accommodation.img_url)
-                        .replace('${HCate}', accommodation.hcateKo) // .getDescription() 필요 없음
-                        .replace('${HName}', accommodation.hname)
-                        .replace('${rating}', accommodation.rating.toFixed(1))
-                        .replace('${reviewCount}', accommodation.reviewCount)
-                        .replace('${oneDayPrice}', priceInfo)
-
-                        // 조건부 렌더링을 위해 ${soldOut}을 체크하여 대체
-                        .replace('${soldOut}', accommodation.soldOut ? '다른 날짜 확인' : `<div class="self-stretch flex flex-row items-end justify-start"><b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]">${accommodation.oneDayPrice}</b><b class="relative inline-block min-w-[15px] text-[16px] font-bold text-[#333]">원</b></div>`);
-
-                    $('#accommodationModal-container').append(rendered);
-                });
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.error("Error occurred during AJAX request:", textStatus, errorThrown);
-            });
+        } else if (identifier === "modal") {
+            let data = {
+                facilities: facilities,
+                hCate: hCate,
+                startPrice: startPrice,
+                endPrice: endPrice,
+                keyword: keyword,
+                checkIn: startDay,
+                checkOut: endDay,
+                person: person,
+                sortType: sortType,
+                soldOut: soldOut,
+                page: page
+            };
+            performSearchRequest("/search/domestic-accommodations", data, renderAccommodations);
         }
     }
 
@@ -959,6 +929,13 @@
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(context, args), wait);
         };
+    }
+
+    function detailHost(hidx) {
+        let checkIn = sessionStorage.getItem('startDate');
+        let checkOut = sessionStorage.getItem('endDate');
+        let person = sessionStorage.getItem('people');
+        window.location.href = `/search/detail-host?id=${hidx}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
     }
 
 
@@ -1203,29 +1180,9 @@
         markers = [];
     }
 
-    function detailHost(hidx) {
-        let checkIn = sessionStorage.getItem('startDate');
-        let checkOut = sessionStorage.getItem('endDate');
-        let person = sessionStorage.getItem('people');
-        window.location.href = `/search/detail-host?id=${hidx}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
-    }
 
-    function reset(){
-        //경고창
-        if(confirm("검색 조건을 초기화 하시겠 습니까?")){
-            let hCate = document.querySelector('input[name="hCate"]:checked');
-            let keyword = sessionStorage.getItem('keyword');
-            let checkIn = sessionStorage.getItem('startDate');
-            let checkOut = sessionStorage.getItem('endDate');
-            let person = sessionStorage.getItem('people');
-            if(hCate.value === 'all'){
-                window.location.href = "/search/domestic-accommodations?keyword=" + keyword + "&checkIn=" + checkIn + "&checkOut=" + checkOut + "&person=" + person;
-            }
-            if (hCate.value !== 'all') {
-                window.location.href = "/search/domestic-accommodations?keyword=" + keyword + "&checkIn=" + checkIn + "&checkOut=" + checkOut + "&person=" + person + "&hCate=" + hCate.value;
-            }
-        }
-    }
+
+
 </script>
 </body>
 </html>

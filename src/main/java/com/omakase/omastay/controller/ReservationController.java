@@ -223,7 +223,7 @@ public class ReservationController {
     @GetMapping("/noReservation")
     public ModelAndView noReservation() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("/reservation/no_login");
+        mv.setViewName("reservation/no_login");
         return mv;
     }
 

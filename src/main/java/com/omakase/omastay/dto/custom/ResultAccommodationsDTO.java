@@ -20,9 +20,11 @@ public class ResultAccommodationsDTO {
     @JsonProperty("hname")
     private String hName;
 
+    //하루 가격 문자열
     @JsonProperty("oneDayPrice")
-    private String oneDayPrice; //평균 가격
+    private String oneDayPrice;
 
+    //일일 가격 인트형
     private Integer price;
 
     @JsonProperty("xaxis")
