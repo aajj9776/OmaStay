@@ -93,35 +93,34 @@
           <div class="flex justify-center mt-4">
             <div class="swiper-pagination"></div>
           </div>
-        </div>
       </section>
 
       <section class="column2 container px-4 py-10 max-w-[1200px] mx-auto">
         <b class="text-2xl font-bold mb-6 block">국내 인기 여행지</b>
         <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img
-                alt=""
-                class="w-full h-auto rounded-lg cursor-pointer"
-                loading="lazy"
-                src="/image/index/jeju.png"
-              />
-              <div class="div8 mt-2">
-                <div class="font-medium">제주도</div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <img
-                alt=""
-                class="w-full h-auto rounded-lg cursor-pointer"
-                loading="lazy"
-                src="/image/index/seoul.png"
-              />
-              <div class="mt-2">
-                <div class="div8 font-medium">서울</div>
-              </div>
-            </div>
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img
+                            alt=""
+                            class="w-full h-auto rounded-lg cursor-pointer"
+                            loading="lazy"
+                            src="/image/index/jeju.png"
+                    />
+                    <div class="div8 mt-2">
+                        <div class="font-medium">제주도</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <img
+                            alt=""
+                            class="w-full h-auto rounded-lg cursor-pointer"
+                            loading="lazy"
+                            src="/image/index/seoul.png"
+                    />
+                    <div class="mt-2">
+                        <div class="div8 font-medium">서울</div>
+                    </div>
+                </div>
 
             <div class="swiper-slide">
               <img
@@ -518,14 +517,14 @@
         });
 
         document.querySelectorAll(".column4 .swiper-slide").forEach((slide) => {
-          slide.addEventListener("click", function () {
-            const hIdx = this.getAttribute("data-id"); // 클릭된 요소의 hIdx 가져오기
-            const today = moment().format("MM/DD");
-            const tomorrow = moment().add(1, "days").format("MM/DD");
-            const dateRange = `${today} ~ ${tomorrow} (1박 2일)`;
-            const startDate = moment().toISOString();
-            const endDate = moment().add(1, "days").toISOString();
-            const people = "2";
+            slide.addEventListener("click", function () {
+                const hIdx = this.getAttribute("data-id"); // 클릭된 요소의 hIdx 가져오기
+                const today = moment().format("MM/DD");
+                const tomorrow = moment().add(1, "days").format("MM/DD");
+                const dateRange = `${today} ~ ${tomorrow} (1박 2일)`;
+                const startDate = moment().format("YYYY-MM-DD");
+                const endDate = moment().add(1, "days").format("YYYY-MM-DD");
+                const people = "2";
 
             // 세션 스토리지에 고정값 저장
             sessionStorage.setItem(
@@ -639,8 +638,8 @@
           const dateRange = dateInput.value.split(" ~ ");
           const startDate = moment(dateRange[0], "MM/DD");
           const endDate = moment(dateRange[1].split(" ")[0], "MM/DD");
-          const formattedStartDate = startDate.toISOString();
-          const formattedEndDate = endDate.toISOString();
+          const formattedStartDate = startDate.format("YYYY-MM-DD");
+          const formattedEndDate = endDate.format("YYYY-MM-DD");
 
           sessionStorage.setItem("date", dateInput.value);
           sessionStorage.setItem("startDate", formattedStartDate);
@@ -662,12 +661,13 @@
           keywordInput.value = keyword;
 
           sessionStorage.setItem("keyword", keyword);
+            sessionStorage.setItem("keyword", keyword);
 
-          const dateRange = dateInput.value.split(" ~ ");
-          const startDate = moment(dateRange[0], "MM/DD");
-          const endDate = moment(dateRange[1].split(" ")[0], "MM/DD");
-          const formattedStartDate = startDate.toISOString();
-          const formattedEndDate = endDate.toISOString();
+            const dateRange = dateInput.value.split(" ~ ");
+            const startDate = moment(dateRange[0], "MM/DD");
+            const endDate = moment(dateRange[1].split(" ")[0], "MM/DD");
+            const formattedStartDate = startDate.format("YYYY-MM-DD");
+            const formattedEndDate = endDate.format("YYYY-MM-DD");
 
           sessionStorage.setItem("date", dateInput.value);
           sessionStorage.setItem("startDate", formattedStartDate);
