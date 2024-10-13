@@ -62,16 +62,22 @@ public class MemberService {
     //구글 로그인
     private final String googleclientId = "590469886146-me4vl0oobgapgs954olc073nj4d771hk.apps.googleusercontent.com" ;  //구글 클라이언트 ID
     private final String googleclientSecret = "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";    //구글 클라이언트 시크릿
-    private final String googleredirectUri= "http://omastay.duckdns.org/login/google/callback";  //구글 콜백 URL
+    private final String googleredirectUri= "https://omastay.duckdns.org/login/google/callback";  //구글 콜백 URL
+    //구글은 http가 안되서 https만 됩니다.......
 
     private final String clientId = "GJiDqqCVffs4XRqv94HT";  // 네이버 클라이언트 ID
     private final String clientSecret = "LvLkyp2ryM";  // 네이버 클라이언트 시크릿
     private final String redirectUri = "http://omastay.duckdns.org/login/naver/callback";  // 네이버 콜백 URL
 
+    
     private final String kakaoclientId ="b37b15fa5576e0a1fcdde58b551288f2";
     private final String kakaoclientSecret ="fPofDsf9V7MwD2ue5gO7ZcWiEvR0D5fv";
     private final String kakaoredirectUri ="http://omastay.duckdns.org/login/kakao/callback";
 
+    //private final String kakaoclientId ="56a031709958ad05dfa47275d428993b";
+    //private final String kakaoclientSecret ="6x6DELwdDqGc06LpRceZWNPL6LJ73Db8";
+    //private final String kakaoredirectUri ="http://localhost:9090/login/kakao/callback";
+    //테스트용
     //카카오 로그인 시작
     public String getKakaoLoginUrl() throws UnsupportedEncodingException{
         String state = "random_state";  // 보안을 위해 랜덤 상태 값 생성

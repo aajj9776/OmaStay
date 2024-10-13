@@ -486,12 +486,12 @@ function startTimer() {
         var memYear = document.getElementById("inputyear").value.trim();
         var memMonth = document.getElementById("inputmonth").value.trim();
         var memDay = document.getElementById("inputday").value.trim();
-        var gender = document.querySelector('input[name="gender"]:checked');
+        var gender = document.querySelector('input[name="gender"]:checked');  //trim제거
         var phone = document.getElementById("mem_phone").value.trim();
         var postCode = document.getElementById("mempostcode").value.trim();
         var street = document.getElementById("memstreet").value.trim();
         var detail = document.getElementById("memdetail").value.trim();
-        var emailSubscription = document.querySelector('input[name="email_subscription"]:checked');
+        var emailSubscription = document.querySelector('input[name="email_subscription"]:checked'); //trim제거
         var memBirth = memYear + "-" + memMonth + "-" + memDay;
 
         if (!memEmail) {
