@@ -1147,7 +1147,7 @@
         }
 
         let successUrl =
-          window.location.origin + "reservation/payment_success" + url;
+          window.location.origin + "/reservation/payment_success" + url;
 
         // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
         // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
@@ -1160,7 +1160,7 @@
           orderId: orderNumber, // 고유 주분번호
           orderName: roomName, //방이름
           successUrl: successUrl, // 결제 요청이 성공하면 리다이렉트되는 URL
-          failUrl: window.location.origin + "reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
+          failUrl: window.location.origin + "/reservation/payment_fail", // 결제 요청이 실패하면 리다이렉트되는 URL
           customerEmail: resEmail, //회원 이메일
           customerName: resName, //회원이름
           customerMobilePhone: "01012341234", //회원전화번호
