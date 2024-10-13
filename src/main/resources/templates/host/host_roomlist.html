@@ -223,7 +223,6 @@
               },
               success: function (data) {
       
-                console.log(data);
                 var table = $('#listTable').DataTable();
                 table.clear();
                 table.rows.add(data.list).draw(); // data.list를 사용하여 데이터 갱신
@@ -257,8 +256,6 @@
                 data: { ids: selectedIds },
               }).done(function (response) {
                 alert("삭제가 완료되었습니다.");
-      
-                console.log(response);
       
                 $('#listTable').DataTable().ajax.reload();
       
