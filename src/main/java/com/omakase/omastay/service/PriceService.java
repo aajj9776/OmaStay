@@ -95,7 +95,7 @@ public class PriceService {
     }
 
 
-    public String calculateAveragePrice(Integer id, Integer roomIdx, LocalDate checkIn, LocalDate checkOut) {
+    public  Map<String, String> calculateAveragePrice(Integer id, Integer roomIdx, LocalDate checkIn, LocalDate checkOut) {
         List<Price> prices = priceRepository.findPricesForRoom(id, roomIdx, checkIn, checkOut);
     
         // 숙박 총 일수 계산 (체크인과 체크아웃 간의 차이)
@@ -135,14 +135,21 @@ public class PriceService {
     
             // 총 가격 계산
             totalPrice += peakPrice + semiPrice + regularPrice;
+            System.out.println("총액"+totalPrice);
         }
     
         double averagePrice = totalPrice / totalDays;
     
-        long finalPrice = (long) Math.floor(averagePrice); 
-    
         DecimalFormat decimalFormat = new DecimalFormat("#,###"); 
-        return decimalFormat.format(finalPrice);
+        String formattedTotalPrice = decimalFormat.format((long) Math.floor(totalPrice));
+        String formattedAveragePrice = decimalFormat.format((long) Math.floor(averagePrice));
+
+        // 총 가격과 평균 가격을 반환
+        Map<String, String> priceResult = new HashMap<>();
+        priceResult.put("totalPrice", formattedTotalPrice);
+        priceResult.put("averagePrice", formattedAveragePrice);
+
+        return priceResult;
     }
     
 
