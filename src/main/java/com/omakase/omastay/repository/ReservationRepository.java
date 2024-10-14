@@ -44,6 +44,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r FROM Reservation r LEFT JOIN FETCH Sales s ON r.id = s.reservation.id WHERE r.startEndVo.end < :yesterday AND s.id IS NULL")
     List<Reservation> findExpiredReservationsNotInSale(@Param("yesterday") LocalDateTime yesterday);
 
+    // 모든 예약 중 Sale 테이블에 없는 예약의 ID를 조회
+    @Query("SELECT r FROM Reservation r LEFT JOIN FETCH Sales s ON r.id = s.reservation.id WHERE r.startEndVo.end < :today AND s.id IS NULL")
+    List<Reservation> findAllExpiredReservationsNotInSale(@Param("today") LocalDateTime today);
+
     @Query("SELECT r FROM Reservation r WHERE r.roomInfo.id = :roomInfo AND ((r.startEndVo.start < :end AND r.startEndVo.end > :start)) AND r.resStatus = :status")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Reservation> checkSameRoom(@Param("roomInfo") int roomInfo, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end,  @Param("status") ResStatus status);
