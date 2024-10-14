@@ -139,77 +139,96 @@ public class ReviewController {
     @RequestMapping("/review_list")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> allReviewList(@RequestParam(value = "sort", defaultValue = "최신순") String sortOption, @RequestParam("hIdx") Integer hIdx) {
-           System.out.println("호텔번호 잘 들어오냐"+hIdx);
-            List<Review> reviewList = reviewService.findAllReview(sortOption,hIdx); 
-            List<ReviewCommentDTO> allReviewCommentList = reviewCommentService.findAllReviewComment(); 
-            List<Map<String, Object>> responseList = new ArrayList<>();
-
-            List<ReviewDTO> reviewImages = reviewService.getAllReviewImages(hIdx);
-            
-            for (Review review : reviewList) {
-                ReviewDTO reviewDTO = new ReviewDTO();
-                reviewDTO.setRevContent(review.getRevContent());
-                reviewDTO.setRevRating(review.getRevRating());
-                reviewDTO.setMemIdx(review.getMember().getId()) ;
-                reviewDTO.setResIdx(review.getReservation().getId()); 
-                reviewDTO.setHIdx(review.getHostInfo().getId());
-                reviewDTO.setRevDate(review.getRevDate());
-                reviewDTO.setId(review.getId());
-
-                MemberDTO memberDTO = new MemberDTO();
-                memberDTO.setMemName(review.getMember().getMemName()); 
-
-                RoomInfoDTO roomInfoDTO = new RoomInfoDTO();
-                roomInfoDTO.setRoomName(review.getReservation().getRoomInfo().getRoomName());
-
-                HostInfoDTO hostInfoDTO = new HostInfoDTO();
-                hostInfoDTO.setHname(review.getHostInfo().getHname());
-
-                ReservationDTO reservationDTO = new ReservationDTO();
-                reservationDTO.setMemIdx(review.getMember().getId());
-
-                GradeDTO gradeDTO = new GradeDTO();
-                gradeDTO.setGCate(review.getMember().getGrade().getGCate());
-
-                Integer revIdx = review.getId();
-                List<ReviewCommentDTO> matchedReviewCommentList = new ArrayList<>(); 
-        
-                for (ReviewCommentDTO comment : allReviewCommentList) {
-                    if (comment.getRevIdx().equals(revIdx)) { 
-                        matchedReviewCommentList.add(comment); 
-                    }
+        System.out.println("호텔번호 잘 들어오냐" + hIdx);
+    
+        // 리뷰 리스트 가져오기
+        List<Review> reviewList = reviewService.findAllReview(sortOption, hIdx);
+        List<ReviewCommentDTO> allReviewCommentList = reviewCommentService.findAllReviewComment(); 
+        List<Map<String, Object>> responseList = new ArrayList<>();
+    
+        // 리뷰 이미지 리스트와 추천 데이터 가져오기
+        List<ReviewDTO> reviewImages = reviewService.getAllReviewImages(hIdx);
+        List<Object[]> goodList = reviewService.getGoodStatus(hIdx); // Object[] -> goodCount 포함
+    
+        // 추천수를 매핑하기 위한 맵 생성 (key: reviewId, value: goodCount)
+        Map<Integer, Long> goodCountMap = new HashMap<>();
+        for (Object[] result : goodList) {
+            Integer reviewId = (Integer) result[0];
+            Long goodCount = (Long) result[1];
+            goodCountMap.put(reviewId, goodCount);  // 리뷰 ID로 추천수 맵핑
+        }
+    
+        for (Review review : reviewList) {
+            ReviewDTO reviewDTO = new ReviewDTO();
+            reviewDTO.setRevContent(review.getRevContent());
+            reviewDTO.setRevRating(review.getRevRating());
+            reviewDTO.setMemIdx(review.getMember().getId());
+            reviewDTO.setResIdx(review.getReservation().getId());
+            reviewDTO.setHIdx(review.getHostInfo().getId());
+            reviewDTO.setRevDate(review.getRevDate());
+            reviewDTO.setId(review.getId());
+    
+            MemberDTO memberDTO = new MemberDTO();
+            memberDTO.setMemName(review.getMember().getMemName());
+    
+            RoomInfoDTO roomInfoDTO = new RoomInfoDTO();
+            roomInfoDTO.setRoomName(review.getReservation().getRoomInfo().getRoomName());
+    
+            HostInfoDTO hostInfoDTO = new HostInfoDTO();
+            hostInfoDTO.setHname(review.getHostInfo().getHname());
+    
+            ReservationDTO reservationDTO = new ReservationDTO();
+            reservationDTO.setMemIdx(review.getMember().getId());
+    
+            GradeDTO gradeDTO = new GradeDTO();
+            gradeDTO.setGCate(review.getMember().getGrade().getGCate());
+    
+            Integer revIdx = review.getId();
+            List<ReviewCommentDTO> matchedReviewCommentList = new ArrayList<>();
+    
+            // 리뷰 코멘트 매칭
+            for (ReviewCommentDTO comment : allReviewCommentList) {
+                if (comment.getRevIdx().equals(revIdx)) {
+                    matchedReviewCommentList.add(comment);
                 }
-             
-                List<String> imagePaths = new ArrayList<>();
-                for (ReviewDTO reviewDtoImg : reviewImages) {
-                    if (reviewDtoImg.getId() == review.getId()){ // rev_idx가 같은 경우
-                        if (reviewDtoImg.getRevFileImageNameVo() != null && reviewDtoImg.getRevFileImageNameVo().getFName() != null) {
-                            String[] fileNames = reviewDtoImg.getRevFileImageNameVo().getFName().split(","); // 콤마로 파일명을 분리
-                            for (String fileName : fileNames) {
-                                String reviewImg = uploadPath + "review/" + fileName;
-                                imagePaths.add(reviewImg);  // 각 파일 경로를 리스트에 저장
-                            }
+            }
+    
+            // 리뷰 이미지 처리
+            List<String> imagePaths = new ArrayList<>();
+            for (ReviewDTO reviewDtoImg : reviewImages) {
+                if (reviewDtoImg.getId() == review.getId()) {
+                    if (reviewDtoImg.getRevFileImageNameVo() != null && reviewDtoImg.getRevFileImageNameVo().getFName() != null) {
+                        String[] fileNames = reviewDtoImg.getRevFileImageNameVo().getFName().split(",");
+                        for (String fileName : fileNames) {
+                            String reviewImg = uploadPath + "review/" + fileName;
+                            imagePaths.add(reviewImg);
                         }
                     }
                 }
-
-                Map<String, Object> response = new HashMap<>();
-                response.put("review", reviewDTO);
-                response.put("member", memberDTO);
-                response.put("hostinfo",hostInfoDTO);
-                response.put("room", roomInfoDTO);
-                response.put("grade",gradeDTO);
-                response.put("reservation", reservationDTO);
-                response.put("reviewImages", imagePaths); 
-                response.put("reviewComment", matchedReviewCommentList.isEmpty() ? null : matchedReviewCommentList); 
-                responseList.add(response); 
             }
-        
+    
+            // goodCount 가져오기 (없으면 0)
+            Long goodCount = goodCountMap.getOrDefault(revIdx, 0L);
+    
             Map<String, Object> response = new HashMap<>();
-            response.put("reviewList", responseList); 
-        
-            return ResponseEntity.ok(response);
+            response.put("review", reviewDTO);
+            response.put("member", memberDTO);
+            response.put("hostinfo", hostInfoDTO);
+            response.put("room", roomInfoDTO);
+            response.put("grade", gradeDTO);
+            response.put("reservation", reservationDTO);
+            response.put("reviewImages", imagePaths);
+            response.put("goodCount", goodCount);  // 추천 수 추가
+            response.put("reviewComment", matchedReviewCommentList.isEmpty() ? null : matchedReviewCommentList);
+    
+            responseList.add(response);
         }
+    
+        Map<String, Object> response = new HashMap<>();
+        response.put("reviewList", responseList);
+    
+        return ResponseEntity.ok(response);
+    }
     
     
     //review 모달창 띄우기
