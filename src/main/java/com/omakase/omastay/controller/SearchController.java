@@ -105,21 +105,24 @@ public class SearchController {
             List<RoomInfoDTO> availableRooms = roomInfoService.getAvailableRooms(hIdx, startDate, endDate, person);
             System.out.println("일치하는 방 잘 나오냐"+availableRooms);
             Map<Integer, String> roomPrices = new HashMap<>();
+            Map<Integer, String> totalPrices = new HashMap<>();  // 총 가격을 담을 Map
 
-            List<Integer> reservationList = reservationService.getMemIdxListByHIdx(hIdx);
-            System.out.println("일치하는 멤버"+reservationList);
-            
             for (RoomInfoDTO roomDto : availableRooms) {
                 Integer roomIdx = roomDto.getId();  // 방 ID 추출
                 System.out.println("방 번호: " + roomIdx);
                 
                 // 방 번호에 맞는 평균 가격 계산
-                String averagePrice = priceService.calculateAveragePrice(hIdx, roomIdx, startDate, endDate);
+                Map<String, String> priceMap = priceService.calculateAveragePrice(hIdx, roomIdx, startDate, endDate);
                 
                 
                 // 방 번호와 계산된 가격을 Map에 저장
-                roomPrices.put(roomIdx, averagePrice);
+                String averagePrice = priceMap.get("averagePrice");
+                String totalPrice = priceMap.get("totalPrice");
                 System.out.println("방 번호: " + roomIdx + "의 평균 가격: " + averagePrice);
+                System.out.println("방 번호: " + roomIdx + "의 총 가격: " + totalPrice);
+
+                roomPrices.put(roomIdx, averagePrice);
+                totalPrices.put(roomIdx, totalPrice);  
             }
             
            
@@ -182,6 +185,7 @@ public class SearchController {
             model.addAttribute("matchImages", roomImageMap);
             model.addAttribute("allRoom", allRoomList);
             model.addAttribute("reviewStats", reviewStats);
+            model.addAttribute("totalPrices", totalPrices);
             model.addAttribute("includeSearchBar", true);
             
         
@@ -195,7 +199,7 @@ public class SearchController {
                                @RequestParam(name = "checkIn") String checkIn,
                                @RequestParam(name = "checkOut") String checkOut,
                                @RequestParam(name = "page", defaultValue = "1") int page,
-                               @RequestParam(name = "size", defaultValue = "1") int size)
+                               @RequestParam(name = "size", defaultValue = "10") int size)
     {
         // Validation error 존재시 처리
    
@@ -210,7 +214,9 @@ public class SearchController {
         // StartEndVo 객체 생성 후 FilterDTO에 설정
         search.setStartEndDay(new StartEndVo(checkInDateTime, checkOutDateTime));
 
-        System.out.println("서치: "  + search);
+        if(Objects.equals(search.getKeyword(), "제주도")){
+            search.setKeyword("제주");
+        }
 
         Pageable pageable = PageRequest.of(page - 1, size);
         AccommodationResponseDTO accommodationResponseDTO = facilitiesService.search(search, pageable, false);

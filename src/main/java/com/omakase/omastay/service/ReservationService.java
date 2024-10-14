@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
+
 
 import com.omakase.omastay.dto.NonMemberDTO;
 import com.omakase.omastay.dto.PaymentDTO;
@@ -33,7 +35,6 @@ import com.omakase.omastay.mapper.ReservationMapper;
 import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.PaymentRepository;
 import com.omakase.omastay.repository.ReservationRepository;
-import com.omakase.omastay.vo.StartEndVo;
 
 import jakarta.transaction.Transactional;
 
@@ -56,8 +57,7 @@ public class ReservationService {
          List<Reservation> checkRoom = reservationRepository.checkSameRoom(
             res.getRoomInfo().getId(), 
             res.getStartEndVo().getStart(), 
-            res.getStartEndVo().getEnd(),
-            ResStatus.CONFIRMED
+            res.getStartEndVo().getEnd()
         );
 
         if (checkRoom != null && checkRoom.size() > 0 ){
@@ -114,10 +114,13 @@ public class ReservationService {
     public ReservationDTO insertNonMemberReservationInfo(ReservationDTO reservationDTO, PaymentDTO paymentDTO, NonMemberDTO noMember) {
         Reservation res = ReservationMapper.INSTANCE.toReservation(reservationDTO);
         res.setMember(null);
-
+        System.out.println("비회원정보" + noMember);
+        
         NonMember nonMember = new NonMember();
         nonMember.setId(noMember.getId());
         res.setNonMember(nonMember);
+        res.setResName(noMember.getNonName());
+        res.setResEmail(noMember.getNonEmail());
 
         
         res.setResPrice(Integer.parseInt(paymentDTO.getAmount()));
@@ -367,8 +370,10 @@ public class ReservationService {
         return ReservationMapper.INSTANCE.toReservationDTO(reservationRepository.findByResNumAndNonEmail(resNum, nonEmail));
     }
 
-    public List<Integer> getMemIdxListByHIdx(Integer hIdx) {
-        return reservationRepository.findMemIdxByHIdx(hIdx);
+    public List<ReservationDTO> getMemIdxListByHIdx(Integer memIdx, Integer hIdx) {
+        return reservationRepository.findSingleByMemIdxAndHIdx(hIdx,memIdx);
     }
 
+   
+  
 }

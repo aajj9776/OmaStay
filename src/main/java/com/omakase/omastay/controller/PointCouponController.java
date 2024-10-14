@@ -32,9 +32,10 @@ public class PointCouponController {
         Map<String, Object> map = new HashMap<>();
         
         List<IssuedCouponDTO> coupon = issuedCouponService.getCouponPoint(member.getId());
-        
-        System.out.println("쿠폰" + coupon);
-        map.put("coupon", coupon);
+        if( coupon != null && coupon.size() > 0){
+            System.out.println("쿠폰" + coupon);
+            map.put("coupon", coupon);
+        } 
         
         return map;
     }
@@ -61,9 +62,14 @@ public class PointCouponController {
 
         List<PointDTO> point = pointService.getPoint(id);
         Integer sum = pointService.getSumPoint(id);
-        System.out.println("포인트 내역" + point);
-        map.put("point", point);
-        map.put("sum", sum);
+        if(point != null && point.size() > 0){
+            System.out.println("포인트 내역" + point);
+            System.out.println("최종값" + sum);
+            map.put("point", point);
+            map.put("sum", sum);
+        } else {
+            map.put("point", false);
+        }
 
         return map;
     }

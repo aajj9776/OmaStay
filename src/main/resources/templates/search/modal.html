@@ -28,13 +28,13 @@
                     class="self-stretch overflow-y-auto shrink-0 flex flex-row items-start justify-start max-w-full mq450:h-auto"
             >
                 <div
-                        class="flex-1 overflow-hidden flex flex-col items-start justify-start pt-[22px] pl-[27px] pr-[8px] box-border max-w-full lg:pt-[20px] lg:box-border mq750:pb-[304px] mq750:box-border"
+                        class="flex-1 overflow-hidden flex flex-col items-start justify-start pt-[22px] pl-[10px] box-border max-w-full lg:pt-[20px] lg:box-border mq750:pb-[304px] mq750:box-border"
                 >
                     <b class="w-[320px] relative text-[12.2px] flex font-[Roboto] text-[#999] items-center z-[1]"
                        id="keyword_value_modal"
                     >???
                     </b>
-                    <div id="accommodationModal-container">
+                    <div id="accommodationModal-container" class="custom-width">
                         <div th:each="accommodation : ${accommodations}"
                              >
                             <div th:id="'modalCard' + ${accommodation.hIdx}"
@@ -49,13 +49,13 @@
                                 />
 
                                 <div
-                                        class="flex-1 overflow-hidden flex flex-col items-start justify-start gap-[86px] min-w-[146px]"
+                                        class="flex-1 overflow-hidden flex flex-col items-start justify-start gap-[86px]"
                                 >
                                     <div
                                             class="self-stretch flex flex-row items-start justify-start py-[0px] pl-[20px] pr-[0px]"
                                     >
                                         <div
-                                                class="flex-1 flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1"
+                                                class="flex flex-col items-start justify-start pt-[0px] px-[0px] pb-[4px] mq450:flex-1 max-w-full"
                                         >
                                             <div
                                                     class="self-stretch flex flex-col items-start justify-start gap-[4px]"
@@ -79,10 +79,9 @@
                                                     <div
                                                             class="self-stretch flex flex-col items-start justify-start text-[16.9px] text-[#333]"
                                                     >
-                                                        <b class="self-stretch relative"
+                                                        <b class="self-stretch relative break-words whitespace-normal"
                                                            th:text="${accommodation.HName}"
-                                                        >강릉 라임비치 스파 펜션</b
-                                                        >
+                                                        >강릉 라임비치 스파 펜션</b>
                                                     </div>
                                                 </div>
                                                 <div
@@ -136,14 +135,13 @@
                                         >
                                             <div class="flex flex-col items-start justify-start">
                                                 <div class="flex flex-col items-end justify-start">
-                                                    <div th:if="${accommodation.oneDayPrice == null}">
+                                                    <div th:if="${accommodation.soldOut}"
                                                         class="relative font-medium inline-block min-w-[74px]
-                                                        whitespace-nowrap"
-                                                        >
+                                                        whitespace-nowrap">
                                                         다른 날짜 확인
                                                     </div>
                                                     <div class="self-stretch flex flex-row items-end justify-start"
-                                                         th:if="${accommodation.oneDayPrice}"
+                                                         th:if="!${accommodation.soldOut}"
                                                     >
                                                         <b class="relative inline-block min-w-[80px] text-[16px] font-bold text-[#333]"
                                                            th:text="${accommodation.oneDayPrice}">

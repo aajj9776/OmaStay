@@ -137,6 +137,19 @@
           </div>
         </button>
         <button
+        id="goNoReservationInfo"
+        class="rounded-[10px] bg-[#5f84a2] flex flex-row items-start justify-start py-[14px] px-[11px] whitespace-nowrap"
+        type="button"
+        onclick="goNoReservationInfo()"
+      >
+        <div
+          class="relative leading-[19.09px] font-semibold inline-block min-w-[97px] whitespace-nowrap"
+        >
+          비회원 예약 확인
+        </div>
+      </button>
+        <button
+          id="goReservationInfo"
           class="rounded-[10px] bg-[#5f84a2] flex flex-row items-start justify-start py-[14px] px-[11px] whitespace-nowrap"
           type="button"
           onclick="goReservationInfo()"
@@ -211,6 +224,16 @@
       }
 
       $(function () {
+
+        if( user != null ){
+          $("#goNoReservationInfo").addClass("hidden");
+          $("#goReservationInfo").removeClass("hidden");
+        } else {
+          $("#goNoReservationInfo").removeClass("hidden");
+          $("#goReservationInfo").addClass("hidden");
+        }
+
+
         // 각 요소에 값 설정
         $("#orderIdPlace").text(orderId);
         $("#room").text(roomName);
@@ -233,6 +256,10 @@
 
       function goReservationInfo() {
         window.location.href = "/mypage/reservation?id=" + user.id;
+      }
+
+      function goNoReservationInfo() {
+        window.location.href = "/reservation/noReservation";
       }
     </script>
   </body>

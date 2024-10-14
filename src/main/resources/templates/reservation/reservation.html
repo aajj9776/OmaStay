@@ -339,7 +339,7 @@
                         class="text-gray-800 font-bold text-3xl"
                         id="totalPoints"
                       >
-                        1,650 P
+                        0 p
                       </p>
                     </div>
 
@@ -608,7 +608,7 @@
                     type="text"
                     id="point_discount"
                     class="text-right w-full max-w-[100px] bg-white border-none outline-none px-[10px] text-[15px] leading-[24px] text-[#388e3c] mq450:text-[16px] mq450:leading-[19px]"
-                    value="0"
+                    value=""
                     readonly
                   />
                   <div
@@ -685,7 +685,6 @@
       console.log(checkInParam + "명")
       console.log(checkOutParam + "명")
 
-
       let person = $("#person").text(personParam);
       let checkIn = $("#checkIn").text(formatDate(checkInParam));
       let checkOut = $("#checkOut").text(formatDate(checkOutParam));
@@ -707,7 +706,6 @@
       let usePoints = 0; // 사용할 포인트를 위한 변수
       let couponPrice = 0; // 쿠폰 할인 금액을 위한 변수
       let sum; // 포인트 총합을 위한 변수
-
 
       function formatDate(dateString) {
         return dateString.slice(0, 10); // 앞에서부터 10글자만 자름 (YYYY-MM-DD 형식)
@@ -818,32 +816,36 @@
           let totalPoint = $("#totalPoints");
           pointList.empty();
           console.log(data.point);
-          for (let i = 0; i < data.point.length; i++) {
-            console.log(data.point[i].pcontent);
-            let point = data.point[i];
-            let formattedDate = point.pdate.slice(0, 10);
-            let value = point.pvalue;
-            sum = data.sum;
-
-            let pointSign = "+";
-            let pointValueClass = "text-green-500 font-bold";
-
-            if (value < 0) {
-              pointValueClass = "text-red-500 font-bold"; // 글자색을 빨간색으로 변경
-              pointSign = ""; // 부호를 빈 문자열로 설정
-            }
-
-            let pointItem = `<li class="flex justify-between items-center p-4 bg-white rounded-lg shadow-md mb-3">
+          if(data.point != false ){
+            for (let i = 0; i < data.point.length; i++) {
+              console.log(data.point[i].pcontent);
+              let point = data.point[i];
+              let formattedDate = point.pdate.slice(0, 10);
+              let value = point.pvalue;
+              sum = data.sum;
+              
+              let pointSign = "+";
+              let pointValueClass = "text-green-500 font-bold";
+              
+              if (value < 0) {
+                pointValueClass = "text-red-500 font-bold"; // 글자색을 빨간색으로 변경
+                pointSign = ""; // 부호를 빈 문자열로 설정
+              }
+              
+              let pointItem = `<li class="flex justify-between items-center p-4 bg-white rounded-lg shadow-md mb-3">
                               <div class="flex flex-col">
                                 <span class="font-medium text-gray-800">${point.pcontent}</span>
                                 <span class="text-sm text-gray-500">${formattedDate}</span>
-                              </div>
-                              <div class="${pointValueClass}">
-                                ${pointSign}  ${value} P
-                              </div>
-                            </li>`;
-            pointList.append(pointItem);
-            totalPoint.text(`${sum} P`);
+                                </div>
+                                <div class="${pointValueClass}">
+                                  ${pointSign}  ${value} P
+                                  </div>
+                                  </li>`;
+                                  pointList.append(pointItem);
+                                  totalPoint.text(`${sum} P`);
+                                } 
+          } else {
+            alert("보유중인 포인트가 없습니다")
           }
         });
       });
@@ -963,7 +965,7 @@
         }
 
         $.ajax({
-          url: "/reservation/emailCheck",
+          url: "reservation/emailCheck",
           type: "POST",
           data: {
             code: code,
@@ -1021,7 +1023,7 @@
         }
 
         $.ajax({
-          url: "/reservation/sendEmail",
+          url: "reservation/sendEmail",
           type: "POST",
           data: {
             email: email,
@@ -1132,14 +1134,16 @@
           "&roomName=" +
           encodeURIComponent(roomName)
           
-          
-          
         if(couponId > 0 ){
           url += "&couponId=" + encodeURIComponent(couponId)
         }
 
         if( couponPrice > 0){
-          url += "&payCoupon=" + encodeURIComponent(couponPrice) + "&payPoint=" + encodeURIComponent(usePoints)
+          url += "&payCoupon=" + encodeURIComponent(couponPrice)
+        }
+
+        if( usePoints > 0){
+          url += "&payPoint=" + encodeURIComponent(usePoints)
         }
 
         if (user != null) {

@@ -346,7 +346,7 @@
                   data: {id: id},
                   success: function (data) {
                       var cnt = data;
-                      console.log(cnt);
+
                       if (cnt == 0) {
                           $('#id_checkresult').text('사용가능').css('color', 'blue').show();
                           $('#id_check > div > div > div').text('확인완료');
@@ -375,7 +375,6 @@
 
       function sendEmailAndStartTimer() {
       const email = $('#email').val().replace(/\s+/g, '');
-      console.log(email);
 
       if (email === "") {
         alert("이메일을 입력해주세요.");
@@ -413,7 +412,6 @@
       function verifyCode() {
       const email = $('#email').val().replace(/\s+/g, '');
       const code = $('#email_check').val().replace(/\s+/g, '');
-      console.log(code);
 
       if (code === "") {
         alert("인증번호를 입력해주세요.");
@@ -426,7 +424,7 @@
         data: { code: code, email: email },
         success: function(data) {
           data = data.trim();
-          console.log(data);
+
           if (data === "success") {
             alert("인증번호가 일치합니다.");
             sessionStorage.setItem("emailVerified", "true");

@@ -3,17 +3,12 @@ package com.omakase.omastay.service;
 import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.PaymentDTO;
-import com.omakase.omastay.dto.RecommendationDTO;
 import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.SalesDTO;
 import com.omakase.omastay.dto.custom.SalesCustomDTO;
 import com.omakase.omastay.dto.custom.Top5SalesDTO;
-import com.omakase.omastay.dto.RoomInfoDTO;
-import com.omakase.omastay.dto.custom.HostReservationDTO;
 import com.omakase.omastay.dto.custom.HostSalesDTO;
-import com.omakase.omastay.entity.Calculation;
 import com.omakase.omastay.entity.Reservation;
-import com.omakase.omastay.entity.RoomInfo;
 import com.omakase.omastay.entity.Sales;
 import com.omakase.omastay.mapper.HostInfoMapper;
 import com.omakase.omastay.mapper.PaymentMapper;
@@ -22,21 +17,16 @@ import com.omakase.omastay.mapper.SalesMapper;
 import com.omakase.omastay.repository.CalculationRepository;
 import com.omakase.omastay.repository.HostInfoRepository;
 import com.omakase.omastay.repository.PaymentRepository;
-import com.omakase.omastay.mapper.RoomInfoMapper;
 import com.omakase.omastay.repository.ReservationRepository;
 import com.omakase.omastay.repository.SalesRepository;
 
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,17 +39,7 @@ public class SalesService {
 
     @Autowired
     private ReservationRepository reservationRepository;
-
-    @Autowired
-    private CalculationRepository calculationRepository;
-
-    @Autowired
-    private HostInfoRepository hostInfoRepository;
-
-    @Autowired
-    private PaymentRepository paymentRepository;
     
-   
 
     /********** 시간이 어제 기준으로 예약이 사용완료가 되면 체크아웃 다음날 매출 테이블로 들어감 **********/
     // @Transactional 
