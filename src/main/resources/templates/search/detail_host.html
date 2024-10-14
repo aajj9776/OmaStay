@@ -32,45 +32,50 @@
 
     <div class="flex flex-col lg:flex-row items-center justify-center w-full max-w-[1560px] gap-8 px-4 sm:px-6 lg:px-0">
         <!-- 큰 이미지 (hostImages[0]) -->
-        <div class="relative w-full lg:max-w-[640px] h-[546px] mb-8 lg:mb-0 rounded-[12px]" th:if="${hostImages[0] != null}">
+        <div class="relative w-full lg:max-w-[640px] h-[546px] mb-8 lg:mb-0 rounded-[12px]">
             <img alt=""
                  class="absolute inset-0 w-full h-full object-cover rounded-[12px]" 
                  loading="lazy"
-                 th:src="@{|https://storage.googleapis.com/omastay/host/${hostImages[0].imgName.fName}|}" />
+                 th:if="${hostImages != null and hostImages.size() > 1}"
+                 th:src="${hostImages[0] != null} ? @{|https://storage.googleapis.com/omastay/host/${hostImages[0].imgName.fName}|} : @{/image/detail/imagex.png}" />
         </div>
     
         <div class="w-full lg:max-w-[552px] aspect-square grid grid-cols-2 gap-4">
             <!-- 작은 이미지 1 (hostImages[1]) -->
-            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${hostImages[1] != null}">
+            <div class="relative w-full h-[250px] rounded-[12px]">
                 <img alt=""
                      class="absolute inset-0 w-full h-full object-cover rounded-[12px]"
                      loading="lazy"
-                     th:src="@{|https://storage.googleapis.com/omastay/host/${hostImages[1].imgName.fName}|}" />
+                     th:if="${hostImages != null and hostImages.size() > 1}"
+                     th:src="${hostImages[1] != null} ? @{|https://storage.googleapis.com/omastay/host/${hostImages[1].imgName.fName}|} : @{/image/detail/imagex.png}" />
             </div>
     
-            <!-- 작은 이미지 2 (roomImages[0]) -->
-            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${hostImages[2] != null}">
+            <!-- 작은 이미지 2 (hostImages[2]) -->
+            <div class="relative w-full h-[250px] rounded-[12px]">
                 <img alt=""
                      class="absolute inset-0 w-full h-full object-cover rounded-[12px]"
                      loading="lazy"
-                     th:src="@{|https://storage.googleapis.com/omastay/host/${hostImages[2].imgName.fName}|}" />
+                     th:if="${hostImages != null and hostImages.size() > 1}"
+                     th:src="${hostImages[2] != null} ? @{|https://storage.googleapis.com/omastay/host/${hostImages[2].imgName.fName}|} : @{/image/detail/imagex.png}" />
             </div>
     
-            <!-- 작은 이미지 3 (roomImages[1]) -->
-            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${roomImages[0] != null}">
+            <!-- 작은 이미지 3 (roomImages[0]) -->
+            <div class="relative w-full h-[250px] rounded-[12px]">
                 <img alt=""
                      class="absolute inset-0 w-full h-full object-cover rounded-[12px]"
                      loading="lazy"
-                     th:src="@{|https://storage.googleapis.com/omastay/room/${roomImages[0].imgName.fName}|}" />
+                     th:if="${roomImages != null and roomImages.size() > 1}"
+                     th:src="${roomImages[0] != null} ? @{|https://storage.googleapis.com/omastay/room/${roomImages[0].imgName.fName}|} : @{/image/detail/imagex.png}" />
             </div>
     
-            <!-- 작은 이미지 4 + 버튼 (roomImages[2]) -->
-            <div class="relative w-full h-[250px] rounded-[12px]" th:if="${roomImages[1] != null}">
+            <!-- 작은 이미지 4 + 버튼 (roomImages[1]) -->
+            <div class="relative w-full h-[250px] rounded-[12px]">
                 <img alt=""
                      class="absolute inset-0 w-full h-full object-cover rounded-[12px]"
                      loading="lazy"
-                     th:src="@{|https://storage.googleapis.com/omastay/room/${roomImages[1].imgName.fName}|}" />
-                     
+                     th:if="${roomImages != null and roomImages.size() > 1}"
+                     th:src="${roomImages[1] != null} ? @{|https://storage.googleapis.com/omastay/room/${roomImages[1].imgName.fName}|} : @{/image/detail/imagex.png}" />
+    
                 <button id="allPhotoBtn" class="cursor-pointer [border:none] bg-white h-[40px] min-w-[150px] shadow-[0px_2px_8px_rgba(0,_0,_0,_0.24)] rounded-full whitespace-nowrap hover:bg-[#e6e6e6] absolute bottom-4 right-4 font-bold p-0 text-[12px] flex items-center justify-center">
                     <div class="flex items-center justify-start">
                         사진 모두보기 <img alt="" class="h-[16px] w-[16px] mr-2" src="/image/detail/svg.svg"/>
@@ -79,6 +84,7 @@
             </div>
         </div>
     </div>
+    
     
 
     <div id="allPhotomodal" th:each="hostInfo : ${hostInfo}" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] to-50%">
@@ -360,7 +366,7 @@
                                                                 class="flex flex-col items-start justify-end pt-[0px] px-[0px] pb-[1px] text-[17.3px] text-[#333]"
                                                         >
                                                             <div th:text="${roomPrices[room.id]}"
-                                                                    class="relative font-extrabold inline-block min-w-[75.6px] z-[1]" style="left:58px"
+                                                                    class="relative font-extrabold inline-block min-w-[75.6px] z-[1]" style="left:60px"
                                                             >
                                                             </div>
                                                         </div>
@@ -653,7 +659,7 @@
                     상호
                     </div>
                     <div th:text="${host.hname}"
-                    class="ml-[6px]w-[165px] absolute !m-[0] top-[106px] right-[103px] leading-[20px] font-semibold flex items-center z-[1]"
+                    class="ml-[6px]w-[165px] absolute !m-[0] top-[106px] right-[103px] leading-[20px] font-semibold flex items-center z-[1]" style="left: 155px; top: 95px;"
                     >
                     
                     </div>
@@ -663,7 +669,7 @@
                     대표자명
                     </div>
                     <div th:text="${host.hostOwnerInfo.hostName}"
-                    class="w-[45px] absolute !m-[0] top-[160px] right-[159px] leading-[20px] font-semibold flex items-center z-[1]"
+                    class="w-[45px] absolute !m-[0] top-[160px] right-[159px] leading-[20px] font-semibold flex items-center z-[1]" style="left: 158px;"
                     >
                     </div>
                     <div
@@ -672,16 +678,16 @@
                     주소
                     </div>
                     <div th:text="${host.addressVo.street}"
-                    class="absolute !m-[0] top-[214px] right-[116px] leading-[20px] font-semibold inline-block min-w-[83px] z-[3]"
-                    >
+                    class="absolute !m-[0] top-[214px] right-[116px] leading-[20px] font-semibold inline-block min-w-[83px] z-[3] w-[204px]"
+                    style="left: 157px; top: 202px;">
                     </div>
                     <div
                     class="w-[71px] absolute !m-[0] top-[269px] left-[51px] leading-[20px] font-semibold flex items-center z-[4]"
                     >
                     전화번호
                     </div>
-                    <div th:text="${host.hphone}"
-                    class="absolute !m-[0] top-[269px] right-[83px] leading-[20px] font-semibold inline-block min-w-[120px] z-[5]"
+                    <div th:text="${host.hphone}" 
+                    class="absolute !m-[0] top-[269px] right-[83px] leading-[20px] font-semibold inline-block min-w-[120px] z-[5]" style="left: 157px;"
                     >
                     </div>
                     <div 
@@ -722,7 +728,7 @@
                     사업자 번호
                     </div>
                     <div th:text="${host.hphone}"
-                    class="absolute !m-[0] right-[101px] bottom-[168px] leading-[20px] font-semibold inline-block min-w-[103px] z-[9]"
+                    class="absolute !m-[0] right-[101px] bottom-[168px] leading-[20px] font-semibold inline-block min-w-[103px] z-[9]" style="left: 158px;"
                     >
                     </div>
                     </div>
@@ -790,7 +796,7 @@
                         >
                             <ul class="m-[0px] font-[inherit] text-inherit pl-[19px]">
                                 <li th:if="${host.addressVo.detail != null and !#strings.isEmpty(host.addressVo.detail)}" th:text="'-'+${host.addressVo.detail}" class="mb-[0px]"></li>
-                                <li th:text="'-'+${host.directions}" class="mb-[0px]"></li>
+                                <li th:text="'-'+${host.directions}" class="mb-[0px]" style="width: 810px"></li>
                             </ul>
                         </div>
                     </div>
@@ -897,82 +903,6 @@
 
                         </div>
                
-                
-            <div id="reviewPagination"
-
-                class="self-stretch flex flex-row items-start justify-center py-[0px] pl-[20px] pr-[21px] text-center text-[#393939] mb-[100px]"
-        >
-            <div
-                    class="w-[282px] flex flex-row items-start justify-between flex-wrap content-start py-[0px] pl-[0px] pr-[15px] box-border gap-[20px]"
-            >
-                <div
-                        class="flex flex-col items-start justify-start pt-[3px] px-[0px] pb-[0px] text-[25px] text-[#b6b6b6]"
-                >
-                    <h3
-                            class="m-[0px] w-[7.4px] h-[14px] relative text-inherit font-semibold font-[inherit] flex items-center justify-center shrink-0 mq450:text-[20px]"
-                    >
-                        &lt;
-                    </h3>
-                </div>
-                <div
-                        class="h-[20px] rounded-[13px] bg-[#b4d0ef] flex flex-row items-start justify-start  px-[6px]  box-border"
-                >
-                    <div
-                            class="h-[18px] w-[20px] relative rounded-[13px] bg-[#b4d0ef] hidden"
-                    ></div>
-                    <div
-                            class="h-[18px] w-[20px] rounded-full bg-[#b4d0ef] flex flex-row items-center justify-center text-white font-semibold"
-                    >
-                        1
-                    </div>
-                </div>
-                <div
-                        class="flex flex-col items-start justify-start pt-[3px] px-[0px] pb-[0px]"
-                >
-                    <div
-                            class="h-[14px] relative font-semibold flex items-center justify-center shrink-0 min-w-[12px]"
-                    >
-                        2
-                    </div>
-                </div>
-                <div
-                        class="flex flex-col items-start justify-start pt-[3px] px-[0px] pb-[0px]"
-                >
-                    <div
-                            class="h-[14px] relative font-semibold flex items-center justify-center shrink-0 min-w-[12px]"
-                    >
-                        3
-                    </div>
-                </div>
-                <div
-                        class="flex flex-col items-start justify-start pt-[3px] px-[0px] pb-[0px]"
-                >
-                    <div
-                            class="h-[14px] relative font-semibold flex items-center justify-center shrink-0 min-w-[12px]"
-                    >
-                        4
-                    </div>
-                </div>
-                <div
-                        class="flex flex-col items-start justify-start pt-[3px] px-[0px] pb-[0px]"
-                >
-                    <div
-                            class="h-[14px] relative font-semibold flex items-center justify-center shrink-0 min-w-[12px]"
-                    >
-                        5
-                    </div>
-                </div>
-                <div
-                        class="flex flex-col items-start justify-start pt-[3px] px-[0px] pb-[0px] text-[25px]"
-                >
-                    <h3
-                            class="m-[0px] w-[7.4px] h-[14px] relative text-inherit font-semibold font-[inherit] flex items-center justify-center shrink-0 mq450:text-[20px]"
-                    >
-                        &gt;
-                    </h3>
-                </div>
-            </div>
-
             </section>
         </main>
         <link href="/summernote/css/summernote-lite.css" rel="stylesheet">
