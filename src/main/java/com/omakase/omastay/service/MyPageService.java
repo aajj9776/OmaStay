@@ -198,7 +198,6 @@ public class MyPageService {
 
         // DTO 값으로 기존 회원 정보 업데이트
         member.setMemPhone(memberDTO.getMemPhone());
-        member.setMemName(memberDTO.getMemName());
         member.setMemBirth(memberDTO.getMemBirth());
         member.setAddressVo(memberDTO.getAddressVo());
         member.setMemEmailCheck(memberDTO.getMemEmailCheck());
