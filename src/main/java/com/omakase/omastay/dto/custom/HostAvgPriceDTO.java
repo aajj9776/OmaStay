@@ -11,4 +11,10 @@ import lombok.NoArgsConstructor;
 public class HostAvgPriceDTO {
     private Integer hostIdx;
     private Integer avgPrice;
+    private boolean soldOut;
+
+    public HostAvgPriceDTO(Integer id, Integer avgPrice) {
+        this.hostIdx = id;
+        this.avgPrice = avgPrice;
+    }
 }
