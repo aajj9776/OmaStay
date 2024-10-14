@@ -80,11 +80,11 @@
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
           <div class="swiper-wrapper">
-              <div class="swiper-slide" th:each="path : ${path}">
+              <div class="swiper-slide" th:each="event : ${event}">
                 <img
                   class="img"
                   loading="lazy"
-                  th:src="@{${path}}"
+                  th:src="${event.path}"
                   alt="image"
                 />
               </div>
@@ -106,8 +106,8 @@
                             loading="lazy"
                             src="/image/index/jeju.png"
                     />
-                    <div class="div8 mt-2">
-                        <div class="font-medium">제주도</div>
+                    <div class=" mt-2">
+                        <div class="div8 font-medium">제주도</div>
                     </div>
                 </div>
                 <div class="swiper-slide">

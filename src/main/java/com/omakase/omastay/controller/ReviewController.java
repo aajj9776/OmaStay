@@ -33,9 +33,12 @@ import com.omakase.omastay.dto.ReservationDTO;
 import com.omakase.omastay.dto.ReviewCommentDTO;
 import com.omakase.omastay.dto.ReviewDTO;
 import com.omakase.omastay.dto.RoomInfoDTO;
+import com.omakase.omastay.entity.Reservation;
 import com.omakase.omastay.entity.Review;
 import com.omakase.omastay.service.FileUploadService;
 import com.omakase.omastay.service.GoodService;
+import com.omakase.omastay.service.MemberService;
+import com.omakase.omastay.service.ReservationService;
 import com.omakase.omastay.service.ReviewCommentService;
 import com.omakase.omastay.service.ReviewService;
 
@@ -56,50 +59,77 @@ public class ReviewController {
     @Autowired
     private FileUploadService fileUploadService;
 
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private MemberService memberService;
+
     @Value("${upload}")
     private String uploadPath;
 
 
     @PostMapping("/review_insert")
     @ResponseBody
-    public ResponseEntity<Integer> addReview(@RequestParam Map<String, String> params) { 
+    public ResponseEntity<Integer> addReview(@RequestParam Map<String, String> params) {
         System.out.println("들어는 왔니?");
-        System.out.println("param"+params);
-        ReviewDTO reviewDTO = new ReviewDTO();
-        String revContent = params.get("revContent");
-        System.out.println("왜 잘리는거냐"+revContent);
-        String revRatingStr = params.get("revRating"); 
-        float revRating = Float.parseFloat(revRatingStr);
+        System.out.println("param: " + params);
+        
         Integer memIdx = Integer.parseInt(params.get("memIdx"));
         Integer hIdx = Integer.parseInt(params.get("hIdx"));
-
-        reviewDTO.setRevContent(revContent);
-        reviewDTO.setRevRating(revRating);
-        reviewDTO.setMemIdx(memIdx);
-        reviewDTO.setHIdx(hIdx);
-
-       
-        List<String> onames = new ArrayList<>();
-        List<String> fnames = new ArrayList<>();
-
-        for (int i = 0; ; i++) {
-            String onameKey = "oname_" + i;
-            String fnameKey = "fname_" + i;
-
-            if (params.containsKey(onameKey) && params.containsKey(fnameKey)) {
-                onames.add(params.get(onameKey));
-                fnames.add(params.get(fnameKey));
-            } else {
-                break; 
+        MemberDTO memberDTO = memberService.getMember(memIdx);
+    
+        try {
+            // 사용자의 예약 내역에서 최근 예약 건을 가져옴
+            ReservationDTO reservationDTO = reservationService.getMemIdxListByHIdx(memIdx, hIdx);
+            System.out.println("리뷰 작성 가능한 회원: " + reservationDTO);
+            
+            if (reservationDTO == null) {
+                return ResponseEntity.ok(0);  // 예약 내역이 없으면 0 반환
             }
+        
+            ReviewDTO reviewDTO = new ReviewDTO();
+            String revContent = params.get("revContent");
+            System.out.println("왜 잘리는거냐: " + revContent);
+            
+            String revRatingStr = params.get("revRating"); 
+            float revRating = Float.parseFloat(revRatingStr);
            
-        } 
-
-        Integer newRevIdx = reviewService.addReview(reviewDTO, onames, fnames);
-
-        return ResponseEntity.ok(newRevIdx);   
+            reviewDTO.setRevContent(revContent);
+            reviewDTO.setRevRating(revRating);
+            reviewDTO.setMemIdx(memIdx);
+            reviewDTO.setHIdx(hIdx);
+            reviewDTO.setResIdx(reservationDTO.getId());
+            reviewDTO.setRevWriter(memberDTO.getMemName());
+    
+            // 파일 이름들 리스트 생성
+            List<String> onames = new ArrayList<>();
+            List<String> fnames = new ArrayList<>();
+    
+            // 파일 이름들을 파라미터에서 추출
+            for (int i = 0; ; i++) {
+                String onameKey = "oname_" + i;
+                String fnameKey = "fname_" + i;
+    
+                if (params.containsKey(onameKey) && params.containsKey(fnameKey)) {
+                    onames.add(params.get(onameKey));
+                    fnames.add(params.get(fnameKey));
+                } else {
+                    break; 
+                }
+            }
+    
+            // 리뷰 저장
+            Integer newRevIdx = reviewService.addReview(reviewDTO, onames, fnames);
+    
+            return ResponseEntity.ok(1);  // 성공시 1 반환
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(-1);  // 에러 발생시 -1 반환
+        }
     }
-
+    
     @RequestMapping("/review_list")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> allReviewList(@RequestParam(value = "sort", defaultValue = "최신순") String sortOption, @RequestParam("hIdx") Integer hIdx) {
@@ -227,6 +257,12 @@ public class ReviewController {
             resCountsList.add(resCountString);
         }
         return ResponseEntity.ok(resCountsList);
+    }
+    
+    @PostMapping("/review_delete")
+    public ResponseEntity<?> deleteReview(@RequestParam int revIdx) {
+        reviewService.deleteReviewById(revIdx);
+        return ResponseEntity.ok().build();
     }
 
 }

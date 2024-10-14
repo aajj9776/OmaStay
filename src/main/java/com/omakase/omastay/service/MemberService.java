@@ -62,7 +62,8 @@ public class MemberService {
     //구글 로그인
     private final String googleclientId = "590469886146-me4vl0oobgapgs954olc073nj4d771hk.apps.googleusercontent.com" ;  //구글 클라이언트 ID
     private final String googleclientSecret = "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";    //구글 클라이언트 시크릿
-    private final String googleredirectUri= "https://omastay.duckdns.org/login/google/callback";  //구글 콜백 URL
+    // private final String googleredirectUri= "http://localhost:9090/login/google/callback";  //구글 콜백 URL
+    private final String googleredirectUri= "http://omastay.duckdns.org/login/google/callback";  //구글 콜백 URL
     //구글은 http가 안되서 https만 됩니다.......
 
     private final String clientId = "GJiDqqCVffs4XRqv94HT";  // 네이버 클라이언트 ID
@@ -498,6 +499,10 @@ public class MemberService {
         throw new IOException("이메일 또는 비밀번호가 잘못되었습니다.");
     }
 
+    if (member.getMemSocial() != Social.NONE) {
+        System.out.println("소셜로 가입된 사용자입니다. 일반 로그인 불가.");
+        throw new IOException("소셜로 로그인을 했습니다.");  // 예외 던짐
+    }
 
     // JWT 토큰 받기
     Map<String, Object> claims = new HashMap<>();
