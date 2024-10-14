@@ -27,8 +27,8 @@
             로그인
           </button>
         </div>
-        <!-- 로그인 실패시 에러 메시지 창-->
-        <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-dange"></div>
+        <!-- 로그인 실패시 에러 메시지 창 -->
+        <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger"></div>
       </form>
       <!-- 계정 비밀번호 까먹으신가요? -->
        <div class="text-gray-400 text-sm font-semibold mt-2">
@@ -51,9 +51,9 @@
     <script th:inline="javascript">
       var errorMessage = /*[[${errorMessage}]]*/ null;
       if (errorMessage !== null && errorMessage !== '') {
-          alert(errorMessage);
+          alert(errorMessage); // 자바스크립트 경고 창으로 에러 메시지 표시
       }
-  </script>
+    </script>
   </body>
 
   
