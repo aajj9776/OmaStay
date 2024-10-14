@@ -95,7 +95,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     //해당 호텔 예약자만 리뷰작성 가능
     @Query("SELECT DISTINCT r FROM Reservation r JOIN r.roomInfo ro JOIN ro.hostInfo h " +
             "WHERE r.member.id = :memIdx AND h.id = :hIdx AND r.resStatus = 3")
-    ReservationDTO findMemIdxByHIdx(@Param("hIdx") Integer hIdx, @Param("memIdx") Integer memIdx);
+            List<ReservationDTO> findSingleByMemIdxAndHIdx(@Param("hIdx") Integer hIdx, @Param("memIdx") Integer memIdx);
 
    
 }
