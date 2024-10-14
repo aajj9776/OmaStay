@@ -12,7 +12,10 @@ import com.omakase.omastay.vo.StartEndVo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.lettuce.core.output.SocketAddressOutput;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,27 +32,36 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
 
     @Override
     public List<Tuple> dateFiltering(StartEndVo startEndDay, List<Integer> roomInfos) {
+        System.out.println(startEndDay);
+
         BooleanBuilder builder = new BooleanBuilder();
 
         // 조건 1: roomInfos 목록에 있는 RoomInfo 아이디와 일치하는 RoomInfo
         builder.and(roomInfo.id.in(roomInfos));
 
-        // 조건 2 및 3: 예약 정보가 없는 경우, 예약 가능한 날짜인지 확인, 또는 예약이 취소된 경우 포함
-        builder.and(
-                reservation.isNull()
-                        .or(startEndDayNotBetween(startEndDay)
-                                .or(reservation.resStatus.eq(ResStatus.CANCELLED).and(
-                                        startEndDayOverlaps(startEndDay)
-                                ))
-                        )
+        // 조건 2: 주어진 날짜 범위에 예약이 없는 경우를 찾는 조건
+        BooleanBuilder noOverlapCondition = new BooleanBuilder();
+        noOverlapCondition.and(
+                JPAExpressions.selectOne()
+                        .from(reservation)
+                        .where(
+                                reservation.roomInfo.id.eq(roomInfo.id)
+                                        .and(reservation.startEndVo.start.lt(startEndDay.getEnd()))
+                                                .and(reservation.startEndVo.end.gt(startEndDay.getStart()))
+                        ).notExists()
         );
 
+        // 최종 조건: 지정된 날짜에 예약이 없는 방을 찾는 조건
+        builder.and(noOverlapCondition);
+
+        // 쿼리 실행
         return queryFactory
-                .select(roomInfo.id, hostInfo.id)
+                .select(hostInfo.id, roomInfo.id)
                 .from(roomInfo)
-                .join(roomInfo.hostInfo, hostInfo)
+                .leftJoin(roomInfo.hostInfo, hostInfo)
                 .leftJoin(reservation).on(roomInfo.eq(reservation.roomInfo))
-                .where(builder).distinct()
+                .where(builder)
+                .distinct()
                 .fetch();
     }
 
@@ -89,19 +101,15 @@ public class RoomInfoRepositoryImpl implements RoomInfoRepositoryCustom {
 
     // 예약이 겹치지 않는지 여부를 확인하는 메서드
     private BooleanExpression startEndDayNotBetween(StartEndVo startEndDay) {
-        LocalDateTime start = startEndDay.getStart();
-        LocalDateTime end = startEndDay.getEnd().minusDays(1).withHour(23).withMinute(59).withSecond(59);
+        LocalDateTime start = startEndDay.getStart(); // 주어진 기간의 시작 날짜
+        LocalDateTime end = startEndDay.getEnd() // 주어진 기간의 끝 날짜를 하루 전으로 설정하고 시간을 설정
+                .minusDays(1).withHour(23).withMinute(59).withSecond(59);
 
-        return reservation.startEndVo.start.goe(end).or(reservation.startEndVo.end.loe(start));
-    }
-
-    // 예약이 겹치는지 여부를 확인하는 메서드
-    private BooleanExpression startEndDayOverlaps(StartEndVo startEndDay) {
-        LocalDateTime start = startEndDay.getStart();
-        LocalDateTime end = startEndDay.getEnd().minusDays(1).withHour(23).withMinute(59).withSecond(59); // 종료 날짜를 명확히 설정
-
-        // 예약 시작 날짜가 시작 날짜 이전이고, 예약 종료 날짜가 종료 날짜 이후인 경우
-        return reservation.startEndVo.start.loe(end).and(reservation.startEndVo.end.goe(start));
+        System.out.println("start: " + start);
+        System.out.println("end: " + end);
+        // 예약의 시작 날짜가 주어진 종료 날짜 이후거나, 예약의 종료 날짜가 주어진 시작 날짜 이전일 경우
+        return reservation.startEndVo.start.goe(start)
+                .or(reservation.startEndVo.end.loe(end));
     }
 
     @Override

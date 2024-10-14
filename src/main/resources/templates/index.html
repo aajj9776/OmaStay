@@ -80,11 +80,11 @@
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
           <div class="swiper-wrapper">
-              <div class="swiper-slide" th:each="path : ${path}">
+              <div class="swiper-slide" th:each="event : ${event}">
                 <img
                   class="img"
                   loading="lazy"
-                  th:src="@{${path}}"
+                  th:src="${event.path}"
                   alt="image"
                 />
               </div>
@@ -658,7 +658,7 @@
       domesticTravel.forEach((div) => {
         div.addEventListener("click", function () {
           const keyword = this.textContent;
-          keywordInput.value = keyword;
+          keywordInput.value.trim = keyword;
 
           sessionStorage.setItem("keyword", keyword);
             sessionStorage.setItem("keyword", keyword);

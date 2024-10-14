@@ -77,7 +77,7 @@ $(document).ready(function() {
     });
 });
 
-const keywordInput = document.getElementById('search-accommodation').trim();
+const keywordInput = document.getElementById('search-accommodation');
 const dateInput = document.getElementById('date-range-picker-input');
 const peopleInput = document.getElementById('person_count2');
 const searchButton = document.getElementById('keyword_searchBtn');
@@ -218,14 +218,16 @@ function recSearch() {
 
 const searchAccommodation = (identifier, filterData, page = 0) => {
     // 필수 입력값 가져오기
-    const keyword = document.getElementById("search-accommodation").value.trim();
-    const checkIn = document.getElementById("check-in").value.trim();
-    const checkOut = document.getElementById("check-out").value.trim();
-    const person = document.getElementById("person_count").innerText.trim();
+    let keyword = document.getElementById("search-accommodation").value;
+    const checkIn = document.getElementById("check-in").value;
+    const checkOut = document.getElementById("check-out").value;
+    const person = document.getElementById("person_count").innerText;
 
     if (!keyword || keyword.trim().length === 0) {
         return;
     }
+
+    keyword = keyword.trim();
 
     let url = `/search/domestic-accommodations?keyword=${keyword}&checkIn=${checkIn}&checkOut=${checkOut}&person=${person}`;
 
