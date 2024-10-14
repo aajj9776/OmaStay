@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,14 +80,18 @@ public class ReviewController {
         Integer memIdx = Integer.parseInt(params.get("memIdx"));
         Integer hIdx = Integer.parseInt(params.get("hIdx"));
         MemberDTO memberDTO = memberService.getMember(memIdx);
+        ReservationDTO latestReservation = null;
     
         try {
             // 사용자의 예약 내역에서 최근 예약 건을 가져옴
-            ReservationDTO reservationDTO = reservationService.getMemIdxListByHIdx(memIdx, hIdx);
-            System.out.println("리뷰 작성 가능한 회원: " + reservationDTO);
+            List<ReservationDTO> reservationList = reservationService.getMemIdxListByHIdx(memIdx, hIdx);
+            System.out.println("리뷰 작성 가능한 회원: " + reservationList);
+            if (!reservationList.isEmpty()) {
+                  latestReservation = reservationList.get(0); // 첫 번째 결과를 선택 (필터링 가능)
+                  
+            }else{
+                return ResponseEntity.ok(0);
             
-            if (reservationDTO == null) {
-                return ResponseEntity.ok(0);  // 예약 내역이 없으면 0 반환
             }
         
             ReviewDTO reviewDTO = new ReviewDTO();
@@ -99,7 +105,7 @@ public class ReviewController {
             reviewDTO.setRevRating(revRating);
             reviewDTO.setMemIdx(memIdx);
             reviewDTO.setHIdx(hIdx);
-            reviewDTO.setResIdx(reservationDTO.getId());
+            reviewDTO.setResIdx(latestReservation.getId());
             reviewDTO.setRevWriter(memberDTO.getMemName());
     
             // 파일 이름들 리스트 생성
