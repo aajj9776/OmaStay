@@ -1375,13 +1375,12 @@
                                         console.log("응답"+data);
                                         if(data === 1){
                                             alert('리뷰가 성공적으로 등록되었습니다.');
-                                            const detailUrl = `/search/detail-host?id=${hIdx}&checkIn=${sessionStorage.getItem("startDate")}&checkOut=${sessionStorage.getItem("endDate")}&person=${sessionStorage.getItem("people")}`;
-                                            location.href = detailUrl;
                                         }else if(data === 0){
                                             alert('호텔 예약 내역이 없는 회원입니다.');
                                         }else{
                                             alert('리뷰 작성 중 오류가 발생했습니다.')
                                         }
+                                        location.reload();
                                         
                                         loadReviewList(hIdx);
                                         $('body').css({
