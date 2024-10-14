@@ -28,7 +28,7 @@ spring:
     lazy-initialization: true
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
