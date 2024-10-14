@@ -214,6 +214,12 @@
 
             // 데이터가 존재하는지 확인하는 코드 추가
             if (response.data && response.data.rows) {
+              // rows 데이터를 날짜 순으로 정렬
+              const sortedRows = response.data.rows.sort((a, b) => {
+                const dateA = new Date(a.dimensionValues[0].value.slice(0, 4), a.dimensionValues[0].value.slice(4, 6) - 1, a.dimensionValues[0].value.slice(6, 8));
+                const dateB = new Date(b.dimensionValues[0].value.slice(0, 4), b.dimensionValues[0].value.slice(4, 6) - 1, b.dimensionValues[0].value.slice(6, 8));
+                return dateA - dateB;
+              });
               const labels = response.data.rows.map(row => row.dimensionValues[0].value);
               const activeUsers = response.data.rows.map(row => parseInt(row.metricValues[0].value));
               const screenPageViews = response.data.rows.map(row => parseInt(row.metricValues[1].value));
