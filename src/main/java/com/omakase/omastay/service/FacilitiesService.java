@@ -246,8 +246,6 @@ public class FacilitiesService {
 
                 // 예약이 불가능한 호스트의 경우 가격을 null로 설정
                 if (priceDTO.isSoldOut()) {
-                    resultAccommodationsDTO.setOneDayPrice(null);
-                    resultAccommodationsDTO.setPrice(null);
                     resultAccommodationsDTO.setSoldOut(true);
                 }
             }
