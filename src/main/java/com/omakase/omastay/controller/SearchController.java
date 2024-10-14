@@ -195,7 +195,7 @@ public class SearchController {
                                @RequestParam(name = "checkIn") String checkIn,
                                @RequestParam(name = "checkOut") String checkOut,
                                @RequestParam(name = "page", defaultValue = "1") int page,
-                               @RequestParam(name = "size", defaultValue = "1") int size)
+                               @RequestParam(name = "size", defaultValue = "10") int size)
     {
         // Validation error 존재시 처리
    
