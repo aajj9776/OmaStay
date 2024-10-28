@@ -81,14 +81,11 @@ custom:
 
 
 #google analytics 전용 [이하운]
-oauth:
-  client:
-    id: your-client-id
-    secret: your-client-secret
-    refresh-token: your-refresh-token
-  google:
-    analytics:
-      property-id: your-ga4-property-id
+google:
+  oauth2:
+    client_id: "160531611477-l7nuhmg2ucugqaov6bc710o83fu07tat.apps.googleusercontent.com"
+    client_secret: "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"
+    refresh_token: "1//04IdQqjTxNhxYCgYIARAAGAQSNwF-L9IrQlav5TXgSljxvOdmPBmjgnGQwLq93TBCLXD0S9-nQqHD6TVD1q6qTWZNimqr3OYtDj8"
       
       
       

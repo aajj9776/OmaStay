@@ -1,8 +1,5 @@
 package com.omakase.omastay.controller;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
@@ -31,11 +28,9 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.omakase.omastay.dto.AdminMemberDTO;
-import com.omakase.omastay.dto.CalculationDTO;
 import com.omakase.omastay.dto.CouponDTO;
 import com.omakase.omastay.dto.HostInfoDTO;
 import com.omakase.omastay.dto.ImageDTO;
-import com.omakase.omastay.dto.InquiryDTO;
 import com.omakase.omastay.dto.MemberDTO;
 import com.omakase.omastay.dto.PointDTO;
 import com.omakase.omastay.dto.PriceDTO;
@@ -44,12 +39,10 @@ import com.omakase.omastay.dto.custom.AdminMainCustomDTO;
 import com.omakase.omastay.dto.custom.CalculationCustomDTO;
 import com.omakase.omastay.dto.custom.CouponHistoryDTO;
 import com.omakase.omastay.dto.custom.HostRequestInfoDTO;
-import com.omakase.omastay.dto.custom.MemberCustomDTO;
 import com.omakase.omastay.dto.custom.PointCustomDTO;
 import com.omakase.omastay.dto.custom.SalesCustomDTO;
 import com.omakase.omastay.dto.custom.Top5SalesDTO;
 import com.omakase.omastay.dto.custom.RecommendationCustomDTO;
-import com.omakase.omastay.entity.Calculation;
 import com.omakase.omastay.entity.enumurate.CalStatus;
 import com.omakase.omastay.entity.enumurate.HCate;
 import com.omakase.omastay.entity.enumurate.HStatus;
@@ -134,9 +127,6 @@ public class AdminController {
     FileUploadService fileUploadService;
 
     @Autowired
-    private ServletContext application;
-
-    @Autowired
     private HttpServletRequest request;
 
     @Autowired
@@ -144,6 +134,15 @@ public class AdminController {
 
     @Value("${upload}")
     private String storage;
+
+    @Value("${google.oauth2.client_id}")
+    private String clientId;
+
+    @Value("${google.oauth2.client_secret}")
+    private String clientSecret;
+
+    @Value("${google.oauth2.refresh_token}")
+    private String refreshToken;
 
     //*** 로그인 ***//
     @RequestMapping("/login")
@@ -198,8 +197,7 @@ public class AdminController {
         //이번달 정산 승인 수
         //이번달 정산 정산완료 수
         List<AdminMainCustomDTO> calCountList = calculationService.getCalculationCount();
-        System.out.println("calCountList: "+ calCountList);
-        //calCountList: [AdminMainCustomDTO(name=2, count=1), AdminMainCustomDTO(name=0, count=2)]
+        
         for(AdminMainCustomDTO dto : calCountList){
             int index = Integer.parseInt(dto.getName()); // 문자열을 int로 변환
             CalStatus calStatus = CalStatus.values()[index]; // index로 enum 값 얻기
@@ -242,9 +240,12 @@ public class AdminController {
 
         //최근 신규 회원 10건 (이메일, 가입일)
         List<MemberDTO> memList = ms.getMemList();
-        System.out.println(memList);
         mv.addObject("memList", memList);
 
+        //api 키값
+        mv.addObject("clientId", clientId);
+        mv.addObject("clientSecret", clientSecret);
+        mv.addObject("refreshToken", refreshToken);
         
         return mv;
     }
@@ -733,7 +734,7 @@ public class AdminController {
         return map;
     }
 
-    // 가맹점 공지사항 세부 조회
+    // 회원 공지사항 세부 조회
     @RequestMapping(value = "/user_notice/view", method = RequestMethod.GET)
     public ModelAndView user_notice_detail(@RequestParam("id") String id) {
         ServiceDTO sDto = null;
