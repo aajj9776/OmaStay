@@ -145,6 +145,14 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   <script th:inline="javascript">
+    let clientId = /*[[${clientId}]]*/ '';
+    let clientSecret = /*[[${clientSecret}]]*/ '';
+    let refreshToken = /*[[${refreshToken}]]*/ '';
+
+    console.log("clientId: "+clientId);
+    console.log("clientSecret: "+clientSecret);
+    console.log("refreshToken: "+refreshToken);
+
     // 차트 데이터
     var top5List = /*[[${top5List}]]*/[];
     console.log(top5List);
@@ -182,9 +190,9 @@
 
     axios.post('https://accounts.google.com/o/oauth2/token',
       {
-        "client_id": "160531611477-l7nuhmg2ucugqaov6bc710o83fu07tat.apps.googleusercontent.com",
-        "client_secret": "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",
-        "refresh_token": "1//04aIrZJfXaBm5CgYIARAAGAQSNwF-L9IrLaw--aYvqFvAwRfPJX_v7cakMr01WDnIIJTe2BUk7hq4WW4DuuSY8ngCdE9sdKltxeM",
+        "client_id": clientId,
+        "client_secret": clientSecret,
+        "refresh_token": refreshToken,
         "grant_type": "refresh_token"
       }
     )
