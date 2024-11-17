@@ -44,7 +44,7 @@ services:
     environment:
       - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org
       - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org
-      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}  # 깃허브 시크릿 변수 사용
+      - EMAIL=${LETSENCRYPT_EMAIL}  # 깃허브 시크릿 변수 사용
       - SPRING_DATASOURCE_URL=${DB_URL}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
