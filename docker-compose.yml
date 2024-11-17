@@ -42,8 +42,8 @@ services:
     expose:
       - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
     environment:
-      - VIRTUAL_HOST=omastay.duckdns.org  # 리버스 프록시를 위한 도메인
-      - LETSENCRYPT_HOST=omastay.duckdns.org  # SSL 인증 도메인
+      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # 두 도메인 추가
+      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
       - LETSENCRYPT_EMAIL=dlflqhfl@gmail.com  # 인증서 알림 받을 이메일
       - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.2.67:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=omastay
