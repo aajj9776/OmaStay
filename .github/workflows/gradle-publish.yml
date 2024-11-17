@@ -21,18 +21,21 @@ jobs:
           ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Copy files to EC2
-        env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+      
+        # env:
+          #   DB_URL: ${{ secrets.DB_URL }}
+          #   DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          #   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          #   MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          #   MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          #   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          #   REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          #   REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          #   GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          #   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          #   GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+
+          
         run: |
           # 파일을 EC2로 복사
           scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
@@ -55,18 +58,18 @@ jobs:
             export GOOGLE_CLIENT_SECRET="${GOOGLE_CLIENT_SECRET}"
             export GOOGLE_REFRESH_TOKEN="${GOOGLE_REFRESH_TOKEN}"
 
-            # .env 파일 생성 후 값 추가
-            echo "DB_URL=${DB_URL}" > /home/ubuntu/OmaStay/.env
-            echo "DB_USERNAME=${DB_USERNAME}" >> /home/ubuntu/OmaStay/.env
-            echo "DB_PASSWORD=${DB_PASSWORD}" >> /home/ubuntu/OmaStay/.env
-            echo "MAIL_USERNAME=${MAIL_USERNAME}" >> /home/ubuntu/OmaStay/.env
-            echo "MAIL_PASSWORD=${MAIL_PASSWORD}" >> /home/ubuntu/OmaStay/.env
-            echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}" >> /home/ubuntu/OmaStay/.env
-            echo "REDIS_HOST=${REDIS_HOST}" >> /home/ubuntu/OmaStay/.env
-            echo "REDIS_PORT=${REDIS_PORT}" >> /home/ubuntu/OmaStay/.env
-            echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> /home/ubuntu/OmaStay/.env
-            echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}" >> /home/ubuntu/OmaStay/.env
-            echo "GOOGLE_REFRESH_TOKEN=${GOOGLE_REFRESH_TOKEN}" >> /home/ubuntu/OmaStay/.env
+             # .env 파일 생성 및 값을 추가하는 부분
+            # echo "DB_URL=${DB_URL}" > /home/ubuntu/OmaStay/.env
+            # echo "DB_USERNAME=${DB_USERNAME}" >> /home/ubuntu/OmaStay/.env
+            # echo "DB_PASSWORD=${DB_PASSWORD}" >> /home/ubuntu/OmaStay/.env
+            # echo "MAIL_USERNAME=${MAIL_USERNAME}" >> /home/ubuntu/OmaStay/.env
+            # echo "MAIL_PASSWORD=${MAIL_PASSWORD}" >> /home/ubuntu/OmaStay/.env
+            # echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}" >> /home/ubuntu/OmaStay/.env
+            # echo "REDIS_HOST=${REDIS_HOST}" >> /home/ubuntu/OmaStay/.env
+            # echo "REDIS_PORT=${REDIS_PORT}" >> /home/ubuntu/OmaStay/.env
+            # echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> /home/ubuntu/OmaStay/.env
+            # echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}" >> /home/ubuntu/OmaStay/.env
+            # echo "GOOGLE_REFRESH_TOKEN=${GOOGLE_REFRESH_TOKEN}" >> /home/ubuntu/OmaStay/.env
 
             # 권한 설정: .env 파일은 읽기/쓰기 권한만 부여
             chmod 644 /home/ubuntu/OmaStay/.env
