@@ -85,8 +85,7 @@ public class RecommendationService {
     // }
 
     //추천 숙소 - 매주 화요일 00시에 추천 목록을 업데이트 (지난 주 일~토까지 체크인의 매출을 기준으로 추천 목록을 업데이트)
-    //@Scheduled(cron = "0 0 0 * * TUE") // 매주 화요일 00시
-    @Scheduled(fixedRate = 1800000)
+    @Scheduled(cron = "0 0 0 * * TUE") // 매주 화요일 00시
     @Transactional
     public void updateRecommendation() {
         int cnt =0;
