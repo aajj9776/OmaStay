@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # nginx-proxy 설정
   nginx-proxy:
-    image: nginxproxy/nginx-proxy:1.6  # 안정적인 버전 지정
+    image: nginxproxy/nginx-proxy:1.6
     container_name: nginx-proxy
     ports:
       - "80:80"
@@ -42,15 +42,16 @@ services:
     expose:
       - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
     environment:
-      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # 두 도메인 추가
-      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
-      - LETSENCRYPT_EMAIL=dlflqhfl@gmail.com  # 인증서 알림 받을 이메일
-      - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.2.67:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=omastay
-      - SPRING_DATASOURCE_PASSWORD=omastay18
+      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org
+      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org
+      - LETSENCRYPT_EMAIL=${MAIL_USERNAME}  # 깃허브 시크릿 변수 사용
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_SERVLET_MULTIPART_ENABLED=true
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     restart: always
     networks:
       - my-net1
