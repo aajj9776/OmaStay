@@ -7,6 +7,11 @@ WORKDIR /app
 # 소스 코드 복사
 COPY . ./
 
+# 환경 변수 출력 (빌드 단계에서 로그로 확인)
+RUN echo "DB_URL=${DB_URL}" >> /var/log/env_vars.log
+RUN echo "MAIL_USERNAME=${MAIL_USERNAME}" >> /var/log/env_vars.log
+RUN echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}" >> /var/log/env_vars.log
+
 # Gradle 빌드 실행 (의존성 해결 및 빌드)
 RUN gradle clean build --no-daemon
 
