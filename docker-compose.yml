@@ -44,14 +44,20 @@ services:
     environment:
       - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org
       - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org
-      - EMAIL=${LETSENCRYPT_EMAIL}  
-      - SPRING_DATASOURCE_URL=${DB_URL}
-      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - EMAIL=${MAIL_USERNAME}  
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
       - SPRING_SERVLET_MULTIPART_ENABLED=true
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_REFRESH_TOKEN=${GOOGLE_REFRESH_TOKEN}
     restart: always
     networks:
       - my-net1
