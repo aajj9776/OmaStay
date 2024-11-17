@@ -33,24 +33,11 @@ jobs:
         run: |
           scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
 
-      # 5. Node.js 및 의존성 캐싱
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node
-
-      - name: Install TailwindCSS and dependencies
+      # 5. TailwindCSS 의존성 설치 (Node.js 설치 없이)
+      - name: Install npm dependencies for TailwindCSS
         run: |
           cd src/main/frontend
-          npm install
+          npm install  # 이미 있는 package.json을 기반으로 의존성 설치
           npm install @popperjs/core@^2.11.8
 
       # 6. Gradle 설정 및 캐싱
@@ -73,25 +60,16 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build --no-daemon
 
-      # 7. EC2에서 Docker 및 Docker Compose 설치
-      - name: Install Docker on EC2
+      # 7. Docker 및 Docker Compose 버전 확인
+      - name: Verify Docker and Docker Compose versions on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
-            curl -fsSL https://get.docker.com -o get-docker.sh
-            sudo sh get-docker.sh
-            sudo usermod -aG docker ubuntu
-            sudo systemctl restart docker
-            sudo curl -L "https://github.com/docker/compose/releases/download/$(curl --silent https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
+            docker --version
+            docker-compose --version
             exit
           EOF
 
-      # 8. Docker 권한 및 상태 확인
-      - name: Verify Docker permissions on EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
-
-      # 9. Docker Compose 실행
+      # 8. Docker Compose 실행
       - name: SSH into EC2 and run Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
