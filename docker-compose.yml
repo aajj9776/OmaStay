@@ -1,57 +1,59 @@
 version: '3.8'
 
 services:
-  backend:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    container_name: backend
+  # nginx-proxy 설정
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.6  # 안정적인 버전 지정
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro  # 도커 소켓 공유
+      - ./certs:/etc/nginx/certs:ro              # SSL 인증서 디렉터리
+      - ./vhost.d:/etc/nginx/vhost.d            # 사용자 정의 가상 호스트 설정
+      - ./html:/usr/share/nginx/html            # HTML 정적 파일
+      - ./dhparam:/etc/nginx/dhparam            # Diffie-Hellman 파라미터
+    restart: always
     networks:
       - my-net1
+
+  # Let's Encrypt Companion 설정
+  letsencrypt-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt-companion
     environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost.d:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+    restart: always
+    networks:
+      - my-net1
+
+  # Backend 애플리케이션
+  backend:
+    build:
+      context: ./  # Dockerfile 위치
+      dockerfile: Dockerfile
+    container_name: backend
+    expose:
+      - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
+    environment:
+      - VIRTUAL_HOST=omastay.duckdns.org  # 리버스 프록시를 위한 도메인
+      - LETSENCRYPT_HOST=omastay.duckdns.org  # SSL 인증 도메인
+      - LETSENCRYPT_EMAIL=dlflqhfl@gmail.com  # 인증서 알림 받을 이메일
       - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.2.67:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=omastay
       - SPRING_DATASOURCE_PASSWORD=omastay18
       - SPRING_SERVLET_MULTIPART_ENABLED=true
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
-    labels:
-      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
     restart: always
-    expose:
-      - "9090"  # 백엔드 서비스는 내부적으로 포트를 노출
-
-  nginx-proxy:
-    image: nginxproxy/nginx-proxy:1.6
-    container_name: nginx-proxy
     networks:
       - my-net1
-    ports:
-      - "80:80"
-      - "443:443"  # HTTPS 트래픽
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx/certs:/etc/nginx/certs
-    restart: always
-    labels:
-      - "com.github.nginx-proxy.docker-gen=true"  # 이 라벨을 추가
-
-  letsencrypt-companion:
-    image: nginxproxy/acme-companion
-    container_name: letsencrypt-companion
-    networks:
-      - my-net1
-    depends_on:
-      - nginx-proxy
-    environment:
-      - DEFAULT_EMAIL=dlflqhfl@gmail.com  # 인증서 발급 시 사용할 이메일
-      - NGINX_DOCKER_GEN_CONTAINER=nginx-proxy  # 환경 변수 추가
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./nginx/certs:/etc/nginx/certs
-      - ./nginx/vhost:/etc/nginx/vhost.d
-      - ./nginx/html:/usr/share/nginx/html
-    restart: always
 
 networks:
   my-net1:
