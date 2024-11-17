@@ -34,8 +34,11 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
+          # 파일을 EC2로 복사
           scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+
+          # EC2에 접속하여 .env 파일에 값 작성
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << "EOF"
             echo "DB_URL=${DB_URL}" > /home/ubuntu/OmaStay/.env
             echo "DB_USERNAME=${DB_USERNAME}" >> /home/ubuntu/OmaStay/.env
             echo "DB_PASSWORD=${DB_PASSWORD}" >> /home/ubuntu/OmaStay/.env
@@ -49,17 +52,13 @@ jobs:
             echo "GOOGLE_REFRESH_TOKEN=${GOOGLE_REFRESH_TOKEN}" >> /home/ubuntu/OmaStay/.env
           EOF
 
-      - name: Install Docker using convenience script on EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
-
       - name: Verify Docker permissions on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
 
       - name: SSH into EC2 and run Docker Compose
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << "EOF"
             cd /home/ubuntu/OmaStay
             docker-compose down
             docker-compose up -d --build
