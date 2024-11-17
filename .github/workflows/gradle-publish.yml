@@ -42,6 +42,19 @@ jobs:
             # 파일 권한 변경: .env 파일을 생성할 위치에 대해 적절한 권한 부여
             chmod 755 /home/ubuntu/OmaStay
 
+             # 환경 변수 설정
+            export DB_URL="${DB_URL}"
+            export DB_USERNAME="${DB_USERNAME}"
+            export DB_PASSWORD="${DB_PASSWORD}"
+            export MAIL_USERNAME="${MAIL_USERNAME}"
+            export MAIL_PASSWORD="${MAIL_PASSWORD}"
+            export JWT_SECRET_KEY="${JWT_SECRET_KEY}"
+            export REDIS_HOST="${REDIS_HOST}"
+            export REDIS_PORT="${REDIS_PORT}"
+            export GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID}"
+            export GOOGLE_CLIENT_SECRET="${GOOGLE_CLIENT_SECRET}"
+            export GOOGLE_REFRESH_TOKEN="${GOOGLE_REFRESH_TOKEN}"
+
             # .env 파일 생성 후 값 추가
             echo "DB_URL=${DB_URL}" > /home/ubuntu/OmaStay/.env
             echo "DB_USERNAME=${DB_USERNAME}" >> /home/ubuntu/OmaStay/.env
