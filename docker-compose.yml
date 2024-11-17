@@ -8,8 +8,6 @@ services:
     container_name: backend
     networks:
       - my-net1
-    ports:
-      - "9090:9090"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://172.31.2.67:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=omastay
@@ -17,21 +15,40 @@ services:
       - SPRING_SERVLET_MULTIPART_ENABLED=true
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
-    volumes:
-      - ./nginx/ssl/accounts:/etc/nginx/ssl/accounts
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
     restart: always
-  nginx:
-    image: nginx:latest
-    container_name: nginx
+    expose:
+      - "9090"  # 백엔드 서비스는 내부적으로 포트를 노출
+
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.6
+    container_name: nginx-proxy
     networks:
       - my-net1
-    restart: always
-    volumes:
-      - ./conf/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
+      - "443:443"  # HTTPS 트래픽
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/certs:/etc/nginx/certs
+    restart: always
+
+  letsencrypt-companion:
+    image: nginxproxy/acme-companion
+    container_name: letsencrypt-companion
+    networks:
+      - my-net1
     depends_on:
-      - backend
+      - nginx-proxy
+    environment:
+      - DEFAULT_EMAIL=dlflqhfl@gmail.com  # 인증서 발급 시 사용할 이메일
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/vhost:/etc/nginx/vhost.d
+      - ./nginx/html:/usr/share/nginx/html
+    restart: always
 
 networks:
   my-net1:
