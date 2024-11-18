@@ -11,6 +11,7 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro  # 도커 소켓 공유
       - ./certs:/etc/nginx/certs:ro              # SSL 인증서 디렉터리
+      - ./dhparam:/etc/nginx/dhparam            # Diffie-Hellman 파라미터
 
     restart: always
     networks:
@@ -25,8 +26,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/etc/nginx/certs
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
     restart: always
     networks:
       - my-net1
