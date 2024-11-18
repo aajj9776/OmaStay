@@ -6,14 +6,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 @EnableScheduling
 public class OmaStayApplication {
+    
+    private static final Logger logger = Logger.getLogger(OmaStayApplication.class.getName());
 
     public static void main(String[] args) {
 
-        Dotenv dotenv = Dotenv.configure().load();
+        Dotenv dotenv = Dotenv.configure().directory("/home/ubuntu/OmaStay").load();
+
+        // 로그 추가
+        logger.info("Loading environment variables from .env file");
+
         System.setProperty("DB_URL", Objects.requireNonNull(dotenv.get("DB_URL")));
         System.setProperty("DB_USERNAME", Objects.requireNonNull(dotenv.get("DB_USERNAME")));
         System.setProperty("DB_PASSWORD", Objects.requireNonNull(dotenv.get("DB_PASSWORD")));
@@ -26,7 +33,8 @@ public class OmaStayApplication {
         System.setProperty("GOOGLE_CLIENT_SECRET", Objects.requireNonNull(dotenv.get("GOOGLE_CLIENT_SECRET")));
         System.setProperty("GOOGLE_REFRESH_TOKEN", Objects.requireNonNull(dotenv.get("GOOGLE_REFRESH_TOKEN")));
         
-        SpringApplication.run(OmaStayApplication.class, args);
+        logger.info("Environment variables loaded successfully");
 
+        SpringApplication.run(OmaStayApplication.class, args);
     }
 }
