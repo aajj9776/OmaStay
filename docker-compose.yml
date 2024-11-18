@@ -42,7 +42,7 @@ services:
     expose:
       - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
     env_file:
-      - /home/ubuntu/OmaStay/.env  # 환경 변수 파일 경로 명시
+      - ./.env  # 환경 변수 파일 경로 명시
     restart: always
     networks:
       - my-net1
