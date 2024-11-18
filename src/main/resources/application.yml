@@ -8,12 +8,11 @@ server:
       max: 80
       min-spare: 5
     max-swallow-size: 20971520  # 20MB
-
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://3.35.171.211:3306/omastay
+    username: omastay
+    password: omastay18
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 60
@@ -41,8 +40,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    username: omastay2@gmail.com
+    password: pkpauztcsjapcqyr
     properties:
       mail:
         smtp:
@@ -56,9 +55,10 @@ spring:
           encoding: UTF-8
     auth-code-expiration-millis: 180000
   data:
+    # Redis aws에 설치함 컴포즈에 만들어야됨
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      host: 3.35.171.211
+      port: 6379
       duration: 600
   cloud:
     gcp:
@@ -77,12 +77,19 @@ spring:
 
 custom:
   jwt:
-    secretKey: ${JWT_SECRET_KEY}
+    secretKey: a9sdjfkLSDk093asdf94fuls9juflokasjdf0odsjflkajdfsdsogldfmso9f
 
+
+#google analytics 전용 [이하운]
 google:
   oauth2:
-    client_id: ${GOOGLE_CLIENT_ID}
-    client_secret: ${GOOGLE_CLIENT_SECRET}
-    refresh_token: ${GOOGLE_REFRESH_TOKEN}
+    client_id: "160531611477-l7nuhmg2ucugqaov6bc710o83fu07tat.apps.googleusercontent.com"
+    client_secret: "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"
+    refresh_token: "1//04IdQqjTxNhxYCgYIARAAGAQSNwF-L9IrQlav5TXgSljxvOdmPBmjgnGQwLq93TBCLXD0S9-nQqHD6TVD1q6qTWZNimqr3OYtDj8"
+      
+      
+      
+      
 
+#건들지 마시오
 upload: https://storage.googleapis.com/omastay/
