@@ -48,6 +48,28 @@ jobs:
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
           echo "GOOGLE_REFRESH_TOKEN=${{ secrets.GOOGLE_REFRESH_TOKEN }}" >> .env
 
+        # .env 파일을 EC2에서 생성하는 단계
+          - name: Create .env file on EC2
+            run: |
+              ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+                echo "DB_URL=${{ secrets.DB_URL }}" > /home/ubuntu/OmaStay/.env
+                echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> /home/ubuntu/OmaStay/.env
+                echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/ubuntu/OmaStay/.env
+                echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> /home/ubuntu/OmaStay/.env
+                echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> /home/ubuntu/OmaStay/.env
+                echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> /home/ubuntu/OmaStay/.env
+                echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> /home/ubuntu/OmaStay/.env
+                echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> /home/ubuntu/OmaStay/.env
+                echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> /home/ubuntu/OmaStay/.env
+                echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> /home/ubuntu/OmaStay/.env
+                echo "GOOGLE_REFRESH_TOKEN=${{ secrets.GOOGLE_REFRESH_TOKEN }}" >> /home/ubuntu/OmaStay/.env
+              EOF
+
+      # .env 파일 내용 확인 단계 추가
+      - name: Verify .env content on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "cat /home/ubuntu/OmaStay/.env"
+
       # .env 파일을 EC2로 복사
       - name: Copy .env to EC2
         run: scp -o StrictHostKeyChecking=no .env ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/.env
