@@ -40,6 +40,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation 'org.springframework:spring-context-support'
+    implementation("io.github.cdimascio:java-dotenv:5.2.2")
 
     //시큐리티
     implementation 'org.springframework.boot:spring-boot-starter-security'
