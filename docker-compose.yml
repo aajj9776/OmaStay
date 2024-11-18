@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # nginx-proxy 설정
   nginx-proxy:
-    image: nginxproxy/nginx-proxy:1.6
+    image: nginxproxy/nginx-proxy:1.6  # 안정적인 버전 지정
     container_name: nginx-proxy
     ports:
       - "80:80"
@@ -14,8 +14,6 @@ services:
       - ./vhost.d:/etc/nginx/vhost.d            # 사용자 정의 가상 호스트 설정
       - ./html:/usr/share/nginx/html            # HTML 정적 파일
       - ./dhparam:/etc/nginx/dhparam            # Diffie-Hellman 파라미터
-
-
     restart: always
     networks:
       - my-net1
@@ -29,6 +27,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/etc/nginx/certs
+      - ./vhost.d:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
     restart: always
     networks:
       - my-net1
@@ -41,8 +41,16 @@ services:
     container_name: backend
     expose:
       - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
-    env_file:
-      - ./.env  # 환경 변수 파일 경로 명시
+    environment:
+      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # 두 도메인 추가
+      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
+      - LETSENCRYPT_EMAIL=${MAIL_USERNAME}  # 인증서 알림 받을 이메일
+      - SPRING_DATASOURCE_URL=${DB_URL}?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_SERVLET_MULTIPART_ENABLED=true
+      - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
+      - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
     restart: always
     networks:
       - my-net1
