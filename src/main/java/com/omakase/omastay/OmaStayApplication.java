@@ -16,7 +16,7 @@ public class OmaStayApplication {
 
     public static void main(String[] args) {
 
-        Dotenv dotenv = Dotenv.configure().directory("/home/ubuntu/OmaStay").load();
+        Dotenv dotenv = Dotenv.configure().filename(".env").load();
 
         // 로그 추가
         logger.info("Loading environment variables from .env file");
