@@ -19,8 +19,14 @@ WORKDIR /app
 # 빌드된 JAR 파일을 빌드 단계에서 복사
 COPY --from=builder /app/build/libs/OmaStay-0.0.1-SNAPSHOT.jar .
 
+# 환경 변수 설정
+ENV SPRING_DATASOURCE_URL=${DB_URL}?useSSL=false&allowPublicKeyRetrieval=true
+ENV SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+ENV SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+
 # 포트 9090 노출
 EXPOSE 9090
 
 # Spring Boot 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "OmaStay-0.0.1-SNAPSHOT.jar"]
+
