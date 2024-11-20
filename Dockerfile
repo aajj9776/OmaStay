@@ -7,12 +7,6 @@ WORKDIR /app
 # 소스 코드 복사
 COPY . ./
 
-# .env 파일 복사
-COPY .env .env
-
-# .env 파일 로드
-RUN echo "source /app/.env" >> ~/.bashrc
-
 # Gradle 빌드 실행 (의존성 해결 및 빌드)
 RUN gradle clean build --no-daemon
 
