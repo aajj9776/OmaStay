@@ -38,6 +38,10 @@ services:
       - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
     env_file:
       - .env  # .env 파일을 로드하여 환경 변수 설정
+       environment:
+      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # 두 도메인 추가
+      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
+      - LETSENCRYPT_EMAIL=omastay2@gmail.com  # 인증서 알림 받을 이메일
     restart: always
     networks:
       - my-net1
