@@ -16,16 +16,8 @@ FROM openjdk:17-alpine
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# .env 파일 복사
-COPY .env .env
-
 # 빌드된 JAR 파일을 빌드 단계에서 복사
 COPY --from=builder /app/build/libs/OmaStay-0.0.1-SNAPSHOT.jar .
-
-# 환경 변수 설정
-ENV SPRING_DATASOURCE_URL=${DB_URL}?useSSL=false&allowPublicKeyRetrieval=true
-ENV SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-ENV SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
 
 # 포트 9090 노출
 EXPOSE 9090
