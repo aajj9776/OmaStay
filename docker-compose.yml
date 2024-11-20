@@ -38,16 +38,6 @@ services:
       - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
     env_file:
       - .env  # .env 파일을 로드하여 환경 변수 설정
-    environment:
-      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # 두 도메인 추가
-      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
-      - LETSENCRYPT_EMAIL=omastay2@gmail.com  # 인증서 알림 받을 이메일
-      - SPRING_DATASOURCE_URL=jdbc:mysql://3.35.171.211:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=omastay
-      - SPRING_DATASOURCE_PASSWORD=omastay18
-      - SPRING_SERVLET_MULTIPART_ENABLED=true
-      - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
-      - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
     restart: always
     networks:
       - my-net1
