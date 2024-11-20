@@ -42,6 +42,7 @@ services:
       - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # 두 도메인 추가
       - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
       - LETSENCRYPT_EMAIL=omastay2@gmail.com  # 인증서 알림 받을 이메일
+      - SPRING_DATASOURCE_URL=jdbc:mysql://3.35.171.211:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
     restart: always
     networks:
       - my-net1
