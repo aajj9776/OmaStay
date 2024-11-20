@@ -1,29 +1,24 @@
 version: '3.8'
 
 services:
-  # nginx-proxy 설정
-  nginx-proxy:
-    image: nginxproxy/nginx-proxy:1.6  # 안정적인 버전 지정
-    container_name: nginx-proxy
-    ports:
-      - "80:80"
-      - "443:443"
+
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro  # 도커 소켓 공유
       - ./certs:/etc/nginx/certs:ro              # SSL 인증서 디렉터리
+      - ./vhost.d:/etc/nginx/vhost.d            # 사용자 정의 가상 호스트 설정
+      - ./html:/usr/share/nginx/html            # HTML 정적 파일 공유
+      - ./dhparam:/etc/nginx/dhparam            # Diffie-Hellman 파라미터
+      - ./logs/nginx:/var/log/nginx              # 로깅을 위한 디렉터리 추가
     restart: always
     networks:
       - my-net1
 
-  # Let's Encrypt Companion 설정
-  letsencrypt-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt-companion
-    environment:
-      - NGINX_PROXY_CONTAINER=nginx-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/etc/nginx/certs
+      - ./vhost.d:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./logs/letsencrypt:/var/log/letsencrypt  # 로깅을 위한 디렉터리 추가
     restart: always
     networks:
       - my-net1
@@ -48,7 +43,6 @@ services:
       - SPRING_SERVLET_MULTIPART_ENABLED=true
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
-
     restart: always
     networks:
       - my-net1
