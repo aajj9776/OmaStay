@@ -11,10 +11,6 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro  # 도커 소켓 공유
       - ./certs:/etc/nginx/certs:ro              # SSL 인증서 디렉터리
-      - ./vhost.d:/etc/nginx/vhost.d            # 사용자 정의 가상 호스트 설정
-      - ./html:/usr/share/nginx/html            # HTML 정적 파일 공유
-      - ./dhparam:/etc/nginx/dhparam            # Diffie-Hellman 파라미터
-      - ./logs/nginx:/var/log/nginx              # 로깅을 위한 디렉터리 추가
     restart: always
     networks:
       - my-net1
@@ -28,9 +24,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/etc/nginx/certs
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
-      - ./logs/letsencrypt:/var/log/letsencrypt  # 로깅을 위한 디렉터리 추가
     restart: always
     networks:
       - my-net1
