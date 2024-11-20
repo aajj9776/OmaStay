@@ -1,4 +1,3 @@
-
 version: '3.8'
 
 services:
@@ -12,10 +11,6 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro  # 도커 소켓 공유
       - ./certs:/etc/nginx/certs:ro              # SSL 인증서 디렉터리
-      - ./vhost.d:/etc/nginx/vhost.d            # 사용자 정의 가상 호스트 설정
-      - ./html:/usr/share/nginx/html            # HTML 정적 파일 공유
-      - ./dhparam:/etc/nginx/dhparam            # Diffie-Hellman 파라미터
-      - ./logs/nginx:/var/log/nginx              # 로깅을 위한 디렉터리 추가
     restart: always
     networks:
       - my-net1
@@ -29,9 +24,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/etc/nginx/certs
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
-      - ./logs/letsencrypt:/var/log/letsencrypt  # 로깅을 위한 디렉터리 추가
     restart: always
     networks:
       - my-net1
@@ -51,11 +43,6 @@ services:
       - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
       - LETSENCRYPT_EMAIL=omastay2@gmail.com  # 인증서 알림 받을 이메일
       - SPRING_DATASOURCE_URL=jdbc:mysql://3.35.171.211:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=omastay
-      - SPRING_DATASOURCE_PASSWORD=omastay18
-      - SPRING_SERVLET_MULTIPART_ENABLED=true
-      - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=10MB
-      - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=10MB
     restart: always
     networks:
       - my-net1
