@@ -1,10 +1,4 @@
-version: '3.8'
-
-services:
-  # nginx-proxy 설정
-  nginx-proxy:
-    image: nginxproxy/nginx-proxy:1.6  # 안정적인 버전 지정
-    container_name: nginx-proxy
+ container_name: nginx-proxy
     ports:
       - "80:80"
       - "443:443"
