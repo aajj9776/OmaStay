@@ -1,19 +1,23 @@
- container_name: nginx-proxy
+version: '3.9'
+
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: jwilder/nginx-proxy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro  # 도커 소켓 공유
-      - ./certs:/etc/nginx/certs:ro              # SSL 인증서 디렉터리
-      - ./vhost.d:/etc/nginx/vhost.d            # 사용자 정의 가상 호스트 설정
-      - ./html:/usr/share/nginx/html            # HTML 정적 파일 공유
-      - ./dhparam:/etc/nginx/dhparam            # Diffie-Hellman 파라미터
-      - ./logs/nginx:/var/log/nginx              # 로깅을 위한 디렉터리 추가
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs:ro
+      - ./vhost.d:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./dhparam:/etc/nginx/dhparam
+      - ./logs/nginx:/var/log/nginx
     restart: always
     networks:
       - my-net1
 
-  # Let's Encrypt Companion 설정
   letsencrypt-companion:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt-companion
@@ -24,25 +28,24 @@
       - ./certs:/etc/nginx/certs
       - ./vhost.d:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
-      - ./logs/letsencrypt:/var/log/letsencrypt  # 로깅을 위한 디렉터리 추가
+      - ./logs/letsencrypt:/var/log/letsencrypt
     restart: always
     networks:
       - my-net1
 
-  # Backend 애플리케이션
   backend:
     build:
       context: ./  # Dockerfile 위치
       dockerfile: Dockerfile
     container_name: backend
     expose:
-      - "9090"  # nginx-proxy가 접근할 수 있도록 포트 노출
+      - "9090"
     env_file:
-      - .env  # .env 파일을 로드하여 환경 변수 설정
+      - .env
     environment:
-      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # 두 도메인 추가
-      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org  # SSL 인증 도메인 추가
-      - LETSENCRYPT_EMAIL=omastay2@gmail.com  # 인증서 알림 받을 이메일
+      - VIRTUAL_HOST=omastay.duckdns.org,www.omastay.duckdns.org
+      - LETSENCRYPT_HOST=omastay.duckdns.org,www.omastay.duckdns.org
+      - LETSENCRYPT_EMAIL=omastay2@gmail.com
       - SPRING_DATASOURCE_URL=jdbc:mysql://3.35.171.211:3306/omastay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=omastay
       - SPRING_DATASOURCE_PASSWORD=omastay18
