@@ -32,10 +32,7 @@ jobs:
       - name: Copy files to EC2
         run: |
           scp -r -o StrictHostKeyChecking=no ./* ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay
-<<<<<<< HEAD
       
-=======
-
       # .env 파일을 GitHub Secrets에서 읽어 EC2로 복사
       - name: Create .env file from secrets
         run: |
@@ -77,7 +74,6 @@ jobs:
       - name: Copy .env to EC2
         run: scp -o StrictHostKeyChecking=no .env ubuntu@${{ secrets.HOST }}:/home/ubuntu/OmaStay/.env
 
->>>>>>> parent of 83d61e8 (reverting)
       # Gradle 설정
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4.0.0
@@ -88,12 +84,7 @@ jobs:
         with:
           restore-keys: |
             ${{ runner.os }}-gradle
-<<<<<<< HEAD
-      
-=======
 
->>>>>>> parent of 83d61e8 (reverting)
-      # gradlew 실행 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod u+x gradlew
 
@@ -101,14 +92,6 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build --no-daemon
 
-<<<<<<< HEAD
-      # EC2에 Docker 설치
-      - name: Install Docker using convenience script on EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh"
-      
-=======
->>>>>>> parent of 83d61e8 (reverting)
       # Docker 그룹에 사용자 추가 및 Docker 재시작
       - name: Add ubuntu user to Docker group and restart Docker on EC2
         run: |
@@ -117,21 +100,8 @@ jobs:
             sudo systemctl restart docker
             exit
           EOF
-<<<<<<< HEAD
-      
-=======
 
->>>>>>> parent of 83d61e8 (reverting)
-      # Docker 권한 확인
-      - name: Verify Docker permissions on EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} "docker ps"
-<<<<<<< HEAD
-      
-=======
-
->>>>>>> parent of 83d61e8 (reverting)
-      # EC2에서 Docker Compose 실행
+      # 8. Docker Compose 실행
       - name: SSH into EC2 and run Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
