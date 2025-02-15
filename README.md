@@ -18,10 +18,10 @@ OMASTAY는 사용자가 원하는 호텔을 간편하게 검색하고 예약할 
 
 # 기술 스택
 
-백엔드: Spring Boot, JPA, Redis
-데이터베이스: MySQL
-프론트엔드: thymeleaf
-결제 시스템: Toss Payments API
+- 백엔드: Spring Boot, JPA, Redis
+- 데이터베이스: MySQL
+- 프론트엔드: thymeleaf
+- 결제 시스템: Toss Payments API
 
 
 # 프로젝트 구상도
