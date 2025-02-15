@@ -18,8 +18,6 @@ OMASTAY는 사용자가 원하는 호텔을 간편하게 검색하고 예약할 
 - 프론트엔드: thymeleaf
 - 결제 시스템: Toss Payments API
 
-# 고민햇
-
 
 # 프로젝트 구상도
 ![image](https://github.com/user-attachments/assets/f0970d3b-b841-40b3-a77a-519a7d3d163c)
