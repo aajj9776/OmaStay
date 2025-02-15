@@ -25,7 +25,7 @@ OMASTAY는 사용자가 원하는 호텔을 간편하게 검색하고 예약할 
 ![image](https://github.com/user-attachments/assets/f0970d3b-b841-40b3-a77a-519a7d3d163c)
 
 # 화면 구성도
-![image](https://github.com/user-attachments/assets/3282dec6-68a8-48d4-8f3b-5064736b8cdb)![image](https://github.com/user-attachments/assets/7fec2b8e-d97d-4572-bf90-4e9f7b3d3848)![image](https://github.com/user-attachments/assets/0eda18e7-f5ed-42a1-ae00-71a89e2a8a7c)
-![image](https://github.com/user-attachments/assets/c78804c5-8645-42a2-be65-3d5cac2570f8)
+
+![image](https://github.com/user-attachments/assets/1ddc6011-72ed-418d-b0c3-ce6d2071f3cc)
 
 
